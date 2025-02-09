@@ -3,19 +3,24 @@ import {useState} from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import Login from '@/components/Login';
-
+import Link from 'next/link';
 import styles from '@/styles/sentenceanalyzer.module.scss';
 import SentenceForm from '@/components/analysis/SentenceForm';
 import Analysis from '@/components/analysis/Analysis';
+import { LineMdTwitterX } from '@/components/icons/Twitter';
+import { LineMdGithub } from '@/components/icons/Github';
+import { LineMdEmail } from '@/components/icons/Email';
 
-const SentenceAnalyzer = () => {
+const SentenceAnalyzer = () => {    
+    
     const { user, loading } = useAuth();
     const [analysis, setAnalysis] = useState(null);
     const [voice1, setVoice1] = useState(null);
     const [voice2, setVoice2] = useState(null);  
 
+
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className={styles.pageLoading}>Loading...</div>;
     }
 
     if (!user) {
@@ -38,14 +43,31 @@ const SentenceAnalyzer = () => {
             </h1>
     
             <h2 className={`${styles.subtitle} ${analysis ? styles.subtitleWithAnalysis : ''}`}>
-                Korean Sentence Analysis Tool
+                Master Korean, One Sentence at a Time
             </h2>
+
+            <div className={`${styles.links} ${analysis ? styles.linksWithAnalysis : ''}`}>
+               
+                <div className={styles.linkContainer}>
+                    <Link href="https://x.com/fifltriggi">
+                        <LineMdTwitterX />
+                    </Link>
+                    <Link href="https://github.com/JamesAC42/hanbok">
+                        <LineMdGithub />
+                    </Link>
+                    <Link href="mailto:jamescrovo450@gmail.com">
+                        <LineMdEmail />
+                    </Link>
+                </div>
+            </div>
     
+
             <SentenceForm
                 analysis={analysis}
                 setAnalysis={setAnalysis}
                 setVoice1={setVoice1}
                 setVoice2={setVoice2}
+
                 />
         
             {

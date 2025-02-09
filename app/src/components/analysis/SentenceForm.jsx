@@ -1,10 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
 
 import styles from '@/styles/components/sentenceanalyzer/sentenceform.module.scss';
+import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 
 const SentenceForm = ({
     analysis,
@@ -16,6 +17,30 @@ const SentenceForm = ({
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+
+    const loadingMessages = [
+        "Analyzing sentence structure...",
+        "Identifying grammar points...",
+        "Checking pronunciation patterns...",
+        "Eating kimchi...",
+        "Processing language elements...",
+        "Preparing detailed breakdown..."
+    ];
+
+    useEffect(() => {
+        let intervalId;
+        if (loading) {
+            intervalId = setInterval(() => {
+                setLoadingMessageIndex((prev) => 
+                    (prev + 1) % loadingMessages.length
+                );
+            }, 3000);
+        }
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, [loading]);
 
     const handleSubmit = async (e) => {
 
@@ -118,8 +143,9 @@ const SentenceForm = ({
         {
             (!error && loading) && (
                 <div className={styles.loading}>
-                    <div className={styles.loadingText}>
-                        Analyzing...
+                    <SvgSpinnersRingResize />
+                    <div className={`${styles.loadingText} ${styles.fadeTransition}`}>
+                        {loadingMessages[loadingMessageIndex]}
                     </div>
                 </div>
             )

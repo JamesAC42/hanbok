@@ -1,0 +1,89 @@
+.variants {
+    
+	margin-top:4rem;
+	.variantsHeader {
+		font-family: var(--font-body);
+		font-size: 2.5rem;
+		font-weight: bold;
+		text-align: left;
+		margin-bottom: 1rem;
+	}
+
+    .variant {
+        margin-top:3rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap:4rem;
+    
+        .variantContent {
+            font-family: var(--font-kr-serif);
+            font-size:1.8rem;
+
+            position:relative;
+
+            border: 1px solid #000000;
+            padding: 2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0.3rem 0.3rem 0 #000000;
+            border-radius:0.5rem;
+            margin-left:3rem;
+
+            max-width:50%;
+
+            .variantType {
+                position:absolute;
+                top:0;
+                left:0;
+                border-radius:1rem;
+                padding:0.5rem 1rem;
+                transform:translate(-30%, -40%);
+                font-size:1.2rem;
+                font-weight:bold;
+                color:#000000;
+                background:#fff;
+                border:1px solid #28369e;
+            }
+        }
+        
+
+        .variantWhenToUse {
+            font-family: var(--font-body);
+            font-size:1.3rem;
+            color:#000000;
+            opacity:0.6;
+            flex:1;
+            text-align:center;
+        }
+
+        &[data-formality="formal"] {
+            .variantContent {
+                box-shadow: 0.3rem 0.3rem 0 #575485;
+
+                .variantType {
+                    border:1px solid #5e72f4;
+                }
+            }
+        }
+        &[data-formality="polite"] {
+            .variantContent {
+                box-shadow: 0.3rem 0.3rem 0 #1b6844;
+
+                .variantType {
+                    border:1px solid #2e6740;
+                }
+            }
+        }
+        &[data-formality="casual"] {
+            .variantContent {
+                box-shadow: 0.3rem 0.3rem 0 #a42547;
+
+
+                .variantType {
+                    border:1px solid #f13063;
+                }
+            }
+        }
+    }
+}

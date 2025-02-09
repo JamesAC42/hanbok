@@ -6,7 +6,7 @@ import WordsList from '@/components/analysis/WordsList';
 import GrammarPoints from '@/components/analysis/GrammarPoints';
 import WordInfo from '@/components/analysis/WordInfo';
 import SentenceNotes from '@/components/analysis/SentenceNotes';
-
+import Variants from '@/components/analysis/Variants';
 
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 
@@ -59,6 +59,8 @@ const Analysis = ({
             shouldAnimate={shouldAnimate} />
 
           <SentenceNotes analysis={analysis} />
+
+          <Variants analysis={analysis} />
 
           <WordsList analysis={analysis} />
 

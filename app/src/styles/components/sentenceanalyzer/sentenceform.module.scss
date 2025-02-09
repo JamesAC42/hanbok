@@ -23,6 +23,71 @@
     }
 }
 
+.loading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom:2rem;
+    padding:2rem 0;
+    background:var(--background);
+    box-shadow: 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.8);
+    border-radius:0.5rem;
+    border:1px solid #000000;
+    animation: slide-in 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    svg {
+        transform:scale(1.5);
+    }
+}
+
+.loadingText {
+    color: var(--text-secondary);
+    font-size: 1.3rem;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fadeTransition {
+    animation: fadeInOut 3s ease-in-out infinite;
+}
+
+@keyframes slide-in {
+    0% {
+        opacity:0;
+        transform:translateY(-10%);
+    }
+    100% {
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes fadeInOut {
+
+    0% {
+        opacity: 0;
+        filter:blur(10px);
+    }
+    10% {
+        opacity: 1;
+        filter:blur(0px);
+    }
+
+    90% {
+        opacity: 1;
+        filter:blur(0px);
+    }
+
+    100% {
+        opacity: 0;
+        filter:blur(10px);
+    }
+
+}
+
 .error {
     margin-bottom: 2rem;
     padding: 1rem;

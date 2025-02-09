@@ -81,19 +81,16 @@
             }
             .grammarListItemExamplesContent {
                 display:flex;
-                flex-direction:row;
+                flex-direction:column;
                 justify-content:center;
                 flex-wrap:wrap;
-                margin:5rem 0 4rem 0;
-                gap:1rem;
+                margin:2rem 0 4rem 0;
+                gap:5rem;
                 .grammarListItemExample {
 
                     position:relative;
 
                     & > * {
-                        position:absolute;
-                        top:50%;
-                        left:50%;
                         font-family:var(--font-body);
                         font-weight:100;
                         padding:1rem 3rem;
@@ -103,16 +100,18 @@
 
                     .grammarListItemExampleKorean {
                         font-family:var(--font-kr-serif);
-                        transform:translate(-75%, -90%);
                         font-size:1.5rem;
                         background: linear-gradient(to left, #000000, #80787d);
                         color:#ffffff;
                     }
                     .grammarListItemExampleEnglish {
+                        position:absolute;
+                        top:80%;
+                        right:0;
                         font-family:var(--font-body);
                         font-size:1.3rem;
                         border:1px solid #000000;
-                        transform:translate(-25%, -5%);
+                        transform:translate(0, -5%);
                         background:#ffffff;
                         color:#000000;
                         box-shadow: 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.8);

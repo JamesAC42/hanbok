@@ -10,9 +10,9 @@ const GrammarPoints = ({analysis}) => {
             case 'beginner':
                 return renderStars(1, 5);
             case 'intermediate':
-                return renderStars(2, 5);
-            case 'advanced':
                 return renderStars(3, 5);
+            case 'advanced':
+                return renderStars(5, 5);
             default:
                 return renderStars(0, 5);
         }
