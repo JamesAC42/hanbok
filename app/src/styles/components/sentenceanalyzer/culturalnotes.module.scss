@@ -1,0 +1,39 @@
+
+.culturalNotes {
+    display:flex;
+    flex-direction:column;
+    gap:2rem;
+    padding:1.5rem 1rem;
+    padding-top:1.8rem;
+    padding-right:1.5rem;
+    background:var(--background);
+    border:2px solid rgba(75, 92, 112, 0.669);
+    box-shadow: 0.3rem 0.3rem 0 rgba(1, 2, 3, 0.642);
+    margin:2rem 0;
+    border-radius:0.5rem;
+    .culturalNotesItem {
+        display:flex;
+        gap:2rem;
+        align-items:center;
+        .culturalNoteIcon {
+        color:#ec70c2;
+        svg {
+            transform:scale(2.2) translateX(calc(50% - 3px));
+        }
+        &.highImportance {
+            color:#f1b754;
+        }
+        &.mediumImportance {
+            color:#e088c3;
+        }
+
+        &.lowImportance {
+            color:#717bff;
+        }
+        }
+        .culturalNoteText {
+            transform:translateY(-2px);
+            font-size:1.2rem;
+        }
+    }
+}

@@ -1,0 +1,124 @@
+
+.grammarList {
+    margin-top:4rem;
+
+    position:relative;
+    .grammarListHeader {
+        font-family: var(--font-body);
+        font-size: 2.5rem;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom:1rem;
+    }
+    .grammarListItem {
+        margin:0;
+        margin-bottom:2rem;
+
+        border:1px solid #010101;
+        position: relative;
+        background: #fff;
+        border-radius: 0.3rem;
+        padding: 2rem;
+        transition:all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0.4rem;
+            left: 0.4rem;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        .grammarListItemPattern {
+            border-bottom:1px solid #000000c7;
+            color:#000000c7;
+            padding:1rem;
+            font-family:var(--font-kr-serif);
+            text-align:center;
+            font-size:2rem;
+            font-weight:bold;
+            font-variation-settings: "wght" 900;
+            border-radius:0.2rem;
+            margin-bottom:0.5rem;
+
+
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+
+            .grammarListItemDifficulty {
+                font-size:1.4rem;
+                font-weight:bold;
+                color:#000000;
+                display:flex;
+                gap:0.2rem;
+                border-radius:0 0.2rem 0 0.2rem;
+                svg {
+                    transform:scale(1.5) translateY(0px);
+                }
+            }
+        }
+
+        .grammarListItemExplanation {
+            font-family:var(--font-body);
+            font-size:1.2rem;
+            font-weight:100;
+            line-height:1.5rem;
+            padding:2rem 1rem; 
+        }
+
+        .grammarListItemExamples {
+            .grammarListItemExamplesHeader {
+                font-family:var(--font-body);
+                font-size:1.2rem;
+                font-weight:bold;
+                text-align:center;
+                margin-bottom:1rem;
+            }
+            .grammarListItemExamplesContent {
+                display:flex;
+                flex-direction:row;
+                justify-content:center;
+                flex-wrap:wrap;
+                margin:5rem 0 4rem 0;
+                gap:1rem;
+                .grammarListItemExample {
+
+                    position:relative;
+
+                    & > * {
+                        position:absolute;
+                        top:50%;
+                        left:50%;
+                        font-family:var(--font-body);
+                        font-weight:100;
+                        padding:1rem 3rem;
+                        border-radius:3rem;
+                        white-space: nowrap;
+                    }
+
+                    .grammarListItemExampleKorean {
+                        font-family:var(--font-kr-serif);
+                        transform:translate(-75%, -90%);
+                        font-size:1.5rem;
+                        background: linear-gradient(to left, #000000, #80787d);
+                        color:#ffffff;
+                    }
+                    .grammarListItemExampleEnglish {
+                        font-family:var(--font-body);
+                        font-size:1.3rem;
+                        border:1px solid #000000;
+                        transform:translate(-25%, -5%);
+                        background:#ffffff;
+                        color:#000000;
+                        box-shadow: 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.8);
+                    }
+                }
+            }
+        }
+    }
+}

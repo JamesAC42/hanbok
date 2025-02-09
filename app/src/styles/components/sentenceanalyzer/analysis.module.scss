@@ -1,0 +1,22 @@
+.analysis {
+    backdrop-filter:blur(15px);
+    background:rgba(255, 255, 255, 0.715);
+    font-family:var(--font-kr-serif);
+    box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1);
+    border-radius:0.5rem;
+    padding:2rem;
+
+    .translationHeader {
+        font-family:var(--font-kr-sans);
+        font-size:0.9rem;
+        font-weight:light;
+        text-align:center;
+    }
+
+    .translation {
+        font-family:var(--font-kr-serif);
+        font-size:1.7rem;
+        font-weight:bold;
+        text-align:center;
+    }
+} 

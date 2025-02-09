@@ -1,0 +1,159 @@
+description of app:
+
+A learning tool that helps users understand Korean through contextual sentence analysis. Users can input any Korean sentence (from songs, books, webtoons, etc.) and receive a detailed breakdown of its components, grammar, and usage.
+Key Features:
+
+Sentence Analysis
+
+
+Morphological breakdown of each word/component
+Explanation of grammar patterns used
+Formality level analysis
+Cultural context and usage notes
+Alternative forms of the same sentence in different formality levels
+
+
+Word/Component Learning
+
+
+Detailed breakdown of each word and grammatical component
+Multiple formality levels and their appropriate contexts
+Related words and common phrases
+Cultural usage notes and restrictions
+Conjugation patterns for verbs/adjectives
+Common collocations and phrases
+
+
+Intelligent Storage System
+
+
+Saves analyzed sentences and components for future reference
+Builds connections between related words and grammar patterns
+Links words to example sentences where they've appeared
+Progressive learning system that enriches word data as more examples are seen
+
+
+Learning Features
+
+
+Tracks words and grammar patterns the user has encountered
+Shows previously seen sentences when encountering familiar words
+Highlights new vocabulary and grammar concepts
+Maps relationships between similar words and expressions
+
+
+Special Language Features
+
+
+Handles formal/informal speech levels
+Processes contractions and common spoken forms
+Recognizes slang and internet language
+Identifies regional variations and dialects
+Explains sound changes and pronunciation rules
+
+Technical Details:
+
+Uses LLM for initial sentence analysis
+MongoDB database for storing analyzed components
+Caching system to reuse previously analyzed elements
+Progressive enhancement of stored data as more examples are encountered
+
+Use Cases:
+
+Language learners wanting to understand sentences from real-world Korean content
+Students studying Korean grammar and vocabulary in context
+People preparing for TOPIK or other Korean language tests
+Learners wanting to understand formality levels and cultural context
+Anyone needing to check the appropriate usage of Korean expressions
+
+The app aims to bridge the gap between textbook Korean and real-world usage by providing detailed, contextual analysis of actual Korean sentences while building up a personalized database of encountered vocabulary and grammar patterns.
+
+
+storing words:
+
+Word
+- base (dictionary form, e.g., 가다)
+- type (verb, noun, adjective, etc.)
+- meaning
+  - primary meaning
+  - other meanings
+  - literal meaning (if different from usage)
+  - etymology (especially for Sino-Korean words)
+- pronunciation
+  - standard pronunciation
+  - common variations
+  - sound change rules that apply
+- formality
+  - base formality level
+  - possible formality variants
+  - context for each variant
+- morphological structure
+  - root/stem
+  - prefixes (if any)
+  - suffixes (if any)
+  - particles (if applicable)
+  - whether it's a compound
+  - component breakdown (for compounds)
+- conjugation (for verbs/adjectives)
+  - regular/irregular pattern
+  - all tense forms
+  - all formality level forms
+  - special conjugation notes
+- grammar notes
+  - part of speech
+  - syntactic role
+  - common particle combinations
+  - position rules in sentence
+- usage
+  - common contexts
+  - register (formal, informal, written, spoken)
+  - age/gender associations
+  - regional variations
+  - frequency of use
+  - generation gaps in usage
+- cultural notes
+  - cultural context
+  - any taboos/restrictions
+  - generational differences
+  - regional differences
+- relationships
+  - synonyms
+  - antonyms
+  - related words
+  - common collocations
+- special cases
+  - idiomatic usage
+  - slang variations
+  - abbreviations
+  - internet/text versions
+  - contracted forms
+
+Sentence Component
+- surface form (as it appears in text)
+- normalized form (dictionary form)
+- position in sentence
+- breakdown
+  - morphemes involved
+  - how they combine
+  - any sound changes
+  - any contractions
+- grammatical role
+- relationship to other components
+- formality level
+- context clues
+
+Morpheme
+- form
+- type (root, particle, ending, etc.)
+- meaning
+- usage rules
+- combination rules
+- sound change rules
+- bound/free status
+- position rules
+- variants
+
+prompt for girl image:
+an anime girl in the style of azumanga, vibrant, wearing a korean hanbok sitting in grass reading a book.  the hanbok is grey with blue highlights and the skirt is blue. it is minimalist, flat style. she has black straight hair in a bob cut. she has a confused expression and one hand is up with a finger resting on her lips. floating above her head is a red question mark. the background is completely white and blades of grass are visible in front of her to indicate her sitting position
+
+

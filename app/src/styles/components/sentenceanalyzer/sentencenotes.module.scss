@@ -1,0 +1,28 @@
+.sentenceNotes {
+    margin-top:4rem;
+    .sentenceNotesHeader {
+        font-family: var(--font-body);
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        text-align: left;
+    }
+
+    .sentenceNotesGrid {
+        display: grid;
+        grid-template-columns: max-content 1fr;
+        gap: 1rem;
+        align-items: center;
+
+        .sentenceNoteLabel {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .sentenceNoteValue {  
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+        }
+    }
+}

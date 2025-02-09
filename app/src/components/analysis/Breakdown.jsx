@@ -1,0 +1,106 @@
+'use client';
+import { useState } from 'react';
+import styles from '@/styles/components/sentenceanalyzer/breakdown.module.scss';
+
+const Breakdown = ({ 
+	analysis,
+	wordInfo,
+	setWordInfo
+}) => {
+
+
+	const [lockedWord, setLockedWord] = useState(null);
+
+	const handleWordInfoLeave = () => {
+		if (!lockedWord) {
+		console.log("leaving word info");
+		console.log(wordInfo);
+		setWordInfo(null);
+		}
+	};
+
+	const handleWordInfoEnter = (item, isParticle = false) => {
+		if (!lockedWord || (lockedWord && lockedWord.dictionary_form === item.dictionary_form)) {
+			console.log("entering word info", item);
+			setWordInfo({...item, type: isParticle ? 'particle' : item.type, isParticle});
+		}
+	}
+
+	const handleWordClick = (item, isParticle = false) => {
+		if (lockedWord && lockedWord.dictionary_form === item.dictionary_form) {
+			setLockedWord(null);
+			setWordInfo(null);
+		} else {
+			setLockedWord(item);
+			setWordInfo({...item, type: isParticle ? 'particle' : item.type, isParticle});
+		}
+	}
+  
+	const renderParticles = (item) => {
+		return item.grammar?.particles?.map((particle, index) => (
+			<div 
+				key={index}
+				className={`${styles.sentenceItem} ${
+					lockedWord && lockedWord.dictionary_form === particle.particle ? styles.locked : ""
+				}`}
+				data-role="particle"
+				onMouseEnter={() => handleWordInfoEnter(particle, true)}
+				onClick={() => handleWordClick(particle, true)}
+				>
+				{particle.particle}
+			</div>
+		));
+	}
+	
+	const getCleanedType = (wordType) => {
+		if (!wordType) {
+			return '';
+		}
+		return wordType.replaceAll(' ', '_').toLowerCase();
+	}
+
+	if (!analysis) {
+		return null;
+	}
+
+	return (
+		
+		<div className={styles.breakdown}>
+		<div
+		className={styles.breakdownContent}
+		onMouseLeave={() => handleWordInfoLeave()}
+		>
+
+		{analysis.components.map((item, index) => {
+			const isWhitespace = item.text.trim() === "";
+			return (
+			<div
+				key={index}
+				className={styles.sentenceItemContainer}
+				onMouseLeave={() => handleWordInfoLeave()}
+			>
+				<div
+				className={`${styles.sentenceItem} ${
+					isWhitespace ? styles.whitespace : ""
+				} ${
+					lockedWord &&
+					lockedWord.dictionary_form === item.dictionary_form
+					? styles.locked
+					: ""
+				}`}
+				data-role={getCleanedType(item.type)}
+				onMouseEnter={() => handleWordInfoEnter(item)}
+				onClick={() => handleWordClick(item)}
+				>
+				{item.text}
+				</div>
+				{item.grammar?.particles?.length > 0 && renderParticles(item)}
+			</div>
+			);
+		})}
+		</div>
+		</div>
+	);
+};
+
+export default Breakdown;

@@ -1,0 +1,62 @@
+@import './fonts.scss';
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --primary: #ffffff;
+  --secondary: #000000;
+  --shadow: #000000;
+
+  --error-background:rgba(252, 207, 207, 0.877);
+  --error-foreground:#b81f1f;
+  --text-normal:1rem;
+  --text-large:1.5rem;
+  --text-small:0.8rem;
+
+  --spacing-small:0.5rem;
+  --spacing-medium:1rem;
+  --spacing-large:2rem;
+
+  --border-radius:0.3rem;
+
+  --font-body: 'Merriweather', serif;
+  --font-display: 'Montserrat', sans-serif;
+  --font-kr-sans: 'Noto Sans KR', sans-serif;
+  --font-kr-serif: 'Noto Serif KR', serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {  
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Pseudo-element for top background dots */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200dvw;
+  height: 40rem;
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.15) 0.1rem, transparent 0.1rem);
+  background-size: 0.5rem 0.5rem;
+  transform: translate(0, -13rem) rotate(2deg);
+  pointer-events: none;
+  z-index: -1;
+}

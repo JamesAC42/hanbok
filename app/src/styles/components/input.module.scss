@@ -1,0 +1,40 @@
+.input {
+  font-family: var(--font-kr-serif);
+  padding: var(--spacing-small) var(--spacing-medium);
+  border: 1px solid var(--foreground);
+  background: var(--background);
+  border-radius: var(--border-radius);
+  color: var(--foreground);
+  width: 100%;
+  transition: all 0.2s ease;
+  position: relative;
+  transform: translate(0, 0);
+  box-shadow: 0 0 0 transparent;
+
+  &:focus {
+    outline: none;
+    transform: translate(-0.125rem, -0.125rem);
+    box-shadow: 0.375rem 0.375rem 0 var(--foreground);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  &.default {
+    // default styles
+  }
+
+  &.large {
+    font-size: var(--text-large);
+    padding: var(--spacing-medium);
+  }
+
+  &.small {
+    font-size: var(--text-small);
+    padding: calc(var(--spacing-small) / 2);
+  }
+} 
