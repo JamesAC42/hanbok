@@ -85,7 +85,7 @@ For valid input:
     "grammar_points": [
         {
         "pattern": "name of grammar pattern or word formation pattern",
-        "level": "TOPIK level or beginner/intermediate/advanced",
+        "level": "beginner/intermediate/advanced",
         "explanation": "clear explanation for learners",
         "components": ["indices of relevant components"],
         "examples": [
@@ -119,6 +119,20 @@ For valid input:
         }
     ]
     }
+}
+
+NOTE: DO NOT INCLUDE BACKTICKS (e.g. \`\`\`json) IN RESPONSE! ONLY the JSON object should be returned.
+
+Example of what NOT to return:
+\`\`\`json
+{
+    ...
+}
+\`\`\`
+
+Example of what to return:
+{
+    ...
 }
 
 Important notes for the response:

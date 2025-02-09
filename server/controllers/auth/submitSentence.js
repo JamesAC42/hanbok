@@ -1,47 +1,14 @@
-
-const Anthropic = require('@anthropic-ai/sdk');
-
+const generateResponse = require('../../llm/generateResponse');
 const generateSpeech = require('../../elevenlabs/generateSpeech');
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+const {ANALYSIS_PROMPT} = require('../../llm/prompt');
 
 const submitSentence = async (req, res) => {
     
   const { text } = req.body;
   
-  let attempts = 0;
-  let maxAttempts = 3;
-  let generateSuccess = false;
   try {
     
-    let parsedResponse = null
-    while(!generateSuccess && attempts < maxAttempts) {
-
-        console.log("generating...");
-        const msg = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-20241022",
-
-        max_tokens: 4096,
-        messages: [{ 
-            role: "user", 
-            content: ANALYSIS_PROMPT + text
-        }],
-        });
-        try {
-            console.log(msg.content[0].text);
-            parsedResponse = JSON.parse(msg.content[0].text);
-            generateSuccess = true;
-        } catch (error) {
-            console.error('Error parsing response:', error);
-            attempts++;
-        }
-    }
-
-    if(!generateSuccess) {
-        throw new Error("Could not generate valid analysis.");
-    }
+    let parsedResponse = await generateResponse(ANALYSIS_PROMPT + text, 'gemini');
 
     if(!parsedResponse.isValid) {
         return res.json({ message: parsedResponse });

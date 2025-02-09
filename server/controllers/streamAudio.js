@@ -1,13 +1,17 @@
+const fs = require('fs');
+const path = require('path');
+
 const streamAudio = (req, res) => {
 
     const { filename } = req.params;
 
     let filePath = null;
     if(filename.includes('speech1')) {
-        filePath = path.join(__dirname, '..', 'audio', 'uyVNoMrnUku1dZyVEXwD', filename);
+        filePath = path.join(__dirname, '..', '..', 'audio', 'uyVNoMrnUku1dZyVEXwD', filename);
     } else if (filename.includes('speech2')) {
-        filePath = path.join(__dirname, '..', 'audio', 'PDoCXqBQFGsvfO0hNkEs', filename);
+        filePath = path.join(__dirname, '..', '..', 'audio', 'PDoCXqBQFGsvfO0hNkEs', filename);
     }
+
 
     if (fs.existsSync(filePath)) {
         res.setHeader('Content-Type', 'audio/mpeg');
