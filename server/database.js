@@ -23,12 +23,15 @@ async function connectToDatabase() {
     // Create indexes
     await db.collection('users').createIndex({ email: 1 }, { unique: true });
     await db.collection('users').createIndex({ googleId: 1 }, { unique: true });
+    await db.collection('sentences').createIndex({ userId: 1 });
+    await db.collection('sentences').createIndex({ sentenceId: 1 }, { unique: true });
 
-    // Initialize counter for auto-incrementing userId
+    // Initialize counters
     try {
       await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });
+      await db.collection('counters').insertOne({ _id: 'sentenceId', seq: 0 });
     } catch (error) {
-      // Ignore duplicate key error as counter might already exist
+      // Ignore duplicate key error as counters might already exist
       if (error.code !== 11000) {
         throw error;
       }

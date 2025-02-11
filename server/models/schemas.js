@@ -24,6 +24,39 @@ const collections = {
         }
       }
     }
+  },
+  sentences: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["sentenceId", "userId", "text", "analysis", "dateCreated"],
+        properties: {
+          sentenceId: {
+            bsonType: "int"
+          },
+          userId: {
+            bsonType: "int"
+          },
+          text: {
+            bsonType: "string"
+          },
+          analysis: {
+            bsonType: "object"
+          },
+          voice1: {
+            bsonType: ["string", "null"],
+            description: "S3 presigned URL for voice 1 audio"
+          },
+          voice2: {
+            bsonType: ["string", "null"],
+            description: "S3 presigned URL for voice 2 audio"
+          },
+          dateCreated: {
+            bsonType: "date"
+          }
+        }
+      }
+    }
   }
 };
 

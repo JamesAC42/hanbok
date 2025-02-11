@@ -10,6 +10,8 @@
   "description": "",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.36.3",
+    "@aws-sdk/client-s3": "^3.744.0",
+    "@aws-sdk/s3-request-presigner": "^3.744.0",
     "@google/generative-ai": "^0.21.0",
     "bcrypt": "^5.1.1",
     "connect-redis": "^8.0.1",

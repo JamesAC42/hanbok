@@ -1,6 +1,26 @@
 const client = require('./client');
-const fs = require('fs');
-const path = require('path');
+const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const { Readable } = require('stream');
+
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  }
+});
+
+const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+
+// Helper function to convert stream to buffer
+const streamToBuffer = async (stream) => {
+  const chunks = [];
+  for await (const chunk of stream) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+};
 
 const generateSpeech = async (text) => {
   try {
@@ -20,40 +40,67 @@ const generateSpeech = async (text) => {
     ]);
 
     const timestamp = Date.now();
-    const filename1 = `speech1_${timestamp}.mp3`;
-    const filename2 = `speech2_${timestamp}.mp3`;
+    const key1 = `audio/uyVNoMrnUku1dZyVEXwD/speech1_${timestamp}.mp3`;
+    const key2 = `audio/PDoCXqBQFGsvfO0hNkEs/speech2_${timestamp}.mp3`;
 
-    const filepath1 = path.join(__dirname, '..', '..', 'audio', 'uyVNoMrnUku1dZyVEXwD', filename1);
-    const filepath2 = path.join(__dirname, '..', '..', 'audio', 'PDoCXqBQFGsvfO0hNkEs', filename2);
+    // Convert streams to buffers
+    const [buffer1, buffer2] = await Promise.all([
+      streamToBuffer(response1),
+      streamToBuffer(response2)
+    ]);
 
-    const dir1 = path.dirname(filepath1);
-    const dir2 = path.dirname(filepath2);
-    if (!fs.existsSync(dir1)) {
-      fs.mkdirSync(dir1, { recursive: true });
-    }
-    if (!fs.existsSync(dir2)) {
-      fs.mkdirSync(dir2, { recursive: true });
-    }
-
+    // Upload both files to S3
     await Promise.all([
-      fs.promises.writeFile(filepath1, response1),
-      fs.promises.writeFile(filepath2, response2)
+      s3Client.send(new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key1,
+        Body: buffer1,
+        ContentType: 'audio/mpeg'
+      })),
+      s3Client.send(new PutObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key2,
+        Body: buffer2,
+        ContentType: 'audio/mpeg'
+      }))
+    ]);
+
+    // Generate presigned URLs that expire in 7 days
+    const [url1, url2] = await Promise.all([
+      getSignedUrl(s3Client, 
+        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: key1 }), 
+        { expiresIn: 604800 }
+      ),
+      getSignedUrl(s3Client, 
+        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: key2 }), 
+        { expiresIn: 604800 }
+      )
     ]);
 
     return {
-      voice1: filename1,
-      voice2: filename2
+      voice1: url1,
+      voice2: url2
     };
 
   } catch (error) {
-    console.error("ElevenLabs API Error:", error);
-    console.error("ElevenLabs API Error Message:", error.message);
-    console.error("ElevenLabs API Error Status Code:", error.statusCode);
+    console.error("Error:", error);
     if (error.response) {
-      console.error("ElevenLabs API Error Response Data:", error.response.data);
+      console.error("Error Response Data:", error.response.data);
     }
     throw error;
   }
 }
 
-module.exports = generateSpeech;
+const getPresignedUrl = async (key) => {
+  const command = new GetObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key
+  });
+  
+  return getSignedUrl(s3Client, command, { expiresIn: 604800 });
+};
+
+module.exports = {
+  generateSpeech,
+  getPresignedUrl
+};

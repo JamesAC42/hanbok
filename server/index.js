@@ -18,8 +18,8 @@ const redisStore = new RedisStore({
 
 const { connectToDatabase } = require('./database');
 
-const streamAudio = require('./controllers/streamAudio');
 const submitSentence = require('./controllers/auth/submitSentence');
+const getAudioURL = require('./controllers/auth/getAudioURL');
 
 const login = require('./controllers/auth/login');
 const getSession = require('./controllers/auth/getSession');
@@ -28,7 +28,7 @@ const logout = require('./controllers/auth/logout');
 const PORT = 5666;
 
 app.use(cors({
-  origin: process.env.LOCAL ? 'http://localhost:3000' : '',
+  origin: process.env.LOCAL ? 'http://localhost:3001' : '',
   credentials: true
 }));
 
@@ -89,8 +89,8 @@ app.post('/api/submit', isAuthenticated, async (req, res) => {
     submitSentence(req, res);
 });
 
-app.get('/api/stream-audio/:filename', isAuthenticated, async (req, res) => {
-    streamAudio(req, res);
+app.get('/api/audio-url/:sentenceId', isAuthenticated, async (req, res) => {
+    getAudioURL(req, res);
 });
 
 async function startServer() {

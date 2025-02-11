@@ -16,7 +16,6 @@ const generateResponse = async (text, model) => {
         console.log("generating...");
         try {
             let response = await models[model](text);
-            //console.log(response);
 
             // Strip away ```json and ``` if present
             if (response.startsWith('```json') && response.endsWith('```')) {
