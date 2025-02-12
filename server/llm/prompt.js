@@ -66,19 +66,20 @@ For valid input:
             "notes": "any specific meaning notes for this context"
         },
 
-        "grammar": {
+        "grammar": { // Make sure that the particles are a direct child of this property!
             "role": "grammatical role (for sentences) or word class (for single words)",
             "conjugation": {  // for verbs/adjectives
             "tense": "present/past/etc",
             "formality": "polite/casual/etc",
-            "steps": ["step1", "step2"] // how it was conjugated from base form
+            "steps": ["step1", "step2"] // how it was conjugated from base form,
+            
+            "particles": [  // for nouns [NOTE: ONLY INCLUDE IF THE PARTICLE IMMEDIATELY FOLLOWS THIS COMPONENT IN THE ORIGINAL SENTENCE]
+                {
+                    "particle": "particle used",
+                    "function": "what it does in this context"
+                }
+            ]
         },
-        "particles": [  // for nouns
-            {
-                "particle": "particle used",
-                "function": "what it does in this context"
-            }
-        ]
     }
     ],
 
@@ -143,6 +144,7 @@ Important notes for the response:
 5. For single words with particles, analyze both the root word and the particle
 6. The text of the components must exactly match the input when combined
 7. It is EXTREMELY important that the text and dictionary form fields are populated for every single component
+8. When constructing components, include both words of a compound noun in a single component. e.g. 버스 타임 is a single component, not two.
 
 Korean text to analyze: `;
 

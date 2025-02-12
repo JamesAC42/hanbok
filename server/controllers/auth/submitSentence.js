@@ -9,7 +9,7 @@ const submitSentence = async (req, res) => {
     
     try {
         const db = getDb();
-        let parsedResponse = await generateResponse(ANALYSIS_PROMPT + text, 'openai');
+        let parsedResponse = await generateResponse(ANALYSIS_PROMPT + text, 'gemini');
 
         if(!parsedResponse.isValid) {
             return res.json({ message: parsedResponse });
