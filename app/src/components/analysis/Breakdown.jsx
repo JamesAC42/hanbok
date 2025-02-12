@@ -1,27 +1,29 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '@/styles/components/sentenceanalyzer/breakdown.module.scss';
 
 const Breakdown = ({ 
 	analysis,
-	wordInfo,
-	setWordInfo
+	setWordInfo,
+	resetLockedWord
 }) => {
-
 
 	const [lockedWord, setLockedWord] = useState(null);
 
+	useEffect(() => {
+		if (resetLockedWord) {
+			setLockedWord(null);
+		}
+	}, [resetLockedWord]);
+
 	const handleWordInfoLeave = () => {
 		if (!lockedWord) {
-		console.log("leaving word info");
-		console.log(wordInfo);
 		setWordInfo(null);
 		}
 	};
 
 	const handleWordInfoEnter = (item, isParticle = false) => {
 		if (!lockedWord || (lockedWord && lockedWord.dictionary_form === item.dictionary_form)) {
-			console.log("entering word info", item);
 			setWordInfo({...item, type: isParticle ? 'particle' : item.type, isParticle});
 		}
 	}
@@ -41,7 +43,7 @@ const Breakdown = ({
 			<div 
 				key={index}
 				className={`${styles.sentenceItem} ${
-					lockedWord && lockedWord.dictionary_form === particle.particle ? styles.locked : ""
+					lockedWord && lockedWord.particle === particle.particle ? styles.locked : ""
 				}`}
 				data-role="particle"
 				onMouseEnter={() => handleWordInfoEnter(particle, true)}
@@ -75,7 +77,7 @@ const Breakdown = ({
 			const isWhitespace = item.text.trim() === "";
 			return (
 			<div
-				key={index}
+				key={item.text + ": " + index}
 				className={styles.sentenceItemContainer}
 				onMouseLeave={() => handleWordInfoLeave()}
 			>

@@ -9,6 +9,9 @@
     align-items:center;
     margin:2rem 0;
     gap:4rem;
+    @media screen and (max-width:725px) {
+        gap:1rem;
+    }
     .speakersOuter {
         display:flex;
         gap:1rem;

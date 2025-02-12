@@ -157,3 +157,14 @@ prompt for girl image:
 an anime girl in the style of azumanga, vibrant, wearing a korean hanbok sitting in grass reading a book.  the hanbok is grey with blue highlights and the skirt is blue. it is minimalist, flat style. she has black straight hair in a bob cut. she has a confused expression and one hand is up with a finger resting on her lips. floating above her head is a red question mark. the background is completely white and blades of grass are visible in front of her to indicate her sitting position
 
 
+todo:
+
+mark the sidebar for viewing profile, login, logout
+wall off audio, saving sentences, etc. behind login
+  shill making an account and premium features behind wall
+make an about/roadmap/blog/contact page
+soft launch
+
+note: if a user signs up after making a sentence, make sure to save the sentence to their profile
+
+add a typing game to learn korean typing as an additional free feature

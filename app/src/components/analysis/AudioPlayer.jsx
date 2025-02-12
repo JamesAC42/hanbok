@@ -44,10 +44,10 @@ const AudioPlayer = ({ voice1, voice2 }) => {
 
       useEffect(() => {
         if (voice1) {
-            audioRefs.voice1.src = `/api/stream-audio/${voice1}`;
+            audioRefs.voice1.src = `${voice1}`;
         }
         if (voice2) {
-            audioRefs.voice2.src = `/api/stream-audio/${voice2}`;
+            audioRefs.voice2.src = `${voice2}`;
         }
       }, [voice1, voice2]);
     
@@ -76,11 +76,11 @@ const AudioPlayer = ({ voice1, voice2 }) => {
           <>
           <div className={styles.audioPlayers}>
             <audio controls>
-              <source src={`/api/stream-audio/${voice1}`} type="audio/mpeg" />
+              <source src={`${voice1}`} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
             <audio controls>
-              <source src={`/api/stream-audio/${voice2}`} type="audio/mpeg" />
+              <source src={`${voice2}`} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
           </div>

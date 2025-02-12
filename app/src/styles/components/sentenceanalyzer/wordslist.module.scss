@@ -40,7 +40,7 @@
 			}
 			margin-right:1.5rem;
 		}
-		
+
 		span.wordDictionary {
 			font-weight:bold;
 		}
@@ -50,6 +50,28 @@
 			font-weight:bold;
 			opacity:0.6;
 			font-size:1rem;
+		}
+	}
+    @media screen and (max-width:725px) {
+        margin-top:2rem;
+        .wordsListHeader {
+            font-size:1.8rem;
+        }
+		.wordListItem {
+			font-size:1.2rem;
+			padding:0.5rem 1rem;
+			margin-bottom:0.4rem;
+			font-size:1rem;
+			.wordListItemActions {
+				margin-right:0.8rem;
+			}
+			.wordDictionary {
+				margin-right:1rem;
+			}
+			span.wordListItemType {
+				font-size:0.8rem;
+				text-align:right;
+			}
 		}
 	}
 }

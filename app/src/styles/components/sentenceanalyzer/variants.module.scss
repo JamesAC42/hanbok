@@ -86,4 +86,42 @@
             }
         }
     }
+    @media screen and (max-width:725px) {
+        margin-top:2rem;
+        .variantsHeader {
+            font-size:1.8rem;
+        }
+        .variant {
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            margin-top:2rem;
+            gap: 0rem;
+
+            .variantContent {
+                max-width:90%;
+                margin-left:0;
+                flex: none;
+                font-size:1.8rem;
+    
+                position:relative;
+    
+                border: 2px solid #000000;
+                padding: 1.1rem 1.4rem;
+                border-radius:0.5rem;
+
+                .variantType {
+                    border-radius:1rem;
+                    padding:0.3rem 0.7rem;
+                    transform:translate(-10%, -50%);
+                    font-size:1rem;
+                }
+            }
+            .variantWhenToUse {
+                flex: none;
+                margin-top: 0.5rem;
+                font-size:1rem;
+            }
+        }
+    }
 }

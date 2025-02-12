@@ -25,4 +25,19 @@
             font-size: 1.1rem;
         }
     }
+    @media screen and (max-width:725px) {
+        margin-top:2rem;
+        .sentenceNotesHeader {
+            font-size:1.8rem;
+        }
+        .sentenceNotesGrid {
+            grid-template-columns: 1fr 2fr;
+            .sentenceNoteLabel {
+                font-size:1rem;
+            }
+            .sentenceNoteValue {
+                font-size:1rem;
+            }
+        }
+    }
 }

@@ -11,7 +11,8 @@ const SentenceForm = ({
     analysis,
     setAnalysis,
     setVoice1,
-    setVoice2
+    setVoice2,
+    setTransition
 }) => {
 
     const [text, setText] = useState('');
@@ -81,13 +82,19 @@ const SentenceForm = ({
             if (!data.message.isValid) {
                 setError(data.message.error);
             } else {
-                setAnalysis(data.message.analysis);
-                if (data.voice1) {
-                    setVoice1(data.voice1);
-                }
-                if (data.voice2) {
-                    setVoice2(data.voice2);
-                }
+                setTransition(true);
+                setTimeout(() => {
+                    setAnalysis(data.message.analysis);
+                    if (data.voice1) {
+                        setVoice1(data.voice1);
+                    }
+                    if (data.voice2) {
+                        setVoice2(data.voice2);
+                    }
+                }, 200);
+                setTimeout(() => {
+                    setTransition(false);
+                }, 400);
             }
         } catch (error) {
             console.error('Error:', error);

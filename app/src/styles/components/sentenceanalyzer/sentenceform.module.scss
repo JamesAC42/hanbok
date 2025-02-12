@@ -10,7 +10,12 @@
         display:flex;
         gap:1rem;
         input {
-        font-size:1.3rem;
+            font-size:1.3rem;
+        }
+    
+        @media screen and (max-width:725px) {
+            flex-direction:column;
+            gap:0.3rem;
         }
     }
 
@@ -39,6 +44,14 @@
 
     svg {
         transform:scale(1.5);
+    }
+    @media screen and (max-width:725px) {
+        flex-direction:column;
+        gap:0.8rem;
+        padding:2rem;
+        svg {
+            transform:scale(1.9);
+        }
     }
 }
 

@@ -8,8 +8,8 @@
             position: relative;
             .wordInfoContainerInner {
                 .type {
-                background-color: rgba($color, 0.1);
-                color: $color;
+					background-color: rgba($color, 0.1);
+					color: $color;
                 }
             }
             .wordInfoBackground {
@@ -34,6 +34,18 @@
 		animation: word-info-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	}
 
+	border: 1px solid #3e3e3e;
+	.wordInfoContainerInner {
+		.type {
+			border:3px;
+			color:#3e3e3e;
+			background-color:#3e3e3e;
+		}
+	}
+	.wordInfoBackground {
+		background:#3e3e3e;
+	}
+
 	@include word-info-colors;
 
 	.wordInfoBackground {
@@ -55,6 +67,10 @@
 		border-radius: inherit;
 
 		padding:2rem;
+		
+		@media screen and (max-width:725px) {
+			padding:0.5rem;
+		}
 
 		.type {
 			position:absolute;
@@ -68,6 +84,10 @@
 			padding:0.4rem 1rem;
 			background-color:rgba(0, 0, 0, 0.1);
 			color:black;
+		
+			@media screen and (max-width:725px) {
+				font-size:0.8rem;
+			}
 		}
 
 		.dictionaryForm {
@@ -79,6 +99,11 @@
 			border-bottom:1px solid #999999;
 			padding-bottom:0.5rem;
 			margin-bottom:0.5rem;
+		
+			@media screen and (max-width:725px) {
+				margin-left:0.2rem;
+				font-size:2.4rem;
+			}
 		}
 
 		.wordInfoContent {
@@ -115,15 +140,27 @@
 					line-height:2rem;
 					text-align:center;
 					span.wordRole {
-					background:#8a8a8a;
-					color:#fff;
-					white-space:nowrap;
-					margin-left:0.5rem;
-					overflow:hidden;
-					text-overflow:ellipsis;
-					padding:0.2rem 0.5rem;
-					border-radius:0.2rem;
-					transform:translateY(-5px);
+						background:#8a8a8a;
+						color:#fff;
+						white-space:nowrap;
+						margin-left:0.5rem;
+						overflow:hidden;
+						text-overflow:ellipsis;
+						padding:0.2rem 0.5rem;
+						border-radius:0.2rem;
+						transform:translateY(-5px);
+					}
+				}
+
+		
+				@media screen and (max-width:725px) {
+					font-size:0.9rem;
+					padding:0;
+					margin-top:1rem;
+					justify-content:center;
+					gap:1rem;
+					.roleInfo {
+						margin-top:0.5rem;
 					}
 				}
 
@@ -159,6 +196,10 @@
 							}
 						}
 					}
+					@media screen and (max-width:725px) {
+						height:fit-content;
+						margin-bottom:0.5rem;
+					}
 				}
 
 				.conjugation {
@@ -170,12 +211,17 @@
 					align-items:stretch;
 					//padding-left:2rem;
 					gap:2rem;
+					@media screen and (max-width:725px) {
+						flex-direction:column;
+						align-items:center;
+						gap:0.5rem;
+					}
 
 					.additionalInfo {
 						display:flex;
 						flex-direction:column;
 						justify-content:center;
-						align-items:center;
+						align-items:stretch;
 						gap:1rem;
 						max-width:15rem;
 
@@ -205,6 +251,18 @@
 								padding: 0.5rem 0.8rem;
 							}
 						}
+						@media screen and (max-width:725px) {
+							flex-direction:row;
+							flex-wrap:wrap;
+							max-width:100%;
+							margin-bottom:0.5rem;
+							.tense, .formality {
+								font-size:0.9rem;
+								& * {
+									padding:0.1rem 0.3rem;
+								}
+							}
+						}
 					}
 
 
@@ -229,6 +287,19 @@
 							text-align:center;
 							}
 						}
+						@media screen and (max-width:725px) {
+							.stepsHeader {
+								font-size:1.2rem;
+							}
+							.stepsContent {
+								.step {
+									font-size:1.2rem;
+								}
+							}
+						}
+					}
+					@media screen and (max-width:725px) {
+						margin-bottom:0.5rem;
 					}
 				}
 			}
@@ -259,6 +330,11 @@
 
 	svg {
 		transform:scale(1.5);
+	}
+	@media screen and (max-width:725px) {
+		flex-direction:column;
+		height:10rem;
+		font-size:1.2rem;
 	}
 } 
 

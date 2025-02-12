@@ -1,3 +1,15 @@
+@keyframes update-blur {
+    0% {
+        filter:none;
+    }
+    50% {
+        filter:blur(8px);
+    }
+    100% {
+        filter:none;
+    }
+}
+
 .analysis {
     backdrop-filter:blur(20px);
     background:rgba(255, 255, 255, 0.815);
@@ -5,6 +17,14 @@
     box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1);
     border-radius:0.5rem;
     padding:2rem;
+
+    &.transition {
+        animation:update-blur 0.3s ease-in-out;
+    }
+
+    @media screen and (max-width:725px) {
+        padding:1rem;
+    }
 
     .translationHeader {
         font-family:var(--font-kr-sans);
@@ -18,5 +38,8 @@
         font-size:1.7rem;
         font-weight:bold;
         text-align:center;
+        @media screen and (max-width:725px) {
+            font-size:1.2rem;
+        }
     }
 } 

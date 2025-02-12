@@ -17,6 +17,7 @@ const SentenceAnalyzer = () => {
     const [analysis, setAnalysis] = useState(null);
     const [voice1, setVoice1] = useState(null);
     const [voice2, setVoice2] = useState(null);  
+    const [showTransition, setShowTransition] = useState(false);
 
 
     if (loading) {
@@ -67,7 +68,7 @@ const SentenceAnalyzer = () => {
                 setAnalysis={setAnalysis}
                 setVoice1={setVoice1}
                 setVoice2={setVoice2}
-
+                setTransition={setShowTransition}
                 />
         
             {
@@ -75,7 +76,8 @@ const SentenceAnalyzer = () => {
             <Analysis 
                 analysis={analysis} 
                 voice1={voice1} 
-                voice2={voice2} />
+                voice2={voice2}
+                showTransition={showTransition} />
             }
         </div>
     )

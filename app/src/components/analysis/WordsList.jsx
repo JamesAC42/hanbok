@@ -76,7 +76,6 @@ const WordsList = ({analysis}) => {
                 </div>
             );
         });
-        console.log(wordList);
         return wordList;
     }
 

@@ -64,9 +64,10 @@
         }
 
         .grammarListItemExplanation {
-            font-family:var(--font-body);
+            font-family:var(--font-kr-serif);
             font-size:1.2rem;
-            font-weight:100;
+            font-weight:500;
+            font-variation-settings: "wght" 500;
             line-height:1.5rem;
             padding:2rem 1rem; 
         }
@@ -115,6 +116,67 @@
                         background:#ffffff;
                         color:#000000;
                         box-shadow: 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.8);
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width:725px) {
+        margin-top:2rem;
+        .grammarListHeader {
+            font-size:1.8rem;
+        }
+        .grammarListItem {
+            margin-bottom:1rem;
+            padding: 0.8rem;
+    
+            &::after {
+                top: 0.3rem;
+                left: 0.3rem;
+            }
+    
+            .grammarListItemPattern {
+                padding:0.7rem;
+                font-size:1.3rem;
+                gap:0.5rem;
+    
+                .grammarListItemDifficulty {
+                    font-size:0.8rem;
+                }
+            }
+    
+            .grammarListItemExplanation {
+                font-size:1rem;
+                padding:1rem; 
+            }
+    
+            .grammarListItemExamples {
+                .grammarListItemExamplesHeader {
+                    font-size:1.2rem;
+                    margin-bottom:0.5rem;
+                }
+                .grammarListItemExamplesContent {
+                    margin:1rem 0 4rem 0;
+                    gap:3rem;
+                    .grammarListItemExample {
+                        & > * {
+                            font-weight:100;
+                            padding:0.5rem 1.5rem;
+                            border-radius:1.8rem;
+                            white-space: wrap;
+                        }
+    
+                        .grammarListItemExampleKorean {
+                            font-size:1.3rem;
+                        }
+
+                        .grammarListItemExampleEnglish {
+                            font-size:1rem;
+                            transform:translate(-1rem, 10%);
+                            max-width:80%;
+                            text-align:right;
+                            width:fit-content;
+                        }
                     }
                 }
             }
