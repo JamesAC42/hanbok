@@ -5,6 +5,7 @@ import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsPause } from '@/components/icons/Pause';
 import { MaterialSymbolsLockOpenCircle } from '@/components/icons/Lock';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
+import { TdesignUserTalk1Filled } from '@/components/icons/Talk';
 import Image from 'next/image';
 
 import styles from '@/styles/components/sentenceanalyzer/audioplayer.module.scss';
@@ -143,7 +144,14 @@ const AudioPlayer = ({ voice1, voice2 }) => {
               <div
                 onClick={() => setShowPopup(true)}
                 className={styles.audioPlayerLocked}>
-                <MaterialSymbolsLockOpenCircle />
+
+                  {
+                    user ? (
+                      <TdesignUserTalk1Filled />
+                    ) : (
+                      <MaterialSymbolsLockOpenCircle />
+                    )
+                  }
               </div>
             )
           }

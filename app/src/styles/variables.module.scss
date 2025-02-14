@@ -57,3 +57,15 @@ $word-types: (
   "interjection": rgb(199, 50, 182),
   "determiner": rgb(49, 188, 111)
 );
+
+
+@keyframes slide-fade-in {
+  0% {
+      opacity:0;
+      transform:translateY(10%);
+  }
+  100% {
+      opacity:1;
+      transform:translateY(0);
+  }
+}

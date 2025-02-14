@@ -29,9 +29,39 @@
         transition: all 0.2s linear;
         background-color: #404040;
         color:#fff;
-        border-color:#8b8b8b;
+        border-color:#000000;
         //transform:translate(-0.25rem, -0.25rem) !important;  
         box-shadow: 0.5rem 0.5rem 0 #171717;
+        &:first-child {
+            box-shadow: 0.5rem 0.5rem 0 #c93838;
+            background-color: #c93838;
+            border-color:#000000;
+        }
+        &:nth-child(2) {
+            box-shadow: 0.5rem 0.5rem 0 #48a940;
+            background-color: #48a940;
+
+        }
+        &:nth-child(3) {
+            box-shadow: 0.5rem 0.5rem 0 #403bd1;
+            background-color: #403bd1;
+
+        }
+        &:nth-child(4) {
+            box-shadow: 0.5rem 0.5rem 0 #d1b936;
+            background-color: #d1b936;
+
+        }
+        &:nth-child(5) {
+            box-shadow: 0.5rem 0.5rem 0 #1a946a;
+            background-color: #1a946a;
+
+        }
+        &:nth-child(6) {
+            box-shadow: 0.5rem 0.5rem 0 #c74683;
+            background-color: #c74683;
+
+        }
     }
 }
 
