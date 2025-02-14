@@ -22,22 +22,23 @@ export function AuthProvider({ children }) {
             setLoading(false);
         }
     };
-
+    
     const login = async (response) => {
         console.log(response);
         try {
             const loginResponse = await fetch('/api/login', { 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token: response.credential })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token: response.credential })
             });
-            if(loginResponse.success) {
-                console.log("loginResponse", loginResponse);
-                setUser(loginResponse.user);
+            const data = await loginResponse.json();
+            console.log(data);
+            if(data.success) {
+                console.log("loginResponse data", data);
+                setUser(data.user);
             }
-
         } catch (error) {
             console.error('Error logging in:', error);
         }
@@ -45,15 +46,23 @@ export function AuthProvider({ children }) {
 
     const logout = async () => {
         try {
-            await fetch('/auth/logout', { method: 'POST' });
+            await fetch('/api/logout', { method: 'POST' });
             setUser(null);
         } catch (error) {
             console.error('Error logging out:', error);
         }
     };
 
+    const value = {
+        user,
+        loading,
+        login,
+        logout,
+        isAuthenticated: !!user
+    };
+
     return (
-        <AuthContext.Provider value={{ user, loading, login, logout }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );

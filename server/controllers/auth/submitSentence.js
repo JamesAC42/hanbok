@@ -5,7 +5,18 @@ const { getDb } = require('../../database');
 
 const submitSentence = async (req, res) => {
     const { text } = req.body;
-    const userId = req.session.user.userId;
+
+    if (!text || text.length > 80) {
+        return res.json({
+            message: {
+                isValid: false,
+                error: {
+                    type: "validation",
+                    message: "Text must be between 1 and 80 characters"
+                }
+            }
+        });
+    }
     
     try {
         const db = getDb();
@@ -34,6 +45,8 @@ const submitSentence = async (req, res) => {
             console.error("Speech generation failed:", speechError);
         }
 
+        const userId = req.session.user ? req.session.user.userId : null;
+
         // Get next sentence ID
         const counterDoc = await db.collection('counters').findOneAndUpdate(
             { _id: 'sentenceId' },
@@ -44,7 +57,7 @@ const submitSentence = async (req, res) => {
         // Create sentence document
         const sentenceDoc = {
             sentenceId: counterDoc.seq,
-            userId: userId,
+            userId: userId ? userId : null,
             text: text,
             analysis: parsedResponse.analysis,
             voice1Key: voice1_url,

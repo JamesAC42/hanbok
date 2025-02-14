@@ -1,0 +1,66 @@
+.pageContainer {
+    height: 100dvh;
+    width: 100dvw;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 2rem 15rem;
+    padding-bottom: 0;
+    margin: 0 auto;
+    position: relative;
+
+    scrollbar-width: thin;
+
+    @media screen and (max-width: 1200px) {
+        padding: 2rem 7rem;
+    }
+    @media screen and (max-width: 950px) {
+        padding: 2rem;
+    }
+    @media screen and (max-width: 725px) {
+        padding: 0.5rem;
+    }
+
+    .girlContainer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 40dvw;
+        height: auto;
+        z-index: -1;
+
+        img {
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        @media screen and (max-width: 725px) {
+            width:60dvw;
+        }
+    }
+
+    .pageContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 0rem;
+        border-radius: 1rem;
+        padding: 2rem;
+
+        .pageTitle {
+            font-family: var(--font-display);
+            font-variation-settings: 'wght' 800;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            text-align: center;
+
+            @media screen and (max-width: 725px) {
+                font-size: 3rem;
+                margin-top: 1dvh;
+            }
+        }
+        @media screen and (max-width: 500px) {
+            padding:0;
+        }
+    }
+} 

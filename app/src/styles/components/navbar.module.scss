@@ -1,0 +1,116 @@
+@mixin navbar-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.125rem;
+    height: 3.125rem;
+    background-color: #fff;
+    color:#404040;
+    border:1px solid #404040;
+    border-radius: 50%;
+    cursor: pointer;
+    animation: sweepIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    animation-fill-mode: forwards;
+    box-shadow: 0.25rem 0.25rem 0 #171717;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    a, .navBarItemIcon {
+        text-decoration: none;
+        color:inherit;
+        svg {
+            transform:translateY(0.1rem) scale(2);
+        }
+    }
+}
+
+@mixin navbar-item-hover {
+    &:hover {
+        transition: all 0.2s linear;
+        background-color: #404040;
+        color:#fff;
+        border-color:#8b8b8b;
+        //transform:translate(-0.25rem, -0.25rem) !important;  
+        box-shadow: 0.5rem 0.5rem 0 #171717;
+    }
+}
+
+.navBar {
+    position: fixed;
+    top:50%;
+    left:0;
+    transform: translateY(-50%);
+    z-index: 100;
+
+    @media screen and (max-width: 1200px) {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-50%) translateX(-10rem);
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+        &.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(-50%) translateX(0);
+        }
+    }
+
+    .navBarContent {
+        display: flex;
+        flex-direction: column;
+        gap:2.5rem;
+        padding:2rem 1rem 2rem 1rem;
+
+        @media screen and (max-width: 1200px) {
+            background:#ffffffef;
+            border-radius:1rem;
+            box-shadow: 0rem 0rem 2rem 4rem #ffffffeb;
+
+            .navBarItem {
+                animation: none;
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    
+        .navBarItem {
+            @include navbar-item;
+            margin-left: 0.6rem;
+            animation-delay: calc(0.1s * var(--nav-index, 0));
+
+            &:first-child {
+                margin-left: 0;
+            }
+
+            &:last-child {
+                margin-left: 0;
+            }
+
+            @include navbar-item-hover;
+        }           
+    }
+}
+
+.navBarToggle {
+    @include navbar-item;
+    position:fixed;
+    top:0;
+    left:0;
+    margin:1rem;
+    display:none;
+    @include navbar-item-hover;
+    @media screen and (max-width: 1200px) {
+        display:flex;
+    }
+}
+
+@keyframes sweepIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-10rem);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

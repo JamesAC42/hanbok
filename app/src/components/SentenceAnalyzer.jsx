@@ -13,20 +13,10 @@ import { LineMdEmail } from '@/components/icons/Email';
 
 const SentenceAnalyzer = () => {    
     
-    const { user, loading } = useAuth();
     const [analysis, setAnalysis] = useState(null);
     const [voice1, setVoice1] = useState(null);
     const [voice2, setVoice2] = useState(null);  
     const [showTransition, setShowTransition] = useState(false);
-
-
-    if (loading) {
-        return <div className={styles.pageLoading}>Loading...</div>;
-    }
-
-    if (!user) {
-        return <Login />;
-    }
 
     return (
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>

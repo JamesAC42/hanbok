@@ -1,0 +1,238 @@
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: 3rem;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 0.5rem;
+  border: 1px solid var(--foreground);
+  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+
+  .section {
+    width: 100%;
+    
+    h2 {
+      font-family: var(--font-display);
+      font-variation-settings: 'wght' 700;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
+      color: var(--foreground);
+    }
+
+    p {
+      font-family: var(--font-body);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      color: #404040;
+    }
+
+    .screenshot {
+      width:100%;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      gap:1rem;
+
+      img {
+        max-width:80%;
+        height:auto;
+        margin:0 auto;
+        border-radius: 0.5rem;
+        border: 1px solid var(--foreground);
+        box-shadow: 0.3rem 0.3rem 0 #394664;
+      }
+
+      p {
+        font-family: var(--font-body);
+        font-size: 1rem;
+        color: #666;
+      } 
+    }
+  }
+
+  .featuresList {
+    list-style: none;
+    padding: 0;
+    
+    li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      
+      &:before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: #3f88c5;
+      }
+    }
+  }
+
+  .updates {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .updateItem {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      gap: 1.5rem;
+      align-items: start;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #eee;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .updateDate {
+        font-family: var(--font-display);
+        font-size: 0.9rem;
+        color: #666;
+        white-space: nowrap;
+      }
+
+      .updateContent {
+        font-family: var(--font-body);
+        line-height: 1.4;
+      }
+    }
+  }
+
+  .contactLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+
+    .contactLink {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--foreground);
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: var(--foreground);
+      transition: all 0.2s ease;
+      background: var(--background);
+      box-shadow: 0.2rem 0.2rem 0 var(--foreground);
+
+      .contactIcon {
+        svg {
+          transform:scale(1.5);
+        }
+      }
+
+      &:hover {
+        transform: translate(-0.2rem, -0.2rem);
+        box-shadow: 0.4rem 0.4rem 0 var(--foreground);
+      }
+
+      &:active {
+        transform: translate(0.1rem, 0.1rem);
+        box-shadow: 0.1rem 0.1rem 0 var(--foreground);
+      }
+
+      .contactLabel {
+        font-family: var(--font-display);
+        font-variation-settings: 'wght' 700;
+        font-size: 1.2rem;
+        min-width: 5rem;
+      }
+
+      .contactText {
+        font-family: var(--font-body);
+        color: #666;
+      }
+    }
+  }
+
+  @media screen and (max-width: 725px) {
+    padding: 1.5rem;
+
+    .section {
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+
+    .updates {
+      .updateItem {
+        grid-template-columns: 6rem 1fr;
+        gap: 1rem;
+      }
+    }
+
+    .contactLinks {
+      .contactLink {
+        padding: 0.8rem 1rem;
+        gap: 1rem;
+
+        .contactLabel {
+          font-size: 1rem;
+          min-width: 4rem;
+        }
+
+        .contactText {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    max-width: 100dvw;
+    width: 100dvw;
+    margin: 0;
+    padding: 1rem;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: #ffffff;
+    min-height: 100dvh;
+    justify-content: center;
+
+    .section {
+      h2 {
+        font-size: 1.4rem;
+      }
+    }
+
+    .updates {
+      .updateItem {
+        grid-template-columns: 5rem 1fr;
+        gap: 0.8rem;
+
+        .updateDate {
+          font-size: 0.8rem;
+        }
+
+        .updateContent {
+          font-size: 0.9rem;
+        }
+      }
+    }
+
+    .contactLinks {
+      .contactLink {
+        padding: 0.7rem 0.8rem;
+        
+        .contactLabel {
+          font-size: 0.9rem;
+          min-width: 3.5rem;
+        }
+
+        .contactText {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+} 

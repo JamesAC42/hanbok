@@ -29,13 +29,13 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["sentenceId", "userId", "text", "analysis", "dateCreated"],
+        required: ["sentenceId", "text", "analysis", "dateCreated"],
         properties: {
           sentenceId: {
             bsonType: "int"
           },
           userId: {
-            bsonType: "int"
+            bsonType: ["int", "null"]
           },
           text: {
             bsonType: "string"

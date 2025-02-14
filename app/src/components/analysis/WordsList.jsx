@@ -47,14 +47,21 @@ const WordsList = ({analysis}) => {
       }
       return wordType.replaceAll(' ', '_').toLowerCase();
     }
-
     const renderWordsList = () => {
         let wordList = [];
-        analysis.components.forEach((word) => {
+        const seenWords = new Set();
+        
+        analysis.components.forEach((word, index) => {
+            if (seenWords.has(word.dictionary_form)) {
+                return;
+            }
+            
+            seenWords.add(word.dictionary_form);
+            
             wordList.push(
                 <div 
                     className={styles.wordListItem} 
-                    key={word.text} 
+                    key={word.text + index} 
                     data-role={getCleanedType(word.type)}
                 >
                     <div className={styles.wordListItemActions}>
