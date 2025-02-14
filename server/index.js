@@ -20,6 +20,8 @@ const { connectToDatabase } = require('./database');
 
 const submitSentence = require('./controllers/auth/submitSentence');
 const getAudioURL = require('./controllers/auth/getAudioURL');
+const generateAudio = require('./controllers/auth/generateAudio');
+const getSentence = require('./controllers/auth/getSentence');
 
 const login = require('./controllers/auth/login');
 const getSession = require('./controllers/auth/getSession');
@@ -91,6 +93,19 @@ app.post('/api/submit', async (req, res) => {
 
 app.get('/api/audio-url/:sentenceId', isAuthenticated, async (req, res) => {
     getAudioURL(req, res);
+});
+
+app.post('/api/sentences/:sentenceId/generate-audio', isAuthenticated, async (req, res) => {
+    generateAudio(req, res);
+});
+
+app.get('/api/sentences/:sentenceId', isAuthenticated, async (req, res) => {
+    getSentence(req, res);
+});
+
+app.get('/api/user/sentences', isAuthenticated, async (req, res) => {
+    const getUserSentences = require('./controllers/auth/getUserSentences');
+    getUserSentences(req, res);
 });
 
 async function startServer() {

@@ -92,7 +92,6 @@
 				}
 			}
 		}
-
 		@media screen and (max-width:725px) {
 			margin-top:10dvh;
 			font-size:3rem;
@@ -105,6 +104,9 @@
 			font-size:2rem;
 			justify-content:flex-start;
 
+			@media screen and (max-width: 950px) {
+				justify-content:center;
+			}
 			@media screen and (max-width:725px) {
 				margin-top:0.7rem;
 			}

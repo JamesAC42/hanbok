@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
@@ -19,6 +20,7 @@ const SentenceForm = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
+    const router = useRouter();
 
     const loadingMessages = [
         "Analyzing sentence structure...",
@@ -95,6 +97,9 @@ const SentenceForm = ({
                 setTimeout(() => {
                     setTransition(false);
                 }, 400);
+                if (data.sentenceId) {
+                    router.push(`/sentence/${data.sentenceId}`);
+                }
             }
         } catch (error) {
             console.error('Error:', error);

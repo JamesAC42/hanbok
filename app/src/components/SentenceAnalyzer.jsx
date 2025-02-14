@@ -1,5 +1,6 @@
 'use client';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useSearchParams} from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import Login from '@/components/Login';
@@ -11,12 +12,36 @@ import { LineMdTwitterX } from '@/components/icons/Twitter';
 import { LineMdGithub } from '@/components/icons/Github';
 import { LineMdEmail } from '@/components/icons/Email';
 
-const SentenceAnalyzer = () => {    
+const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
+    const searchParams = useSearchParams();
+    const { loadSentence, isAuthenticated } = useAuth();
     
     const [analysis, setAnalysis] = useState(null);
     const [voice1, setVoice1] = useState(null);
     const [voice2, setVoice2] = useState(null);  
     const [showTransition, setShowTransition] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        // First check for prop sentenceId (from /sentence/[id] route)
+        // Then fall back to query param (from /?id= route)
+        const idToLoad = propSentenceId || searchParams.get('id');
+        if (idToLoad && isAuthenticated) {
+            loadSavedSentence(idToLoad);
+        }
+    }, [searchParams, isAuthenticated, propSentenceId]);
+
+    const loadSavedSentence = async (id) => {
+        const result = await loadSentence(id);
+        if (result.success) {
+            setAnalysis(result.sentence.analysis);
+            setVoice1(result.sentence.voice1Key);
+            setVoice2(result.sentence.voice2Key);
+            setShowTransition(false); // Reset transition when loading saved sentence
+        } else {
+            setError(result.error);
+        }
+    };
 
     return (
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>
@@ -69,6 +94,12 @@ const SentenceAnalyzer = () => {
                 voice2={voice2}
                 showTransition={showTransition} />
             }
+
+            {error && (
+                <div className={styles.error}>
+                    {error}
+                </div>
+            )}
         </div>
     )
 }

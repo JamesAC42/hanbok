@@ -3,13 +3,18 @@
   flex-direction: column;
   align-items: center;
   gap: 2rem;
-  max-width: 40rem;
+  max-width: 70rem;
+  width: 100%;
   margin: 0 auto;
-  padding: 3rem;
-  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  background:#fff;
   border-radius: 0.5rem;
-  border: 1px solid var(--foreground);
   box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+
+  .pageTitle {
+    font-family:var(--font-display);
+    margin-top:2rem;
+  }
 
   @media screen and (max-width: 725px) {
     padding: 1.5rem;
@@ -27,4 +32,86 @@
     min-height: 100dvh;
     justify-content: center;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.sentenceItem {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0rem;
+  border-radius: 0.5rem;
+  border: 0.0625rem solid #000000;
+  cursor:pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width:100%;
+  
+  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+
+  animation: fadeIn 0.5s ease-in-out;
+
+  &:hover {
+    transform:translate(-0.25rem, -0.25rem);
+    box-shadow: 0.55rem 0.55rem 0 var(--foreground);
+  }
+}
+
+.sentenceText {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #333333;
+  font-family:var(--font-kr-serif);
+}
+
+.sentenceDate {
+  font-size: 0.875rem;
+  color: #888888;
+  margin-bottom: 1rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+
+  button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    border: 0.0625rem solid #0070f3;
+    border-radius: 0.25rem;
+    color: #0070f3;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover:not(:disabled) {
+      background-color: #0070f3;
+      color: #ffffff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    font-size: 1rem;
+    color: #333333;
+  }
+}
+
+.error {
+  color: red;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 1rem;
 } 

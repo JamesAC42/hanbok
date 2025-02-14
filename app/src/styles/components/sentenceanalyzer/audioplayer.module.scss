@@ -2,6 +2,51 @@
     display:none;
 }
 
+.audioPlayerWrapper {
+    position:relative;
+}
+
+.audioPlayerLocked {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:3rem;
+    height:3rem;
+    z-index:1000;
+    background:#ffffff;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    svg {
+        color:#191f20;
+        transform:scale(3);
+    }
+}
+
+.audioPlayerLockedPopup {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);   
+    z-index:1001;
+    background:#ffffff;
+    border:1px solid #000000;
+    height:100%;
+    width:70%;
+    border-radius:2rem;
+    display:flex;
+    justify-content:center;
+    flex-direction:column;
+    padding:0 2rem;
+    align-items:center;
+    p {
+        text-align:center;
+    }
+}
+
 .audioPlayerOuter {
     position:relative;
     display:flex;
@@ -9,8 +54,21 @@
     align-items:center;
     margin:2rem 0;
     gap:4rem;
+
+    &.locked {
+        width:fit-content;
+        padding:1rem 5rem;
+        padding-bottom:2rem;
+        border-radius:1rem;
+        margin:2rem auto;
+        margin-bottom:0;
+        filter:brightness(0.2) blur(1px) grayscale(0.9);
+        background:#aeaeae76;
+    }
     @media screen and (max-width:725px) {
         gap:1rem;
+    }
+    @media screen and (max-width:500px) {
     }
     .speakersOuter {
         display:flex;
@@ -18,7 +76,10 @@
         height:10rem;
         width:10rem;
         position:relative;
-        cursor:pointer;
+
+        &:not(.locked) {
+            cursor:pointer;
+        }
 
         .speaker {
             position:absolute;
@@ -101,7 +162,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        cursor: pointer;
         border: 2px solid #9c9c9c;
         box-shadow: 0.5rem 0.5rem 0 rgba(87, 88, 92, 0.792);
         position: relative;
@@ -114,16 +174,19 @@
             }
         }
 
-        &:hover {
-            transform: translate(-0.25rem, -0.25rem);
-            border: 2px solid rgba(42, 42, 183, 0.826);
-            box-shadow: 0.75rem 0.75rem 0 rgba(42, 42, 183, 0.826);
-        }
+        &:not(.locked) {
+            cursor: pointer;
+            &:hover {
+                transform: translate(-0.25rem, -0.25rem);
+                border: 2px solid rgba(42, 42, 183, 0.826);
+                box-shadow: 0.75rem 0.75rem 0 rgba(42, 42, 183, 0.826);
+            }
 
-        &:active {
-            transform: translate(0.3rem, 0.3rem);
-            border: 2px solid rgba(251, 61, 159, 0.833);
-            box-shadow: 0.2rem 0.2rem 0 rgba(251, 61, 159, 0.833);
+            &:active {
+                transform: translate(0.3rem, 0.3rem);
+                border: 2px solid rgba(251, 61, 159, 0.833);
+                box-shadow: 0.2rem 0.2rem 0 rgba(251, 61, 159, 0.833);
+            }
         }
     }
 }

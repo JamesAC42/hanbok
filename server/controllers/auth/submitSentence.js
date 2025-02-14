@@ -1,5 +1,4 @@
 const generateResponse = require('../../llm/generateResponse');
-const { generateSpeech, getPresignedUrl } = require('../../elevenlabs/generateSpeech');
 const {ANALYSIS_PROMPT} = require('../../llm/prompt');
 const { getDb } = require('../../database');
 
@@ -32,18 +31,6 @@ const submitSentence = async (req, res) => {
                 error: { type: "other", message: "Failed to analyze the sentence. Please try again." }
             } });
         }
-        
-        // Generate speech audio and get S3 URLs
-        let voice1_url = null;
-        let voice2_url = null;
-
-        try {
-            const { voice1, voice2 } = await generateSpeech(text);
-            voice1_url = voice1;
-            voice2_url = voice2;
-        } catch (speechError) {
-            console.error("Speech generation failed:", speechError);
-        }
 
         const userId = req.session.user ? req.session.user.userId : null;
 
@@ -60,8 +47,8 @@ const submitSentence = async (req, res) => {
             userId: userId ? userId : null,
             text: text,
             analysis: parsedResponse.analysis,
-            voice1Key: voice1_url,
-            voice2Key: voice2_url,
+            voice1Key: null,
+            voice2Key: null,
             dateCreated: new Date()
         };
 
@@ -69,9 +56,7 @@ const submitSentence = async (req, res) => {
         await db.collection('sentences').insertOne(sentenceDoc);
 
         res.json({ 
-            message: parsedResponse, 
-            voice1: voice1_url, 
-            voice2: voice2_url,
+            message: parsedResponse,
             sentenceId: sentenceDoc.sentenceId
         });
     } catch (error) {

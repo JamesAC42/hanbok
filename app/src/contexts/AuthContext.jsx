@@ -53,11 +53,37 @@ export function AuthProvider({ children }) {
         }
     };
 
+    const loadSentence = async (sentenceId) => {
+        try {
+            const response = await fetch(`/api/sentences/${sentenceId}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                return {
+                    success: true,
+                    sentence: data.sentence
+                };
+            } else {
+                return {
+                    success: false,
+                    error: data.error
+                };
+            }
+        } catch (error) {
+            console.error('Error loading sentence:', error);
+            return {
+                success: false,
+                error: 'Failed to load sentence'
+            };
+        }
+    };
+
     const value = {
         user,
         loading,
         login,
         logout,
+        loadSentence,
         isAuthenticated: !!user
     };
 
