@@ -129,6 +129,7 @@
     margin:1rem;
     display:none;
     @include navbar-item-hover;
+    z-index:1000;
     @media screen and (max-width: 1200px) {
         display:flex;
     }
