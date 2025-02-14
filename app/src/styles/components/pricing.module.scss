@@ -1,0 +1,232 @@
+.pricingContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: 3rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    /* A clean white look with bold accents */
+    border-radius: 0.5rem;
+    border: 0.0625rem solid var(--foreground);
+    box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+
+  
+
+    @media screen and (max-width: 725px) {
+        padding:3rem 0;
+    }
+
+    @media screen and (max-width: 500px) {
+        max-width: 100dvw;
+        width: 100dvw;
+        margin: 0;
+        padding: 1rem;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        background-color: #ffffff;
+        min-height: 100dvh;
+        justify-content: center;
+    }
+}
+
+.section {
+  width: 100%;
+}
+
+.section h2 {
+  font-family: var(--font-display);
+  font-variation-settings: 'wght' 700;
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+  text-align:center;
+
+  @media screen and (max-width: 725px) {
+    font-size: 1.2rem;
+    margin-left:1rem;
+  }
+}
+
+.options {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media screen and (max-width: 500px) {
+    gap: 1rem;
+  }
+}
+
+.optionCard {
+  /* Default option card style (will be overridden below by more vibrant colors) */
+  background-color: #f9f9f9;
+  border: 0.0625rem solid var(--foreground);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  width: 100%;
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+
+  @media screen and (max-width: 725px) {
+    padding: 1.5rem;
+    max-width: 100%;
+    margin:0 0.5rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    padding: 1rem;
+    border: 0.0625rem solid var(--foreground);
+    box-shadow: 0.2rem 0.2rem 0 var(--foreground);
+  }
+}
+
+.optionCard h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+
+  @media screen and (max-width: 500px) {
+    font-size: 1.2rem;
+  }
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: bold;
+  /* Default, overridden in personalized cards */
+  color: var(--highlight);
+
+  @media screen and (max-width: 500px) {
+    font-size: 1.6rem;
+  }
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.featuresList li {
+  padding: 0.5rem 0;
+  border-bottom: 0.0625rem solid #eee;
+  
+  strong {
+    font-weight: bold;
+    font-size: 1.1rem;
+
+    @media screen and (max-width: 500px) {
+      font-size: 1rem;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.9rem;
+    padding: 0.4rem 0;
+  }
+}
+
+.purchaseButton {
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: var(--highlight);
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family:inherit;
+  font-family: var(--font-display);
+  box-shadow: 0.3rem 0.3rem 0 var(--primary);
+  
+  &:hover {
+    filter: brightness(110%);
+    transform: translate(-0.25rem, -0.25rem);
+    box-shadow: 0.55rem 0.55rem 0 var(--primary);
+  }
+}
+
+/* One-Time Purchase card: Bold red with a discount badge */
+.optionCard.oneTime {
+  background-color: #ff4757;
+  color: #fff;
+  border-color: #ff6b81;
+}
+
+.optionCard.oneTime .price {
+  color: #fff;
+}
+
+.optionCard.oneTime .purchaseButton {
+    font-family: var(--font-display);
+    background-color: #ffc7d0;
+    color: #000000;
+}
+
+/* Subscription card: Bold blue */
+.optionCard.subscription {
+  background-color: #1e90ff;
+  color: #fff;
+  border-color: #74b9ff;
+}
+
+.optionCard.subscription .price {
+  color: #fff;
+}
+
+.optionCard.subscription .purchaseButton {
+  background-color: #b6daff;
+  color: #0d0c10;
+}
+
+/* Discount badge for one-time purchase */
+.badge {
+  background-color: #fffa65;
+  color: #000;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+
+  @media screen and (max-width: 500px) {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Specific highlight colors for each card type */
+.optionCard.oneTime .featuresList li strong {
+  color: #fffa65;
+  text-shadow: 0 0 0.0625rem rgba(0, 0, 0, 0.5);
+}
+
+.optionCard.subscription .featuresList li strong {
+  color: #201363;
+  text-shadow: 0 0 0.0625rem rgba(0, 0, 0, 0.5);
+}
+
+.girl {
+    margin-top:2rem;
+    max-width: 80dvw;
+    img {
+        max-width: 50dvw;
+        height: auto;
+    }
+    @media screen and (max-width: 700px) {
+        img {
+            max-width: 90dvw;
+        }
+    }
+}

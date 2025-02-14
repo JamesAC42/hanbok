@@ -42,7 +42,9 @@ const login = async (req, res, redisClient) => {
                 name,
                 email,
                 googleId,
-                dateCreated: new Date()
+                dateCreated: new Date(),
+                tier: 0,
+                remainingAudioGenerations: 10
             };
 
             await usersCollection.insertOne(user);
@@ -58,7 +60,9 @@ const login = async (req, res, redisClient) => {
                 userId: user.userId,
                 name: user.name,
                 email: user.email,
-                dateCreated: user.dateCreated
+                dateCreated: user.dateCreated,
+                tier: user.tier,
+                remainingAudioGenerations: user.remainingAudioGenerations   
             }
         });
 

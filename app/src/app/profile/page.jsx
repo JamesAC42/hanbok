@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 const Profile = () => {
     const router = useRouter();
-    const { isAuthenticated, loading } = useAuth();
+    const { user, isAuthenticated, loading } = useAuth();
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -24,7 +24,30 @@ const Profile = () => {
             <div className={styles.pageContent}>
                 <div className={profileStyles.profileContent}>
                     <h1 className={styles.pageTitle}>Profile</h1>
-                    {/* Add profile content here */}
+                    <div className={profileStyles.userDetails}>
+                        <h2>User Info</h2>
+                        <p><strong>Name:</strong> {user.name}</p>
+                        <p><strong>Email:</strong> {user.email}</p>
+                        <p>
+                          <strong>Tier:</strong> {user.tier == 0 ? "Basic" : user.tier === 1 ? "Plus" : "Unknown"}
+                        </p>
+                        <p>
+                          <strong>Remaining Audio Generations:</strong> {user.remainingAudioGenerations == null ? "0" : user.remainingAudioGenerations}
+                        </p>
+                    </div>
+                    <div className={profileStyles.tierInfo}>
+                        {user.tier === 2 ? (
+                            <>
+                                <p><strong>Plus User Benefits:</strong> Enjoy unlimited audio generations, priority support, and premium features!</p>
+                                <p>For more details, visit our <a href="/pricing">Pricing</a> page.</p>
+                            </>
+                        ) : (
+                            <>
+                                <p><strong>Basic User Benefits:</strong> You have limited audio generations available. Upgrade for more features and unlimited access.</p>
+                                <p>For more details, visit our <a href="/pricing">Pricing</a> page.</p>
+                            </>
+                        )}
+                    </div>
                 </div>
             </div>
             <div className={styles.girlContainer}>

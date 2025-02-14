@@ -5,10 +5,10 @@
   gap: 2rem;
   max-width: 40rem;
   margin: 0 auto;
-  padding: 3rem;
+  padding: 2rem;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 0.5rem;
-  border: 1px solid var(--foreground);
+  border: 0.0625rem solid var(--foreground);
   box-shadow: 0.3rem 0.3rem 0 var(--foreground);
 
   @media screen and (max-width: 725px) {
@@ -27,4 +27,37 @@
     min-height: 100dvh;
     justify-content: center;
   }
+}
+
+.userDetails {
+  margin-top: 0rem;
+  padding: 2rem;
+  border: 0.0625rem solid var(--foreground);
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  font-size:1rem;
+}
+
+.userDetails h2 {
+  font-size:1rem;
+  margin-bottom: 1rem;
+}
+
+.userDetails p {
+  font-size:1rem;
+  margin-bottom: 1rem;
+}
+
+.tierInfo {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 0.0625rem solid var(--foreground);
+  border-radius: 0.5rem;
+  background-color: #fff;
+  font-size: 1rem;
+}
+
+.tierInfo a {
+  color: var(--highlight);
+  text-decoration: underline;
 } 

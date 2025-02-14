@@ -5,6 +5,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
+    // user object now includes: tier (1 for basic, 2 for plus) and remainingAudioGenerations (number)
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

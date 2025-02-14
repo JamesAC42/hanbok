@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/components/pagelayout.module.scss';
 import savesStyles from '@/styles/components/saves.module.scss';
 import Image from 'next/image';
+import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
 
 const Saves = () => {
     const router = useRouter();
@@ -87,16 +88,25 @@ const Saves = () => {
                         <p className={savesStyles.error}>{error}</p>
                     ) : (
                         <>
-                            {renderPageSwitcher()}
-                            {sentences.map(sentence => (
-                                <div
+                            {sentences.length === 0 ? (
+                                <div className={savesStyles.noSaves}>
+                                    <p>No saved sentences found.</p>
+                                    <p>Click the <MaterialSymbolsBookmarkSharp /> icon on any sentence to save it.</p>
+                                </div>
+                            ) : (
+                                <>
+                                    {renderPageSwitcher()}
+                                    {sentences.map(sentence => (
+                                        <div
                                     onClick={() => handleSentenceClick(sentence.sentenceId)}
                                     key={sentence.sentenceId} className={savesStyles.sentenceItem}>
                                     <p className={savesStyles.sentenceText}>{sentence.text}</p>
                                     <p className={savesStyles.sentenceDate}>{new Date(sentence.dateCreated).toLocaleString()}</p>
                                 </div>
-                            ))}
-                            {renderPageSwitcher()}
+                                    ))}
+                                    {renderPageSwitcher()}
+                                </>
+                            )}
                         </>
                     )}
                 </div>

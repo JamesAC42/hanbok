@@ -33,7 +33,9 @@ const getSession = async (req, res) => {
                 userId: user.userId,
                 name: user.name,
                 email: user.email,
-                dateCreated: user.dateCreated
+                dateCreated: user.dateCreated,
+                tier: user.tier,
+                remainingAudioGenerations: user.remainingAudioGenerations ? user.remainingAudioGenerations : 0
             }
         });
 

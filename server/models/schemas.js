@@ -3,7 +3,7 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["email", "userId", "name", "googleId"],
+        required: ["email", "userId", "name", "googleId", "tier", "remainingAudioGenerations"],
         properties: {
           userId: {
             bsonType: "int"
@@ -17,6 +17,14 @@ const collections = {
           },
           googleId: {
             bsonType: "string"
+          },
+          tier: {
+            bsonType: "int",
+            description: "User tier: 1 for basic, 2 for plus"
+          },
+          remainingAudioGenerations: {
+            bsonType: "int",
+            description: "Remaining audio generations available for the user"
           },
           dateCreated: {
             bsonType: "date"

@@ -112,6 +112,17 @@
   }
 }
 
+.noSaves {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #333333;
+  font-family:var(--font-kr-serif);
+  svg {
+    transform: scale(1.5) translateY(2px);
+    margin:0 0.5rem;
+  }
+}
+
 .error {
   color: red;
   font-size: 1rem;
