@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import "../styles/globals.scss";
 import NavBar from '@/components/NavBar';
@@ -36,7 +37,9 @@ export default function RootLayout({ children }) {
                 strategy="afterInteractive"
             />
             <script defer src="https://umami.ovel.sh/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
-            {children}
+            <Suspense fallback={<div>Loading...</div>}>
+              {children}
+            </Suspense>
             <NavBar />
           </PopupProvider>
         </AuthProvider>

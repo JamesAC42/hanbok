@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/components/pagelayout.module.scss';
@@ -8,7 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { MaterialSymbolsCheckCircleOutlineRounded } from '@/components/icons/CheckCircle';
 
-const Success = () => {
+const SuccessContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { isAuthenticated, loading, fetchSession } = useAuth();
@@ -77,6 +77,14 @@ const Success = () => {
                 />
             </div>
         </div>
+    );
+};
+
+const Success = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SuccessContent />
+        </Suspense>
     );
 };
 
