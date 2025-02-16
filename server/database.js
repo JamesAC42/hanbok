@@ -2,7 +2,7 @@ require('dotenv').config();
 const { MongoClient, ObjectId } = require('mongodb');
 const { setupCollections } = require('./models/schemas');
 
-const mongoUrl = `mongodb://${process.env.MONGODB_USER}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DB}?authSource=admin`;
+const mongoUrl = `mongodb://${process.env.MONGODB_USER}:${encodeURIComponent(process.env.MONGODB_PASSWORD)}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.MONGODB_DB.split('?')[0]}?authSource=admin`;
 
 let db;
 
@@ -12,6 +12,11 @@ async function connectToDatabase() {
     const client = await MongoClient.connect(mongoUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      authSource: 'admin',
+      auth: {
+        username: process.env.MONGODB_USER,
+        password: process.env.MONGODB_PASSWORD
+      }
     });
     
     console.log('Connected to MongoDB');
