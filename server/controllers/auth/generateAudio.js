@@ -5,9 +5,21 @@ const generateAudio = async (req, res) => {
     const { sentenceId } = req.params;
     const userId = req.session.user.userId;
 
+    console.log(sentenceId, userId);
+
     try {
         const db = getDb();
         
+        // First check if user has remaining generations
+        const user = await db.collection('users').findOne({ userId });
+        
+        if (!user || user.remainingAudioGenerations <= 0) {
+            return res.status(403).json({
+                success: false,
+                error: 'No remaining audio generations available'
+            });
+        }
+
         // Find the sentence and verify ownership
         const sentence = await db.collection('sentences').findOne({ 
             sentenceId: parseInt(sentenceId),
@@ -20,6 +32,12 @@ const generateAudio = async (req, res) => {
                 error: 'Sentence not found or unauthorized'
             });
         }
+
+        // Decrement the remaining generations
+        await db.collection('users').updateOne(
+            { userId },
+            { $inc: { remainingAudioGenerations: -1 } }
+        );
 
         // Generate speech audio
         const { voice1, voice2 } = await generateSpeech(sentence.text);
@@ -39,7 +57,8 @@ const generateAudio = async (req, res) => {
         res.json({ 
             success: true,
             voice1: voice1,
-            voice2: voice2
+            voice2: voice2,
+            remainingGenerations: user.remainingAudioGenerations - 1
         });
 
     } catch (error) {

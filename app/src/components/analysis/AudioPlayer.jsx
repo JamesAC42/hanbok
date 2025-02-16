@@ -3,21 +3,35 @@ import { useState, useEffect } from 'react';
 
 import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsPause } from '@/components/icons/Pause';
+import {useSearchParams} from 'next/navigation';
 import { MaterialSymbolsLockOpenCircle } from '@/components/icons/Lock';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
 import { TdesignUserTalk1Filled } from '@/components/icons/Talk';
+import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import Image from 'next/image';
+import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 
 import styles from '@/styles/components/sentenceanalyzer/audioplayer.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 
-const AudioPlayer = ({ voice1, voice2 }) => {
+const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
 
     const [activeSpeaker, setActiveSpeaker] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
 
-    const { user } = useAuth();
+    const [loadingAudio, setLoadingAudio] = useState(false);
+
+    const [voices, setVoices] = useState({});
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+      if(voice1 || voice2) {
+        setVoices({voice1: voice1, voice2: voice2});
+      }
+    }, [voice1, voice2]);
+      
+    const { user, decrementRemainingAudioGenerations } = useAuth();
 
     const [showPopup, setShowPopup] = useState(false);
 
@@ -25,6 +39,11 @@ const AudioPlayer = ({ voice1, voice2 }) => {
       voice1: typeof Audio !== 'undefined' ? new Audio() : null,
       voice2: typeof Audio !== 'undefined' ? new Audio() : null
     });
+
+    const getSentenceId = () => {
+        // First check prop sentenceId, then fall back to query param
+        return propSentenceId || searchParams.get('id');
+    };
 
     const handlePlayPause = () => {
 
@@ -49,8 +68,23 @@ const AudioPlayer = ({ voice1, voice2 }) => {
       }
     };
 
-    const noAudio = () => (voice1 == null || voice2 == null);
+    const noAudio = () => (voices?.voice1 == null || voices?.voice2 == null);
   
+    const hasRemainingAudioGenerations = () => {
+      if(!user) {
+        return false;
+      }
+      return user.remainingAudioGenerations > 0;
+    }
+
+    const loggedIn = () => {
+      return !!user;
+    }
+
+    const shouldLock = () => {
+      return !loggedIn || noAudio()
+    }
+
     const handleSpeakerSwitch = () => {
       if (noAudio()) {
         return;
@@ -61,14 +95,62 @@ const AudioPlayer = ({ voice1, voice2 }) => {
       setActiveSpeaker(activeSpeaker === 1 ? 2 : 1);
     };
 
+    const generateAudio = () => {
+      if(!loggedIn() || !hasRemainingAudioGenerations()) {
+        setShowPopup(true);
+        return;
+      }
+      const id = getSentenceId();
+      setLoadingAudio(true);  
+      fetch(`/api/sentences/${id}/generate-audio`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          setVoices({voice1: data.voice1, voice2: data.voice2});
+          decrementRemainingAudioGenerations();
+        } else {
+          console.error('Error generating audio:', data.error);
+        }
+      })
+      .catch(error => {
+        console.error('Error generating audio:', error);
+      })
+      .finally(() => {
+        setLoadingAudio(false);
+      });
+    }
+    
+    const handleAudioLock = () => {
+      if(loadingAudio) {
+        return;
+      }
+      if(loggedIn() && hasRemainingAudioGenerations()) {
+        setShowPopup(false);
+        generateAudio();
+      } else if(!loggedIn()) {
+        setShowPopup(true);
+      } else if(loggedIn() && !hasRemainingAudioGenerations()) {
+        setShowPopup(true);
+      }
+    }
+
+    const hidePopup = () => {
+      setShowPopup(false);
+    }
+
     useEffect(() => {
-      if (voice1) {
-          audioRefs.voice1.src = `${voice1}`;
+      if (voices.voice1) {
+          audioRefs.voice1.src = `${voices.voice1}`;
       }
-      if (voice2) {
-          audioRefs.voice2.src = `${voice2}`;
+      if (voices.voice2) {
+          audioRefs.voice2.src = `${voices.voice2}`;
       }
-    }, [voice1, voice2]);
+    }, [voices]);
   
     useEffect(() => {
       const handleAudioEnded = () => {
@@ -85,21 +167,19 @@ const AudioPlayer = ({ voice1, voice2 }) => {
 
     }, []);
 
-    console.log(voice1, voice2);
-
     return (
         <div className={styles.audioPlayerWrapper}>
           <div className={styles.audioPlayers}>
             <audio controls>
-              <source src={`${voice1}`} type="audio/mpeg" />
+              <source src={`${voices?.voice1}`} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
             <audio controls>
-              <source src={`${voice2}`} type="audio/mpeg" />
+              <source src={`${voices?.voice2}`} type="audio/mpeg" />
               Your browser does not support the audio element.
             </audio>
           </div>
-          <div className={`${styles.audioPlayerOuter} ${noAudio() ? styles.locked : ''}`}>
+          <div className={`${styles.audioPlayerOuter} ${shouldLock() ? styles.locked : ''}`}>
 
             <div
               onClick={handleSpeakerSwitch} 
@@ -108,7 +188,7 @@ const AudioPlayer = ({ voice1, voice2 }) => {
                 } ${
                   activeSpeaker === 1 ? styles.speaker1Active : styles.speaker2Active
                 } ${
-                  noAudio() ? styles.locked : ''
+                  shouldLock() ? styles.locked : ''
                 }`}>
               <div className={styles.speaker}>
                 <div className={styles.speakerInner}>
@@ -130,7 +210,7 @@ const AudioPlayer = ({ voice1, voice2 }) => {
               className={`${
                 styles.togglePlaying
               } ${
-                noAudio() ? styles.locked : ''
+                shouldLock() ? styles.locked : ''
               }`}
               onClick={handlePlayPause}>
               <div className={styles.togglePlayingInner}>
@@ -140,14 +220,31 @@ const AudioPlayer = ({ voice1, voice2 }) => {
           </div>
           
           {
-            (noAudio()  ) && (
+            (shouldLock()) && (
               <div
-                onClick={() => setShowPopup(true)}
+                onClick={() => handleAudioLock()}
                 className={styles.audioPlayerLocked}>
-
                   {
                     user ? (
-                      <TdesignUserTalk1Filled />
+                      <>
+                      {
+                        !loadingAudio ? (
+                          <div className={styles.generateAudioButton}>
+                            <TdesignUserTalk1Filled />
+                            <div className={styles.generateAudioButtonText}>
+                            Play Audio
+                            </div>
+                          </div>
+                        ) : (
+                          <div className={styles.generateAudioButton}>
+                            <SvgSpinnersRingResize />
+                            <div className={styles.generateAudioButtonText}>
+                              Generating...
+                            </div>
+                          </div>
+                        )
+                      }
+                      </>
                     ) : (
                       <MaterialSymbolsLockOpenCircle />
                     )
@@ -157,12 +254,31 @@ const AudioPlayer = ({ voice1, voice2 }) => {
           }
 
           {
-            showPopup && (
+            (showPopup && !loggedIn()) && (
               <div className={styles.audioPlayerLockedPopup}>
                 <p>Sign in to generate audio samples and hear the sentence spoken by a native speaker.</p>
                 <Link href="/login">
                   Make a free account <MaterialSymbolsArrowCircleRightRounded />
                 </Link>
+
+                <div className={styles.closePopup} onClick={hidePopup}>
+                  <MaterialSymbolsCancel />
+                </div>
+              </div>
+            )
+          }
+
+          {
+            (showPopup && loggedIn()) && (
+              <div className={styles.audioPlayerLockedPopup}>
+                <p>You have no remaining audio credits.</p>
+                <Link href="/pricing">
+                  Get More <MaterialSymbolsArrowCircleRightRounded />
+                </Link>
+
+                <div className={styles.closePopup} onClick={hidePopup}>
+                  <MaterialSymbolsCancel />
+                </div>
               </div>
             )
           }

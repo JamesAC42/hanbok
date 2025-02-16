@@ -11,6 +11,7 @@
 }
 
 .analysis {
+    position: relative;
     backdrop-filter:blur(20px);
     background:rgba(255, 255, 255, 0.815);
     font-family:var(--font-kr-serif);
@@ -26,14 +27,16 @@
         padding:1rem;
     }
 
-    .translationHeader {
+    .translationHeader,
+    .sentenceHeader {
         font-family:var(--font-kr-sans);
         font-size:0.9rem;
         font-weight:light;
         text-align:center;
     }
 
-    .translation {
+    .translation,
+    .sentence {
         font-family:var(--font-kr-serif);
         font-size:1.7rem;
         font-weight:bold;
@@ -41,5 +44,9 @@
         @media screen and (max-width:725px) {
             font-size:1.2rem;
         }
+    }
+
+    .sentence {
+        margin-bottom:1rem;
     }
 } 

@@ -72,6 +72,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
   gap: 1rem;
   box-shadow: 0.3rem 0.3rem 0 var(--foreground);
 
@@ -177,6 +178,31 @@
   background-color: #1e90ff;
   color: #fff;
   border-color: #74b9ff;
+  box-shadow: 0rem 1rem 2rem 0rem #1e90ff;
+  z-index:1;
+  @media screen and (max-width: 500px) {
+    margin-top:1rem;
+  }
+}
+
+.bestValue {
+  background-color: #e6f3ff;
+  color: #070707;
+  border:2px solid #3059ab;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  position:absolute;
+  top:0;
+  right:0;
+  transform:translate(0%, -30%) scale(1.3) rotate(7deg);
+  box-shadow:0 0.5rem 1rem 0 #74beff;
+  @media screen and (max-width: 500px) {
+    transform:translate(4%, -50%) scale(1) rotate(7deg);
+  }
 }
 
 .optionCard.subscription .price {

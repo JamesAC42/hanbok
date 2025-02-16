@@ -27,6 +27,17 @@ const login = require('./controllers/auth/login');
 const getSession = require('./controllers/auth/getSession');
 const logout = require('./controllers/auth/logout');
 
+const saveSentence = require('./controllers/auth/saveSentence');
+const unsaveSentence = require('./controllers/auth/unsaveSentence');
+const checkSavedSentence = require('./controllers/auth/checkSavedSentence');
+const getSavedSentences = require('./controllers/auth/getSavedSentences');
+
+const addWord = require('./controllers/auth/addWord');
+const removeWord = require('./controllers/auth/removeWord');
+const getUserWords = require('./controllers/auth/getUserWords');
+
+const checkSavedWords = require('./controllers/auth/checkSavedWords');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -106,6 +117,39 @@ app.get('/api/sentences/:sentenceId', isAuthenticated, async (req, res) => {
 app.get('/api/user/sentences', isAuthenticated, async (req, res) => {
     const getUserSentences = require('./controllers/auth/getUserSentences');
     getUserSentences(req, res);
+});
+
+app.post('/api/sentences/:sentenceId/save', isAuthenticated, async (req, res) => {
+    saveSentence(req, res);
+});
+
+app.delete('/api/sentences/:sentenceId/save', isAuthenticated, async (req, res) => {
+    unsaveSentence(req, res);
+});
+
+app.get('/api/sentences/:sentenceId/saved', isAuthenticated, async (req, res) => {
+    checkSavedSentence(req, res);
+});
+
+app.get('/api/saved-sentences', isAuthenticated, async (req, res) => {
+    getSavedSentences(req, res);
+});
+
+// Word routes
+app.post('/api/words', isAuthenticated, async (req, res) => {
+    addWord(req, res);
+});
+
+app.delete('/api/words/:wordId', isAuthenticated, async (req, res) => {
+    removeWord(req, res);
+});
+
+app.get('/api/words', isAuthenticated, async (req, res) => {
+    getUserWords(req, res);
+});
+
+app.post('/api/words/check', isAuthenticated, async (req, res) => {
+    checkSavedWords(req, res);
 });
 
 async function startServer() {

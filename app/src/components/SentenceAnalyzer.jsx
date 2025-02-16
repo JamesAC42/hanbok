@@ -92,7 +92,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 analysis={analysis} 
                 voice1={voice1} 
                 voice2={voice2}
-                showTransition={showTransition} />
+                showTransition={showTransition}
+                sentenceId={propSentenceId || searchParams.get('id')} />
             }
 
             {error && (

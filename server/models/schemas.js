@@ -20,11 +20,19 @@ const collections = {
           },
           tier: {
             bsonType: "int",
-            description: "User tier: 1 for basic, 2 for plus"
+            description: "User tier: 0 for free, 1 for basic, 2 for plus"
           },
           remainingAudioGenerations: {
             bsonType: "int",
             description: "Remaining audio generations available for the user"
+          },
+          maxSavedSentences: {
+            bsonType: "int",
+            description: "Maximum number of sentences user can save (for tier 0)"
+          },
+          maxSavedWords: {
+            bsonType: "int",
+            description: "Maximum number of words user can save (for tier 0)"
           },
           dateCreated: {
             bsonType: "date"
@@ -64,6 +72,58 @@ const collections = {
           }
         }
       }
+    }
+  },
+  savedSentences: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "sentenceId", "dateSaved"],
+        properties: {
+          userId: {
+            bsonType: "int"
+          },
+          sentenceId: {
+            bsonType: "int"
+          },
+          dateSaved: {
+            bsonType: "date"
+          }
+        }
+      }
+    },
+    index: {
+      key: { userId: 1, sentenceId: 1 },
+      unique: true
+    }
+  },
+  words: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["wordId", "userId", "korean", "english", "dateSaved"],
+        properties: {
+          wordId: {
+            bsonType: "int"
+          },
+          userId: {
+            bsonType: "int"
+          },
+          korean: {
+            bsonType: "string"
+          },
+          english: {
+            bsonType: "string"
+          },
+          dateSaved: {
+            bsonType: "date"
+          }
+        }
+      }
+    },
+    index: {
+      key: { userId: 1, korean: 1 },
+      unique: true
     }
   }
 };

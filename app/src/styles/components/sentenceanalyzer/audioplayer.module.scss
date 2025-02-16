@@ -11,19 +11,50 @@
     top:50%;
     left:50%;
     transform:translate(-50%, -50%);
-    width:4rem;
-    height:4rem;
     z-index:1000;
     background:#ffffff;
-    border-radius:50%;
+    padding:2rem;
+    border-radius:1rem;
     display:flex;
+    flex-direction:row;
     border:2px solid #000000;
     justify-content:center;
+    text-align:center;
     align-items:center;
+    gap:2rem;
     cursor:pointer;
     svg {
         color:#191f20;
-        transform:scale(2);
+        transform:scale(3) translateY(0px);
+    }
+    .generateAudioButton {
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        gap:3rem;
+        margin-left:1rem;
+        .generateAudioButtonText {
+            font-size:1.2rem;
+            font-weight:bold;
+        }
+        &:hover {
+            color:#5183b8;
+            svg {
+                color:#5183b8;
+            }
+        }
+    }
+    
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translate(-50%, 0%);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
     }
 }
 
@@ -33,17 +64,18 @@
     left:50%;
     transform:translate(-50%, -50%);   
     z-index:1001;
-    background:#ffffffeb;
-    border:2px solid #56565645;
+    background:#fffffffd;
+    border:2px solid #050505;
     height:100%;
     width:70%;
-    border-radius:2rem;
+    border-radius:1rem;
     display:flex;
     justify-content:center;
     flex-direction:column;
     padding:0 2rem;
     gap:1rem;
     align-items:center;
+    animation: slideInFromBottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     p {
         text-align:center;
     }
@@ -69,6 +101,23 @@
             box-shadow: 0.25rem 0.25rem 0 #171717;
         }
     }   
+
+    .closePopup {
+        position:absolute;
+        top:1rem;
+        right:2rem;
+        cursor:pointer;   
+        svg {
+            color:#000000;
+            transform:scale(1.5);
+        }
+    }
+    @media screen and (max-width:800px) {
+        width:90%;
+    }
+    @media screen and (max-width: 500px) {
+        width:100%;
+    }
 }
 
 .audioPlayerOuter {
@@ -91,8 +140,6 @@
     }
     @media screen and (max-width:725px) {
         gap:1rem;
-    }
-    @media screen and (max-width:500px) {
     }
     .speakersOuter {
         display:flex;

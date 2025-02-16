@@ -44,7 +44,9 @@ const login = async (req, res, redisClient) => {
                 googleId,
                 dateCreated: new Date(),
                 tier: 0,
-                remainingAudioGenerations: 10
+                remainingAudioGenerations: 10,
+                maxSavedSentences:30,
+                maxSavedWords:60
             };
 
             await usersCollection.insertOne(user);
@@ -62,7 +64,9 @@ const login = async (req, res, redisClient) => {
                 email: user.email,
                 dateCreated: user.dateCreated,
                 tier: user.tier,
-                remainingAudioGenerations: user.remainingAudioGenerations   
+                remainingAudioGenerations: user.remainingAudioGenerations,
+                maxSavedSentences: user.maxSavedSentences,
+                maxSavedWords: user.maxSavedWords
             }
         });
 

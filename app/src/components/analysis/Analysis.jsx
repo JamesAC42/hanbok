@@ -8,18 +8,22 @@ import WordInfo from '@/components/analysis/WordInfo';
 import SentenceNotes from '@/components/analysis/SentenceNotes';
 import Variants from '@/components/analysis/Variants';
 import CulturalNotes from '@/components/analysis/CulturalNotes';
+import SaveButton from '@/components/analysis/SaveButton';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 
 const Analysis = ({
     analysis,
     voice1,
     voice2,
-    showTransition
+    showTransition,
+    sentenceId
 }) => {
 
     const [prevWord, setPrevWord] = useState(null);
     const [wordInfo, setWordInfo] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(false);
+
+    
 
     useEffect(() => {
         if (!wordInfo) {
@@ -45,35 +49,42 @@ const Analysis = ({
     return(
 
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
-          
-          <div className={styles.translationHeader}>Translation:</div>
-          <div className={styles.translation}>
-            {analysis.sentence.english}
-          </div>
+            <SaveButton sentenceId={sentenceId} />
+            
+            <div className={styles.sentenceHeader}>Original:</div>
+            <div className={styles.sentence}>
+                {analysis.sentence.korean}
+            </div>
 
-          <AudioPlayer
-            voice1={voice1}
-            voice2={voice2} />
+            <div className={styles.translationHeader}>Translation:</div>
+            <div className={styles.translation}>
+                {analysis.sentence.english}
+            </div>
 
-          <Breakdown 
-            analysis={analysis} 
-            setWordInfo={setWordInfo}
-            resetLockedWord={showTransition}
-            shouldAnimate={shouldAnimate} />
+            <AudioPlayer
+                sentenceId={sentenceId}
+                voice1={voice1}
+                voice2={voice2} />
 
-          <WordInfo 
-            wordInfo={wordInfo}
-            shouldAnimate={shouldAnimate} />
+            <Breakdown 
+                analysis={analysis} 
+                setWordInfo={setWordInfo}
+                resetLockedWord={showTransition}
+                shouldAnimate={shouldAnimate} />
 
-          <SentenceNotes analysis={analysis} />
+            <WordInfo 
+                wordInfo={wordInfo}
+                shouldAnimate={shouldAnimate} />
 
-          <CulturalNotes analysis={analysis} />
+            <SentenceNotes analysis={analysis} />
 
-          <Variants analysis={analysis} />
+            <CulturalNotes analysis={analysis} />
 
-          <WordsList analysis={analysis} />
+            <Variants analysis={analysis} />
 
-          <GrammarPoints analysis={analysis} />
+            <WordsList analysis={analysis} />
+
+            <GrammarPoints analysis={analysis} />
         
         </div>
     )

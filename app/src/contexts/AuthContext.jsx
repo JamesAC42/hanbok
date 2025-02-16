@@ -23,6 +23,13 @@ export function AuthProvider({ children }) {
             setLoading(false);
         }
     };
+
+    const decrementRemainingAudioGenerations = () => {
+        setUser(prevUser => ({
+            ...prevUser,
+            remainingAudioGenerations: prevUser.remainingAudioGenerations - 1
+        }));
+    }
     
     const login = async (response) => {
         console.log(response);
@@ -85,6 +92,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         loadSentence,
+        decrementRemainingAudioGenerations,
         isAuthenticated: !!user
     };
 

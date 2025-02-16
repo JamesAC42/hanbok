@@ -15,15 +15,24 @@ const Pricing = () => {
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
                                 <div className={pricingStyles.badge}>Limited Time Only - 50% OFF</div>
                                 <h3>One-Time Purchase</h3>
+                                <p className={pricingStyles.price}>$4</p>
+                                <ul className={pricingStyles.featuresList}>
+                                    <li>Increase saved sentence limit from <strong>30</strong> to <strong>150</strong></li>
+                                    <li>Increase saved words limit from <strong>60</strong> to <strong>200</strong></li>
+                                </ul>
+                                <button className={pricingStyles.purchaseButton}>Buy Now</button>
+                            </div>
+                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
+                                <div className={pricingStyles.badge}>Limited Time Only - 50% OFF</div>
+                                <h3>One-Time Purchase</h3>
                                 <p className={pricingStyles.price}>$6</p>
                                 <ul className={pricingStyles.featuresList}>
-                                    <li>Increase saved sentence limit from <strong>50</strong> to <strong>150</strong></li>
-                                    <li>Increase saved words limit from <strong>100</strong> to <strong>200</strong></li>
                                     <li>An additional <strong>50 audio generations</strong></li>
                                 </ul>
                                 <button className={pricingStyles.purchaseButton}>Buy Now</button>
                             </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
+                                <div className={pricingStyles.bestValue}>Best Value</div>
                                 <h3>Monthly Subscription</h3>
                                 <p className={pricingStyles.price}>$10 / month</p>
                                 <ul className={pricingStyles.featuresList}>

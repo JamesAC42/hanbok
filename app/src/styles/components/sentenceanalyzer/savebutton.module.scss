@@ -1,0 +1,38 @@
+.saveButton {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 1.5rem;
+    color: var(--color-text);
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.saved {
+        opacity: 1;
+        color: var(--color-primary);
+    }
+
+    &.loading {
+        cursor: not-allowed;
+        opacity: 0.3;
+    }
+
+    @media screen and (max-width: 725px) {
+        top: 0.5rem;
+        right: 0.5rem;
+        font-size: 1.2rem;
+    }
+} 

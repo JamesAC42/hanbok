@@ -25,6 +25,11 @@ async function connectToDatabase() {
     await db.collection('users').createIndex({ googleId: 1 }, { unique: true });
     await db.collection('sentences').createIndex({ userId: 1 });
     await db.collection('sentences').createIndex({ sentenceId: 1 }, { unique: true });
+    await db.collection('savedSentences').createIndex(
+      { userId: 1, sentenceId: 1 }, 
+      { unique: true }
+    );
+    await db.collection('savedSentences').createIndex({ dateSaved: -1 });
 
     // Initialize counters
     try {
