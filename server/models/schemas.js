@@ -38,7 +38,7 @@ const collections = {
             bsonType: "date"
           },
           purchases: {
-            bsonType: "object",
+            bsonType: ["object", "null"],
             properties: {
               basicUpgrade: {
                 bsonType: ["object", "null"],
@@ -48,7 +48,7 @@ const collections = {
                 }
               },
               audioPacks: {
-                bsonType: "array",
+                bsonType: ["array", "null"],
                 items: {
                   bsonType: "object",
                   properties: {
