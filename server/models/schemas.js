@@ -92,10 +92,12 @@ const collections = {
         }
       }
     },
-    index: {
-      key: { userId: 1, sentenceId: 1 },
-      unique: true
-    }
+    indexes: [
+      {
+        key: { userId: 1, sentenceId: 1 },
+        unique: true
+      }
+    ]
   },
   words: {
     validator: {
@@ -128,11 +130,23 @@ const collections = {
   }
 };
 
-// Apply schema validation to collections
+// Apply schema validation and indexes to collections
 async function setupCollections(db) {
   for (const [collectionName, schema] of Object.entries(collections)) {
     try {
-      await db.createCollection(collectionName, schema);
+      // Create collection with validator
+      await db.createCollection(collectionName, {
+        validator: schema.validator
+      });
+
+      // Create indexes if specified
+      if (schema.indexes) {
+        for (const index of schema.indexes) {
+          await db.collection(collectionName).createIndex(index.key, {
+            unique: index.unique
+          });
+        }
+      }
     } catch (error) {
       if (error.code !== 48) { // Collection already exists
         console.error(`Error creating ${collectionName}:`, error);
