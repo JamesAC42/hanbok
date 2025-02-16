@@ -23,6 +23,7 @@
     "google-auth-library": "^9.15.1",
     "mongodb": "^6.13.0",
     "openai": "^4.83.0",
-    "redis": "^4.7.0"
+    "redis": "^4.7.0",
+    "stripe": "^17.6.0"
   }
 }

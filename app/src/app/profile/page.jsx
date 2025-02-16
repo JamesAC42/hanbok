@@ -32,7 +32,15 @@ const Profile = () => {
                           <strong>Tier:</strong> {user.tier == 0 ? "Basic" : user.tier === 1 ? "Plus" : "Unknown"}
                         </p>
                         <p>
-                          <strong>Remaining Audio Generations:</strong> {user.remainingAudioGenerations == null ? "0" : user.remainingAudioGenerations}
+                          <strong>Remaining Audio Generations:</strong> {
+                            user.tier === 1 ? "Unlimited" : user.remainingAudioGenerations == null ? "0" : user.remainingAudioGenerations
+                          }
+                        </p>
+                        <p>
+                            <strong>Max Saved Sentences:</strong> {user.tier === 1 ? "Unlimited" : user.maxSavedSentences == null ? "0" : user.maxSavedSentences}
+                        </p>
+                        <p>
+                            <strong>Max Saved Words:</strong> {user.tier === 1 ? "Unlimited" : user.maxSavedWords == null ? "0" : user.maxSavedWords}
                         </p>
                     </div>
                     <div className={profileStyles.tierInfo}>

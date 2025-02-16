@@ -35,7 +35,9 @@ const getSession = async (req, res) => {
                 email: user.email,
                 dateCreated: user.dateCreated,
                 tier: user.tier,
-                remainingAudioGenerations: user.remainingAudioGenerations ? user.remainingAudioGenerations : 0
+                remainingAudioGenerations: user.remainingAudioGenerations ? user.remainingAudioGenerations : 0,
+                maxSavedSentences: user.maxSavedSentences ? user.maxSavedSentences : 0,
+                maxSavedWords: user.maxSavedWords ? user.maxSavedWords : 0
             }
         });
 

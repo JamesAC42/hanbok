@@ -38,6 +38,9 @@ const getUserWords = require('./controllers/auth/getUserWords');
 
 const checkSavedWords = require('./controllers/auth/checkSavedWords');
 
+const createCheckoutSession = require('./controllers/createCheckoutSession');
+const handleWebhook = require('./controllers/handleWebhook');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -45,8 +48,9 @@ app.use(cors({
   credentials: true
 }));
 
+app.post('/webhook', express.raw({type: 'application/json'}), handleWebhook);
+
 app.use(express.json({ limit: '50mb' }));
-app.use('/webhook', express.raw({ type: 'application/json' }));
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.setTimeout(300000, () => {
@@ -151,6 +155,9 @@ app.get('/api/words', isAuthenticated, async (req, res) => {
 app.post('/api/words/check', isAuthenticated, async (req, res) => {
     checkSavedWords(req, res);
 });
+
+// Stripe endpoints
+app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
 
 async function startServer() {
   await connectToDatabase();

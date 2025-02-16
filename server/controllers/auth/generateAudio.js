@@ -13,11 +13,21 @@ const generateAudio = async (req, res) => {
         // First check if user has remaining generations
         const user = await db.collection('users').findOne({ userId });
         
-        if (!user || user.remainingAudioGenerations <= 0) {
+        if (!user) {
             return res.status(403).json({
                 success: false,
                 error: 'No remaining audio generations available'
             });
+        }
+
+        if (user.tier === 0) {
+            const saved = user.remainingAudioGenerations;
+            if (saved <= 0) {
+                return res.status(403).json({
+                    success: false,
+                    error: 'No remaining audio generations available'
+                });
+            }
         }
 
         // Find the sentence and verify ownership

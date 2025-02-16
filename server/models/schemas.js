@@ -23,19 +23,53 @@ const collections = {
             description: "User tier: 0 for free, 1 for basic, 2 for plus"
           },
           remainingAudioGenerations: {
-            bsonType: "int",
+            bsonType: ["int", "null"],
             description: "Remaining audio generations available for the user"
           },
           maxSavedSentences: {
-            bsonType: "int",
+            bsonType: ["int", "null"],
             description: "Maximum number of sentences user can save (for tier 0)"
           },
           maxSavedWords: {
-            bsonType: "int",
+            bsonType: ["int", "null"],
             description: "Maximum number of words user can save (for tier 0)"
           },
           dateCreated: {
             bsonType: "date"
+          },
+          purchases: {
+            bsonType: "object",
+            properties: {
+              basicUpgrade: {
+                bsonType: ["object", "null"],
+                properties: {
+                  purchaseDate: { bsonType: "date" },
+                  sessionId: { bsonType: "string" }
+                }
+              },
+              audioPacks: {
+                bsonType: "array",
+                items: {
+                  bsonType: "object",
+                  properties: {
+                    purchaseDate: { bsonType: "date" },
+                    sessionId: { bsonType: "string" },
+                    amount: { bsonType: "int" }
+                  }
+                }
+              }
+            }
+          },
+          subscription: {
+            bsonType: ["object", "null"],
+            properties: {
+              status: { bsonType: "string" },
+              startDate: { bsonType: "date" },
+              endDate: { bsonType: ["date", "null"] },
+              stripeSubscriptionId: { bsonType: "string" },
+              customerId: { bsonType: "string" }
+            },
+            required: ["status", "startDate"]
           }
         }
       }

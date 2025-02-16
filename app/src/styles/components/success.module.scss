@@ -1,0 +1,72 @@
+.successContent {
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+    }
+
+    p {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        margin-bottom: 2rem;
+    }
+}
+
+.checkmark {
+    font-size: 4rem;
+    color: var(--success);
+    margin-bottom: 1rem;
+    animation: scaleIn 0.5s ease-out;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    width:100%;
+}
+
+.button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+
+    &:first-child {
+        background-color: rgb(69, 60, 101);
+        color: white;
+
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+    }
+
+    &:last-child {
+        background-color: rgb(100, 113, 218);
+        color: var(--primary);
+
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+    }
+}
+
+@keyframes scaleIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+} 

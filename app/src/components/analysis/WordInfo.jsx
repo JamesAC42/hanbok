@@ -86,7 +86,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                     }
                     
                     {
-                        wordInfo.grammar.particles && (
+                        (wordInfo.grammar.particles && wordInfo.grammar.particles.length > 0) && (
                         <div className={styles.wordInfoParticles}>
                             <div className={styles.wordInfoParticlesHeader}>
                             Particles
@@ -108,7 +108,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                     }
 
                     {
-                        wordInfo.grammar?.conjugation && (
+                        (wordInfo.grammar?.conjugation) && (
                         <div className={styles.conjugation}>
                             
                             <div className={styles.additionalInfo}>

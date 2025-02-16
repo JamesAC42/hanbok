@@ -87,6 +87,7 @@ export function AuthProvider({ children }) {
         user,
         loading,
         login,
+        fetchSession,
         logout,
         loadSentence,
         decrementRemainingAudioGenerations,

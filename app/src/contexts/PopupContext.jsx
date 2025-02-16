@@ -37,7 +37,7 @@ export function PopupProvider({ children }) {
     };
 
     return (
-        <PopupContext.Provider value={{ showLimitReachedPopup, showLoginRequiredPopup }}>
+        <PopupContext.Provider value={{ showLimitReachedPopup, showLoginRequiredPopup, hidePopup }}>
             {children}
             {popupState.show && popupState.variant === 'limit' && (
                 <LimitReachedPopup 

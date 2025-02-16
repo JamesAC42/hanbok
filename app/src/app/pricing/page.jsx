@@ -2,8 +2,55 @@
 import Image from 'next/image';
 import styles from '@/styles/components/pagelayout.module.scss';
 import pricingStyles from '@/styles/components/pricing.module.scss';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+
+//real
+const PRICE_IDS = {
+    BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
+    AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
+    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc'
+};
+
+//test
+// const PRICE_IDS = {
+//     BASIC_UPGRADE: 'price_1QtEdrDv6kE7GatabIZ21Odt',
+//     AUDIO_PACK: 'price_1QtEdODv6kE7GataOemGLYiK',
+//     MONTHLY_SUB: 'price_1QtEcWDv6kE7Gata4QDYmETm'
+// };
 
 const Pricing = () => {
+    const { user } = useAuth();
+    const router = useRouter();
+    const [loading, setLoading] = useState(false);
+
+    const handlePurchase = async (priceId) => {
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await fetch('/api/create-checkout-session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ priceId }),
+                credentials: 'include'
+            });
+
+            const { url } = await response.json();
+            window.location.href = url;
+        } catch (error) {
+            console.error('Error creating checkout session:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
@@ -20,7 +67,13 @@ const Pricing = () => {
                                     <li>Increase saved sentence limit from <strong>30</strong> to <strong>150</strong></li>
                                     <li>Increase saved words limit from <strong>60</strong> to <strong>200</strong></li>
                                 </ul>
-                                <button className={pricingStyles.purchaseButton}>Buy Now</button>
+                                <button 
+                                    className={pricingStyles.purchaseButton}
+                                    onClick={() => handlePurchase(PRICE_IDS.BASIC_UPGRADE)}
+                                    disabled={loading}
+                                >
+                                    Buy Now
+                                </button>
                             </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
                                 <div className={pricingStyles.badge}>Limited Time Only - 50% OFF</div>
@@ -29,7 +82,13 @@ const Pricing = () => {
                                 <ul className={pricingStyles.featuresList}>
                                     <li>An additional <strong>50 audio generations</strong></li>
                                 </ul>
-                                <button className={pricingStyles.purchaseButton}>Buy Now</button>
+                                <button 
+                                    className={pricingStyles.purchaseButton}
+                                    onClick={() => handlePurchase(PRICE_IDS.AUDIO_PACK)}
+                                    disabled={loading}
+                                >
+                                    Buy Now
+                                </button>
                             </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
                                 <div className={pricingStyles.bestValue}>Best Value</div>
@@ -40,7 +99,13 @@ const Pricing = () => {
                                     <li><strong>Unlimited</strong> saved words</li>
                                     <li><strong>Unlimited</strong> audio generations</li>
                                 </ul>
-                                <button className={pricingStyles.purchaseButton}>Subscribe</button>
+                                <button 
+                                    className={pricingStyles.purchaseButton}
+                                    onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
+                                    disabled={loading}
+                                >
+                                    Subscribe
+                                </button>
                             </div>
                         </div>
                     </section>
