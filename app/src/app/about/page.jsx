@@ -9,7 +9,7 @@ import { LineMdEmail } from '@/components/icons/Email';
 const About = () => {
     const updates = [
         {
-            date: '2025-02-13',
+            date: '2025-02-16',
             content: 'Initial beta release'
         }
     ];
