@@ -32,7 +32,6 @@ export function AuthProvider({ children }) {
     }
     
     const login = async (response) => {
-        console.log(response);
         try {
             const loginResponse = await fetch('/api/login', { 
                 method: 'POST',
@@ -42,9 +41,7 @@ export function AuthProvider({ children }) {
                 body: JSON.stringify({ token: response.credential })
             });
             const data = await loginResponse.json();
-            console.log(data);
             if(data.success) {
-                console.log("loginResponse data", data);
                 setUser(data.user);
             }
         } catch (error) {
