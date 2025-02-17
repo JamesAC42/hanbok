@@ -45,3 +45,5 @@ node_modules
 package-lock.json
 
 /audio/*
+
+/docs/images/*
