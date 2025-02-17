@@ -138,9 +138,6 @@
         filter:brightness(0.2) blur(1px) grayscale(0.9);
         background:#aeaeae76;
     }
-    @media screen and (max-width:725px) {
-        gap:1rem;
-    }
     .speakersOuter {
         display:flex;
         gap:1rem;
@@ -258,6 +255,30 @@
                 border: 2px solid rgba(251, 61, 159, 0.833);
                 box-shadow: 0.2rem 0.2rem 0 rgba(251, 61, 159, 0.833);
             }
+        }
+    }
+
+
+    @media screen and (max-width:500px) {
+        gap:0.5rem;
+
+        &.locked {
+            padding:1rem 3rem;
+            padding-bottom:2rem;
+        }
+    }
+
+    @media screen and (max-width:500px) {
+        &.locked {
+            padding:1rem 1rem;
+            padding-bottom:2rem;
+            padding-left:2rem;
+        }
+        .speakersOuter {
+            transform:scale(0.9);
+        }
+        .togglePlaying {
+            transform:scale(0.9);
         }
     }
 }

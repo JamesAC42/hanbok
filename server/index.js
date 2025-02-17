@@ -61,7 +61,7 @@ const getSiteStats = require('./controllers/auth/getSiteStats');
 const PORT = 5666;
 
 app.use(cors({
-  origin: process.env.LOCAL === 'true' ? 'http://localhost:3001' : 'https://hanbokstudy.com',
+  origin: process.env.LOCAL === 'true' ? 'http://localhost:3000' : 'https://hanbokstudy.com',
   credentials: true
 }));
 
