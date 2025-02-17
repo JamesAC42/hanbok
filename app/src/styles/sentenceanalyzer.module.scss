@@ -137,7 +137,7 @@
 		display:flex;
 		flex-direction:row;
 		justify-content: center;
-		margin-bottom:3rem;
+		margin-bottom:2rem;
 
 		.linkContainer {
 			border-radius:3rem;
@@ -146,18 +146,19 @@
 			gap:1rem;
 			display:flex;
 			flex-direction:row;
+			transition:all .2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			
 			a {
 				color:#fff;
 				font-size:1.6rem;
 				svg {
 					transform:translateY(3px);
 				}
-				transition:all .2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 				&:hover {
 					color:#3943cf;
 				}
 			}
-
+	
 		}
 
 		@media screen and (max-width:725px) {
@@ -168,10 +169,64 @@
 				}
 			}
 		}
-
 		&.linksWithAnalysis {
 			display:none;
-			transition:all .2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+		}
+	}
+}
+
+.statsContainer {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 0rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(2px);
+	margin:0 auto;
+	margin-bottom:1rem;
+	border-radius:1rem;
+	width:fit-content;
+
+	.statItem {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 8rem;
+		padding: 0.5rem;
+	}
+	
+	.statNumber {
+		font-size: 1.5rem;
+		font-weight: bold;
+		color: #000000;
+	}
+	
+	.statLabel {
+		font-size: 0.875rem;
+		color: rgba(116, 116, 116, 0.8);
+		text-align: center;
+	}
+
+	&.statsContainerWithAnalysis {
+		display:none;
+	}
+
+	@media screen and (max-width:725px) {
+		margin-bottom:2rem;
+		gap:0rem;
+		justify-content:center;
+		width:100%;
+		.statItem {
+			padding:0.2rem;
+		}
+		.statNumber {
+			font-size:1.2rem;
+		}
+		.statLabel {
+			font-size:0.7rem;
+			max-width:3rem;
 		}
 	}
 }

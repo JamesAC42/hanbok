@@ -56,6 +56,8 @@ const checkSavedWords = require('./controllers/auth/checkSavedWords');
 const createCheckoutSession = require('./controllers/createCheckoutSession');
 const handleWebhook = require('./controllers/handleWebhook');
 
+const getSiteStats = require('./controllers/auth/getSiteStats');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -173,6 +175,11 @@ app.post('/api/words/check', isAuthenticated, async (req, res) => {
 
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
+
+// Add this with other route definitions
+app.get('/api/stats', async (req, res) => {
+    getSiteStats(req, res);
+});
 
 // Connect to Redis before starting the server
 async function startServer() {

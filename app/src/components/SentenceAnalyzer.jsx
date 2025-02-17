@@ -21,6 +21,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [voice2, setVoice2] = useState(null);  
     const [showTransition, setShowTransition] = useState(false);
     const [error, setError] = useState(null);
+    const [siteStats, setSiteStats] = useState(null);
 
     useEffect(() => {
         // First check for prop sentenceId (from /sentence/[id] route)
@@ -29,6 +30,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         if (idToLoad && isAuthenticated) {
             loadSavedSentence(idToLoad);
         }
+        fetchSiteStats();
     }, [searchParams, isAuthenticated, propSentenceId]);
 
     const loadSavedSentence = async (id) => {
@@ -40,6 +42,18 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             setShowTransition(false); // Reset transition when loading saved sentence
         } else {
             setError(result.error);
+        }
+    };
+
+    const fetchSiteStats = async () => {
+        try {
+            const response = await fetch('/api/stats');
+            const data = await response.json();
+            if (data.success) {
+                setSiteStats(data.stats);
+            }
+        } catch (error) {
+            console.error('Error fetching site stats:', error);
         }
     };
 
@@ -77,6 +91,23 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 </div>
             </div>
     
+
+            {siteStats && (
+                <div className={`${styles.statsContainer} ${analysis ? styles.statsContainerWithAnalysis : ''}`}>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>{siteStats.totalSentences.toLocaleString()}</span>
+                        <span className={styles.statLabel}>Sentences Analyzed</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>{siteStats.totalWords.toLocaleString()}</span>
+                        <span className={styles.statLabel}>Words Being Learned</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>{siteStats.totalUsers.toLocaleString()}</span>
+                        <span className={styles.statLabel}>Users Learning Now</span>
+                    </div>
+                </div>
+            )}
 
             <SentenceForm
                 analysis={analysis}
