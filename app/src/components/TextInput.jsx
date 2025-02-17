@@ -8,7 +8,8 @@ const TextInput = ({
   type = 'text',
   className = '',
   disabled = false,
-  variant = 'default'
+  variant = 'default',
+  maxLength = 120
 }) => {
   return (
     <input
@@ -18,6 +19,7 @@ const TextInput = ({
       placeholder={placeholder}
       disabled={disabled}
       className={`${styles.input} ${styles[variant]} ${className}`}
+      maxLength={maxLength}
     />
   );
 };

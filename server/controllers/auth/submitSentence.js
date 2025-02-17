@@ -5,7 +5,7 @@ const { getDb } = require('../../database');
 const submitSentence = async (req, res) => {
     const { text } = req.body;
 
-    if (!text || text.length > 80) {
+    if (!text || text.length > 120) {
         return res.json({
             message: {
                 isValid: false,
