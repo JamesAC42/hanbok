@@ -6,12 +6,26 @@ const app = express();
 const session = require('express-session');
 const {createClient} = require('redis');
 const {RedisStore} = require('connect-redis');
-const redisClient = createClient();
-if (process.env.REDIS_PW) {
-  redisClient.auth({ password: process.env.REDIS_PW })
-    .catch(console.error);
-}
-redisClient.connect().catch(console.error);
+
+// Create Redis client with configuration
+const redisClient = createClient({
+  password: process.env.REDIS_PW || undefined,
+  socket: {
+    reconnectStrategy: (retries) => {
+      if (retries > 10) {
+        console.error('Redis connection failed after multiple retries');
+        return false;
+      }
+      return Math.min(retries * 100, 3000);
+    }
+  }
+});
+
+// Handle Redis connection events
+redisClient.on('error', (err) => console.error('Redis Client Error:', err));
+redisClient.on('connect', () => console.log('Redis Client Connected'));
+
+// Initialize Redis store
 const redisStore = new RedisStore({ 
     client: redisClient,
     prefix: "hanbok:"
@@ -160,12 +174,19 @@ app.post('/api/words/check', isAuthenticated, async (req, res) => {
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
 
+// Connect to Redis before starting the server
 async function startServer() {
-  await connectToDatabase();
-  
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  try {
+    await redisClient.connect();
+    await connectToDatabase();
+    
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
 }
 
 startServer().catch(console.error);
