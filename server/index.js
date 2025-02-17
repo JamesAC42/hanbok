@@ -44,7 +44,7 @@ const handleWebhook = require('./controllers/handleWebhook');
 const PORT = 5666;
 
 app.use(cors({
-  origin: process.env.LOCAL ? 'http://localhost:3001' : '',
+  origin: process.env.LOCAL ? 'http://localhost:3001' : 'https://hanbokstudy.com',
   credentials: true
 }));
 
@@ -68,7 +68,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: process.env.SECURE_SESSION === 'true',
-      domain: process.env.LOCAL ? 'localhost' : '',
+      domain: process.env.LOCAL ? 'localhost' : 'hanbokstudy.com',
       path: '/',
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
