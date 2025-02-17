@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -44,11 +45,11 @@ const handleWebhook = require('./controllers/handleWebhook');
 const PORT = 5666;
 
 app.use(cors({
-  origin: process.env.LOCAL ? 'http://localhost:3001' : 'https://hanbokstudy.com',
+  origin: process.env.LOCAL === 'true' ? 'http://localhost:3001' : 'https://hanbokstudy.com',
   credentials: true
 }));
 
-app.post('/webhook', express.raw({type: 'application/json'}), handleWebhook);
+app.post('/api/webhook', express.raw({type: 'application/json'}), handleWebhook);
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -68,7 +69,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: process.env.SECURE_SESSION === 'true',
-      domain: process.env.LOCAL ? 'localhost' : 'hanbokstudy.com',
+      domain: process.env.LOCAL === 'true' ? 'localhost' : 'hanbokstudy.com',
       path: '/',
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
