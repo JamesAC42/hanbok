@@ -23,6 +23,19 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [error, setError] = useState(null);
     const [siteStats, setSiteStats] = useState(null);
 
+    const exampleSentences = [
+        "그는 음악을 듣다가 잠들었어요.",
+        "어제 도서관에서 열심히 공부했어요.",
+        "버스 타임을 확인해 주세요.",
+        "맛있는 음식을 먹고 기분이 좋아졌어요."
+    ];
+
+    const handleExampleClick = (sentence) => {
+        if (window.setInputText) {
+            window.setInputText(sentence);
+        }
+    };
+
     useEffect(() => {
         // First check for prop sentenceId (from /sentence/[id] route)
         // Then fall back to query param (from /?id= route)
@@ -116,6 +129,23 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 setVoice2={setVoice2}
                 setTransition={setShowTransition}
                 />
+
+            {
+                !analysis && <div className={styles.testSentences}>
+                    <h3>Or try an example sentence:</h3>
+                    {exampleSentences.map((sentence, index) => (
+                        <div 
+                            key={index} 
+                            className={styles.exampleSentence}
+                            onClick={() => handleExampleClick(sentence)}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            {sentence}
+                        </div>
+                    ))}
+                </div>
+            }
         
             {
             analysis && 

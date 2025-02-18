@@ -230,3 +230,69 @@
 		}
 	}
 }
+
+.testSentences {
+	h3 {
+		margin-bottom:1rem;
+
+		@media screen and (max-width:725px) {
+			background:#ffffffe7;
+			width:fit-content;
+			padding:0.5rem;
+			border-radius:0.3rem;
+		}
+
+	}
+	.exampleSentence {
+		font-size:1.2rem;
+		margin-bottom:0.5rem;
+		font-family:var(--font-kr-serif);
+		position:relative;
+		width:fit-content;
+		padding:0.5rem;
+		cursor:pointer;
+		border-radius:0.3rem;
+
+		transition:all .2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+		overflow:hidden;
+
+		@media screen and (max-width:725px) {
+			background:#ffffffe7;
+		}
+
+		&::after {
+			position:absolute;
+			content:'';
+			bottom:0;
+			left:0;
+			width:100%;
+			height:100%;
+			background:#000000;
+			transform:translateY(calc(100%));
+			transition:all .2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+			z-index:-1;
+		}
+
+		&:hover {
+			color:#fff;
+			&::after {
+				transform:translateY(0);
+			}
+		}
+	}
+}
+
+.exampleSentence {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+        color: var(--primary-color);
+        transform: translateY(-0.125rem);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}

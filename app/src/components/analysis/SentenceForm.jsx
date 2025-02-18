@@ -47,6 +47,16 @@ const SentenceForm = ({
         };
     }, [loading]);
 
+    useEffect(() => {
+        // Expose setText function globally so it can be accessed by SentenceAnalyzer
+        window.setInputText = setText;
+        
+        // Cleanup
+        return () => {
+            delete window.setInputText;
+        };
+    }, []);
+
     const handleSubmit = async (e) => {
 
         e.preventDefault();
