@@ -50,76 +50,76 @@ For valid input:
   "isValid": true,
   "analysis": {
     "sentence": {
-        "korean": "original Korean input (word or sentence)",
-        "english": "English translation",
-        "formality": "polite/casual/formal",
-        "context": "when/where/why you'd use this word/sentence"
+      "korean": "original Korean input (word or sentence)",
+      "english": "English translation",
+      "formality": "polite/casual/formal",
+      "context": "when/where/why you'd use this word/sentence"
     },
-    
     "components": [
-    {
-        "text": "(IMPORTANT)component as it appears in input (do not include particle)",
+      {
+        "text": "(IMPORTANT) component as it appears in input (do not include particle)",
         "dictionary_form": "(IMPORTANT) base dictionary form (e.g., 하다 form for verbs)",
         "type": "(IMPORTANT) verb/noun/particle/ending/etc. If multiple words (e.g., auxiliary verb) use an underscore to separate them (e.g., auxiliary_verb).",
         "meaning": {
-            "english": "English meaning",
-            "notes": "any specific meaning notes for this context"
+          "english": "English meaning",
+          "notes": "any specific meaning notes for this context"
         },
-
-        "grammar": { // Make sure that the particles are a direct child of this property!
-            "role": "grammatical role (for sentences) or word class (for single words)",
-            "conjugation": {  // for verbs/adjectives
+        "grammar": {
+          "role": "grammatical role (for sentences) or word class (for single words)",
+          "conjugation": {
             "tense": "present/past/etc",
             "formality": "polite/casual/etc",
-            "steps": ["step1", "step2"] // how it was conjugated from base form,
-            
-            "particles": [  // for nouns [NOTE: ONLY INCLUDE IF THE PARTICLE IMMEDIATELY FOLLOWS THIS COMPONENT IN THE ORIGINAL SENTENCE]
-                {
-                    "particle": "particle used",
-                    "function": "what it does in this context"
-                }
+            "steps": [
+              {
+                "step": "Concise description of the conjugation change (e.g., 'add -요')",
+                "explanation": "Detailed explanation of the morphological change from the base form to the current form"
+              }
             ]
-        },
-    }
+          },
+          "particles": [
+            {
+              "particle": "particle used",
+              "function": "what it does in this context"
+            }
+          ]
+        }
+      }
     ],
-
     "grammar_points": [
-        {
+      {
         "pattern": "name of grammar pattern or word formation pattern",
         "level": "beginner/intermediate/advanced",
         "explanation": "clear explanation for learners",
         "components": ["indices of relevant components"],
         "examples": [
-            {
+          {
             "korean": "similar example",
             "english": "translation"
-            }
+          }
         ]
-        }
+      }
     ],
-
     "variants": {
-        "formal": {
+      "formal": {
         "text": "formal version",
         "when_to_use": "explanation"
-        },
-        "polite": {
+      },
+      "polite": {
         "text": "polite version",
         "when_to_use": "explanation"
-        },
-        "casual": {
+      },
+      "casual": {
         "text": "casual version",
         "when_to_use": "explanation"
-        }
+      }
     },
-
     "cultural_notes": [
-        {
+      {
         "note": "cultural context/usage note",
         "importance": "how crucial this is to understand"
-        }
+      }
     ]
-    }
+  }
 }
 
 NOTE: DO NOT INCLUDE BACKTICKS (e.g. \`\`\`json) IN RESPONSE! ONLY the JSON object should be returned.
@@ -137,14 +137,18 @@ Example of what to return:
 }
 
 Important notes for the response:
-1. Omit any fields that aren't applicable rather than using null or empty values
-2. Include all relevant grammatical and cultural information in the details
-3. For single words, still include at least one grammar point (can be about word formation, conjugation pattern, or usage)
-4. Make sure to break down any conjugated forms into their components
-5. For single words with particles, analyze both the root word and the particle
-6. The text of the components must exactly match the input when combined
-7. It is EXTREMELY important that the text and dictionary form fields are populated for every single component
-8. When constructing components, include both words of a compound noun in a single component. e.g. 버스 타임 is a single component, not two.
+1. Particle Handling: Do not include particles as separate components if they are directly attached to a preceding component. Instead, list them under the particles array within the grammar field of that component.
+2. Enhanced Conjugation Information: In the conjugation field, provide a detailed breakdown of the conjugation process. Each step in the steps array must include:
+    - A concise description (in the step field) of what change occurred.
+    - A detailed explanation (in the explanation field) of the morphological or phonological change from the base form to the conjugated form.
+3. Omit any fields that aren't applicable rather than using null or empty values.
+4. Include all relevant grammatical and cultural information in the details.
+5. For single words, still include at least one grammar point (this can be about word formation, conjugation pattern, or usage).
+6. Make sure to break down any conjugated forms into their individual steps.
+7. For single words with particles, analyze both the root word and the particle.
+8. The combined text of the components must exactly match the original input.
+9. It is EXTREMELY important that the text and dictionary_form fields are populated for every single component.
+10. When constructing components, include both words of a compound noun in a single component (e.g., 버스 타임 should be a single component, not two).
 
 Korean text to analyze: `;
 

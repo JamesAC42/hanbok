@@ -1,6 +1,7 @@
 'use client';
 import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
 import styles from '@/styles/components/sentenceanalyzer/wordinfo.module.scss';
+import Conjugation from './Conjugation';
 
 const WordInfo = ({wordInfo, shouldAnimate}) => {
     
@@ -108,57 +109,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                     }
 
                     {
-                        (wordInfo.grammar?.conjugation) && (
-                        <div className={styles.conjugation}>
-                            
-                            <div className={styles.additionalInfo}>
-                            {
-                            wordInfo.grammar.conjugation.tense && (
-                                <div className={styles.tense}>
-                                <span className={styles.tenseLabel}>
-                                    Tense:
-                                </span>
-                                <span className={styles.tenseValue}>
-                                    {wordInfo.grammar.conjugation.tense.replaceAll('_', ' ')}
-                                </span>
-                                </div>
-                            )
-                            }
-
-                            {
-                            wordInfo.grammar.conjugation.formality && (
-                                <div className={styles.formality}>
-                                <span className={styles.formalityLabel}>
-                                    Formality:
-                                </span>
-                                <span className={styles.formalityValue}>
-                                    {wordInfo.grammar.conjugation.formality.replaceAll('_', ' ')}
-                                </span>
-                                </div>
-                            )
-                            }
-                            </div>
-                            
-                            {
-                            wordInfo.grammar.conjugation.steps && (
-                                <div className={styles.steps}>
-                                <div className={styles.stepsHeader}>
-                                    Conjugation Steps:
-                                </div>
-                                <div className={styles.stepsContent}>
-                                    {wordInfo.grammar.conjugation.steps.map((step, index) => (
-                                    <div className={styles.step} key={index}>
-                                        {step}
-                                    </div>
-                                    ))}
-                                </div>
-                                </div>
-                            )
-                            }
-                            
-                            
-                        </div>
-                        )
+                        (wordInfo.grammar?.conjugation) && <Conjugation wordInfo={wordInfo} />
                     }
                     </div>
                     )}
