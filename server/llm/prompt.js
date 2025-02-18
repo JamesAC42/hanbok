@@ -57,7 +57,7 @@ For valid input:
     },
     "components": [
       {
-        "text": "(IMPORTANT) component as it appears in input (do not include particle)",
+        "text": "(IMPORTANT) component as it appears in input (do not include particle) but DO include conjugation - again, this is the entire word as it appears in the sentence MINUS the particle (if a noun)",
         "dictionary_form": "(IMPORTANT) base dictionary form (e.g., 하다 form for verbs)",
         "type": "(IMPORTANT) verb/noun/particle/ending/etc. If multiple words (e.g., auxiliary verb) use an underscore to separate them (e.g., auxiliary_verb).",
         "meaning": {
