@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
 import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
 import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
+import { removeWord } from '@/api/words';
 
 const Saves = () => {
     const router = useRouter();
@@ -65,19 +66,11 @@ const Saves = () => {
         router.replace(`/sentence/${sentenceId}`);
     }
 
-    const handleDeleteWord = async (wordId, e) => {
-        e.stopPropagation(); // Prevent any parent click handlers
-        
+    const handleDeleteWord = async (word, e) => {
+        e.stopPropagation();
         try {
-            const response = await fetch(`/api/words/${wordId}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-
-            if (!response.ok) throw new Error('Failed to delete word');
-
-            // Remove word from state
-            setWords(prevWords => prevWords.filter(word => word.wordId !== wordId));
+            await removeWord({korean:word.korean, english:word.english});
+            setWords(prevWords => prevWords.filter(w => w.wordId !== word.wordId));
         } catch (error) {
             console.error('Error deleting word:', error);
         }
@@ -179,7 +172,7 @@ const Saves = () => {
                         </div>
                         <button 
                             className={savesStyles.deleteButton}
-                            onClick={(e) => handleDeleteWord(word.wordId, e)}
+                            onClick={(e) => handleDeleteWord(word, e)}
                             aria-label="Delete word"
                         >
                             <MaterialSymbolsDeleteOutlineSharp />

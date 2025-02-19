@@ -50,6 +50,8 @@ const addWord = async (req, res) => {
         res.json({ success: true });
 
     } catch (error) {
+
+        console.log(error);
         // Handle duplicate word error
         if (error.code === 11000) {
             return res.status(400).json({

@@ -1,8 +1,6 @@
 const { getDb } = require('../../database');
 
 const getSession = async (req, res) => {
-    console.log('Session data:', req.session);
-    console.log('Session user:', req.session.user);
     
     if (!req.session.user) {
         return res.status(401).json({ 
@@ -16,8 +14,6 @@ const getSession = async (req, res) => {
         const user = await db.collection('users').findOne(
             { userId: req.session.user.userId }
         );
-
-        console.log('Found user:', user);
 
         if (!user) {
             req.session.destroy();

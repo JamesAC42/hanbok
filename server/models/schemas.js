@@ -157,10 +157,12 @@ const collections = {
         }
       }
     },
-    index: {
-      key: { userId: 1, korean: 1 },
-      unique: true
-    }
+    indexes: [
+      {
+        key: { userId: 1, korean: 1 },
+        unique: true
+      }
+    ]
   }
 };
 

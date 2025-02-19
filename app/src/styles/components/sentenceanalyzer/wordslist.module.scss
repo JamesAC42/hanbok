@@ -18,9 +18,11 @@
 		font-family: var(--font-kr-serif);
 		display: flex;
 		font-size:1.3rem;
+		align-items:center;
 
 		.wordListItemActions {
 			.wordListItemAction {
+				cursor:pointer;
 				svg {
 				transform:scale(1.5) translateY(1px);
 				}
@@ -31,7 +33,6 @@
 				}
 				}
 				&.wordNotInLibrary {
-				cursor:pointer;
 				svg {
 					color:#5061cd;
 					opacity:0.8;
@@ -45,11 +46,13 @@
 			font-weight:bold;
 		}
 		span.wordListItemType {
-			display:inline-block;
-			margin-left:auto;
+
+			display:block;
 			font-weight:bold;
 			opacity:0.6;
-			font-size:1rem;
+			font-size:0.8rem;
+			transform:translateY(0.1rem);
+			margin-left:0.5rem;
 		}
 	}
     @media screen and (max-width:725px) {
@@ -61,6 +64,7 @@
 			font-size:1.2rem;
 			padding:0.5rem 1rem;
 			margin-bottom:0.4rem;
+			flex-wrap:wrap;
 			font-size:1rem;
 			.wordListItemActions {
 				margin-right:0.8rem;
@@ -71,7 +75,186 @@
 			span.wordListItemType {
 				font-size:0.8rem;
 				text-align:right;
+				transform:none;
 			}
 		}
 	}
+}
+
+.showRelatedButton {
+    font-size: 0.875rem;
+	color:#676767;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+	font-family:var(--font-display);
+    margin-left: auto;
+    transition: all 0.2s ease-in-out;
+	border-radius:2rem;
+
+    &:hover {
+		background:#f1f1f1;
+		color:#121212;
+    }
+}
+
+.relatedWordsContainer {
+    margin-left: 1rem;
+    padding: 0.25rem 0.5rem;
+    border-left: 2px solid #ddd;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.relatedWordsContainer .wordListItem {
+    font-size: 1.2rem;
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.5rem;
+	border-color:#e6e6e6;
+    @media screen and (max-width:725px) {
+		font-size:1rem;
+	}
+}
+
+.loadingRelated {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    padding: 0.5rem 0;
+
+    svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+.relatedSection {
+
+    margin-bottom: 1rem;
+	padding-left:1rem;
+
+    h4 {
+        color: var(--text-secondary);
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.relatedWordsPopup {
+    position: relative;
+    background: var(--background-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    margin-left: 1.2rem;
+
+    p {
+        margin-bottom: 0.5rem;
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .closePopup {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-secondary);
+        padding: 0.25rem;
+
+        &:hover {
+            color: var(--text);
+        }
+
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+    }
+}
+
+.noRelatedWords, .errorRelatedWords {
+    padding: 1rem;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.errorRelatedWords {
+    color: var(--error);
+    
+    svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+}
+
+.wordListItemAction {
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.addWordTooltip {
+    position: absolute;
+    background: #2c2c2c;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    left: calc(100% + 1.5rem);
+    top: 0%;
+    transform: translateY(-160%);
+    z-index: 10;
+    box-shadow: 0 0 0.8rem 0.2rem rgba(45, 174, 225, 0.886);
+    animation: fadeIn 0.3s ease-in-out;
+
+    .addWordTooltipInner {
+        position: relative;
+        svg {
+            color:#ffffff !important;
+            margin-left:0.5rem;
+        }
+
+        .addWordTooltipIcon {
+            position: absolute;
+            left: 0;
+            bottom:0;
+            transform: translate(-120%,80%);
+            svg {
+                color:#000000 !important;
+                font-size:1.8rem;
+            }
+            
+        }
+    }
+
 }

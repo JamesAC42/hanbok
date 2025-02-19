@@ -10,10 +10,9 @@ const models = {
 
 const generateResponse = async (text, model) => {
     let attempts = 0;
-    let maxAttempts = 1;
+    let maxAttempts = 2;
     let parsedResponse = null;
     while(!parsedResponse && attempts < maxAttempts) {
-        console.log("generating...");
         try {
             let response = await models[model](text);
 

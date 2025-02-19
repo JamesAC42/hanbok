@@ -1,15 +1,21 @@
 const { getDb } = require('../../database');
 
 const removeWord = async (req, res) => {
-    const { wordId } = req.params;
+    const { word } = req.body;
     const userId = req.session.user.userId;
+    if (!word?.korean) {
+        return res.status(400).json({
+            success: false,
+            error: 'Korean word is required'
+        });
+    }
 
     try {
         const db = getDb();
         
         const result = await db.collection('words').deleteOne({
-            wordId: parseInt(wordId),
-            userId
+            userId,
+            korean:word.korean
         });
 
         if (result.deletedCount === 0) {

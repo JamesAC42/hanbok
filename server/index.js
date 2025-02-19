@@ -31,7 +31,7 @@ const redisStore = new RedisStore({
     prefix: "hanbok:"
 });
 
-const { connectToDatabase } = require('./database');
+const { connectToDatabase, getDb } = require('./database');
 
 const submitSentence = require('./controllers/auth/submitSentence');
 const getAudioURL = require('./controllers/auth/getAudioURL');
@@ -57,6 +57,8 @@ const createCheckoutSession = require('./controllers/createCheckoutSession');
 const handleWebhook = require('./controllers/handleWebhook');
 
 const getSiteStats = require('./controllers/auth/getSiteStats');
+
+const getWordRelations = require('./controllers/auth/getWordRelations');
 
 const PORT = 5666;
 
@@ -161,7 +163,7 @@ app.post('/api/words', isAuthenticated, async (req, res) => {
     addWord(req, res);
 });
 
-app.delete('/api/words/:wordId', isAuthenticated, async (req, res) => {
+app.delete('/api/words/', isAuthenticated, async (req, res) => {
     removeWord(req, res);
 });
 
@@ -179,6 +181,10 @@ app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession)
 // Add this with other route definitions
 app.get('/api/stats', async (req, res) => {
     getSiteStats(req, res);
+});
+
+app.get('/api/word-relations', isAuthenticated, async (req, res) => {
+    getWordRelations(req, res);
 });
 
 // Connect to Redis before starting the server
