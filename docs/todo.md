@@ -1,5 +1,7 @@
 fixes:
 
+- SEO + more info on homepage
+- enforce more strict guidelines for the conjugation/grammar info for each word and display it better
 - show thing prompting people to save words and save sentences to teach
 - more analytics endpoints for seeing top users
 - show translation of sentence in the sentence page
