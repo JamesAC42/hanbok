@@ -43,11 +43,21 @@ const generateAudio = async (req, res) => {
             });
         }
 
-        // Decrement the remaining generations
-        await db.collection('users').updateOne(
-            { userId },
-            { $inc: { remainingAudioGenerations: -1 } }
-        );
+        // Decrement the remaining generations, but don't go below 0
+        if(user.tier === 0) {
+            await db.collection('users').updateOne(
+                { userId },
+                [
+                    {
+                        $set: {
+                            remainingAudioGenerations: {
+                                $max: [0, { $subtract: ['$remainingAudioGenerations', 1] }]
+                            }
+                        }
+                    }
+                ]
+            );
+        }
 
         // Generate speech audio
         const { voice1, voice2 } = await generateSpeech(sentence.text);

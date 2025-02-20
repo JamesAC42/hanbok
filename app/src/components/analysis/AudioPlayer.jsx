@@ -96,10 +96,16 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
     };
 
     const generateAudio = () => {
-      if(!loggedIn() || !hasRemainingAudioGenerations()) {
+      if(!loggedIn()) {
         setShowPopup(true);
         return;
       }
+
+      if(user.tier === 0 && !hasRemainingAudioGenerations()) {
+        setShowPopup(true);
+        return;
+      }
+
       const id = getSentenceId();
       setLoadingAudio(true);  
       fetch(`/api/sentences/${id}/generate-audio`, {
@@ -129,13 +135,18 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
       if(loadingAudio) {
         return;
       }
-      if(loggedIn() && hasRemainingAudioGenerations()) {
-        setShowPopup(false);
-        generateAudio();
-      } else if(!loggedIn()) {
+
+      if(!loggedIn()) {
         setShowPopup(true);
-      } else if(loggedIn() && !hasRemainingAudioGenerations()) {
-        setShowPopup(true);
+        return;
+      } else {
+        if(user.tier === 0 && !hasRemainingAudioGenerations()) {
+          setShowPopup(true);
+          return;
+        } else {
+          setShowPopup(false);
+          generateAudio();
+        }
       }
     }
 

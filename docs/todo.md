@@ -1,5 +1,8 @@
 fixes:
 
+- fix bug where audio generation doesn't work for plus users if their credits are out
+- update messaging on word relations being included with plus
+- add popup hihglighting saving a sentence
 - SEO + more info on homepage
 - enforce more strict guidelines for the conjugation/grammar info for each word and display it better
 - show thing prompting people to save words and save sentences to teach
