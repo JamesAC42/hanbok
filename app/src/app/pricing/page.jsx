@@ -98,6 +98,7 @@ const Pricing = () => {
                                     <li><strong>Unlimited</strong> sentences saved</li>
                                     <li><strong>Unlimited</strong> saved words</li>
                                     <li><strong>Unlimited</strong> audio generations</li>
+                                    <li><strong>Unlimited</strong> word relation insights</li>
                                 </ul>
                                 <button 
                                     className={pricingStyles.purchaseButton}

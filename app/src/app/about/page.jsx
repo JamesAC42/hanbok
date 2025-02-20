@@ -9,6 +9,10 @@ import { LineMdEmail } from '@/components/icons/Email';
 const About = () => {
     const updates = [
         {
+            date: '2025-02-19',
+            content: 'Added word relations for plus users and fixed various minor issues.'
+        },
+        {
             date: '2025-02-16',
             content: 'Initial beta release'
         }
@@ -17,9 +21,11 @@ const About = () => {
     const upcomingFeatures = [
         'Personalized vocabulary decks with spaced repetition learning',
         'Upload or paste screenshots of text to analyze',
-        'Premium features to allow users to save unlimited sentences, words, and generate more audio examples',
+        'Hear audio for individual words',
         'Interactive grammar exercises based on saved sentences',
         'Community features for sharing and discussing sentences',
+        'More languages!',
+        'More features for premium users!'
     ];
 
     const contactLinks = [
