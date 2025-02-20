@@ -44,6 +44,7 @@ const Saves = () => {
 
                 if (data.success) {
                     if (activePage === 'sentences') {
+                        console.log(data.sentences);
                         setSentences(data.sentences);
                     } else {
                         setWords(data.words);
@@ -131,6 +132,7 @@ const Saves = () => {
                             className={savesStyles.sentenceItem}
                         >
                             <p className={savesStyles.sentenceText}>{sentence.text}</p>
+                            <p className={savesStyles.sentenceTranslation}>{sentence.analysis?.sentence?.english}</p>
                             <p className={savesStyles.sentenceDate}>
                                 Saved on {new Date(sentence.dateSaved).toLocaleString()}
                             </p>
