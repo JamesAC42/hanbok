@@ -6,6 +6,7 @@ import { MakiInformation11 } from './icons/Info';
 import { MaterialSymbolsCardsStarRounded } from './icons/Deck';
 import { MaterialSymbolsMenu } from './icons/Menu';
 import { SolarChatRoundMoneyBold } from './icons/Money';
+import { MingcuteCommentFill } from './icons/CommentFill';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -56,14 +57,19 @@ const NavBar = () => {
                         <MakiInformation11 />
                     </Link>
                 </div>
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 4 : 3 }}>   
+                    <Link href="/feedback">
+                        <MingcuteCommentFill />
+                    </Link>
+                </div>
                 
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 3 : 2 }}>   
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 5 : 4 }}>   
                     <Link href="/pricing">
                         <SolarChatRoundMoneyBold />
                     </Link>
                 </div>
                 {user && (
-                    <div className={styles.navBarItem} style={{ '--nav-index': 4 }}>   
+                    <div className={styles.navBarItem} style={{ '--nav-index': 6 }}>   
                         <div 
                             onClick={handleLogout}
                             className={styles.navBarItemIcon}>

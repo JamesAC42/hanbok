@@ -60,6 +60,10 @@ const getSiteStats = require('./controllers/auth/getSiteStats');
 
 const getWordRelations = require('./controllers/auth/getWordRelations');
 
+const getFeedback = require('./controllers/auth/getFeedback');
+const addFeedback = require('./controllers/auth/addFeedback');
+const deleteFeedback = require('./controllers/auth/deleteFeedback');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -185,6 +189,19 @@ app.get('/api/stats', async (req, res) => {
 
 app.get('/api/word-relations', isAuthenticated, async (req, res) => {
     getWordRelations(req, res);
+});
+
+// Feedback forum routes
+app.get('/api/feedback', async (req, res) => {
+    getFeedback(req, res);
+});
+
+app.post('/api/feedback', isAuthenticated, async (req, res) => {
+    addFeedback(req, res);
+});
+
+app.delete('/api/feedback/:feedbackId', isAuthenticated, async (req, res) => {
+    deleteFeedback(req, res);
 });
 
 // Connect to Redis before starting the server

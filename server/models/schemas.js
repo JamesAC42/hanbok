@@ -163,6 +163,54 @@ const collections = {
         unique: true
       }
     ]
+  },
+  feedback: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["feedbackId", "userId", "text", "dateCreated"],
+        properties: {
+          feedbackId: {
+            bsonType: "int"
+          },
+          userId: {
+            bsonType: "int"
+          },
+          text: {
+            bsonType: "string",
+            maxLength: 2000
+          },
+          parentId: {
+            bsonType: ["int", "null"],
+            description: "ID of parent feedback for replies, null for top-level comments"
+          },
+          dateCreated: {
+            bsonType: "date"
+          },
+          isDeleted: {
+            bsonType: ["bool", "null"],
+            description: "Whether the feedback has been soft deleted"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { dateCreated: -1 },
+        name: "date_index",
+        unique: false
+      },
+      {
+        key: { parentId: 1 },
+        name: "parent_index",
+        unique: false
+      },
+      {
+        key: { feedbackId: 1 },
+        name: "feedbackId_index",
+        unique: true
+      }
+    ]
   }
 };
 

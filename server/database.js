@@ -36,10 +36,17 @@ async function connectToDatabase() {
     );
     await db.collection('savedSentences').createIndex({ dateSaved: -1 });
 
+    // Add indexes for feedback collection
+    await db.collection('feedback').createIndex({ dateCreated: -1 });
+    await db.collection('feedback').createIndex({ parentId: 1 });
+    await db.collection('feedback').createIndex({ feedbackId: 1 }, { unique: true });
+    await db.collection('feedback').createIndex({ userId: 1 });
+
     // Initialize counters
     try {
       await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });
       await db.collection('counters').insertOne({ _id: 'sentenceId', seq: 0 });
+      await db.collection('counters').insertOne({ _id: 'feedbackId', seq: 0 });
     } catch (error) {
       // Ignore duplicate key error as counters might already exist
       if (error.code !== 11000) {

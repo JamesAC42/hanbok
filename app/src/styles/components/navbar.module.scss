@@ -60,7 +60,10 @@
         &:nth-child(6) {
             box-shadow: 0.5rem 0.5rem 0 #c74683;
             background-color: #c74683;
-
+        }
+        &:nth-child(7) {
+            box-shadow: 0.5rem 0.5rem 0 #3a6ccf;
+            background-color: #3a6ccf;
         }
     }
 }
@@ -117,7 +120,15 @@
             }
 
             @include navbar-item-hover;
-        }           
+        }     
+        
+        @media screen and (max-height: 800px) {
+            gap:1rem;
+        }  
+        
+        @media screen and (max-height: 600px) {
+            transform:scale(0.8);
+        }
     }
 }
 
