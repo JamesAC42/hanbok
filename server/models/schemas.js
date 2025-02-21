@@ -26,6 +26,10 @@ const collections = {
             bsonType: ["int", "null"],
             description: "Remaining audio generations available for the user"
           },
+          feedbackAudioCreditRedeemed: {
+            bsonType: ["bool", "null"],
+            description: "Whether user has redeemed their feedback audio credit bonus"
+          },
           maxSavedSentences: {
             bsonType: ["int", "null"],
             description: "Maximum number of sentences user can save (for tier 0)"

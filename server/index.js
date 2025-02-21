@@ -197,7 +197,7 @@ app.get('/api/feedback', async (req, res) => {
 });
 
 app.post('/api/feedback', isAuthenticated, async (req, res) => {
-    addFeedback(req, res);
+    addFeedback(req, res, redisClient);
 });
 
 app.delete('/api/feedback/:feedbackId', isAuthenticated, async (req, res) => {

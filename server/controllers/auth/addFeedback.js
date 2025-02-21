@@ -1,6 +1,6 @@
 const { getDb } = require('../../database');
 
-const addFeedback = async (req, res) => {
+const addFeedback = async (req, res, redisClient) => {
     const { text, parentId } = req.body;
     const userId = req.session.user.userId;
 
@@ -13,6 +13,26 @@ const addFeedback = async (req, res) => {
 
     try {
         const db = getDb();
+
+        // Check if this is a top-level comment (not a reply)
+        if (!parentId) {
+            // Check if user has already redeemed their audio credit
+            const hasRedeemed = await redisClient.sIsMember('feedbackAudioCreditRedeemed', userId.toString());
+
+            if (!hasRedeemed) {
+                // Add user to the redeemed set
+                await redisClient.sAdd('feedbackAudioCreditRedeemed', userId.toString());
+
+                // Update user's audio generations
+                await db.collection('users').updateOne(
+                    { userId },
+                    { 
+                        $inc: { remainingAudioGenerations: 15 },
+                        $set: { feedbackAudioCreditRedeemed: true }
+                    }
+                );
+            }
+        }
 
         // Check last feedback time for this user
         const lastFeedback = await db.collection('feedback').findOne(

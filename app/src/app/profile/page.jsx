@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/components/pagelayout.module.scss';
 import profileStyles from '@/styles/components/profile.module.scss';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const Profile = () => {
     const router = useRouter();
@@ -43,6 +44,15 @@ const Profile = () => {
                             <strong>Max Saved Words:</strong> {user.tier === 1 ? "Unlimited" : user.maxSavedWords == null ? "0" : user.maxSavedWords}
                         </p>
                     </div>
+                    {!user.feedbackAudioCreditRedeemed && (
+                        <div className={profileStyles.bonusAlert}>
+                            <h3>Get 15 Free Audio Generations! 🎉</h3>
+                            <p>
+                                Share your feedback with us on our <Link href="/feedback">feedback page</Link> and 
+                                receive 15 additional audio generations as a thank you!
+                            </p>
+                        </div>
+                    )}
                     <div className={profileStyles.tierInfo}>
                         {user.tier === 2 ? (
                             <>

@@ -46,7 +46,8 @@ const login = async (req, res, redisClient) => {
                 tier: 0,
                 remainingAudioGenerations: 10,
                 maxSavedSentences:30,
-                maxSavedWords:60
+                maxSavedWords:60,
+                feedbackAudioCreditRedeemed: false
             };
 
             await usersCollection.insertOne(user);
@@ -66,7 +67,8 @@ const login = async (req, res, redisClient) => {
                 tier: user.tier,
                 remainingAudioGenerations: user.remainingAudioGenerations,
                 maxSavedSentences: user.maxSavedSentences,
-                maxSavedWords: user.maxSavedWords
+                maxSavedWords: user.maxSavedWords,
+                feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false
             }
         });
 
