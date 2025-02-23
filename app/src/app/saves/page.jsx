@@ -37,7 +37,7 @@ const Saves = () => {
 
                 const endpoint = activePage === 'sentences' 
                     ? `/api/saved-sentences?page=${page}&limit=${limit}`
-                    : `/api/words?page=${page}&limit=${limit}`;
+                    : `/api/words?page=${page}&limit=${limit}&originalLanguage=ko&translationLanguage=en`;
 
                 const response = await fetch(endpoint);
                 const data = await response.json();
@@ -70,7 +70,10 @@ const Saves = () => {
     const handleDeleteWord = async (word, e) => {
         e.stopPropagation();
         try {
-            await removeWord({korean:word.korean, english:word.english});
+            await removeWord({
+                originalWord: word.originalWord,
+                originalLanguage: word.originalLanguage
+            });
             setWords(prevWords => prevWords.filter(w => w.wordId !== word.wordId));
         } catch (error) {
             console.error('Error deleting word:', error);
@@ -164,9 +167,9 @@ const Saves = () => {
                     >
                         <div className={savesStyles.wordContent}>
                             <p className={savesStyles.wordText}>
-                                <span className={savesStyles.korean}>{word.korean}</span>
+                                <span className={savesStyles.korean}>{word.originalWord}</span>
                                 <span className={savesStyles.divider}>•</span>
-                                <span className={savesStyles.english}>{word.english}</span>
+                                <span className={savesStyles.english}>{word.translatedWord}</span>
                             </p>
                             <p className={savesStyles.wordDate}>
                                 Saved on {new Date(word.dateSaved).toLocaleString()}

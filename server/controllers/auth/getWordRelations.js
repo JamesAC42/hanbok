@@ -3,7 +3,7 @@ const { SYNONYMS_PROMPT } = require('../../llm/prompt_synonyms');
 const { getDb } = require('../../database');
 
 const getWordRelations = async (req, res) => {
-    const { word } = req.query;
+    const { word, language = 'ko' } = req.query;
     const userId = req.session.user.userId;
 
     if (!word) {
@@ -41,10 +41,25 @@ const getWordRelations = async (req, res) => {
             });
         }
 
+        // Transform the response to use the new schema
+        const transformedSynonyms = parsedResponse.synonyms.map(syn => ({
+            originalWord: syn.korean,
+            translatedWord: syn.english,
+            originalLanguage: language,
+            translationLanguage: 'en'
+        }));
+
+        const transformedAntonyms = parsedResponse.antonyms.map(ant => ({
+            originalWord: ant.korean,
+            translatedWord: ant.english,
+            originalLanguage: language,
+            translationLanguage: 'en'
+        }));
+
         res.json({
             success: true,
-            synonyms: parsedResponse.synonyms,
-            antonyms: parsedResponse.antonyms
+            synonyms: transformedSynonyms,
+            antonyms: transformedAntonyms
         });
 
     } catch (error) {

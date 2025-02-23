@@ -9,6 +9,10 @@ import { LineMdEmail } from '@/components/icons/Email';
 const About = () => {
     const updates = [
         {
+            date: '2025-02-20',
+            content: 'Added feedback forum for users to submit feedback and suggestions.'
+        },
+        {
             date: '2025-02-19',
             content: 'Added word relations for plus users and fixed various minor issues.'
         },

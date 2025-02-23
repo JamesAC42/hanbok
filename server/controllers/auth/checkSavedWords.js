@@ -1,13 +1,21 @@
 const { getDb } = require('../../database');
+const SupportedLanguages = require('../../supported_languages');
 
 const checkSavedWords = async (req, res) => {
-    const { words } = req.body; // Expecting an array of Korean words
+    const { words, originalLanguage } = req.body; // Expecting an array of words and their language
     const userId = req.session.user.userId;
 
-    if (!Array.isArray(words)) {
+    if (!Array.isArray(words) || !originalLanguage) {
         return res.status(400).json({
             success: false,
-            error: 'Words must be provided as an array'
+            error: 'Words must be provided as an array and language must be specified'
+        });
+    }
+
+    if (!SupportedLanguages[originalLanguage]) {
+        return res.status(400).json({
+            success: false,
+            error: 'Unsupported language'
         });
     }
 
@@ -17,17 +25,18 @@ const checkSavedWords = async (req, res) => {
         const savedWords = await db.collection('words')
             .find({
                 userId,
-                korean: { $in: words }
+                originalLanguage,
+                originalWord: { $in: words }
             })
-            .project({ korean: 1, _id: 0 })
+            .project({ originalWord: 1, _id: 0 })
             .toArray();
 
-        // Extract just the Korean words that are saved
-        const savedKoreanWords = savedWords.map(word => word.korean);
+        // Extract just the original words that are saved
+        const savedOriginalWords = savedWords.map(word => word.originalWord);
 
         res.json({
             success: true,
-            savedWords: savedKoreanWords
+            savedWords: savedOriginalWords
         });
 
     } catch (error) {

@@ -19,13 +19,18 @@ export async function fetchWordRelations(word) {
   }
 }
 
-export async function addWord(word) {
+export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage }) {
   try {
     const response = await fetch('/api/words', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(word)
+      body: JSON.stringify({
+        originalWord,
+        translatedWord,
+        originalLanguage,
+        translationLanguage
+      })
     });
     const data = await response.json();
     if (data.reachedLimit) {
@@ -40,9 +45,9 @@ export async function addWord(word) {
   }
 }
 
-export async function removeWord(word) {
+export async function removeWord({ originalWord, originalLanguage }) {
   try {
-    const checkResponse = await checkSavedWords([word.korean]);
+    const checkResponse = await checkSavedWords([originalWord], originalLanguage);
     if (
       !checkResponse.success ||
       !checkResponse.savedWords ||
@@ -54,7 +59,10 @@ export async function removeWord(word) {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({word})
+      body: JSON.stringify({
+        originalWord,
+        originalLanguage
+      })
     });
     if (!response.ok) {
       throw new Error('Failed to remove word');
@@ -65,13 +73,16 @@ export async function removeWord(word) {
   }
 }
 
-export async function checkSavedWords(words) {
+export async function checkSavedWords(words, originalLanguage = 'ko') {
   try {
     const response = await fetch('/api/words/check', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ words })
+      body: JSON.stringify({ 
+        words,
+        originalLanguage 
+      })
     });
     const data = await response.json();
     return data;

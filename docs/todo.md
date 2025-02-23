@@ -1,6 +1,5 @@
 fixes:
 
-- add feedback forum
 - add flashcards
 - more analytics endpoints for seeing top users
 - add popup hihglighting saving a sentence
@@ -16,6 +15,7 @@ fixes:
 
 done:
 
+- add feedback forum
 - update messaging on word relations being included with plus
 - show translation of sentence in the sentence page
 - add antonyms/synonyms for words

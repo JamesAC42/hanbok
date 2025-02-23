@@ -192,3 +192,12 @@ pm2 logs hanbok-frontend
 pm2 monit
 
 pm2 restart hanbok-frontend
+
+
+
+refactoring for supporting more languages (both ways):
+
+- have enum of supported languages on backend
+- user data saves a preferred native language
+  - this sets what the website displays in and also what the analysis default to translating to
+- 

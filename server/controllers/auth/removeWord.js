@@ -1,12 +1,21 @@
 const { getDb } = require('../../database');
+const SupportedLanguages = require('../../supported_languages');
 
 const removeWord = async (req, res) => {
-    const { word } = req.body;
+    const { originalWord, originalLanguage } = req.body;
     const userId = req.session.user.userId;
-    if (!word?.korean) {
+
+    if (!originalWord || !originalLanguage) {
         return res.status(400).json({
             success: false,
-            error: 'Korean word is required'
+            error: 'Original word and language are required'
+        });
+    }
+
+    if (!SupportedLanguages[originalLanguage]) {
+        return res.status(400).json({
+            success: false,
+            error: 'Unsupported language'
         });
     }
 
@@ -15,7 +24,8 @@ const removeWord = async (req, res) => {
         
         const result = await db.collection('words').deleteOne({
             userId,
-            korean:word.korean
+            originalLanguage,
+            originalWord
         });
 
         if (result.deletedCount === 0) {

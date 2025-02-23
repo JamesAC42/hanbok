@@ -40,21 +40,17 @@ const WordItem = ({
     showTooltip = false,
     setShowTooltip = null
 }) => {
-    const isSaved = savedWords.has(word.korean);
+    const isSaved = savedWords.has(word.originalWord);
     return (
         <div className={styles.wordListItem} data-role={type ? getCleanedType(type) : null}>
             <div className={styles.wordListItemActions}>
                 <div 
                     className={`${styles.wordListItemAction} ${isSaved ? styles.wordInLibrary : styles.wordNotInLibrary}`}
                     onClick={(e) => {
-                        console.log(setShowTooltip);
                         if (setShowTooltip) {
                             setShowTooltip(false);
                         }
-                        toggleWordInLibrary({
-                            korean: word.korean,
-                            meaning: { english: word.english }
-                        }, e)
+                        toggleWordInLibrary(word, e)
                     }}>
                     {isSaved ? 
                         <MaterialSymbolsCheckBoxRounded /> : 
@@ -79,8 +75,8 @@ const WordItem = ({
                     )}
                 </div>
             </div>
-            <span className={styles.wordDictionary}>{word.korean}</span>
-            {word.english && ` - ${word.english}`}
+            <span className={styles.wordDictionary}>{word.originalWord}</span>
+            {word.translatedWord && ` - ${word.translatedWord}`}
             {type && (
                 <span className={styles.wordListItemType}>
                     ({getDisplayType(type)})
@@ -89,12 +85,9 @@ const WordItem = ({
             {showRelated && handleShowRelated && (
                 <button 
                     className={styles.showRelatedButton}
-                    onClick={() => handleShowRelated({
-                        korean: word.korean,
-                        meaning: { english: word.english }
-                    })}
+                    onClick={() => handleShowRelated(word)}
                 >
-                    {expandedWord === word.korean ? 'Hide related words' : 'Show related words'}
+                    {expandedWord === word.originalWord ? 'Hide related words' : 'Show related words'}
                 </button>
             )}
         </div>
@@ -127,7 +120,7 @@ const WordsList = ({ analysis }) => {
 
             try {
                 setIsSavedWordsLoading(true);
-                const data = await checkSavedWords(uniqueWords);
+                const data = await checkSavedWords(uniqueWords, 'ko');
                 if (data.success) {
                     setSavedWords(new Set(data.savedWords));
                 }
@@ -166,22 +159,24 @@ const WordsList = ({ analysis }) => {
             showLoginRequiredPopup('words');
             return;
         }
-        const alreadySaved = savedWords.has(word.korean);
+        const alreadySaved = savedWords.has(word.originalWord);
         try {
             if (alreadySaved) {
                 await removeWord({
-                    korean: word.korean,
-                    english: word.meaning.english || ''
+                    originalWord: word.originalWord,
+                    originalLanguage: 'ko'
                 });
                 setSavedWords(prev => {
                     const updated = new Set(prev);
-                    updated.delete(word.korean);
+                    updated.delete(word.originalWord);
                     return updated;
                 });
             } else {
                 const addResult = await addWord({
-                    korean: word.korean,
-                    english: word.meaning.english || ''
+                    originalWord: word.originalWord,
+                    translatedWord: word.translatedWord,
+                    originalLanguage: 'ko',
+                    translationLanguage: 'en'
                 });
                 if (addResult.reachedLimit) {
                     showLimitReachedPopup('words', {
@@ -190,8 +185,7 @@ const WordsList = ({ analysis }) => {
                     });
                     return;
                 }
-                // On success, add word to saved set
-                setSavedWords(prev => new Set([...prev, word.korean]));
+                setSavedWords(prev => new Set([...prev, word.originalWord]));
             }
         } catch (error) {
             console.error('Error toggling word in library:', error);
@@ -208,34 +202,34 @@ const WordsList = ({ analysis }) => {
             return;
         }
         // Toggle if already expanded
-        if (expandedWord === word.korean) {
+        if (expandedWord === word.originalWord) {
             setExpandedWord(null);
             setRelatedWords(null);
             return;
         }
-        setExpandedWord(word.korean);
+        setExpandedWord(word.originalWord);
         setRelatedWords(null);
         // Use cache if exists
-        if (relatedWordsCache[word.korean]) {
-            setRelatedWords(relatedWordsCache[word.korean]);
+        if (relatedWordsCache[word.originalWord]) {
+            setRelatedWords(relatedWordsCache[word.originalWord]);
             return;
         }
         setLoadingRelated(true);
         try {
-            const data = await fetchWordRelations(word.korean);
+            const data = await fetchWordRelations(word.originalWord);
             if (data.success) {
                 setRelatedWordsCache(prev => ({
                     ...prev,
-                    [word.korean]: data
+                    [word.originalWord]: data
                 }));
                 setRelatedWords(data);
                 // Check the related words for their saved state and update the global set
                 const allRelated = [
-                    ...data.synonyms.map(syn => syn.korean),
-                    ...data.antonyms.map(ant => ant.korean)
+                    ...data.synonyms.map(syn => syn.originalWord),
+                    ...data.antonyms.map(ant => ant.originalWord)
                 ];
                 if (allRelated.length > 0) {
-                    const checkRes = await checkSavedWords(allRelated);
+                    const checkRes = await checkSavedWords(allRelated, 'ko');
                     if (checkRes.success && checkRes.savedWords) {
                         setSavedWords(prev => {
                             const updated = new Set(prev);
@@ -255,7 +249,7 @@ const WordsList = ({ analysis }) => {
     };
 
     const renderRelatedWords = (word) => {
-        if (expandedWord !== word.korean) return null;
+        if (expandedWord !== word.originalWord) return null;
         return (
             <div className={styles.relatedWordsContainer}>
                 {loadingRelated ? (
@@ -266,7 +260,7 @@ const WordsList = ({ analysis }) => {
                 ) : relatedWords ? (
                     (relatedWords.synonyms.length === 0 && relatedWords.antonyms.length === 0) ? (
                         <div className={styles.noRelatedWords}>
-                            No related words found for "{word.korean}"
+                            No related words found for "{word.originalWord}"
                         </div>
                     ) : (
                         <>
@@ -277,8 +271,8 @@ const WordsList = ({ analysis }) => {
                                         <WordItem 
                                             key={`syn-${index}`}
                                             word={{
-                                                korean: syn.korean,
-                                                english: syn.english
+                                                originalWord: syn.originalWord,
+                                                translatedWord: syn.translatedWord
                                             }}
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
@@ -294,8 +288,8 @@ const WordsList = ({ analysis }) => {
                                         <WordItem 
                                             key={`ant-${index}`}
                                             word={{
-                                                korean: ant.korean,
-                                                english: ant.english
+                                                originalWord: ant.originalWord,
+                                                translatedWord: ant.translatedWord
                                             }}
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
@@ -309,7 +303,7 @@ const WordsList = ({ analysis }) => {
                 ) : (
                     <div className={styles.errorRelatedWords}>
                         <MaterialSymbolsCancel />
-                        <span>No related words found for "{word.korean}"</span>
+                        <span>No related words found for "{word.originalWord}"</span>
                     </div>
                 )}
             </div>
@@ -332,8 +326,10 @@ const WordsList = ({ analysis }) => {
             }
             seenWords.add(word.dictionary_form);
             const formattedWord = {
-                korean: word.dictionary_form,
-                english: word.meaning?.english || ''
+                originalWord: word.dictionary_form,
+                translatedWord: word.meaning?.english || '',
+                originalLanguage: 'ko',
+                translationLanguage: 'en'
             };
 
             wordList.push(

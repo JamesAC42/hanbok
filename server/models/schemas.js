@@ -141,7 +141,7 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["wordId", "userId", "korean", "english", "dateSaved"],
+        required: ["wordId", "userId", "originalLanguage", "originalWord", "translationLanguage", "translatedWord", "dateSaved"],
         properties: {
           wordId: {
             bsonType: "int"
@@ -149,10 +149,16 @@ const collections = {
           userId: {
             bsonType: "int"
           },
-          korean: {
+          originalLanguage: {
             bsonType: "string"
           },
-          english: {
+          originalWord: {
+            bsonType: "string"
+          },
+          translationLanguage: {
+            bsonType: "string"
+          },
+          translatedWord: {
             bsonType: "string"
           },
           dateSaved: {
@@ -163,7 +169,7 @@ const collections = {
     },
     indexes: [
       {
-        key: { userId: 1, korean: 1 },
+        key: { userId: 1, originalLanguage: 1, originalWord: 1 },
         unique: true
       }
     ]

@@ -1,13 +1,23 @@
 const { getDb } = require('../../database');
+const SupportedLanguages = require('../../supported_languages');
 
 const addWord = async (req, res) => {
-    const { korean, english } = req.body;
+    const { originalWord, translatedWord, originalLanguage, translationLanguage } = req.body;
     const userId = req.session.user.userId;
 
-    if (!korean || !english) {
+    // Validate inputs
+    if (!originalWord || !translatedWord || !originalLanguage || !translationLanguage) {
         return res.status(400).json({
             success: false,
-            error: 'Both Korean and English words are required'
+            error: 'Original word, translated word, and both languages are required'
+        });
+    }
+
+    // Validate languages
+    if (!SupportedLanguages[originalLanguage] || !SupportedLanguages[translationLanguage]) {
+        return res.status(400).json({
+            success: false,
+            error: 'Unsupported language combination'
         });
     }
 
@@ -42,16 +52,16 @@ const addWord = async (req, res) => {
         await db.collection('words').insertOne({
             wordId: counterDoc.seq,
             userId,
-            korean,
-            english,
+            originalLanguage,
+            originalWord,
+            translationLanguage,
+            translatedWord,
             dateSaved: new Date()
         });
 
         res.json({ success: true });
 
     } catch (error) {
-
-        console.log(error);
         // Handle duplicate word error
         if (error.code === 11000) {
             return res.status(400).json({
