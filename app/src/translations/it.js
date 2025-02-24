@@ -16,12 +16,12 @@ export const it = {
     about: {
         title: 'Chi Siamo',
         whatIsHanbok: 'Cos\'è hanbok?',
-        description: 'Hanbok è uno strumento completo progettato per aiutare gli studenti di coreano a comprendere e padroneggiare le frasi in coreano. Hanbok scompone le frasi coreane nelle loro parti componenti, fornendo un\'analisi dettagliata dei modelli grammaticali, del vocabolario e dell\'uso.',
+        description: 'Hanbok è uno strumento completo per l\'apprendimento delle lingue progettato per aiutarti a comprendere e padroneggiare le frasi in più lingue. Hanbok scompone le frasi nelle loro parti componenti, fornendo un\'analisi dettagliata dei modelli grammaticali, del vocabolario e dell\'uso per coreano, giapponese, cinese, spagnolo, italiano e francese.',
         screenshotAlt: 'screenshot',
         exampleAnalysis: 'Esempio di analisi della frase',
-        registeredFeatures: 'Gli account registrati hanno accesso a esempi audio di madrelingua sia maschili che femminili, aiutandoti a perfezionare la tua pronuncia e a comprendere i modelli naturali del parlato. Forniamo anche note culturali per darti contesto e una comprensione più profonda dell\'uso della lingua coreana.',
+        registeredFeatures: 'Gli account registrati hanno accesso a esempi audio di madrelingua sia maschili che femminili, aiutandoti a perfezionare la tua pronuncia e a comprendere i modelli naturali del parlato. Forniamo anche note culturali per darti contesto e una comprensione più profonda dell\'uso della lingua.',
         culturalNotes: 'Note culturali e varianti per diversi contesti',
-        benefitsDescription: 'Che tu sia un principiante o uno studente avanzato, il nostro strumento ti aiuta a comprendere le sfumature della grammatica, del vocabolario e del contesto culturale coreano in un unico posto.',
+        benefitsDescription: 'Che tu sia un principiante o uno studente avanzato, il nostro strumento ti aiuta a comprendere le sfumature della grammatica, del vocabolario e del contesto culturale tutto in un unico posto.',
         saveFeature: 'Salva le frasi che trovi interessanti o stimolanti per riferimento futuro. Presto, potrai creare mazzi di studio personalizzati dalle parole e dai modelli grammaticali che incontri, permettendo un apprendimento efficiente attraverso tecniche di ripetizione spaziata.',
         upcomingFeatures: 'Funzionalità in Arrivo',
         updateHistory: 'Cronologia Aggiornamenti',
@@ -39,6 +39,10 @@ export const it = {
             text: 'Domande e feedback'
         },
         updates: [
+            {
+                date: '2025-02-23',
+                content: 'Aggiunto supporto per giapponese, cinese, spagnolo, italiano e francese.'
+            },
             {
                 date: '2025-02-20',
                 content: 'Aggiunto forum di feedback per consentire agli utenti di inviare feedback e suggerimenti.'

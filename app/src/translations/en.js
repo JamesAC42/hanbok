@@ -16,12 +16,12 @@ export const en = {
     about: {
         title: 'About',
         whatIsHanbok: 'What is hanbok?',
-        description: 'Hanbok is a comprehensive tool designed to help Korean language learners understand and master Korean sentences. Hanbok breaks down Korean sentences into their component parts, providing detailed analysis of grammar patterns, vocabulary, and usage.',
+        description: 'Hanbok is a comprehensive language learning tool designed to help you understand and master sentences in multiple languages. Hanbok breaks down sentences into their component parts, providing detailed analysis of grammar patterns, vocabulary, and usage for Korean, Japanese, Chinese, Spanish, Italian, and French.',
         screenshotAlt: 'screenshot',
         exampleAnalysis: 'Example sentence analysis',
-        registeredFeatures: 'Registered accounts get access to audio examples from both male and female native speakers, helping you perfect your pronunciation and understand natural speech patterns. We also provide cultural notes to give you context and deeper understanding of Korean language usage.',
+        registeredFeatures: 'Registered accounts get access to audio examples from both male and female native speakers, helping you perfect your pronunciation and understand natural speech patterns. We also provide cultural notes to give you context and deeper understanding of language usage.',
         culturalNotes: 'Cultural notes and variants for different contexts',
-        benefitsDescription: 'Whether you\'re a beginner or an advanced learner, our tool helps you understand the nuances of Korean grammar, vocabulary, and cultural context all in one place.',
+        benefitsDescription: 'Whether you\'re a beginner or an advanced learner, our tool helps you understand the nuances of grammar, vocabulary, and cultural context all in one place.',
         saveFeature: 'Save sentences that you find interesting or challenging for later reference. Soon, you\'ll be able to create personalized study decks from the words and grammar patterns you encounter, enabling efficient learning through spaced repetition techniques.',
         upcomingFeatures: 'Upcoming Features',
         updateHistory: 'Update History',
@@ -39,6 +39,10 @@ export const en = {
             text: 'Questions and feedback'
         },
         updates: [
+            {
+                date: '2025-02-23',
+                content: 'Added support for Japanese, Chinese, Spanish, Italian, and French languages.'
+            },
             {
                 date: '2025-02-20',
                 content: 'Added feedback forum for users to submit feedback and suggestions.'

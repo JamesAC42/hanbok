@@ -16,12 +16,12 @@ export const es = {
     about: {
         title: 'Acerca de',
         whatIsHanbok: '¿Qué es hanbok?',
-        description: 'Hanbok es una herramienta integral diseñada para ayudar a los estudiantes de coreano a entender y dominar las oraciones en coreano. Hanbok descompone las oraciones coreanas en sus partes componentes, proporcionando un análisis detallado de patrones gramaticales, vocabulario y uso.',
+        description: 'Hanbok es una herramienta integral de aprendizaje de idiomas diseñada para ayudarte a entender y dominar oraciones en múltiples idiomas. Hanbok descompone las oraciones en sus partes componentes, proporcionando un análisis detallado de patrones gramaticales, vocabulario y uso para coreano, japonés, chino, español, italiano y francés.',
         screenshotAlt: 'captura de pantalla',
         exampleAnalysis: 'Ejemplo de análisis de oración',
-        registeredFeatures: 'Las cuentas registradas tienen acceso a ejemplos de audio de hablantes nativos tanto masculinos como femeninos, ayudándote a perfeccionar tu pronunciación y entender patrones naturales del habla. También proporcionamos notas culturales para darte contexto y una comprensión más profunda del uso del idioma coreano.',
+        registeredFeatures: 'Las cuentas registradas tienen acceso a ejemplos de audio de hablantes nativos tanto masculinos como femeninos, ayudándote a perfeccionar tu pronunciación y entender patrones naturales del habla. También proporcionamos notas culturales para darte contexto y una comprensión más profunda del uso del idioma.',
         culturalNotes: 'Notas culturales y variantes para diferentes contextos',
-        benefitsDescription: 'Ya seas principiante o estudiante avanzado, nuestra herramienta te ayuda a entender los matices de la gramática, vocabulario y contexto cultural coreano en un solo lugar.',
+        benefitsDescription: 'Ya seas principiante o estudiante avanzado, nuestra herramienta te ayuda a entender los matices de la gramática, vocabulario y contexto cultural todo en un solo lugar.',
         saveFeature: 'Guarda las oraciones que encuentres interesantes o desafiantes para referencia futura. Pronto, podrás crear mazos de estudio personalizados con las palabras y patrones gramaticales que encuentres, permitiendo un aprendizaje eficiente mediante técnicas de repetición espaciada.',
         upcomingFeatures: 'Próximas Funciones',
         updateHistory: 'Historial de Actualizaciones',
@@ -39,6 +39,10 @@ export const es = {
             text: 'Preguntas y comentarios'
         },
         updates: [
+            {
+                date: '2025-02-23',
+                content: 'Se agregó soporte para japonés, chino, español, italiano y francés.'
+            },
             {
                 date: '2025-02-20',
                 content: 'Se agregó un foro de comentarios para que los usuarios envíen feedback y sugerencias.'

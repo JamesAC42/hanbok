@@ -16,12 +16,12 @@ export const fr = {
     about: {
         title: 'À propos',
         whatIsHanbok: 'Qu\'est-ce que hanbok ?',
-        description: 'Hanbok est un outil complet conçu pour aider les apprenants de coréen à comprendre et à maîtriser les phrases en coréen. Hanbok décompose les phrases coréennes en leurs éléments constitutifs, fournissant une analyse détaillée des modèles grammaticaux, du vocabulaire et de l\'usage.',
+        description: 'Hanbok est un outil d\'apprentissage des langues complet conçu pour vous aider à comprendre et à maîtriser les phrases dans plusieurs langues. Hanbok décompose les phrases en leurs éléments constitutifs, fournissant une analyse détaillée des modèles grammaticaux, du vocabulaire et de l\'usage pour le coréen, le japonais, le chinois, l\'espagnol, l\'italien et le français.',
         screenshotAlt: 'capture d\'écran',
         exampleAnalysis: 'Exemple d\'analyse de phrase',
-        registeredFeatures: 'Les comptes enregistrés ont accès à des exemples audio de locuteurs natifs masculins et féminins, vous aidant à perfectionner votre prononciation et à comprendre les schémas naturels de la parole. Nous fournissons également des notes culturelles pour vous donner le contexte et une compréhension plus approfondie de l\'usage de la langue coréenne.',
+        registeredFeatures: 'Les comptes enregistrés ont accès à des exemples audio de locuteurs natifs masculins et féminins, vous aidant à perfectionner votre prononciation et à comprendre les schémas naturels de la parole. Nous fournissons également des notes culturelles pour vous donner le contexte et une compréhension plus approfondie de l\'usage de la langue.',
         culturalNotes: 'Notes culturelles et variantes pour différents contextes',
-        benefitsDescription: 'Que vous soyez débutant ou apprenant avancé, notre outil vous aide à comprendre les nuances de la grammaire, du vocabulaire et du contexte culturel coréen en un seul endroit.',
+        benefitsDescription: 'Que vous soyez débutant ou apprenant avancé, notre outil vous aide à comprendre les nuances de la grammaire, du vocabulaire et du contexte culturel en un seul endroit.',
         saveFeature: 'Sauvegardez les phrases que vous trouvez intéressantes ou difficiles pour référence ultérieure. Bientôt, vous pourrez créer des jeux d\'étude personnalisés à partir des mots et des modèles grammaticaux que vous rencontrez, permettant un apprentissage efficace grâce aux techniques de répétition espacée.',
         upcomingFeatures: 'Fonctionnalités à Venir',
         updateHistory: 'Historique des Mises à Jour',
@@ -39,6 +39,10 @@ export const fr = {
             text: 'Questions et retours'
         },
         updates: [
+            {
+                date: '2025-02-23',
+                content: 'Ajout du support pour le japonais, le chinois, l\'espagnol, l\'italien et le français.'
+            },
             {
                 date: '2025-02-20',
                 content: 'Ajout d\'un forum de feedback pour permettre aux utilisateurs de soumettre leurs commentaires et suggestions.'
