@@ -1,4 +1,6 @@
 .savesContent {
+
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -273,4 +275,60 @@
         width: 1.25rem;
         height: 1.25rem;
     }
-} 
+}
+
+@keyframes expand {
+  0% {
+    max-height:3rem;
+  }
+  100% {
+    max-height:100rem;
+  }
+}
+
+.languageSelector {
+  position: absolute;
+  top:0;
+  right:0;
+  display: flex;
+  align-items: center;
+
+  .languageList {
+    margin:1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+    background:#fff;
+    border-radius:0.5rem;
+
+    overflow:hidden;
+    max-height:3rem;
+    padding:0.5rem;
+
+    button {
+      background:none;
+      border:none;
+      height:2rem;
+      width:2rem;
+      padding:0;
+      margin:0;
+      cursor:pointer;
+
+      svg {
+        font-size:2rem;
+      }
+
+      &.languageButton {
+        cursor:pointer;
+      }
+    }
+  }
+
+  &.show {
+    .languageList {
+      max-height:100rem;
+      box-shadow: 0 0 1rem 0.2rem #8282826d;
+      animation: expand 0.5s ease-in-out;
+    }
+  }
+}

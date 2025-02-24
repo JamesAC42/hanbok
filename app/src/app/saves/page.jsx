@@ -23,7 +23,10 @@ const Saves = () => {
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
     const [activeWordId, setActiveWordId] = useState(null);
-    const { t } = useLanguage();
+    const { t, language, setLanguage, nativeLanguage, setNativeLanguage, getIcon, supportedLanguages } = useLanguage();
+    const [selectedLanguage, setSelectedLanguage] = useState(language);
+
+    const [showLanguageOptions, setShowLanguageOptions] = useState(false);
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -32,21 +35,21 @@ const Saves = () => {
     }, [isAuthenticated, loading, router]);
 
     useEffect(() => {
+
         async function fetchContent() {
             try {
                 setLoadingContent(true);
                 setError(null);
 
                 const endpoint = activePage === 'sentences' 
-                    ? `/api/saved-sentences?page=${page}&limit=${limit}`
-                    : `/api/words?page=${page}&limit=${limit}&originalLanguage=ko&translationLanguage=en`;
+                    ? `/api/saved-sentences?page=${page}&limit=${limit}&language=${selectedLanguage}`
+                    : `/api/words?page=${page}&limit=${limit}&originalLanguage=${selectedLanguage}&translationLanguage=en`;
 
                 const response = await fetch(endpoint);
                 const data = await response.json();
 
                 if (data.success) {
                     if (activePage === 'sentences') {
-                        console.log(data.sentences);
                         setSentences(data.sentences);
                     } else {
                         setWords(data.words);
@@ -63,7 +66,7 @@ const Saves = () => {
             }
         }
         fetchContent();
-    }, [page, limit, activePage]);
+    }, [page, limit, activePage, selectedLanguage]);
 
     const handleSentenceClick = (sentenceId) => {
         router.replace(`/sentence/${sentenceId}`);
@@ -107,6 +110,31 @@ const Saves = () => {
             </div>
         )
     }
+
+    const renderLanguageSelector = () => (
+        <div className={`${savesStyles.languageSelector} ${showLanguageOptions ? savesStyles.show : ''}`}>
+            <div className={savesStyles.languageList}>
+                <button
+                    className={savesStyles.languageButton}
+                    onClick={() => setShowLanguageOptions(!showLanguageOptions)}>
+                    {getIcon(selectedLanguage)}
+                </button>
+                {Object.keys(supportedLanguages).map(code => (
+                    <button
+                        key={code}
+                        className={`${savesStyles.languageOption} ${selectedLanguage === code ? savesStyles.selected : ''}`}
+                        onClick={() => {
+                            setSelectedLanguage(code);
+                            setPage(1); // Reset to first page when changing language
+                            setShowLanguageOptions(false);
+                        }}
+                    >
+                        {getIcon(code)}
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
 
     const renderContent = () => {
         if (loadingContent) {
@@ -198,7 +226,10 @@ const Saves = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={savesStyles.savesContent}>
-                    <h1 className={styles.pageTitle}>{t('saves.title')}</h1>
+                    {renderLanguageSelector()}
+                    <div className={savesStyles.header}>
+                        <h1 className={styles.pageTitle}>{t('saves.title')}</h1>
+                    </div>
                     
                     <div className={savesStyles.tabButtons}>
                         <button 

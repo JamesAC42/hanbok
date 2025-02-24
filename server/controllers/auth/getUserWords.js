@@ -21,7 +21,7 @@ const getUserWords = async (req, res) => {
     try {
         const db = getDb();
         
-        // Build query
+        // Build query with language filter
         const query = { userId };
         if (originalLanguage) query.originalLanguage = originalLanguage;
         if (translationLanguage) query.translationLanguage = translationLanguage;
