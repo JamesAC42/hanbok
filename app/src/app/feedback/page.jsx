@@ -5,6 +5,7 @@ import styles from '@/styles/components/pagelayout.module.scss';
 import feedbackStyles from '@/styles/components/feedback.module.scss';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 import { MingcuteCommentFill } from '@/components/icons/CommentFill';
 
@@ -21,7 +22,8 @@ const FeedbackItem = ({
     onCancelReply,
     formatDate,
     isAuthenticated,
-    userId 
+    userId,
+    t
 }) => {
     const isOwnComment = userId === item.userId;
 
@@ -31,7 +33,7 @@ const FeedbackItem = ({
             <div className={feedbackStyles.feedbackHeader}>
                 <span className={feedbackStyles.userName}>
                     {item.userName}
-                    {isOwnComment && <span className={feedbackStyles.youBadge}>You</span>}
+                    {isOwnComment && <span className={feedbackStyles.youBadge}>{t('feedback.youBadge')}</span>}
                 </span>
                 <span className={feedbackStyles.date}>{formatDate(item.dateCreated)}</span>
             </div>
@@ -43,14 +45,14 @@ const FeedbackItem = ({
                             onClick={() => onReply(item.feedbackId)}
                             className={feedbackStyles.actionButton}
                         >
-                            Reply
+                            {t('feedback.actions.reply')}
                         </button>
                         {userId === item.userId && (
                             <button 
                                 onClick={() => onDelete(item.feedbackId)}
                                 className={`${feedbackStyles.actionButton} ${feedbackStyles.delete}`}
                             >
-                                Delete
+                                {t('feedback.actions.delete')}
                             </button>
                         )}
                     </>
@@ -61,11 +63,11 @@ const FeedbackItem = ({
                     <textarea
                         value={replyText}
                         onChange={(e) => onReplyTextChange(e.target.value)}
-                        placeholder="Write a reply..."
+                        placeholder={t('feedback.replyPlaceholder')}
                     />
                     <div className={feedbackStyles.formActions}>
-                        <button type="submit">Submit</button>
-                        <button type="button" onClick={onCancelReply}>Cancel</button>
+                        <button type="submit">{t('feedback.actions.submit')}</button>
+                        <button type="button" onClick={onCancelReply}>{t('feedback.actions.cancel')}</button>
                     </div>
                 </form>
             )}
@@ -84,6 +86,7 @@ const FeedbackItem = ({
                     formatDate={formatDate}
                     isAuthenticated={isAuthenticated}
                     userId={userId}
+                    t={t}
                 />
             ))}
         </div>
@@ -91,6 +94,7 @@ const FeedbackItem = ({
 };
 
 const Feedback = () => {
+    const { t } = useLanguage();
     const [feedback, setFeedback] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -113,7 +117,7 @@ const Feedback = () => {
                 throw new Error(data.error);
             }
         } catch (err) {
-            setError('Failed to load feedback');
+            setError(t('feedback.errors.loadFailed'));
             console.error(err);
         } finally {
             setLoading(false);
@@ -151,12 +155,12 @@ const Feedback = () => {
                 setReplyText('');
                 setReplyingTo(null);
             } else {
-                setError(data.error);
+                setError(t('feedback.errors.submitFailed'));
                 setTimeout(() => setError(null), 5000);
             }
         } catch (err) {
             console.error('Failed to submit feedback:', err);
-            setError('Failed to submit feedback. Please try again.');
+            setError(t('feedback.errors.submitFailed'));
             setTimeout(() => setError(null), 5000);
         }
     };
@@ -170,9 +174,14 @@ const Feedback = () => {
 
             if (response.ok) {
                 await fetchFeedback();
+            } else {
+                setError(t('feedback.errors.deleteFailed'));
+                setTimeout(() => setError(null), 5000);
             }
         } catch (err) {
             console.error('Failed to delete feedback:', err);
+            setError(t('feedback.errors.deleteFailed'));
+            setTimeout(() => setError(null), 5000);
         }
     };
 
@@ -200,37 +209,33 @@ const Feedback = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={feedbackStyles.feedbackContent}>
-                    <h1 className={styles.pageTitle}>Feedback Forum</h1>
+                    <h1 className={styles.pageTitle}>{t('feedback.title')}</h1>
 
-                    <p>
-                        Please share your feedback and suggestions with us. We value your input and are always looking for ways to improve our service.
-                    </p>
+                    <p>{t('feedback.description')}</p>
                     
                     {isAuthenticated ? (
                         <form onSubmit={(e) => handleSubmit(e)} className={feedbackStyles.newFeedbackForm}>
                             <textarea
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
-                                placeholder="Share your thoughts or suggestions..."
+                                placeholder={t('feedback.submitPlaceholder')}
                             />
-                            <button type="submit">Submit Feedback</button>
+                            <button type="submit">{t('feedback.submitButton')}</button>
                         </form>
                     ) : (
                         <div className={feedbackStyles.loginPrompt}>
-                            Please <Link href="/login">log in</Link> to share your feedback
+                            {t('feedback.loginPrompt')} <Link href="/login">log in</Link>
                         </div>
                     )}
                     
-                    { error ? (
-                        <div className={feedbackStyles.error}>{error}</div>
-                    ) : null}
+                    {error && <div className={feedbackStyles.error}>{error}</div>}
 
                     {loading ? (
-                        <div className={feedbackStyles.loading}>Loading...</div>
+                        <div className={feedbackStyles.loading}>{t('feedback.loading')}</div>
                     ) : feedback.length === 0 ? (
                         <div className={feedbackStyles.emptyState}>
                             <MingcuteCommentFill />
-                            <p>No comments yet. Be the first to share your thoughts!</p>
+                            <p>{t('feedback.emptyState')}</p>
                         </div>
                     ) : (
                         <div className={feedbackStyles.feedbackList}>
@@ -248,6 +253,7 @@ const Feedback = () => {
                                     formatDate={formatDate}
                                     isAuthenticated={isAuthenticated}
                                     userId={user?.userId}
+                                    t={t}
                                 />
                             ))}
                         </div>
@@ -259,14 +265,16 @@ const Feedback = () => {
                                 onClick={() => setPage(p => Math.max(1, p - 1))}
                                 disabled={page === 1}
                             >
-                                Previous
+                                {t('feedback.actions.previous')}
                             </button>
-                            <span>Page {page} of {totalPages}</span>
+                            <span>
+                                {t('feedback.pagination.page', { current: page, total: totalPages })}
+                            </span>
                             <button 
                                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                 disabled={page === totalPages}
                             >
-                                Next
+                                {t('feedback.actions.next')}
                             </button>
                         </div>
                     )}

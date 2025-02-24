@@ -136,8 +136,10 @@
 	.links {
 		display:flex;
 		flex-direction:row;
-		justify-content: center;
+		align-items:center;
+		justify-content: space-between;
 		margin-bottom:2rem;
+		padding:0 2rem;
 
 		.linkContainer {
 			border-radius:3rem;
@@ -163,6 +165,7 @@
 
 		@media screen and (max-width:725px) {
 			margin-bottom:2rem;
+			padding:0 1rem;
 			.linkContainer {
 				a {
 					font-size:1.4rem;

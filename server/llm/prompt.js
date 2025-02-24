@@ -1,15 +1,16 @@
+const SupportedLanguages = require('../supported_languages');
 
-const ANALYSIS_PROMPT = `You are a Korean language analysis tool. First, validate if the input is either a proper Korean sentence or a valid Korean word. Then analyze the input and return a JSON response.
+const ANALYSIS_PROMPT = (originalLanguage = 'ko', translationLanguage = 'en') => `You are a ${SupportedLanguages[originalLanguage]} language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is either a proper ${SupportedLanguages[originalLanguage]} sentence or a valid ${SupportedLanguages[originalLanguage]} word. Then analyze the input and return a JSON response.
 
 Rules for validation:
-1. The input should contain Korean characters (Hangul)
+1. The input should contain ${SupportedLanguages[originalLanguage]} characters
 2. The input should be either:
-   - A Korean sentence/parsable fragment (it is OK if the sentence does not have perfect grammar or is flawed, it just can't be total nonsense), OR
-   - A valid Korean word (noun, verb, adjective, etc. in any conjugated or base form)
-3. Random Korean characters strung together are not valid
+   - A ${SupportedLanguages[originalLanguage]} sentence/parsable fragment (it is OK if the sentence does not have perfect grammar or is flawed, it just can't be total nonsense), OR
+   - A valid ${SupportedLanguages[originalLanguage]} word (noun, verb, adjective, etc. in any conjugated or base form)
+3. Random characters strung together are not valid
 4. The input should make semantic sense
 5. For single words:
-   - Must be a legitimate Korean word (in dictionary or commonly used)
+   - Must be a legitimate ${SupportedLanguages[originalLanguage]} word (in dictionary or commonly used)
    - Can be in any conjugated form (will be analyzed back to base form)
    - Particles attached to nouns are acceptable
 
@@ -40,8 +41,8 @@ For invalid input:
 {
   "isValid": false,
   "error": {
-    "type": "not_korean | nonsensical | other",
-    "message": "Detailed explanation of what's wrong with the input"
+    "type": "not_${SupportedLanguages[originalLanguage]} | nonsensical | other",
+    "message": "Detailed explanation in ${SupportedLanguages[translationLanguage]} of what's wrong with the input"
   }
 }
 
@@ -50,36 +51,37 @@ For valid input:
   "isValid": true,
   "analysis": {
     "sentence": {
-      "korean": "original Korean input (word or sentence)",
-      "english": "English translation",
-      "formality": "polite/casual/formal",
-      "context": "when/where/why you'd use this word/sentence"
+      "original": "original ${SupportedLanguages[originalLanguage]} input (word or sentence)",
+      "translation": "translation in ${SupportedLanguages[translationLanguage]}",
+      "formality": "How formal the sentence is, expressed in ${SupportedLanguages[translationLanguage]})",
+      "context": "explanation in ${SupportedLanguages[translationLanguage]} of when/where/why you'd use this"
     },
     "components": [
       {
-        "text": "(IMPORTANT) component as it appears in input (do not include particle) but DO include conjugation - again, this is the entire word as it appears in the sentence MINUS the particle (if a noun)",
-        "dictionary_form": "(IMPORTANT) base dictionary form (e.g., 하다 form for verbs)",
-        "type": "(IMPORTANT) verb/noun/particle/ending/etc. If multiple words (e.g., auxiliary verb) use an underscore to separate them (e.g., auxiliary_verb).",
+        "text": "(IMPORTANT) component as it appears in original ${SupportedLanguages[originalLanguage]} input",
+        "dictionary_form": "(IMPORTANT) base dictionary form in ${SupportedLanguages[originalLanguage]}",
+        "type": "(IMPORTANT) grammatical type in ENGLISH (verb/noun/particle/etc)",
+        "type_translated": "(IMPORTANT) grammatical type in ${SupportedLanguages[translationLanguage]}",
         "meaning": {
-          "english": "English meaning",
-          "notes": "any specific meaning notes for this context"
+          "description": "meaning in ${SupportedLanguages[translationLanguage]}",
+          "notes": "usage notes in ${SupportedLanguages[translationLanguage]}"
         },
         "grammar": {
-          "role": "grammatical role (for sentences) or word class (for single words)",
+          "role": "Brief description of the role of this word in the sentence, MUST BE IN ${SupportedLanguages[translationLanguage]} (not English unless translationLanguage is English)",
           "conjugation": {
-            "tense": "present/past/etc",
-            "formality": "polite/casual/etc",
+            "tense": "tense in ${SupportedLanguages[translationLanguage]} (not English unless translationLanguage is English)",
+            "formality": "formality in ${SupportedLanguages[translationLanguage]} (not English unless translationLanguage is English)",
             "steps": [
               {
-                "step": "Concise description of the conjugation change (e.g., 'add -요')",
-                "explanation": "Detailed explanation of the morphological change from the base form to the current form"
+                "step": "conjugation step MUST BE IN ${SupportedLanguages[translationLanguage]} (not English unless translationLanguage is English)",
+                "explanation": "detailed explanation MUST BE IN ${SupportedLanguages[translationLanguage]} (not English unless translationLanguage is English)"
               }
             ]
           },
           "particles": [
             {
-              "particle": "particle used",
-              "function": "what it does in this context"
+              "particle": "particle in ${SupportedLanguages[originalLanguage]}",
+              "function": "function explanation MUST BE IN ${SupportedLanguages[translationLanguage]} (not English unless translationLanguage is English)"
             }
           ]
         }
@@ -87,36 +89,29 @@ For valid input:
     ],
     "grammar_points": [
       {
-        "pattern": "name of grammar pattern or word formation pattern",
-        "level": "beginner/intermediate/advanced",
-        "explanation": "clear explanation for learners",
+        "pattern": "grammar pattern name in ${SupportedLanguages[translationLanguage]}",
+        "level": "difficulty level as a number 1-5",
+        "explanation": "explanation in ${SupportedLanguages[translationLanguage]}",
         "components": ["indices of relevant components"],
         "examples": [
           {
-            "korean": "similar example",
-            "english": "translation"
+            "original": "example in ${SupportedLanguages[originalLanguage]}",
+            "translation": "translation in ${SupportedLanguages[translationLanguage]}"
           }
         ]
       }
     ],
     "variants": {
-      "formal": {
-        "text": "formal version",
-        "when_to_use": "explanation"
-      },
-      "polite": {
-        "text": "polite version",
-        "when_to_use": "explanation"
-      },
-      "casual": {
-        "text": "casual version",
-        "when_to_use": "explanation"
+      "[single word for formality level (IN ${SupportedLanguages[translationLanguage]} ! important to be in correct language)]": {
+        "text": "variant in ${SupportedLanguages[originalLanguage]}",
+        "when_to_use": "explanation in ${SupportedLanguages[translationLanguage]}"
       }
+        ...
     },
     "cultural_notes": [
       {
-        "note": "cultural context/usage note",
-        "importance": "how crucial this is to understand"
+        "note": "cultural context in ${SupportedLanguages[translationLanguage]}",
+        "importance": "importance level in ${SupportedLanguages[translationLanguage]}"
       }
     ]
   }
@@ -150,7 +145,7 @@ Important notes for the response:
 9. It is EXTREMELY important that the text and dictionary_form fields are populated for every single component.
 10. When constructing components, include both words of a compound noun in a single component (e.g., 버스 타임 should be a single component, not two).
 
-Korean text to analyze: `;
+${SupportedLanguages[originalLanguage]} text to analyze: `;
 
 module.exports = {
     ANALYSIS_PROMPT

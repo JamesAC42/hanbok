@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
@@ -16,7 +17,7 @@ const SentenceForm = ({
     setVoice2,
     setTransition
 }) => {
-
+    const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -25,13 +26,19 @@ const SentenceForm = ({
     const { isAuthenticated } = useAuth();
 
     const loadingMessages = [
-        "Analyzing sentence structure...",
-        "Identifying grammar points...",
-        "Checking pronunciation patterns...",
-        "Eating kimchi...",
-        "Processing language elements...",
-        "Preparing detailed breakdown..."
+        t('sentenceForm.loading.structure'),
+        t('sentenceForm.loading.grammar'),
+        t('sentenceForm.loading.pronunciation'),
+        t('sentenceForm.loading.kimchi'),
+        t('sentenceForm.loading.elements'),
+        t('sentenceForm.loading.breakdown')
     ];
+
+    const getLocalizedPlaceholder = () => {
+        const languageKey = supportedLanguages[language];
+        const languageName = t(`languages.${languageKey}`);
+        return t('sentenceForm.placeholder').replace('{language}', languageName);
+    };
 
     useEffect(() => {
         let intervalId;
@@ -65,8 +72,7 @@ const SentenceForm = ({
 
         if (!text) {
         setError({
-            type: 'empty',
-            message: 'Please enter a sentence.'
+            type: 'empty'
         });
         setLoading(false);
         return;
@@ -81,7 +87,11 @@ const SentenceForm = ({
                 headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text }),
+                body: JSON.stringify({
+                    text,
+                    originalLanguage: language,
+                    translationLanguage: nativeLanguage
+                 }),
                 signal: controller.signal
             });
 
@@ -119,13 +129,11 @@ const SentenceForm = ({
             console.error('Error:', error);
             if (error.name === 'AbortError') {
                 setError({
-                    type: 'timeout',
-                    message: 'The request took too long. Please try again.'
+                    type: 'timeout'
                 });
             } else {
                 setError({
-                    type: 'other',
-                    message: 'Failed to analyze the sentence. Please try again.'
+                    type: 'other'
                 });
             }
         } finally {
@@ -137,11 +145,12 @@ const SentenceForm = ({
 
     const getErrorMessage = (error) => {
         const messages = {
-            not_korean: "Please enter a sentence using Korean characters (Hangul).",
-            invalid_grammar: "This sentence appears to have grammatical errors.",
-            nonsensical: "This input doesn't form a meaningful Korean sentence.",
-            timeout: "The request took too long. Please try again.",
-            other: "There was an error analyzing your input."
+            not_korean: t('sentenceForm.errors.not_korean'),
+            invalid_grammar: t('sentenceForm.errors.invalid_grammar'),
+            nonsensical: t('sentenceForm.errors.nonsensical'),
+            timeout: t('sentenceForm.errors.timeout'),
+            other: t('sentenceForm.errors.other'),
+            empty: t('sentenceForm.errors.empty')
         };
         return error.message || messages[error.type] || messages.other;
     };
@@ -154,7 +163,7 @@ const SentenceForm = ({
                 <TextInput
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    placeholder="Enter a Korean sentence..."
+                    placeholder={getLocalizedPlaceholder()}
                     variant="large"
                 />
                 <Button 
@@ -162,7 +171,7 @@ const SentenceForm = ({
                     disabled={loading}
                     variant="primary"
                 >
-                {loading ? 'Analyzing...' : 'Analyze'}
+                {loading ? t('sentenceForm.analyzing') : t('sentenceForm.analyze')}
                 </Button>
             </form>
         </div>

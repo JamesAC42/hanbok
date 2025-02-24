@@ -6,11 +6,11 @@
  *   - and checking saved words.
  */
 
-export async function fetchWordRelations(word) {
+export async function fetchWordRelations(word, originalLanguage, translationLanguage) {
   try {
     const response = await fetch(
-      `/api/word-relations?word=${encodeURIComponent(word)}`,
-      { credentials: 'include' }
+      `/api/word-relations?word=${encodeURIComponent(word)}&originalLanguage=${originalLanguage}&translationLanguage=${translationLanguage}`,
+      { credentials: 'include' },
     );
     const data = await response.json();
     return data;

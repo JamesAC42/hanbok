@@ -3,9 +3,11 @@ const { SYNONYMS_PROMPT } = require('../../llm/prompt_synonyms');
 const { getDb } = require('../../database');
 
 const getWordRelations = async (req, res) => {
-    const { word, language = 'ko' } = req.query;
+    const { word, originalLanguage = 'ko', translationLanguage = 'en' } = req.query;
     const userId = req.session.user.userId;
 
+
+    console.log(word, originalLanguage, translationLanguage);
     if (!word) {
         return res.status(400).json({
             success: false,
@@ -32,7 +34,10 @@ const getWordRelations = async (req, res) => {
             });
         }
 
-        let parsedResponse = await generateResponse(SYNONYMS_PROMPT + word, 'gemini');
+        let parsedResponse = await generateResponse(
+            SYNONYMS_PROMPT(originalLanguage, translationLanguage) + word,
+            'gemini'
+        );
 
         if (!parsedResponse.isValid) {
             return res.json({ 
@@ -43,17 +48,17 @@ const getWordRelations = async (req, res) => {
 
         // Transform the response to use the new schema
         const transformedSynonyms = parsedResponse.synonyms.map(syn => ({
-            originalWord: syn.korean,
-            translatedWord: syn.english,
-            originalLanguage: language,
-            translationLanguage: 'en'
+            originalWord: syn.original,
+            translatedWord: syn.translation,
+            originalLanguage,
+            translationLanguage
         }));
 
         const transformedAntonyms = parsedResponse.antonyms.map(ant => ({
-            originalWord: ant.korean,
-            translatedWord: ant.english,
-            originalLanguage: language,
-            translationLanguage: 'en'
+            originalWord: ant.original,
+            translatedWord: ant.translation,
+            originalLanguage,
+            translationLanguage
         }));
 
         res.json({

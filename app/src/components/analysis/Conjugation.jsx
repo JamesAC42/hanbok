@@ -1,8 +1,17 @@
 import styles from '@/styles/components/sentenceanalyzer/conjugation.module.scss';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Conjugation = ({
     wordInfo
 }) => {
+    const { t } = useLanguage();
+
+    const fillSteps = () => {
+        if (!wordInfo.grammar.conjugation.steps || wordInfo.grammar.conjugation.steps.length === 0) {
+            return true;
+        }
+        return false;
+    }
 
     const renderStep = (step, index) => {
         if (typeof step === 'string') return step;
@@ -20,14 +29,14 @@ const Conjugation = ({
     if (!wordInfo.grammar?.conjugation) return null;
 
     return (
-        <div className={styles.conjugation}>
+        <div className={`${styles.conjugation} ${fillSteps() ? styles.fillSteps : ''}`}>
             
             <div className={styles.additionalInfo}>
             {
             wordInfo.grammar.conjugation.tense && (
                 <div className={styles.tense}>
                 <span className={styles.tenseLabel}>
-                    Tense:
+                    {t('analysis.conjugation.tense')}:
                 </span>
                 <span className={styles.tenseValue}>
                     {wordInfo.grammar.conjugation.tense.replaceAll('_', ' ')}
@@ -40,7 +49,7 @@ const Conjugation = ({
             wordInfo.grammar.conjugation.formality && (
                 <div className={styles.formality}>
                 <span className={styles.formalityLabel}>
-                    Formality:
+                    {t('analysis.conjugation.formality')}:
                 </span>
                 <span className={styles.formalityValue}>
                     {wordInfo.grammar.conjugation.formality.replaceAll('_', ' ')}
@@ -51,10 +60,10 @@ const Conjugation = ({
             </div>
             
             {
-            wordInfo.grammar.conjugation.steps && (
+            wordInfo.grammar.conjugation.steps && wordInfo.grammar.conjugation.steps.length > 0 && (
                 <div className={styles.steps}>
                 <div className={styles.stepsHeader}>
-                    Conjugation Steps:
+                    {t('analysis.conjugation.steps')}:
                 </div>
                 <div className={styles.stepsContent}>
                     <table className={styles.stepsTable}>

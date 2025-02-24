@@ -34,7 +34,7 @@ const CulturalNotes = ({analysis}) => {
         )
     }
 
-    if(!analysis) {
+    if(!analysis || !analysis.cultural_notes || analysis.cultural_notes.length === 0) {
         return null;
     }
 

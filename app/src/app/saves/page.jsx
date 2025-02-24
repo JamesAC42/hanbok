@@ -9,6 +9,7 @@ import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
 import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
 import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
 import { removeWord } from '@/api/words';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Saves = () => {
     const router = useRouter();
@@ -22,6 +23,7 @@ const Saves = () => {
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
     const [activeWordId, setActiveWordId] = useState(null);
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -55,7 +57,7 @@ const Saves = () => {
                 }
             } catch (err) {
                 console.error(err);
-                setError(`Error fetching saved ${activePage}.`);
+                setError(t('saves.fetchError', { type: activePage }));
             } finally {
                 setLoadingContent(false);
             }
@@ -93,14 +95,14 @@ const Saves = () => {
                     disabled={page <= 1} 
                     onClick={() => setPage(page - 1)}
                 >
-                    Prev
+                    {t('saves.prev')}
                 </button>
-                <span>Page {page} of {totalPages}</span>
+                <span>{t('saves.pageOf').replace('{current}', page).replace('{total}', totalPages)}</span>
                 <button 
                     disabled={page >= totalPages} 
                     onClick={() => setPage(page + 1)}
                 >
-                    Next
+                    {t('saves.next')}
                 </button>
             </div>
         )
@@ -108,7 +110,7 @@ const Saves = () => {
 
     const renderContent = () => {
         if (loadingContent) {
-            return <p>Loading {activePage}...</p>;
+            return <p>{t('saves.loading')}</p>;
         }
 
         if (error) {
@@ -119,8 +121,8 @@ const Saves = () => {
             if (sentences.length === 0) {
                 return (
                     <div className={savesStyles.noSaves}>
-                        <p>No saved sentences found.</p>
-                        <p>Click the <MaterialSymbolsBookmarkSharp /> icon on any sentence to save it.</p>
+                        <p>{t('saves.noSentences')}</p>
+                        <p>{t('saves.clickBookmark')} <MaterialSymbolsBookmarkSharp /> {t('saves.toSave')}</p>
                     </div>
                 );
             }
@@ -135,9 +137,9 @@ const Saves = () => {
                             className={savesStyles.sentenceItem}
                         >
                             <p className={savesStyles.sentenceText}>{sentence.text}</p>
-                            <p className={savesStyles.sentenceTranslation}>{sentence.analysis?.sentence?.english}</p>
+                            <p className={savesStyles.sentenceTranslation}>{sentence.analysis?.sentence?.translation}</p>
                             <p className={savesStyles.sentenceDate}>
-                                Saved on {new Date(sentence.dateSaved).toLocaleString()}
+                                {t('saves.savedOn')} {new Date(sentence.dateSaved).toLocaleString()}
                             </p>
                         </div>
                     ))}
@@ -150,8 +152,8 @@ const Saves = () => {
         if (words.length === 0) {
             return (
                 <div className={savesStyles.noSaves}>
-                    <p>No saved words found.</p>
-                    <p>Click the <MaterialSymbolsLibraryAddRounded /> icon on any word to save it.</p>
+                    <p>{t('saves.noWords')}</p>
+                    <p>{t('saves.clickAdd')} <MaterialSymbolsLibraryAddRounded /> {t('saves.toSave')}</p>
                 </div>
             );
         }
@@ -172,13 +174,13 @@ const Saves = () => {
                                 <span className={savesStyles.english}>{word.translatedWord}</span>
                             </p>
                             <p className={savesStyles.wordDate}>
-                                Saved on {new Date(word.dateSaved).toLocaleString()}
+                                {t('saves.savedOn')} {new Date(word.dateSaved).toLocaleString()}
                             </p>
                         </div>
                         <button 
                             className={savesStyles.deleteButton}
                             onClick={(e) => handleDeleteWord(word, e)}
-                            aria-label="Delete word"
+                            aria-label={t('saves.deleteWord')}
                         >
                             <MaterialSymbolsDeleteOutlineSharp />
                         </button>
@@ -196,7 +198,7 @@ const Saves = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={savesStyles.savesContent}>
-                    <h1 className={styles.pageTitle}>Saved Items</h1>
+                    <h1 className={styles.pageTitle}>{t('saves.title')}</h1>
                     
                     <div className={savesStyles.tabButtons}>
                         <button 
@@ -206,7 +208,7 @@ const Saves = () => {
                                 setPage(1);
                             }}
                         >
-                            Sentences
+                            {t('saves.sentences')}
                         </button>
                         <button 
                             className={`${savesStyles.tabButton} ${activePage === 'words' ? savesStyles.active : ''}`}
@@ -215,12 +217,12 @@ const Saves = () => {
                                 setPage(1);
                             }}
                         >
-                            Words
+                            {t('saves.words')}
                         </button>
                     </div>
 
                     <p className={savesStyles.comingSoon}>
-                        Flashcards coming soon!
+                        {t('saves.flashcardsComingSoon')}
                     </p>
 
                     {renderContent()}
@@ -229,7 +231,7 @@ const Saves = () => {
             <div className={styles.girlContainer}>
                 <Image
                     src="/images/girl1.png"
-                    alt="girl"
+                    alt={t('common.girlImage')}
                     width={1920}
                     height={1080}
                     priority

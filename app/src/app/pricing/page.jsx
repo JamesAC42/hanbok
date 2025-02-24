@@ -5,6 +5,7 @@ import pricingStyles from '@/styles/components/pricing.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 //real
 const PRICE_IDS = {
@@ -24,6 +25,7 @@ const Pricing = () => {
     const { user } = useAuth();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const { t } = useLanguage();
 
     const handlePurchase = async (priceId) => {
         if (!user) {
@@ -55,57 +57,63 @@ const Pricing = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={pricingStyles.pricingContent}>
-                    <h1 className={styles.pageTitle}>Pricing</h1>
+                    <h1 className={styles.pageTitle}>{t('pricing.title')}</h1>
                     <section className={pricingStyles.section}>
-                        <h2>Upgrade Options</h2>
+                        <h2>{t('pricing.upgradeOptions')}</h2>
                         <div className={pricingStyles.options}>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
-                                <div className={pricingStyles.badge}>Limited Time Only - 50% OFF</div>
-                                <h3>One-Time Purchase</h3>
+                                <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
+                                <h3>{t('pricing.oneTimePurchase')}</h3>
                                 <p className={pricingStyles.price}>$4</p>
                                 <ul className={pricingStyles.featuresList}>
-                                    <li>Increase saved sentence limit from <strong>30</strong> to <strong>150</strong></li>
-                                    <li>Increase saved words limit from <strong>60</strong> to <strong>200</strong></li>
+                                    <li>
+                                        {t('pricing.features.increaseSentences')} <strong>30</strong> {t('pricing.features.to')} <strong>150</strong>
+                                    </li>
+                                    <li>
+                                        {t('pricing.features.increaseWords')} <strong>60</strong> {t('pricing.features.to')} <strong>200</strong>
+                                    </li>
                                 </ul>
                                 <button 
                                     className={pricingStyles.purchaseButton}
                                     onClick={() => handlePurchase(PRICE_IDS.BASIC_UPGRADE)}
                                     disabled={loading}
                                 >
-                                    Buy Now
+                                    {t('pricing.buttons.buyNow')}
                                 </button>
                             </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
-                                <div className={pricingStyles.badge}>Limited Time Only - 50% OFF</div>
-                                <h3>One-Time Purchase</h3>
+                                <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
+                                <h3>{t('pricing.oneTimePurchase')}</h3>
                                 <p className={pricingStyles.price}>$6</p>
                                 <ul className={pricingStyles.featuresList}>
-                                    <li>An additional <strong>50 audio generations</strong></li>
+                                    <li>
+                                        {t('pricing.features.additionalAudio')} <strong>50</strong> {t('pricing.features.audioGenerations')}
+                                    </li>
                                 </ul>
                                 <button 
                                     className={pricingStyles.purchaseButton}
                                     onClick={() => handlePurchase(PRICE_IDS.AUDIO_PACK)}
                                     disabled={loading}
                                 >
-                                    Buy Now
+                                    {t('pricing.buttons.buyNow')}
                                 </button>
                             </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
-                                <div className={pricingStyles.bestValue}>Best Value</div>
-                                <h3>Monthly Subscription</h3>
-                                <p className={pricingStyles.price}>$10 / month</p>
+                                <div className={pricingStyles.bestValue}>{t('pricing.bestValue')}</div>
+                                <h3>{t('pricing.monthlySubscription')}</h3>
+                                <p className={pricingStyles.price}>$10 {t('pricing.perMonth')}</p>
                                 <ul className={pricingStyles.featuresList}>
-                                    <li><strong>Unlimited</strong> sentences saved</li>
-                                    <li><strong>Unlimited</strong> saved words</li>
-                                    <li><strong>Unlimited</strong> audio generations</li>
-                                    <li><strong>Unlimited</strong> word relation insights</li>
+                                    <li>{t('pricing.features.unlimited.sentences')}</li>
+                                    <li>{t('pricing.features.unlimited.words')}</li>
+                                    <li>{t('pricing.features.unlimited.audio')}</li>
+                                    <li>{t('pricing.features.unlimited.insights')}</li>
                                 </ul>
                                 <button 
                                     className={pricingStyles.purchaseButton}
                                     onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
                                     disabled={loading}
                                 >
-                                    Subscribe
+                                    {t('pricing.buttons.subscribe')}
                                 </button>
                             </div>
                         </div>

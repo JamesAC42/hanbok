@@ -32,7 +32,7 @@ const addWord = async (req, res) => {
             // Count current saved words
             const savedCount = await db.collection('words').countDocuments({ userId });
             
-            if (savedCount >= user.maxSavedWords) {
+            if (!user.maxSavedWords || savedCount >= user.maxSavedWords) {
                 return res.status(403).json({
                     success: false,
                     reachedLimit: true,

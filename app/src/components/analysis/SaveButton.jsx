@@ -5,12 +5,14 @@ import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
 import styles from '@/styles/components/sentenceanalyzer/savebutton.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SaveButton = ({ sentenceId }) => {
     const [isSaved, setIsSaved] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const { isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (sentenceId && isAuthenticated) {
@@ -67,7 +69,7 @@ const SaveButton = ({ sentenceId }) => {
             className={`${styles.saveButton} ${isSaved ? styles.saved : ''} ${isLoading ? styles.loading : ''}`}
             onClick={toggleSave}
             disabled={isLoading}
-            title={isSaved ? "Remove from saved" : "Save sentence"}
+            title={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
         >
             {isSaved ? <MaterialSymbolsBookmarkSharp /> : <MaterialSymbolsBookmarkOutlineSharp />}
         </button>

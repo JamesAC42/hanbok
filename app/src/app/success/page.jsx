@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/pagelayout.module.scss';
 import successStyles from '@/styles/components/success.module.scss';
 import Image from 'next/image';
@@ -12,6 +13,7 @@ const SuccessContent = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { isAuthenticated, loading, fetchSession } = useAuth();
+    const { t } = useLanguage();
     const [processingPayment, setProcessingPayment] = useState(true);
 
     // Handle initial redirect checks
@@ -45,22 +47,22 @@ const SuccessContent = () => {
                 <div className={successStyles.successContent}>
                     {processingPayment ? (
                         <>
-                            <h1>Processing Payment...</h1>
-                            <p>Please wait while we confirm your payment.</p>
+                            <h1>{t('success.processing.title')}</h1>
+                            <p>{t('success.processing.description')}</p>
                         </>
                     ) : (
                         <>
                             <div className={successStyles.checkmark}>
                                 <MaterialSymbolsCheckCircleOutlineRounded />
                             </div>
-                            <h1>Thank You!</h1>
-                            <p>Your payment was successful and your account has been upgraded.</p>
+                            <h1>{t('success.completed.title')}</h1>
+                            <p>{t('success.completed.description')}</p>
                             <div className={successStyles.buttons}>
                                 <Link href="/profile" className={successStyles.button}>
-                                    View Profile
+                                    {t('success.completed.viewProfile')}
                                 </Link>
                                 <Link href="/" className={successStyles.button}>
-                                    Start Learning
+                                    {t('success.completed.startLearning')}
                                 </Link>
                             </div>
                         </>

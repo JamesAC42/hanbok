@@ -2,20 +2,13 @@
 import styles from "@/styles/components/sentenceanalyzer/grammarpoints.module.scss"
 import { MaterialSymbolsLightKidStar } from '@/components/icons/StarFilled';
 import { MaterialSymbolsLightKidStarOutline } from '@/components/icons/StarOutline';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const GrammarPoints = ({analysis}) => {
+    const { t } = useLanguage();
     
     const renderLessonDifficulty = (difficulty) => {
-        switch(difficulty) {
-            case 'beginner':
-                return renderStars(1, 5);
-            case 'intermediate':
-                return renderStars(3, 5);
-            case 'advanced':
-                return renderStars(5, 5);
-            default:
-                return renderStars(0, 5);
-        }
+        return renderStars(difficulty, 5);
     }
     
     const renderStars = (count, total) => {
@@ -62,7 +55,7 @@ const GrammarPoints = ({analysis}) => {
                     {lesson.examples && (
                         <div className={styles.grammarListItemExamples}>
                             <div className={styles.grammarListItemExamplesHeader}>
-                                Examples
+                                {t('analysis.examples')}
                             </div>
                             <div className={styles.grammarListItemExamplesContent}>
                                 {lesson.examples.map((example, index) => (
@@ -71,10 +64,10 @@ const GrammarPoints = ({analysis}) => {
                                         className={styles.grammarListItemExample}
                                     >
                                         <div className={styles.grammarListItemExampleKorean}>
-                                            {example.korean}
+                                            {example.original}
                                         </div>
                                         <div className={styles.grammarListItemExampleEnglish}>
-                                            {example.english}
+                                            {example.translation}
                                         </div>
                                     </div>
                                 ))}
@@ -95,7 +88,7 @@ const GrammarPoints = ({analysis}) => {
     return(
         <div className={styles.grammarList}>
             <div className={styles.grammarListHeader}>
-                Grammar
+                {t('analysis.grammar')}
             </div>
             <div className={styles.grammarListContainer}>
                 {renderGrammarList()}

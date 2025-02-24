@@ -13,10 +13,12 @@ import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 
 import styles from '@/styles/components/sentenceanalyzer/audioplayer.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
 const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
 
+    const { t } = useLanguage();
     const [activeSpeaker, setActiveSpeaker] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
 
@@ -204,14 +206,24 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
               <div className={styles.speaker}>
                 <div className={styles.speakerInner}>
                   <div className={styles.speakerImage}>
-                    <Image src="/images/speakers/female.png" alt="girl" width={1920} height={1080} />
+                    <Image 
+                      src="/images/speakers/female.png" 
+                      alt={t('audioPlayer.speakerImages.female')} 
+                      width={1920} 
+                      height={1080} 
+                    />
                   </div>
                 </div>
               </div>
               <div className={styles.speaker}>
                 <div className={styles.speakerInner}>
                   <div className={styles.speakerImage}>
-                    <Image src="/images/speakers/male.png" alt="boy" width={1920} height={1080} />
+                    <Image 
+                      src="/images/speakers/male.png" 
+                      alt={t('audioPlayer.speakerImages.male')} 
+                      width={1920} 
+                      height={1080} 
+                    />
                   </div>
                 </div>
               </div>
@@ -243,14 +255,14 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
                           <div className={styles.generateAudioButton}>
                             <TdesignUserTalk1Filled />
                             <div className={styles.generateAudioButtonText}>
-                            Play Audio
+                              {t('audioPlayer.playAudio')}
                             </div>
                           </div>
                         ) : (
                           <div className={styles.generateAudioButton}>
                             <SvgSpinnersRingResize />
                             <div className={styles.generateAudioButtonText}>
-                              Generating...
+                              {t('audioPlayer.generating')}
                             </div>
                           </div>
                         )
@@ -267,9 +279,9 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
           {
             (showPopup && !loggedIn()) && (
               <div className={styles.audioPlayerLockedPopup}>
-                <p>Sign in to generate audio samples and hear the sentence spoken by a native speaker.</p>
+                <p>{t('audioPlayer.loginRequired.title')}</p>
                 <Link href="/login">
-                  Make a free account <MaterialSymbolsArrowCircleRightRounded />
+                  {t('audioPlayer.loginRequired.cta')} <MaterialSymbolsArrowCircleRightRounded />
                 </Link>
 
                 <div className={styles.closePopup} onClick={hidePopup}>
@@ -282,9 +294,9 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
           {
             (showPopup && loggedIn()) && (
               <div className={styles.audioPlayerLockedPopup}>
-                <p>You have no remaining audio credits.</p>
+                <p>{t('audioPlayer.noCredits.title')}</p>
                 <Link href="/pricing">
-                  Get More <MaterialSymbolsArrowCircleRightRounded />
+                  {t('audioPlayer.noCredits.cta')} <MaterialSymbolsArrowCircleRightRounded />
                 </Link>
 
                 <div className={styles.closePopup} onClick={hidePopup}>

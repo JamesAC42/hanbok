@@ -11,6 +11,7 @@ import Link from 'next/link';
 import styles from '@/styles/components/sentenceanalyzer/wordslist.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 // Import our helper API functions
 import { fetchWordRelations, addWord, removeWord, checkSavedWords } from '@/api/words';
@@ -40,6 +41,7 @@ const WordItem = ({
     showTooltip = false,
     setShowTooltip = null
 }) => {
+    const { t } = useLanguage();
     const isSaved = savedWords.has(word.originalWord);
     return (
         <div className={styles.wordListItem} data-role={type ? getCleanedType(type) : null}>
@@ -87,7 +89,10 @@ const WordItem = ({
                     className={styles.showRelatedButton}
                     onClick={() => handleShowRelated(word)}
                 >
-                    {expandedWord === word.originalWord ? 'Hide related words' : 'Show related words'}
+                    {expandedWord === word.originalWord ? 
+                        t('analysis.hideRelatedWords') : 
+                        t('analysis.showRelatedWords')
+                    }
                 </button>
             )}
         </div>
@@ -97,6 +102,7 @@ const WordItem = ({
 const WordsList = ({ analysis }) => {
     const { user, isLoading, isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
+    const { t, language, nativeLanguage } = useLanguage();
     const [savedWords, setSavedWords] = useState(new Set());
     const [isSavedWordsLoading, setIsSavedWordsLoading] = useState(true);
     const [expandedWord, setExpandedWord] = useState(null);
@@ -120,7 +126,7 @@ const WordsList = ({ analysis }) => {
 
             try {
                 setIsSavedWordsLoading(true);
-                const data = await checkSavedWords(uniqueWords, 'ko');
+                const data = await checkSavedWords(uniqueWords, language);
                 if (data.success) {
                     setSavedWords(new Set(data.savedWords));
                 }
@@ -164,7 +170,7 @@ const WordsList = ({ analysis }) => {
             if (alreadySaved) {
                 await removeWord({
                     originalWord: word.originalWord,
-                    originalLanguage: 'ko'
+                    originalLanguage: language
                 });
                 setSavedWords(prev => {
                     const updated = new Set(prev);
@@ -175,8 +181,8 @@ const WordsList = ({ analysis }) => {
                 const addResult = await addWord({
                     originalWord: word.originalWord,
                     translatedWord: word.translatedWord,
-                    originalLanguage: 'ko',
-                    translationLanguage: 'en'
+                    originalLanguage: language,
+                    translationLanguage: nativeLanguage
                 });
                 if (addResult.reachedLimit) {
                     showLimitReachedPopup('words', {
@@ -216,7 +222,7 @@ const WordsList = ({ analysis }) => {
         }
         setLoadingRelated(true);
         try {
-            const data = await fetchWordRelations(word.originalWord);
+            const data = await fetchWordRelations(word.originalWord, language, nativeLanguage);
             if (data.success) {
                 setRelatedWordsCache(prev => ({
                     ...prev,
@@ -229,7 +235,7 @@ const WordsList = ({ analysis }) => {
                     ...data.antonyms.map(ant => ant.originalWord)
                 ];
                 if (allRelated.length > 0) {
-                    const checkRes = await checkSavedWords(allRelated, 'ko');
+                    const checkRes = await checkSavedWords(allRelated, language);
                     if (checkRes.success && checkRes.savedWords) {
                         setSavedWords(prev => {
                             const updated = new Set(prev);
@@ -255,18 +261,18 @@ const WordsList = ({ analysis }) => {
                 {loadingRelated ? (
                     <div className={styles.loadingRelated}>
                         <SvgSpinnersRingResize />
-                        <span>Loading related words...</span>
+                        <span>{t('sentenceForm.loading.elements')}</span>
                     </div>
                 ) : relatedWords ? (
                     (relatedWords.synonyms.length === 0 && relatedWords.antonyms.length === 0) ? (
                         <div className={styles.noRelatedWords}>
-                            No related words found for "{word.originalWord}"
+                            {t('limitReached.relatedWordsMessage')}
                         </div>
                     ) : (
                         <>
                             {relatedWords.synonyms.length > 0 && (
                                 <div className={styles.relatedSection}>
-                                    <h4>Synonyms</h4>
+                                    <h4>{t('analysis.synonyms')}</h4>
                                     {relatedWords.synonyms.map((syn, index) => (
                                         <WordItem 
                                             key={`syn-${index}`}
@@ -283,7 +289,7 @@ const WordsList = ({ analysis }) => {
                             )}
                             {relatedWords.antonyms.length > 0 && (
                                 <div className={styles.relatedSection}>
-                                    <h4>Antonyms</h4>
+                                    <h4>{t('analysis.antonyms')}</h4>
                                     {relatedWords.antonyms.map((ant, index) => (
                                         <WordItem 
                                             key={`ant-${index}`}
@@ -303,7 +309,7 @@ const WordsList = ({ analysis }) => {
                 ) : (
                     <div className={styles.errorRelatedWords}>
                         <MaterialSymbolsCancel />
-                        <span>No related words found for "{word.originalWord}"</span>
+                        <span>{t('sentenceForm.errors.other')}</span>
                     </div>
                 )}
             </div>
@@ -311,10 +317,9 @@ const WordsList = ({ analysis }) => {
     };
 
     const renderWordsList = () => {
-
-        if(isLoading) return <div className={styles.loading}>Loading...</div>;
+        if(isLoading) return <div className={styles.loading}>{t('sentenceForm.loading.elements')}</div>;
         if (isAuthenticated && isSavedWordsLoading) {
-            return <div className={styles.loading}>Loading...</div>;
+            return <div className={styles.loading}>{t('sentenceForm.loading.elements')}</div>;
         }
 
         let wordList = [];
@@ -327,9 +332,9 @@ const WordsList = ({ analysis }) => {
             seenWords.add(word.dictionary_form);
             const formattedWord = {
                 originalWord: word.dictionary_form,
-                translatedWord: word.meaning?.english || '',
-                originalLanguage: 'ko',
-                translationLanguage: 'en'
+                translatedWord: word.meaning?.description || '',
+                originalLanguage: language,
+                translationLanguage: nativeLanguage
             };
 
             wordList.push(
@@ -339,7 +344,7 @@ const WordsList = ({ analysis }) => {
                         savedWords={savedWords}
                         toggleWordInLibrary={toggleWordInLibrary}
                         showRelated={true}
-                        type={word.type}
+                        type={word.type_translated || word.type}
                         handleShowRelated={handleShowRelated}
                         expandedWord={expandedWord}
                         showTooltip={showTooltip && index === 0}
@@ -357,7 +362,7 @@ const WordsList = ({ analysis }) => {
     return (
         <div className={styles.wordsList}>
             <div className={styles.wordsListHeader}>
-                Words
+                {t('analysis.words')}
             </div>
             <div className={styles.wordsListContainer}>
                 {renderWordsList()}

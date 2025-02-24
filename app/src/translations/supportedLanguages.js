@@ -1,4 +1,4 @@
-const SupportedLanguages = {
+export const supportedLanguages = {
     'ko': 'korean',
     'en': 'english',
     'zh': 'chinese',
@@ -6,5 +6,4 @@ const SupportedLanguages = {
     'es': 'spanish',
     'it': 'italian',
     'fr': 'french',
-}
-module.exports = SupportedLanguages;
+}; 

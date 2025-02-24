@@ -83,7 +83,7 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["sentenceId", "text", "analysis", "dateCreated"],
+        required: ["sentenceId", "text", "analysis", "dateCreated", "originalLanguage", "translationLanguage"],
         properties: {
           sentenceId: {
             bsonType: "int"
@@ -107,6 +107,14 @@ const collections = {
           },
           dateCreated: {
             bsonType: "date"
+          },
+          originalLanguage: {
+            bsonType: "string",
+            description: "Language code for the original text (e.g. 'ko', 'en')"
+          },
+          translationLanguage: {
+            bsonType: "string",
+            description: "Language code for the translation (e.g. 'en', 'ko')"
           }
         }
       }

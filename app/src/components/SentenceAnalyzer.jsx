@@ -3,7 +3,6 @@ import {useState, useEffect} from 'react';
 import {useSearchParams} from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
-import Login from '@/components/Login';
 import Link from 'next/link';
 import styles from '@/styles/sentenceanalyzer.module.scss';
 import SentenceForm from '@/components/analysis/SentenceForm';
@@ -11,10 +10,14 @@ import Analysis from '@/components/analysis/Analysis';
 import { LineMdTwitterX } from '@/components/icons/Twitter';
 import { LineMdGithub } from '@/components/icons/Github';
 import { LineMdEmail } from '@/components/icons/Email';
+import ChangeLanguageButton from '@/components/ChangeLanguageButton';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { resources } from '@/translations';
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
     const searchParams = useSearchParams();
     const { loadSentence, isAuthenticated } = useAuth();
+    const { t, language, supportedLanguages } = useLanguage();
     
     const [analysis, setAnalysis] = useState(null);
     const [voice1, setVoice1] = useState(null);
@@ -22,13 +25,6 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [showTransition, setShowTransition] = useState(false);
     const [error, setError] = useState(null);
     const [siteStats, setSiteStats] = useState(null);
-
-    const exampleSentences = [
-        "그는 음악을 듣다가 잠들었어요.",
-        "어제 도서관에서 열심히 공부했어요.",
-        "버스 타임을 확인해 주세요.",
-        "맛있는 음식을 먹고 기분이 좋아졌어요."
-    ];
 
     const handleExampleClick = (sentence) => {
         if (window.setInputText) {
@@ -70,11 +66,24 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         }
     };
 
+    const getLocalizedSubtitle = () => {
+        const languageKey = supportedLanguages[language];
+        const languageName = t(`languages.${languageKey}`);
+        return t('home.subtitle').replace('{language}', languageName);
+    };
+
+    // Get example sentences in the learning language
+    const getExampleSentences = () => {
+        // Get the translations object for the learning language
+        const learningLanguageTranslations = resources[language];
+        return learningLanguageTranslations?.home?.exampleSentences || [];
+    };
+
     return (
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>
 
             <div className={styles.girlContainer}>
-            <Image src="/images/girl1.png" alt="girl" width={1920} height={1080} />
+            <Image src="/images/girl1.png" alt={t('login.girlImageAlt')} width={1920} height={1080} />
             </div>
     
             <h1 className={`${styles.title} ${analysis ? styles.titleWithAnalysis : ''}`}>
@@ -86,11 +95,11 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             </h1>
     
             <h2 className={`${styles.subtitle} ${analysis ? styles.subtitleWithAnalysis : ''}`}>
-                Master Korean, One Sentence at a Time
+                {getLocalizedSubtitle()}
             </h2>
 
             <div className={`${styles.links} ${analysis ? styles.linksWithAnalysis : ''}`}>
-               
+                <ChangeLanguageButton />
                 <div className={styles.linkContainer}>
                     <Link href="https://x.com/fifltriggi">
                         <LineMdTwitterX />
@@ -102,6 +111,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                         <LineMdEmail />
                     </Link>
                 </div>
+                <ChangeLanguageButton native={true} />
             </div>
     
 
@@ -109,15 +119,15 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 <div className={`${styles.statsContainer} ${analysis ? styles.statsContainerWithAnalysis : ''}`}>
                     <div className={styles.statItem}>
                         <span className={styles.statNumber}>{siteStats.totalSentences.toLocaleString()}</span>
-                        <span className={styles.statLabel}>Sentences Analyzed</span>
+                        <span className={styles.statLabel}>{t('home.stats.sentencesAnalyzed')}</span>
                     </div>
                     <div className={styles.statItem}>
                         <span className={styles.statNumber}>{siteStats.totalWords.toLocaleString()}</span>
-                        <span className={styles.statLabel}>Words Being Learned</span>
+                        <span className={styles.statLabel}>{t('home.stats.wordsLearned')}</span>
                     </div>
                     <div className={styles.statItem}>
                         <span className={styles.statNumber}>{siteStats.totalUsers.toLocaleString()}</span>
-                        <span className={styles.statLabel}>Users Learning Now</span>
+                        <span className={styles.statLabel}>{t('home.stats.activeUsers')}</span>
                     </div>
                 </div>
             )}
@@ -132,8 +142,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
 
             {
                 !analysis && <div className={styles.testSentences}>
-                    <h3>Or try an example sentence:</h3>
-                    {exampleSentences.map((sentence, index) => (
+                    <h3>{t('home.tryExample')}</h3>
+                    {getExampleSentences().map((sentence, index) => (
                         <div 
                             key={index} 
                             className={styles.exampleSentence}

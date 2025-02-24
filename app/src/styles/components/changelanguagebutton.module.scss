@@ -1,0 +1,193 @@
+$buttonSize:3.4rem;
+
+@keyframes blurIn {
+    0% {
+        backdrop-filter: blur(0px);
+        background:transparent;
+    }
+    100% {
+        backdrop-filter: blur(3px);
+        background:#00000029;
+    }
+}
+
+.languageButtonOuter {
+    position:relative;
+    height:$buttonSize;
+    width:$buttonSize;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    .picker {
+
+        position: fixed;
+        height: 100dvh;
+        width: 100dvw;
+        background: #00000029;
+        backdrop-filter: blur(3px);
+        top: 0;
+        left: 0;
+        z-index: 2000;
+        animation: blurIn 0.2s ease-in-out;
+
+        .pickerBackground {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        @keyframes expand {
+            0% {
+                transform:scale(0) translate(-100%,-100%);
+            }
+            100% {
+                transform:scale(1) translate(0,0);
+            }
+        }
+
+        @keyframes expand-reverse {
+            0% {
+                transform:scale(0) translate(-20%,-100%);
+            }
+            100% {
+                transform:scale(1) translate(-80%,0);
+            }
+        }
+
+        .pickerContent {
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap:1.8rem;
+            background: white;
+            border-radius: 0.5rem;
+            padding: 2rem;
+            box-shadow: 0 0rem 1rem 0.2rem rgba(255, 255, 255, 0.715);
+            justify-content: center;
+            animation:expand 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
+
+            .pickerHeader {
+                text-align:center;
+                color:#606060;
+                h3 {
+                    font-size:0.9rem;
+                }
+            }
+            .pickerItemContainer {
+                width:100%;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+                width: 15rem;
+            }
+        }
+
+        .pickerItem {
+            button {
+                padding: 0;
+                border: none;
+                background: none;
+                cursor: pointer;
+                border-radius: 0.25rem;
+                border-radius:50%;
+                height:$buttonSize;
+                width:$buttonSize;
+                border:1px solid #000;
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: #040404;
+                }
+
+                svg {
+                    font-size: 3rem;
+                    transform:translateY(2px);
+                }
+            }
+        }
+
+        &.reverse {
+            .pickerContent {
+                transform: translateX(-80%);
+                animation:expand-reverse 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
+            }
+        }
+    }
+}
+
+.buttonContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    height:$buttonSize;
+    width:$buttonSize;
+    border-radius:50%;
+    border:1px solid #21446c;
+    overflow:hidden;
+    background:#fff;
+    animation:blurIn 0.2s ease-in-out;
+    .languageButton {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:#fff;
+        &:hover {
+            opacity: 0.8;
+        }
+    
+        svg {
+            transform:scale(3) translateY(0px);
+        }
+    }
+}
+
+
+.tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 1000;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 0.25rem;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+    }
+}
+
+.closeTooltip {
+    background: none;
+    border: none;
+    color: white;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    padding: 0 0.25rem;
+    font-size: 1rem;
+    
+    &:hover {
+        opacity: 0.8;
+    }
+} 

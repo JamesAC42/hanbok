@@ -2,8 +2,10 @@
 import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
 import styles from '@/styles/components/sentenceanalyzer/wordinfo.module.scss';
 import Conjugation from './Conjugation';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const WordInfo = ({wordInfo, shouldAnimate}) => {
+    const { t } = useLanguage();
     
     const getCleanedType = (wordType) => {
       if (!wordType) {
@@ -35,7 +37,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                         {
                         wordInfo.isParticle ? 
                             "PARTICLE" : 
-                            getDisplayType(wordInfo.type)
+                            getDisplayType(wordInfo.type_translated)
                         }
                     </div>
                     )
@@ -51,7 +53,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                         !wordInfo.isParticle? 
                             
                         <li>
-                        {wordInfo.meaning?.english}
+                        {wordInfo.meaning?.description}
                         </li> : null 
                     }
                     {
@@ -61,7 +63,8 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                         <span className={styles.notes}>
                         {
                             wordInfo.isParticle ? 
-                            "Function: " : "Notes: "
+                            `${t('analysis.wordInfo.function')}: ` : 
+                            `${t('analysis.wordInfo.notes')}: `
                         }
                         {wordInfo.isParticle ? wordInfo.function.replaceAll('_', ' ') : wordInfo.meaning?.notes}
                         </span>
@@ -77,11 +80,11 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                     {
                         !wordInfo.isParticle && wordInfo.grammar?.role ?
                         <div className={styles.roleInfo}>
-                            The role of this word in the sentence is <span className={styles.wordRole}>{wordInfo.grammar.role.replaceAll('_', ' ')}</span>
+                            {t('analysis.wordInfo.role')} <span className={styles.wordRole}>{wordInfo.grammar.role.replaceAll('_', ' ')}</span>
                         </div>
                         : wordInfo.isParticle && (
                         <div className={styles.roleInfo}>
-                            The role of this word in the sentence is <span className={styles.wordRole}>particle</span>
+                            {t('analysis.wordInfo.role')} <span className={styles.wordRole}>particle</span>
                         </div>
                         )
                     }
@@ -90,7 +93,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                         (wordInfo.grammar.particles && wordInfo.grammar.particles.length > 0) && (
                         <div className={styles.wordInfoParticles}>
                             <div className={styles.wordInfoParticlesHeader}>
-                            Particles
+                            {t('analysis.wordInfo.particles')}
                             </div>
                             <div className={styles.wordInfoParticlesContent}>
                             {wordInfo.grammar.particles.map((particle, index) => (
@@ -121,7 +124,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
             {!wordInfo && (
             <div className={styles.wordInfoPlaceholder}>
                 <FluentCursorHover32Filled />
-                Hover over a word for explanation.
+                {t('analysis.hoverExplanation', 'Hover over a word for explanation.')}
             </div>
             )}
         </>

@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/pagelayout.module.scss';
 import loginStyles from '@/styles/components/login.module.scss';
 import Image from 'next/image';
@@ -11,10 +12,10 @@ import { MdiHeadphones } from '@/components/icons/Headphones';
 import { MajesticonsLightbulbShine } from '@/components/icons/Lightbulb';
 import { MaterialSymbolsNestClockFarsightAnalogRounded } from '@/components/icons/Clock';
 
-
 const Login = () => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
@@ -28,9 +29,9 @@ const Login = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={loginStyles.loginContent}>
-                    <h1 className={loginStyles.loginTitle}>Login</h1>
+                    <h1 className={loginStyles.loginTitle}>{t('login.title')}</h1>
                     <p className={loginStyles.loginDescription}>
-                        Log in with Google to unlock powerful features for your Korean learning journey. Don't have an account? One will be created for you automatically.
+                        {t('login.description')}
                     </p>
                     
                     <div className={loginStyles.features}>
@@ -38,31 +39,31 @@ const Login = () => {
                             <div className={loginStyles.featureIcon}>
                                 <MaterialSymbolsBookmarkSharp />
                             </div>
-                            Save sentences and words for later review
+                            {t('login.features.save')}
                         </div>
                         <div className={loginStyles.feature}>
                             <div className={loginStyles.featureIcon}>
                                 <MaterialSymbolsNestClockFarsightAnalogRounded />
                             </div>
-                            Coming soon: Spaced repetition flashcards
+                            {t('login.features.flashcards')}
                         </div>
                         <div className={loginStyles.feature}>
                             <div className={loginStyles.featureIcon}>
                                 <MdiHeadphones />
                             </div>
-                            15 free audio sentence generations
+                            {t('login.features.audio')}
                         </div>
                         <div className={loginStyles.feature}>
                             <div className={loginStyles.featureIcon}>
                                 <MajesticonsLightbulbShine />
                             </div>
-                            Access to upcoming premium features
+                            {t('login.features.premium')}
                         </div>
                     </div>
 
                     <div className={loginStyles.signInInfo}>
-                        <p>✨ Free Account</p>
-                        <p>🔐 Secure Google Sign In</p>
+                        <p>{t('login.freeAccount')}</p>
+                        <p>{t('login.secureSignIn')}</p>
                     </div>
 
                     <div className={loginStyles.buttonContainer}>
@@ -73,7 +74,7 @@ const Login = () => {
             <div className={styles.girlContainer}>
                 <Image
                     src="/images/girl1.png"
-                    alt="girl"
+                    alt={t('login.girlImageAlt')}
                     width={1920}
                     height={1080}
                     priority

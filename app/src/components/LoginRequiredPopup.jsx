@@ -1,30 +1,18 @@
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
 
 const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
+    const { t } = useLanguage();
 
     const getMessage = () => {
-        switch (type) {
-            case 'related-words':
-                return {
-                    title: 'Login Required',
-                    message: 'Create a free account to access word relationships and expand your vocabulary!',
-                    subMessage: 'Join thousands of Korean learners using Hanbok to improve their language skills.'
-                };
-            case 'audio':
-                return {
-                    title: 'Login Required',
-                    message: 'Create a free account to generate audio and hear native pronunciation!',
-                    subMessage: 'Join thousands of Korean learners using Hanbok to improve their speaking and listening.'
-                };
-            default:
-                return {
-                    title: 'Login Required',
-                    message: `Create a free account to start saving ${type} and track your learning progress!`,
-                    subMessage: 'Join thousands of Korean learners using Hanbok to improve their language skills.'
-                };
-        }
+        const messages = t('loginRequired.messages')[type] || t('loginRequired.messages.default');
+        return {
+            title: t('loginRequired.title'),
+            message: messages.main.replace('{type}', type),
+            subMessage: messages.sub
+        };
     };
 
     const handleLoginClick = () => {
@@ -49,13 +37,13 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
                         className={styles.upgradeButton}
                         onClick={handleLoginClick}
                     >
-                        Create Account
+                        {t('loginRequired.createAccount')}
                     </button>
                     <button 
                         className={styles.cancelButton}
                         onClick={onClose}
                     >
-                        Maybe Later
+                        {t('loginRequired.maybeLater')}
                     </button>
                 </div>
             </div>

@@ -1,20 +1,20 @@
 'use client';
 import styles from '@/styles/components/sentenceanalyzer/sentencenotes.module.scss';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const SentenceNotes = ({analysis}) => {
+    const { t } = useLanguage();
+    
     return (
-        
-
-
         <div className={styles.sentenceNotes}>
             <div className={styles.sentenceNotesHeader}>
-                About the Sentence
+                {t('analysis.sentenceNotes.title')}
             </div>
             <div className={styles.sentenceNotesGrid}>
             {analysis.sentence.formality && (
                 <>
                 <div className={styles.sentenceNoteLabel}>
-                    Formality:
+                    {t('analysis.sentenceNotes.formality')}
                 </div>
                 <div className={styles.sentenceNoteValue}>
                     {analysis.sentence.formality}
@@ -24,7 +24,7 @@ const SentenceNotes = ({analysis}) => {
             {analysis.sentence.context && (
                 <>
                 <div className={styles.sentenceNoteLabel}>
-                    Example Context:
+                    {t('analysis.sentenceNotes.context')}
                 </div>
                 <div className={styles.sentenceNoteValue}>
                     {analysis.sentence.context}
@@ -34,7 +34,6 @@ const SentenceNotes = ({analysis}) => {
             </div>
         </div>
     )
-
 }
 
 export default SentenceNotes;

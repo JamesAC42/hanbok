@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/pagelayout.module.scss';
 import profileStyles from '@/styles/components/profile.module.scss';
 import Image from 'next/image';
@@ -10,6 +11,7 @@ import Link from 'next/link';
 const Profile = () => {
     const router = useRouter();
     const { user, isAuthenticated, loading } = useAuth();
+    const { t } = useLanguage();
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -24,45 +26,58 @@ const Profile = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={profileStyles.profileContent}>
-                    <h1 className={styles.pageTitle}>Profile</h1>
+                    <h1 className={styles.pageTitle}>{t('profile.title')}</h1>
                     <div className={profileStyles.userDetails}>
-                        <h2>User Info</h2>
-                        <p><strong>Name:</strong> {user.name}</p>
-                        <p><strong>Email:</strong> {user.email}</p>
+                        <h2>{t('profile.userInfo')}</h2>
+                        <p><strong>{t('profile.name')}:</strong> {user.name}</p>
+                        <p><strong>{t('profile.email')}:</strong> {user.email}</p>
                         <p>
-                          <strong>Tier:</strong> {user.tier == 0 ? "Basic" : user.tier === 1 ? "Plus" : "Unknown"}
+                            <strong>{t('profile.tier')}:</strong> {
+                                user.tier === 0 ? t('profile.tierTypes.basic') :
+                                user.tier === 1 ? t('profile.tierTypes.plus') :
+                                t('profile.tierTypes.unknown')
+                            }
                         </p>
                         <p>
-                          <strong>Remaining Audio Generations:</strong> {
-                            user.tier === 1 ? "Unlimited" : user.remainingAudioGenerations == null ? "0" : user.remainingAudioGenerations
-                          }
+                            <strong>{t('profile.remainingAudioGenerations')}:</strong> {
+                                user.tier === 1 ? t('profile.unlimited') :
+                                user.remainingAudioGenerations == null ? "0" :
+                                user.remainingAudioGenerations
+                            }
                         </p>
                         <p>
-                            <strong>Max Saved Sentences:</strong> {user.tier === 1 ? "Unlimited" : user.maxSavedSentences == null ? "0" : user.maxSavedSentences}
+                            <strong>{t('profile.maxSavedSentences')}:</strong> {
+                                user.tier === 1 ? t('profile.unlimited') :
+                                user.maxSavedSentences == null ? "0" :
+                                user.maxSavedSentences
+                            }
                         </p>
                         <p>
-                            <strong>Max Saved Words:</strong> {user.tier === 1 ? "Unlimited" : user.maxSavedWords == null ? "0" : user.maxSavedWords}
+                            <strong>{t('profile.maxSavedWords')}:</strong> {
+                                user.tier === 1 ? t('profile.unlimited') :
+                                user.maxSavedWords == null ? "0" :
+                                user.maxSavedWords
+                            }
                         </p>
                     </div>
                     {!user.feedbackAudioCreditRedeemed && (
                         <div className={profileStyles.bonusAlert}>
-                            <h3>Get 15 Free Audio Generations! 🎉</h3>
+                            <h3>{t('profile.bonusAlert.title')}</h3>
                             <p>
-                                Share your feedback with us on our <Link href="/feedback">feedback page</Link> and 
-                                receive 15 additional audio generations as a thank you!
+                                {t('profile.bonusAlert.description')} <Link href="/feedback">feedback page</Link>
                             </p>
                         </div>
                     )}
                     <div className={profileStyles.tierInfo}>
-                        {user.tier === 2 ? (
+                        {user.tier === 1 ? (
                             <>
-                                <p><strong>Plus User Benefits:</strong> Enjoy unlimited audio generations, priority support, and premium features!</p>
-                                <p>For more details, visit our <a href="/pricing">Pricing</a> page.</p>
+                                <p><strong>{t('profile.tierInfo.plus.title')}:</strong> {t('profile.tierInfo.plus.description')}</p>
+                                <p>{t('profile.tierInfo.moreDetails')} <Link href="/pricing">Pricing</Link> page.</p>
                             </>
                         ) : (
                             <>
-                                <p><strong>Basic User Benefits:</strong> You have limited audio generations available. Upgrade for more features and unlimited access.</p>
-                                <p>For more details, visit our <a href="/pricing">Pricing</a> page.</p>
+                                <p><strong>{t('profile.tierInfo.basic.title')}:</strong> {t('profile.tierInfo.basic.description')}</p>
+                                <p>{t('profile.tierInfo.moreDetails')} <Link href="/pricing">Pricing</Link> page.</p>
                             </>
                         )}
                     </div>

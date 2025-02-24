@@ -9,6 +9,7 @@ import SentenceNotes from '@/components/analysis/SentenceNotes';
 import Variants from '@/components/analysis/Variants';
 import CulturalNotes from '@/components/analysis/CulturalNotes';
 import SaveButton from '@/components/analysis/SaveButton';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 
 const Analysis = ({
@@ -18,12 +19,10 @@ const Analysis = ({
     showTransition,
     sentenceId
 }) => {
-
+    const { t } = useLanguage();
     const [prevWord, setPrevWord] = useState(null);
     const [wordInfo, setWordInfo] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(false);
-
-    
 
     useEffect(() => {
         if (!wordInfo) {
@@ -47,18 +46,17 @@ const Analysis = ({
     }, [showTransition]);
 
     return(
-
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
             <SaveButton sentenceId={sentenceId} />
             
-            <div className={styles.sentenceHeader}>Original:</div>
+            <div className={styles.sentenceHeader}>{t('analysis.original')}:</div>
             <div className={styles.sentence}>
-                {analysis.sentence.korean}
+                {analysis.sentence.original}
             </div>
 
-            <div className={styles.translationHeader}>Translation:</div>
+            <div className={styles.translationHeader}>{t('analysis.translation')}:</div>
             <div className={styles.translation}>
-                {analysis.sentence.english}
+                {analysis.sentence.translation}
             </div>
 
             <AudioPlayer
@@ -88,7 +86,6 @@ const Analysis = ({
         
         </div>
     )
-
 }
 
 export default Analysis;

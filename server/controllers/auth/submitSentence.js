@@ -1,9 +1,23 @@
 const generateResponse = require('../../llm/generateResponse');
 const {ANALYSIS_PROMPT} = require('../../llm/prompt');
 const { getDb } = require('../../database');
+const SupportedLanguages = require('../../supported_languages');
 
 const submitSentence = async (req, res) => {
-    const { text } = req.body;
+    const { text, originalLanguage = 'ko', translationLanguage = 'en' } = req.body;
+
+    // Validate languages are supported
+    // if (!SupportedLanguages[originalLanguage] || !SupportedLanguages[translationLanguage]) {
+    //     return res.json({
+    //         message: {
+    //             isValid: false,
+    //             error: {
+    //                 type: "validation",
+    //                 message: "Unsupported language combination"
+    //             }
+    //         }
+    //     });
+    // }
 
     if (!text || text.length > 120) {
         return res.json({
@@ -19,7 +33,10 @@ const submitSentence = async (req, res) => {
     
     try {
         const db = getDb();
-        let parsedResponse = await generateResponse(ANALYSIS_PROMPT + text, 'gemini');
+        let parsedResponse = await generateResponse(
+            ANALYSIS_PROMPT(originalLanguage, translationLanguage) + text, 
+            'gemini'
+        );
 
         if(!parsedResponse.isValid) {
             return res.json({ message: parsedResponse });
@@ -49,6 +66,8 @@ const submitSentence = async (req, res) => {
             analysis: parsedResponse.analysis,
             voice1Key: null,
             voice2Key: null,
+            originalLanguage,
+            translationLanguage,
             dateCreated: new Date()
         };
 

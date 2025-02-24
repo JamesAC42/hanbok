@@ -1,20 +1,22 @@
 import { useRouter } from 'next/navigation';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
 
 const LimitReachedPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
+    const { t } = useLanguage();
 
     const getMessage = () => {
         switch (type) {
             case 'related-words':
                 return {
-                    title: 'Plus Feature',
-                    message: 'Viewing related words is a Plus feature. Upgrade your account to see synonyms, antonyms, and expand your vocabulary!'
+                    title: t('limitReached.plusFeatureTitle'),
+                    message: t('limitReached.relatedWordsMessage')
                 };
             default:
                 return {
-                    title: 'Storage Limit Reached',
-                    message: `You've reached the maximum number of saved ${type} for your current plan.`
+                    title: t('limitReached.storageTitle'),
+                    message: t('limitReached.storageMessage').replace('{type}', type)
                 };
         }
     };
@@ -40,13 +42,13 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
                         className={styles.upgradeButton}
                         onClick={handleUpgradeClick}
                     >
-                        View Pricing
+                        {t('limitReached.viewPricing')}
                     </button>
                     <button 
                         className={styles.cancelButton}
                         onClick={onClose}
                     >
-                        Maybe Later
+                        {t('limitReached.maybeLater')}
                     </button>
                 </div>
             </div>

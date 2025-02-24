@@ -1,3 +1,4 @@
+'use client';
 import styles from '@/styles/components/pagelayout.module.scss';
 import aboutStyles from '@/styles/components/about.module.scss';
 import Image from 'next/image';
@@ -5,51 +6,29 @@ import Link from 'next/link';
 import { LineMdTwitterX } from '@/components/icons/Twitter';
 import { LineMdGithub } from '@/components/icons/Github';
 import { LineMdEmail } from '@/components/icons/Email';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const About = () => {
-    const updates = [
-        {
-            date: '2025-02-20',
-            content: 'Added feedback forum for users to submit feedback and suggestions.'
-        },
-        {
-            date: '2025-02-19',
-            content: 'Added word relations for plus users and fixed various minor issues.'
-        },
-        {
-            date: '2025-02-16',
-            content: 'Initial beta release'
-        }
-    ];
-
-    const upcomingFeatures = [
-        'Personalized vocabulary decks with spaced repetition learning',
-        'Upload or paste screenshots of text to analyze',
-        'Hear audio for individual words',
-        'Interactive grammar exercises based on saved sentences',
-        'Community features for sharing and discussing sentences',
-        'More languages!',
-        'More features for premium users!'
-    ];
+    const { t } = useLanguage();
 
     const contactLinks = [
         {
             icon: <LineMdTwitterX />,
-            label: 'Twitter',
+            label: t('about.twitter.label'),
             url: 'https://x.com/fifltriggi',
-            text: 'Follow development updates'
+            text: t('about.twitter.text')
         },
         {
             icon: <LineMdGithub />,
-            label: 'GitHub',
+            label: t('about.github.label'),
             url: 'https://github.com/JamesAC42/hanbok',
-            text: 'View source code'
+            text: t('about.github.text')
         },
         {
             icon: <LineMdEmail />,
-            label: 'Email',
+            label: t('about.email.label'),
             url: 'mailto:jamescrovo450@gmail.com',
-            text: 'Questions and feedback'
+            text: t('about.email.text')
         }
     ];
 
@@ -57,51 +36,39 @@ const About = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={aboutStyles.aboutContent}>
-                    <h1 className={styles.pageTitle}>About</h1>
+                    <h1 className={styles.pageTitle}>{t('about.title')}</h1>
                     
                     <div className={aboutStyles.section}>
-                        <h2>What is hanbok?</h2>
-                        <p>
-                            Hanbok is a comprehensive tool designed to help Korean language learners understand and master Korean sentences. Hanbok breaks down Korean sentences into their component parts, providing detailed analysis of grammar patterns, vocabulary, and usage.
-                        </p>
+                        <h2>{t('about.whatIsHanbok')}</h2>
+                        <p>{t('about.description')}</p>
 
                         <div className={aboutStyles.screenshot}>
-                            <Image src="/images/screenshots/sentence.png" alt="screenshot" width={1243} height={869} />
-                            <p>
-                                Example sentence analysis
-                            </p>
+                            <Image src="/images/screenshots/sentence.png" alt={t('about.screenshotAlt')} width={1243} height={869} />
+                            <p>{t('about.exampleAnalysis')}</p>
                         </div>
-                        <p>
-                            Registered accounts get access to audio examples from both male and female native speakers, helping you perfect your pronunciation and understand natural speech patterns. We also provide cultural notes to give you context and deeper understanding of Korean language usage.
-                        </p>
+                        <p>{t('about.registeredFeatures')}</p>
 
                         <div className={aboutStyles.screenshot}>
-                            <Image src="/images/screenshots/sentencenotes.png" alt="screenshot" width={1193} height={785} />
-                            <p>
-                                Cultural notes and variants for different contexts
-                            </p>
+                            <Image src="/images/screenshots/sentencenotes.png" alt={t('about.screenshotAlt')} width={1193} height={785} />
+                            <p>{t('about.culturalNotes')}</p>
                         </div>
-                        <p>
-                            Whether you're a beginner or an advanced learner, our tool helps you understand the nuances of Korean grammar, vocabulary, and cultural context all in one place.
-                        </p>
-                        <p>
-                            Save sentences that you find interesting or challenging for later reference. Soon, you'll be able to create personalized study decks from the words and grammar patterns you encounter, enabling efficient learning through spaced repetition techniques.
-                        </p>
+                        <p>{t('about.benefitsDescription')}</p>
+                        <p>{t('about.saveFeature')}</p>
                     </div>
 
                     <section className={aboutStyles.section}>
-                        <h2>Upcoming Features</h2>
+                        <h2>{t('about.upcomingFeatures')}</h2>
                         <ul className={aboutStyles.featuresList}>
-                            {upcomingFeatures.map((feature, index) => (
+                            {t('about.upcomingFeaturesList').map((feature, index) => (
                                 <li key={index}>{feature}</li>
                             ))}
                         </ul>
                     </section>
 
                     <section className={aboutStyles.section}>
-                        <h2>Update History</h2>
+                        <h2>{t('about.updateHistory')}</h2>
                         <div className={aboutStyles.updates}>
-                            {updates.map((update, index) => (
+                            {t('about.updates').map((update, index) => (
                                 <div key={index} className={aboutStyles.updateItem}>
                                     <div className={aboutStyles.updateDate}>
                                         {update.date}
@@ -115,7 +82,7 @@ const About = () => {
                     </section>
 
                     <section className={aboutStyles.section}>
-                        <h2>Contact & Links</h2>
+                        <h2>{t('about.contactLinks')}</h2>
                         <div className={aboutStyles.contactLinks}>
                             {contactLinks.map((link, index) => (
                                 <Link 
