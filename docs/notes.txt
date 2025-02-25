@@ -201,3 +201,17 @@ refactoring for supporting more languages (both ways):
 - user data saves a preferred native language
   - this sets what the website displays in and also what the analysis default to translating to
 - 
+
+prompt tokens: 1560
+$2.50/m = 0.004 cents/prompt
+output tokens: ~1000
+$10/m = 0.01 cent/prompt
+
+prompt synonyms: 433
+$2.50/m = 0.001 cents/prompt
+output tokens: 139
+$10/m = 0.00139 cents/prompt
+
+
+
+

@@ -161,6 +161,9 @@ export const it = {
         buttons: {
             buyNow: 'Acquista Ora',
             subscribe: 'Abbonati'
+        },
+        donate: {
+            text: '— OPPURE DONA PER SUPPORTARE IL SITO! —'
         }
     },
     success: {

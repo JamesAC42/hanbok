@@ -161,6 +161,9 @@ export const zh = {
         buttons: {
             buyNow: '立即购买',
             subscribe: '订阅'
+        },
+        donate: {
+            text: '— 或者捐赠支持本网站！—'
         }
     },
     success: {

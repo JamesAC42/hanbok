@@ -60,6 +60,7 @@ const Pricing = () => {
                     <h1 className={styles.pageTitle}>{t('pricing.title')}</h1>
                     <section className={pricingStyles.section}>
                         <h2>{t('pricing.upgradeOptions')}</h2>
+
                         <div className={pricingStyles.options}>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
                                 <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
@@ -116,6 +117,20 @@ const Pricing = () => {
                                     {t('pricing.buttons.subscribe')}
                                 </button>
                             </div>
+                        </div>
+                        <div className={pricingStyles.kofi}>
+                            <div className={pricingStyles.kofiText}>
+                                {t('pricing.donate.text')}
+                            </div>
+                            <a href='https://ko-fi.com/U7U21B323R' target='_blank'>
+                                <img 
+                                    height='36' 
+                                    style={{border:"0px", height: "40px"}} 
+                                    src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' 
+                                    border='0' 
+                                    alt='Buy Me a Coffee at ko-fi.com' 
+                                />
+                            </a>
                         </div>
                     </section>
                 </div>

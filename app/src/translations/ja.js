@@ -161,6 +161,9 @@ export const ja = {
         buttons: {
             buyNow: '今すぐ購入',
             subscribe: '購読する'
+        },
+        donate: {
+            text: '— またはサイトをサポートするために寄付をお願いします！—'
         }
     },
     success: {

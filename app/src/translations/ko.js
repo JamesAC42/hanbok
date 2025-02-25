@@ -161,6 +161,9 @@ export const ko = {
         buttons: {
             buyNow: '지금 구매',
             subscribe: '구독하기'
+        },
+        donate: {
+            text: '— 또는 사이트를 지원하기 위해 기부해주세요! —'
         }
     },
     success: {

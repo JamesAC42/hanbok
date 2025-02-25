@@ -89,6 +89,22 @@
   }
 }
 
+.kofi {
+  margin-top: 5rem;
+  width:100%;
+  .kofiText {
+    margin-bottom: 1rem;
+    text-align:center;
+    font-family:var(--font-display);
+    font-size:1.2rem;
+  }
+  a {
+    margin:0 auto;
+    width:fit-content;
+    display:block;
+  }
+}
+
 .optionCard h3 {
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
