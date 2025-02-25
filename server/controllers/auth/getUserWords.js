@@ -24,8 +24,7 @@ const getUserWords = async (req, res) => {
         // Build query with language filter
         const query = { userId };
         if (originalLanguage) query.originalLanguage = originalLanguage;
-        if (translationLanguage) query.translationLanguage = translationLanguage;
-
+        
         const totalCount = await db.collection('words').countDocuments(query);
 
         const words = await db.collection('words')
