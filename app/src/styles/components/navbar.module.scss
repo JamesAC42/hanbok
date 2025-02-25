@@ -18,8 +18,13 @@
     a, .navBarItemIcon {
         text-decoration: none;
         color:inherit;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         svg {
-            transform:translateY(0.1rem) scale(2);
+            transform:scale(2);
         }
     }
 }
