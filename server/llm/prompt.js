@@ -58,8 +58,9 @@ For valid input:
     },
     "components": [
       {
-        "text": "(IMPORTANT) component as it appears in original ${SupportedLanguages[originalLanguage]} input",
+        "text": "(IMPORTANT) component as it appears in original ${SupportedLanguages[originalLanguage]} input. SKIP PARTICLES. THEY ARE TO BE INCLUDED IN THEIR RESPECTIVE COMPONENT",
         "dictionary_form": "(IMPORTANT) base dictionary form in ${SupportedLanguages[originalLanguage]}",
+        ${originalLanguage === 'ja' ? '"reading": "(IMPORTANT) for Japanese words only: hiragana/katakana reading showing proper on/kunyomi pronunciation based on context",' : originalLanguage === 'zh' ? '"reading": "(IMPORTANT) for Chinese words only: pinyin with proper tone diacritical marks",' : ''}
         "type": "(IMPORTANT) grammatical type in ENGLISH (verb/noun/particle/etc)",
         "type_translated": "(IMPORTANT) grammatical type in ${SupportedLanguages[translationLanguage]}",
         "meaning": {
@@ -96,6 +97,7 @@ For valid input:
         "examples": [
           {
             "original": "example in ${SupportedLanguages[originalLanguage]}",
+            ${originalLanguage === 'ja' ? '"reading": "(IMPORTANT) for Japanese words only: hiragana/katakana reading showing proper on/kunyomi pronunciation based on context",' : originalLanguage === 'zh' ? '"reading": "(IMPORTANT) for Chinese words only: pinyin with proper tone diacritical marks",' : ''}
             "translation": "translation in ${SupportedLanguages[translationLanguage]}"
           }
         ]
@@ -103,7 +105,8 @@ For valid input:
     ],
     "variants": {
       "[single word for formality level (IN ${SupportedLanguages[translationLanguage]} ! important to be in correct language)]": {
-        "text": "variant in ${SupportedLanguages[originalLanguage]}",
+        "text": "variant in ${SupportedLanguages[originalLanguage]} ${originalLanguage === 'ko' ? '(IMPORTANT: INCLUDE SPACES BETWEEN WORDS)' : ''}",
+         ${originalLanguage === 'ja' ? '"reading": "(IMPORTANT) for Japanese words only: hiragana/katakana reading showing proper on/kunyomi pronunciation based on context",' : originalLanguage === 'zh' ? '"reading": "(IMPORTANT) for Chinese words only: pinyin with proper tone diacritical marks",' : ''}
         "when_to_use": "explanation in ${SupportedLanguages[translationLanguage]}"
       }
         ...
@@ -144,6 +147,10 @@ Important notes for the response:
 8. The combined text of the components must exactly match the original input.
 9. It is EXTREMELY important that the text and dictionary_form fields are populated for every single component.
 10. When constructing components, include both words of a compound noun in a single component (e.g., 버스 타임 should be a single component, not two).
+11. DO NOT INCLUDE PUNCTUATION IN THE COMPONENTS.
+
+${originalLanguage === 'ja' ? 'Important note for Japanese analysis:\n1. Always include the reading field for each component with the proper hiragana/katakana showing on/kunyomi reading based on context.\n2. The reading should reflect the actual pronunciation in the given context, not just the dictionary form reading.\n' : ''}
+${originalLanguage === 'zh' ? 'Important note for Chinese analysis:\n1. Always include the reading field for each component with the correct pinyin including proper tone marks.\n2. Ensure tone marks are accurate and reflect the pronunciation in context.\n' : ''}
 
 ${SupportedLanguages[originalLanguage]} text to analyze: `;
 

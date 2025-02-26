@@ -7,6 +7,7 @@ import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import { MaterialSymbolsArrowsMoreDownRounded } from '@/components/icons/DownLeft';
 import Link from 'next/link';
+import { romanize } from '@romanize/korean';
 
 import styles from '@/styles/components/sentenceanalyzer/wordslist.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
@@ -27,11 +28,29 @@ const getCleanedType = (wordType) => {
     return wordType.replaceAll(' ', '_').toLowerCase();
 };
 
+const getDisplayReading = (word, language) => {
+    let reading = null;
+    if(language === 'ko') {
+        reading = romanize(word.originalWord);
+    } else if(word.reading) {
+        reading = word.reading;
+    }
+    if(reading) {
+        return (
+            <span className={styles.wordReading}>
+                ({reading})
+            </span>
+        )
+    }
+    return null;
+}
+
 // Add this before the WordItem component
 const TOOLTIP_SHOWN_KEY = 'word_add_tooltip_shown';
 
 const WordItem = ({ 
     word, 
+    language,
     savedWords, 
     toggleWordInLibrary, 
     showRelated = false, 
@@ -78,7 +97,10 @@ const WordItem = ({
                 </div>
             </div>
             <span className={styles.wordDictionary}>{word.originalWord}</span>
-            {word.translatedWord && ` - ${word.translatedWord}`}
+            {
+                getDisplayReading(word, language)
+            }
+            {word.translatedWord && ` ${word.translatedWord}`}
             {type && (
                 <span className={styles.wordListItemType}>
                     ({getDisplayType(type)})
@@ -99,10 +121,10 @@ const WordItem = ({
     );
 };
 
-const WordsList = ({ analysis }) => {
+const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
     const { user, isLoading, isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
-    const { t, language, nativeLanguage } = useLanguage();
+    const { t } = useLanguage();
     const [savedWords, setSavedWords] = useState(new Set());
     const [isSavedWordsLoading, setIsSavedWordsLoading] = useState(true);
     const [expandedWord, setExpandedWord] = useState(null);
@@ -126,7 +148,7 @@ const WordsList = ({ analysis }) => {
 
             try {
                 setIsSavedWordsLoading(true);
-                const data = await checkSavedWords(uniqueWords, language);
+                const data = await checkSavedWords(uniqueWords, originalLanguage);
                 if (data.success) {
                     setSavedWords(new Set(data.savedWords));
                 }
@@ -170,7 +192,7 @@ const WordsList = ({ analysis }) => {
             if (alreadySaved) {
                 await removeWord({
                     originalWord: word.originalWord,
-                    originalLanguage: language
+                    originalLanguage: originalLanguage
                 });
                 setSavedWords(prev => {
                     const updated = new Set(prev);
@@ -181,8 +203,8 @@ const WordsList = ({ analysis }) => {
                 const addResult = await addWord({
                     originalWord: word.originalWord,
                     translatedWord: word.translatedWord,
-                    originalLanguage: language,
-                    translationLanguage: nativeLanguage
+                    originalLanguage: originalLanguage,
+                    translationLanguage: translationLanguage
                 });
                 if (addResult.reachedLimit) {
                     showLimitReachedPopup('words', {
@@ -222,7 +244,7 @@ const WordsList = ({ analysis }) => {
         }
         setLoadingRelated(true);
         try {
-            const data = await fetchWordRelations(word.originalWord, language, nativeLanguage);
+            const data = await fetchWordRelations(word.originalWord, originalLanguage, translationLanguage);
             if (data.success) {
                 setRelatedWordsCache(prev => ({
                     ...prev,
@@ -235,7 +257,7 @@ const WordsList = ({ analysis }) => {
                     ...data.antonyms.map(ant => ant.originalWord)
                 ];
                 if (allRelated.length > 0) {
-                    const checkRes = await checkSavedWords(allRelated, language);
+                    const checkRes = await checkSavedWords(allRelated, originalLanguage);
                     if (checkRes.success && checkRes.savedWords) {
                         setSavedWords(prev => {
                             const updated = new Set(prev);
@@ -276,8 +298,10 @@ const WordsList = ({ analysis }) => {
                                     {relatedWords.synonyms.map((syn, index) => (
                                         <WordItem 
                                             key={`syn-${index}`}
+                                            language={originalLanguage}
                                             word={{
                                                 originalWord: syn.originalWord,
+                                                reading: syn.reading,
                                                 translatedWord: syn.translatedWord
                                             }}
                                             savedWords={savedWords}
@@ -293,8 +317,10 @@ const WordsList = ({ analysis }) => {
                                     {relatedWords.antonyms.map((ant, index) => (
                                         <WordItem 
                                             key={`ant-${index}`}
+                                            language={originalLanguage}
                                             word={{
                                                 originalWord: ant.originalWord,
+                                                reading: ant.reading,
                                                 translatedWord: ant.translatedWord
                                             }}
                                             savedWords={savedWords}
@@ -333,14 +359,16 @@ const WordsList = ({ analysis }) => {
             const formattedWord = {
                 originalWord: word.dictionary_form,
                 translatedWord: word.meaning?.description || '',
-                originalLanguage: language,
-                translationLanguage: nativeLanguage
+                originalLanguage: originalLanguage,
+                translationLanguage: translationLanguage,
+                reading: word.reading || ''
             };
 
             wordList.push(
                 <div key={word.text + index}>
                     <WordItem 
                         word={formattedWord}
+                        language={originalLanguage}
                         savedWords={savedWords}
                         toggleWordInLibrary={toggleWordInLibrary}
                         showRelated={true}

@@ -14,6 +14,8 @@ import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 
 const Analysis = ({
     analysis,
+    originalLanguage,
+    translationLanguage,
     voice1,
     voice2,
     showTransition,
@@ -66,23 +68,32 @@ const Analysis = ({
 
             <Breakdown 
                 analysis={analysis} 
+                language={originalLanguage}
                 setWordInfo={setWordInfo}
                 resetLockedWord={showTransition}
                 shouldAnimate={shouldAnimate} />
 
             <WordInfo 
                 wordInfo={wordInfo}
+                language={originalLanguage}
                 shouldAnimate={shouldAnimate} />
 
             <SentenceNotes analysis={analysis} />
 
             <CulturalNotes analysis={analysis} />
 
-            <Variants analysis={analysis} />
+            <Variants 
+                analysis={analysis} 
+                language={originalLanguage} />
 
-            <WordsList analysis={analysis} />
+            <WordsList 
+                analysis={analysis} 
+                originalLanguage={originalLanguage} 
+                translationLanguage={translationLanguage} />
 
-            <GrammarPoints analysis={analysis} />
+            <GrammarPoints 
+                analysis={analysis} 
+                language={originalLanguage} />
         
         </div>
     )

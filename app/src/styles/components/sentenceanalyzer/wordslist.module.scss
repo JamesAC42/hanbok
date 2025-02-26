@@ -19,7 +19,9 @@
 		display: flex;
 		font-size:1.3rem;
 		align-items:center;
-
+        white-space: nowrap;
+        flex-wrap:wrap;
+        
 		.wordListItemActions {
 			.wordListItemAction {
 				cursor:pointer;
@@ -44,7 +46,17 @@
 
 		span.wordDictionary {
 			font-weight:bold;
+            white-space: nowrap;
 		}
+
+        span.wordReading {
+            font-size:0.9rem;
+            color:#414141;
+            margin-left:0.5rem;
+            margin-right:0.5rem;
+            white-space: nowrap;
+        }
+
 		span.wordListItemType {
 
 			display:block;
@@ -53,8 +65,11 @@
 			font-size:0.8rem;
 			transform:translateY(0.1rem);
 			margin-left:0.5rem;
+            margin-right:1rem;
+            white-space: nowrap;
 		}
 	}
+
     @media screen and (max-width:725px) {
         margin-top:2rem;
         .wordsListHeader {
@@ -69,8 +84,9 @@
 			.wordListItemActions {
 				margin-right:0.8rem;
 			}
-			.wordDictionary {
-				margin-right:1rem;
+			span.wordReading {
+				font-size:0.8rem;
+				margin-right:0.5rem;
 			}
 			span.wordListItemType {
 				font-size:0.8rem;
@@ -92,6 +108,7 @@
     margin-left: auto;
     transition: all 0.2s ease-in-out;
 	border-radius:2rem;
+    white-space: nowrap;
 
     &:hover {
 		background:#f1f1f1;
@@ -100,11 +117,11 @@
 }
 
 .relatedWordsContainer {
-    margin-left: 1rem;
+    margin-left: 0.2rem;
     padding: 0.25rem 0.5rem;
     border-left: 2px solid #ddd;
     margin-top: 0.25rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 .relatedWordsContainer .wordListItem {

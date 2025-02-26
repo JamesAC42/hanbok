@@ -169,6 +169,9 @@ const collections = {
           translatedWord: {
             bsonType: "string"
           },
+          reading: {
+            bsonType: ["string", "null"]
+          },
           dateSaved: {
             bsonType: "date"
           }

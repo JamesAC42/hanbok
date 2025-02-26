@@ -17,9 +17,11 @@ import { resources } from '@/translations';
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
     const searchParams = useSearchParams();
     const { loadSentence, isAuthenticated } = useAuth();
-    const { t, language, supportedLanguages } = useLanguage();
+    const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
     
     const [analysis, setAnalysis] = useState(null);
+    const [originalLanguage, setOriginalLanguage] = useState(null);
+    const [translationLanguage, setTranslationLanguage] = useState(null);
     const [voice1, setVoice1] = useState(null);
     const [voice2, setVoice2] = useState(null);  
     const [showTransition, setShowTransition] = useState(false);
@@ -31,6 +33,12 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             window.setInputText(sentence);
         }
     };
+
+    const handleNewAnalysis = (a) => {
+        setAnalysis(a);
+        setOriginalLanguage(language);
+        setTranslationLanguage(nativeLanguage);
+    }
 
     useEffect(() => {
         // First check for prop sentenceId (from /sentence/[id] route)
@@ -46,6 +54,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         const result = await loadSentence(id);
         if (result.success) {
             setAnalysis(result.sentence.analysis);
+            setOriginalLanguage(result.sentence.originalLanguage);
+            setTranslationLanguage(result.sentence.translationLanguage);
             setVoice1(result.sentence.voice1Key);
             setVoice2(result.sentence.voice2Key);
             setShowTransition(false); // Reset transition when loading saved sentence
@@ -134,7 +144,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
 
             <SentenceForm
                 analysis={analysis}
-                setAnalysis={setAnalysis}
+                setAnalysis={handleNewAnalysis}
                 setVoice1={setVoice1}
                 setVoice2={setVoice2}
                 setTransition={setShowTransition}
@@ -163,6 +173,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 analysis={analysis} 
                 voice1={voice1} 
                 voice2={voice2}
+                originalLanguage={originalLanguage}
+                translationLanguage={translationLanguage}
                 showTransition={showTransition}
                 sentenceId={propSentenceId || searchParams.get('id')} />
             }

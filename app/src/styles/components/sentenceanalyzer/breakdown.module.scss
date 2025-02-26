@@ -33,7 +33,7 @@
 }
 
 .breakdown {
-	margin-top: 1rem;
+	margin-top: 3rem;
 	font-size: 2.3rem;
 	display: flex;
 	justify-content: center;
@@ -46,15 +46,26 @@
 	.breakdownContent {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
+		gap: 1rem;
 		justify-content: center;
 		align-items: center;
+		row-gap:2rem;
 	}
 
 	.sentenceItemContainer {
 		display: flex;
 		gap: 0.5rem;
 		position: relative;
+
+		.pronunciation {
+			position:absolute;
+			top:0;
+			left:50%;
+			transform:translate(-50%,-100%);
+			font-size:1rem;
+			color:#494949;
+			white-space: nowrap;
+		}
 	}
 
 	.sentenceItem {
@@ -110,12 +121,13 @@
 
     @media screen and (max-width:725px) {
 
-		margin-top: 2.5rem;
+		margin-top: 3rem;
 		margin-bottom:1rem;
 		font-size: 1.8rem;
 		padding: 0.5rem;
 		.breakdownContent {
-			gap: 0.1rem;
+			gap: 0.6rem;
+			row-gap:2.5rem;
 		}
 	
 		.sentenceItemContainer {

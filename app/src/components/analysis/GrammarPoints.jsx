@@ -3,8 +3,9 @@ import styles from "@/styles/components/sentenceanalyzer/grammarpoints.module.sc
 import { MaterialSymbolsLightKidStar } from '@/components/icons/StarFilled';
 import { MaterialSymbolsLightKidStarOutline } from '@/components/icons/StarOutline';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { romanize } from '@romanize/korean';
 
-const GrammarPoints = ({analysis}) => {
+const GrammarPoints = ({analysis, language}) => {
     const { t } = useLanguage();
     
     const renderLessonDifficulty = (difficulty) => {
@@ -29,6 +30,22 @@ const GrammarPoints = ({analysis}) => {
             }
         }
         return stars;
+    }
+
+    const renderPronunciation = (example) => {
+        let p = example.reading;
+        if(language === "ko") {
+            p = romanize(example.original);
+        }
+        
+        if(p) {
+            return (
+                <div className={styles.pronunciation}>
+                    {p}
+                </div>
+            )
+        }
+        return null;
     }
 
     const renderGrammarList = () => {
@@ -65,6 +82,8 @@ const GrammarPoints = ({analysis}) => {
                                     >
                                         <div className={styles.grammarListItemExampleKorean}>
                                             {example.original}
+
+                                            {renderPronunciation(example)}
                                         </div>
                                         <div className={styles.grammarListItemExampleEnglish}>
                                             {example.translation}

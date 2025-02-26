@@ -3,8 +3,10 @@ import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
 import styles from '@/styles/components/sentenceanalyzer/wordinfo.module.scss';
 import Conjugation from './Conjugation';
 import { useLanguage } from '@/contexts/LanguageContext';
+import renderPronunciation from '@/lib/pronunciation';
+import { romanize } from '@romanize/korean';
 
-const WordInfo = ({wordInfo, shouldAnimate}) => {
+const WordInfo = ({wordInfo, shouldAnimate, language}) => {
     const { t } = useLanguage();
     
     const getCleanedType = (wordType) => {
@@ -19,6 +21,20 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
         return '';
       }
       return wordType.replaceAll('_', ' ').toUpperCase();
+    }
+
+    const pronunciation = () => {
+        let text = wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form
+        let p = null;
+        if(language === 'ko') {
+            p = romanize(text);
+        } else {
+            p = renderPronunciation(wordInfo, language);
+        }
+        if(p) {
+            return <span className={styles.pronunciation}>({p})</span>
+        }
+        return null;
     }
 
     return(
@@ -45,6 +61,7 @@ const WordInfo = ({wordInfo, shouldAnimate}) => {
                 
                 <div className={styles.dictionaryForm}>
                     {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
+                    {pronunciation()}
                 </div>
 
                 <div className={styles.wordInfoContent}>

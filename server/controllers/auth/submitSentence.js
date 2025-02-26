@@ -118,6 +118,8 @@ const submitSentence = async (req, res) => {
 
         res.json({ 
             message: parsedResponse,
+            originalLanguage: originalLanguage,
+            translationLanguage: translationLanguage,
             sentenceId: sentenceDoc.sentenceId
         });
     } catch (error) {

@@ -99,10 +99,22 @@
 			border-bottom:1px solid #999999;
 			padding-bottom:0.5rem;
 			margin-bottom:0.5rem;
+
+			span.pronunciation {
+				font-size:1.5rem;
+				font-family:var(--font-kr-sans);
+				-webkit-text-stroke: 1px rgb(133, 133, 133);
+				font-weight:normal;
+				margin-left:0.5rem;
+			}
 		
 			@media screen and (max-width:725px) {
 				margin-left:0.2rem;
 				font-size:2.4rem;
+
+				span.pronunciation {
+					font-size:1rem;
+				}
 			}
 		}
 

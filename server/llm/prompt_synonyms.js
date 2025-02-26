@@ -23,12 +23,16 @@ Response format must be exactly this structure:
     {
       "original": "${SupportedLanguages[originalLanguage]} synonym",
       "translation": "${SupportedLanguages[translationLanguage]} translation"
+      ${originalLanguage === 'ja' ? '"reading": "hiragana/katakana reading showing on/kunyomi pronunciation"' 
+        : originalLanguage === 'zh' ? '"reading": "pinyin with tone marks"' : ''}
     }
   ],
   "antonyms": [
     {
       "original": "${SupportedLanguages[originalLanguage]} antonym",
       "translation": "${SupportedLanguages[translationLanguage]} translation"
+      ${originalLanguage === 'ja' ? '"reading": "hiragana/katakana reading showing on/kunyomi pronunciation"' 
+        : originalLanguage === 'zh' ? '"reading": "pinyin with tone marks"' : ''}
     }
   ]
 }
@@ -41,6 +45,7 @@ REMEMBER:
 5. Must be valid JSON that can be parsed with JSON.parse()
 6. Include error object only if isValid is false
 7. Include synonyms and antonyms arrays only if isValid is true
+${originalLanguage === 'ja' ? '\n8. For Japanese words, always include the reading field with the proper hiragana/katakana on/kunyomi reading based on context' : originalLanguage === 'zh' ? '\n8. For Chinese words, always include the reading field with the correct pinyin including proper tone marks' : ''}
 
 ${SupportedLanguages[originalLanguage]} word to analyze: `;
 

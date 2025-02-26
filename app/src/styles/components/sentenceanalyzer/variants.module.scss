@@ -32,6 +32,14 @@
 
             max-width:50%;
 
+            .variantText.fontZh {
+                font-family: var(--font-sc-serif);
+            }
+
+            .variantText.fontJp {
+                font-family: var(--font-jp-serif);
+            }
+
             .variantType {
                 position:absolute;
                 top:0;
@@ -44,6 +52,13 @@
                 color:#000000;
                 background:#fff;
                 border:1px solid #28369e;
+            }
+
+            .variantReading {
+                border-top:1px solid #767676;
+                font-size:1.2rem;
+                padding:0.5rem 0;
+                margin-top:0.5rem;
             }
         }
         

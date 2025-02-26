@@ -51,14 +51,16 @@ const getWordRelations = async (req, res) => {
             originalWord: syn.original,
             translatedWord: syn.translation,
             originalLanguage,
-            translationLanguage
+            translationLanguage,
+            reading: syn.reading
         }));
 
         const transformedAntonyms = parsedResponse.antonyms.map(ant => ({
             originalWord: ant.original,
             translatedWord: ant.translation,
             originalLanguage,
-            translationLanguage
+            translationLanguage,
+            reading: ant.reading
         }));
 
         res.json({

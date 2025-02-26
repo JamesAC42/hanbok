@@ -1,9 +1,11 @@
 'use client';
 import { useState, useEffect } from 'react';
 import styles from '@/styles/components/sentenceanalyzer/breakdown.module.scss';
+import renderPronunciation from '@/lib/pronunciation';
 
 const Breakdown = ({ 
 	analysis,
+	language,
 	setWordInfo,
 	resetLockedWord
 }) => {
@@ -39,6 +41,7 @@ const Breakdown = ({
 	}
   
 	const renderParticles = (item) => {
+		if(language === "zh" || language === "ja" || language === "ko") return null;
 		return item.grammar?.particles?.map((particle, index) => (
 			<div 
 				key={index}
@@ -81,6 +84,11 @@ const Breakdown = ({
 				className={styles.sentenceItemContainer}
 				onMouseLeave={() => handleWordInfoLeave()}
 			>
+				<div className={styles.pronunciation}>
+					{
+						renderPronunciation(item, language)
+					}
+				</div>
 				<div
 				className={`${styles.sentenceItem} ${
 					isWhitespace ? styles.whitespace : ""
