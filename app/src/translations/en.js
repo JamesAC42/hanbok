@@ -11,7 +11,11 @@ export const en = {
         japanese: 'Japanese',
         spanish: 'Spanish',
         italian: 'Italian',
-        french: 'French'
+        french: 'French',
+        german: 'German',
+        dutch: 'Dutch',
+        russian: 'Russian',
+        turkish: 'Turkish'
     },
     about: {
         title: 'About',
@@ -39,6 +43,10 @@ export const en = {
             text: 'Questions and feedback'
         },
         updates: [
+            {
+                date: '2025-02-26',
+                content: 'Added support for German, Dutch, Russian, and Turkish languages.'
+            },
             {
                 date: '2025-02-23',
                 content: 'Added support for Japanese, Chinese, Spanish, Italian, and French languages.'

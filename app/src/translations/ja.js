@@ -11,7 +11,11 @@ export const ja = {
         japanese: '日本語',
         spanish: 'スペイン語',
         italian: 'イタリア語',
-        french: 'フランス語'
+        french: 'フランス語',
+        german: 'ドイツ語',
+        dutch: 'オランダ語',
+        russian: 'ロシア語',
+        turkish: 'トルコ語'
     },
     about: {
         title: '概要',
@@ -54,6 +58,10 @@ export const ja = {
             {
                 date: '2025-02-16',
                 content: '初期ベータ版リリース'
+            },
+            {
+                date: '2025-02-26',
+                content: 'ドイツ語、オランダ語、ロシア語、トルコ語のサポートを追加しました。'
             }
         ],
         upcomingFeaturesList: [

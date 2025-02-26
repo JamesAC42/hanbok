@@ -100,7 +100,9 @@ const WordItem = ({
             {
                 getDisplayReading(word, language)
             }
-            {word.translatedWord && ` ${word.translatedWord}`}
+            <span className={styles.wordListItemTranslation}>
+                {word.translatedWord && ` ${word.translatedWord}`}
+            </span>
             {type && (
                 <span className={styles.wordListItemType}>
                     ({getDisplayType(type)})

@@ -89,7 +89,11 @@ const ChangeLanguageButton = ({ native = false }) => {
                             {
                                 availableLanguages.map((lang) => (
                                     <div className={styles.pickerItem} key={lang}>
-                                        <button onClick={() => handleLanguageChange(lang)}>
+                                        <button 
+                                            onClick={() => handleLanguageChange(lang)}
+                                            title={t(`languages.${supportedLanguages[lang]}`)}
+                                            className={styles.languagePickerButton}
+                                        >
                                             {getIcon(lang)}
                                         </button>
                                     </div>

@@ -11,6 +11,10 @@ import { EmojioneFlagForItaly } from '../components/icons/ItalianCircle';
 import { EmojioneFlagForFrance } from '../components/icons/FrenchCircle';
 import { EmojioneFlagForUnitedKingdom } from '../components/icons/EnglishCircle';
 import { EmojioneFlagForSouthKorea } from '../components/icons/KoreaCircle';
+import { EmojioneFlagForGermany } from '../components/icons/GermanCircle';
+import { EmojioneFlagForNetherlands } from '../components/icons/DutchCircle';
+import { EmojioneFlagForRussia } from '../components/icons/RussianCircle';
+import { EmojioneFlagForTurkey } from '../components/icons/TurkishCircle';
 
 export function LanguageProvider({ children }) {
     const [language, setLanguage] = useState('ko');
@@ -63,6 +67,14 @@ export function LanguageProvider({ children }) {
                 return <EmojioneFlagForItaly />;
             case 'fr':
                 return <EmojioneFlagForFrance />;
+            case 'de':
+                return <EmojioneFlagForGermany />;
+            case 'nl':
+                return <EmojioneFlagForNetherlands />;
+            case 'ru':
+                return <EmojioneFlagForRussia />;
+            case 'tr':
+                return <EmojioneFlagForTurkey />;
         }
     }
 

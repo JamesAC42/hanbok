@@ -293,6 +293,8 @@
   display: flex;
   align-items: center;
 
+  z-index:10000;
+
   .languageList {
     margin:1rem;
     display:flex;

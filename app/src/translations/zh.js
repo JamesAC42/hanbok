@@ -11,7 +11,11 @@ export const zh = {
         japanese: '日语',
         spanish: '西班牙语',
         italian: '意大利语',
-        french: '法语'
+        french: '法语',
+        german: '德语',
+        dutch: '荷兰语',
+        russian: '俄语',
+        turkish: '土耳其语'
     },
     about: {
         title: '关于',
@@ -54,6 +58,10 @@ export const zh = {
             {
                 date: '2025-02-16',
                 content: '初始测试版发布'
+            },
+            {
+                date: '2025-02-26',
+                content: '添加了德语、荷兰语、俄语和土耳其语支持。'
             }
         ],
         upcomingFeaturesList: [

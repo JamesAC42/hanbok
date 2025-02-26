@@ -11,7 +11,11 @@ export const fr = {
         japanese: 'Japonais',
         spanish: 'Espagnol',
         italian: 'Italien',
-        french: 'Français'
+        french: 'Français',
+        german: 'Allemand',
+        dutch: 'Néerlandais',
+        russian: 'Russe',
+        turkish: 'Turc'
     },
     about: {
         title: 'À propos',
@@ -54,6 +58,10 @@ export const fr = {
             {
                 date: '2025-02-16',
                 content: 'Sortie initiale de la version bêta'
+            },
+            {
+                date: '2025-02-26',
+                content: 'Ajout du support pour l\'allemand, le néerlandais, le russe et le turc.'
             }
         ],
         upcomingFeaturesList: [

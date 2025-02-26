@@ -11,7 +11,11 @@ export const ko = {
         japanese: '일본어',
         spanish: '스페인어',
         italian: '이탈리아어',
-        french: '프랑스어'
+        french: '프랑스어',
+        german: '독일어',
+        dutch: '네덜란드어',
+        russian: '러시아어',
+        turkish: '터키어'
     },
     about: {
         title: '소개',
@@ -54,6 +58,10 @@ export const ko = {
             {
                 date: '2025-02-16',
                 content: '초기 베타 버전 출시'
+            },
+            {
+                date: '2025-02-26',
+                content: '독일어, 네덜란드어, 러시아어, 터키어 지원이 추가되었습니다.'
             }
         ],
         upcomingFeaturesList: [
