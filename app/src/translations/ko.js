@@ -72,7 +72,9 @@ export const ko = {
             '문장 공유와 토론을 위한 커뮤니티 기능',
             '더 많은 언어!',
             '프리미엄 사용자를 위한 더 많은 기능!'
-        ]
+        ],
+        supportedLanguages: '지원되는 언어',
+        languageSupportDescription: '한복은 이제 여러 언어를 지원하여 다음 언어로 문장을 분석하고 학습할 수 있습니다:',
     },
     feedback: {
         title: '피드백 포럼',

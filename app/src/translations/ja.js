@@ -72,7 +72,9 @@ export const ja = {
             '文章の共有と討論のためのコミュニティ機能',
             'より多くの言語！',
             'プレミアムユーザー向けの追加機能！'
-        ]
+        ],
+        supportedLanguages: '対応言語',
+        languageSupportDescription: 'hanbokは現在複数の言語をサポートしており、以下の言語で文章を分析し学習することができます:'
     },
     feedback: {
         title: 'フィードバックフォーラム',

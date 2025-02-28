@@ -72,7 +72,9 @@ export const tr = {
             'Cümleleri paylaşmak ve tartışmak için topluluk özellikleri',
             'Daha fazla dil!',
             'Premium kullanıcılar için daha fazla özellik!'
-        ]
+        ],
+        supportedLanguages: 'Desteklenen Diller',
+        languageSupportDescription: 'Hanbok artık birden fazla dili destekliyor, aşağıdaki dillerden herhangi birinde cümleleri analiz etmenizi ve öğrenmenizi sağlıyor:'
     },
     feedback: {
         title: 'Geri Bildirim Forumu',

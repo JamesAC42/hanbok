@@ -72,7 +72,9 @@ export const zh = {
             '用于分享和讨论句子的社区功能',
             '更多语言！',
             '更多高级用户功能！'
-        ]
+        ],
+        supportedLanguages: '支持的语言',
+        languageSupportDescription: 'hanbok现在支持多种语言，让您可以分析和学习以下任何语言的句子:'
     },
     feedback: {
         title: '反馈论坛',

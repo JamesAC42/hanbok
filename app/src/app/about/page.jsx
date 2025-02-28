@@ -42,6 +42,23 @@ const About = () => {
                         <h2>{t('about.whatIsHanbok')}</h2>
                         <p>{t('about.description')}</p>
 
+                        <div className={aboutStyles.languageSupport}>
+                            <h3>{t('about.supportedLanguages')}</h3>
+                            <p>{t('about.languageSupportDescription')}</p>
+                            <ul className={aboutStyles.languageList}>
+                                <li>Korean (한국어)</li>
+                                <li>Chinese (中文)</li>
+                                <li>Japanese (日本語)</li>
+                                <li>Spanish (Español)</li>
+                                <li>Italian (Italiano)</li>
+                                <li>French (Français)</li>
+                                <li>German (Deutsch)</li>
+                                <li>Dutch (Nederlands)</li>
+                                <li>Russian (Русский)</li>
+                                <li>Turkish (Türkçe)</li>
+                            </ul>
+                        </div>
+
                         <div className={aboutStyles.screenshot}>
                             <Image src="/images/screenshots/sentence.png" alt={t('about.screenshotAlt')} width={1243} height={869} />
                             <p>{t('about.exampleAnalysis')}</p>

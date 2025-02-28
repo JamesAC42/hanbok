@@ -72,7 +72,9 @@ export const nl = {
             'Communityfuncties voor het delen en bespreken van zinnen',
             'Meer talen!',
             'Meer functies voor premiumgebruikers!'
-        ]
+        ],
+        supportedLanguages: 'Ondersteunde Talen',
+        languageSupportDescription: 'Hanbok ondersteunt nu meerdere talen, waardoor je zinnen kunt analyseren en leren in elk van de volgende talen:'
     },
     feedback: {
         title: 'Feedbackforum',

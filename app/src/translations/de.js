@@ -72,7 +72,9 @@ export const de = {
             'Community-Funktionen zum Teilen und Diskutieren von Sätzen',
             'Mehr Sprachen!',
             'Mehr Funktionen für Premium-Nutzer!'
-        ]
+        ],
+        supportedLanguages: 'Unterstützte Sprachen',
+        languageSupportDescription: 'Hanbok unterstützt jetzt mehrere Sprachen, sodass Sie Sätze in einer der folgenden Sprachen analysieren und lernen können:'
     },
     feedback: {
         title: 'Feedback-Forum',

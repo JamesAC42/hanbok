@@ -72,7 +72,9 @@ export const en = {
             'Community features for sharing and discussing sentences',
             'More languages!',
             'More features for premium users!'
-        ]
+        ],
+        supportedLanguages: 'Supported Languages',
+        languageSupportDescription: 'Hanbok now supports multiple languages, allowing you to analyze and learn sentences in any of the following languages:'
     },
     feedback: {
         title: 'Feedback Forum',

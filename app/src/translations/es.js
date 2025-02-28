@@ -72,7 +72,9 @@ export const es = {
             'Funciones comunitarias para compartir y discutir oraciones',
             '¡Más idiomas!',
             '¡Más funciones para usuarios premium!'
-        ]
+        ],
+        supportedLanguages: 'Idiomas Compatibles',
+        languageSupportDescription: 'Hanbok ahora admite varios idiomas, lo que le permite analizar y aprender oraciones en cualquiera de los siguientes idiomas:'
     },
     feedback: {
         title: 'Foro de Comentarios',

@@ -245,4 +245,32 @@
       }
     }
   }
+}
+
+.languageSupport {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+}
+
+.languageList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: 0.5rem;
+  margin-top: 1rem;
+  
+  li {
+    padding: 0.5rem;
+    background-color: #ffffff;
+    border-radius: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    list-style: none;
+  }
 } 

@@ -7,8 +7,9 @@ import Script from 'next/script';
 import { PopupProvider } from '@/contexts/PopupContext';
 
 export const metadata = {
-  title: "hanbok",
-  description: "korean learning tool",
+  title: "Hanbok - Multi-Language Learning Tool",
+  description: "Learn Korean, Chinese, Japanese, Spanish, and more languages with AI-powered sentence analysis, vocabulary tools, and cultural insights.",
+  keywords: "language learning, Korean, Chinese, Japanese, Spanish, Italian, French, German, Dutch, Russian, Turkish, vocabulary, grammar, translation",
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -19,7 +20,29 @@ export const metadata = {
     ],
     shortcut: ['/favicon.ico'],
   },
-  manifest: '/manifest.json'
+  manifest: '/manifest.json',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://hanbokstudy.com/',
+    title: 'Hanbok - Multi-Language Learning Tool',
+    description: 'Learn Korean, Chinese, Japanese, Spanish, and more languages with AI-powered sentence analysis, vocabulary tools, and cultural insights.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Hanbok Language Learning',
+      }
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Hanbok - Multi-Language Learning Tool',
+    description: 'Learn Korean, Chinese, Japanese, Spanish, and more languages with AI-powered sentence analysis, vocabulary tools, and cultural insights.',
+    images: ['/twitter-image.png'],
+    creator: '@fifltriggi'
+  }
 };
 
 export default function RootLayout({ children }) {

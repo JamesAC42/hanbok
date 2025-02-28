@@ -72,7 +72,9 @@ export const it = {
             'Funzionalità community per condividere e discutere le frasi',
             'Più lingue!',
             'Più funzionalità per gli utenti premium!'
-        ]
+        ],
+        supportedLanguages: 'Lingue Supportate',
+        languageSupportDescription: 'Hanbok ora supporta più lingue, permettendoti di analizzare e imparare frasi in una qualsiasi delle seguenti lingue:'
     },
     feedback: {
         title: 'Forum di Feedback',
