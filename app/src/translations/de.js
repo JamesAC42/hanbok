@@ -113,6 +113,7 @@ export const de = {
             unknown: 'Unbekannt'
         },
         remainingAudioGenerations: 'Verbleibende Audio-Generierungen',
+        remainingImageExtracts: 'Verbleibende Bildextraktionen',
         unlimited: 'Unbegrenzt',
         maxSavedSentences: 'Maximal gespeicherte Sätze',
         maxSavedWords: 'Maximal gespeicherte Wörter',
@@ -158,11 +159,14 @@ export const de = {
             to: 'auf',
             increaseWords: 'Erhöhen Sie das Limit der gespeicherten Wörter von',
             additionalAudio: 'Zusätzlich',
+            additionalImageExtracts: 'Zusätzlich',
             audioGenerations: 'Audio-Generierungen',
+            imageExtractions: 'Bildextraktionen',
             unlimited: {
                 sentences: 'Unbegrenzt gespeicherte Sätze',
                 words: 'Unbegrenzt gespeicherte Wörter',
                 audio: 'Unbegrenzte Audio-Generierungen',
+                images: 'Unbegrenzte Bildextraktionen',
                 insights: 'Unbegrenzte Einblicke in Wortbeziehungen'
             }
         },
@@ -207,6 +211,8 @@ export const de = {
         placeholder: 'Geben Sie einen {language} Satz ein...',
         analyze: 'Analysieren',
         analyzing: 'Analysieren...',
+        processing_image: 'Bild wird verarbeitet...',
+        text_disabled_with_image: 'Texteingabe ist deaktiviert, wenn ein Bild hochgeladen wird.',
         loading: {
             structure: 'Satzstruktur analysieren...',
             grammar: 'Grammatikpunkte identifizieren...',
@@ -221,7 +227,8 @@ export const de = {
             nonsensical: 'Diese Eingabe bildet keinen sinnvollen koreanischen Satz.',
             timeout: 'Die Anfrage hat zu lange gedauert. Bitte versuchen Sie es erneut.',
             other: 'Beim Analysieren Ihrer Eingabe ist ein Fehler aufgetreten.',
-            empty: 'Bitte geben Sie einen Satz ein.'
+            empty: 'Bitte geben Sie einen Satz ein.',
+            file_too_large: 'Bilddatei ist zu groß. Maximale Größe ist 2MB.',
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const de = {
     limitReached: {
         storageTitle: 'Speicherlimit erreicht',
         plusFeatureTitle: 'Plus-Funktion',
+        imageExtractsTitle: 'Bildextraktionslimit erreicht',
+        imageExtractsMessage: 'Sie haben alle Ihre kostenlosen Bildextraktionen für diesen Monat aufgebraucht. Aktualisieren Sie Ihr Konto, um mehr Bilder zu verarbeiten, oder sehen Sie sich die Preisoptionen an, um mehr zu kaufen.',
         relatedWordsMessage: 'Das Anzeigen verwandter Wörter ist eine Plus-Funktion. Aktualisieren Sie Ihr Konto, um Synonyme, Antonyme zu sehen und Ihren Wortschatz zu erweitern!',
         storageMessage: 'Sie haben die maximale Anzahl gespeicherter {type} für Ihren aktuellen Plan erreicht.',
         viewPricing: 'Preise anzeigen',
@@ -278,6 +287,10 @@ export const de = {
             'audio': {
                 main: 'Erstellen Sie ein kostenloses Konto, um Audio zu generieren und die native Aussprache zu hören!',
                 sub: 'Schließen Sie sich Tausenden von Koreanisch-Lernenden an, die Hanbok verwenden, um ihre Sprech- und Hörfähigkeiten zu verbessern.'
+            },
+            'image-extracts': {
+                main: 'Erstellen Sie ein kostenloses Konto, um Text aus Bildern zu extrahieren!',
+                sub: 'Kostenlose Konten erhalten 20 kostenlose Bildextraktionen, um Ihnen bei der Analyse von Text aus beliebigen Quellen zu helfen.'
             },
             'default': {
                 main: 'Erstellen Sie ein kostenloses Konto, um mit dem Speichern von {type} zu beginnen und Ihren Lernfortschritt zu verfolgen!',

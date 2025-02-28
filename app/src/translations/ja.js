@@ -113,6 +113,7 @@ export const ja = {
             unknown: '不明'
         },
         remainingAudioGenerations: '残りの音声生成回数',
+        remainingImageExtracts: '残りの画像抽出回数',
         unlimited: '無制限',
         maxSavedSentences: '保存可能な文章数',
         maxSavedWords: '保存可能な単語数',
@@ -158,11 +159,14 @@ export const ja = {
             to: 'から',
             increaseWords: '保存可能な単語数を',
             additionalAudio: '追加',
+            additionalImageExtracts: '追加',
             audioGenerations: '音声生成',
+            imageExtractions: '画像抽出',
             unlimited: {
                 sentences: '無制限の文章保存',
                 words: '無制限の単語保存',
                 audio: '無制限の音声生成',
+                images: '無制限の画像抽出',
                 insights: '無制限の単語関係インサイト'
             }
         },
@@ -207,6 +211,8 @@ export const ja = {
         placeholder: '{language}の文章を入力してください...',
         analyze: '分析',
         analyzing: '分析中...',
+        processing_image: '画像処理中...',
+        text_disabled_with_image: '画像がアップロードされている場合、テキスト入力は無効になります。',
         loading: {
             structure: '文章構造を分析中...',
             grammar: '文法ポイントを特定中...',
@@ -221,7 +227,8 @@ export const ja = {
             nonsensical: '意味のある韓国語の文章になっていません。',
             timeout: 'リクエストがタイムアウトしました。もう一度お試しください。',
             other: '入力の分析中にエラーが発生しました。',
-            empty: '文章を入力してください。'
+            empty: '文章を入力してください。',
+            file_too_large: '画像ファイルが大きすぎます。最大サイズは2MBです。',
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const ja = {
     limitReached: {
         storageTitle: 'ストレージ制限に達しました',
         plusFeatureTitle: 'プラス機能',
+        imageExtractsTitle: '画像抽出制限に達しました',
+        imageExtractsMessage: '今月の無料画像抽出をすべて使用しました。アカウントをアップグレードしてより多くの画像を処理するか、料金オプションを確認して追加購入してください。',
         relatedWordsMessage: '関連語の表示はプラス機能です。アカウントをアップグレードして、類義語、対義語を見て語彙を増やしましょう！',
         storageMessage: '現在のプランで保存できる{type}の上限に達しました。',
         viewPricing: '料金を見る',
@@ -278,6 +287,10 @@ export const ja = {
             'audio': {
                 main: '無料アカウントを作成して、音声を生成し、ネイティブの発音を聞いてみましょう！',
                 sub: 'hanbokを使ってスピーキングとリスニング力を向上させている数千人の学習者に参加しましょう。'
+            },
+            'image-extracts': {
+                main: '無料アカウントを作成して、画像からテキストを抽出しましょう！',
+                sub: '無料アカウントでは、あらゆるソースからテキストを分析するのに役立つ20回の無料画像抽出が提供されます。'
             },
             'default': {
                 main: '無料アカウントを作成して{type}の保存を開始し、学習の進捗を管理しましょう！',

@@ -11,7 +11,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const PRICE_IDS = {
     BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
     AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
-    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc'
+    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
+    IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj'
 };
 
 //test
@@ -99,12 +100,30 @@ const Pricing = () => {
                                     {t('pricing.buttons.buyNow')}
                                 </button>
                             </div>
+                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
+                                <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
+                                <h3>{t('pricing.oneTimePurchase')}</h3>
+                                <p className={pricingStyles.price}>$5</p>
+                                <ul className={pricingStyles.featuresList}>
+                                    <li>
+                                        <strong>150</strong> {t('pricing.features.imageExtractions')}
+                                    </li>
+                                </ul>
+                                <button 
+                                    className={pricingStyles.purchaseButton}
+                                    onClick={() => handlePurchase(PRICE_IDS.IMAGE_PACK)}
+                                    disabled={loading}
+                                >
+                                    {t('pricing.buttons.buyNow')}
+                                </button>
+                            </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
                                 <div className={pricingStyles.bestValue}>{t('pricing.bestValue')}</div>
                                 <h3>{t('pricing.monthlySubscription')}</h3>
                                 <p className={pricingStyles.price}>$10 {t('pricing.perMonth')}</p>
                                 <ul className={pricingStyles.featuresList}>
                                     <li>{t('pricing.features.unlimited.sentences')}</li>
+                                    <li>{t('pricing.features.unlimited.images')}</li>
                                     <li>{t('pricing.features.unlimited.words')}</li>
                                     <li>{t('pricing.features.unlimited.audio')}</li>
                                     <li>{t('pricing.features.unlimited.insights')}</li>

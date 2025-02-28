@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { OAuth2Client } = require('google-auth-library');
 const { getDb } = require('../../database');
+const polyfillData = require('../../migrations/user_polyfill');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -47,10 +48,13 @@ const login = async (req, res, redisClient) => {
                 remainingAudioGenerations: 10,
                 maxSavedSentences:30,
                 maxSavedWords:60,
-                feedbackAudioCreditRedeemed: false
+                feedbackAudioCreditRedeemed: false,
+                remainingImageExtracts: 20
             };
 
             await usersCollection.insertOne(user);
+        } else {
+            user = await polyfillData(user, db);
         }
 
         req.session.user = { userId: user.userId };
@@ -68,7 +72,8 @@ const login = async (req, res, redisClient) => {
                 remainingAudioGenerations: user.remainingAudioGenerations,
                 maxSavedSentences: user.maxSavedSentences,
                 maxSavedWords: user.maxSavedWords,
-                feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false
+                feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
+                remainingImageExtracts: user.remainingImageExtracts
             }
         });
 

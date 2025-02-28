@@ -9,7 +9,9 @@ const TextInput = ({
   className = '',
   disabled = false,
   variant = 'default',
-  maxLength = 120
+  maxLength = 120,
+  onPaste,
+  ...props
 }) => {
   return (
     <input
@@ -20,6 +22,8 @@ const TextInput = ({
       disabled={disabled}
       className={`${styles.input} ${styles[variant]} ${className}`}
       maxLength={maxLength}
+      onPaste={onPaste}
+      {...props}
     />
   );
 };

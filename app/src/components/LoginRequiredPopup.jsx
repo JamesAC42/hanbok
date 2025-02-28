@@ -7,12 +7,32 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
     const { t } = useLanguage();
 
     const getMessage = () => {
-        const messages = t('loginRequired.messages')[type] || t('loginRequired.messages.default');
-        return {
-            title: t('loginRequired.title'),
-            message: messages.main.replace('{type}', type),
-            subMessage: messages.sub
-        };
+        switch (type) {
+            case 'related-words':
+                return {
+                    title: t('loginRequired.title'),
+                    message: t('loginRequired.messages.related-words.main'),
+                    subMessage: t('loginRequired.messages.related-words.sub')
+                };
+            case 'audio':
+                return {
+                    title: t('loginRequired.title'),
+                    message: t('loginRequired.messages.audio.main'),
+                    subMessage: t('loginRequired.messages.audio.sub')
+                };
+            case 'image-extracts':
+                return {
+                    title: t('loginRequired.title'),
+                    message: t('loginRequired.messages.image-extracts.main'),
+                    subMessage: t('loginRequired.messages.image-extracts.sub')
+                };
+            default:
+                return {
+                    title: t('loginRequired.title'),
+                    message: t('loginRequired.messages.default.main').replace('{type}', type),
+                    subMessage: t('loginRequired.messages.default.sub')
+                };
+        }
     };
 
     const handleLoginClick = () => {

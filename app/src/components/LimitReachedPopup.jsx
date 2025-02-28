@@ -13,6 +13,11 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
                     title: t('limitReached.plusFeatureTitle'),
                     message: t('limitReached.relatedWordsMessage')
                 };
+            case 'image-extracts':
+                return {
+                    title: t('limitReached.imageExtractsTitle'),
+                    message: t('limitReached.imageExtractsMessage')
+                };
             default:
                 return {
                     title: t('limitReached.storageTitle'),

@@ -26,6 +26,10 @@ const collections = {
             bsonType: ["int", "null"],
             description: "Remaining audio generations available for the user"
           },
+          remainingImageExtracts: {
+            bsonType: ["int", "null"],
+            description: "Remaining image extracts available for the user"
+          },
           feedbackAudioCreditRedeemed: {
             bsonType: ["bool", "null"],
             description: "Whether user has redeemed their feedback audio credit bonus"
@@ -229,6 +233,42 @@ const collections = {
       {
         key: { feedbackId: 1 },
         name: "feedbackId_index",
+        unique: true
+      }
+    ]
+  },
+  feature_usage: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "feature", "count", "lastUsed"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "User ID who used the feature"
+          },
+          feature: {
+            bsonType: "string",
+            description: "Name of the feature being tracked (e.g., 'image_extraction')"
+          },
+          count: {
+            bsonType: "int",
+            description: "Number of times the feature has been used"
+          },
+          lastUsed: {
+            bsonType: "date",
+            description: "Timestamp of the last usage"
+          },
+          firstUsed: {
+            bsonType: "date",
+            description: "Timestamp of the first usage"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, feature: 1 },
         unique: true
       }
     ]

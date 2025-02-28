@@ -207,6 +207,14 @@ $2.50/m = 0.004 cents/prompt
 output tokens: ~1000
 $10/m = 0.01 cent/prompt
 
+gemini: 
+input- 0.10/million
+  0.000156 /prompt
+output- 0.40/million
+  0.0004 / prompt
+
+100 sentences = (0.000156 + 0.0004) * 100 = $0.05
+
 prompt synonyms: 433
 $2.50/m = 0.001 cents/prompt
 output tokens: 139

@@ -113,6 +113,7 @@ export const zh = {
             unknown: '未知'
         },
         remainingAudioGenerations: '剩余音频生成次数',
+        remainingImageExtracts: '剩余图像提取次数',
         unlimited: '无限制',
         maxSavedSentences: '最大保存句子数',
         maxSavedWords: '最大保存单词数',
@@ -158,11 +159,14 @@ export const zh = {
             to: '增加到',
             increaseWords: '将保存单词限制从',
             additionalAudio: '额外',
+            additionalImageExtracts: '额外',
             audioGenerations: '音频生成',
+            imageExtractions: '图像提取',
             unlimited: {
                 sentences: '无限保存句子',
                 words: '无限保存单词',
                 audio: '无限音频生成',
+                images: '无限图像提取',
                 insights: '无限单词关系洞察'
             }
         },
@@ -207,6 +211,8 @@ export const zh = {
         placeholder: '请输入{language}句子...',
         analyze: '分析',
         analyzing: '分析中...',
+        processing_image: '处理图像中...',
+        text_disabled_with_image: '上传图像时文本输入被禁用。',
         loading: {
             structure: '正在分析句子结构...',
             grammar: '正在识别语法点...',
@@ -221,7 +227,8 @@ export const zh = {
             nonsensical: '这不是一个有意义的韩语句子。',
             timeout: '请求超时。请重试。',
             other: '分析输入时出错。',
-            empty: '请输入句子。'
+            empty: '请输入句子。',
+            file_too_large: '图像文件太大。最大大小为2MB。',
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const zh = {
     limitReached: {
         storageTitle: '存储限制已达到',
         plusFeatureTitle: 'Plus功能',
+        imageExtractsTitle: '图像提取限制已达到',
+        imageExtractsMessage: '您已用完本月的免费图像提取次数。升级您的账户以处理更多图像，或查看价格选项购买更多。',
         relatedWordsMessage: '查看相关词是Plus功能。升级您的账户以查看同义词、反义词并扩充词汇量！',
         storageMessage: '您已达到当前计划的最大{type}保存数量。',
         viewPricing: '查看价格',
@@ -282,7 +291,11 @@ export const zh = {
             'default': {
                 main: '创建免费账户以开始保存{type}并跟踪学习进度！',
                 sub: '加入数千名使用hanbok提升语言技能的学习者。'
-            }
+            },
+            'image-extracts': {
+                main: '创建免费账户以从图像中提取文本！',
+                sub: '免费账户可获得20次免费图像提取，帮助您分析来自任何来源的文本。'
+            },
         },
         createAccount: '创建账户',
         maybeLater: '稍后再说'

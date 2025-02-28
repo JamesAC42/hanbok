@@ -113,6 +113,7 @@ export const tr = {
             unknown: 'Bilinmiyor'
         },
         remainingAudioGenerations: 'Kalan Ses Üretimleri',
+        remainingImageExtracts: 'Kalan Görüntü Çıkarımları',
         unlimited: 'Sınırsız',
         maxSavedSentences: 'Maksimum Kaydedilen Cümleler',
         maxSavedWords: 'Maksimum Kaydedilen Kelimeler',
@@ -158,11 +159,14 @@ export const tr = {
             to: 'şuraya',
             increaseWords: 'Kaydedilen kelime sınırını artırın',
             additionalAudio: 'Ek',
+            additionalImageExtracts: 'Ek',
             audioGenerations: 'ses üretimi',
+            imageExtractions: 'görüntü çıkarımı',
             unlimited: {
                 sentences: 'Sınırsız kaydedilen cümleler',
                 words: 'Sınırsız kaydedilen kelimeler',
                 audio: 'Sınırsız ses üretimi',
+                images: 'Sınırsız görüntü çıkarımı',
                 insights: 'Sınırsız kelime ilişkisi içgörüleri'
             }
         },
@@ -207,6 +211,8 @@ export const tr = {
         placeholder: '{language} cümlesi girin...',
         analyze: 'Analiz Et',
         analyzing: 'Analiz ediliyor...',
+        processing_image: 'Görüntü işleniyor...',
+        text_disabled_with_image: 'Görüntü yüklendiğinde metin girişi devre dışı bırakılır.',
         loading: {
             structure: 'Cümle yapısını analiz ediyor...',
             grammar: 'Dilbilgisi noktalarını belirliyor...',
@@ -221,7 +227,8 @@ export const tr = {
             nonsensical: 'Bu giriş anlamlı bir Korece cümle oluşturmuyor.',
             timeout: 'İstek çok uzun sürdü. Lütfen tekrar deneyin.',
             other: 'Girişinizi analiz ederken bir hata oluştu.',
-            empty: 'Lütfen bir cümle girin.'
+            empty: 'Lütfen bir cümle girin.',
+            file_too_large: 'Görüntü dosyası çok büyük. Maksimum boyut 2MB.'
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const tr = {
     limitReached: {
         storageTitle: 'Depolama Sınırına Ulaşıldı',
         plusFeatureTitle: 'Plus Özelliği',
+        imageExtractsTitle: 'Görüntü Çıkarım Sınırına Ulaşıldı',
+        imageExtractsMessage: 'Bu ay için ücretsiz görüntü çıkarımlarınızın tümünü kullandınız. Daha fazla görüntü işlemek için hesabınızı yükseltin veya daha fazla satın almak için fiyatlandırma seçeneklerine bakın.',
         relatedWordsMessage: 'İlgili kelimeleri görüntülemek bir Plus özelliğidir. Eşanlamlıları, zıt anlamlıları görmek ve kelime dağarcığınızı genişletmek için hesabınızı yükseltin!',
         storageMessage: 'Mevcut planınız için kaydedilen maksimum {type} sayısına ulaştınız.',
         viewPricing: 'Fiyatları Görüntüle',
@@ -282,6 +291,10 @@ export const tr = {
             'default': {
                 main: '{type} kaydetmeye başlamak ve öğrenme ilerlemenizi takip etmek için ücretsiz bir hesap oluşturun!',
                 sub: 'Dil becerilerini geliştirmek için Hanbok kullanan binlerce Korece öğrenen kişiye katılın.'
+            },
+            'image-extracts': {
+                main: 'Görüntülerden metin çıkarmak için ücretsiz bir hesap oluşturun!',
+                sub: 'Ücretsiz hesaplar, herhangi bir kaynaktan metin analiz etmenize yardımcı olmak için 20 ücretsiz görüntü çıkarımı sunar.'
             }
         },
         createAccount: 'Hesap Oluştur',

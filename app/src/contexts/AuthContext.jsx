@@ -5,7 +5,8 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
-    // user object now includes: tier (1 for basic, 2 for plus) and remainingAudioGenerations (number)
+    // user object now includes: tier (0 for free, 1 for basic, 2 for plus), 
+    // remainingAudioGenerations (number), and remainingImageExtracts (number)
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -28,6 +29,13 @@ export function AuthProvider({ children }) {
         setUser(prevUser => ({
             ...prevUser,
             remainingAudioGenerations: prevUser.remainingAudioGenerations - 1
+        }));
+    }
+    
+    const decrementRemainingImageExtracts = () => {
+        setUser(prevUser => ({
+            ...prevUser,
+            remainingImageExtracts: prevUser.remainingImageExtracts - 1
         }));
     }
     
@@ -91,6 +99,7 @@ export function AuthProvider({ children }) {
         logout,
         loadSentence,
         decrementRemainingAudioGenerations,
+        decrementRemainingImageExtracts,
         isAuthenticated: !!user
     };
 

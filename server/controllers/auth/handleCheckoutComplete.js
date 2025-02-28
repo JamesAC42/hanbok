@@ -5,7 +5,8 @@ const { getDb } = require('../../database');
 const PRICE_IDS = {
     BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
     AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
-    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc'
+    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
+    IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj'
 };
 
 //test
@@ -83,6 +84,14 @@ const handleCheckoutComplete = async (session) => {
                 await db.collection('users').updateOne(
                     { userId },
                     { $set: subscriptionUpdate }
+                );
+                break;
+
+            case PRICE_IDS.IMAGE_PACK: // Image Pack
+            
+                await db.collection('users').updateOne(
+                    { userId },
+                    { $inc: { remainingImageExtracts: 150 } }
                 );
                 break;
 

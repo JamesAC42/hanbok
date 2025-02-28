@@ -113,6 +113,7 @@ export const en = {
             unknown: 'Unknown'
         },
         remainingAudioGenerations: 'Remaining Audio Generations',
+        remainingImageExtracts: 'Remaining Image Extracts',
         unlimited: 'Unlimited',
         maxSavedSentences: 'Max Saved Sentences',
         maxSavedWords: 'Max Saved Words',
@@ -159,8 +160,10 @@ export const en = {
             increaseWords: 'Increase saved words limit from',
             additionalAudio: 'An additional',
             audioGenerations: 'audio generations',
+            imageExtractions: 'image extractions',
             unlimited: {
                 sentences: 'Unlimited sentences saved',
+                images: 'Unlimited image extractions',
                 words: 'Unlimited saved words',
                 audio: 'Unlimited audio generations',
                 insights: 'Unlimited word relation insights'
@@ -207,6 +210,8 @@ export const en = {
         placeholder: 'Enter a {language} sentence...',
         analyze: 'Analyze',
         analyzing: 'Analyzing...',
+        processing_image: 'Processing image...',
+        text_disabled_with_image: 'Text input is disabled when an image is uploaded.',
         loading: {
             structure: 'Analyzing sentence structure...',
             grammar: 'Identifying grammar points...',
@@ -221,7 +226,8 @@ export const en = {
             nonsensical: "This input doesn't form a meaningful Korean sentence.",
             timeout: 'The request took too long. Please try again.',
             other: 'There was an error analyzing your input.',
-            empty: 'Please enter a sentence.'
+            empty: 'Please enter a sentence.',
+            file_too_large: 'Image file is too large. Maximum size is 2MB.',
         }
     },
     analysis: {
@@ -263,6 +269,8 @@ export const en = {
     limitReached: {
         storageTitle: 'Storage Limit Reached',
         plusFeatureTitle: 'Plus Feature',
+        imageExtractsTitle: 'Image Extract Limit Reached',
+        imageExtractsMessage: 'You\'ve used all your free image extractions for this month. Upgrade your account to process more images or view pricing options to purchase more.',
         relatedWordsMessage: 'Viewing related words is a Plus feature. Upgrade your account to see synonyms, antonyms, and expand your vocabulary!',
         storageMessage: 'You\'ve reached the maximum number of saved {type} for your current plan.',
         viewPricing: 'View Pricing',
@@ -278,6 +286,10 @@ export const en = {
             'audio': {
                 main: 'Create a free account to generate audio and hear native pronunciation!',
                 sub: 'Join thousands of Korean learners using Hanbok to improve their speaking and listening.'
+            },
+            'image-extracts': {
+                main: 'Create a free account to extract text from images!',
+                sub: 'Free accounts get 20 free image extractions to help you analyze text from any source.'
             },
             'default': {
                 main: 'Create a free account to start saving {type} and track your learning progress!',

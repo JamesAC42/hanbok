@@ -42,6 +42,12 @@ async function connectToDatabase() {
     await db.collection('feedback').createIndex({ feedbackId: 1 }, { unique: true });
     await db.collection('feedback').createIndex({ userId: 1 });
 
+    // Add index for feature_usage collection
+    await db.collection('feature_usage').createIndex(
+      { userId: 1, feature: 1 }, 
+      { unique: true }
+    );
+
     // Initialize counters
     try {
       await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });

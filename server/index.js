@@ -64,6 +64,8 @@ const getFeedback = require('./controllers/auth/getFeedback');
 const addFeedback = require('./controllers/auth/addFeedback');
 const deleteFeedback = require('./controllers/auth/deleteFeedback');
 
+const getFeatureUsage = require('./controllers/auth/getFeatureUsage');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -202,6 +204,11 @@ app.post('/api/feedback', isAuthenticated, async (req, res) => {
 
 app.delete('/api/feedback/:feedbackId', isAuthenticated, async (req, res) => {
     deleteFeedback(req, res);
+});
+
+// Admin routes
+app.get('/api/admin/feature-usage', isAuthenticated, async (req, res) => {
+    getFeatureUsage(req, res);
 });
 
 // Connect to Redis before starting the server

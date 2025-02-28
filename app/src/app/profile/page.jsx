@@ -59,6 +59,13 @@ const Profile = () => {
                                 user.maxSavedWords
                             }
                         </p>
+                        <p>
+                            <strong>{t('profile.remainingImageExtracts')}:</strong> {
+                                user.tier === 1 ? t('profile.unlimited') :
+                                user.remainingImageExtracts == null ? "0" :
+                                user.remainingImageExtracts
+                            }
+                        </p>
                     </div>
                     {!user.feedbackAudioCreditRedeemed && (
                         <div className={profileStyles.bonusAlert}>

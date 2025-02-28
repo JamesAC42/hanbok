@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const polyfillData = require('../../migrations/user_polyfill');
 
 const getSession = async (req, res) => {
     
@@ -11,7 +12,7 @@ const getSession = async (req, res) => {
 
     try {
         const db = getDb();
-        const user = await db.collection('users').findOne(
+        let user = await db.collection('users').findOne(
             { userId: req.session.user.userId }
         );
 
@@ -23,19 +24,24 @@ const getSession = async (req, res) => {
             });
         }
 
+        user = await polyfillData(user, db);
+
+        let userData = {
+            userId: user.userId,
+            name: user.name,
+            email: user.email,
+            dateCreated: user.dateCreated,
+            tier: user.tier,
+            remainingAudioGenerations: user.remainingAudioGenerations ? user.remainingAudioGenerations : 0,
+            maxSavedSentences: user.maxSavedSentences ? user.maxSavedSentences : 0,
+            maxSavedWords: user.maxSavedWords ? user.maxSavedWords : 0,
+            feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
+            remainingImageExtracts: user.remainingImageExtracts ? user.remainingImageExtracts : 0
+        };
+
         res.json({
             success: true,
-            user: {
-                userId: user.userId,
-                name: user.name,
-                email: user.email,
-                dateCreated: user.dateCreated,
-                tier: user.tier,
-                remainingAudioGenerations: user.remainingAudioGenerations ? user.remainingAudioGenerations : 0,
-                maxSavedSentences: user.maxSavedSentences ? user.maxSavedSentences : 0,
-                maxSavedWords: user.maxSavedWords ? user.maxSavedWords : 0,
-                feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false
-            }
+            user: userData
         });
 
     } catch (error) {

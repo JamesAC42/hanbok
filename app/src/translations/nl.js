@@ -113,6 +113,7 @@ export const nl = {
             unknown: 'Onbekend'
         },
         remainingAudioGenerations: 'Resterende audio-generaties',
+        remainingImageExtracts: 'Resterende beeldextracties',
         unlimited: 'Onbeperkt',
         maxSavedSentences: 'Maximaal opgeslagen zinnen',
         maxSavedWords: 'Maximaal opgeslagen woorden',
@@ -158,11 +159,14 @@ export const nl = {
             to: 'naar',
             increaseWords: 'Verhoog de limiet van opgeslagen woorden van',
             additionalAudio: 'Extra',
+            additionalImageExtracts: 'Extra',
             audioGenerations: 'audio-generaties',
+            imageExtractions: 'beeldextracties',
             unlimited: {
                 sentences: 'Onbeperkt opgeslagen zinnen',
                 words: 'Onbeperkt opgeslagen woorden',
                 audio: 'Onbeperkte audio-generaties',
+                images: 'Onbeperkte beeldextracties',
                 insights: 'Onbeperkte woordrelatie-inzichten'
             }
         },
@@ -207,6 +211,8 @@ export const nl = {
         placeholder: 'Voer een {language} zin in...',
         analyze: 'Analyseren',
         analyzing: 'Analyseren...',
+        processing_image: 'Afbeelding verwerken...',
+        text_disabled_with_image: 'Tekstinvoer is uitgeschakeld wanneer een afbeelding is geüpload.',
         loading: {
             structure: 'Zinsstructuur analyseren...',
             grammar: 'Grammaticale punten identificeren...',
@@ -221,7 +227,8 @@ export const nl = {
             nonsensical: 'Deze invoer vormt geen zinvolle Koreaanse zin.',
             timeout: 'Het verzoek duurde te lang. Probeer het opnieuw.',
             other: 'Er is een fout opgetreden bij het analyseren van uw invoer.',
-            empty: 'Voer een zin in.'
+            empty: 'Voer een zin in.',
+            file_too_large: 'Afbeeldingsbestand is te groot. Maximale grootte is 2MB.'
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const nl = {
     limitReached: {
         storageTitle: 'Opslaglimiet bereikt',
         plusFeatureTitle: 'Plusfunctie',
+        imageExtractsTitle: 'Beeldextractielimiet bereikt',
+        imageExtractsMessage: 'Je hebt al je gratis beeldextracties voor deze maand gebruikt. Upgrade je account om meer afbeeldingen te verwerken of bekijk de prijsopties om meer te kopen.',
         relatedWordsMessage: 'Het bekijken van gerelateerde woorden is een Plus-functie. Upgrade je account om synoniemen, antoniemen te zien en je woordenschat uit te breiden!',
         storageMessage: 'Je hebt het maximale aantal opgeslagen {type} voor je huidige plan bereikt.',
         viewPricing: 'Bekijk prijzen',
@@ -282,6 +291,10 @@ export const nl = {
             'default': {
                 main: 'Maak een gratis account aan om te beginnen met het opslaan van {type} en je leerproces bij te houden!',
                 sub: 'Doe mee met duizenden Koreaanse leerlingen die Hanbok gebruiken om hun taalvaardigheden te verbeteren.'
+            },
+            'image-extracts': {
+                main: 'Maak een gratis account aan om tekst uit afbeeldingen te extraheren!',
+                sub: 'Gratis accounts krijgen 20 gratis beeldextracties om je te helpen tekst uit elke bron te analyseren.'
             }
         },
         createAccount: 'Account aanmaken',

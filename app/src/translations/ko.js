@@ -113,6 +113,7 @@ export const ko = {
             unknown: '알 수 없음'
         },
         remainingAudioGenerations: '남은 음성 생성 횟수',
+        remainingImageExtracts: '남은 이미지 추출 횟수',
         unlimited: '무제한',
         maxSavedSentences: '최대 저장 문장 수',
         maxSavedWords: '최대 저장 단어 수',
@@ -158,11 +159,14 @@ export const ko = {
             to: '에서',
             increaseWords: '저장 가능한 단어 수를',
             additionalAudio: '추가',
+            additionalImageExtracts: '추가',
             audioGenerations: '음성 생성',
+            imageExtractions: '이미지 추출',
             unlimited: {
                 sentences: '무제한 문장 저장',
                 words: '무제한 단어 저장',
                 audio: '무제한 음성 생성',
+                images: '무제한 이미지 추출',
                 insights: '무제한 단어 관계 인사이트'
             }
         },
@@ -207,6 +211,8 @@ export const ko = {
         placeholder: '{language} 문장을 입력하세요...',
         analyze: '분석',
         analyzing: '분석 중...',
+        processing_image: '이미지 처리 중...',
+        text_disabled_with_image: '이미지가 업로드되면 텍스트 입력이 비활성화됩니다.',
         loading: {
             structure: '문장 구조 분석 중...',
             grammar: '문법 요소 식별 중...',
@@ -221,7 +227,8 @@ export const ko = {
             nonsensical: '의미 있는 한국어 문장이 아닙니다.',
             timeout: '요청 시간이 초과되었습니다. 다시 시도해 주세요.',
             other: '입력 분석 중 오류가 발생했습니다.',
-            empty: '문장을 입력해 주세요.'
+            empty: '문장을 입력해 주세요.',
+            file_too_large: '이미지 파일이 너무 큽니다. 최대 크기는 2MB입니다.',
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const ko = {
     limitReached: {
         storageTitle: '저장 한도 도달',
         plusFeatureTitle: '플러스 기능',
+        imageExtractsTitle: '이미지 추출 한도 도달',
+        imageExtractsMessage: '이번 달 무료 이미지 추출을 모두 사용했습니다. 더 많은 이미지를 처리하려면 계정을 업그레이드하거나 더 구매하려면 가격 옵션을 확인하세요.',
         relatedWordsMessage: '관련 단어 보기는 플러스 기능입니다. 계정을 업그레이드하여 동의어, 반의어를 보고 어휘를 확장하세요!',
         storageMessage: '현재 플랜의 최대 저장 가능한 {type} 수에 도달했습니다.',
         viewPricing: '요금제 보기',
@@ -282,6 +291,10 @@ export const ko = {
             'default': {
                 main: '무료 계정을 만들어 {type} 저장을 시작하고 학습 진도를 관리하세요!',
                 sub: '한복을 사용하여 언어 실력을 향상시키는 수천 명의 학습자들과 함께하세요.'
+            },
+            'image-extracts': {
+                main: '무료 계정을 만들어 이미지에서 텍스트를 추출하세요!',
+                sub: '무료 계정은 어떤 소스에서든 텍스트를 분석하는 데 도움이 되는 20회의 무료 이미지 추출을 제공합니다.'
             }
         },
         createAccount: '계정 만들기',

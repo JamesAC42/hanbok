@@ -1,5 +1,14 @@
 fixes:
 
+- popup on page load announcing new updates and emphasizing the new features and how often it's updated
+- use IP and browser to limit free usage
+    - after user has done 3 sentences, show popup stating the limit and that they can purchase 100 for $1
+    - limit to 20 sentences total for free users
+
+- cache duplicate sentences
+- add tense to verb conjugations
+- add queue to backend to process sentences
+- add more languages - croation, russian
 - add flashcards
 - more analytics endpoints for seeing top users
 - add popup hihglighting saving a sentence

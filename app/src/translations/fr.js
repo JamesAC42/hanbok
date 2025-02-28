@@ -113,6 +113,7 @@ export const fr = {
             unknown: 'Inconnu'
         },
         remainingAudioGenerations: 'Générations Audio Restantes',
+        remainingImageExtracts: 'Extractions d\'Images Restantes',
         unlimited: 'Illimité',
         maxSavedSentences: 'Maximum de Phrases Sauvegardées',
         maxSavedWords: 'Maximum de Mots Sauvegardés',
@@ -158,11 +159,14 @@ export const fr = {
             to: 'à',
             increaseWords: 'Augmenter la limite de mots sauvegardés de',
             additionalAudio: 'Supplémentaire',
+            additionalImageExtracts: 'Supplémentaire',
             audioGenerations: 'générations audio',
+            imageExtractions: 'extractions d\'images',
             unlimited: {
                 sentences: 'Phrases sauvegardées illimitées',
                 words: 'Mots sauvegardés illimités',
                 audio: 'Générations audio illimitées',
+                images: 'Extractions d\'images illimitées',
                 insights: 'Informations illimitées sur les relations entre les mots'
             }
         },
@@ -207,6 +211,8 @@ export const fr = {
         placeholder: 'Entrez une phrase en {language}...',
         analyze: 'Analyser',
         analyzing: 'Analyse en cours...',
+        processing_image: 'Traitement de l\'image...',
+        text_disabled_with_image: 'La saisie de texte est désactivée lorsqu\'une image est téléchargée.',
         loading: {
             structure: 'Analyse de la structure de la phrase...',
             grammar: 'Identification des points grammaticaux...',
@@ -221,7 +227,8 @@ export const fr = {
             nonsensical: 'Cette entrée ne forme pas une phrase coréenne sensée.',
             timeout: 'La requête a pris trop de temps. Veuillez réessayer.',
             other: 'Une erreur s\'est produite lors de l\'analyse de votre entrée.',
-            empty: 'Veuillez entrer une phrase.'
+            empty: 'Veuillez entrer une phrase.',
+            file_too_large: 'Le fichier image est trop volumineux. La taille maximale est de 2 Mo.',
         }
     },
     analysis: {
@@ -263,6 +270,8 @@ export const fr = {
     limitReached: {
         storageTitle: 'Limite de Stockage Atteinte',
         plusFeatureTitle: 'Fonctionnalité Plus',
+        imageExtractsTitle: 'Limite d\'Extractions d\'Images Atteinte',
+        imageExtractsMessage: 'Vous avez utilisé toutes vos extractions d\'images gratuites pour ce mois-ci. Mettez à niveau votre compte pour traiter plus d\'images ou consultez les options de tarification pour en acheter davantage.',
         relatedWordsMessage: 'La visualisation des mots associés est une fonctionnalité Plus. Mettez à niveau votre compte pour voir les synonymes, les antonymes et enrichir votre vocabulaire !',
         storageMessage: 'Vous avez atteint le nombre maximum de {type} enregistrés pour votre forfait actuel.',
         viewPricing: 'Voir les Prix',
@@ -278,6 +287,10 @@ export const fr = {
             'audio': {
                 main: 'Créez un compte gratuit pour générer de l\'audio et entendre la prononciation native !',
                 sub: 'Rejoignez des milliers d\'apprenants de coréen qui utilisent Hanbok pour améliorer leur expression orale et leur compréhension.'
+            },
+            'image-extracts': {
+                main: 'Créez un compte gratuit pour extraire du texte à partir d\'images !',
+                sub: 'Les comptes gratuits bénéficient de 20 extractions d\'images gratuites pour vous aider à analyser du texte provenant de n\'importe quelle source.'
             },
             'default': {
                 main: 'Créez un compte gratuit pour commencer à sauvegarder des {type} et suivre vos progrès !',

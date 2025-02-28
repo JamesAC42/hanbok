@@ -43,6 +43,17 @@ const generateAudio = async (req, res) => {
             });
         }
 
+        // Track audio generation usage
+        await db.collection('feature_usage').updateOne(
+            { userId: userId, feature: 'audio_generation' },
+            { 
+                $inc: { count: 1 },
+                $set: { lastUsed: new Date() },
+                $setOnInsert: { firstUsed: new Date() }
+            },
+            { upsert: true }
+        );
+
         // Decrement the remaining generations, but don't go below 0
         if(user.tier === 0) {
             await db.collection('users').updateOne(

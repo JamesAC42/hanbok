@@ -59,6 +59,8 @@
 
         span.wordListItemTranslation {
             margin-left:0.5rem;
+            max-width:100%;
+            white-space: normal;
         }
 
 		span.wordListItemType {
