@@ -89,7 +89,7 @@ const Breakdown = ({
 						renderPronunciation(item, language)
 					}
 				</div>
-				<div
+				<button
 				className={`${styles.sentenceItem} ${
 					isWhitespace ? styles.whitespace : ""
 				} ${
@@ -101,9 +101,11 @@ const Breakdown = ({
 				data-role={getCleanedType(item.type)}
 				onMouseEnter={() => handleWordInfoEnter(item)}
 				onClick={() => handleWordClick(item)}
+				// TODO: Translate this aria-label into other supported languages
+				aria-label={`Show details for ${item.text}`}
 				>
 				{item.text}
-				</div>
+				</button>
 				{item.grammar?.particles?.length > 0 && renderParticles(item)}
 			</div>
 			);
