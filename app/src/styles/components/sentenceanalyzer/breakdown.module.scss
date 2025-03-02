@@ -79,6 +79,10 @@
 		font-family:var(--font-kr-serif);
 		font-size:2.6rem;
 
+		// override default button styles
+		background-color: unset;
+		border: unset;
+
 		&::after {
 			position: absolute;
 			content: '';
