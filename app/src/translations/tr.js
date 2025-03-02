@@ -336,5 +336,17 @@ export const tr = {
         pageOf: 'Sayfa {current} / {total}',
         flashcardsComingSoon: 'Kartlar yakında geliyor!',
         fetchError: 'Kaydedilen {type} alınırken hata oluştu.'
+    },
+    announcement: {
+        new: 'Yeni',
+        newFeatures: 'Yeni Özellikler Mevcut!',
+        newLanguagesTitle: '9 Yeni Dil Eklendi',
+        newLanguagesDesc: 'Dil tekliflerimizi genişlettik! Artık 9 ek dilde cümleleri öğrenebilir ve analiz edebilirsiniz, bu da Hanbok\'u dünya çapındaki dil öğrencileri için daha da güçlü bir araç haline getiriyor.',
+        imageExtractionTitle: 'Görüntü Metin Çıkarımı',
+        imageExtractionDesc: 'Doğrudan görüntülerden, ekran görüntülerinden, mangalardan, videolardan ve daha fazlasından metin çıkarın! Sadece bir görüntü yükleyin ve Hanbok metni tanımlayıp analiz ederek, otantik materyallerden öğrenmeyi her zamankinden daha kolay hale getirir.',
+        communityTitle: 'Topluluğumuza Katılın',
+        communityDesc: 'Hanbok\'tan keyif alıyorsanız, sizden haber almak isteriz! Özellikler önermek, sorunları bildirmek ve üzerinde çalıştığımız bir sonraki şey hakkında güncellemeler almak için geri bildirim bırakın veya Discord sunucumuza katılın.',
+        leaveFeedback: 'Geri Bildirim Bırakın',
+        joinDiscord: 'Discord\'a Katılın',
     }
 }; 

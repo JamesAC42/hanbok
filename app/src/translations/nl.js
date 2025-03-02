@@ -336,5 +336,17 @@ export const nl = {
         pageOf: 'Pagina {current} van {total}',
         flashcardsComingSoon: 'Flashcards binnenkort beschikbaar!',
         fetchError: 'Fout bij het ophalen van opgeslagen {type}.'
+    },
+    announcement: {
+        new: 'Nieuw',
+        newFeatures: 'Nieuwe functies beschikbaar!',
+        newLanguagesTitle: '9 nieuwe talen toegevoegd',
+        newLanguagesDesc: 'We hebben ons taalaanbod uitgebreid! Je kunt nu zinnen leren en analyseren in 9 extra talen, waardoor Hanbok een nog krachtiger hulpmiddel wordt voor taalleerders wereldwijd.',
+        imageExtractionTitle: 'Beeldtekstextractie',
+        imageExtractionDesc: 'Extraheer tekst rechtstreeks uit afbeeldingen, screenshots, manga, video\'s en meer! Upload gewoon een afbeelding en Hanbok identificeert en analyseert de tekst, waardoor het gemakkelijker dan ooit is om te leren van authentiek materiaal.',
+        communityTitle: 'Word lid van onze community',
+        communityDesc: 'Als je geniet van Hanbok, horen we graag van je! Laat feedback achter of word lid van onze Discord-server om functies voor te stellen, problemen te melden en updates te krijgen over waar we als volgende aan werken.',
+        leaveFeedback: 'Feedback achterlaten',
+        joinDiscord: 'Word lid van Discord',
     }
 }; 

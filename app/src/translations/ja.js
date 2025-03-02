@@ -336,5 +336,17 @@ export const ja = {
         pageOf: 'ページ {current}/{total}',
         flashcardsComingSoon: 'フラッシュカード機能は近日公開予定です！',
         fetchError: '保存された{type}の読み込みに失敗しました。'
+    },
+    announcement: {
+        new: '新機能',
+        newFeatures: '新機能が利用可能になりました！',
+        newLanguagesTitle: '9つの新言語が追加されました',
+        newLanguagesDesc: '言語の提供を拡大しました！さらに9つの言語で文章を学習・分析できるようになり、hanbokは世界中の言語学習者にとってさらに強力なツールになりました。',
+        imageExtractionTitle: '画像テキスト抽出',
+        imageExtractionDesc: '画像、スクリーンショット、マンガ、動画などから直接テキストを抽出できます！画像をアップロードするだけで、hanbokがテキストを識別・分析し、本物の教材からの学習がこれまで以上に簡単になります。',
+        communityTitle: 'コミュニティに参加する',
+        communityDesc: 'hanbokをお楽しみいただいているなら、ぜひご意見をお聞かせください！フィードバックを残すか、Discordサーバーに参加して、機能の提案、問題の報告、次の開発内容についての最新情報を入手してください。',
+        leaveFeedback: 'フィードバックを残す',
+        joinDiscord: 'Discordに参加する',
     }
 }; 

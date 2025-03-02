@@ -1,0 +1,154 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999999;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.popup {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    max-width: 36rem;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0.3rem 0.3rem 0 #000;
+    border: 1px solid #000;
+    animation: slideUp 0.3s ease-out;
+    position: relative;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    
+    h2 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.75rem;
+    }
+}
+
+.badge {
+    background: #ff3e00;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.content {
+    h3 {
+        margin: 1.5rem 0 0.5rem;
+        font-family: var(--font-display);
+        font-size: 1.25rem;
+    }
+    
+    p {
+        margin: 0.5rem 0 1rem;
+        line-height: 1.6;
+        color: var(--text-secondary);
+    }
+}
+
+.communitySection {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.closeButton {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    color: var(--text-secondary);
+
+    &:hover {
+        color: var(--text-primary);
+    }
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.feedbackButton, .discordButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    transition: all 0.2s ease;
+    font-weight: 600;
+}
+
+.feedbackButton {
+    background: #000;
+    color: white;
+    border: 1px solid #000;
+
+    &:hover {
+        transform: translate(-0.15rem, -0.15rem);
+        box-shadow: 0.15rem 0.15rem 0 #000;
+    }
+}
+
+.discordButton {
+    background: #5865F2;
+    color: white;
+    border: 1px solid #5865F2;
+
+    &:hover {
+        transform: translate(-0.15rem, -0.15rem);
+        box-shadow: 0.15rem 0.15rem 0 #5865F2;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 640px) {
+    .popup {
+        padding: 1.5rem;
+    }
+    
+    .buttons {
+        flex-direction: column;
+    }
+    
+    .feedbackButton, .discordButton {
+        width: 100%;
+    }
+} 

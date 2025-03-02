@@ -336,5 +336,17 @@ export const it = {
         pageOf: 'Pagina {current} di {total}',
         flashcardsComingSoon: 'Flashcard in arrivo!',
         fetchError: 'Errore nel caricamento di {type} salvati.'
+    },
+    announcement: {
+        new: 'Nuovo',
+        newFeatures: 'Nuove funzionalità disponibili!',
+        newLanguagesTitle: '9 nuove lingue aggiunte',
+        newLanguagesDesc: 'Abbiamo ampliato la nostra offerta linguistica! Ora puoi imparare e analizzare frasi in 9 lingue aggiuntive, rendendo Hanbok uno strumento ancora più potente per gli studenti di lingue in tutto il mondo.',
+        imageExtractionTitle: 'Estrazione di testo da immagini',
+        imageExtractionDesc: 'Estrai testo direttamente da immagini, screenshot, manga, video e altro! Carica semplicemente un\'immagine e Hanbok identificherà e analizzerà il testo, rendendo più facile che mai imparare da materiali autentici.',
+        communityTitle: 'Unisciti alla nostra community',
+        communityDesc: 'Se ti piace Hanbok, ci piacerebbe sentire la tua opinione! Lascia un feedback o unisciti al nostro server Discord per suggerire funzionalità, segnalare problemi e ricevere aggiornamenti su ciò a cui stiamo lavorando.',
+        leaveFeedback: 'Lascia feedback',
+        joinDiscord: 'Unisciti a Discord',
     }
 }; 

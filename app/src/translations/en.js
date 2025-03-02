@@ -335,5 +335,17 @@ export const en = {
         pageOf: 'Page {current} of {total}',
         flashcardsComingSoon: 'Flashcards coming soon!',
         fetchError: 'Error fetching saved {type}.'
-    }
+    },
+    announcement: {
+        new: 'New',
+        newFeatures: 'New Features Available!',
+        newLanguagesTitle: '9 New Languages Added',
+        newLanguagesDesc: 'We\'ve expanded our language offerings! You can now learn and analyze sentences in 9 additional languages, making Hanbok an even more powerful tool for language learners worldwide.',
+        imageExtractionTitle: 'Image Text Extraction',
+        imageExtractionDesc: 'Extract text directly from images, screenshots, manga, videos, and more! Simply upload an image and Hanbok will identify and analyze the text, making it easier than ever to learn from authentic materials.',
+        communityTitle: 'Join Our Community',
+        communityDesc: 'If you\'re enjoying Hanbok, we\'d love to hear from you! Leave feedback or join our Discord server to suggest features, report issues, and get updates on what we\'re working on next.',
+        leaveFeedback: 'Leave Feedback',
+        joinDiscord: 'Join Discord',
+    },
 }; 

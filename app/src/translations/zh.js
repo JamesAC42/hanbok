@@ -336,5 +336,17 @@ export const zh = {
         pageOf: '第 {current} 页，共 {total} 页',
         flashcardsComingSoon: '闪卡功能即将推出！',
         fetchError: '获取已保存的{type}失败。'
+    },
+    announcement: {
+        new: '新功能',
+        newFeatures: '新功能已上线！',
+        newLanguagesTitle: '新增9种语言',
+        newLanguagesDesc: '我们扩展了语言选择！现在您可以学习和分析9种额外语言的句子，使hanbok成为全球语言学习者更强大的工具。',
+        imageExtractionTitle: '图像文本提取',
+        imageExtractionDesc: '直接从图像、截图、漫画、视频等提取文本！只需上传图像，hanbok将识别并分析文本，让您比以往任何时候都更容易从真实材料中学习。',
+        communityTitle: '加入我们的社区',
+        communityDesc: '如果您喜欢hanbok，我们很想听到您的声音！留下反馈或加入我们的Discord服务器，提出功能建议、报告问题，并获取我们下一步工作的最新动态。',
+        leaveFeedback: '留下反馈',
+        joinDiscord: '加入Discord',
     }
 }; 
