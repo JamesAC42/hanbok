@@ -101,11 +101,6 @@ const Breakdown = ({
 				data-role={getCleanedType(item.type)}
 				onMouseEnter={() => handleWordInfoEnter(item)}
 				onClick={() => handleWordClick(item)}
-				onKeyDown={(e) => {
-					if (e.key === 'Enter') {
-						handleWordClick(item)
-					}
-				}}
 				// TODO: Translate this aria-label into other supported languages
 				aria-label={`Show details for ${item.text}`}
 				>
