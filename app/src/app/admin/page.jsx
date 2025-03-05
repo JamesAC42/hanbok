@@ -78,19 +78,9 @@ const Admin = () => {
                     setSummaryStats(data.summaryStats);
                     setFeatures(data.features);
                     
-                    // Extract unique users from the data for the user filter
-                    if (!selectedUser && data.usageData.length > 0) {
-                        const uniqueUsers = Array.from(new Set(
-                            data.usageData.map(item => item.userId)
-                        )).map(userId => {
-                            const userItem = data.usageData.find(item => item.userId === userId);
-                            return {
-                                userId,
-                                name: userItem.userName,
-                                email: userItem.userEmail
-                            };
-                        });
-                        setUsers(uniqueUsers);
+                    // Use the users from the backend instead of extracting them
+                    if (data.users) {
+                        setUsers(data.users);
                     }
                     
                     setTotalPages(data.pagination.totalPages);
@@ -199,7 +189,7 @@ const Admin = () => {
                                     setPage(1); // Reset to first page when changing limit
                                 }}
                             >
-                                <option value={10}>10</option>
+                                <option value={1}>1</option>
                                 <option value={20}>20</option>
                                 <option value={50}>50</option>
                                 <option value={100}>100</option>
