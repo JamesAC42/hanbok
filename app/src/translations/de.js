@@ -245,12 +245,21 @@ export const de = {
             function: 'Funktion',
             notes: 'Notizen',
             role: 'Die Rolle dieses Wortes im Satz ist',
-            particles: 'Partikel'
+            particles: 'Partikel',
+            structure: 'Dieses Wort erscheint im ',
+            aspect: 'Der Aspekt dieses Verbs ist ',
+            form: 'Die Form dieses Wortes ist ',
+            politeness: 'Höflichkeitsstufe',
+            case: 'Der Fall dieses Wortes ist '
         },
         conjugation: {
             tense: 'Zeitform',
             formality: 'Formalität',
-            steps: 'Konjugationsschritte'
+            steps: 'Konjugationsschritte',
+            person: 'Person',
+            number: 'Numerus',
+            gender: 'Genus',
+            mood: 'Modus'
         },
         hoverExplanation: 'Fahren Sie mit der Maus über ein Wort, um eine Erklärung zu sehen.',
         sentenceNotes: {

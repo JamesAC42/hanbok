@@ -245,13 +245,22 @@ export const ko = {
             function: '기능',
             notes: '참고',
             role: '이 단어의 문장에서의 역할은',
-            particles: '조사'
+            particles: '조사',
+            structure: '이 단어는 다음에 나타납니다 ',
+            aspect: '이 동사의 상은 ',
+            form: '이 단어의 형태는 ',
+            politeness: '존댓말 수준',
+            case: '이 단어의 격은 '
         },
         hoverExplanation: '설명을 보려면 단어 위에 마우스를 올리세요.',
         conjugation: {
             tense: '시제',
             formality: '높임법',
-            steps: '활용 단계'
+            steps: '활용 단계',
+            person: '인칭',
+            number: '수',
+            gender: '성별',
+            mood: '서법'
         },
         variants: {
             title: '변형',

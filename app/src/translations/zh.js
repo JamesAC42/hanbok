@@ -245,13 +245,22 @@ export const zh = {
             function: '功能',
             notes: '注释',
             role: '这个词在句子中的作用是',
-            particles: '助词'
+            particles: '助词',
+            structure: '这个词出现在 ',
+            aspect: '这个动词的体是 ',
+            form: '这个词的形式是 ',
+            politeness: '礼貌程度',
+            case: '这个词的格是 '
         },
         hoverExplanation: '将鼠标悬停在单词上查看解释。',
         conjugation: {
             tense: '时态',
             formality: '敬语等级',
-            steps: '变位步骤'
+            steps: '变位步骤',
+            person: '人称',
+            number: '数',
+            gender: '性别',
+            mood: '语气'
         },
         variants: {
             title: '变体',

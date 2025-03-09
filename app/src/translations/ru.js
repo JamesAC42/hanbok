@@ -245,12 +245,21 @@ export const ru = {
             function: 'Функция',
             notes: 'Заметки',
             role: 'Роль этого слова в предложении',
-            particles: 'Частицы'
+            particles: 'Частицы',
+            structure: 'Это слово появляется в ',
+            aspect: 'Вид этого глагола ',
+            form: 'Форма этого слова ',
+            politeness: 'Уровень вежливости',
+            case: 'Падеж этого слова '
         },
         conjugation: {
             tense: 'Время',
             formality: 'Формальность',
-            steps: 'Шаги спряжения'
+            steps: 'Шаги спряжения',
+            person: 'Лицо',
+            number: 'Число',
+            gender: 'Род',
+            mood: 'Наклонение'
         },
         hoverExplanation: 'Наведите курсор на слово для объяснения.',
         sentenceNotes: {

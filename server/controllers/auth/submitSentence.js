@@ -1,5 +1,8 @@
 const generateResponse = require('../../llm/generateResponse');
-const {ANALYSIS_PROMPT} = require('../../llm/prompt');
+const basicPrompt = require('../../llm/prompt');
+const chinesePrompt = require('../../llm/prompt_chinese');
+const japanesePrompt = require('../../llm/prompt_japanese');
+const russianPrompt = require('../../llm/prompt_russian');
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
 
@@ -193,9 +196,19 @@ const submitSentence = async (req, res) => {
                 analysis: analysis
             };
         } else {
+
+            let prompt = basicPrompt.ANALYSIS_PROMPT;
+            if(originalLanguage === 'zh') {
+                prompt = chinesePrompt.ANALYSIS_PROMPT;
+            } else if(originalLanguage === 'ja') {
+                prompt = japanesePrompt.ANALYSIS_PROMPT;
+            } else if(originalLanguage === 'ru') {
+                prompt = russianPrompt.ANALYSIS_PROMPT;
+            }
+
             // Generate new analysis
             parsedResponse = await generateResponse(
-                ANALYSIS_PROMPT(originalLanguage, translationLanguage) + text, 
+                prompt(originalLanguage, translationLanguage) + text, 
                 'gemini'
             );
 

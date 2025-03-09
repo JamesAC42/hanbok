@@ -244,12 +244,21 @@ export const en = {
             function: 'Function',
             notes: 'Notes',
             role: 'The role of this word in the sentence is',
-            particles: 'Particles'
+            particles: 'Particles',
+            structure: 'This word appears in the ',
+            aspect: 'The aspect of this verb is ',
+            form: 'The form of this word is ',
+            politeness: 'Politeness level',
+            case: 'The case of this word is '
         },
         conjugation: {
             tense: 'Tense',
             formality: 'Formality',
-            steps: 'Conjugation Steps'
+            steps: 'Conjugation Steps',
+            person: 'Person',
+            number: 'Number',
+            gender: 'Gender',
+            mood: 'Mood'
         },
         hoverExplanation: 'Hover over a word for explanation.',
         sentenceNotes: {

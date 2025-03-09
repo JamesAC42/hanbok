@@ -33,6 +33,8 @@ const getDisplayReading = (word, language) => {
     let reading = null;
     if(language === 'ko') {
         reading = romanize(word.originalWord);
+    } else if(language === 'ru') {
+        reading = word.transliteration;
     } else if(word.reading) {
         reading = word.reading;
     }
@@ -305,7 +307,8 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                                             word={{
                                                 originalWord: syn.originalWord,
                                                 reading: syn.reading,
-                                                translatedWord: syn.translatedWord
+                                                translatedWord: syn.translatedWord,
+                                                transliteration: syn.transliteration
                                             }}
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
@@ -324,7 +327,8 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                                             word={{
                                                 originalWord: ant.originalWord,
                                                 reading: ant.reading,
-                                                translatedWord: ant.translatedWord
+                                                translatedWord: ant.translatedWord,
+                                                transliteration: ant.transliteration
                                             }}
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
@@ -364,7 +368,8 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                 translatedWord: word.meaning?.description || '',
                 originalLanguage: originalLanguage,
                 translationLanguage: translationLanguage,
-                reading: word.reading || ''
+                reading: word.reading || '',
+                transliteration: word.transliteration || ''
             };
 
             wordList.push(

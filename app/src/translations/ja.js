@@ -245,13 +245,22 @@ export const ja = {
             function: '機能',
             notes: '注釈',
             role: 'この単語の文中での役割は',
-            particles: '助詞'
+            particles: '助詞',
+            structure: 'この単語は次の中に現れます ',
+            aspect: 'この動詞のアスペクトは ',
+            form: 'この単語の形式は ',
+            politeness: '丁寧さのレベル',
+            case: 'この単語の格は '
         },
         hoverExplanation: '単語の上にマウスを置くと説明が表示されます。',
         conjugation: {
             tense: '時制',
             formality: '敬語レベル',
-            steps: '活用の手順'
+            steps: '活用の手順',
+            person: '人称',
+            number: '数',
+            gender: '性別',
+            mood: '法'
         },
         variants: {
             title: 'バリエーション',

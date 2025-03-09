@@ -38,6 +38,14 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
         return null;
     }
 
+    // For Russian transliteration display
+    const transliteration = () => {
+        if (language === 'ru' && wordInfo.transliteration) {
+            return <span className={styles.transliteration}>[{wordInfo.transliteration}]</span>
+        }
+        return null;
+    }
+
     return(
         <>
         {wordInfo && (
@@ -62,7 +70,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
                 
                 <div className={`${styles.dictionaryForm} ${getFontClass(language)}`}>
                     {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
-                    {pronunciation()}
+                    {language === 'ru' ? transliteration() : pronunciation()}
                 </div>
 
                 <div className={styles.wordInfoContent}>
@@ -102,9 +110,56 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
                         </div>
                         : wordInfo.isParticle && (
                         <div className={styles.roleInfo}>
-                            {t('analysis.wordInfo.role')} <span className={styles.wordRole}>particle</span>
+                            {t('analysis.wordInfo.role')}: <span className={styles.wordRole}>particle</span>
                         </div>
                         )
+                    }
+
+                    {/* Russian-specific case information */}
+                    {
+                        language === 'ru' && wordInfo.grammar?.case &&
+                        <div className={styles.caseInfo}>
+                            {t('analysis.wordInfo.case')} <span className={styles.wordCase}>{wordInfo.grammar.case.name.replaceAll('_', ' ')}</span><br/>
+                            {t('analysis.wordInfo.notes')}: {wordInfo.grammar.case.function}
+                        </div>
+                    }
+
+                    {/* Russian-specific aspect information */}
+                    {
+                        language === 'ru' && wordInfo.grammar?.conjugation?.aspect &&
+                        <div className={styles.aspectInfo}>
+                            {t('analysis.wordInfo.aspect')} <span className={styles.wordAspect}>{wordInfo.grammar.conjugation.aspect.replaceAll('_', ' ')}</span>
+                        </div>
+                    }
+
+                    {/* Chinese-specific aspect information */}
+                    {
+                        language === 'zh' && wordInfo.grammar?.aspect &&
+                        <div className={styles.aspectInfo}>
+                            {t('analysis.wordInfo.aspect')} <span className={styles.wordAspect}>{wordInfo.grammar.aspect.type}</span><br/>
+                            {t('analysis.wordInfo.notes')}: {wordInfo.grammar.aspect.explanation}
+                        </div>
+                    }
+
+                    {
+                        wordInfo.grammar?.structure &&
+                        <div className={styles.structureInfo}>
+                            {t('analysis.wordInfo.structure')} <span className={styles.wordStructure}>{wordInfo.grammar.structure.pattern}</span><br/>
+                            {t('analysis.wordInfo.notes')}: {wordInfo.grammar.structure.function}
+                        </div>
+                    }
+                    
+                    {/* Japanese-specific conjugation form display */}
+                    {
+                        language === 'ja' && wordInfo.grammar?.conjugation?.form &&
+                        <div className={styles.formInfo}>
+                            {t('analysis.wordInfo.form')} <span className={styles.wordForm}>{wordInfo.grammar.conjugation.form.replaceAll('_', ' ')}</span><br/>
+                            {wordInfo.grammar.conjugation.politeness && 
+                                <div className={styles.politenessInfo}>
+                                    {t('analysis.wordInfo.politeness')}: {wordInfo.grammar.conjugation.politeness.replaceAll('_', ' ')}
+                                </div>
+                            }
+                        </div>
                     }
                     
                     {

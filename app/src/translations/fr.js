@@ -245,13 +245,22 @@ export const fr = {
             function: 'Fonction',
             notes: 'Notes',
             role: 'Le rôle de ce mot dans la phrase est',
-            particles: 'Particules'
+            particles: 'Particules',
+            structure: 'Ce mot apparaît dans le ',
+            aspect: 'L\'aspect de ce verbe est ',
+            form: 'La forme de ce mot est ',
+            politeness: 'Niveau de politesse',
+            case: 'Le cas de ce mot est '
         },
         hoverExplanation: 'Survolez un mot pour voir son explication.',
         conjugation: {
             tense: 'Temps',
             formality: 'Formalité',
-            steps: 'Étapes de Conjugaison'
+            steps: 'Étapes de Conjugaison',
+            person: 'Personne',
+            number: 'Nombre',
+            gender: 'Genre',
+            mood: 'Mode'
         },
         variants: {
             title: 'Variantes',

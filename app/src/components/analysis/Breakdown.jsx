@@ -66,7 +66,7 @@ const Breakdown = ({
 	}
 
 	const hasPronunciation = () => {
-		if(language === "zh" || language === "ja" || language === "ko") return styles.hasPronunciation;
+		if(language === "zh" || language === "ja" || language === "ko" || language === "ru") return styles.hasPronunciation;
 		return "";
 	}
 

@@ -49,13 +49,66 @@ const Conjugation = ({
             }
 
             {
-            wordInfo.grammar.conjugation.formality && (
+            wordInfo.grammar.conjugation.formality && language !== 'ja' && (
                 <div className={`${styles.formality}`}>
                 <span className={styles.formalityLabel}>
                     {t('analysis.conjugation.formality')}:
                 </span>
                 <span className={styles.formalityValue}>
                     {wordInfo.grammar.conjugation.formality.replaceAll('_', ' ')}
+                </span>
+                </div>
+            )
+            }
+
+            {/* Russian-specific conjugation information */}
+            {
+            language === 'ru' && wordInfo.grammar.conjugation.person && (
+                <div className={`${styles.person}`}>
+                <span className={styles.personLabel}>
+                    {t('analysis.conjugation.person')}:
+                </span>
+                <span className={styles.personValue}>
+                    {wordInfo.grammar.conjugation.person.replaceAll('_', ' ')}
+                </span>
+                </div>
+            )
+            }
+
+            {
+            language === 'ru' && wordInfo.grammar.conjugation.number && (
+                <div className={`${styles.number}`}>
+                <span className={styles.numberLabel}>
+                    {t('analysis.conjugation.number')}:
+                </span>
+                <span className={styles.numberValue}>
+                    {wordInfo.grammar.conjugation.number.replaceAll('_', ' ')}
+                </span>
+                </div>
+            )
+            }
+
+            {
+            language === 'ru' && wordInfo.grammar.conjugation.gender && (
+                <div className={`${styles.gender}`}>
+                <span className={styles.genderLabel}>
+                    {t('analysis.conjugation.gender')}:
+                </span>
+                <span className={styles.genderValue}>
+                    {wordInfo.grammar.conjugation.gender.replaceAll('_', ' ')}
+                </span>
+                </div>
+            )
+            }
+
+            {
+            language === 'ru' && wordInfo.grammar.conjugation.mood && (
+                <div className={`${styles.mood}`}>
+                <span className={styles.moodLabel}>
+                    {t('analysis.conjugation.mood')}:
+                </span>
+                <span className={styles.moodValue}>
+                    {wordInfo.grammar.conjugation.mood.replaceAll('_', ' ')}
                 </span>
                 </div>
             )

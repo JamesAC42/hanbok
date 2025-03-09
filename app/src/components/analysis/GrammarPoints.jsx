@@ -38,6 +38,9 @@ const GrammarPoints = ({analysis, language}) => {
         if(language === "ko") {
             p = romanize(example.original);
         }
+        if(language === "ru") {
+            p = example.transliteration;
+        }
         
         if(p) {
             return (

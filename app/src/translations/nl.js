@@ -245,12 +245,21 @@ export const nl = {
             function: 'Functie',
             notes: 'Notities',
             role: 'De rol van dit woord in de zin is',
-            particles: 'Partikels'
+            particles: 'Partikels',
+            structure: 'Dit woord komt voor in de ',
+            aspect: 'Het aspect van dit werkwoord is ',
+            form: 'De vorm van dit woord is ',
+            politeness: 'Beleefdheidsgraad',
+            case: 'De naamval van dit woord is '
         },
         conjugation: {
             tense: 'Tijd',
             formality: 'Formaliteit',
-            steps: 'Conjugatiestappen'
+            steps: 'Conjugatiestappen',
+            person: 'Persoon',
+            number: 'Getal',
+            gender: 'Geslacht',
+            mood: 'Wijs'
         },
         hoverExplanation: 'Zweef over een woord voor uitleg.',
         sentenceNotes: {

@@ -245,12 +245,21 @@ export const tr = {
             function: 'Fonksiyon',
             notes: 'Notlar',
             role: 'Bu kelimenin cümledeki rolü',
-            particles: 'Partiküller'
+            particles: 'Partiküller',
+            structure: 'Bu kelime şurada görünür ',
+            aspect: 'Bu fiilin görünüşü ',
+            form: 'Bu kelimenin biçimi ',
+            politeness: 'Nezaket seviyesi',
+            case: 'Bu kelimenin hali '
         },
         conjugation: {
             tense: 'Zaman',
             formality: 'Resmiyet',
-            steps: 'Çekim Adımları'
+            steps: 'Çekim Adımları',
+            person: 'Şahıs',
+            number: 'Sayı',
+            gender: 'Cinsiyet',
+            mood: 'Kip'
         },
         hoverExplanation: 'Açıklama için bir kelimenin üzerine gelin.',
         sentenceNotes: {

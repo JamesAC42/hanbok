@@ -245,12 +245,21 @@ export const es = {
             function: 'Función',
             notes: 'Notas',
             role: 'El rol de esta palabra en la oración es',
-            particles: 'Partículas'
+            particles: 'Partículas',
+            structure: 'Esta palabra aparece en el ',
+            aspect: 'El aspecto de este verbo es ',
+            form: 'La forma de esta palabra es ',
+            politeness: 'Nivel de cortesía',
+            case: 'El caso de esta palabra es '
         },
         conjugation: {
             tense: 'Tiempo',
             formality: 'Formalidad',
-            steps: 'Pasos de Conjugación'
+            steps: 'Pasos de Conjugación',
+            person: 'Persona',
+            number: 'Número',
+            gender: 'Género',
+            mood: 'Modo'
         },
         hoverExplanation: 'Pase el cursor sobre una palabra para ver la explicación.',
         variants: {

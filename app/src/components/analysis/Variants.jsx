@@ -11,6 +11,9 @@ const Variants = ({analysis, language}) => {
         if(language === 'ko') {
             reading = romanize(variant.text);
         }
+        if(language === 'ru') {
+            reading = variant.transliteration;
+        }
         
         if(reading) {
             return (
@@ -22,8 +25,22 @@ const Variants = ({analysis, language}) => {
         return null;
     }
 
-    if(!analysis.variants || Object.keys(analysis.variants).length === 0) {
+    let variants;
+
+    if((!analysis.variants && !analysis.register_variants)) {
         return null;
+    }
+
+    if(analysis.register_variants) {
+        if(Object.keys(analysis.register_variants).length === 0) {  
+            return null;
+        }
+        variants = analysis.register_variants;
+    } else {
+        if(Object.keys(analysis.variants).length === 0) {
+            return null;
+        }
+        variants = analysis.variants;
     }
 
     return (
@@ -33,7 +50,7 @@ const Variants = ({analysis, language}) => {
             </div>
             <div className={styles.variantsContainer}>
                 {
-                    Object.keys(analysis.variants).map((variant) => (
+                    Object.keys(variants).map((variant) => (
                         <div
                             data-formality={variant}
                             className={styles.variant} 
@@ -44,12 +61,12 @@ const Variants = ({analysis, language}) => {
                                     {variant}
                                 </div>
                                 <div className={`${getFontClass(language)}`}>
-                                    {analysis.variants[variant].text}
+                                    {variants[variant].text}
                                 </div>
-                                {renderReading(analysis.variants[variant])}
+                                {renderReading(variants[variant])}
                             </div>
                             <div className={styles.variantWhenToUse}>
-                                {analysis.variants[variant].when_to_use}
+                                {variants[variant].when_to_use}
                             </div>
                         </div>
                     ))
