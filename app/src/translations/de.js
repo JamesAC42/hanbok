@@ -245,12 +245,21 @@ export const de = {
             function: 'Funktion',
             notes: 'Notizen',
             role: 'Die Rolle dieses Wortes im Satz ist',
-            particles: 'Partikel'
+            particles: 'Partikel',
+            structure: 'Dieses Wort erscheint im ',
+            aspect: 'Der Aspekt dieses Verbs ist ',
+            form: 'Die Form dieses Wortes ist ',
+            politeness: 'Höflichkeitsstufe',
+            case: 'Der Fall dieses Wortes ist '
         },
         conjugation: {
             tense: 'Zeitform',
             formality: 'Formalität',
-            steps: 'Konjugationsschritte'
+            steps: 'Konjugationsschritte',
+            person: 'Person',
+            number: 'Numerus',
+            gender: 'Genus',
+            mood: 'Modus'
         },
         hoverExplanation: 'Fahren Sie mit der Maus über ein Wort, um eine Erklärung zu sehen.',
         sentenceNotes: {
@@ -265,6 +274,10 @@ export const de = {
         saveButton: {
             save: "Satz speichern",
             remove: "Aus gespeicherten entfernen"
+        },
+        settingsButton: {
+            title: "Einstellungen",
+            showPronunciations: "Aussprachen anzeigen"
         },
         grammar: 'Grammatik',
         examples: 'Beispiele'
@@ -340,13 +353,21 @@ export const de = {
     announcement: {
         new: 'Neu',
         newFeatures: 'Neue Funktionen verfügbar!',
-        newLanguagesTitle: '9 neue Sprachen hinzugefügt',
-        newLanguagesDesc: 'Wir haben unser Sprachangebot erweitert! Sie können jetzt Sätze in 9 zusätzlichen Sprachen lernen und analysieren, was Hanbok zu einem noch leistungsfähigeren Werkzeug für Sprachlernende weltweit macht.',
-        imageExtractionTitle: 'Bild-Text-Extraktion',
-        imageExtractionDesc: 'Extrahieren Sie Text direkt aus Bildern, Screenshots, Manga, Videos und mehr! Laden Sie einfach ein Bild hoch und Hanbok identifiziert und analysiert den Text, wodurch es einfacher als je zuvor wird, aus authentischen Materialien zu lernen.',
-        communityTitle: 'Treten Sie unserer Community bei',
-        communityDesc: 'Wenn Sie Hanbok genießen, würden wir gerne von Ihnen hören! Hinterlassen Sie Feedback oder treten Sie unserem Discord-Server bei, um Funktionen vorzuschlagen, Probleme zu melden und Updates zu erhalten, woran wir als nächstes arbeiten.',
+        languageEnhancementsTitle: 'Verbesserte Sprachunterstützung',
+        languageEnhancementsDesc: 'Wir haben erhebliche Verbesserungen an unseren Sprachfähigkeiten vorgenommen, mit Schwerpunkt auf besserer Unterstützung für asiatische und slawische Sprachen.',
+        enhancedChinese: 'Verbesserte Sprachanalyse für Chinesisch',
+        enhancedRussian: 'Verbesserte Sprachanalyse für Russisch mit Transliterationsunterstützung',
+        enhancedJapanese: 'Verbesserte Sprachanalyse für Japanisch',
+        fixedFontRendering: 'Schriftartdarstellungsprobleme für Chinesisch, Russisch und Japanisch behoben',
+        russianTransliteration: 'Transliteration für Russisch hinzugefügt',
+        accessibilityTitle: 'Verbesserte Barrierefreiheit',
+        accessibilityDesc: 'Wir haben die Tastaturzugänglichkeit in der gesamten Anwendung verbessert, damit alle Benutzer unsere Funktionen einfacher nutzen können.',
+        communityTitle: 'Treten Sie unserer wachsenden Gemeinschaft bei',
+        communityDesc: 'Wenn Sie Kankoku gerne verwenden, würden wir uns freuen, wenn Sie unserer Gemeinschaft beitreten! Teilen Sie Ihre Erfahrungen mit Freunden und helfen Sie uns zu wachsen.',
+        discordInvite: 'Treten Sie unserer Discord-Community bei, um Tipps zum Sprachenlernen, Updates und um sich mit anderen Lernenden zu verbinden!',
         leaveFeedback: 'Feedback hinterlassen',
-        joinDiscord: 'Discord beitreten',
-    }
+        joinDiscord: 'Treten Sie unserem Discord bei',
+        shareWebsite: 'Mit Freunden teilen',
+        linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie es mit Ihren Freunden.'
+    },
 }; 

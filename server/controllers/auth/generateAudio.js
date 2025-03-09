@@ -71,7 +71,13 @@ const generateAudio = async (req, res) => {
         }
 
         // Generate speech audio
-        const { voice1, voice2 } = await generateSpeech(sentence.text);
+        let textToRead;
+        if(sentence.originalLanguage === 'ja') {
+            textToRead = sentence.analysis.sentence.reading ?? sentence.text;
+        } else {
+            textToRead = sentence.text;
+        }
+        const { voice1, voice2 } = await generateSpeech(textToRead);
 
         // Update sentence with audio URLs
         await db.collection('sentences').updateOne(

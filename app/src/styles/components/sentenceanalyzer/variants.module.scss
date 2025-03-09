@@ -18,7 +18,7 @@
         gap:4rem;
     
         .variantContent {
-            font-family: var(--font-kr-serif);
+            font-family: var(--font-serif);
             font-size:1.8rem;
 
             position:relative;
@@ -31,14 +31,6 @@
             margin-left:3rem;
 
             max-width:50%;
-
-            .variantText.fontZh {
-                font-family: var(--font-sc-serif);
-            }
-
-            .variantText.fontJp {
-                font-family: var(--font-jp-serif);
-            }
 
             .variantType {
                 position:absolute;

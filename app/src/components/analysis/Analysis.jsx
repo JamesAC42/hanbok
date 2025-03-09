@@ -9,8 +9,10 @@ import SentenceNotes from '@/components/analysis/SentenceNotes';
 import Variants from '@/components/analysis/Variants';
 import CulturalNotes from '@/components/analysis/CulturalNotes';
 import SaveButton from '@/components/analysis/SaveButton';
+import SettingsButton from '@/components/analysis/SettingsButton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
+import getFontClass from '@/lib/fontClass';
 
 const Analysis = ({
     analysis,
@@ -25,6 +27,15 @@ const Analysis = ({
     const [prevWord, setPrevWord] = useState(null);
     const [wordInfo, setWordInfo] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(false);
+    const [showPronunciation, setShowPronunciation] = useState(true);
+
+    // Initialize showPronunciation from localStorage
+    useEffect(() => {
+        const savedPref = localStorage.getItem('showPronunciation');
+        if (savedPref !== null) {
+            setShowPronunciation(JSON.parse(savedPref));
+        }
+    }, []);
 
     useEffect(() => {
         if (!wordInfo) {
@@ -50,9 +61,14 @@ const Analysis = ({
     return(
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
             <SaveButton sentenceId={sentenceId} />
+            <SettingsButton 
+                showPronunciation={showPronunciation} 
+                setShowPronunciation={setShowPronunciation} 
+                language={originalLanguage}
+            />
             
             <div className={styles.sentenceHeader}>{t('analysis.original')}:</div>
-            <div className={styles.sentence}>
+            <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>
                 {analysis.sentence.original}
             </div>
 
@@ -71,12 +87,14 @@ const Analysis = ({
                 language={originalLanguage}
                 setWordInfo={setWordInfo}
                 resetLockedWord={showTransition}
-                shouldAnimate={shouldAnimate} />
+                shouldAnimate={shouldAnimate}
+                showPronunciation={showPronunciation} />
 
             <WordInfo 
                 wordInfo={wordInfo}
                 language={originalLanguage}
-                shouldAnimate={shouldAnimate} />
+                shouldAnimate={shouldAnimate}
+                showPronunciation={showPronunciation} />
 
             <SentenceNotes analysis={analysis} />
 
@@ -84,16 +102,19 @@ const Analysis = ({
 
             <Variants 
                 analysis={analysis} 
-                language={originalLanguage} />
+                language={originalLanguage}
+                showPronunciation={showPronunciation} />
 
             <WordsList 
                 analysis={analysis} 
                 originalLanguage={originalLanguage} 
-                translationLanguage={translationLanguage} />
+                translationLanguage={translationLanguage}
+                showPronunciation={showPronunciation} />
 
             <GrammarPoints 
                 analysis={analysis} 
-                language={originalLanguage} />
+                language={originalLanguage}
+                showPronunciation={showPronunciation} />
         
         </div>
     )

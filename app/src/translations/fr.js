@@ -245,13 +245,22 @@ export const fr = {
             function: 'Fonction',
             notes: 'Notes',
             role: 'Le rôle de ce mot dans la phrase est',
-            particles: 'Particules'
+            particles: 'Particules',
+            structure: 'Ce mot apparaît dans le ',
+            aspect: 'L\'aspect de ce verbe est ',
+            form: 'La forme de ce mot est ',
+            politeness: 'Niveau de politesse',
+            case: 'Le cas de ce mot est '
         },
         hoverExplanation: 'Survolez un mot pour voir son explication.',
         conjugation: {
             tense: 'Temps',
             formality: 'Formalité',
-            steps: 'Étapes de Conjugaison'
+            steps: 'Étapes de Conjugaison',
+            person: 'Personne',
+            number: 'Nombre',
+            gender: 'Genre',
+            mood: 'Mode'
         },
         variants: {
             title: 'Variantes',
@@ -265,6 +274,10 @@ export const fr = {
         saveButton: {
             save: "Enregistrer la phrase",
             remove: "Retirer des enregistrements"
+        },
+        settingsButton: {
+            title: "Paramètres",
+            showPronunciations: "Afficher les prononciations"
         },
         grammar: 'Grammaire',
         examples: 'Exemples'
@@ -339,14 +352,22 @@ export const fr = {
     },
     announcement: {
         new: 'Nouveau',
-        newFeatures: 'Nouvelles fonctionnalités disponibles !',
-        newLanguagesTitle: '9 nouvelles langues ajoutées',
-        newLanguagesDesc: 'Nous avons élargi notre offre linguistique ! Vous pouvez désormais apprendre et analyser des phrases dans 9 langues supplémentaires, faisant de Hanbok un outil encore plus puissant pour les apprenants de langues du monde entier.',
-        imageExtractionTitle: 'Extraction de texte d\'image',
-        imageExtractionDesc: 'Extrayez du texte directement à partir d\'images, captures d\'écran, mangas, vidéos et plus encore ! Téléchargez simplement une image et Hanbok identifiera et analysera le texte, facilitant plus que jamais l\'apprentissage à partir de matériaux authentiques.',
-        communityTitle: 'Rejoignez notre communauté',
-        communityDesc: 'Si vous appréciez Hanbok, nous aimerions avoir de vos nouvelles ! Laissez un commentaire ou rejoignez notre serveur Discord pour suggérer des fonctionnalités, signaler des problèmes et obtenir des mises à jour sur ce sur quoi nous travaillons ensuite.',
+        newFeatures: 'Nouvelles fonctionnalités disponibles!',
+        languageEnhancementsTitle: 'Support linguistique amélioré',
+        languageEnhancementsDesc: 'Nous avons apporté des améliorations significatives à nos capacités d\'analyse linguistique, en nous concentrant sur un meilleur support pour les langues asiatiques et slaves.',
+        enhancedChinese: 'Analyse linguistique améliorée pour le chinois',
+        enhancedRussian: 'Analyse linguistique améliorée pour le russe avec support de translittération',
+        enhancedJapanese: 'Analyse linguistique améliorée pour le japonais',
+        fixedFontRendering: 'Problèmes de rendu des polices pour le chinois, le russe et le japonais résolus',
+        russianTransliteration: 'Translittération ajoutée pour le russe',
+        accessibilityTitle: 'Accessibilité améliorée',
+        accessibilityDesc: 'Nous avons amélioré l\'accessibilité du clavier dans toute l\'application, facilitant ainsi la navigation et l\'utilisation de nos fonctionnalités pour tous les utilisateurs.',
+        communityTitle: 'Rejoignez notre communauté croissante',
+        communityDesc: 'Si vous aimez utiliser Kankoku, nous serions ravis que vous rejoigniez notre communauté! Partagez votre expérience avec vos amis et aidez-nous à grandir.',
+        discordInvite: 'Rejoignez notre communauté Discord pour des conseils d\'apprentissage des langues, des mises à jour et pour vous connecter avec d\'autres apprenants!',
         leaveFeedback: 'Laisser un commentaire',
-        joinDiscord: 'Rejoindre Discord',
-    }
+        joinDiscord: 'Rejoignez notre Discord',
+        shareWebsite: 'Partager avec des amis',
+        linkCopied: 'Lien copié dans le presse-papiers! Partagez-le avec vos amis.'
+    },
 }; 

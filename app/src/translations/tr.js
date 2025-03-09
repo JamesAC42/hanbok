@@ -245,12 +245,21 @@ export const tr = {
             function: 'Fonksiyon',
             notes: 'Notlar',
             role: 'Bu kelimenin cümledeki rolü',
-            particles: 'Partiküller'
+            particles: 'Partiküller',
+            structure: 'Bu kelime şurada görünür ',
+            aspect: 'Bu fiilin görünüşü ',
+            form: 'Bu kelimenin biçimi ',
+            politeness: 'Nezaket seviyesi',
+            case: 'Bu kelimenin hali '
         },
         conjugation: {
             tense: 'Zaman',
             formality: 'Resmiyet',
-            steps: 'Çekim Adımları'
+            steps: 'Çekim Adımları',
+            person: 'Şahıs',
+            number: 'Sayı',
+            gender: 'Cinsiyet',
+            mood: 'Kip'
         },
         hoverExplanation: 'Açıklama için bir kelimenin üzerine gelin.',
         sentenceNotes: {
@@ -265,6 +274,10 @@ export const tr = {
         saveButton: {
             save: "Cümleyi kaydet",
             remove: "Kaydedilenlerden kaldır"
+        },
+        settingsButton: {
+            title: "Ayarlar",
+            showPronunciations: "Telaffuzları göster"
         },
         grammar: 'Dilbilgisi',
         examples: 'Örnekler'
@@ -340,13 +353,21 @@ export const tr = {
     announcement: {
         new: 'Yeni',
         newFeatures: 'Yeni Özellikler Mevcut!',
-        newLanguagesTitle: '9 Yeni Dil Eklendi',
-        newLanguagesDesc: 'Dil tekliflerimizi genişlettik! Artık 9 ek dilde cümleleri öğrenebilir ve analiz edebilirsiniz, bu da Hanbok\'u dünya çapındaki dil öğrencileri için daha da güçlü bir araç haline getiriyor.',
-        imageExtractionTitle: 'Görüntü Metin Çıkarımı',
-        imageExtractionDesc: 'Doğrudan görüntülerden, ekran görüntülerinden, mangalardan, videolardan ve daha fazlasından metin çıkarın! Sadece bir görüntü yükleyin ve Hanbok metni tanımlayıp analiz ederek, otantik materyallerden öğrenmeyi her zamankinden daha kolay hale getirir.',
-        communityTitle: 'Topluluğumuza Katılın',
-        communityDesc: 'Hanbok\'tan keyif alıyorsanız, sizden haber almak isteriz! Özellikler önermek, sorunları bildirmek ve üzerinde çalıştığımız bir sonraki şey hakkında güncellemeler almak için geri bildirim bırakın veya Discord sunucumuza katılın.',
+        languageEnhancementsTitle: 'Gelişmiş Dil Desteği',
+        languageEnhancementsDesc: 'Dil analiz yeteneklerimizde önemli iyileştirmeler yaptık, Asya ve Slav dillerine daha iyi destek sağlamaya odaklandık.',
+        enhancedChinese: 'Çince için geliştirilmiş dil analizi',
+        enhancedRussian: 'Rusça için geliştirilmiş dil analizi ve transliterasyon desteği',
+        enhancedJapanese: 'Japonca için geliştirilmiş dil analizi',
+        fixedFontRendering: 'Çince, Rusça ve Japonca için yazı tipi render sorunları düzeltildi',
+        russianTransliteration: 'Rusça için transliterasyon eklendi',
+        accessibilityTitle: 'Geliştirilmiş Erişilebilirlik',
+        accessibilityDesc: 'Uygulama genelinde klavye erişilebilirliğini artırdık, böylece tüm kullanıcıların özelliklerimizi daha kolay kullanabilmesini sağladık.',
+        communityTitle: 'Büyüyen Topluluğumuza Katılın',
+        communityDesc: 'Kankoku kullanmaktan keyif alıyorsanız, topluluğumuza katılmanızı çok isteriz! Deneyiminizi arkadaşlarınızla paylaşın ve büyümemize yardımcı olun.',
+        discordInvite: 'Dil öğrenme ipuçları, güncellemeler ve diğer öğrenenlerle bağlantı kurmak için Discord topluluğumuza katılın!',
         leaveFeedback: 'Geri Bildirim Bırakın',
-        joinDiscord: 'Discord\'a Katılın',
-    }
+        joinDiscord: 'Discord\'umuza Katılın',
+        shareWebsite: 'Arkadaşlarınızla Paylaşın',
+        linkCopied: 'Bağlantı panoya kopyalandı! Arkadaşlarınızla paylaşın.'
+    },
 }; 

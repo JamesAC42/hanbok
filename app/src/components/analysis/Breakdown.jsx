@@ -2,12 +2,15 @@
 import { useState, useEffect } from 'react';
 import styles from '@/styles/components/sentenceanalyzer/breakdown.module.scss';
 import renderPronunciation from '@/lib/pronunciation';
+import getFontClass from '@/lib/fontClass';
 
 const Breakdown = ({ 
 	analysis,
 	language,
 	setWordInfo,
-	resetLockedWord
+	resetLockedWord,
+	shouldAnimate,
+	showPronunciation
 }) => {
 
 	const [lockedWord, setLockedWord] = useState(null);
@@ -64,6 +67,11 @@ const Breakdown = ({
 		return wordType.replaceAll(' ', '_').toLowerCase();
 	}
 
+	const hasPronunciation = () => {
+		if(language === "zh" || language === "ja" || language === "ko" || language === "ru") return styles.hasPronunciation;
+		return "";
+	}
+
 	if (!analysis) {
 		return null;
 	}
@@ -72,7 +80,7 @@ const Breakdown = ({
 		
 		<div className={styles.breakdown}>
 		<div
-		className={styles.breakdownContent}
+		className={`${styles.breakdownContent} ${hasPronunciation()}`}
 		onMouseLeave={() => handleWordInfoLeave()}
 		>
 
@@ -84,11 +92,13 @@ const Breakdown = ({
 				className={styles.sentenceItemContainer}
 				onMouseLeave={() => handleWordInfoLeave()}
 			>
-				<div className={styles.pronunciation}>
-					{
-						renderPronunciation(item, language)
-					}
-				</div>
+				{showPronunciation && (
+					<div className={styles.pronunciation}>
+						{
+							renderPronunciation(item, language)
+						}
+					</div>
+				)}
 				<button
 				className={`${styles.sentenceItem} ${
 					isWhitespace ? styles.whitespace : ""
@@ -97,6 +107,8 @@ const Breakdown = ({
 					lockedWord.dictionary_form === item.dictionary_form
 					? styles.locked
 					: ""
+				} ${
+					getFontClass(language)
 				}`}
 				data-role={getCleanedType(item.type)}
 				onMouseEnter={() => handleWordInfoEnter(item)}

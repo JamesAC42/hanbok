@@ -1,7 +1,7 @@
 import { romanize } from '@romanize/korean';
 
 const renderPronunciation = (item, language) => {
-    if(!item.reading && language !== 'ko') return null;
+    if(!item.reading && language !== 'ko' && language !== 'ru') return null;
     try {
         switch (language) {
             case 'zh':
@@ -10,6 +10,8 @@ const renderPronunciation = (item, language) => {
                 return item.reading;
             case 'ko':
                 return romanize(item.text);
+            case 'ru':
+                return item.transliteration;
             default:
                 return null;
         }

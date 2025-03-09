@@ -4,8 +4,9 @@ import { MaterialSymbolsLightKidStar } from '@/components/icons/StarFilled';
 import { MaterialSymbolsLightKidStarOutline } from '@/components/icons/StarOutline';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { romanize } from '@romanize/korean';
+import getFontClass from '@/lib/fontClass';
 
-const GrammarPoints = ({analysis, language}) => {
+const GrammarPoints = ({analysis, language, showPronunciation}) => {
     const { t } = useLanguage();
     
     const renderLessonDifficulty = (difficulty) => {
@@ -33,9 +34,13 @@ const GrammarPoints = ({analysis, language}) => {
     }
 
     const renderPronunciation = (example) => {
+        if(!showPronunciation) return null;
         let p = example.reading;
         if(language === "ko") {
             p = romanize(example.original);
+        }
+        if(language === "ru") {
+            p = example.transliteration;
         }
         
         if(p) {
@@ -57,7 +62,7 @@ const GrammarPoints = ({analysis, language}) => {
                     key={`${lesson.pattern}-${lessonIndex}`}
                     className={styles.grammarListItem}
                 >
-                    <div className={styles.grammarListItemPattern}>
+                    <div className={`${styles.grammarListItemPattern} ${getFontClass(language)}`}>
                         {lesson.pattern}
 
                         <div className={styles.grammarListItemDifficulty} title={lesson.level}>
@@ -80,12 +85,12 @@ const GrammarPoints = ({analysis, language}) => {
                                         key={`${example.korean}-${index}`}
                                         className={styles.grammarListItemExample}
                                     >
-                                        <div className={styles.grammarListItemExampleKorean}>
+                                        <div className={`${styles.grammarListItemExampleOriginal} ${getFontClass(language)}`}>
                                             {example.original}
 
                                             {renderPronunciation(example)}
                                         </div>
-                                        <div className={styles.grammarListItemExampleEnglish}>
+                                        <div className={styles.grammarListItemExampleTranslation}>
                                             {example.translation}
                                         </div>
                                     </div>

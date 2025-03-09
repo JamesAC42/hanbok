@@ -1,6 +1,6 @@
 'use client';
 import styles from '@/styles/components/input.module.scss';
-
+import getFontClass from '@/lib/fontClass';
 const TextInput = ({
   value,
   onChange,
@@ -11,6 +11,7 @@ const TextInput = ({
   variant = 'default',
   maxLength = 120,
   onPaste,
+  language,
   ...props
 }) => {
   return (
@@ -20,7 +21,7 @@ const TextInput = ({
       onChange={onChange}
       placeholder={placeholder}
       disabled={disabled}
-      className={`${styles.input} ${styles[variant]} ${className}`}
+      className={`${styles.input} ${getFontClass(language)}`}
       maxLength={maxLength}
       onPaste={onPaste}
       {...props}

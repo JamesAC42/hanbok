@@ -245,12 +245,21 @@ export const nl = {
             function: 'Functie',
             notes: 'Notities',
             role: 'De rol van dit woord in de zin is',
-            particles: 'Partikels'
+            particles: 'Partikels',
+            structure: 'Dit woord komt voor in de ',
+            aspect: 'Het aspect van dit werkwoord is ',
+            form: 'De vorm van dit woord is ',
+            politeness: 'Beleefdheidsgraad',
+            case: 'De naamval van dit woord is '
         },
         conjugation: {
             tense: 'Tijd',
             formality: 'Formaliteit',
-            steps: 'Conjugatiestappen'
+            steps: 'Conjugatiestappen',
+            person: 'Persoon',
+            number: 'Getal',
+            gender: 'Geslacht',
+            mood: 'Wijs'
         },
         hoverExplanation: 'Zweef over een woord voor uitleg.',
         sentenceNotes: {
@@ -265,6 +274,10 @@ export const nl = {
         saveButton: {
             save: "Zin opslaan",
             remove: "Verwijderen uit opgeslagen"
+        },
+        settingsButton: {
+            title: "Instellingen",
+            showPronunciations: "Uitspraken tonen"
         },
         grammar: 'Grammatica',
         examples: 'Voorbeelden'
@@ -340,13 +353,21 @@ export const nl = {
     announcement: {
         new: 'Nieuw',
         newFeatures: 'Nieuwe functies beschikbaar!',
-        newLanguagesTitle: '9 nieuwe talen toegevoegd',
-        newLanguagesDesc: 'We hebben ons taalaanbod uitgebreid! Je kunt nu zinnen leren en analyseren in 9 extra talen, waardoor Hanbok een nog krachtiger hulpmiddel wordt voor taalleerders wereldwijd.',
-        imageExtractionTitle: 'Beeldtekstextractie',
-        imageExtractionDesc: 'Extraheer tekst rechtstreeks uit afbeeldingen, screenshots, manga, video\'s en meer! Upload gewoon een afbeelding en Hanbok identificeert en analyseert de tekst, waardoor het gemakkelijker dan ooit is om te leren van authentiek materiaal.',
-        communityTitle: 'Word lid van onze community',
-        communityDesc: 'Als je geniet van Hanbok, horen we graag van je! Laat feedback achter of word lid van onze Discord-server om functies voor te stellen, problemen te melden en updates te krijgen over waar we als volgende aan werken.',
-        leaveFeedback: 'Feedback achterlaten',
-        joinDiscord: 'Word lid van Discord',
-    }
+        languageEnhancementsTitle: 'Verbeterde Taalondersteuning',
+        languageEnhancementsDesc: 'We hebben aanzienlijke verbeteringen aangebracht in onze taalvermogens, met de nadruk op betere ondersteuning voor Aziatische en Slavische talen.',
+        enhancedChinese: 'Verbeterde taalanalyse voor Chinees',
+        enhancedRussian: 'Verbeterde taalanalyse voor Russisch met transliteratie-ondersteuning',
+        enhancedJapanese: 'Verbeterde taalanalyse voor Japans',
+        fixedFontRendering: 'Problemen met lettertypeweergave voor Chinees, Russisch en Japans opgelost',
+        russianTransliteration: 'Toegevoegde transliteratie voor Russisch',
+        accessibilityTitle: 'Verbeterde Toegankelijkheid',
+        accessibilityDesc: 'We hebben de toegankelijkheid van het toetsenbord in de hele applicatie verbeterd, zodat alle gebruikers onze functies gemakkelijker kunnen gebruiken.',
+        communityTitle: 'Doe mee met onze Groeiende Gemeenschap',
+        communityDesc: 'Als je geniet van het gebruik van Kankoku, zouden we het geweldig vinden als je lid wordt van onze gemeenschap! Deel je ervaring met vrienden en help ons groeien.',
+        discordInvite: 'Doe mee met onze Discord-gemeenschap voor taalleertips, updates en om in contact te komen met andere leerlingen!',
+        leaveFeedback: 'Laat Feedback Achter',
+        joinDiscord: 'Doe mee met onze Discord',
+        shareWebsite: 'Deel met Vrienden',
+        linkCopied: 'Link gekopieerd naar klembord! Deel het met je vrienden.'
+    },
 }; 

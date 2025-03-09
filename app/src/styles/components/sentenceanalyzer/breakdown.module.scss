@@ -49,7 +49,10 @@
 		gap: 1rem;
 		justify-content: center;
 		align-items: center;
-		row-gap:2rem;
+
+		&.hasPronunciation {
+			row-gap:2rem;
+		}
 	}
 
 	.sentenceItemContainer {
@@ -76,7 +79,6 @@
 		cursor: pointer;
 		position: relative;
 		z-index: 1;
-		font-family:var(--font-kr-serif);
 		font-size:2.6rem;
 
 		// override default button styles
@@ -146,7 +148,6 @@
 			cursor: pointer;
 			position: relative;
 			z-index: 1;
-			font-family:var(--font-kr-serif);
 			font-size:1.8rem;
 		}
 	}

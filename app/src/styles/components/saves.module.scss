@@ -70,7 +70,6 @@
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
   color: #333333;
-  font-family:var(--font-kr-serif);
 }
 
 .sentenceDate {
@@ -119,7 +118,7 @@
   text-align: center;
   font-size: 1.2rem;
   color: #333333;
-  font-family:var(--font-kr-serif);
+  font-family:var(--font-display);
   svg {
     transform: scale(1.5) translateY(2px);
     margin:0
@@ -226,9 +225,8 @@
     gap: 0.5rem;
 }
 
-.korean {
+.originalWord {
     font-weight: 500;
-    font-family: var(--font-kr-serif);
     font-size:1.4rem;
 }
 
@@ -236,7 +234,7 @@
     color: var(--text-secondary);
 }
 
-.english {
+.translatedWord {
     color: var(--text-secondary);
 }
 

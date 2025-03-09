@@ -364,6 +364,7 @@ const SentenceForm = ({
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.textInputContainer}>
                         <TextInput
+                            language={language}
                             value={text}
                             onChange={(e) => setText(e.target.value)}
                             placeholder={getLocalizedPlaceholder()}

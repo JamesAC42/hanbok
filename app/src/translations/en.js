@@ -244,12 +244,21 @@ export const en = {
             function: 'Function',
             notes: 'Notes',
             role: 'The role of this word in the sentence is',
-            particles: 'Particles'
+            particles: 'Particles',
+            structure: 'This word appears in the ',
+            aspect: 'The aspect of this verb is ',
+            form: 'The form of this word is ',
+            politeness: 'Politeness level',
+            case: 'The case of this word is '
         },
         conjugation: {
             tense: 'Tense',
             formality: 'Formality',
-            steps: 'Conjugation Steps'
+            steps: 'Conjugation Steps',
+            person: 'Person',
+            number: 'Number',
+            gender: 'Gender',
+            mood: 'Mood'
         },
         hoverExplanation: 'Hover over a word for explanation.',
         sentenceNotes: {
@@ -264,6 +273,10 @@ export const en = {
         saveButton: {
             save: "Save sentence",
             remove: "Remove from saved"
+        },
+        settingsButton: {
+            title: "Settings",
+            showPronunciations: "Show pronunciations"
         },
         grammar: 'Grammar',
         examples: 'Examples'
@@ -339,13 +352,20 @@ export const en = {
     announcement: {
         new: 'New',
         newFeatures: 'New Features Available!',
-        newLanguagesTitle: '9 New Languages Added',
-        newLanguagesDesc: 'We\'ve expanded our language offerings! You can now learn and analyze sentences in 9 additional languages, making Hanbok an even more powerful tool for language learners worldwide.',
-        imageExtractionTitle: 'Image Text Extraction',
-        imageExtractionDesc: 'Extract text directly from images, screenshots, manga, videos, and more! Simply upload an image and Hanbok will identify and analyze the text, making it easier than ever to learn from authentic materials.',
-        communityTitle: 'Join Our Community',
-        communityDesc: 'If you\'re enjoying Hanbok, we\'d love to hear from you! Leave feedback or join our Discord server to suggest features, report issues, and get updates on what we\'re working on next.',
+        languageEnhancementsTitle: 'Enhanced Language Support',
+        languageEnhancementsDesc: 'We\'ve made significant improvements to our language analysis capabilities, focusing on better support for Asian and Slavic languages.',
+        enhancedChinese: 'Enhanced language analysis for Chinese',
+        enhancedRussian: 'Enhanced language analysis for Russian with transliteration support',
+        enhancedJapanese: 'Enhanced language analysis for Japanese',
+        fixedFontRendering: 'Fixed font rendering issues for Chinese, Russian, and Japanese',
+        accessibilityTitle: 'Improved Accessibility',
+        accessibilityDesc: 'We\'ve enhanced keyboard accessibility throughout the application, making it easier for all users to navigate and use our features.',
+        communityTitle: 'Join Our Growing Community',
+        communityDesc: 'If you\'re enjoying using Hanbok, we\'d love for you to join our community! Share your experience with friends and help us grow.',
+        discordInvite: 'Join our Discord community for updates, give feedback,and to connect with other learners!',
         leaveFeedback: 'Leave Feedback',
-        joinDiscord: 'Join Discord',
+        joinDiscord: 'Join Our Discord',
+        shareWebsite: 'Share With Friends',
+        linkCopied: 'Link copied to clipboard! Share it with your friends.'
     },
 }; 

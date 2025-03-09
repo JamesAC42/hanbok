@@ -13,6 +13,7 @@ import styles from '@/styles/components/sentenceanalyzer/wordslist.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import getFontClass from '@/lib/fontClass';
 
 // Import our helper API functions
 import { fetchWordRelations, addWord, removeWord, checkSavedWords } from '@/api/words';
@@ -28,10 +29,13 @@ const getCleanedType = (wordType) => {
     return wordType.replaceAll(' ', '_').toLowerCase();
 };
 
-const getDisplayReading = (word, language) => {
+const getDisplayReading = (word, language, showPronunciation) => {
+    if(!showPronunciation) return null;
     let reading = null;
     if(language === 'ko') {
         reading = romanize(word.originalWord);
+    } else if(language === 'ru') {
+        reading = word.transliteration;
     } else if(word.reading) {
         reading = word.reading;
     }
@@ -58,12 +62,13 @@ const WordItem = ({
     handleShowRelated = null, 
     expandedWord = null, 
     showTooltip = false,
-    setShowTooltip = null
+    setShowTooltip = null,
+    showPronunciation = false
 }) => {
     const { t } = useLanguage();
     const isSaved = savedWords.has(word.originalWord);
     return (
-        <div className={styles.wordListItem} data-role={type ? getCleanedType(type) : null}>
+        <div className={`${styles.wordListItem} ${getFontClass(language)}`} data-role={type ? getCleanedType(type) : null}>
             <div className={styles.wordListItemActions}>
                 <div 
                     className={`${styles.wordListItemAction} ${isSaved ? styles.wordInLibrary : styles.wordNotInLibrary}`}
@@ -98,7 +103,7 @@ const WordItem = ({
             </div>
             <span className={styles.wordDictionary}>{word.originalWord}</span>
             {
-                getDisplayReading(word, language)
+                getDisplayReading(word, language, showPronunciation)
             }
             <span className={styles.wordListItemTranslation}>
                 {word.translatedWord && ` ${word.translatedWord}`}
@@ -123,7 +128,7 @@ const WordItem = ({
     );
 };
 
-const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
+const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronunciation }) => {
     const { user, isLoading, isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const { t } = useLanguage();
@@ -304,11 +309,13 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                                             word={{
                                                 originalWord: syn.originalWord,
                                                 reading: syn.reading,
-                                                translatedWord: syn.translatedWord
+                                                translatedWord: syn.translatedWord,
+                                                transliteration: syn.transliteration
                                             }}
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
                                             showTooltip={false}
+                                            showPronunciation={showPronunciation}
                                         />
                                     ))}
                                 </div>
@@ -323,11 +330,13 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                                             word={{
                                                 originalWord: ant.originalWord,
                                                 reading: ant.reading,
-                                                translatedWord: ant.translatedWord
+                                                translatedWord: ant.translatedWord,
+                                                transliteration: ant.transliteration
                                             }}
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
                                             showTooltip={false}
+                                            showPronunciation={showPronunciation}
                                         />
                                     ))}
                                 </div>
@@ -363,7 +372,8 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                 translatedWord: word.meaning?.description || '',
                 originalLanguage: originalLanguage,
                 translationLanguage: translationLanguage,
-                reading: word.reading || ''
+                reading: word.reading || '',
+                transliteration: word.transliteration || ''
             };
 
             wordList.push(
@@ -379,6 +389,7 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                         expandedWord={expandedWord}
                         showTooltip={showTooltip && index === 0}
                         setShowTooltip={setShowTooltip}
+                        showPronunciation={showPronunciation}
                     />
                     {renderRelatedWords(formattedWord)}
                 </div>

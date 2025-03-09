@@ -44,7 +44,7 @@ const getFeatureUsage = async (req, res) => {
         // Get total count for pagination
         const totalCount = await db.collection('feature_usage').countDocuments(query);
         
-        // Get feature usage data with user information
+        // Get feature usage data with user information - with pagination
         const usageData = await db.collection('feature_usage')
             .aggregate([
                 { $match: query },
@@ -76,7 +76,7 @@ const getFeatureUsage = async (req, res) => {
             ])
             .toArray();
         
-        // Get summary statistics
+        // Get summary statistics - without pagination, to include all matching data
         const summaryStats = await db.collection('feature_usage')
             .aggregate([
                 { $match: query },
@@ -96,11 +96,43 @@ const getFeatureUsage = async (req, res) => {
         const features = await db.collection('feature_usage')
             .distinct('feature');
         
+        // Get all users who have feature usage data for the user filter
+        const users = await db.collection('feature_usage')
+            .aggregate([
+                { $match: query.feature ? { feature: query.feature } : {} },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'userId',
+                        foreignField: 'userId',
+                        as: 'user'
+                    }
+                },
+                { $unwind: '$user' },
+                {
+                    $group: {
+                        _id: '$userId',
+                        name: { $first: '$user.name' },
+                        email: { $first: '$user.email' }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        userId: '$_id',
+                        name: 1,
+                        email: 1
+                    }
+                }
+            ])
+            .toArray();
+        
         res.json({
             success: true,
             usageData,
             summaryStats,
             features,
+            users,
             pagination: {
                 page,
                 limit,

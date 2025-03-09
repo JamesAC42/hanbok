@@ -12,6 +12,7 @@ import { LineMdGithub } from '@/components/icons/Github';
 import { LineMdEmail } from '@/components/icons/Email';
 import ChangeLanguageButton from '@/components/ChangeLanguageButton';
 import { useLanguage } from '@/contexts/LanguageContext';
+import getFontClass from '@/lib/fontClass';
 import { resources } from '@/translations';
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
@@ -89,6 +90,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         return learningLanguageTranslations?.home?.exampleSentences || [];
     };
 
+    console.log(language);
+
     return (
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>
 
@@ -156,7 +159,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                     {getExampleSentences().map((sentence, index) => (
                         <div 
                             key={index} 
-                            className={styles.exampleSentence}
+                            className={`${styles.exampleSentence} ${getFontClass(language)}`}
                             onClick={() => handleExampleClick(sentence)}
                             role="button"
                             tabIndex={0}

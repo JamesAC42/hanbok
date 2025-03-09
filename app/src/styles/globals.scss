@@ -22,6 +22,7 @@
   --font-body: 'Merriweather', serif;
   --font-display: 'Montserrat', sans-serif;
   --font-kr-sans: 'Noto Sans KR', sans-serif;
+  --font-serif: 'Noto Serif', serif;
   --font-kr-serif: 'Noto Serif KR', serif;
   --font-sc-serif: 'Noto Serif SC', serif;
   --font-jp-serif: 'Noto Serif JP', serif;
@@ -61,4 +62,19 @@ body::before {
   transform: translate(0, -13rem) rotate(2deg);
   pointer-events: none;
   z-index: -1;
+}
+
+.latin {
+  font-family:var(--font-serif);
+}
+.korean {
+  font-family:var(--font-kr-serif);
+}
+
+.chinese {
+  font-family:var(--font-sc-serif);
+}
+
+.japanese {
+  font-family:var(--font-jp-serif);
 }

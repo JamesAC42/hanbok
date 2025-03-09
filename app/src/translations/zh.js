@@ -245,13 +245,22 @@ export const zh = {
             function: '功能',
             notes: '注释',
             role: '这个词在句子中的作用是',
-            particles: '助词'
+            particles: '助词',
+            structure: '这个词出现在 ',
+            aspect: '这个动词的体是 ',
+            form: '这个词的形式是 ',
+            politeness: '礼貌程度',
+            case: '这个词的格是 '
         },
         hoverExplanation: '将鼠标悬停在单词上查看解释。',
         conjugation: {
             tense: '时态',
             formality: '敬语等级',
-            steps: '变位步骤'
+            steps: '变位步骤',
+            person: '人称',
+            number: '数',
+            gender: '性别',
+            mood: '语气'
         },
         variants: {
             title: '变体',
@@ -265,6 +274,10 @@ export const zh = {
         saveButton: {
             save: "保存句子",
             remove: "从保存中删除"
+        },
+        settingsButton: {
+            title: "设置",
+            showPronunciations: "显示发音"
         },
         grammar: '语法',
         examples: '例句'
@@ -338,15 +351,23 @@ export const zh = {
         fetchError: '获取已保存的{type}失败。'
     },
     announcement: {
-        new: '新功能',
-        newFeatures: '新功能已上线！',
-        newLanguagesTitle: '新增9种语言',
-        newLanguagesDesc: '我们扩展了语言选择！现在您可以学习和分析9种额外语言的句子，使hanbok成为全球语言学习者更强大的工具。',
-        imageExtractionTitle: '图像文本提取',
-        imageExtractionDesc: '直接从图像、截图、漫画、视频等提取文本！只需上传图像，hanbok将识别并分析文本，让您比以往任何时候都更容易从真实材料中学习。',
-        communityTitle: '加入我们的社区',
-        communityDesc: '如果您喜欢hanbok，我们很想听到您的声音！留下反馈或加入我们的Discord服务器，提出功能建议、报告问题，并获取我们下一步工作的最新动态。',
+        new: '新',
+        newFeatures: '新功能可用！',
+        languageEnhancementsTitle: '增强的语言支持',
+        languageEnhancementsDesc: '我们对语言分析能力进行了重大改进，重点是更好地支持亚洲和斯拉夫语言。',
+        enhancedChinese: '增强的中文语言分析',
+        enhancedRussian: '增强的俄语语言分析，支持音译',
+        enhancedJapanese: '增强的日语语言分析',
+        fixedFontRendering: '修复了中文、俄文和日文的字体渲染问题',
+        russianTransliteration: '添加了俄语音译',
+        accessibilityTitle: '改进的可访问性',
+        accessibilityDesc: '我们在整个应用程序中增强了键盘可访问性，使所有用户更容易导航和使用我们的功能。',
+        communityTitle: '加入我们不断壮大的社区',
+        communityDesc: '如果您喜欢使用Kankoku，我们希望您能加入我们的社区！与朋友分享您的体验，帮助我们成长。',
+        discordInvite: '加入我们的Discord社区，获取语言学习技巧、更新，并与其他学习者联系！',
         leaveFeedback: '留下反馈',
-        joinDiscord: '加入Discord',
-    }
+        joinDiscord: '加入我们的Discord',
+        shareWebsite: '与朋友分享',
+        linkCopied: '链接已复制到剪贴板！与您的朋友分享。'
+    },
 }; 
