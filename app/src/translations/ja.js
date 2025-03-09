@@ -347,15 +347,23 @@ export const ja = {
         fetchError: '保存された{type}の読み込みに失敗しました。'
     },
     announcement: {
-        new: '新機能',
-        newFeatures: '新機能が利用可能になりました！',
-        newLanguagesTitle: '9つの新言語が追加されました',
-        newLanguagesDesc: '言語の提供を拡大しました！さらに9つの言語で文章を学習・分析できるようになり、hanbokは世界中の言語学習者にとってさらに強力なツールになりました。',
-        imageExtractionTitle: '画像テキスト抽出',
-        imageExtractionDesc: '画像、スクリーンショット、マンガ、動画などから直接テキストを抽出できます！画像をアップロードするだけで、hanbokがテキストを識別・分析し、本物の教材からの学習がこれまで以上に簡単になります。',
-        communityTitle: 'コミュニティに参加する',
-        communityDesc: 'hanbokをお楽しみいただいているなら、ぜひご意見をお聞かせください！フィードバックを残すか、Discordサーバーに参加して、機能の提案、問題の報告、次の開発内容についての最新情報を入手してください。',
+        new: '新しい',
+        newFeatures: '新機能が利用可能です！',
+        languageEnhancementsTitle: '言語サポートの強化',
+        languageEnhancementsDesc: 'アジアとスラブの言語のサポートを強化することに重点を置いて、言語分析機能を大幅に改善しました。',
+        enhancedChinese: '中国語の言語分析の強化',
+        enhancedRussian: 'ロシア語の言語分析の強化と音訳サポート',
+        enhancedJapanese: '日本語の言語分析の強化',
+        fixedFontRendering: '中国語、ロシア語、日本語のフォントレンダリングの問題を修正しました',
+        russianTransliteration: 'ロシア語の音訳を追加しました',
+        accessibilityTitle: 'アクセシビリティの向上',
+        accessibilityDesc: 'アプリケーション全体でキーボードのアクセシビリティを向上させ、すべてのユーザーが機能をより簡単に利用できるようにしました。',
+        communityTitle: '成長するコミュニティに参加しましょう',
+        communityDesc: 'Kankokuを楽しんでいるなら、ぜひ私たちのコミュニティに参加してください！友達と経験を共有し、成長を助けてください。',
+        discordInvite: '言語学習のヒント、更新情報を得るために、他の学習者とつながるために、Discordコミュニティに参加しましょう！',
         leaveFeedback: 'フィードバックを残す',
         joinDiscord: 'Discordに参加する',
-    }
+        shareWebsite: '友達と共有する',
+        linkCopied: 'リンクがクリップボードにコピーされました！友達と共有してください。'
+    },
 }; 

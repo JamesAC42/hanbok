@@ -347,15 +347,23 @@ export const ko = {
         fetchError: '저장된 {type} 불러오기 실패.'
     },
     announcement: {
-        new: '신규',
-        newFeatures: '새로운 기능이 출시되었습니다!',
-        newLanguagesTitle: '9개 언어 추가',
-        newLanguagesDesc: '언어 제공을 확장했습니다! 이제 9개의 추가 언어로 문장을 학습하고 분석할 수 있어, 한복은 전 세계 언어 학습자들에게 더욱 강력한 도구가 되었습니다.',
-        imageExtractionTitle: '이미지 텍스트 추출',
-        imageExtractionDesc: '이미지, 스크린샷, 만화, 비디오 등에서 직접 텍스트를 추출하세요! 이미지를 업로드하기만 하면 한복이 텍스트를 식별하고 분석하여 실제 자료에서 학습하는 것이 그 어느 때보다 쉬워졌습니다.',
-        communityTitle: '커뮤니티에 참여하세요',
-        communityDesc: '한복을 즐기고 계신다면, 여러분의 의견을 듣고 싶습니다! 피드백을 남기거나 Discord 서버에 참여하여 기능 제안, 문제 보고, 다음 작업에 대한 업데이트를 받으세요.',
+        new: '새로운',
+        newFeatures: '새로운 기능이 제공됩니다!',
+        languageEnhancementsTitle: '향상된 언어 지원',
+        languageEnhancementsDesc: '아시아 및 슬라브 언어에 대한 지원을 개선하는 데 중점을 두고 언어 분석 기능을 크게 향상시켰습니다.',
+        enhancedChinese: '중국어에 대한 향상된 언어 분석',
+        enhancedRussian: '러시아어에 대한 향상된 언어 분석 및 음역 지원',
+        enhancedJapanese: '일본어에 대한 향상된 언어 분석',
+        fixedFontRendering: '중국어, 러시아어 및 일본어의 글꼴 렌더링 문제를 수정했습니다',
+        russianTransliteration: '러시아어에 대한 음역 추가',
+        accessibilityTitle: '향상된 접근성',
+        accessibilityDesc: '응용 프로그램 전반에 걸쳐 키보드 접근성을 향상시켜 모든 사용자가 기능을 더 쉽게 탐색하고 사용할 수 있도록 했습니다.',
+        communityTitle: '성장하는 커뮤니티에 참여하세요',
+        communityDesc: 'Kankoku를 즐기고 있다면 커뮤니티에 참여해 주세요! 친구들과 경험을 공유하고 성장에 도움을 주세요.',
+        discordInvite: '언어 학습 팁, 업데이트를 받고 다른 학습자와 연결하기 위해 Discord 커뮤니티에 참여하세요!',
         leaveFeedback: '피드백 남기기',
-        joinDiscord: 'Discord 참여하기',
+        joinDiscord: 'Discord에 참여하기',
+        shareWebsite: '친구와 공유하기',
+        linkCopied: '링크가 클립보드에 복사되었습니다! 친구와 공유하세요.'
     }
 }; 
