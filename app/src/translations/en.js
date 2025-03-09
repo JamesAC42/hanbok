@@ -274,6 +274,10 @@ export const en = {
             save: "Save sentence",
             remove: "Remove from saved"
         },
+        settingsButton: {
+            title: "Settings",
+            showPronunciations: "Show pronunciations"
+        },
         grammar: 'Grammar',
         examples: 'Examples'
     },

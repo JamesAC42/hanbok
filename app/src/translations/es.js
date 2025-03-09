@@ -275,6 +275,10 @@ export const es = {
             save: "Guardar frase",
             remove: "Eliminar de guardados"
         },
+        settingsButton: {
+            title: "Configuración",
+            showPronunciations: "Mostrar pronunciaciones"
+        },
         grammar: 'Gramática',
         examples: 'Ejemplos'
     },

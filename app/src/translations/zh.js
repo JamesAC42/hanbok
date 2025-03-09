@@ -275,6 +275,10 @@ export const zh = {
             save: "保存句子",
             remove: "从保存中删除"
         },
+        settingsButton: {
+            title: "设置",
+            showPronunciations: "显示发音"
+        },
         grammar: '语法',
         examples: '例句'
     },

@@ -29,7 +29,8 @@ const getCleanedType = (wordType) => {
     return wordType.replaceAll(' ', '_').toLowerCase();
 };
 
-const getDisplayReading = (word, language) => {
+const getDisplayReading = (word, language, showPronunciation) => {
+    if(!showPronunciation) return null;
     let reading = null;
     if(language === 'ko') {
         reading = romanize(word.originalWord);
@@ -61,7 +62,8 @@ const WordItem = ({
     handleShowRelated = null, 
     expandedWord = null, 
     showTooltip = false,
-    setShowTooltip = null
+    setShowTooltip = null,
+    showPronunciation = false
 }) => {
     const { t } = useLanguage();
     const isSaved = savedWords.has(word.originalWord);
@@ -101,7 +103,7 @@ const WordItem = ({
             </div>
             <span className={styles.wordDictionary}>{word.originalWord}</span>
             {
-                getDisplayReading(word, language)
+                getDisplayReading(word, language, showPronunciation)
             }
             <span className={styles.wordListItemTranslation}>
                 {word.translatedWord && ` ${word.translatedWord}`}
@@ -126,7 +128,7 @@ const WordItem = ({
     );
 };
 
-const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
+const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronunciation }) => {
     const { user, isLoading, isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const { t } = useLanguage();
@@ -313,6 +315,7 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
                                             showTooltip={false}
+                                            showPronunciation={showPronunciation}
                                         />
                                     ))}
                                 </div>
@@ -333,6 +336,7 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                                             savedWords={savedWords}
                                             toggleWordInLibrary={toggleWordInLibrary}
                                             showTooltip={false}
+                                            showPronunciation={showPronunciation}
                                         />
                                     ))}
                                 </div>
@@ -385,6 +389,7 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage }) => {
                         expandedWord={expandedWord}
                         showTooltip={showTooltip && index === 0}
                         setShowTooltip={setShowTooltip}
+                        showPronunciation={showPronunciation}
                     />
                     {renderRelatedWords(formattedWord)}
                 </div>

@@ -3,10 +3,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { romanize } from '@romanize/korean';
 import getFontClass from '@/lib/fontClass';
 
-const Variants = ({analysis, language}) => {
+const Variants = ({analysis, language, showPronunciation}) => {
     const { t } = useLanguage();
 
     const renderReading = (variant) => {
+        if(!showPronunciation) return null;
         let reading = variant.reading;
         if(language === 'ko') {
             reading = romanize(variant.text);

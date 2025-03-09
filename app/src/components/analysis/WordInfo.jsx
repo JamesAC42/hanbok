@@ -7,7 +7,7 @@ import renderPronunciation from '@/lib/pronunciation';
 import { romanize } from '@romanize/korean';
 import getFontClass from '@/lib/fontClass';
 
-const WordInfo = ({wordInfo, shouldAnimate, language}) => {
+const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
     const { t } = useLanguage();
     
     const getCleanedType = (wordType) => {
@@ -25,6 +25,8 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
     }
 
     const pronunciation = () => {
+        if (!showPronunciation) return null;
+        
         let text = wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form
         let p = null;
         if(language === 'ko') {
@@ -40,6 +42,8 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
 
     // For Russian transliteration display
     const transliteration = () => {
+        if (!showPronunciation) return null;
+        
         if (language === 'ru' && wordInfo.transliteration) {
             return <span className={styles.transliteration}>[{wordInfo.transliteration}]</span>
         }

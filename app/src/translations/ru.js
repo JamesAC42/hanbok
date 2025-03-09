@@ -275,6 +275,10 @@ export const ru = {
             save: "Сохранить предложение",
             remove: "Удалить из сохраненных"
         },
+        settingsButton: {
+            title: "Настройки",
+            showPronunciations: "Показать произношения"
+        },
         grammar: 'Грамматика',
         examples: 'Примеры'
     },

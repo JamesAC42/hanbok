@@ -275,6 +275,10 @@ export const tr = {
             save: "Cümleyi kaydet",
             remove: "Kaydedilenlerden kaldır"
         },
+        settingsButton: {
+            title: "Ayarlar",
+            showPronunciations: "Telaffuzları göster"
+        },
         grammar: 'Dilbilgisi',
         examples: 'Örnekler'
     },

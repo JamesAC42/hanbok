@@ -275,6 +275,10 @@ export const fr = {
             save: "Enregistrer la phrase",
             remove: "Retirer des enregistrements"
         },
+        settingsButton: {
+            title: "Paramètres",
+            showPronunciations: "Afficher les prononciations"
+        },
         grammar: 'Grammaire',
         examples: 'Exemples'
     },

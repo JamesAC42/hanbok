@@ -275,6 +275,10 @@ export const it = {
             save: "Salva frase",
             remove: "Rimuovi dai salvati"
         },
+        settingsButton: {
+            title: "Impostazioni",
+            showPronunciations: "Mostra pronunce"
+        },
         grammar: 'Grammatica',
         examples: 'Esempi'
     },

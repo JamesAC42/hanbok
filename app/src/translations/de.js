@@ -275,6 +275,10 @@ export const de = {
             save: "Satz speichern",
             remove: "Aus gespeicherten entfernen"
         },
+        settingsButton: {
+            title: "Einstellungen",
+            showPronunciations: "Aussprachen anzeigen"
+        },
         grammar: 'Grammatik',
         examples: 'Beispiele'
     },

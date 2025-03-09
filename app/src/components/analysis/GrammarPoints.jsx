@@ -6,7 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { romanize } from '@romanize/korean';
 import getFontClass from '@/lib/fontClass';
 
-const GrammarPoints = ({analysis, language}) => {
+const GrammarPoints = ({analysis, language, showPronunciation}) => {
     const { t } = useLanguage();
     
     const renderLessonDifficulty = (difficulty) => {
@@ -34,6 +34,7 @@ const GrammarPoints = ({analysis, language}) => {
     }
 
     const renderPronunciation = (example) => {
+        if(!showPronunciation) return null;
         let p = example.reading;
         if(language === "ko") {
             p = romanize(example.original);

@@ -275,6 +275,10 @@ export const ko = {
             save: "문장 저장",
             remove: "저장 목록에서 제거"
         },
+        settingsButton: {
+            title: "설정",
+            showPronunciations: "발음 표시"
+        },
         grammar: '문법',
         examples: '예문'
     },

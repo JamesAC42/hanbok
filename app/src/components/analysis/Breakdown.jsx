@@ -8,7 +8,9 @@ const Breakdown = ({
 	analysis,
 	language,
 	setWordInfo,
-	resetLockedWord
+	resetLockedWord,
+	shouldAnimate,
+	showPronunciation
 }) => {
 
 	const [lockedWord, setLockedWord] = useState(null);
@@ -90,11 +92,13 @@ const Breakdown = ({
 				className={styles.sentenceItemContainer}
 				onMouseLeave={() => handleWordInfoLeave()}
 			>
-				<div className={styles.pronunciation}>
-					{
-						renderPronunciation(item, language)
-					}
-				</div>
+				{showPronunciation && (
+					<div className={styles.pronunciation}>
+						{
+							renderPronunciation(item, language)
+						}
+					</div>
+				)}
 				<button
 				className={`${styles.sentenceItem} ${
 					isWhitespace ? styles.whitespace : ""

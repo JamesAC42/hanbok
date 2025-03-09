@@ -275,6 +275,10 @@ export const ja = {
             save: "文章を保存",
             remove: "保存から削除"
         },
+        settingsButton: {
+            title: "設定",
+            showPronunciations: "発音を表示"
+        },
         grammar: '文法',
         examples: '例文'
     },

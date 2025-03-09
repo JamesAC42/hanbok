@@ -275,6 +275,10 @@ export const nl = {
             save: "Zin opslaan",
             remove: "Verwijderen uit opgeslagen"
         },
+        settingsButton: {
+            title: "Instellingen",
+            showPronunciations: "Uitspraken tonen"
+        },
         grammar: 'Grammatica',
         examples: 'Voorbeelden'
     },
