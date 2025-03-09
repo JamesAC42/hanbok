@@ -1,8 +1,11 @@
 import styles from '@/styles/components/sentenceanalyzer/conjugation.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
+import getFontClass from '@/lib/fontClass';
+
 
 const Conjugation = ({
-    wordInfo
+    wordInfo,
+    language
 }) => {
     const { t } = useLanguage();
 
@@ -29,12 +32,12 @@ const Conjugation = ({
     if (!wordInfo.grammar?.conjugation) return null;
 
     return (
-        <div className={`${styles.conjugation} ${fillSteps() ? styles.fillSteps : ''}`}>
+        <div className={`${styles.conjugation} ${getFontClass(language)} ${fillSteps() ? styles.fillSteps : ''}`}>
             
             <div className={styles.additionalInfo}>
             {
             wordInfo.grammar.conjugation.tense && (
-                <div className={styles.tense}>
+                <div className={`${styles.tense}`}>
                 <span className={styles.tenseLabel}>
                     {t('analysis.conjugation.tense')}:
                 </span>
@@ -47,7 +50,7 @@ const Conjugation = ({
 
             {
             wordInfo.grammar.conjugation.formality && (
-                <div className={styles.formality}>
+                <div className={`${styles.formality}`}>
                 <span className={styles.formalityLabel}>
                     {t('analysis.conjugation.formality')}:
                 </span>
@@ -66,7 +69,7 @@ const Conjugation = ({
                     {t('analysis.conjugation.steps')}:
                 </div>
                 <div className={styles.stepsContent}>
-                    <table className={styles.stepsTable}>
+                    <table className={`${styles.stepsTable} ${getFontClass(language)}`}>
                         <tbody>
                             {wordInfo.grammar.conjugation.steps.map((step, index) => 
                                 typeof step === 'string' 

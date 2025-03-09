@@ -13,6 +13,7 @@ import styles from '@/styles/components/sentenceanalyzer/wordslist.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import getFontClass from '@/lib/fontClass';
 
 // Import our helper API functions
 import { fetchWordRelations, addWord, removeWord, checkSavedWords } from '@/api/words';
@@ -63,7 +64,7 @@ const WordItem = ({
     const { t } = useLanguage();
     const isSaved = savedWords.has(word.originalWord);
     return (
-        <div className={styles.wordListItem} data-role={type ? getCleanedType(type) : null}>
+        <div className={`${styles.wordListItem} ${getFontClass(language)}`} data-role={type ? getCleanedType(type) : null}>
             <div className={styles.wordListItemActions}>
                 <div 
                     className={`${styles.wordListItemAction} ${isSaved ? styles.wordInLibrary : styles.wordNotInLibrary}`}

@@ -37,14 +37,12 @@
             border-bottom:1px solid #000000c7;
             color:#000000c7;
             padding:1rem;
-            font-family:var(--font-kr-serif);
             text-align:center;
             font-size:2rem;
             font-weight:bold;
             font-variation-settings: "wght" 900;
             border-radius:0.2rem;
             margin-bottom:0.5rem;
-
 
             display:flex;
             justify-content:space-between;
@@ -64,7 +62,7 @@
         }
 
         .grammarListItemExplanation {
-            font-family:var(--font-kr-serif);
+            font-family:var(--font-body);
             font-size:1.2rem;
             font-weight:500;
             font-variation-settings: "wght" 500;
@@ -92,15 +90,13 @@
                     position:relative;
 
                     & > * {
-                        font-family:var(--font-body);
                         font-weight:100;
                         padding:1rem 3rem;
                         border-radius:3rem;
                         white-space: nowrap;
                     }
 
-                    .grammarListItemExampleKorean {
-                        font-family:var(--font-kr-serif);
+                    .grammarListItemExampleOriginal {
                         font-size:1.5rem;
                         background: linear-gradient(to left, #000000, #80787d);
                         color:#ffffff;
@@ -116,16 +112,16 @@
                             background:#535353;
                             border-radius:3rem;
                             padding:0.2rem 1rem;
-                            font-family:var(--font-kr-sans);
+                            font-family:var(--font-serif);
                             font-weight:100;
                             max-width:80%;
                         }
                     }
-                    .grammarListItemExampleEnglish {
+                    .grammarListItemExampleTranslation {
                         position:absolute;
                         top:80%;
                         right:0;
-                        font-family:var(--font-body);
+                        font-family:var(--font-serif);
                         font-size:1.3rem;
                         border:1px solid #000000;
                         transform:translate(0, -5%);

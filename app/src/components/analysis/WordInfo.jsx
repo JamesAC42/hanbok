@@ -5,6 +5,7 @@ import Conjugation from './Conjugation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import renderPronunciation from '@/lib/pronunciation';
 import { romanize } from '@romanize/korean';
+import getFontClass from '@/lib/fontClass';
 
 const WordInfo = ({wordInfo, shouldAnimate, language}) => {
     const { t } = useLanguage();
@@ -41,7 +42,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
         <>
         {wordInfo && (
             <div 
-                className={`${styles.wordInfoContainer} ${shouldAnimate ? styles.animate : ''}`}
+                className={`${styles.wordInfoContainer} ${shouldAnimate ? styles.animate : ''} ${getFontClass(language)}`}
                 data-role={wordInfo.isParticle ? 'particle' : getCleanedType(wordInfo.type)}
             >
                 <div className={styles.wordInfoBackground}></div>
@@ -49,7 +50,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
 
                 {
                     wordInfo.type && (
-                    <div className={styles.type}>
+                    <div className={`${styles.type} ${getFontClass(language)}`}>
                         {
                         wordInfo.isParticle ? 
                             "PARTICLE" : 
@@ -59,7 +60,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
                     )
                 }
                 
-                <div className={styles.dictionaryForm}>
+                <div className={`${styles.dictionaryForm} ${getFontClass(language)}`}>
                     {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
                     {pronunciation()}
                 </div>
@@ -129,7 +130,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
                     }
 
                     {
-                        (wordInfo.grammar?.conjugation) && <Conjugation wordInfo={wordInfo} />
+                        (wordInfo.grammar?.conjugation) && <Conjugation language={language} wordInfo={wordInfo} />
                     }
                     </div>
                     )}

@@ -1,5 +1,4 @@
 .conjugation {
-    font-family:var(--font-kr-serif);
     font-weight:normal;
 
     display:flex;
@@ -27,7 +26,6 @@
         max-width:15rem;
 
         .tense, .formality {
-            font-family:var(--font-kr-serif);
             font-weight:normal;
             font-size:1.1rem;
             border:1px solid #000;
@@ -83,7 +81,6 @@
             .stepsTable {
                 width:100%;
                 border-collapse:collapse;
-                font-family:var(--font-kr-serif);
                 
                 td {
                     padding:0.5rem 1rem;

@@ -11,6 +11,7 @@ import CulturalNotes from '@/components/analysis/CulturalNotes';
 import SaveButton from '@/components/analysis/SaveButton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
+import getFontClass from '@/lib/fontClass';
 
 const Analysis = ({
     analysis,
@@ -52,7 +53,7 @@ const Analysis = ({
             <SaveButton sentenceId={sentenceId} />
             
             <div className={styles.sentenceHeader}>{t('analysis.original')}:</div>
-            <div className={styles.sentence}>
+            <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>
                 {analysis.sentence.original}
             </div>
 

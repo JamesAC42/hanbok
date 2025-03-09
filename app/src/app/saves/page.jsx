@@ -10,6 +10,7 @@ import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
 import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
 import { removeWord } from '@/api/words';
 import { useLanguage } from '@/contexts/LanguageContext';
+import getFontClass from '@/lib/fontClass';
 
 const Saves = () => {
     const router = useRouter();
@@ -164,8 +165,8 @@ const Saves = () => {
                             key={sentence.sentenceId} 
                             className={savesStyles.sentenceItem}
                         >
-                            <p className={savesStyles.sentenceText}>{sentence.text}</p>
-                            <p className={savesStyles.sentenceTranslation}>{sentence.analysis?.sentence?.translation}</p>
+                            <p className={`${savesStyles.sentenceText} ${getFontClass(selectedLanguage)}`}>{sentence.text}</p>
+                            <p className={`${getFontClass(sentence.translationLanguage)}`}>{sentence.analysis?.sentence?.translation}</p>
                             <p className={savesStyles.sentenceDate}>
                                 {t('saves.savedOn')} {new Date(sentence.dateSaved).toLocaleString()}
                             </p>
@@ -197,9 +198,9 @@ const Saves = () => {
                     >
                         <div className={savesStyles.wordContent}>
                             <p className={savesStyles.wordText}>
-                                <span className={savesStyles.korean}>{word.originalWord}</span>
+                                <span className={`${savesStyles.originalWord} ${getFontClass(selectedLanguage)}`}>{word.originalWord}</span>
                                 <span className={savesStyles.divider}>•</span>
-                                <span className={savesStyles.english}>{word.translatedWord}</span>
+                                <span className={`${savesStyles.translatedWord} ${getFontClass(word.translationLanguage)}`}>{word.translatedWord}</span>
                             </p>
                             <p className={savesStyles.wordDate}>
                                 {t('saves.savedOn')} {new Date(word.dateSaved).toLocaleString()}
