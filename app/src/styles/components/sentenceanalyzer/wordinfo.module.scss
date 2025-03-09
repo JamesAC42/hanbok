@@ -90,6 +90,7 @@
 
 		.dictionaryForm {
 			width:100%;
+			word-wrap: break-word;
 			text-align:left; 
 			-webkit-text-stroke: 1px black;
 			font-size:3rem;
@@ -118,7 +119,7 @@
 			@media screen and (max-width:725px) {
 				margin-left:0.2rem;
 				font-size:2.4rem;
-
+				margin-top:2rem;
 				span.pronunciation,
 				span.transliteration {
 					font-size:1rem;

@@ -69,8 +69,10 @@ const WordInfo = ({wordInfo, shouldAnimate, language}) => {
                 }
                 
                 <div className={`${styles.dictionaryForm} ${getFontClass(language)}`}>
-                    {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
-                    {language === 'ru' ? transliteration() : pronunciation()}
+                    <span className={styles.dictionaryFormInner}>
+                        {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
+                        {language === 'ru' ? transliteration() : pronunciation()}
+                    </span>
                 </div>
 
                 <div className={styles.wordInfoContent}>
