@@ -23,16 +23,11 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
     const [isPlaying, setIsPlaying] = useState(false);
 
     const [loadingAudio, setLoadingAudio] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [voices, setVoices] = useState({});
     const searchParams = useSearchParams();
 
-    useEffect(() => {
-      if(voice1 || voice2) {
-        setVoices({voice1: voice1, voice2: voice2});
-      }
-    }, [voice1, voice2]);
-      
     const { user, decrementRemainingAudioGenerations } = useAuth();
 
     const [showPopup, setShowPopup] = useState(false);
@@ -42,32 +37,97 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
       voice2: typeof Audio !== 'undefined' ? new Audio() : null
     });
 
+    useEffect(() => {
+      if(voice1 || voice2) {
+        setVoices({voice1: voice1, voice2: voice2});
+      }
+    }, [voice1, voice2]);
+
     const getSentenceId = () => {
         // First check prop sentenceId, then fall back to query param
         return propSentenceId || searchParams.get('id');
     };
 
     const handlePlayPause = () => {
-
       if (noAudio()) {
         return;
       }
 
       const activeAudio = activeSpeaker === 1 ? audioRefs.voice1 : audioRefs.voice2;
       const inactiveAudio = activeSpeaker === 1 ? audioRefs.voice2 : audioRefs.voice1;
-  
+
       if (isPlaying) {
-          activeAudio?.pause();
-          setIsPlaying(false);
+        activeAudio?.pause();
+        setIsPlaying(false);
       } else {
-          inactiveAudio?.pause();
-          if (activeAudio) {
-              activeAudio.play().catch(error => {
+        inactiveAudio?.pause();
+        if (activeAudio) {
+          activeAudio.play()
+            .catch(error => {
               console.error('Error playing audio:', error);
-              });
-              setIsPlaying(true);
-          }
+              
+              // Check if the error is due to an expired URL (NotSupportedError or network error)
+              if (error.name === 'NotSupportedError' || error.name === 'NetworkError') {
+                refreshAudioUrls();
+              }
+            });
+          setIsPlaying(true);
+        }
       }
+    };
+
+    const refreshAudioUrls = () => {
+      const id = getSentenceId();
+      if (!id || isRefreshing || loadingAudio) return;
+      
+      setIsRefreshing(true);
+      setLoadingAudio(true);
+      
+      console.log('Refreshing audio URLs for sentence:', id);
+      
+      fetch(`/api/audio-url/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.voice1 && data.voice2) {
+          // We got fresh URLs, update them
+          console.log('Received fresh audio URLs');
+          setVoices({voice1: data.voice1, voice2: data.voice2});
+          
+          // Update audio sources
+          if (audioRefs.voice1) audioRefs.voice1.src = data.voice1;
+          if (audioRefs.voice2) audioRefs.voice2.src = data.voice2;
+          
+          // Try playing again
+          setTimeout(() => {
+            const activeAudio = activeSpeaker === 1 ? audioRefs.voice1 : audioRefs.voice2;
+            activeAudio?.play()
+              .catch(error => {
+                console.error('Error playing audio after refresh:', error);
+                setIsPlaying(false);
+              });
+          }, 500);
+        } else {
+          // If we didn't get valid URLs, the S3 objects might be missing
+          console.log('No valid URLs returned, keys have been cleared on the server');
+          setIsPlaying(false);
+        }
+      })
+      .catch(error => {
+        console.error('Error refreshing audio URLs:', error);
+        setIsPlaying(false);
+      })
+      .finally(() => {
+        setLoadingAudio(false);
+        // Reset the refreshing flag after a delay to prevent rapid consecutive calls
+        setTimeout(() => {
+          setIsRefreshing(false);
+        }, 2000);
+      });
     };
 
     const noAudio = () => (voices?.voice1 == null || voices?.voice2 == null);
@@ -84,7 +144,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
     }
 
     const shouldLock = () => {
-      return !loggedIn || noAudio()
+      return !loggedIn() || noAudio()
     }
 
     const handleSpeakerSwitch = () => {
@@ -158,26 +218,45 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
 
     useEffect(() => {
       if (voices.voice1) {
-          audioRefs.voice1.src = `${voices.voice1}`;
+        audioRefs.voice1.src = `${voices.voice1}`;
+        
+        // Add error event listener to detect expired URLs when loading
+        audioRefs.voice1.onerror = () => {
+          console.error('Error loading voice1 audio');
+          if (!isRefreshing && !loadingAudio) {
+            refreshAudioUrls();
+          }
+        };
       }
       if (voices.voice2) {
-          audioRefs.voice2.src = `${voices.voice2}`;
+        audioRefs.voice2.src = `${voices.voice2}`;
+        
+        // Add error event listener to detect expired URLs when loading
+        audioRefs.voice2.onerror = () => {
+          console.error('Error loading voice2 audio');
+          if (!isRefreshing && !loadingAudio) {
+            refreshAudioUrls();
+          }
+        };
       }
-    }, [voices]);
+    }, [voices, loadingAudio, isRefreshing]);
   
     useEffect(() => {
       const handleAudioEnded = () => {
-          setIsPlaying(false);
+        setIsPlaying(false);
       };
   
       audioRefs.voice1?.addEventListener('ended', handleAudioEnded);
       audioRefs.voice2?.addEventListener('ended', handleAudioEnded);
   
       return () => {
-          audioRefs.voice1?.removeEventListener('ended', handleAudioEnded);
-          audioRefs.voice2?.removeEventListener('ended', handleAudioEnded);
+        audioRefs.voice1?.removeEventListener('ended', handleAudioEnded);
+        audioRefs.voice2?.removeEventListener('ended', handleAudioEnded);
+        
+        // Remove error event listeners
+        if (audioRefs.voice1) audioRefs.voice1.onerror = null;
+        if (audioRefs.voice2) audioRefs.voice2.onerror = null;
       };
-
     }, []);
 
     return (
