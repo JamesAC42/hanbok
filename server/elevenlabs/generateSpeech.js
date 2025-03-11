@@ -1,5 +1,5 @@
 const client = require('./client');
-const { S3Client, PutObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, PutObjectCommand, GetObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { Readable } = require('stream');
 
@@ -92,12 +92,74 @@ const generateSpeech = async (text) => {
 }
 
 const getPresignedUrl = async (key) => {
-  const command = new GetObjectCommand({
-    Bucket: BUCKET_NAME,
-    Key: key
-  });
-  
-  return getSignedUrl(s3Client, command, { expiresIn: 604800 });
+  if (!key) {
+    throw new Error('Invalid key: Key is null or undefined');
+  }
+
+  try {
+    // Check if the key is actually a full URL (this happens if the database stored the URL instead of just the key)
+    if (key.startsWith('http')) {
+      console.log('Key appears to be a full URL, extracting actual key');
+      try {
+        // Try to extract the actual key from the URL
+        const url = new URL(key);
+        const pathParts = url.pathname.split('/');
+        // The key should be everything after the bucket name in the path
+        // For example: /audio/voice_id/speech_timestamp.mp3
+        if (pathParts.length >= 3) {
+          // Remove the first empty element and join the rest
+          const actualKey = pathParts.slice(1).join('/');
+          console.log('Extracted key:', actualKey);
+          
+          const command = new GetObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: actualKey
+          });
+          
+          // Check if the object exists
+          try {
+            await s3Client.send(new HeadObjectCommand({
+              Bucket: BUCKET_NAME,
+              Key: actualKey
+            }));
+            
+            return getSignedUrl(s3Client, command, { expiresIn: 604800 });
+          } catch (error) {
+            console.error(`S3 object not found for extracted key: ${actualKey}`, error);
+            throw new Error(`S3 object not found for extracted key: ${actualKey}`);
+          }
+        }
+      } catch (parseError) {
+        console.error('Error parsing URL:', parseError);
+      }
+      
+      // If we couldn't extract a valid key or the object doesn't exist, throw an error
+      throw new Error(`Invalid key format or S3 object not found: ${key}`);
+    }
+    
+    // Normal case - key is just the S3 object key
+    const command = new GetObjectCommand({
+      Bucket: BUCKET_NAME,
+      Key: key
+    });
+    
+    // First check if the object exists
+    try {
+      // This will throw an error if the object doesn't exist
+      await s3Client.send(new HeadObjectCommand({
+        Bucket: BUCKET_NAME,
+        Key: key
+      }));
+    } catch (error) {
+      console.error(`S3 object not found for key: ${key}`, error);
+      throw new Error(`S3 object not found for key: ${key}`);
+    }
+    
+    return getSignedUrl(s3Client, command, { expiresIn: 604800 });
+  } catch (error) {
+    console.error(`Error generating presigned URL for key: ${key}`, error);
+    throw error;
+  }
 };
 
 module.exports = {
