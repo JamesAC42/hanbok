@@ -48,6 +48,12 @@ async function connectToDatabase() {
       { unique: true }
     );
 
+    // Add index for word_audio collection
+    await db.collection('word_audio').createIndex(
+      { language: 1, word: 1, hiraganaReading: 1 }, 
+      { unique: true }
+    );
+
     // Initialize counters
     try {
       await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });

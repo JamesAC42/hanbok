@@ -189,6 +189,37 @@ const collections = {
       }
     ]
   },
+  word_audio: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["word", "language", "audioUrl", "dateGenerated"],
+        properties: {
+          word: {
+            bsonType: "string"
+          },
+          language: {
+            bsonType: "string"
+          },
+          audioUrl: {
+            bsonType: "string"
+          },
+          hiraganaReading: {
+            bsonType: ["string", "null"]
+          },
+          dateGenerated: {
+            bsonType: "date"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { language: 1, word: 1, hiraganaReading: 1 },
+        unique: true
+      }
+    ]
+  },
   feedback: {
     validator: {
       $jsonSchema: {
@@ -272,6 +303,202 @@ const collections = {
         unique: true
       }
     ]
+  },
+  flashcards: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["flashcardId", "userId", "contentType", "contentId", "dateCreated", "nextReviewDate", "reviewHistory"],
+        properties: {
+          flashcardId: {
+            bsonType: "int"
+          },
+          userId: {
+            bsonType: "int"
+          },
+          contentType: {
+            bsonType: "string",
+            description: "Type of content: 'word', 'sentence', or 'grammar'"
+          },
+          contentId: {
+            bsonType: "int",
+            description: "ID of the word, sentence, or grammar pattern"
+          },
+          dateCreated: {
+            bsonType: "date"
+          },
+          nextReviewDate: {
+            bsonType: "date",
+            description: "When this card should next be reviewed"
+          },
+          interval: {
+            bsonType: "int",
+            description: "Current interval in days between reviews"
+          },
+          easeFactor: {
+            bsonType: "double",
+            description: "Ease factor for the SM-2 algorithm (default: 2.5)"
+          },
+          reviewHistory: {
+            bsonType: "array",
+            items: {
+              bsonType: "object",
+              required: ["date", "rating", "timeTaken"],
+              properties: {
+                date: {
+                  bsonType: "date"
+                },
+                rating: {
+                  bsonType: "int",
+                  description: "User's self-rating of recall (0-5)"
+                },
+                timeTaken: {
+                  bsonType: "int",
+                  description: "Time in milliseconds to complete the review"
+                },
+                interval: {
+                  bsonType: "int",
+                  description: "Interval set after this review"
+                }
+              }
+            }
+          },
+          suspended: {
+            bsonType: ["bool", "null"],
+            description: "Whether the card is temporarily suspended from reviews"
+          },
+          customFront: {
+            bsonType: ["string", "null"],
+            description: "Custom front side content (overrides default)"
+          },
+          customBack: {
+            bsonType: ["string", "null"],
+            description: "Custom back side content (overrides default)"
+          },
+          tags: {
+            bsonType: ["array", "null"],
+            items: {
+              bsonType: "string"
+            }
+          },
+          repetitionNumber: {
+            bsonType: "int",
+            description: "Number of successful reviews of this card"
+          },
+          lapses: {
+            bsonType: "int",
+            description: "Number of times the card was rated < 3"
+          },
+          reviewState: {
+            bsonType: "string",
+            enum: ["new", "learning", "review", "relearning"],
+            description: "Current state in spaced repetition system"
+          },
+          createdBy: {
+            bsonType: "string",
+            description: "Application component that created this card"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, nextReviewDate: 1 },
+        name: "user_review_index"
+      },
+      {
+        key: { userId: 1, contentType: 1, contentId: 1 },
+        unique: true,
+        name: "unique_content_index"
+      }
+    ]
+  },
+  flashcard_decks: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["deckId", "userId", "name", "dateCreated"],
+        properties: {
+          deckId: {
+            bsonType: "int"
+          },
+          userId: {
+            bsonType: "int"
+          },
+          name: {
+            bsonType: "string"
+          },
+          language: {
+            bsonType: "string",
+            description: "The language code for the deck (e.g., 'ko', 'ja')"
+          },
+          description: {
+            bsonType: ["string", "null"]
+          },
+          dateCreated: {
+            bsonType: "date"
+          },
+          lastReviewed: {
+            bsonType: ["date", "null"]
+          },
+          settings: {
+            bsonType: ["object", "null"],
+            properties: {
+              newCardsPerDay: {
+                bsonType: "int",
+                description: "Maximum new cards to show per day"
+              },
+              reviewsPerDay: {
+                bsonType: "int",
+                description: "Maximum reviews to show per day"
+              },
+              learningSteps: {
+                bsonType: "array",
+                items: {
+                  bsonType: "int",
+                  description: "Minutes between learning steps"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1 },
+        name: "user_index"
+      },
+      {
+        key: { userId: 1, language: 1 },
+        name: "user_language_index"
+      }
+    ]
+  },
+  deck_cards: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["deckId", "flashcardId"],
+        properties: {
+          deckId: {
+            bsonType: "int"
+          },
+          flashcardId: {
+            bsonType: "int"
+          },
+          dateAdded: {
+            bsonType: "date"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { deckId: 1, flashcardId: 1 },
+        unique: true
+      }
+    ]
   }
 };
 
@@ -280,28 +507,49 @@ async function setupCollections(db) {
   for (const [collectionName, schema] of Object.entries(collections)) {
     try {
       // Create collection with validator
-      await db.createCollection(collectionName, {
-        validator: schema.validator
-      });
+      try {
+        await db.createCollection(collectionName, {
+          validator: schema.validator
+        });
+      } catch (collError) {
+        if (collError.code !== 48) { // Collection already exists
+          console.error(`Error creating collection ${collectionName}:`, collError);
+        } else {
+          // Update existing collection with new validation
+          await db.command({
+            collMod: collectionName,
+            validator: schema.validator
+          });
+        }
+      }
 
       // Create indexes if specified
       if (schema.indexes) {
         for (const index of schema.indexes) {
-          await db.collection(collectionName).createIndex(index.key, {
-            unique: index.unique
-          });
+          try {
+            const options = {};
+            
+            // Only add unique option if it's explicitly true or false
+            if (typeof index.unique === 'boolean') {
+              options.unique = index.unique;
+            }
+            
+            // Add name if specified
+            if (index.name) {
+              options.name = index.name;
+            }
+            
+            await db.collection(collectionName).createIndex(index.key, options);
+          } catch (indexError) {
+            // Skip errors for indexes that already exist
+            if (indexError.code !== 85 && indexError.code !== 11000) {
+              console.error(`Error creating index on ${collectionName}:`, indexError);
+            }
+          }
         }
       }
     } catch (error) {
-      if (error.code !== 48) { // Collection already exists
-        console.error(`Error creating ${collectionName}:`, error);
-      } else {
-        // Update existing collection with new validation
-        await db.command({
-          collMod: collectionName,
-          validator: schema.validator
-        });
-      }
+      console.error(`Error setting up collection ${collectionName}:`, error);
     }
   }
 }

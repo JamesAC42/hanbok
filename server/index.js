@@ -65,6 +65,10 @@ const addFeedback = require('./controllers/auth/addFeedback');
 const deleteFeedback = require('./controllers/auth/deleteFeedback');
 
 const getFeatureUsage = require('./controllers/auth/getFeatureUsage');
+const getDecks = require('./controllers/auth/getDecks');
+const getDeckCards = require('./controllers/auth/getDeckCards');
+const getDeckSettings = require('./controllers/auth/getDeckSettings');
+const updateDeckSettings = require('./controllers/auth/updateDeckSettings');
 
 const PORT = 5666;
 
@@ -139,6 +143,11 @@ app.post('/api/sentences/:sentenceId/generate-audio', isAuthenticated, async (re
     generateAudio(req, res);
 });
 
+app.get('/api/word-audio', isAuthenticated, async (req, res) => {
+    const getWordAudioController = require('./controllers/words/getWordAudio');
+    getWordAudioController(req, res);
+});
+
 app.get('/api/sentences/:sentenceId', isAuthenticated, async (req, res) => {
     getSentence(req, res);
 });
@@ -179,6 +188,23 @@ app.get('/api/words', isAuthenticated, async (req, res) => {
 
 app.post('/api/words/check', isAuthenticated, async (req, res) => {
     checkSavedWords(req, res);
+});
+
+// Flashcard routes
+app.get('/api/decks', isAuthenticated, async (req, res) => {
+    getDecks(req, res);
+});
+
+app.get('/api/decks/:deckId/cards', isAuthenticated, async (req, res) => {
+    getDeckCards(req, res);
+});
+
+app.get('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
+    getDeckSettings(req, res);
+});
+
+app.put('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
+    updateDeckSettings(req, res);
 });
 
 // Stripe endpoints

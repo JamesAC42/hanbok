@@ -1,0 +1,90 @@
+@import '../variables.module.scss';
+
+.studyContent {
+    width: 100%;
+    max-width: 75rem;
+    margin: 0 auto;
+    padding: var(--spacing-large);
+    position: relative;
+}
+
+.header {
+    margin-bottom: var(--spacing-large);
+    text-align: center;
+    
+    h1 {
+        font-size: var(--text-large);
+        font-weight: 700;
+        color: var(--foreground);
+    }
+}
+
+.backButton {
+    position: absolute;
+    top: var(--spacing-large);
+    left: var(--spacing-large);
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground);
+    font-size: var(--text-large);
+    
+    &:hover {
+        color: var(--secondary);
+    }
+}
+
+.studyContainer {
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-large);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+    margin-bottom: var(--spacing-large);
+    position: relative;
+}
+
+.deckName {
+    font-size: var(--text-large);
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: var(--spacing-medium);
+}
+
+.placeholder {
+    font-size: var(--text-normal);
+    color: var(--foreground);
+    text-align: center;
+    padding: 3rem 0;
+}
+
+.error {
+    color: var(--error-foreground);
+    background-color: var(--error-background);
+    text-align: center;
+    font-size: var(--text-normal);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+    .studyContent {
+        padding: var(--spacing-medium);
+    }
+    
+    .backButton {
+        top: var(--spacing-medium);
+        left: var(--spacing-medium);
+    }
+    
+    .header h1 {
+        font-size: var(--text-large);
+    }
+    
+    .studyContainer {
+        padding: var(--spacing-medium);
+    }
+} 

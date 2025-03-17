@@ -22,16 +22,43 @@ const removeWord = async (req, res) => {
     try {
         const db = getDb();
         
-        const result = await db.collection('words').deleteOne({
+        // Find the word first to get its ID
+        const word = await db.collection('words').findOne({
             userId,
             originalLanguage,
             originalWord
         });
-
-        if (result.deletedCount === 0) {
+        
+        if (!word) {
             return res.status(404).json({
                 success: false,
                 error: 'Word not found'
+            });
+        }
+        
+        // Delete the word
+        await db.collection('words').deleteOne({
+            userId,
+            originalLanguage,
+            originalWord
+        });
+        
+        // Find the flashcard associated with this word
+        const flashcard = await db.collection('flashcards').findOne({
+            userId,
+            contentType: 'word',
+            contentId: word.wordId
+        });
+        
+        if (flashcard) {
+            // Remove the flashcard from any decks
+            await db.collection('deck_cards').deleteMany({
+                flashcardId: flashcard.flashcardId
+            });
+            
+            // Delete the flashcard
+            await db.collection('flashcards').deleteOne({
+                flashcardId: flashcard.flashcardId
             });
         }
 

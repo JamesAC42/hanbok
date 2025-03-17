@@ -1,0 +1,242 @@
+.settingsModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.settingsContent {
+  background-color: white;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 30rem;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease-in-out;
+}
+
+.settingsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 0.0625rem solid #e0e0e0;
+  
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+  
+  &:hover {
+    color: var(--text-primary);
+  }
+}
+
+.settingsBody {
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+  
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 0.0625rem solid #e0e0e0;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    
+    &:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 0.125rem rgba(22, 163, 74, 0.2);
+    }
+  }
+}
+
+.helpText {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.advancedToggle {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.advancedButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f0f0f0;
+    color: var(--text-primary);
+  }
+}
+
+.chevron {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+  
+  &.up {
+    transform: rotate(180deg);
+  }
+}
+
+.advancedSettings {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 0.0625rem solid #e0e0e0;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.advancedHeader {
+  margin-bottom: 1.5rem;
+  
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+  }
+}
+
+.advancedDescription {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.infoBox {
+  background-color: #f0f9ff;
+  border: 0.0625rem solid #bae6fd;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  
+  h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem 0;
+    color: #0369a1;
+  }
+  
+  p {
+    font-size: 0.8125rem;
+    margin: 0.5rem 0;
+    color: #0c4a6e;
+    line-height: 1.4;
+  }
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.saveButton, .cancelButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveButton {
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  
+  &:hover {
+    background-color: #15803d;
+  }
+  
+  &:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  background-color: white;
+  color: var(--text-primary);
+  border: 0.0625rem solid #e0e0e0;
+  
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.success {
+  background-color: #dcfce7;
+  color: #15803d;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+} 

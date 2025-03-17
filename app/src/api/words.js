@@ -19,7 +19,7 @@ export async function fetchWordRelations(word, originalLanguage, translationLang
   }
 }
 
-export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage }) {
+export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage, reading }) {
   try {
     const response = await fetch('/api/words', {
       method: 'POST',
@@ -29,7 +29,8 @@ export async function addWord({ originalWord, translatedWord, originalLanguage, 
         originalWord,
         translatedWord,
         originalLanguage,
-        translationLanguage
+        translationLanguage,
+        reading
       })
     });
     const data = await response.json();
@@ -45,7 +46,7 @@ export async function addWord({ originalWord, translatedWord, originalLanguage, 
   }
 }
 
-export async function removeWord({ originalWord, originalLanguage }) {
+export async function removeWord({ originalWord, originalLanguage, reading }) {
   try {
     const checkResponse = await checkSavedWords([originalWord], originalLanguage);
     if (
@@ -61,7 +62,8 @@ export async function removeWord({ originalWord, originalLanguage }) {
       credentials: 'include',
       body: JSON.stringify({
         originalWord,
-        originalLanguage
+        originalLanguage,
+        reading
       })
     });
     if (!response.ok) {

@@ -12,13 +12,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/components/navbar.module.scss';
 import { useState } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { MaterialSymbolsStyleCards } from './icons/Cards';
+import { MaterialSymbolsBookmarkSharp } from './icons/Bookmark';
 
 const NavBar = () => {
     const { user, logout, loading } = useAuth();
     const router = useRouter();
     const [isNavVisible, setIsNavVisible] = useState(false);
+    const { t } = useLanguage();
     
-    const totalItems = user ? 5 : 3;
+    const totalItems = user ? 6 : 3;
 
     const handleLogout = () => {
         logout();
@@ -28,6 +32,16 @@ const NavBar = () => {
     const toggleNav = () => {
         setIsNavVisible(!isNavVisible);
     }
+
+    const navItems = [
+        { name: t('navbar.home'), path: '/' },
+        { name: t('navbar.bookmarks'), path: '/bookmarks' },
+        { name: t('navbar.cards'), path: '/cards' },
+        { name: t('navbar.profile'), path: '/profile' },
+        { name: t('navbar.about'), path: '/about' },
+        { name: t('navbar.feedback'), path: '/feedback' },
+        { name: t('navbar.pricing'), path: '/pricing' },
+    ];
 
     if (loading) return null;
 
@@ -47,29 +61,36 @@ const NavBar = () => {
                 </div>
                 {user && (
                     <div className={styles.navBarItem} style={{ '--nav-index': 2 }}>   
-                        <Link href="/saves">
+                        <Link href="/bookmarks">
+                            <MaterialSymbolsBookmarkSharp />
+                        </Link>
+                    </div>
+                )}
+                {user && (
+                    <div className={styles.navBarItem} style={{ '--nav-index': 3 }}>   
+                        <Link href="/cards">
                             <MaterialSymbolsCardsStarRounded />
                         </Link>
                     </div>
                 )}
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 3 : 2 }}>   
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 4 : 2 }}>   
                     <Link href="/about">
                         <MakiInformation11 />
                     </Link>
                 </div>
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 4 : 3 }}>   
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 5 : 3 }}>   
                     <Link href="/feedback">
                         <MingcuteCommentFill />
                     </Link>
                 </div>
                 
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 5 : 4 }}>   
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 6 : 4 }}>   
                     <Link href="/pricing">
                         <SolarChatRoundMoneyBold />
                     </Link>
                 </div>
                 {user && (
-                    <div className={styles.navBarItem} style={{ '--nav-index': 6 }}>   
+                    <div className={styles.navBarItem} style={{ '--nav-index': 7 }}>   
                         <div 
                             onClick={handleLogout}
                             className={styles.navBarItemIcon}>

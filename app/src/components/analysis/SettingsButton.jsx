@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from '@/styles/components/sentenceanalyzer/settingsbutton.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
-import GearIcon from '@/components/icons/Settings';
+import {MaterialSymbolsSettingsRounded} from '@/components/icons/Settings';
 
 const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,7 +51,7 @@ const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) =
                 onClick={toggleMenu}
                 title={t('analysis.settingsButton.title', 'Settings')}
             >
-                <GearIcon />
+                <MaterialSymbolsSettingsRounded />
             </button>
 
             {isMenuOpen && (

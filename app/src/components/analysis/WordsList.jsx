@@ -190,6 +190,7 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
     }, [isLoading, isAuthenticated]);
 
     const toggleWordInLibrary = async (word, event) => {
+        console.log('toggleWordInLibrary', word);
         if (!user) {
             showLoginRequiredPopup('words');
             return;
@@ -199,7 +200,8 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
             if (alreadySaved) {
                 await removeWord({
                     originalWord: word.originalWord,
-                    originalLanguage: originalLanguage
+                    originalLanguage: originalLanguage,
+                    reading: word.reading
                 });
                 setSavedWords(prev => {
                     const updated = new Set(prev);
@@ -211,7 +213,8 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
                     originalWord: word.originalWord,
                     translatedWord: word.translatedWord,
                     originalLanguage: originalLanguage,
-                    translationLanguage: translationLanguage
+                    translationLanguage: translationLanguage,
+                    reading: word.reading
                 });
                 if (addResult.reachedLimit) {
                     showLimitReachedPopup('words', {
