@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/components/pagelayout.module.scss';
@@ -7,7 +7,11 @@ import studyStyles from '@/styles/components/study.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
+import { MaterialSymbolsVolumeUp } from '@/components/icons/VolumeOn';
+import { MaterialSymbolsVolumeOff } from '@/components/icons/VolumeOff';
 import { use } from 'react';
+// Import our new study session manager
+import studySessionManager from '@/lib/studySessionManager';
 
 const StudyView = ({ params }) => {
     // Unwrap params using React.use()
@@ -17,10 +21,22 @@ const StudyView = ({ params }) => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
     const [deck, setDeck] = useState(null);
+    const [deckSettings, setDeckSettings] = useState(null);
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
     const { t } = useLanguage();
+    const [studySession, setStudySession] = useState(null);
+
+    const [currentCard, setCurrentCard] = useState(null);
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [updatingCard, setUpdatingCard] = useState(false);
+    const [cardIndex, setCardIndex] = useState(0);
+    const [muted, setMuted] = useState(false);
+    const [audioError, setAudioError] = useState(false);
     
+    // Audio player reference
+    const audioRef = useRef(null);
+
     useEffect(() => {
         if (!loading && !isAuthenticated) {
             router.replace('/login');
@@ -29,6 +45,7 @@ const StudyView = ({ params }) => {
 
     useEffect(() => {
         async function fetchDeckDetails() {
+            console.log('Fetching deck details');
             try {
                 setLoadingContent(true);
                 setError(null);
@@ -55,6 +72,57 @@ const StudyView = ({ params }) => {
                     name: currentDeck.name,
                     language: currentDeck.language,
                 });
+
+                // Fetch deck settings
+                const settingsResponse = await fetch(`/api/decks/${deckId}/settings`);
+                const settingsData = await settingsResponse.json();
+
+                let deckSettings = {
+                    steps: [1, 10, 60, 1440], // Default steps in minutes
+                    newCardsPerDay: 20,
+                    reviewsPerDay: 100
+                };
+
+                if (settingsData.success) {
+                    deckSettings = {
+                        ...deckSettings,
+                        ...settingsData.settings
+                    };
+                } else {
+                    console.error('Failed to fetch deck settings:', settingsData.error);
+                }
+                setDeckSettings(deckSettings);
+
+                // Fetch study session data
+                const studyResponse = await fetch(`/api/decks/${deckId}/study`);
+                const studyData = await studyResponse.json();
+
+                if (!studyData.success) {
+                    setError(studyData.error || t('cards.studySessionError'));
+                    return;
+                }
+
+                // Initialize the study session
+                setStudySession(studyData.studySession);
+                
+                // Initialize the study session manager with the session data and deck settings
+                const firstCard = studySessionManager.initialize(studyData.studySession, (updateInfo) => {
+                    // This callback will be called when the session state changes
+                    if (updateInfo.currentCard) {
+                        setCurrentCard(updateInfo.currentCard);
+                    }
+                    if (updateInfo.cardIndex !== undefined) {
+                        setCardIndex(updateInfo.cardIndex);
+                    }
+                    if (updateInfo.sessionUpdated) {
+                        setStudySession({...studySessionManager.session});
+                    }
+                }, deckSettings);
+                
+                if (firstCard) {
+                    setCurrentCard(firstCard);
+                    setCardIndex(0);
+                }
             } catch (err) {
                 console.error(err);
                 setError(t('cards.fetchError'));
@@ -63,15 +131,205 @@ const StudyView = ({ params }) => {
             }
         }
         
-        if (isAuthenticated && !loading) {
+        // Only fetch deck details when the page first loads and user is authenticated
+        if (isAuthenticated && !loading && deckId) {
             fetchDeckDetails();
         }
+
     }, [deckId, isAuthenticated, loading, t]);
+
+    // Helper function to log and handle audio errors
+    const handleAudioError = (err) => {
+        console.error('Error playing audio:', err);
+        setAudioError(true);
+        
+        // If we get an error, we'll log extra information to help debug
+        if (currentCard?.audioUrl) {
+            console.log('Audio URL that failed:', currentCard.audioUrl);
+        }
+    };
+
+    // Play audio when showing the answer, if not muted
+    useEffect(() => {
+        if (showAnswer && currentCard && currentCard.audioUrl && !muted) {
+            // Reset audio error state when trying to play
+            setAudioError(false);
+            
+            // Small delay to ensure the audio element is properly loaded
+            const timer = setTimeout(() => {
+                if (audioRef.current) {
+                    console.log('Attempting to play audio on answer reveal:', currentCard.audioUrl);
+                    audioRef.current.play().catch(handleAudioError);
+                }
+            }, 300);
+            
+            return () => clearTimeout(timer);
+        }
+    }, [showAnswer, currentCard, muted]);
+
+    // Reset audio error state for new cards
+    useEffect(() => {
+        if (currentCard) {
+            setAudioError(false);
+        }
+    }, [currentCard]);
+
+    const handleShowAnswer = () => {
+        setShowAnswer(true);
+        // Audio will play automatically due to the useEffect watching showAnswer
+    };
 
     const handleBackClick = () => {
         router.push(`/cards/${deckId}`);
     };
 
+    const handleToggleMute = () => {
+        setMuted(prev => !prev);
+        // If currently muted and toggling to unmuted, play the audio
+        if (muted && currentCard && currentCard.audioUrl && audioRef.current) {
+            setAudioError(false);
+            audioRef.current.play().catch(handleAudioError);
+        }
+    };
+
+    const handlePlayAudio = () => {
+        if (currentCard && currentCard.audioUrl && audioRef.current) {
+            setAudioError(false);
+            audioRef.current.play().catch(handleAudioError);
+        }
+    };
+
+    const handleCardRating = async (rating) => {
+        if (!currentCard || updatingCard) return;
+        
+        try {
+            setUpdatingCard(true);
+            
+            console.log(`[study-page] Rating card ${currentCard.flashcardId} as '${rating}'. Initial state:`, {
+                reviewState: currentCard.reviewState,
+                intervalDays: currentCard.intervalDays,
+                nextReviewDate: currentCard.nextReviewDate
+            });
+            
+            // Calculate the new card state using our session manager
+            const updatedCard = studySessionManager.handleCardRating(rating);
+            
+            console.log(`[study-page] Card after studySessionManager.handleCardRating:`, {
+                flashcardId: updatedCard.flashcardId,
+                reviewState: updatedCard.reviewState,
+                intervalDays: updatedCard.intervalDays,
+                nextReviewDate: updatedCard.nextReviewDate
+            });
+            
+            // Clean up the card state to only include fields that should be persisted
+            // Remove any fields that shouldn't be in the database record
+            const { 
+                content, audioUrl, audioId, _id,
+                ...cardStateToUpdate 
+            } = updatedCard;
+            
+            console.log(`[study-page] Card state after cleanup:`, {
+                flashcardId: cardStateToUpdate.flashcardId,
+                reviewState: cardStateToUpdate.reviewState,
+                intervalDays: cardStateToUpdate.intervalDays,
+                nextReviewDate: cardStateToUpdate.nextReviewDate
+            });
+            
+            // Ensure we have required fields according to the schema
+            if (!cardStateToUpdate.reviewHistory || !Array.isArray(cardStateToUpdate.reviewHistory) || cardStateToUpdate.reviewHistory.length === 0) {
+                // Create a basic review history entry if none exists
+                cardStateToUpdate.reviewHistory = [{
+                    date: new Date().toISOString(),
+                    rating: rating === 'again' ? 1 : rating === 'hard' ? 2 : rating === 'good' ? 3 : 4,
+                    timeTaken: 0,
+                    interval: cardStateToUpdate.intervalDays || 0
+                }];
+            }
+            
+            // Ensure all required fields are present
+            const requiredFields = {
+                flashcardId: currentCard.flashcardId,
+                userId: currentCard.userId,
+                contentType: currentCard.contentType || 'word',
+                contentId: currentCard.contentId,
+                dateCreated: currentCard.dateCreated || new Date().toISOString(),
+                nextReviewDate: cardStateToUpdate.nextReviewDate || new Date().toISOString(),
+            };
+            
+            // Combine with any missing required fields
+            const completeCardState = {
+                ...requiredFields,
+                ...cardStateToUpdate
+            };
+            
+            console.log(`[study-page] Final card state before sending to server:`, {
+                flashcardId: completeCardState.flashcardId,
+                reviewState: completeCardState.reviewState,
+                intervalDays: completeCardState.intervalDays,
+                nextReviewDate: completeCardState.nextReviewDate
+            });
+            
+            // Send the updated card state to the server
+            const response = await fetch(`/api/decks/${deckId}/study`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    flashcardId: currentCard.flashcardId,
+                    updatedCardState: completeCardState
+                }),
+            });
+
+            const data = await response.json();
+
+            if (!data.success) {
+                console.error('Error updating card:', data.error);
+                setError(t('cards.study.errorUpdating'));
+                return;
+            }
+
+            // Reset answer display immediately
+            setShowAnswer(false);
+            
+        } catch (err) {
+            console.error('Error rating card:', err);
+            setError(t('cards.study.errorUpdating'));
+        } finally {
+            setUpdatingCard(false);
+        }
+    };
+
+    // Prepare card content for display
+    const getCardContent = () => {
+        if (!currentCard || !currentCard.content) return { question: '', answer: '' };
+        
+        let question = '';
+        let answer = '';
+        
+        if (currentCard.contentType === 'word') {
+            // Word-type cards
+            const content = currentCard.content;
+            
+            // Question side is the original word in the original language
+            question = content.originalWord || t('cards.unknownWord');
+            
+            // Answer side is the translated word
+            answer = content.translatedWord || t('cards.unknownTranslation');
+        } else if (currentCard.contentType === 'sentence') {
+            // Sentence-type cards
+            const content = currentCard.content;
+            
+            // Question side is the original sentence
+            question = content.originalText || t('cards.unknownWord');
+            
+            // Answer side is the translated sentence
+            answer = content.translatedText || t('cards.unknownTranslation');
+        }
+        
+        return { question, answer };
+    };
+    
     const renderContent = () => {
         if (loadingContent) {
             return <p>{t('cards.loading')}</p>;
@@ -85,6 +343,28 @@ const StudyView = ({ params }) => {
             return <p className={studyStyles.error}>{t('cards.deckNotFound')}</p>;
         }
 
+        if (!studySession || !studySession.cards || studySession.cards.length === 0) {
+            return (
+                <div className={studyStyles.emptyState}>
+                    <p>{t('cards.study.finishedStudying')}</p>
+                    <button 
+                        className={studyStyles.backButton}
+                        onClick={handleBackClick}
+                        aria-label={t('common.back')}
+                    >
+                        {t('common.back')}
+                    </button>
+                </div>
+            );
+        }
+
+        if (!currentCard) {
+            return <p className={studyStyles.loading}>{t('cards.loading')}</p>;
+        }
+
+        const { question, answer } = getCardContent();
+        const cardLanguage = currentCard.content?.originalLanguage || deck.language;
+
         return (
             <div className={studyStyles.studyContainer}>
                 <button 
@@ -94,9 +374,120 @@ const StudyView = ({ params }) => {
                 >
                     <MaterialSymbolsArrowBackRounded />
                 </button>
-                <p className={studyStyles.placeholder}>
-                    {t('cards.studyPlaceholder')}
-                </p>
+                
+                <button 
+                    className={studyStyles.muteButton}
+                    onClick={handleToggleMute}
+                    aria-label={muted ? t('cards.study.unmute') : t('cards.study.mute')}
+                >
+                    {muted ? <MaterialSymbolsVolumeOff /> : <MaterialSymbolsVolumeUp />}
+                </button>
+                
+                {/* Hidden audio player */}
+                {currentCard && currentCard.audioUrl && (
+                    <audio 
+                        ref={audioRef} 
+                        src={currentCard.audioUrl} 
+                        preload="auto"
+                        onError={(e) => {
+                            console.error('Audio element error:', e);
+                            console.log('Failed to load audio URL:', currentCard.audioUrl);
+                            setAudioError(true);
+                        }}
+                    />
+                )}
+                
+                <div className={studyStyles.cardOuter}>
+                    {currentCard && (
+                        <div className={studyStyles.cardContent}>
+                            <div className={studyStyles.cardFace}>
+                                <div className={studyStyles.questionSide}>
+                                    <h3>{t('cards.study.question')}</h3>
+                                    <p className={cardLanguage} lang={cardLanguage}>{question}</p>
+                                </div>
+                                {
+                                    showAnswer && (    
+                                    <div className={studyStyles.answerSide}>
+                                        <h3>{t('cards.study.answer')}</h3>
+                                        <p lang="en">{answer}</p>
+                                        {currentCard.audioUrl && !audioError && (
+                                            <button 
+                                                className={studyStyles.playAudioButton}
+                                                onClick={handlePlayAudio}
+                                                aria-label={t('cards.study.playAudio')}
+                                            >
+                                                <MaterialSymbolsVolumeUp />
+                                            </button>
+                                        )}
+                                    </div>
+                                    )
+                                }
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className={studyStyles.studyStats}>
+                    {deckSettings && (
+                        <div className={studyStyles.statsContainer}>
+                            <div className={studyStyles.statItem}>
+                                <span className={studyStyles.statLabel}>{t('cards.study.currentProgress')}:</span>
+                                <span className={studyStyles.statValue}>
+                                    {studySession && studySession.cards ? studySession.cards.length : 0} {t('cards.study.cardsLeft')}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className={studyStyles.studyControls}>
+                    {
+                        showAnswer ? (
+                            <div className={studyStyles.ratingControls}>
+                                <h4>{t('cards.study.rateYourRecall')}</h4>
+                                <div className={studyStyles.ratingButtons}>
+                                    <button 
+                                        className={`${studyStyles.ratingButton} ${studyStyles.againButton}`}
+                                        onClick={() => handleCardRating('again')}
+                                        disabled={updatingCard}
+                                    >
+                                        <span className={studyStyles.ratingLabel}>{t('cards.study.again')}</span>
+                                    </button>
+                                    <button 
+                                        className={`${studyStyles.ratingButton} ${studyStyles.hardButton}`}
+                                        onClick={() => handleCardRating('hard')}
+                                        disabled={updatingCard}
+                                    >
+                                        <span className={studyStyles.ratingLabel}>{t('cards.study.hard')}</span>
+                                    </button>
+                                    <button 
+                                        className={`${studyStyles.ratingButton} ${studyStyles.goodButton}`}
+                                        onClick={() => handleCardRating('good')}
+                                        disabled={updatingCard}
+                                    >
+                                        <span className={studyStyles.ratingLabel}>{t('cards.study.good')}</span>
+                                    </button>
+                                    <button 
+                                        className={`${studyStyles.ratingButton} ${studyStyles.easyButton}`}
+                                        onClick={() => handleCardRating('easy')}
+                                        disabled={updatingCard}
+                                    >
+                                        <span className={studyStyles.ratingLabel}>{t('cards.study.easy')}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <button 
+                                className={studyStyles.showAnswerButton}
+                                onClick={handleShowAnswer}
+                                disabled={updatingCard}
+                            >
+                                {t('cards.study.showAnswer')}
+                            </button>
+                        )
+                    }
+                </div>
+
             </div>
         );
     };
@@ -104,8 +495,6 @@ const StudyView = ({ params }) => {
     // Don't render while main auth is loading
     if (loading || !isAuthenticated) return null;
     if (!deck) return null;
-
-    console.log(deck);
 
     return (
         <div className={styles.pageContainer}>

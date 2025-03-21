@@ -1,5 +1,10 @@
 @import '../variables.module.scss';
 
+// Define theme colors that avoid the white-on-white issue
+$primary-button: #3d64e8; // Blue for primary buttons
+$primary-button-hover: #2a4cc2;
+$dark-text: #171717; // Dark text for good contrast
+
 .studyContent {
     width: 100%;
     max-width: 75rem;
@@ -21,8 +26,11 @@
 
 .backButton {
     position: absolute;
-    top: var(--spacing-large);
-    left: var(--spacing-large);
+    top: 0.5rem;
+    left: 0.5rem;
+    padding:0.5rem;
+    border-radius: 0.25rem;
+    transition: background 0.2s ease;
     background: none;
     border: none;
     cursor: pointer;
@@ -33,7 +41,28 @@
     font-size: var(--text-large);
     
     &:hover {
-        color: var(--secondary);
+        background:#dddddd;
+    }
+}
+
+// Mute button styling
+.muteButton {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background 0.2s ease;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground);
+    
+    &:hover {
+        background: #dddddd;
     }
 }
 
@@ -44,6 +73,51 @@
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
     margin-bottom: var(--spacing-large);
     position: relative;
+}
+
+.studyStats {
+    background-color: var(--background-alt);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-medium);
+    margin-bottom: var(--spacing-medium);
+    text-align: center;
+    
+    p {
+        margin: 0.5rem 0;
+        font-size: var(--text-small);
+        color: var(--foreground-muted);
+    }
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    text-align: center;
+    
+    p {
+        font-size: var(--text-normal);
+        color: var(--foreground-muted);
+        margin-bottom: var(--spacing-medium);
+    }
+    
+    button {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--border-radius);
+        background-color: $primary-button;
+        color: white;
+        border: none;
+        font-size: var(--text-normal);
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+            background-color: $primary-button-hover;
+        }
+    }
 }
 
 .deckName {
@@ -60,6 +134,13 @@
     padding: 3rem 0;
 }
 
+.loading {
+    font-size: var(--text-normal);
+    color: var(--foreground-muted);
+    text-align: center;
+    padding: 2rem 0;
+}
+
 .error {
     color: var(--error-foreground);
     background-color: var(--error-background);
@@ -67,6 +148,240 @@
     font-size: var(--text-normal);
     padding: var(--spacing-medium);
     border-radius: var(--border-radius);
+}
+
+// Card styles
+.cardOuter {
+    width: 100%;
+    min-height: 16rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-medium);
+}
+
+.cardContent {
+    width: 100%;
+    height: 100%;
+    min-height: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-medium);
+}
+
+.cardFace {
+    width: 100%;
+    max-width: 40rem;
+    background-color: var(--background-alt);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-large);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    position: relative;
+    
+    h3 {
+        font-size: var(--text-normal);
+        color: var(--foreground-muted);
+        margin-bottom: var(--spacing-small);
+    }
+    
+    p {
+        font-size: var(--text-large);
+        color: var(--foreground);
+        margin: 0;
+        text-align: center;
+    }
+}
+
+.playAudioButton {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: rgba(0, 0, 0, 0.08);
+    color: var(--foreground);
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.25rem;
+    
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+}
+
+.questionSide, .answerSide {
+    transition: opacity 0.3s ease;
+}
+
+.questionSide {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.answerSide {
+    h3 {
+        color: $primary-button;
+    }
+    
+    position: relative;
+    margin-top: 1rem;
+}
+
+// Stats styles
+.statsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-medium);
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    .statLabel {
+        font-size: var(--text-small);
+        color: var(--foreground-muted);
+        margin-bottom: 0.25rem;
+    }
+    
+    .statValue {
+        font-size: var(--text-normal);
+        color: var(--foreground);
+        font-weight: 600;
+    }
+}
+
+// Card rating controls
+.ratingControls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: var(--spacing-medium);
+    
+    h4 {
+        font-size: var(--text-normal);
+        color: var(--foreground);
+        margin-bottom: var(--spacing-small);
+        font-weight: 500;
+    }
+}
+
+.ratingButtons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-small);
+    margin-top: var(--spacing-small);
+}
+
+.ratingButton {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-size: var(--text-small);
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 6rem;
+    
+    &:hover {
+        transform: translateY(-0.125rem);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: translateY(0);
+    }
+}
+
+.ratingInterval {
+    font-size: 0.7rem;
+    opacity: 0.9;
+}
+
+.againButton {
+    background-color: var(--error-background);
+    color: var(--error-foreground);
+    
+    &:hover {
+        background-color: var(--error-foreground);
+        color: white;
+    }
+}
+
+.hardButton {
+    background-color: var(--warning-background);
+    color: var(--warning-foreground);
+    
+    &:hover {
+        background-color: var(--warning-foreground);
+        color: white;
+    }
+}
+
+.goodButton {
+    background-color: var(--success-background);
+    color: var(--success-foreground);
+    
+    &:hover {
+        background-color: var(--success-foreground);
+        color: white;
+    }
+}
+
+.easyButton {
+    background-color: var(--info-background);
+    color: var(--info-foreground);
+    
+    &:hover {
+        background-color: var(--info-foreground);
+        color: white;
+    }
+}
+
+.showAnswerButton {
+    background-color: $primary-button;
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 2rem;
+    font-size: var(--text-normal);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+        background-color: $primary-button-hover;
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.studyControls {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--spacing-medium);
 }
 
 // Responsive styles
@@ -80,6 +395,11 @@
         left: var(--spacing-medium);
     }
     
+    .muteButton {
+        top: var(--spacing-medium);
+        right: var(--spacing-medium);
+    }
+    
     .header h1 {
         font-size: var(--text-large);
     }
@@ -87,4 +407,61 @@
     .studyContainer {
         padding: var(--spacing-medium);
     }
-} 
+    
+    .studyStats {
+        padding: var(--spacing-small);
+        
+        p {
+            font-size: var(--text-xsmall);
+        }
+    }
+    
+    .cardContent {
+        min-height: 10rem;
+        padding: var(--spacing-small);
+    }
+    
+    .cardFace {
+        padding: var(--spacing-medium);
+        
+        h3 {
+            font-size: var(--text-small);
+        }
+        
+        p {
+            font-size: var(--text-normal);
+        }
+    }
+    
+    .statItem {
+        .statLabel {
+            font-size: var(--text-xsmall);
+        }
+        
+        .statValue {
+            font-size: var(--text-small);
+        }
+    }
+    
+    .ratingButtons {
+        gap: 0.5rem;
+    }
+    
+    .ratingButton {
+        padding: 0.5rem 1rem;
+        font-size: var(--text-xsmall);
+        min-width: 5rem;
+    }
+    
+    .showAnswerButton {
+        padding: 0.5rem 1.5rem;
+        font-size: var(--text-small);
+    }
+    
+    .playAudioButton {
+        width: 2rem;
+        height: 2rem;
+        bottom: 0.5rem;
+        right: 0.5rem;
+    }
+}

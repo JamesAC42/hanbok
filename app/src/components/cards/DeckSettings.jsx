@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from '@/styles/components/decksettings.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const DeckSettings = ({ deckId, onClose }) => {
+const DeckSettings = ({ deckId, onClose, onSettingsUpdated }) => {
   const { t } = useLanguage();
   const [settings, setSettings] = useState({
     newCardsPerDay: 20,
@@ -102,6 +102,11 @@ const DeckSettings = ({ deckId, onClose }) => {
         setSettings(data.settings);
         setLearningStepsText(data.settings.learningSteps.join(', '));
         setSuccess(true);
+        
+        // Call the onSettingsUpdated callback if provided
+        if (typeof onSettingsUpdated === 'function') {
+          onSettingsUpdated();
+        }
         
         // Hide success message after 3 seconds
         setTimeout(() => {

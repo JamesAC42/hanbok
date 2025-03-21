@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/components/pagelayout.module.scss';
@@ -10,6 +10,7 @@ import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsSettingsRounded } from '@/components/icons/Settings';
 import DeckSettings from '@/components/cards/DeckSettings';
+import StudyStatsDisplay from '@/components/StudyStatsDisplay';
 import { use } from 'react';
 
 const DeckView = ({ params }) => {
@@ -42,72 +43,79 @@ const DeckView = ({ params }) => {
         setCurrentPage(1);
     }, [viewMode, cards.length]);
 
-    useEffect(() => {
-        async function fetchDeckDetails() {
-            try {
-                setLoadingContent(true);
-                setError(null);
+    // Extract fetchDeckDetails function to be reused
+    const fetchDeckDetails = useCallback(async () => {
+        try {
+            setLoadingContent(true);
+            setError(null);
 
-                // Fetch deck details
-                const deckResponse = await fetch(`/api/decks`);
-                const deckData = await deckResponse.json();
+            // Fetch deck details
+            const deckResponse = await fetch(`/api/decks`);
+            const deckData = await deckResponse.json();
 
-                if (!deckData.success) {
-                    setError(deckData.error || t('cards.fetchError'));
-                    return;
-                }
-
-                // Find the specific deck
-                const currentDeck = deckData.decks.find(d => d.deckId === parseInt(deckId));
-                
-                if (!currentDeck) {
-                    setError(t('cards.deckNotFound'));
-                    return;
-                }
-
-                setDeck({
-                    id: currentDeck.deckId,
-                    name: currentDeck.name,
-                    language: currentDeck.language,
-                    cardCount: currentDeck.cardCount || 0,
-                    stats: currentDeck.stats || { new: 0, learning: 0, due: 0 },
-                    settings: currentDeck.settings || {
-                        newCardsPerDay: 20,
-                        reviewsPerDay: 100,
-                        learningSteps: [1, 10, 60, 1440]
-                    },
-                    lastReviewed: currentDeck.lastReviewed
-                });
-
-                // Fetch cards for this deck
-                const cardsResponse = await fetch(`/api/decks/${deckId}/cards`);
-                const cardsData = await cardsResponse.json();
-
-                if (cardsData.success) {
-                    setCards(cardsData.cards);
-                    
-                    // Update deck stats with more detailed information if available
-                    if (cardsData.stats) {
-                        setDeck(prevDeck => ({
-                            ...prevDeck,
-                            detailedStats: cardsData.stats
-                        }));
-                    }
-                } else {
-                    setError(cardsData.error || t('cards.fetchError'));
-                }
-            } catch (err) {
-                console.error(err);
-                setError(t('cards.fetchError'));
-            } finally {
-                setLoadingContent(false);
+            if (!deckData.success) {
+                setError(deckData.error || t('cards.fetchError'));
+                return;
             }
+
+            // Find the specific deck
+            const currentDeck = deckData.decks.find(d => d.deckId === parseInt(deckId));
+            
+            if (!currentDeck) {
+                setError(t('cards.deckNotFound'));
+                return;
+            }
+
+            setDeck({
+                id: currentDeck.deckId,
+                name: currentDeck.name,
+                language: currentDeck.language,
+                cardCount: currentDeck.cardCount || 0,
+                stats: {
+                    ...(currentDeck.stats || { new: 0, learning: 0, due: 0 }),
+                    detailedStats: currentDeck.stats?.detailedStats || null
+                },
+                settings: currentDeck.settings || {
+                    newCardsPerDay: 20,
+                    reviewsPerDay: 100,
+                    learningSteps: [1, 10, 60, 1440]
+                },
+                lastReviewed: currentDeck.lastReviewed
+            });
+
+            // Fetch cards for this deck
+            const cardsResponse = await fetch(`/api/decks/${deckId}/cards`);
+            const cardsData = await cardsResponse.json();
+
+            if (cardsData.success) {
+                setCards(cardsData.cards);
+                
+                // Update deck stats with more detailed information if available
+                if (cardsData.stats) {
+                    setDeck(prevDeck => ({
+                        ...prevDeck,
+                        stats: {
+                            ...prevDeck.stats,
+                            detailedStats: cardsData.stats
+                        }
+                    }));
+                }
+            } else {
+                setError(cardsData.error || t('cards.fetchError'));
+            }
+        } catch (err) {
+            console.error(err);
+            setError(t('cards.fetchError'));
+        } finally {
+            setLoadingContent(false);
         }
-        
+    }, [deckId, t]);
+
+    useEffect(() => {
         if (isAuthenticated && !loading) {
             fetchDeckDetails();
         }
-    }, [deckId, isAuthenticated, loading, t]);
+    }, [deckId, isAuthenticated, loading, t, fetchDeckDetails]);
 
     const handleBackClick = () => {
         router.push('/cards');
@@ -125,6 +133,11 @@ const DeckView = ({ params }) => {
         setShowSettings(!showSettings);
     };
 
+    // Simplified refreshDeckData function that calls fetchDeckDetails
+    const refreshDeckData = () => {
+        fetchDeckDetails();
+    };
+
     // Format date for display
     const formatDate = (dateString) => {
         if (!dateString) return '-';
@@ -137,17 +150,6 @@ const DeckView = ({ params }) => {
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
     const currentCards = cards.slice(indexOfFirstCard, indexOfLastCard);
     const totalPages = Math.ceil(cards.length / cardsPerPage);
-
-    // Add debug logging to help diagnose pagination issues
-    useEffect(() => {
-        if (cards.length > 0) {
-            console.log('Cards loaded:', cards.length);
-            console.log('Total pages:', totalPages);
-            console.log('Current page:', currentPage);
-            console.log('Cards per page:', cardsPerPage);
-            console.log('Showing cards from index', indexOfFirstCard, 'to', Math.min(indexOfLastCard, cards.length) - 1);
-        }
-    }, [cards.length, totalPages, currentPage, cardsPerPage, indexOfFirstCard, indexOfLastCard]);
 
     // Change page
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -253,7 +255,7 @@ const DeckView = ({ params }) => {
                                             {t(`cards.${card.reviewState || 'new'}`)}
                                         </span>
                                     </td>
-                                    <td>{card.interval || 0} {t('cards.days')}</td>
+                                    <td>{card.intervalDays || 0} {t('cards.days')}</td>
                                     <td>{card.easeFactor?.toFixed(2) || '2.50'}</td>
                                     <td>{formatDate(card.nextReviewDate)}</td>
                                     <td>{card.repetitionNumber || 0}</td>
@@ -312,6 +314,14 @@ const DeckView = ({ params }) => {
                             <span className={`${deckStyles.statValue} ${deckStyles.new}`}>
                                 {deck.stats.new}
                             </span>
+                            {deck.stats.detailedStats && deck.stats.detailedStats.new.available > deck.stats.detailedStats.new.remaining && (
+                                <span className={deckStyles.statLimit}>
+                                    {deck.stats.detailedStats.new.available} {t('cards.total')}
+                                    {deck.stats.detailedStats.new.studied > 0 && (
+                                        <> ({deck.stats.detailedStats.new.studied} {t('cards.studied')} {t('cards.today')})</>
+                                    )}
+                                </span>
+                            )}
                         </div>
                         <div className={deckStyles.statItem}>
                             <span className={deckStyles.statLabel}>{t('cards.learning')}</span>
@@ -324,10 +334,10 @@ const DeckView = ({ params }) => {
                             <span className={`${deckStyles.statValue} ${deckStyles.due}`}>
                                 {deck.stats.due}
                             </span>
-                            {deck.detailedStats && deck.detailedStats.due.available > deck.detailedStats.due.limited && (
+                            {deck.stats.detailedStats && deck.stats.detailedStats.due.available > deck.stats.detailedStats.due.limited && (
                                 <span className={deckStyles.statLimit}>
-                                    {deck.detailedStats.due.available} {t('cards.available')} 
-                                    ({t('cards.limitedTo')} {deck.detailedStats.due.limit})
+                                    {deck.stats.detailedStats.due.available} {t('cards.available')} 
+                                    ({t('cards.limitedTo')} {deck.stats.detailedStats.due.limit})
                                 </span>
                             )}
                         </div>
@@ -342,6 +352,9 @@ const DeckView = ({ params }) => {
                         {t('cards.studyNow')}
                     </button>
                 </div>
+                
+                {/* Study Stats Display Component */}
+                <StudyStatsDisplay deckId={deckId} />
                 
                 <div className={deckStyles.cardsList}>
                     <div className={deckStyles.cardsListHeader}>
@@ -368,7 +381,8 @@ const DeckView = ({ params }) => {
                 {showSettings && (
                     <DeckSettings 
                         deckId={deckId} 
-                        onClose={toggleSettings} 
+                        onClose={toggleSettings}
+                        onSettingsUpdated={refreshDeckData}
                     />
                 )}
             </>

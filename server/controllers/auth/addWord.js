@@ -149,6 +149,7 @@ const addWord = async (req, res) => {
             dateCreated: new Date(),
             nextReviewDate: new Date(), // Due immediately
             interval: 0,
+            intervalDays: 0,
             easeFactor: 2.5, // Default ease factor
             reviewHistory: [],
             repetitionNumber: 0,

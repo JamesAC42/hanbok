@@ -10,6 +10,13 @@ async function getDecks(req, res) {
       .find({ userId })
       .toArray();
 
+    // Current date for calculations
+    const now = new Date();
+    
+    // Get today's date (truncated to day) for checking study progress
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     // For each deck, get the card counts
     const decksWithStats = await Promise.all(decks.map(async (deck) => {
       // Get all flashcard IDs in this deck
@@ -27,46 +34,64 @@ async function getDecks(req, res) {
       };
       
       if (flashcardIds.length > 0) {
-        // Count cards by review state
-        const cardStats = await db.collection('flashcards')
-          .aggregate([
-            { 
-              $match: { 
-                flashcardId: { $in: flashcardIds },
-                userId: userId
-              } 
-            },
-            {
-              $group: {
-                _id: '$reviewState',
-                count: { $sum: 1 }
-              }
-            }
-          ])
+        // Get all the cards for more detailed calculations
+        const allCards = await db.collection('flashcards')
+          .find({ 
+            flashcardId: { $in: flashcardIds },
+            userId: userId
+          })
           .toArray();
         
-        // Map the stats
-        cardStats.forEach(stat => {
-          if (stat._id === 'new') {
-            stats.new = stat.count;
-          } else if (stat._id === 'learning' || stat._id === 'relearning') {
-            stats.learning += stat.count;
-          } else if (stat._id === 'review') {
-            // Count cards due today
-            stats.due = stat.count;
-          }
+        // Count cards by state
+        const newCards = allCards.filter(card => card.reviewState === 'new');
+        
+        // Make sure to include all cards in learning state, regardless of their nextReviewDate
+        const learningCards = allCards.filter(card => 
+          card.reviewState === 'learning' || card.reviewState === 'relearning'
+        );
+        
+        // Only count cards as "due" if they are in review state AND due
+        const dueCards = allCards.filter(card => 
+          card.reviewState === 'review' && new Date(card.nextReviewDate) <= now
+        );
+        
+        // Check how many new cards were already studied today for this deck from study_progress
+        const todayProgress = await db.collection('study_progress').findOne({
+          userId,
+          deckId: deck.deckId,
+          date: { $gte: today, $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) }
         });
+        
+        // Number of new cards already studied today
+        const newCardsAlreadyStudiedToday = todayProgress ? todayProgress.newCardsStudied : 0;
+        
+        // Get deck settings
+        const newCardsPerDay = deck.settings?.newCardsPerDay || 20;
+        const reviewsPerDay = deck.settings?.reviewsPerDay || 100;
+        
+        // Calculate how many new cards we can still introduce today
+        const remainingNewCardsToday = Math.max(0, newCardsPerDay - newCardsAlreadyStudiedToday);
+        
+        // Set the stats with corrected values
+        stats.new = Math.min(newCards.length, remainingNewCardsToday);
+        stats.learning = learningCards.length;
+        stats.due = Math.min(dueCards.length, reviewsPerDay);
+        
+        // Add detailed stats information that can be shown on hover
+        stats.detailedStats = {
+          new: {
+            available: newCards.length,
+            limit: newCardsPerDay,
+            studied: newCardsAlreadyStudiedToday,
+            remaining: remainingNewCardsToday
+          },
+          due: {
+            available: dueCards.length,
+            limited: stats.due,
+            limit: reviewsPerDay
+          }
+        };
       }
-      
-      // Apply limits from deck settings
-      const newCardsPerDay = deck.settings?.newCardsPerDay || 20;
-      const reviewsPerDay = deck.settings?.reviewsPerDay || 100;
-      
-      // Limit new cards to the setting value
-      stats.new = Math.min(stats.new, newCardsPerDay);
-      
-      // Limit due cards to the setting value
-      stats.due = Math.min(stats.due, reviewsPerDay);
       
       return {
         ...deck,
@@ -86,6 +111,13 @@ async function getDecks(req, res) {
       error: 'Failed to fetch decks'
     });
   }
+}
+
+// Helper function to check if two dates are on the same day
+function isSameDay(date1, date2) {
+  return date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate();
 }
 
 module.exports = getDecks; 

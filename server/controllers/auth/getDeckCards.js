@@ -45,15 +45,34 @@ async function getDeckCards(req, res) {
       })
       .toArray();
 
+    // Get current date for calculations
+    const now = new Date();
+    
     // Separate cards by state for stats
     const newCards = flashcards.filter(card => card.reviewState === 'new');
+    
+    // Make sure we're including all cards in learning state
     const learningCards = flashcards.filter(card => 
       card.reviewState === 'learning' || card.reviewState === 'relearning'
     );
-    const dueCards = flashcards.filter(card => card.reviewState === 'review');
+    
+    // Only include cards in review state that are due today
+    const dueCards = flashcards.filter(card => 
+      card.reviewState === 'review' && new Date(card.nextReviewDate) <= now
+    );
+    
+    // Count how many new cards have already been started today
+    const learningCardsStartedToday = flashcards.filter(card => {
+      return (card.reviewState === 'learning' || card.reviewState === 'relearning') && 
+             card.lastReviewed && 
+             isSameDay(new Date(card.lastReviewed), now);
+    }).length;
+    
+    // Calculate how many new cards we can still introduce today
+    const remainingNewCardsToday = Math.max(0, newCardsPerDay - learningCardsStartedToday);
 
     // Calculate limited cards for stats only
-    const limitedNewCards = newCards.slice(0, newCardsPerDay);
+    const limitedNewCards = newCards.slice(0, remainingNewCardsToday);
     const limitedDueCards = dueCards.slice(0, reviewsPerDay);
 
     // For each flashcard, get the content (word, sentence, etc.)
@@ -79,7 +98,9 @@ async function getDeckCards(req, res) {
       new: {
         available: newCards.length,
         limited: limitedNewCards.length,
-        limit: newCardsPerDay
+        limit: newCardsPerDay,
+        startedToday: learningCardsStartedToday,
+        remainingToday: remainingNewCardsToday
       },
       learning: learningCards.length,
       due: {
@@ -101,6 +122,13 @@ async function getDeckCards(req, res) {
       error: 'Failed to fetch deck cards'
     });
   }
+}
+
+// Helper function to check if two dates are on the same day
+function isSameDay(date1, date2) {
+  return date1.getFullYear() === date2.getFullYear() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getDate() === date2.getDate();
 }
 
 module.exports = getDeckCards; 

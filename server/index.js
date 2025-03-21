@@ -69,6 +69,9 @@ const getDecks = require('./controllers/auth/getDecks');
 const getDeckCards = require('./controllers/auth/getDeckCards');
 const getDeckSettings = require('./controllers/auth/getDeckSettings');
 const updateDeckSettings = require('./controllers/auth/updateDeckSettings');
+const initiateStudySession = require('./controllers/auth/initiateStudySession');
+const updateCardProgress = require('./controllers/auth/updateCardProgress');
+const getStudyStats = require('./controllers/auth/getStudyStats');
 
 const PORT = 5666;
 
@@ -199,12 +202,25 @@ app.get('/api/decks/:deckId/cards', isAuthenticated, async (req, res) => {
     getDeckCards(req, res);
 });
 
+app.get('/api/decks/:deckId/study', isAuthenticated, async (req, res) => {
+    initiateStudySession(req, res);
+});
+
+app.post('/api/decks/:deckId/study', isAuthenticated, async (req, res) => {
+    updateCardProgress(req, res);
+});
+
 app.get('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
     getDeckSettings(req, res);
 });
 
 app.put('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
     updateDeckSettings(req, res);
+});
+
+// New route for study statistics
+app.get('/api/study/stats', isAuthenticated, async (req, res) => {
+    getStudyStats(req, res);
 });
 
 // Stripe endpoints

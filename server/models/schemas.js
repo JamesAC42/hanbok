@@ -331,7 +331,7 @@ const collections = {
             bsonType: "date",
             description: "When this card should next be reviewed"
           },
-          interval: {
+          intervalDays: {
             bsonType: "int",
             description: "Current interval in days between reviews"
           },
@@ -356,7 +356,7 @@ const collections = {
                   bsonType: "int",
                   description: "Time in milliseconds to complete the review"
                 },
-                interval: {
+                intervalDays: {
                   bsonType: "int",
                   description: "Interval set after this review"
                 }
@@ -497,6 +497,115 @@ const collections = {
       {
         key: { deckId: 1, flashcardId: 1 },
         unique: true
+      }
+    ]
+  },
+  study_progress: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "deckId", "date", "newCardsStudied", "reviewsCompleted"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "User ID who studied cards"
+          },
+          deckId: {
+            bsonType: "int",
+            description: "Deck ID being studied"
+          },
+          date: {
+            bsonType: "date",
+            description: "Date of study activity (truncated to day)"
+          },
+          newCardsStudied: {
+            bsonType: "int",
+            description: "Number of new cards studied today"
+          },
+          reviewsCompleted: {
+            bsonType: "int",
+            description: "Number of reviews completed today"
+          },
+          timeSpent: {
+            bsonType: ["int", "null"],
+            description: "Optional tracking of time spent studying in seconds"
+          },
+          lastUpdated: {
+            bsonType: "date",
+            description: "Timestamp of the last update to this record"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, deckId: 1, date: 1 },
+        unique: true,
+        name: "unique_daily_progress"
+      },
+      {
+        key: { date: -1 },
+        name: "date_index"
+      }
+    ]
+  },
+  study_streaks: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "deckId", "currentStreak", "maxStreak", "lastStudyDate"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "User ID who is tracking streaks"
+          },
+          deckId: {
+            bsonType: "int",
+            description: "Deck ID being tracked"
+          },
+          currentStreak: {
+            bsonType: "int",
+            description: "Current streak in days"
+          },
+          maxStreak: {
+            bsonType: "int",
+            description: "Maximum streak achieved in days"
+          },
+          currentStreakStartDate: {
+            bsonType: "date",
+            description: "Date when the current streak started"
+          },
+          maxStreakStartDate: {
+            bsonType: ["date", "null"],
+            description: "Date when the maximum streak started"
+          },
+          maxStreakEndDate: {
+            bsonType: ["date", "null"],
+            description: "Date when the maximum streak ended"
+          },
+          lastStudyDate: {
+            bsonType: "date",
+            description: "Last date the user studied this deck"
+          },
+          studyDates: {
+            bsonType: "array",
+            description: "Array of dates when user studied",
+            items: {
+              bsonType: "date"
+            }
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, deckId: 1 },
+        unique: true,
+        name: "unique_user_deck_streak"
+      },
+      {
+        key: { currentStreak: -1 },
+        name: "current_streak_index"
       }
     ]
   }
