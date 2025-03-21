@@ -259,7 +259,13 @@
     
     &:hover {
       transform: none;
+      background-color: #9ca3af;
+      box-shadow: none;
     }
+    
+    opacity: 0.7;
+    position: relative;
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 
@@ -514,4 +520,19 @@ input:checked + .slider:before {
   font-size: 0.75rem;
   margin-top: 0.25rem;
   color: var(--text-tertiary, #6b7280);
+}
+
+.completedMessage {
+  background-color: #e6f7ff;
+  color: #0072b1;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin: 0 auto 1rem auto;
+  max-width: 30rem;
+  border-left: 0.25rem solid #1890ff;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
 } 

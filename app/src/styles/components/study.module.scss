@@ -11,16 +11,28 @@ $dark-text: #171717; // Dark text for good contrast
     margin: 0 auto;
     padding: var(--spacing-large);
     position: relative;
+    background:var(--background);
+    border-radius:var(--border-radius);
+
+    @media (max-width:800px) {
+        margin-top:3rem;
+        background:var(--background);
+        border-radius:var(--border-radius);
+    }
 }
 
 .header {
     margin-bottom: var(--spacing-large);
     text-align: center;
     
-    h1 {
-        font-size: var(--text-large);
-        font-weight: 700;
+    h2 {
+        font-family:var(--font-display);
+        font-size: 1.9rem;
+        font-weight: 800;
         color: var(--foreground);
+    }
+    @media (max-width:800px) {
+        display:none;
     }
 }
 
@@ -42,6 +54,12 @@ $dark-text: #171717; // Dark text for good contrast
     
     &:hover {
         background:#dddddd;
+    }
+
+    &.backButtonEmpty {
+        @media (max-width:800px) {
+            top:2rem;
+        }
     }
 }
 
@@ -96,26 +114,17 @@ $dark-text: #171717; // Dark text for good contrast
     justify-content: center;
     padding: 3rem 0;
     text-align: center;
-    
+    background:var(--background);
+    border-radius:var(--border-radius);
+
     p {
         font-size: var(--text-normal);
         color: var(--foreground-muted);
         margin-bottom: var(--spacing-medium);
     }
-    
-    button {
-        padding: 0.75rem 1.5rem;
-        border-radius: var(--border-radius);
-        background-color: $primary-button;
-        color: white;
-        border: none;
-        font-size: var(--text-normal);
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
-        
-        &:hover {
-            background-color: $primary-button-hover;
+    @media (max-width:800px) {
+        p {
+            margin-top:2rem;
         }
     }
 }
@@ -240,13 +249,18 @@ $dark-text: #171717; // Dark text for good contrast
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--spacing-medium);
+    gap: 0.5rem;
 }
 
 .statItem {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: var(--background);
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    min-width: 4.5rem;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
     
     .statLabel {
         font-size: var(--text-small);
@@ -259,6 +273,23 @@ $dark-text: #171717; // Dark text for good contrast
         color: var(--foreground);
         font-weight: 600;
     }
+}
+
+// Different colored backgrounds for each stat type
+.statItem:nth-child(1) {
+    border-bottom: 0.2rem solid #4caf50; // Green for new cards
+}
+
+.statItem:nth-child(2) {
+    border-bottom: 0.2rem solid #2196f3; // Blue for learning cards
+}
+
+.statItem:nth-child(3) {
+    border-bottom: 0.2rem solid #ff9800; // Orange for due cards
+}
+
+.statItem:nth-child(4) {
+    border-bottom: 0.2rem solid #9c27b0; // Purple for total
 }
 
 // Card rating controls
@@ -290,6 +321,7 @@ $dark-text: #171717; // Dark text for good contrast
     font-size: var(--text-small);
     font-weight: 600;
     border: none;
+    font-family:var(--font-display);
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
@@ -310,6 +342,13 @@ $dark-text: #171717; // Dark text for good contrast
         cursor: not-allowed;
         transform: translateY(0);
     }
+}
+
+.ratingShortcut {
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    opacity: 0.7;
+    font-weight: 400;
 }
 
 .ratingInterval {
@@ -364,9 +403,11 @@ $dark-text: #171717; // Dark text for good contrast
     border-radius: var(--border-radius);
     padding: 0.75rem 2rem;
     font-size: var(--text-normal);
+    font-family:var(--font-display);
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    position: relative;
     
     &:hover {
         background-color: $primary-button-hover;
@@ -376,6 +417,14 @@ $dark-text: #171717; // Dark text for good contrast
         opacity: 0.6;
         cursor: not-allowed;
     }
+}
+
+.keyboardHint {
+    display: block;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    opacity: 0.8;
+    font-weight: 400;
 }
 
 .studyControls {
@@ -416,6 +465,23 @@ $dark-text: #171717; // Dark text for good contrast
         }
     }
     
+    .statsContainer {
+        gap: 0.35rem;
+    }
+    
+    .statItem {
+        padding: 0.35rem 0.75rem;
+        min-width: 3.5rem;
+        
+        .statLabel {
+            font-size: var(--text-xsmall);
+        }
+        
+        .statValue {
+            font-size: var(--text-small);
+        }
+    }
+    
     .cardContent {
         min-height: 10rem;
         padding: var(--spacing-small);
@@ -433,16 +499,6 @@ $dark-text: #171717; // Dark text for good contrast
         }
     }
     
-    .statItem {
-        .statLabel {
-            font-size: var(--text-xsmall);
-        }
-        
-        .statValue {
-            font-size: var(--text-small);
-        }
-    }
-    
     .ratingButtons {
         gap: 0.5rem;
     }
@@ -453,9 +509,19 @@ $dark-text: #171717; // Dark text for good contrast
         min-width: 5rem;
     }
     
+    .ratingShortcut {
+        font-size: 0.65rem;
+        margin-top: 0.2rem;
+    }
+    
     .showAnswerButton {
         padding: 0.5rem 1.5rem;
         font-size: var(--text-small);
+    }
+    
+    .keyboardHint {
+        font-size: 0.65rem;
+        margin-top: 0.2rem;
     }
     
     .playAudioButton {

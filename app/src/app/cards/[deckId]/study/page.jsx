@@ -10,6 +10,7 @@ import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsVolumeUp } from '@/components/icons/VolumeOn';
 import { MaterialSymbolsVolumeOff } from '@/components/icons/VolumeOff';
 import { use } from 'react';
+import getFontClass from '@/lib/fontClass';
 // Import our new study session manager
 import studySessionManager from '@/lib/studySessionManager';
 
@@ -36,6 +37,13 @@ const StudyView = ({ params }) => {
     
     // Audio player reference
     const audioRef = useRef(null);
+
+    // Add a reference to each rating button for focus management
+    const againButtonRef = useRef(null);
+    const hardButtonRef = useRef(null);
+    const goodButtonRef = useRef(null);
+    const easyButtonRef = useRef(null);
+    const showAnswerButtonRef = useRef(null);
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -102,6 +110,8 @@ const StudyView = ({ params }) => {
                     return;
                 }
 
+                console.log('Study data:', studyData);
+
                 // Initialize the study session
                 setStudySession(studyData.studySession);
                 
@@ -118,6 +128,9 @@ const StudyView = ({ params }) => {
                         setStudySession({...studySessionManager.session});
                     }
                 }, deckSettings);
+                
+                // Make sure we update the session statistics
+                studySessionManager.updateSessionStats();
                 
                 if (firstCard) {
                     setCurrentCard(firstCard);
@@ -174,9 +187,56 @@ const StudyView = ({ params }) => {
         }
     }, [currentCard]);
 
+    // Add keyboard event handler
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Don't capture keyboard events if we're in an input field
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            
+            // If card is updating, don't process keyboard shortcuts
+            if (updatingCard) return;
+            
+            // Handle show answer with space or enter
+            if (!showAnswer && (e.key === ' ' || e.key === 'Enter')) {
+                e.preventDefault(); // Prevent page scrolling on space
+                handleShowAnswer();
+                return;
+            }
+            
+            // Handle rating with number keys 1-4
+            if (showAnswer) {
+                switch (e.key) {
+                    case '1':
+                        handleCardRating('again');
+                        break;
+                    case '2':
+                        handleCardRating('hard');
+                        break;
+                    case '3':
+                        handleCardRating('good');
+                        break;
+                    case '4':
+                        handleCardRating('easy');
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        
+        // Add event listener
+        window.addEventListener('keydown', handleKeyDown);
+        
+        // Clean up event listener
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [showAnswer, currentCard, updatingCard]);
+
     const handleShowAnswer = () => {
         setShowAnswer(true);
-        // Audio will play automatically due to the useEffect watching showAnswer
     };
 
     const handleBackClick = () => {
@@ -347,13 +407,13 @@ const StudyView = ({ params }) => {
             return (
                 <div className={studyStyles.emptyState}>
                     <p>{t('cards.study.finishedStudying')}</p>
-                    <button 
-                        className={studyStyles.backButton}
-                        onClick={handleBackClick}
-                        aria-label={t('common.back')}
-                    >
-                        {t('common.back')}
-                    </button>
+                <button 
+                    className={`${studyStyles.backButton} ${studyStyles.backButtonEmpty}`}
+                    onClick={handleBackClick}
+                    aria-label={t('common.back')}
+                >
+                    <MaterialSymbolsArrowBackRounded />
+                </button>
                 </div>
             );
         }
@@ -403,7 +463,7 @@ const StudyView = ({ params }) => {
                             <div className={studyStyles.cardFace}>
                                 <div className={studyStyles.questionSide}>
                                     <h3>{t('cards.study.question')}</h3>
-                                    <p className={cardLanguage} lang={cardLanguage}>{question}</p>
+                                    <p className={`${cardLanguage} ${getFontClass(deck.language)}`} lang={cardLanguage}>{question}</p>
                                 </div>
                                 {
                                     showAnswer && (    
@@ -431,9 +491,27 @@ const StudyView = ({ params }) => {
                     {deckSettings && (
                         <div className={studyStyles.statsContainer}>
                             <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.currentProgress')}:</span>
+                                <span className={studyStyles.statLabel}>{t('cards.study.newCards')}:</span>
                                 <span className={studyStyles.statValue}>
-                                    {studySession && studySession.cards ? studySession.cards.length : 0} {t('cards.study.cardsLeft')}
+                                    {studySession?.stats?.new || 0}
+                                </span>
+                            </div>
+                            <div className={studyStyles.statItem}>
+                                <span className={studyStyles.statLabel}>{t('cards.study.learningCards')}:</span>
+                                <span className={studyStyles.statValue}>
+                                    {studySession?.stats?.learning || 0}
+                                </span>
+                            </div>
+                            <div className={studyStyles.statItem}>
+                                <span className={studyStyles.statLabel}>{t('cards.study.dueCards')}:</span>
+                                <span className={studyStyles.statValue}>
+                                    {studySession?.stats?.due || 0}
+                                </span>
+                            </div>
+                            <div className={studyStyles.statItem}>
+                                <span className={studyStyles.statLabel}>{t('cards.study.totalCards')}:</span>
+                                <span className={studyStyles.statValue}>
+                                    {studySession?.stats?.total || 0}
                                 </span>
                             </div>
                         </div>
@@ -447,42 +525,57 @@ const StudyView = ({ params }) => {
                                 <h4>{t('cards.study.rateYourRecall')}</h4>
                                 <div className={studyStyles.ratingButtons}>
                                     <button 
+                                        ref={againButtonRef}
                                         className={`${studyStyles.ratingButton} ${studyStyles.againButton}`}
                                         onClick={() => handleCardRating('again')}
                                         disabled={updatingCard}
+                                        title={t('cards.study.againShortcut')}
                                     >
                                         <span className={studyStyles.ratingLabel}>{t('cards.study.again')}</span>
+                                        <span className={studyStyles.ratingShortcut}>(1)</span>
                                     </button>
                                     <button 
+                                        ref={hardButtonRef}
                                         className={`${studyStyles.ratingButton} ${studyStyles.hardButton}`}
                                         onClick={() => handleCardRating('hard')}
                                         disabled={updatingCard}
+                                        title={t('cards.study.hardShortcut')}
                                     >
                                         <span className={studyStyles.ratingLabel}>{t('cards.study.hard')}</span>
+                                        <span className={studyStyles.ratingShortcut}>(2)</span>
                                     </button>
                                     <button 
+                                        ref={goodButtonRef}
                                         className={`${studyStyles.ratingButton} ${studyStyles.goodButton}`}
                                         onClick={() => handleCardRating('good')}
                                         disabled={updatingCard}
+                                        title={t('cards.study.goodShortcut')}
                                     >
                                         <span className={studyStyles.ratingLabel}>{t('cards.study.good')}</span>
+                                        <span className={studyStyles.ratingShortcut}>(3)</span>
                                     </button>
                                     <button 
+                                        ref={easyButtonRef}
                                         className={`${studyStyles.ratingButton} ${studyStyles.easyButton}`}
                                         onClick={() => handleCardRating('easy')}
                                         disabled={updatingCard}
+                                        title={t('cards.study.easyShortcut')}
                                     >
                                         <span className={studyStyles.ratingLabel}>{t('cards.study.easy')}</span>
+                                        <span className={studyStyles.ratingShortcut}>(4)</span>
                                     </button>
                                 </div>
                             </div>
                         ) : (
                             <button 
+                                ref={showAnswerButtonRef}
                                 className={studyStyles.showAnswerButton}
                                 onClick={handleShowAnswer}
                                 disabled={updatingCard}
+                                title={t('cards.study.showAnswerShortcut')}
                             >
                                 {t('cards.study.showAnswer')}
+                                <span className={studyStyles.keyboardHint}>{t('cards.study.spaceOrEnter')}</span>
                             </button>
                         )
                     }

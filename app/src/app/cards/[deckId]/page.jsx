@@ -343,10 +343,17 @@ const DeckView = ({ params }) => {
                         </div>
                     </div>
                     
+                    {/* Calculate whether there are any cards to study */}
+                    {(deck.stats.new + deck.stats.learning + deck.stats.due) === 0 && deck.cardCount > 0 && (
+                        <div className={deckStyles.completedMessage}>
+                            {t('cards.completedForDay')} {t('cards.checkBackTomorrow')}
+                        </div>
+                    )}
+                    
                     <button 
                         className={deckStyles.studyButton}
                         onClick={handleStudyClick}
-                        disabled={deck.cardCount === 0}
+                        disabled={deck.cardCount === 0 || (deck.stats.new + deck.stats.learning + deck.stats.due) === 0}
                     >
                         <MaterialSymbolsPlayArrowRounded />
                         {t('cards.studyNow')}

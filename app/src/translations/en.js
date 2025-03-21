@@ -359,6 +359,8 @@ export const en = {
         due: 'Due',
         lastReviewed: 'Last reviewed',
         studyNow: 'Study Now',
+        completedForDay: 'Great job! You\'ve completed all your cards for today.',
+        checkBackTomorrow: 'Check back tomorrow to keep up your streak and continue learning.',
         cardsInDeck: 'Cards in this deck',
         noCardsInDeck: 'No cards in this deck yet.',
         fetchError: 'Error fetching flashcards.',
@@ -419,7 +421,7 @@ export const en = {
             easy: 'Easy',
             stepSettings: 'Learning steps',
             defaultSteps: 'Default',
-            finishedStudying: 'You have finished studying all available cards!',
+            finishedStudying: 'You\'re done for today! Come back tomorrow to keep learning.',
             errorUpdating: 'Error updating card progress',
             nextCard: 'Next Card',
             currentProgress: 'Progress',
@@ -427,7 +429,17 @@ export const en = {
             mute: 'Mute audio',
             unmute: 'Unmute audio',
             playAudio: 'Play audio',
-            showAgain: 'repeat in session'
+            showAgain: 'repeat in session',
+            newCards: 'New',
+            learningCards: 'Learning',
+            dueCards: 'Due',
+            totalCards: 'Total',
+            spaceOrEnter: 'Press Space or Enter',
+            againShortcut: 'Press 1 for Again',
+            hardShortcut: 'Press 2 for Hard',
+            goodShortcut: 'Press 3 for Good',
+            easyShortcut: 'Press 4 for Easy',
+            showAnswerShortcut: 'Press Space or Enter to show answer'
         }
     },
     common: {
