@@ -125,6 +125,26 @@
             }
 
             @include navbar-item-hover;
+
+            &.cardsNew {
+                background:#edfffe;
+                box-shadow: 0.25rem 0.25rem 0 #4c7fc2;
+                &::after {
+                    content:"";
+                    position:absolute;
+                    top:0;
+                    left:0;
+                    height:1rem;
+                    width:1rem;
+                    background:#607aff;
+                    border-radius:50%;
+                }
+
+                &:hover {
+                    background:#5073ba;
+                    box-shadow: 0.5rem 0.5rem 0 #94b7e3;
+                }
+            }
         }     
         
         @media screen and (max-height: 800px) {

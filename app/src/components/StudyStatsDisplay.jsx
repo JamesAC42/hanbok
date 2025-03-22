@@ -13,30 +13,6 @@ const StudyStatsDisplay = ({ deckId }) => {
   const [stats, setStats] = useState(null);
   const [encouragingMessage, setEncouragingMessage] = useState('');
 
-  // Helper function to get a standardized date string in YYYY-MM-DD format
-  // This ensures consistent handling of dates regardless of timezone
-  const getStandardDateString = (dateInput) => {
-    if (!dateInput) return '';
-    
-    // If the input is already in the format YYYY-MM-DD, just return it
-    if (typeof dateInput === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateInput)) {
-      return dateInput;
-    }
-    
-    // Create a new date in local timezone
-    const date = new Date(dateInput);
-    
-    // Check if it's an invalid date
-    if (isNaN(date.getTime())) {
-      console.error('Invalid date input:', dateInput);
-      return '';
-    }
-    
-    // Here's the key fix: adjust for timezone issues by using a Date's UTC methods
-    // This fixes the off-by-one day issue
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-  };
-
   useEffect(() => {
     const fetchStudyStats = async () => {
       try {
@@ -48,8 +24,6 @@ const StudyStatsDisplay = ({ deckId }) => {
         
         const response = await fetch(endpoint);
         const data = await response.json();
-
-        console.log(data);
         
         if (data.success) {
           setStats(data.stats);
@@ -92,15 +66,6 @@ const StudyStatsDisplay = ({ deckId }) => {
     
     // Create a map of date strings to activity levels
     const activityMap = new Map();
-    console.log('Stats daily data:', stats.daily);
-    
-    // Log all activity dates for debugging
-    console.log('All activity dates from server:');
-    stats.daily.forEach(day => {
-      if (day.hasActivity) {
-        console.log(`  ${day.date} - ${day.newCardsStudied + day.reviewsCompleted} activities`);
-      }
-    });
     
     stats.daily.forEach(day => {
       if (day.hasActivity) {
@@ -110,7 +75,6 @@ const StudyStatsDisplay = ({ deckId }) => {
         const dateKey = day.date;
         
         activityMap.set(dateKey, totalActivity);
-        console.log(`Activity on ${dateKey}: ${totalActivity}`);
       }
     });
 
@@ -147,10 +111,6 @@ const StudyStatsDisplay = ({ deckId }) => {
     const daysSinceLastSunday = firstSunday.getDay();
     firstSunday.setDate(firstSunday.getDate() - daysSinceLastSunday);
     
-    // For debugging, log the date range
-    console.log(`Heat map date range: ${startDate.toLocaleDateString()} to ${today.toLocaleDateString()}`);
-    console.log(`First Sunday: ${firstSunday.toLocaleDateString()}`);
-    
     // Create the grid data structure directly, row by day, column by week
     const dayRows = Array(7).fill().map(() => Array(13).fill(null)); // Increased to 13 to ensure we capture the full last week
     
@@ -166,9 +126,6 @@ const StudyStatsDisplay = ({ deckId }) => {
           continue;
         }
         
-        // Log this date for debugging
-        console.log(`Processing grid date: ${date.toLocaleDateString()}`);
-        
         // Format the date string exactly in YYYY-MM-DD format matching the server format
         // The server sends dates in format YYYY-MM-DD, so we need to match that exactly
         const year = date.getFullYear();
@@ -178,11 +135,6 @@ const StudyStatsDisplay = ({ deckId }) => {
         
         // Check if this date exists in our activity map
         const activity = activityMap.get(dateStr) || 0;
-        
-        // Log to debug date mapping issues
-        if (activity > 0) {
-          console.log(`Heat map cell for ${dateStr} has activity: ${activity}`);
-        }
         
         // Calculate if this is today
         const isToday = date.getFullYear() === todayMidnight.getFullYear() && 

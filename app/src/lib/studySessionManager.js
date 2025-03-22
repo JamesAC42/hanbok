@@ -222,10 +222,6 @@ export class StudySessionManager {
             updatedCard.repetitionNumber = 0;
         }
         else if (rating === 'good' || rating === 'easy') {
-
-
-            console.log('logic for good or easy');
-            console.log(updatedCard);
             
             updatedCard.reviewState = 'review';
             if (updatedCard.repetitionNumber === 0) {
@@ -268,8 +264,6 @@ export class StudySessionManager {
      */
     handleCardRating(rating) {
         if (!this.currentCard) return null;
-
-        console.log("rating", rating);
 
         try {
             console.log(`[handleCardRating] Processing rating '${rating}' for card ${this.currentCard.flashcardId}`);

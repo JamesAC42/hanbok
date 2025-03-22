@@ -67,7 +67,7 @@ const NavBar = () => {
                     </div>
                 )}
                 {user && (
-                    <div className={styles.navBarItem} style={{ '--nav-index': 3 }}>   
+                    <div className={`${styles.navBarItem} ${styles.cardsNew}`} style={{ '--nav-index': 3 }}>   
                         <Link href="/cards">
                             <MaterialSymbolsCardsStarRounded />
                         </Link>
