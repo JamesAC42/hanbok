@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsSettingsRounded } from '@/components/icons/Settings';
+import { MaterialSymbolsDownloadRounded } from '@/components/icons/Download';
 import DeckSettings from '@/components/cards/DeckSettings';
 import StudyStatsDisplay from '@/components/StudyStatsDisplay';
 import { use } from 'react';
@@ -31,6 +32,9 @@ const DeckView = ({ params }) => {
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const cardsPerPage = 50;
+    
+    // Add exportStatus state to show loading state during export
+    const [exportStatus, setExportStatus] = useState('idle'); // 'idle', 'loading', 'error'
     
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -271,6 +275,56 @@ const DeckView = ({ params }) => {
         );
     };
 
+    const handleExportClick = async () => {
+        try {
+            setExportStatus('loading');
+            const response = await fetch(`/api/decks/${deckId}/export`);
+            
+            // Check if the response is OK
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to export deck');
+            }
+            
+            // Get the filename from the Content-Disposition header or use a default
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = `deck_${deckId}_export.txt`;
+            
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename="(.+)"/);
+                if (filenameMatch) {
+                    filename = filenameMatch[1];
+                }
+            }
+            
+            // Get the blob from the response
+            const blob = await response.blob();
+            
+            // Create a URL for the blob
+            const url = window.URL.createObjectURL(blob);
+            
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            
+            // Append to the document, click it, and clean up
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Release the URL object
+            window.URL.revokeObjectURL(url);
+            
+            setExportStatus('idle');
+        } catch (error) {
+            console.error('Error exporting deck:', error);
+            setError(t('cards.exportError') || 'Failed to export deck');
+            setExportStatus('error');
+            setTimeout(() => setExportStatus('idle'), 3000);
+        }
+    };
+
     const renderContent = () => {
         if (loadingContent) {
             return <p>{t('cards.loading')}</p>;
@@ -295,6 +349,15 @@ const DeckView = ({ params }) => {
                             {deck.name}
                         </h2>
                         <div className={deckStyles.deckActions}>
+                            <button 
+                                className={`${deckStyles.downloadButton} ${exportStatus === 'loading' ? deckStyles.loading : ''}`}
+                                onClick={handleExportClick}
+                                disabled={exportStatus === 'loading' || deck.cardCount === 0}
+                                aria-label={t('cards.exportDeck')}
+                                title={t('cards.exportDeckForAnki')}
+                            >
+                                <MaterialSymbolsDownloadRounded />
+                            </button>
                             <button 
                                 className={deckStyles.settingsButton}
                                 onClick={toggleSettings}

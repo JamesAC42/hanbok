@@ -136,6 +136,45 @@
   }
 }
 
+.downloadButton {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: var(--text-primary);
+    background-color: #f0f0f0;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    
+    &:hover {
+      color: var(--text-secondary);
+      background: none;
+    }
+  }
+  
+  &.loading {
+    animation: pulse 1.5s infinite ease-in-out;
+    pointer-events: none;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+}
+
 .deckName {
   font-size: 1.5rem;
   font-weight: 600;

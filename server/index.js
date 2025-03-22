@@ -72,6 +72,7 @@ const updateDeckSettings = require('./controllers/auth/updateDeckSettings');
 const initiateStudySession = require('./controllers/auth/initiateStudySession');
 const updateCardProgress = require('./controllers/auth/updateCardProgress');
 const getStudyStats = require('./controllers/auth/getStudyStats');
+const exportDeck = require('./controllers/auth/exportDeck');
 
 const PORT = 5666;
 
@@ -216,6 +217,11 @@ app.get('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
 
 app.put('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
     updateDeckSettings(req, res);
+});
+
+// New route for exporting deck data in Anki format
+app.get('/api/decks/:deckId/export', isAuthenticated, async (req, res) => {
+    exportDeck(req, res);
 });
 
 // New route for study statistics
