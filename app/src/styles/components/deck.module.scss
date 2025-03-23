@@ -553,6 +553,10 @@ input:checked + .slider:before {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   border: 0.0625rem solid #e0e0e0;
+
+  @media (max-width: 620px) {
+    display:none;
+  }
 }
 
 .cardRange {
