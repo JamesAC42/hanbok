@@ -42,7 +42,39 @@ export const en = {
             label: 'Email',
             text: 'Questions and feedback'
         },
+        discord: {
+            label: 'Discord',
+            text: 'Join our Discord community'
+        },
         updates: [
+            {
+                date: '2025-03-23',
+                content: 'Add built in flashcard program and Anki export.'
+            },
+            {
+                date: '2025-03-11',
+                content: 'Fixed issue with old audio not refreshing after link expires.'
+            },
+            {
+                date: '2025-03-10',
+                content: 'Added toggle for pronunciation display in sentence analysis.'
+            },
+            {
+                date: '2025-03-09',
+                content: 'Improved analysis for Chinese, Russian, and Japanese.'
+            },
+            {
+                date: '2025-03-03',
+                content: 'Better keyboard accessibility.'
+            },
+            {
+                date: '2025-03-01',
+                content: 'Added sound effects.'
+            },
+            {
+                date: '2025-02-28',
+                content: 'Added image extraction feature.'
+            },
             {
                 date: '2025-02-26',
                 content: 'Added support for German, Dutch, Russian, and Turkish languages.'
@@ -65,8 +97,6 @@ export const en = {
             }
         ],
         upcomingFeaturesList: [
-            'Personalized vocabulary decks with spaced repetition learning',
-            'Upload or paste screenshots of text to analyze',
             'Hear audio for individual words',
             'Interactive grammar exercises based on saved sentences',
             'Community features for sharing and discussing sentences',
@@ -454,6 +484,13 @@ export const en = {
     announcement: {
         new: 'New',
         newFeatures: 'New Features Available!',
+        flashcardsTitle: 'Introducing Spaced Repetition Flashcards',
+        flashcardsDesc: 'We\'ve launched a powerful new flashcard system to help you retain vocabulary long-term using proven memory techniques.',
+        flashcardsFeature1: 'Add words directly from sentence analysis with one click',
+        flashcardsFeature2: 'Organize cards by language with automatic deck creation',
+        flashcardsFeature3: 'Track your progress with streak counts and study statistics',
+        flashcardsFeature4: 'Study efficiently with SM-2 spaced repetition algorithm',
+        tryFlashcards: 'Try Flashcards',
         languageEnhancementsTitle: 'Enhanced Language Support',
         languageEnhancementsDesc: 'We\'ve made significant improvements to our language analysis capabilities, focusing on better support for Asian and Slavic languages.',
         enhancedChinese: 'Enhanced language analysis for Chinese',
@@ -513,5 +550,33 @@ export const en = {
         fri: 'F',
         sat: 'S',
         sun: 'S'
+    },
+    flashcardsFeature: {
+        title: 'Spaced Repetition Flashcards',
+        description: 'Our built-in flashcard system helps you master vocabulary efficiently using the proven SM-2 spaced repetition algorithm. Learn words you actually encounter in real content and build long-term memory through consistent daily practice.',
+        addWordsAlt: 'Add words to flashcards from sentence analysis',
+        mainAlt: 'Flashcards main deck view',
+        statsAlt: 'Flashcards statistics view',
+        studyAlt: 'Flashcards study interface',
+        
+        addWords: {
+            title: 'Add Words While You Learn',
+            description: 'Easily add vocabulary directly from sentence analysis with one click. The system automatically includes related synonyms and antonyms to enrich your learning experience.'
+        },
+        
+        main: {
+            title: 'Organized by Language',
+            description: 'Each language you\'re learning gets its own deck. See at a glance how many cards you have in total, plus new words, learning cards, and reviews due for today.'
+        },
+        
+        stats: {
+            title: 'Track Your Progress',
+            description: 'Monitor your learning with detailed statistics including daily streak count, maximum streak, study activity heatmap, and general stats like total reviews and study days.'
+        },
+        
+        study: {
+            title: 'Efficient Study Sessions',
+            description: 'The study interface shows vocabulary on the front and translations on the back. Listen to native audio pronunciation and rate how well you remembered each word to optimize future review scheduling.'
+        }
     },
 }; 

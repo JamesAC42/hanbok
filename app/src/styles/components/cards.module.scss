@@ -32,9 +32,10 @@
 }
 
 .header {
+  margin-top:2rem;
   width: 100%;
   text-align: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0rem;
 }
 
 .subtitle {
@@ -155,9 +156,8 @@
 
 .noDecks {
   text-align: center;
-  font-size: 1.2rem;
   color: #333333;
-  padding: 2rem;
+  padding:0;
 }
 
 .error {

@@ -6,12 +6,20 @@ import Link from 'next/link';
 import { LineMdTwitterX } from '@/components/icons/Twitter';
 import { LineMdGithub } from '@/components/icons/Github';
 import { LineMdEmail } from '@/components/icons/Email';
+import { IcTwotoneDiscord } from '@/components/icons/DiscordIcon';
 import { useLanguage } from '@/contexts/LanguageContext';
+import FlashcardsFeature from '@/components/FlashcardsFeature';
 
 const About = () => {
     const { t } = useLanguage();
 
     const contactLinks = [
+        {
+            icon: <IcTwotoneDiscord />,
+            label: t('about.discord.label'),
+            url: 'https://discord.gg/EQVvphzctc',
+            text: t('about.discord.text')
+        },
         {
             icon: <LineMdTwitterX />,
             label: t('about.twitter.label'),
@@ -71,6 +79,10 @@ const About = () => {
                         </div>
                         <p>{t('about.benefitsDescription')}</p>
                         <p>{t('about.saveFeature')}</p>
+                    </div>
+
+                    <div className={aboutStyles.section}>
+                        <FlashcardsFeature />
                     </div>
 
                     <section className={aboutStyles.section}>

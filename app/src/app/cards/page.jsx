@@ -6,6 +6,7 @@ import styles from '@/styles/components/pagelayout.module.scss';
 import cardsStyles from '@/styles/components/cards.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import FlashcardsFeature from '@/components/FlashcardsFeature';
 
 const Cards = () => {
     const router = useRouter();
@@ -76,8 +77,7 @@ const Cards = () => {
         if (decks.length === 0) {
             return (
                 <div className={cardsStyles.noDecks}>
-                    <p>{t('cards.noDecks')}</p>
-                    <p>{t('cards.saveWordsToCreate')}</p>
+                    <FlashcardsFeature />
                 </div>
             );
         }

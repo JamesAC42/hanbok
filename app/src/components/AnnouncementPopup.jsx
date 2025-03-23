@@ -32,6 +32,11 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
         }
     };
 
+    const handleFlashcardsClick = () => {
+        router.push('/cards');
+        onClose();
+    };
+
     return (
         <div className={styles.overlay} onClick={onClose}>
             <div 
@@ -45,18 +50,22 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                 </div>
                 
                 <div className={styles.content}>
-                    <h3>{t('announcement.languageEnhancementsTitle')}</h3>
-                    <p>{t('announcement.languageEnhancementsDesc')}</p>
+                    <h3>{t('announcement.flashcardsTitle')}</h3>
+                    <p>{t('announcement.flashcardsDesc')}</p>
                     
                     <ul className={styles.featureList}>
-                        <li>{t('announcement.enhancedChinese')}</li>
-                        <li>{t('announcement.enhancedRussian')}</li>
-                        <li>{t('announcement.enhancedJapanese')}</li>
-                        <li>{t('announcement.fixedFontRendering')}</li>
+                        <li>{t('announcement.flashcardsFeature1')}</li>
+                        <li>{t('announcement.flashcardsFeature2')}</li>
+                        <li>{t('announcement.flashcardsFeature3')}</li>
+                        <li>{t('announcement.flashcardsFeature4')}</li>
                     </ul>
                     
-                    <h3>{t('announcement.accessibilityTitle')}</h3>
-                    <p>{t('announcement.accessibilityDesc')}</p>
+                    <button 
+                        className={styles.tryFeatureButton}
+                        onClick={handleFlashcardsClick}
+                    >
+                        <span className={styles.buttonText}>{t('announcement.tryFlashcards')}</span>
+                    </button>
                     
                     <div className={styles.communitySection}>
                         <h3>{t('announcement.communityTitle')}</h3>
