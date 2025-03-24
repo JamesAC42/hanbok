@@ -147,6 +147,12 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 </div>
             )}
 
+            {
+                !analysis && (
+                    <a className={styles.aboutLink} href="/about">What is this?</a>
+                )
+            }
+
             <SentenceForm
                 analysis={analysis}
                 setAnalysis={handleNewAnalysis}
