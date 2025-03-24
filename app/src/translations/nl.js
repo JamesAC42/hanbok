@@ -42,7 +42,39 @@ export const nl = {
             label: 'E-mail',
             text: 'Vragen en feedback'
         },
+        discord: {
+            label: 'Discord',
+            text: 'Word lid van onze Discord-gemeenschap'
+        },
         updates: [
+            {
+                date: '2025-03-23',
+                content: 'Ingebouwd flashcardprogramma en Anki-export toegevoegd.'
+            },
+            {
+                date: '2025-03-11',
+                content: 'Probleem opgelost met oude audio die niet vernieuwde nadat de link verlopen was.'
+            },
+            {
+                date: '2025-03-10',
+                content: 'Schakelaar toegevoegd voor uitspraakweergave in zinsanalyse.'
+            },
+            {
+                date: '2025-03-09',
+                content: 'Verbeterde analyse voor Chinees, Russisch en Japans.'
+            },
+            {
+                date: '2025-03-03',
+                content: 'Betere toetsenbordtoegankelijkheid.'
+            },
+            {
+                date: '2025-03-01',
+                content: 'Geluidseffecten toegevoegd.'
+            },
+            {
+                date: '2025-02-28',
+                content: 'Functie voor afbeeldingsextractie toegevoegd.'
+            },
             {
                 date: '2025-02-26',
                 content: 'Ondersteuning toegevoegd voor Duits, Nederlands, Russisch en Turks.'
@@ -57,11 +89,11 @@ export const nl = {
             },
             {
                 date: '2025-02-19',
-                content: 'Woordrelaties toegevoegd voor plusgebruikers en diverse kleine problemen opgelost.'
+                content: 'Woordrelaties toegevoegd voor Plus-gebruikers en verschillende kleine problemen opgelost.'
             },
             {
                 date: '2025-02-16',
-                content: 'Eerste bètaversie uitgebracht'
+                content: 'Initiële bètaversie'
             }
         ],
         upcomingFeaturesList: [
@@ -290,7 +322,15 @@ export const nl = {
         relatedWordsMessage: 'Het bekijken van gerelateerde woorden is een Plus-functie. Upgrade je account om synoniemen, antoniemen te zien en je woordenschat uit te breiden!',
         storageMessage: 'Je hebt het maximale aantal opgeslagen {type} voor je huidige plan bereikt.',
         viewPricing: 'Bekijk prijzen',
-        maybeLater: 'Misschien later'
+        maybeLater: 'Misschien later',
+        sentenceAnalysesTitle: 'Wekelijkse limiet voor zinsanalyses bereikt',
+        sentenceAnalysesMessage: 'Je hebt alle 30 gratis wekelijkse zinsanalyses gebruikt. Upgrade naar Premium voor onbeperkte analyses, of koop 100 extra analyses voor slechts $1.',
+        firstFiveUsedTitle: 'Gebruik van wekelijkse zinsanalyses',
+        firstFiveUsedMessage: 'Je hebt 5 van je 30 gratis wekelijkse zinsanalyses gebruikt. Overweeg om te upgraden naar Premium voor onbeperkte analyses, of koop 100 extra analyses voor slechts $1.',
+        fifteenRemainingTitle: 'Update wekelijkse zinsanalyse',
+        fifteenRemainingMessage: 'Je hebt nog 15 zinsanalyses over voor deze week. Upgrade naar Premium voor onbeperkte analyses, of koop 100 extra analyses voor slechts $1.',
+        fiveRemainingTitle: 'Waarschuwing wekelijkse zinsanalyse',
+        fiveRemainingMessage: 'Je hebt nog maar 5 zinsanalyses over voor deze week. Upgrade naar Premium of koop extra analyses, of koop 100 extra analyses voor slechts $1.'
     },
     loginRequired: {
         title: 'Inloggen vereist',
@@ -369,5 +409,197 @@ export const nl = {
         joinDiscord: 'Doe mee met onze Discord',
         shareWebsite: 'Deel met Vrienden',
         linkCopied: 'Link gekopieerd naar klembord! Deel het met je vrienden.'
+    },
+    bookmarks: {
+        title: 'Bladwijzers',
+        sentences: 'Zinnen',
+        loading: 'Laden...',
+        noSentences: 'Geen opgeslagen zinnen gevonden.',
+        clickBookmark: 'Klik op het',
+        toSave: 'pictogram om op te slaan.',
+        savedOn: 'Opgeslagen op',
+        prev: 'Vorige',
+        next: 'Volgende',
+        pageOf: 'Pagina {current} van {total}',
+        fetchError: 'Fout bij het ophalen van opgeslagen zinnen.'
+    },
+    cards: {
+        title: 'Flashcards',
+        subtitle: 'Bestudeer je opgeslagen woorden met gespreide herhaling',
+        deckTitle: 'Flashcard Deck',
+        loading: 'Laden...',
+        noDecks: 'Geen flashcard decks gevonden.',
+        saveWordsToCreate: 'Sla woorden op in verschillende talen om decks te maken.',
+        cards: 'kaarten',
+        new: 'Nieuw',
+        learning: 'Leren',
+        relearning: 'Opnieuw leren',
+        review: 'Herhalen',
+        due: 'Te doen',
+        lastReviewed: 'Laatst herhaald',
+        studyNow: 'Nu studeren',
+        completedForDay: 'Goed gedaan! Je hebt al je kaarten voor vandaag voltooid.',
+        checkBackTomorrow: 'Kom morgen terug om je streak voort te zetten en door te gaan met leren.',
+        cardsInDeck: 'Kaarten in dit deck',
+        noCardsInDeck: 'Nog geen kaarten in dit deck.',
+        fetchError: 'Fout bij het ophalen van flashcards.',
+        deckNotFound: 'Deck niet gevonden.',
+        viewMode: 'Weergavemodus',
+        gridView: 'Raster',
+        tableView: 'Tabel',
+        front: 'Voorkant',
+        back: 'Achterkant',
+        state: 'Status',
+        interval: 'Interval',
+        easeFactor: 'Moeilijkheidsgraad',
+        nextReview: 'Volgende herhaling',
+        reviews: 'Herhalingen',
+        lapses: 'Fouten',
+        days: 'dagen',
+        unknownWord: 'Onbekend woord',
+        unknownTranslation: 'Onbekende vertaling',
+        available: 'beschikbaar',
+        limitedTo: 'beperkt tot',
+        total: 'totaal',
+        studied: 'bestudeerd',
+        today: 'vandaag',
+        deckSettings: 'Deck instellingen',
+        settingsError: 'Fout bij het laden van instellingen',
+        settingsUpdateError: 'Fout bij het bijwerken van instellingen',
+        settingsSaved: 'Instellingen succesvol opgeslagen',
+        newCardsPerDay: 'Nieuwe kaarten per dag',
+        newCardsPerDayHelp: 'Maximaal aantal nieuwe kaarten om elke dag te introduceren',
+        reviewsPerDay: 'Herhalingen per dag',
+        reviewsPerDayHelp: 'Maximaal aantal herhalingen om elke dag te tonen',
+        showAdvanced: 'Toon geavanceerde instellingen',
+        hideAdvanced: 'Verberg geavanceerde instellingen',
+        advancedSettings: 'Geavanceerde instellingen',
+        advancedSettingsDescription: 'Deze instellingen bepalen het algoritme voor gespreide herhaling. Wijzig ze alleen als je begrijpt hoe ze werken.',
+        learningSteps: 'Leerstappen (minuten)',
+        learningStepsHelp: 'Door komma\'s gescheiden lijst met intervallen (in minuten) voor leerkaarten',
+        whatAreLearningSteps: 'Wat zijn leerstappen?',
+        learningStepsExplanation1: 'Leerstappen zijn korte intervallen (in minuten) die nieuwe kaarten doorlopen voordat ze in het reguliere herhalingsschema komen.',
+        learningStepsExplanation2: 'Wanneer je een nieuwe kaart ziet, zul je deze meerdere keren herhalen volgens deze stappen voordat de kaart doorstroomt naar het gespreide herhalingssysteem.',
+        learningStepsExample: 'Voorbeeld: Met stappen "1, 10, 60, 1440" (1min, 10min, 1uur, 1dag), zie je een nieuwe kaart 4 keer met toenemende intervallen als je elke keer correct antwoordt.',
+        invalidLearningSteps: 'Leerstappen moeten een door komma\'s gescheiden lijst van positieve getallen zijn',
+        saveSettings: 'Instellingen opslaan',
+        saving: 'Opslaan...',
+        cancel: 'Annuleren',
+        settings: 'Instellingen',
+        showing: 'Tonen',
+        study: {
+            studying: 'Studeren',
+            answer: 'Antwoord',
+            question: 'Vraag',
+            showAnswer: 'Toon antwoord',
+            showQuestion: 'Toon vraag',
+            rateYourRecall: 'Hoe goed herinnerde je je dit?',
+            again: 'Opnieuw',
+            hard: 'Moeilijk',
+            good: 'Goed',
+            easy: 'Gemakkelijk',
+            stepSettings: 'Leerstappen',
+            defaultSteps: 'Standaard',
+            finishedStudying: 'Je bent klaar voor vandaag! Kom morgen terug om door te gaan met leren.',
+            errorUpdating: 'Fout bij het bijwerken van kaartvoortgang',
+            nextCard: 'Volgende kaart',
+            currentProgress: 'Voortgang',
+            cardsLeft: 'kaarten over',
+            mute: 'Geluid uit',
+            unmute: 'Geluid aan',
+            playAudio: 'Audio afspelen',
+            showAgain: 'herhaal in sessie',
+            newCards: 'Nieuw',
+            learningCards: 'Leren',
+            dueCards: 'Te doen',
+            totalCards: 'Totaal',
+            spaceOrEnter: 'Druk op Spatie of Enter',
+            againShortcut: 'Druk op 1 voor Opnieuw',
+            hardShortcut: 'Druk op 2 voor Moeilijk',
+            goodShortcut: 'Druk op 3 voor Goed',
+            easyShortcut: 'Druk op 4 voor Gemakkelijk',
+            showAnswerShortcut: 'Druk op Spatie of Enter om antwoord te tonen'
+        }
+    },
+    common: {
+        back: 'Terug',
+        page: 'Pagina',
+        of: 'van',
+        showing: 'Tonen',
+        cards: 'kaarten',
+        previous: 'Vorige',
+        next: 'Volgende'
+    },
+    navbar: {
+        home: 'Home',
+        bookmarks: 'Bladwijzers',
+        cards: 'Flashcards',
+        profile: 'Profiel',
+        about: 'Over',
+        feedback: 'Feedback',
+        pricing: 'Prijzen',
+    },
+    stats: {
+        studyStats: 'Studiestatistieken',
+        yourProgress: 'Je voortgang',
+        currentStreak: 'Huidige streak',
+        maxStreak: 'Max streak',
+        studyActivity: 'Studieactiviteit',
+        cardsReviewed: 'Kaarten herhaald',
+        newCardsStudied: 'Nieuwe kaarten',
+        reviewsCompleted: 'Herhalingen',
+        daysStudied: 'Dagen gestudeerd',
+        avgPerDay: 'Gem. per dag',
+        activityLevel: 'Activiteitsniveau',
+        noActivity: 'Geen activiteit',
+        startStreak: 'Begin vandaag met je studiestreak!',
+        firstDayStreak: 'Eerste dag van je streak! Ga zo door!',
+        keepGoing: 'Je bouwt momentum op. Ga zo door!',
+        doingGreat: 'Je doet het geweldig! Houd de streak in leven!',
+        impressive: 'Indrukwekkende streak! Je maakt echte vooruitgang!',
+        amazing: 'Verbazingwekkende toewijding! Je consistentie werpt vruchten af!',
+        extraordinary: 'Buitengewone inzet! Je bent een taalleer-machine!',
+        legendary: 'Legendarische streak! Je toewijding is echt inspirerend!',
+        noActivityYet: 'Nog geen studieactiviteit geregistreerd. Begin met studeren om je voortgang te zien!',
+        noStatsYet: 'Nog geen studiestatistieken beschikbaar. Voltooi enkele herhalingen om je voortgang te zien!',
+        noStreakYet: 'Nog geen streak. Begin dagelijks te studeren om een streak op te bouwen!',
+        statsError: 'Fout bij het laden van studiestatistieken'
+    },
+    days: {
+        mon: 'M',
+        tue: 'D',
+        wed: 'W',
+        thu: 'D',
+        fri: 'V',
+        sat: 'Z',
+        sun: 'Z'
+    },
+    flashcardsFeature: {
+        title: 'Gespreide herhaling flashcards',
+        description: 'Ons ingebouwde flashcardsysteem helpt je efficiënt woordenschat te beheersen met behulp van het bewezen SM-2 gespreide herhalingsalgoritme. Leer woorden die je daadwerkelijk tegenkomt in echte content en bouw langetermijngeheugen op door consistente dagelijkse oefening.',
+        addWordsAlt: 'Voeg woorden toe aan flashcards vanuit zinsanalyse',
+        mainAlt: 'Flashcards hoofdweergave',
+        statsAlt: 'Flashcards statistiekenweergave',
+        studyAlt: 'Flashcards studie-interface',
+        
+        addWords: {
+            title: 'Voeg woorden toe terwijl je leert',
+            description: 'Voeg eenvoudig woordenschat toe direct vanuit zinsanalyse met één klik. Het systeem neemt automatisch gerelateerde synoniemen en antoniemen op om je leerervaring te verrijken.'
+        },
+        
+        main: {
+            title: 'Georganiseerd per taal',
+            description: 'Elke taal die je leert krijgt zijn eigen deck. Zie in één oogopslag hoeveel kaarten je in totaal hebt, plus nieuwe woorden, leerkaarten en herhalingen die vandaag gepland staan.'
+        },
+        
+        stats: {
+            title: 'Volg je voortgang',
+            description: 'Monitor je leerproces met gedetailleerde statistieken, waaronder dagelijkse streaktelling, maximale streak, studieactiviteit heatmap, en algemene statistieken zoals totale herhalingen en studiedagen.'
+        },
+        
+        study: {
+            title: 'Efficiënte studiesessies',
+            description: 'De studie-interface toont woordenschat aan de voorkant en vertalingen aan de achterkant. Luister naar audio-uitspraak en beoordeel hoe goed je elk woord onthield om toekomstige herhalingsplanning te optimaliseren.'
+        }
     },
 }; 

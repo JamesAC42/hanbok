@@ -5,6 +5,7 @@ const japanesePrompt = require('../../llm/prompt_japanese');
 const russianPrompt = require('../../llm/prompt_russian');
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
+const getPreviousSunday = require('../../utils/getPreviousSunday');
 
 const { extractTextFromImage } = require('../../llm/analyzeImage');
 
@@ -13,6 +14,192 @@ const isBase64Image = (str) => {
     
     const imgRegex = /^data:image\/(jpeg|jpg|png|gif|webp);base64,/;
     return imgRegex.test(str);
+};
+
+// Check if user has exceeded their rate limit quota
+const checkRateLimits = async (req, db) => {
+    const userId = req.session.user ? req.session.user.userId : null;
+    const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const weekStartDate = getPreviousSunday();
+    
+    // Skip rate limiting for paid users
+    if (userId !== null) {
+        const user = await db.collection('users').findOne({ userId });
+        
+        // Skip rate limiting for paid users (tier > 0)
+        if (user && user.tier > 0) {
+            return { 
+                hasQuota: true,
+                message: null
+            };
+        }
+        
+        // Check if free tier user has purchased additional sentence analyses
+        if (user) {
+            // If remainingSentenceAnalyses is undefined, set it to 0
+            if (user.remainingSentenceAnalyses === undefined) {
+                await db.collection('users').updateOne(
+                    { userId },
+                    { $set: { remainingSentenceAnalyses: 0 } }
+                );
+                user.remainingSentenceAnalyses = 0;
+            }
+            
+            // If user has purchased analyses remaining, use one of those instead of rate limiting
+            if (user.remainingSentenceAnalyses > 0) {
+                // Decrement the remaining analyses count
+                await db.collection('users').updateOne(
+                    { userId },
+                    { $inc: { remainingSentenceAnalyses: -1 } }
+                );
+                
+                return {
+                    hasQuota: true,
+                    message: null,
+                    usedPurchasedAnalysis: true
+                };
+            }
+        }
+    }
+    
+    // Determine identifier for rate limiting
+    const identifier = userId !== null ? userId.toString() : ipAddress;
+    const identifierType = userId !== null ? 'userId' : 'ipAddress';
+    
+    // Get or create rate limit record
+    let rateLimitRecord = await db.collection('rate_limits').findOne({ 
+        identifier,
+        identifierType 
+    });
+    
+    // For logged-in users with no record, check their IP record in case it has usage data
+    if (userId !== null && !rateLimitRecord) {
+        // New user account with no rate limit record yet
+        // Check if we have an IP-based record for this user
+        const ipRecord = await db.collection('rate_limits').findOne({ 
+            identifier: ipAddress,
+            identifierType: 'ipAddress'
+        });
+        
+        if (ipRecord) {
+            // Create a new user-based rate limit record using the IP data
+            rateLimitRecord = {
+                identifier,
+                identifierType,
+                totalSentences: ipRecord.totalSentences,
+                weekSentences: ipRecord.weekSentences,
+                weekStartDate: ipRecord.weekStartDate,
+                lastUpdated: new Date()
+            };
+            
+            await db.collection('rate_limits').insertOne(rateLimitRecord);
+        }
+    }
+    
+    if (!rateLimitRecord) {
+        // Create new record if we don't have one yet
+        rateLimitRecord = {
+            identifier,
+            identifierType,
+            totalSentences: 0,
+            weekSentences: 0,
+            weekStartDate,
+            lastUpdated: new Date()
+        };
+        await db.collection('rate_limits').insertOne(rateLimitRecord);
+    } else if (rateLimitRecord.weekStartDate < weekStartDate) {
+        // Reset weekly counter if we're in a new week
+        await db.collection('rate_limits').updateOne(
+            { identifier, identifierType },
+            { 
+                $set: { 
+                    weekSentences: 0, 
+                    weekStartDate, 
+                    lastUpdated: new Date()
+                }
+            }
+        );
+        rateLimitRecord.weekSentences = 0;
+        rateLimitRecord.weekStartDate = weekStartDate;
+    }
+    
+    // Check if user has exceeded the weekly quota
+    const WEEKLY_QUOTA = 30;
+    const hasQuota = rateLimitRecord.weekSentences < WEEKLY_QUOTA;
+    
+    // Create appropriate message for quota exceeded
+    const message = hasQuota ? null : {
+        type: 'rate_limit_exceeded',
+        message: 'You have used all 30 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses or purchase 100 additional analyses for $1.',
+        remaining: 0
+    };
+    
+    return {
+        hasQuota,
+        message,
+        rateLimitRecord
+    };
+};
+
+// Update rate limits after successful sentence generation and check for new notifications
+const incrementRateLimitsAndCheckNotifications = async (identifier, identifierType, db, usedPurchasedAnalysis = false) => {
+    // If the user used a purchased analysis, don't increment rate limits
+    if (usedPurchasedAnalysis) {
+        return null;
+    }
+    
+    // First increment the counters
+    await db.collection('rate_limits').updateOne(
+        { identifier, identifierType },
+        { 
+            $inc: { 
+                totalSentences: 1,
+                weekSentences: 1
+            },
+            $set: { lastUpdated: new Date() }
+        }
+    );
+    
+    // Then get the updated record to check thresholds
+    const updatedRecord = await db.collection('rate_limits').findOne({ identifier, identifierType });
+    if (!updatedRecord) return null;
+    
+    // Check if we've hit any notification thresholds
+    const WEEKLY_QUOTA = 30;
+    const remaining = WEEKLY_QUOTA - updatedRecord.weekSentences;
+    let notification = null;
+    
+    // Simply check the current values against our thresholds
+    if (updatedRecord.weekSentences === 5) {
+        notification = {
+            type: 'firstFiveUsed',
+            message: 'You have used 5 out of your 30 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses.',
+            remaining: remaining,
+            weekSentencesUsed: updatedRecord.weekSentences,
+            weekSentencesTotal: WEEKLY_QUOTA,
+            weekSentencesRemaining: remaining
+        };
+    } else if (remaining === 15) {
+        notification = {
+            type: 'fifteenRemaining',
+            message: 'You have 15 sentence analyses remaining for this week. Upgrade to Premium for unlimited analyses.',
+            remaining: remaining,
+            weekSentencesUsed: updatedRecord.weekSentences,
+            weekSentencesTotal: WEEKLY_QUOTA,
+            weekSentencesRemaining: remaining
+        };
+    } else if (remaining === 5) {
+        notification = {
+            type: 'fiveRemaining',
+            message: 'You only have 5 sentence analyses remaining for this week. Upgrade to Premium or purchase additional analyses.',
+            remaining: remaining,
+            weekSentencesUsed: updatedRecord.weekSentences,
+            weekSentencesTotal: WEEKLY_QUOTA,
+            weekSentencesRemaining: remaining
+        };
+    }
+    
+    return notification;
 };
 
 const submitSentence = async (req, res) => {
@@ -37,11 +224,29 @@ const submitSentence = async (req, res) => {
 
     let isImageSubmission = false;
     let user = null;
-    console.log(userId);
+    
     if(userId !== null) {
         user = await db.collection('users').findOne({ userId: userId });
     }
-    console.log(user);
+    
+    // Initialize rate limit check with defaults for paid users
+    let rateLimitCheck = {
+        hasQuota: true,
+        notification: null
+    };
+    
+    // Check rate limits for free users and non-logged in users
+    if(!user || user.tier === 0) {
+        rateLimitCheck = await checkRateLimits(req, db);
+        if (!rateLimitCheck.hasQuota) {
+            return res.json({
+                message: {
+                    isValid: false,
+                    error: rateLimitCheck.message
+                }
+            });
+        }
+    }
 
     const MAX_BASE64_SIZE = 2.7 * 1024 * 1024; // ~2MB after base64 encoding
 
@@ -263,12 +468,57 @@ const submitSentence = async (req, res) => {
             );
         }
 
+        // Initialize notification variable
+        let notification = null;
+        
+        // Increment rate limit counter for non-premium users only
+        if (!user || user.tier === 0) {
+            const identifier = userId !== null ? userId.toString() : (req.headers['x-forwarded-for'] || req.socket.remoteAddress);
+            const identifierType = userId !== null ? 'userId' : 'ipAddress';
+            // Increment counters and check for new notifications
+            notification = await incrementRateLimitsAndCheckNotifications(identifier, identifierType, db, rateLimitCheck.usedPurchasedAnalysis);
+        }
+
+        // Include rate limit notification if applicable
+        const rateLimit = notification ? {
+            notification: notification
+        } : {};
+
+        // Include if this request used a purchased analysis
+        const analysisUsage = rateLimitCheck.usedPurchasedAnalysis ? {
+            usedPurchasedAnalysis: true
+        } : {};
+
+        // For non-premium users, get the current rate limit information to return
+        let weeklyQuotaInfo = {};
+        if (!user || user.tier === 0) {
+            const identifier = userId !== null ? userId.toString() : (req.headers['x-forwarded-for'] || req.socket.remoteAddress);
+            const identifierType = userId !== null ? 'userId' : 'ipAddress';
+            const currentRecord = await db.collection('rate_limits').findOne({ identifier, identifierType });
+            
+            if (currentRecord) {
+                const WEEKLY_QUOTA = 30;
+                const remaining = WEEKLY_QUOTA - currentRecord.weekSentences;
+                
+                weeklyQuotaInfo = {
+                    weeklyQuota: {
+                        weekSentencesUsed: currentRecord.weekSentences,
+                        weekSentencesTotal: WEEKLY_QUOTA,
+                        weekSentencesRemaining: remaining
+                    }
+                };
+            }
+        }
+
         res.json({ 
             message: parsedResponse,
             originalLanguage: originalLanguage,
             translationLanguage: translationLanguage,
             sentenceId: sentenceDoc.sentenceId,
-            extractedFromImage: isImageSubmission
+            extractedFromImage: isImageSubmission,
+            ...rateLimit,
+            ...analysisUsage,
+            ...weeklyQuotaInfo
         });
     } catch (error) {
         console.error('Error:', error);

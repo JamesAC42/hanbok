@@ -40,28 +40,60 @@ export const fr = {
         },
         email: {
             label: 'Email',
-            text: 'Questions et retours'
+            text: 'Questions et commentaires'
+        },
+        discord: {
+            label: 'Discord',
+            text: 'Rejoignez notre communauté Discord'
         },
         updates: [
+            {
+                date: '2025-03-23',
+                content: 'Ajout d\'un programme de cartes intégré et exportation Anki.'
+            },
+            {
+                date: '2025-03-11',
+                content: 'Correction du problème d\'ancien audio qui ne se rafraîchissait pas après l\'expiration du lien.'
+            },
+            {
+                date: '2025-03-10',
+                content: 'Ajout d\'un interrupteur pour l\'affichage de la prononciation dans l\'analyse de phrases.'
+            },
+            {
+                date: '2025-03-09',
+                content: 'Amélioration de l\'analyse pour le chinois, le russe et le japonais.'
+            },
+            {
+                date: '2025-03-03',
+                content: 'Meilleure accessibilité au clavier.'
+            },
+            {
+                date: '2025-03-01',
+                content: 'Ajout d\'effets sonores.'
+            },
+            {
+                date: '2025-02-28',
+                content: 'Ajout de la fonction d\'extraction d\'images.'
+            },
+            {
+                date: '2025-02-26',
+                content: 'Ajout du support pour l\'allemand, le néerlandais, le russe et le turc.'
+            },
             {
                 date: '2025-02-23',
                 content: 'Ajout du support pour le japonais, le chinois, l\'espagnol, l\'italien et le français.'
             },
             {
                 date: '2025-02-20',
-                content: 'Ajout d\'un forum de feedback pour permettre aux utilisateurs de soumettre leurs commentaires et suggestions.'
+                content: 'Ajout d\'un forum de commentaires pour que les utilisateurs puissent soumettre des commentaires et des suggestions.'
             },
             {
                 date: '2025-02-19',
-                content: 'Ajout des relations entre les mots pour les utilisateurs plus et correction de divers problèmes mineurs.'
+                content: 'Ajout de relations de mots pour les utilisateurs Plus et correction de divers problèmes mineurs.'
             },
             {
                 date: '2025-02-16',
-                content: 'Sortie initiale de la version bêta'
-            },
-            {
-                date: '2025-02-26',
-                content: 'Ajout du support pour l\'allemand, le néerlandais, le russe et le turc.'
+                content: 'Version bêta initiale'
             }
         ],
         upcomingFeaturesList: [
@@ -290,7 +322,15 @@ export const fr = {
         relatedWordsMessage: 'La visualisation des mots associés est une fonctionnalité Plus. Mettez à niveau votre compte pour voir les synonymes, les antonymes et enrichir votre vocabulaire !',
         storageMessage: 'Vous avez atteint le nombre maximum de {type} enregistrés pour votre forfait actuel.',
         viewPricing: 'Voir les Prix',
-        maybeLater: 'Plus Tard'
+        maybeLater: 'Plus Tard',
+        sentenceAnalysesTitle: 'Limite hebdomadaire d\'analyses de phrases atteinte',
+        sentenceAnalysesMessage: 'Vous avez utilisé toutes vos 30 analyses de phrases gratuites hebdomadaires. Passez à Premium pour des analyses illimitées, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        firstFiveUsedTitle: 'Utilisation hebdomadaire d\'analyses de phrases',
+        firstFiveUsedMessage: 'Vous avez utilisé 5 de vos 30 analyses de phrases gratuites hebdomadaires. Envisagez de passer à Premium pour des analyses illimitées, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        fifteenRemainingTitle: 'Mise à jour des analyses de phrases hebdomadaires',
+        fifteenRemainingMessage: 'Il vous reste 15 analyses de phrases pour cette semaine. Passez à Premium pour des analyses illimitées, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        fiveRemainingTitle: 'Alerte d\'analyses de phrases hebdomadaires',
+        fiveRemainingMessage: 'Il ne vous reste que 5 analyses de phrases pour cette semaine. Passez à Premium ou achetez des analyses supplémentaires, ou achetez 100 analyses supplémentaires pour seulement 1$.'
     },
     loginRequired: {
         title: 'Connexion Requise',
@@ -369,5 +409,197 @@ export const fr = {
         joinDiscord: 'Rejoignez notre Discord',
         shareWebsite: 'Partager avec des amis',
         linkCopied: 'Lien copié dans le presse-papiers! Partagez-le avec vos amis.'
+    },
+    bookmarks: {
+        title: 'Favoris',
+        sentences: 'Phrases',
+        loading: 'Chargement...',
+        noSentences: 'Aucune phrase enregistrée trouvée.',
+        clickBookmark: 'Cliquez sur l\'icône',
+        toSave: 'pour enregistrer.',
+        savedOn: 'Enregistré le',
+        prev: 'Précédent',
+        next: 'Suivant',
+        pageOf: 'Page {current} sur {total}',
+        fetchError: 'Erreur lors de la récupération des phrases enregistrées.'
+    },
+    cards: {
+        title: 'Cartes',
+        subtitle: 'Étudiez vos mots enregistrés avec la répétition espacée',
+        deckTitle: 'Paquet de cartes',
+        loading: 'Chargement...',
+        noDecks: 'Aucun paquet de cartes trouvé.',
+        saveWordsToCreate: 'Enregistrez des mots dans différentes langues pour créer des paquets.',
+        cards: 'cartes',
+        new: 'Nouvelles',
+        learning: 'En apprentissage',
+        relearning: 'Réapprentissage',
+        review: 'Révision',
+        due: 'À revoir',
+        lastReviewed: 'Dernière révision',
+        studyNow: 'Étudier maintenant',
+        completedForDay: 'Bon travail ! Vous avez terminé toutes vos cartes pour aujourd\'hui.',
+        checkBackTomorrow: 'Revenez demain pour maintenir votre série et continuer à apprendre.',
+        cardsInDeck: 'Cartes dans ce paquet',
+        noCardsInDeck: 'Pas encore de cartes dans ce paquet.',
+        fetchError: 'Erreur lors de la récupération des cartes.',
+        deckNotFound: 'Paquet non trouvé.',
+        viewMode: 'Mode d\'affichage',
+        gridView: 'Grille',
+        tableView: 'Tableau',
+        front: 'Recto',
+        back: 'Verso',
+        state: 'État',
+        interval: 'Intervalle',
+        easeFactor: 'Facteur de facilité',
+        nextReview: 'Prochaine révision',
+        reviews: 'Révisions',
+        lapses: 'Échecs',
+        days: 'jours',
+        unknownWord: 'Mot inconnu',
+        unknownTranslation: 'Traduction inconnue',
+        available: 'disponibles',
+        limitedTo: 'limité à',
+        total: 'total',
+        studied: 'étudié',
+        today: 'aujourd\'hui',
+        deckSettings: 'Paramètres du paquet',
+        settingsError: 'Erreur lors du chargement des paramètres',
+        settingsUpdateError: 'Erreur lors de la mise à jour des paramètres',
+        settingsSaved: 'Paramètres enregistrés avec succès',
+        newCardsPerDay: 'Nouvelles cartes par jour',
+        newCardsPerDayHelp: 'Nombre maximum de nouvelles cartes à introduire chaque jour',
+        reviewsPerDay: 'Révisions par jour',
+        reviewsPerDayHelp: 'Nombre maximum de révisions à afficher chaque jour',
+        showAdvanced: 'Afficher les paramètres avancés',
+        hideAdvanced: 'Masquer les paramètres avancés',
+        advancedSettings: 'Paramètres avancés',
+        advancedSettingsDescription: 'Ces paramètres contrôlent l\'algorithme de répétition espacée. Ne les modifiez que si vous comprenez leur fonctionnement.',
+        learningSteps: 'Étapes d\'apprentissage (minutes)',
+        learningStepsHelp: 'Liste d\'intervalles séparés par des virgules (en minutes) pour les cartes en apprentissage',
+        whatAreLearningSteps: 'Que sont les étapes d\'apprentissage ?',
+        learningStepsExplanation1: 'Les étapes d\'apprentissage sont de courts intervalles (en minutes) par lesquels passent les nouvelles cartes avant d\'entrer dans le programme régulier de révision.',
+        learningStepsExplanation2: 'Lorsque vous voyez une nouvelle carte, vous la réviserez plusieurs fois selon ces étapes avant qu\'elle ne soit intégrée au système de répétition espacée.',
+        learningStepsExample: 'Exemple : Avec les étapes "1, 10, 60, 1440" (1min, 10min, 1h, 1jour), vous verrez une nouvelle carte 4 fois avec des intervalles croissants si vous répondez correctement à chaque fois.',
+        invalidLearningSteps: 'Les étapes d\'apprentissage doivent être une liste de nombres positifs séparés par des virgules',
+        saveSettings: 'Enregistrer les paramètres',
+        saving: 'Enregistrement...',
+        cancel: 'Annuler',
+        settings: 'Paramètres',
+        showing: 'Affichage de',
+        study: {
+            studying: 'Étude',
+            answer: 'Réponse',
+            question: 'Question',
+            showAnswer: 'Afficher la réponse',
+            showQuestion: 'Afficher la question',
+            rateYourRecall: 'Évaluez votre mémorisation',
+            again: 'Encore',
+            hard: 'Difficile',
+            good: 'Bien',
+            easy: 'Facile',
+            stepSettings: 'Étapes d\'apprentissage',
+            defaultSteps: 'Par défaut',
+            finishedStudying: 'Vous avez terminé pour aujourd\'hui ! Revenez demain pour continuer à apprendre.',
+            errorUpdating: 'Erreur lors de la mise à jour des progrès de la carte',
+            nextCard: 'Carte suivante',
+            currentProgress: 'Progression',
+            cardsLeft: 'cartes restantes',
+            mute: 'Couper le son',
+            unmute: 'Activer le son',
+            playAudio: 'Lire l\'audio',
+            showAgain: 'répéter dans la session',
+            newCards: 'Nouvelles',
+            learningCards: 'En apprentissage',
+            dueCards: 'À revoir',
+            totalCards: 'Total',
+            spaceOrEnter: 'Appuyez sur Espace ou Entrée',
+            againShortcut: 'Appuyez sur 1 pour Encore',
+            hardShortcut: 'Appuyez sur 2 pour Difficile',
+            goodShortcut: 'Appuyez sur 3 pour Bien',
+            easyShortcut: 'Appuyez sur 4 pour Facile',
+            showAnswerShortcut: 'Appuyez sur Espace ou Entrée pour afficher la réponse'
+        }
+    },
+    common: {
+        back: 'Retour',
+        page: 'Page',
+        of: 'sur',
+        showing: 'Affichage de',
+        cards: 'cartes',
+        previous: 'Précédent',
+        next: 'Suivant'
+    },
+    navbar: {
+        home: 'Accueil',
+        bookmarks: 'Favoris',
+        cards: 'Cartes',
+        profile: 'Profil',
+        about: 'À propos',
+        feedback: 'Commentaires',
+        pricing: 'Tarifs',
+    },
+    stats: {
+        studyStats: 'Statistiques d\'étude',
+        yourProgress: 'Votre progression',
+        currentStreak: 'Série actuelle',
+        maxStreak: 'Série maximale',
+        studyActivity: 'Activité d\'étude',
+        cardsReviewed: 'Cartes révisées',
+        newCardsStudied: 'Nouvelles cartes',
+        reviewsCompleted: 'Révisions',
+        daysStudied: 'Jours d\'étude',
+        avgPerDay: 'Moyenne par jour',
+        activityLevel: 'Niveau d\'activité',
+        noActivity: 'Aucune activité',
+        startStreak: 'Commencez votre série d\'étude aujourd\'hui !',
+        firstDayStreak: 'Premier jour de votre série ! Continuez comme ça !',
+        keepGoing: 'Vous prenez de l\'élan. Continuez !',
+        doingGreat: 'Vous vous débrouillez très bien ! Maintenez votre série !',
+        impressive: 'Série impressionnante ! Vous faites de réels progrès !',
+        amazing: 'Dévouement incroyable ! Votre constance porte ses fruits.',
+        extraordinary: 'Engagement extraordinaire ! Vous êtes une machine d\'apprentissage des langues !',
+        legendary: 'Série légendaire ! Votre dévouement est vraiment inspirant.',
+        noActivityYet: 'Aucune activité d\'étude enregistrée pour l\'instant. Commencez à étudier pour voir votre progression !',
+        noStatsYet: 'Aucune statistique d\'étude disponible pour l\'instant. Terminez quelques révisions pour voir votre progression !',
+        noStreakYet: 'Pas encore de série. Commencez à étudier quotidiennement pour établir une série !',
+        statsError: 'Erreur lors du chargement des statistiques d\'étude'
+    },
+    days: {
+        mon: 'L',
+        tue: 'M',
+        wed: 'M',
+        thu: 'J',
+        fri: 'V',
+        sat: 'S',
+        sun: 'D'
+    },
+    flashcardsFeature: {
+        title: 'Cartes de répétition espacée',
+        description: 'Notre système de cartes intégré vous aide à maîtriser le vocabulaire efficacement en utilisant l\'algorithme de répétition espacée SM-2 éprouvé. Apprenez des mots que vous rencontrez réellement dans du contenu authentique et construisez une mémoire à long terme grâce à une pratique quotidienne constante.',
+        addWordsAlt: 'Ajouter des mots aux cartes depuis l\'analyse de phrases',
+        mainAlt: 'Vue principale des paquets de cartes',
+        statsAlt: 'Vue des statistiques de cartes',
+        studyAlt: 'Interface d\'étude des cartes',
+        
+        addWords: {
+            title: 'Ajoutez des mots tout en apprenant',
+            description: 'Ajoutez facilement du vocabulaire directement depuis l\'analyse de phrases en un clic. Le système inclut automatiquement des synonymes et antonymes liés pour enrichir votre expérience d\'apprentissage.'
+        },
+        
+        main: {
+            title: 'Organisé par langue',
+            description: 'Chaque langue que vous apprenez a son propre paquet. Voyez d\'un coup d\'œil combien de cartes vous avez au total, ainsi que les nouveaux mots, les cartes en apprentissage et les révisions dues pour aujourd\'hui.'
+        },
+        
+        stats: {
+            title: 'Suivez votre progression',
+            description: 'Surveillez votre apprentissage avec des statistiques détaillées, notamment le compteur de série quotidienne, la série maximale, la carte thermique d\'activité d\'étude et des statistiques générales comme les révisions totales et les jours d\'étude.'
+        },
+        
+        study: {
+            title: 'Sessions d\'étude efficaces',
+            description: 'L\'interface d\'étude affiche le vocabulaire au recto et les traductions au verso. Écoutez la prononciation audio et évaluez la qualité de votre mémorisation pour chaque mot afin d\'optimiser la programmation des futures révisions.'
+        }
     },
 }; 

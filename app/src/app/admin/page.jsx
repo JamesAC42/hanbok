@@ -21,6 +21,13 @@ const Admin = () => {
     const [error, setError] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     
+    // State for rate limit data
+    const [rateLimitData, setRateLimitData] = useState([]);
+    const [loadingRateLimits, setLoadingRateLimits] = useState(true);
+    const [rateLimitError, setRateLimitError] = useState(null);
+    const [totalAnonymousUsers, setTotalAnonymousUsers] = useState(0);
+    const [totalAnonymousSentences, setTotalAnonymousSentences] = useState(0);
+    
     // Pagination and filtering state
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(20);
@@ -29,6 +36,13 @@ const Admin = () => {
     const [selectedUser, setSelectedUser] = useState('');
     const [sortBy, setSortBy] = useState('count');
     const [sortOrder, setSortOrder] = useState('desc');
+    
+    // Pagination for rate limit data
+    const [rateLimitPage, setRateLimitPage] = useState(1);
+    const [rateLimitLimit, setRateLimitLimit] = useState(20);
+    const [rateLimitTotalPages, setRateLimitTotalPages] = useState(1);
+    const [rateLimitSortBy, setRateLimitSortBy] = useState('weekSentences');
+    const [rateLimitSortOrder, setRateLimitSortOrder] = useState('desc');
     
     // Check if user is authenticated
     useEffect(() => {
@@ -98,6 +112,50 @@ const Admin = () => {
         fetchFeatureUsage();
     }, [user, page, limit, selectedFeature, selectedUser, sortBy, sortOrder, router]);
     
+    // Fetch rate limit data for anonymous users
+    useEffect(() => {
+        const fetchRateLimitData = async () => {
+            if (!user || !isAdmin) return;
+            
+            try {
+                setLoadingRateLimits(true);
+                setRateLimitError(null);
+                
+                const queryParams = new URLSearchParams({
+                    page: rateLimitPage,
+                    limit: rateLimitLimit,
+                    sortBy: rateLimitSortBy,
+                    sortOrder: rateLimitSortOrder,
+                    identifierType: 'ipAddress' // Only fetch data for anonymous users
+                });
+                
+                const response = await fetch(`/api/admin/rate-limits?${queryParams}`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch rate limit data');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    setRateLimitData(data.rateLimits);
+                    setRateLimitTotalPages(data.pagination.totalPages);
+                    setTotalAnonymousUsers(data.totalAnonymousUsers || 0);
+                    setTotalAnonymousSentences(data.totalAnonymousSentences || 0);
+                } else {
+                    throw new Error(data.error || 'Unknown error');
+                }
+            } catch (err) {
+                console.error('Error fetching rate limit data:', err);
+                setRateLimitError(err.message);
+            } finally {
+                setLoadingRateLimits(false);
+            }
+        };
+        
+        fetchRateLimitData();
+    }, [user, isAdmin, rateLimitPage, rateLimitLimit, rateLimitSortBy, rateLimitSortOrder]);
+    
     // Format date for display
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
@@ -122,6 +180,18 @@ const Admin = () => {
         }
     };
     
+    // Handle sort change for rate limit table
+    const handleRateLimitSortChange = (field) => {
+        if (rateLimitSortBy === field) {
+            // Toggle sort order if clicking the same field
+            setRateLimitSortOrder(rateLimitSortOrder === 'asc' ? 'desc' : 'asc');
+        } else {
+            // Default to descending for new sort field
+            setRateLimitSortBy(field);
+            setRateLimitSortOrder('desc');
+        }
+    };
+    
     // Don't render while loading auth or if not an admin
     if (loading || !isAuthenticated || !isAdmin) {
         return null;
@@ -131,7 +201,7 @@ const Admin = () => {
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={adminStyles.adminContent}>
-                    <h1 className={styles.pageTitle}>Feature Usage Dashboard</h1>
+                    <h1 className={styles.pageTitle}>Admin Dashboard</h1>
                     
                     {error && (
                         <div className={adminStyles.error}>
@@ -139,198 +209,348 @@ const Admin = () => {
                         </div>
                     )}
                     
-                    {/* Feature filter and controls */}
-                    <div className={adminStyles.controls}>
-                        <div className={adminStyles.filterContainer}>
-                            <label htmlFor="feature-filter">Filter by feature:</label>
-                            <select 
-                                id="feature-filter"
-                                value={selectedFeature}
-                                onChange={(e) => {
-                                    setSelectedFeature(e.target.value);
-                                    setPage(1); // Reset to first page when changing filter
-                                }}
-                            >
-                                <option value="">All Features</option>
-                                {features.map(feature => (
-                                    <option key={feature} value={feature}>
-                                        {feature.replace('_', ' ')}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                    {/* Anonymous Users Rate Limit Section */}
+                    <section className={adminStyles.detailedSection}>
+                        <h2>Anonymous Users Sentence Generation</h2>
                         
-                        <div className={adminStyles.filterContainer}>
-                            <label htmlFor="user-filter">Filter by user:</label>
-                            <select 
-                                id="user-filter"
-                                value={selectedUser}
-                                onChange={(e) => {
-                                    setSelectedUser(e.target.value);
-                                    setPage(1); // Reset to first page when changing filter
-                                }}
-                            >
-                                <option value="">All Users</option>
-                                {users.map(userItem => (
-                                    <option key={userItem.userId} value={userItem.userId}>
-                                        {userItem.name} ({userItem.email})
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        
-                        <div className={adminStyles.limitContainer}>
-                            <label htmlFor="limit-select">Items per page:</label>
-                            <select
-                                id="limit-select"
-                                value={limit}
-                                onChange={(e) => {
-                                    setLimit(Number(e.target.value));
-                                    setPage(1); // Reset to first page when changing limit
-                                }}
-                            >
-                                <option value={1}>1</option>
-                                <option value={20}>20</option>
-                                <option value={50}>50</option>
-                                <option value={100}>100</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    {/* Summary statistics */}
-                    <section className={adminStyles.summarySection}>
-                        <h2>Summary Statistics</h2>
-                        {loadingData ? (
-                            <div className={adminStyles.loading}>Loading statistics...</div>
-                        ) : summaryStats.length === 0 ? (
-                            <div className={adminStyles.noData}>No data available</div>
-                        ) : (
-                            <div className={adminStyles.summaryGrid}>
-                                {summaryStats.map(stat => (
-                                    <div key={stat._id} className={adminStyles.summaryCard}>
-                                        <h3>{stat._id.replace('_', ' ')}</h3>
-                                        <div className={adminStyles.statItem}>
-                                            <span>Total Usage:</span>
-                                            <strong>{stat.totalUsage.toLocaleString()}</strong>
-                                        </div>
-                                        <div className={adminStyles.statItem}>
-                                            <span>Users:</span>
-                                            <strong>{stat.userCount.toLocaleString()}</strong>
-                                        </div>
-                                        <div className={adminStyles.statItem}>
-                                            <span>Avg Per User:</span>
-                                            <strong>{stat.avgUsagePerUser.toFixed(1)}</strong>
-                                        </div>
-                                        <div className={adminStyles.statItem}>
-                                            <span>Max By User:</span>
-                                            <strong>{stat.maxUsageByUser.toLocaleString()}</strong>
-                                        </div>
-                                    </div>
-                                ))}
+                        {rateLimitError && (
+                            <div className={adminStyles.error}>
+                                Error: {rateLimitError}
                             </div>
                         )}
-                    </section>
-                    
-                    {/* Detailed usage data */}
-                    <section className={adminStyles.detailedSection}>
-                        <h2>Detailed Usage Data</h2>
-                        {loadingData ? (
-                            <div className={adminStyles.loading}>Loading data...</div>
-                        ) : usageData.length === 0 ? (
-                            <div className={adminStyles.noData}>No data available</div>
+                        
+                        <div className={adminStyles.summarySection}>
+                            <div className={adminStyles.summaryGrid}>
+                                <div className={adminStyles.summaryCard}>
+                                    <h3>Anonymous Users</h3>
+                                    <div className={adminStyles.statItem}>
+                                        <span>Total IPs:</span>
+                                        <strong>{totalAnonymousUsers.toLocaleString()}</strong>
+                                    </div>
+                                    <div className={adminStyles.statItem}>
+                                        <span>Total Sentences:</span>
+                                        <strong>{totalAnonymousSentences.toLocaleString()}</strong>
+                                    </div>
+                                    <div className={adminStyles.statItem}>
+                                        <span>Avg Per IP:</span>
+                                        <strong>
+                                            {totalAnonymousUsers > 0 
+                                                ? (totalAnonymousSentences / totalAnonymousUsers).toFixed(1) 
+                                                : '0.0'}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {loadingRateLimits ? (
+                            <div className={adminStyles.loading}>Loading rate limit data...</div>
+                        ) : rateLimitData.length === 0 ? (
+                            <div className={adminStyles.noData}>No anonymous user data available</div>
                         ) : (
                             <>
                                 <div className={adminStyles.tableContainer}>
                                     <table className={adminStyles.usageTable}>
                                         <thead>
                                             <tr>
-                                                <th>User</th>
-                                                <th>Email</th>
-                                                <th>Tier</th>
+                                                <th>IP Address</th>
                                                 <th 
                                                     className={adminStyles.sortable}
-                                                    onClick={() => handleSortChange('feature')}
+                                                    onClick={() => handleRateLimitSortChange('totalSentences')}
                                                 >
-                                                    Feature
-                                                    {sortBy === 'feature' && (
+                                                    Total Sentences
+                                                    {rateLimitSortBy === 'totalSentences' && (
                                                         <span className={adminStyles.sortIcon}>
-                                                            {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
                                                         </span>
                                                     )}
                                                 </th>
                                                 <th 
                                                     className={adminStyles.sortable}
-                                                    onClick={() => handleSortChange('count')}
+                                                    onClick={() => handleRateLimitSortChange('weekSentences')}
                                                 >
-                                                    Count
-                                                    {sortBy === 'count' && (
+                                                    Weekly Sentences
+                                                    {rateLimitSortBy === 'weekSentences' && (
                                                         <span className={adminStyles.sortIcon}>
-                                                            {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
                                                         </span>
                                                     )}
                                                 </th>
                                                 <th 
                                                     className={adminStyles.sortable}
-                                                    onClick={() => handleSortChange('firstUsed')}
+                                                    onClick={() => handleRateLimitSortChange('weekStartDate')}
                                                 >
-                                                    First Used
-                                                    {sortBy === 'firstUsed' && (
+                                                    Week Start Date
+                                                    {rateLimitSortBy === 'weekStartDate' && (
                                                         <span className={adminStyles.sortIcon}>
-                                                            {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
                                                         </span>
                                                     )}
                                                 </th>
                                                 <th 
                                                     className={adminStyles.sortable}
-                                                    onClick={() => handleSortChange('lastUsed')}
+                                                    onClick={() => handleRateLimitSortChange('lastUpdated')}
                                                 >
-                                                    Last Used
-                                                    {sortBy === 'lastUsed' && (
+                                                    Last Updated
+                                                    {rateLimitSortBy === 'lastUpdated' && (
                                                         <span className={adminStyles.sortIcon}>
-                                                            {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
                                                         </span>
                                                     )}
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {usageData.map((item, index) => (
-                                                <tr key={`${item.userId}-${item.feature}-${index}`}>
-                                                    <td>{item.userName}</td>
-                                                    <td>{item.userEmail}</td>
-                                                    <td>{item.userTier === 0 ? 'Free' : 'Plus'}</td>
-                                                    <td>{item.feature.replace('_', ' ')}</td>
-                                                    <td>{item.count.toLocaleString()}</td>
-                                                    <td>{formatDate(item.firstUsed)}</td>
-                                                    <td>{formatDate(item.lastUsed)}</td>
+                                            {rateLimitData.map((item, index) => (
+                                                <tr key={`${item.identifier}-${index}`}>
+                                                    <td>{item.identifier}</td>
+                                                    <td>{item.totalSentences.toLocaleString()}</td>
+                                                    <td>{item.weekSentences.toLocaleString()}</td>
+                                                    <td>{formatDate(item.weekStartDate)}</td>
+                                                    <td>{formatDate(item.lastUpdated)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
                                     </table>
                                 </div>
                                 
-                                {/* Pagination */}
-                                {totalPages > 1 && (
+                                {/* Pagination for rate limit data */}
+                                {rateLimitTotalPages > 1 && (
                                     <div className={adminStyles.pagination}>
                                         <button 
-                                            onClick={() => setPage(p => Math.max(1, p - 1))}
-                                            disabled={page === 1}
+                                            onClick={() => setRateLimitPage(p => Math.max(1, p - 1))}
+                                            disabled={rateLimitPage === 1}
                                         >
                                             Previous
                                         </button>
                                         <span>
-                                            Page {page} of {totalPages}
+                                            Page {rateLimitPage} of {rateLimitTotalPages}
                                         </span>
                                         <button 
-                                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                            disabled={page === totalPages}
+                                            onClick={() => setRateLimitPage(p => Math.min(rateLimitTotalPages, p + 1))}
+                                            disabled={rateLimitPage === rateLimitTotalPages}
                                         >
                                             Next
                                         </button>
                                     </div>
                                 )}
+                                
+                                <div className={adminStyles.limitContainer}>
+                                    <label htmlFor="rate-limit-select">Items per page:</label>
+                                    <select
+                                        id="rate-limit-select"
+                                        value={rateLimitLimit}
+                                        onChange={(e) => {
+                                            setRateLimitLimit(Number(e.target.value));
+                                            setRateLimitPage(1); // Reset to first page when changing limit
+                                        }}
+                                    >
+                                        <option value={1}>1</option>
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                    </select>
+                                </div>
                             </>
                         )}
+                    </section>
+                    
+                    {/* Feature Usage Section */}
+                    <section className={adminStyles.detailedSection}>
+                        <h2>Feature Usage Dashboard</h2>
+                        
+                        {/* Feature filter and controls */}
+                        <div className={adminStyles.controls}>
+                            <div className={adminStyles.filterContainer}>
+                                <label htmlFor="feature-filter">Filter by feature:</label>
+                                <select 
+                                    id="feature-filter"
+                                    value={selectedFeature}
+                                    onChange={(e) => {
+                                        setSelectedFeature(e.target.value);
+                                        setPage(1); // Reset to first page when changing filter
+                                    }}
+                                >
+                                    <option value="">All Features</option>
+                                    {features.map(feature => (
+                                        <option key={feature} value={feature}>
+                                            {feature.replace('_', ' ')}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className={adminStyles.filterContainer}>
+                                <label htmlFor="user-filter">Filter by user:</label>
+                                <select 
+                                    id="user-filter"
+                                    value={selectedUser}
+                                    onChange={(e) => {
+                                        setSelectedUser(e.target.value);
+                                        setPage(1); // Reset to first page when changing filter
+                                    }}
+                                >
+                                    <option value="">All Users</option>
+                                    {users.map(userItem => (
+                                        <option key={userItem.userId} value={userItem.userId}>
+                                            {userItem.name} ({userItem.email})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            
+                            <div className={adminStyles.limitContainer}>
+                                <label htmlFor="limit-select">Items per page:</label>
+                                <select
+                                    id="limit-select"
+                                    value={limit}
+                                    onChange={(e) => {
+                                        setLimit(Number(e.target.value));
+                                        setPage(1); // Reset to first page when changing limit
+                                    }}
+                                >
+                                    <option value={1}>1</option>
+                                    <option value={20}>20</option>
+                                    <option value={50}>50</option>
+                                    <option value={100}>100</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        {/* Summary statistics */}
+                        <section className={adminStyles.summarySection}>
+                            <h2>Summary Statistics</h2>
+                            {loadingData ? (
+                                <div className={adminStyles.loading}>Loading statistics...</div>
+                            ) : summaryStats.length === 0 ? (
+                                <div className={adminStyles.noData}>No data available</div>
+                            ) : (
+                                <div className={adminStyles.summaryGrid}>
+                                    {summaryStats.map(stat => (
+                                        <div key={stat._id} className={adminStyles.summaryCard}>
+                                            <h3>{stat._id.replace('_', ' ')}</h3>
+                                            <div className={adminStyles.statItem}>
+                                                <span>Total Usage:</span>
+                                                <strong>{stat.totalUsage.toLocaleString()}</strong>
+                                            </div>
+                                            <div className={adminStyles.statItem}>
+                                                <span>Users:</span>
+                                                <strong>{stat.userCount.toLocaleString()}</strong>
+                                            </div>
+                                            <div className={adminStyles.statItem}>
+                                                <span>Avg Per User:</span>
+                                                <strong>{stat.avgUsagePerUser.toFixed(1)}</strong>
+                                            </div>
+                                            <div className={adminStyles.statItem}>
+                                                <span>Max By User:</span>
+                                                <strong>{stat.maxUsageByUser.toLocaleString()}</strong>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </section>
+                        
+                        {/* Detailed usage data */}
+                        <section className={adminStyles.detailedSection}>
+                            {loadingData ? (
+                                <div className={adminStyles.loading}>Loading data...</div>
+                            ) : usageData.length === 0 ? (
+                                <div className={adminStyles.noData}>No data available</div>
+                            ) : (
+                                <>
+                                    <div className={adminStyles.tableContainer}>
+                                        <table className={adminStyles.usageTable}>
+                                            <thead>
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Email</th>
+                                                    <th>Tier</th>
+                                                    <th 
+                                                        className={adminStyles.sortable}
+                                                        onClick={() => handleSortChange('feature')}
+                                                    >
+                                                        Feature
+                                                        {sortBy === 'feature' && (
+                                                            <span className={adminStyles.sortIcon}>
+                                                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </th>
+                                                    <th 
+                                                        className={adminStyles.sortable}
+                                                        onClick={() => handleSortChange('count')}
+                                                    >
+                                                        Count
+                                                        {sortBy === 'count' && (
+                                                            <span className={adminStyles.sortIcon}>
+                                                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </th>
+                                                    <th 
+                                                        className={adminStyles.sortable}
+                                                        onClick={() => handleSortChange('firstUsed')}
+                                                    >
+                                                        First Used
+                                                        {sortBy === 'firstUsed' && (
+                                                            <span className={adminStyles.sortIcon}>
+                                                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </th>
+                                                    <th 
+                                                        className={adminStyles.sortable}
+                                                        onClick={() => handleSortChange('lastUsed')}
+                                                    >
+                                                        Last Used
+                                                        {sortBy === 'lastUsed' && (
+                                                            <span className={adminStyles.sortIcon}>
+                                                                {sortOrder === 'asc' ? '↑' : '↓'}
+                                                            </span>
+                                                        )}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {usageData.map((item, index) => (
+                                                    <tr key={`${item.userId}-${item.feature}-${index}`}>
+                                                        <td>{item.userName}</td>
+                                                        <td>{item.userEmail}</td>
+                                                        <td>{item.userTier === 0 ? 'Free' : 'Plus'}</td>
+                                                        <td>{item.feature.replace('_', ' ')}</td>
+                                                        <td>{item.count.toLocaleString()}</td>
+                                                        <td>{formatDate(item.firstUsed)}</td>
+                                                        <td>{formatDate(item.lastUsed)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    {/* Pagination */}
+                                    {totalPages > 1 && (
+                                        <div className={adminStyles.pagination}>
+                                            <button 
+                                                onClick={() => setPage(p => Math.max(1, p - 1))}
+                                                disabled={page === 1}
+                                            >
+                                                Previous
+                                            </button>
+                                            <span>
+                                                Page {page} of {totalPages}
+                                            </span>
+                                            <button 
+                                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                                disabled={page === totalPages}
+                                            >
+                                                Next
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </section>
                     </section>
                 </div>
             </div>

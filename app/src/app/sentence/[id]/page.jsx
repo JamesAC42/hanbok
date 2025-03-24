@@ -10,14 +10,14 @@ const SentencePage = ({ params }) => {
     const { isAuthenticated, loading } = useAuth();
     const resolvedParams = use(params);
 
-    useEffect(() => {
-        if (!loading && !isAuthenticated) {
-            router.replace('/login');
-        }
-    }, [isAuthenticated, loading, router]);
+    // useEffect(() => {
+    //     if (!loading && !isAuthenticated) {
+    //         router.replace('/login');
+    //     }
+    // }, [isAuthenticated, loading, router]);
 
     // Don't render anything while loading or if not authenticated
-    if (loading || !isAuthenticated) return null;
+    if (loading) return null;
 
     return <SentenceAnalyzer sentenceId={resolvedParams.id} />;
 };

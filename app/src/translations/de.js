@@ -42,7 +42,39 @@ export const de = {
             label: 'E-Mail',
             text: 'Fragen und Feedback'
         },
+        discord: {
+            label: 'Discord',
+            text: 'Treten Sie unserer Discord-Gemeinschaft bei'
+        },
         updates: [
+            {
+                date: '2025-03-23',
+                content: 'Eingebautes Karteikartenprogramm und Anki-Export hinzugefügt.'
+            },
+            {
+                date: '2025-03-11',
+                content: 'Problem mit altem Audio behoben, das nach Ablauf des Links nicht aktualisiert wurde.'
+            },
+            {
+                date: '2025-03-10',
+                content: 'Umschalter für die Aussprache-Anzeige in der Satzanalyse hinzugefügt.'
+            },
+            {
+                date: '2025-03-09',
+                content: 'Verbesserte Analyse für Chinesisch, Russisch und Japanisch.'
+            },
+            {
+                date: '2025-03-03',
+                content: 'Bessere Tastaturzugänglichkeit.'
+            },
+            {
+                date: '2025-03-01',
+                content: 'Soundeffekte hinzugefügt.'
+            },
+            {
+                date: '2025-02-28',
+                content: 'Bildextraktionsfunktion hinzugefügt.'
+            },
             {
                 date: '2025-02-26',
                 content: 'Unterstützung für Deutsch, Niederländisch, Russisch und Türkisch hinzugefügt.'
@@ -61,7 +93,7 @@ export const de = {
             },
             {
                 date: '2025-02-16',
-                content: 'Erste Beta-Version veröffentlicht'
+                content: 'Erste Beta-Version'
             }
         ],
         upcomingFeaturesList: [
@@ -290,7 +322,15 @@ export const de = {
         relatedWordsMessage: 'Das Anzeigen verwandter Wörter ist eine Plus-Funktion. Aktualisieren Sie Ihr Konto, um Synonyme, Antonyme zu sehen und Ihren Wortschatz zu erweitern!',
         storageMessage: 'Sie haben die maximale Anzahl gespeicherter {type} für Ihren aktuellen Plan erreicht.',
         viewPricing: 'Preise anzeigen',
-        maybeLater: 'Vielleicht später'
+        maybeLater: 'Vielleicht später',
+        sentenceAnalysesTitle: 'Wöchentliches Limit für Satzanalysen erreicht',
+        sentenceAnalysesMessage: 'Sie haben alle Ihre 30 kostenlosen wöchentlichen Satzanalysen aufgebraucht. Upgraden Sie auf Premium für unbegrenzte Analysen oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        firstFiveUsedTitle: 'Wöchentliche Nutzung der Satzanalysen',
+        firstFiveUsedMessage: 'Sie haben 5 Ihrer 30 kostenlosen wöchentlichen Satzanalysen verwendet. Erwägen Sie ein Upgrade auf Premium für unbegrenzte Analysen oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        fifteenRemainingTitle: 'Wöchentliches Update der Satzanalysen',
+        fifteenRemainingMessage: 'Sie haben noch 15 Satzanalysen für diese Woche übrig. Upgraden Sie auf Premium für unbegrenzte Analysen oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        fiveRemainingTitle: 'Wöchentliche Warnung für Satzanalysen',
+        fiveRemainingMessage: 'Sie haben nur noch 5 Satzanalysen für diese Woche übrig. Upgraden Sie auf Premium oder kaufen Sie zusätzliche Analysen, oder kaufen Sie 100 zusätzliche Analysen für nur 1$.'
     },
     loginRequired: {
         title: 'Anmeldung erforderlich',
@@ -369,5 +409,197 @@ export const de = {
         joinDiscord: 'Treten Sie unserem Discord bei',
         shareWebsite: 'Mit Freunden teilen',
         linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie es mit Ihren Freunden.'
+    },
+    bookmarks: {
+        title: 'Lesezeichen',
+        sentences: 'Sätze',
+        loading: 'Wird geladen...',
+        noSentences: 'Keine gespeicherten Sätze gefunden.',
+        clickBookmark: 'Klicken Sie auf das',
+        toSave: 'Symbol zum Speichern.',
+        savedOn: 'Gespeichert am',
+        prev: 'Zurück',
+        next: 'Weiter',
+        pageOf: 'Seite {current} von {total}',
+        fetchError: 'Fehler beim Abrufen gespeicherter Sätze.'
+    },
+    cards: {
+        title: 'Karteikarten',
+        subtitle: 'Lernen Sie Ihre gespeicherten Wörter mit Spaced Repetition',
+        deckTitle: 'Karteikarten-Stapel',
+        loading: 'Wird geladen...',
+        noDecks: 'Keine Karteikarten-Stapel gefunden.',
+        saveWordsToCreate: 'Speichern Sie Wörter in verschiedenen Sprachen, um Stapel zu erstellen.',
+        cards: 'Karten',
+        new: 'Neu',
+        learning: 'Lernphase',
+        relearning: 'Wiederholung',
+        review: 'Überprüfung',
+        due: 'Fällig',
+        lastReviewed: 'Zuletzt überprüft',
+        studyNow: 'Jetzt lernen',
+        completedForDay: 'Gut gemacht! Sie haben alle Ihre Karten für heute abgeschlossen.',
+        checkBackTomorrow: 'Kommen Sie morgen wieder, um Ihre Serie fortzusetzen und weiter zu lernen.',
+        cardsInDeck: 'Karten in diesem Stapel',
+        noCardsInDeck: 'Noch keine Karten in diesem Stapel.',
+        fetchError: 'Fehler beim Abrufen der Karteikarten.',
+        deckNotFound: 'Stapel nicht gefunden.',
+        viewMode: 'Ansichtsmodus',
+        gridView: 'Rasteransicht',
+        tableView: 'Tabellenansicht',
+        front: 'Vorderseite',
+        back: 'Rückseite',
+        state: 'Status',
+        interval: 'Intervall',
+        easeFactor: 'Leichtigkeitsfaktor',
+        nextReview: 'Nächste Überprüfung',
+        reviews: 'Überprüfungen',
+        lapses: 'Fehler',
+        days: 'Tage',
+        unknownWord: 'Unbekanntes Wort',
+        unknownTranslation: 'Unbekannte Übersetzung',
+        available: 'verfügbar',
+        limitedTo: 'begrenzt auf',
+        total: 'gesamt',
+        studied: 'gelernt',
+        today: 'heute',
+        deckSettings: 'Stapel-Einstellungen',
+        settingsError: 'Fehler beim Laden der Einstellungen',
+        settingsUpdateError: 'Fehler beim Aktualisieren der Einstellungen',
+        settingsSaved: 'Einstellungen erfolgreich gespeichert',
+        newCardsPerDay: 'Neue Karten pro Tag',
+        newCardsPerDayHelp: 'Maximale Anzahl neuer Karten, die täglich eingeführt werden sollen',
+        reviewsPerDay: 'Überprüfungen pro Tag',
+        reviewsPerDayHelp: 'Maximale Anzahl von Überprüfungen, die täglich angezeigt werden sollen',
+        showAdvanced: 'Erweiterte Einstellungen anzeigen',
+        hideAdvanced: 'Erweiterte Einstellungen ausblenden',
+        advancedSettings: 'Erweiterte Einstellungen',
+        advancedSettingsDescription: 'Diese Einstellungen steuern den Spaced-Repetition-Algorithmus. Ändern Sie sie nur, wenn Sie verstehen, wie sie funktionieren.',
+        learningSteps: 'Lernschritte (Minuten)',
+        learningStepsHelp: 'Durch Kommas getrennte Liste von Intervallen (in Minuten) für Karten in der Lernphase',
+        whatAreLearningSteps: 'Was sind Lernschritte?',
+        learningStepsExplanation1: 'Lernschritte sind kurze Intervalle (in Minuten), die neue Karten durchlaufen, bevor sie in den regulären Wiederholungsplan aufgenommen werden.',
+        learningStepsExplanation2: 'Wenn Sie eine neue Karte sehen, werden Sie sie mehrmals gemäß diesen Schritten wiederholen, bevor sie zum Spaced-Repetition-System übergeht.',
+        learningStepsExample: 'Beispiel: Mit den Schritten "1, 10, 60, 1440" (1min, 10min, 1Std, 1Tag) sehen Sie eine neue Karte 4 Mal mit zunehmenden Intervallen, wenn Sie jedes Mal richtig antworten.',
+        invalidLearningSteps: 'Lernschritte müssen eine durch Kommas getrennte Liste positiver Zahlen sein',
+        saveSettings: 'Einstellungen speichern',
+        saving: 'Wird gespeichert...',
+        cancel: 'Abbrechen',
+        settings: 'Einstellungen',
+        showing: 'Anzeigen von',
+        study: {
+            studying: 'Lernen',
+            answer: 'Antwort',
+            question: 'Frage',
+            showAnswer: 'Antwort anzeigen',
+            showQuestion: 'Frage anzeigen',
+            rateYourRecall: 'Bewerten Sie Ihre Erinnerung',
+            again: 'Nochmal',
+            hard: 'Schwer',
+            good: 'Gut',
+            easy: 'Einfach',
+            stepSettings: 'Lernschritte',
+            defaultSteps: 'Standard',
+            finishedStudying: 'Sie sind für heute fertig! Kommen Sie morgen wieder, um weiter zu lernen.',
+            errorUpdating: 'Fehler beim Aktualisieren des Kartenfortschritts',
+            nextCard: 'Nächste Karte',
+            currentProgress: 'Fortschritt',
+            cardsLeft: 'Karten übrig',
+            mute: 'Ton stumm',
+            unmute: 'Ton an',
+            playAudio: 'Audio abspielen',
+            showAgain: 'in Sitzung wiederholen',
+            newCards: 'Neu',
+            learningCards: 'Lernphase',
+            dueCards: 'Fällig',
+            totalCards: 'Gesamt',
+            spaceOrEnter: 'Drücken Sie Leertaste oder Enter',
+            againShortcut: 'Drücken Sie 1 für Nochmal',
+            hardShortcut: 'Drücken Sie 2 für Schwer',
+            goodShortcut: 'Drücken Sie 3 für Gut',
+            easyShortcut: 'Drücken Sie 4 für Einfach',
+            showAnswerShortcut: 'Drücken Sie Leertaste oder Enter, um die Antwort anzuzeigen'
+        }
+    },
+    common: {
+        back: 'Zurück',
+        page: 'Seite',
+        of: 'von',
+        showing: 'Anzeigen von',
+        cards: 'Karten',
+        previous: 'Zurück',
+        next: 'Weiter'
+    },
+    navbar: {
+        home: 'Startseite',
+        bookmarks: 'Lesezeichen',
+        cards: 'Karteikarten',
+        profile: 'Profil',
+        about: 'Über uns',
+        feedback: 'Feedback',
+        pricing: 'Preise',
+    },
+    stats: {
+        studyStats: 'Lernstatistiken',
+        yourProgress: 'Ihr Fortschritt',
+        currentStreak: 'Aktuelle Serie',
+        maxStreak: 'Maximale Serie',
+        studyActivity: 'Lernaktivität',
+        cardsReviewed: 'Überprüfte Karten',
+        newCardsStudied: 'Neue Karten',
+        reviewsCompleted: 'Überprüfungen',
+        daysStudied: 'Lerntage',
+        avgPerDay: 'Durchschnitt pro Tag',
+        activityLevel: 'Aktivitätsniveau',
+        noActivity: 'Keine Aktivität',
+        startStreak: 'Beginnen Sie heute Ihre Lernserie!',
+        firstDayStreak: 'Erster Tag Ihrer Serie! Weiter so!',
+        keepGoing: 'Sie gewinnen an Schwung. Machen Sie weiter!',
+        doingGreat: 'Sie machen das großartig! Halten Sie die Serie aufrecht!',
+        impressive: 'Beeindruckende Serie! Sie machen echte Fortschritte!',
+        amazing: 'Erstaunliches Engagement! Ihre Beständigkeit zahlt sich aus.',
+        extraordinary: 'Außergewöhnliches Engagement! Sie sind eine Sprachlernmaschine!',
+        legendary: 'Legendäre Serie! Ihr Engagement ist wirklich inspirierend.',
+        noActivityYet: 'Noch keine Lernaktivität aufgezeichnet. Beginnen Sie zu lernen, um Ihren Fortschritt zu sehen!',
+        noStatsYet: 'Noch keine Lernstatistiken verfügbar. Schließen Sie einige Überprüfungen ab, um Ihren Fortschritt zu sehen!',
+        noStreakYet: 'Noch keine Serie. Beginnen Sie täglich zu lernen, um eine Serie aufzubauen!',
+        statsError: 'Fehler beim Laden der Lernstatistiken'
+    },
+    days: {
+        mon: 'M',
+        tue: 'D',
+        wed: 'M',
+        thu: 'D',
+        fri: 'F',
+        sat: 'S',
+        sun: 'S'
+    },
+    flashcardsFeature: {
+        title: 'Spaced-Repetition-Karteikarten',
+        description: 'Unser integriertes Karteikartensystem hilft Ihnen, Vokabeln effizient zu beherrschen, indem es den bewährten SM-2-Spaced-Repetition-Algorithmus verwendet. Lernen Sie Wörter, die Ihnen tatsächlich in echten Inhalten begegnen, und bauen Sie durch konsequente tägliche Übung ein Langzeitgedächtnis auf.',
+        addWordsAlt: 'Wörter aus der Satzanalyse zu Karteikarten hinzufügen',
+        mainAlt: 'Hauptansicht der Karteikarten-Stapel',
+        statsAlt: 'Ansicht der Karteikarten-Statistiken',
+        studyAlt: 'Karteikarten-Lernoberfläche',
+        
+        addWords: {
+            title: 'Fügen Sie Wörter während des Lernens hinzu',
+            description: 'Fügen Sie Vokabeln direkt aus der Satzanalyse mit einem Klick hinzu. Das System schließt automatisch verwandte Synonyme und Antonyme ein, um Ihre Lernerfahrung zu bereichern.'
+        },
+        
+        main: {
+            title: 'Nach Sprache organisiert',
+            description: 'Jede Sprache, die Sie lernen, hat ihren eigenen Stapel. Sehen Sie auf einen Blick, wie viele Karten Sie insgesamt haben, sowie neue Wörter, Karten in der Lernphase und fällige Wiederholungen für heute.'
+        },
+        
+        stats: {
+            title: 'Verfolgen Sie Ihren Fortschritt',
+            description: 'Überwachen Sie Ihr Lernen mit detaillierten Statistiken, einschließlich täglichem Serienzähler, maximaler Serie, Heatmap der Lernaktivität und allgemeinen Statistiken wie Gesamtwiederholungen und Lerntagen.'
+        },
+        
+        study: {
+            title: 'Effiziente Lernsitzungen',
+            description: 'Die Lernoberfläche zeigt Vokabeln auf der Vorderseite und Übersetzungen auf der Rückseite. Hören Sie die Audioaussprache und bewerten Sie, wie gut Sie sich an jedes Wort erinnert haben, um die Planung zukünftiger Wiederholungen zu optimieren.'
+        }
     },
 }; 

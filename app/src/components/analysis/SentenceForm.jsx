@@ -28,7 +28,7 @@ const SentenceForm = ({
     setTransition
 }) => {
     const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
-    const { isAuthenticated, user, decrementRemainingImageExtracts } = useAuth();
+    const { isAuthenticated, user, decrementRemainingImageExtracts, decrementRemainingSentenceAnalyses, updateWeeklySentenceQuota } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const [text, setText] = useState('');
     const [loading, setLoading] = useState(false);
@@ -210,6 +210,54 @@ const SentenceForm = ({
         fileInputRef.current?.click();
     };
 
+    // Function to show appropriate rate limit notification popup
+    const showRateLimitNotification = (notification) => {
+        if (!notification) return;
+        
+        // Update weekly sentence quota in the user session with values from the server
+        // This takes precedence over our client-side calculations
+        if (isAuthenticated && notification.weekSentencesUsed !== undefined) {
+            updateWeeklySentenceQuota(
+                notification.weekSentencesUsed,
+                notification.weekSentencesTotal,
+                notification.weekSentencesRemaining
+            );
+        }
+        
+        // Create custom popup message based on notification type
+        let popupType = '';
+        
+        switch (notification.type) {
+            case 'firstFiveUsed':
+                popupType = 'first-five-used';
+                break;
+            case 'fifteenRemaining':
+                popupType = 'fifteen-remaining';
+                break;
+            case 'fiveRemaining':
+                popupType = 'five-remaining';
+                break;
+            default:
+                return; // Don't show popup for unknown notification types
+        }
+        
+        // Use the existing popup system to show the notification
+        showLimitReachedPopup(popupType);
+    };
+    
+    // Function to show a message when a purchased analysis is used
+    const showPurchasedAnalysisUsage = (remainingCount) => {
+        setError({
+            type: 'purchased_analysis_used',
+            message: `You used 1 of your purchased sentence analyses. You have ${remainingCount - 1} remaining.`
+        });
+        
+        // Clear the message after 3 seconds
+        setTimeout(() => {
+            setError(null);
+        }, 3000);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -264,80 +312,136 @@ const SentenceForm = ({
             });
 
             clearTimeout(timeoutId);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
+
             const data = await response.json();
-            
-            if (!data.message.isValid) {
-                setError(data.message.error);
-            } else {
-                // Decrement remaining image extracts if this was an image submission
-                // and user is on the free tier
-                if (imagePreview && user && user.tier === 0) {
+
+            // If rate limit exceeded, show error
+            if (data.message?.error?.type === 'rate_limit_exceeded') {
+                setError({
+                    type: 'rate_limit_exceeded',
+                    message: data.message.error.message
+                });
+                
+                // Show the limit reached popup 
+                showLimitReachedPopup('sentence-analyses');
+                setLoading(false);
+                return;
+            }
+
+            if(data.message.isValid) {
+                // If this is an image submission and user is logged in
+                if (imagePreview && isAuthenticated && user.tier === 0) {
                     decrementRemainingImageExtracts();
                 }
                 
-                // Clear the image preview after successful submission
-                if (imagePreview) {
-                    setImagePreview(null);
+                // If this request used a purchased analysis, decrement the counter
+                if (data.usedPurchasedAnalysis && isAuthenticated) {
+                    decrementRemainingSentenceAnalyses();
+                    showPurchasedAnalysisUsage(user.remainingSentenceAnalyses);
                 }
                 
+                // Clear image preview
+                setImagePreview(null);
+                
+                // Update analysis state in parent component
+                setAnalysis(data.message.analysis);
+                
+                // Clear voice keys
+                setVoice1(null);
+                setVoice2(null);
+                
+                // Show transition animation
                 setTransition(true);
-                setTimeout(() => {
-                    setAnalysis(data.message.analysis);
-                    if (data.voice1) {
-                        setVoice1(data.voice1);
-                    }
-                    if (data.voice2) {
-                        setVoice2(data.voice2);
-                    }
-                }, 200);
-                setTimeout(() => {
-                    setTransition(false);
-                }, 400);
-                playFinishedSound();
-                if (data.sentenceId) {
-                    if (isAuthenticated) {
-                        router.push(`/sentence/${data.sentenceId}`);
+                
+                // For free users, always update the weekly sentence quota information after each analysis
+                if (isAuthenticated && user?.tier === 0 && !data.usedPurchasedAnalysis) {
+                    // If the server sent weekly quota info, use it
+                    if (data.weeklyQuota) {
+                        updateWeeklySentenceQuota(
+                            data.weeklyQuota.weekSentencesUsed,
+                            data.weeklyQuota.weekSentencesTotal,
+                            data.weeklyQuota.weekSentencesRemaining
+                        );
+                    } else {
+                        // Otherwise, calculate locally
+                        const newWeekSentencesUsed = (user.weekSentencesUsed || 0) + 1;
+                        const weekSentencesTotal = user.weekSentencesTotal || 30;
+                        const newWeekSentencesRemaining = weekSentencesTotal - newWeekSentencesUsed;
+                        
+                        updateWeeklySentenceQuota(
+                            newWeekSentencesUsed,
+                            weekSentencesTotal,
+                            newWeekSentencesRemaining
+                        );
                     }
                 }
+                
+                // If there's a notification about rate limits, show it as a popup
+                if (data.notification) {
+                    // Show appropriate popup based on notification type
+                    setTimeout(() => {
+                        showRateLimitNotification(data.notification);
+                    }, 500);
+                }
+                
+                playFinishedSound();
+                
+                // If originalLanguage or sentenceId is in the response, add them to query params
+                if (data.originalLanguage && data.sentenceId) {
+                    router.push(`/sentence/${data.sentenceId}`);
+                }
+            } else {
+                setError({
+                    type: data.message.error?.type || 'other',
+                    message: data.message.error?.message
+                });
             }
+
+            setLoading(false);
+            setIsProcessingImage(false);
         } catch (error) {
             console.error('Error:', error);
             if (error.name === 'AbortError') {
                 setError({
-                    type: 'timeout'
+                    type: 'timeout',
+                    message: t('sentenceForm.errors.timeout')
                 });
             } else {
                 setError({
-                    type: 'other'
+                    type: 'server',
+                    message: t('sentenceForm.errors.server')
                 });
             }
-        } finally {
-            // Make sure to set isProcessingImage back to false when done
-            if (imagePreview) {
-                setIsProcessingImage(false);
-            }
             setLoading(false);
+            setIsProcessingImage(false);
         }
     };
     
     const getErrorMessage = (error) => {
-        const messages = {
-            not_korean: t('sentenceForm.errors.not_korean'),
-            invalid_grammar: t('sentenceForm.errors.invalid_grammar'),
-            nonsensical: t('sentenceForm.errors.nonsensical'),
-            timeout: t('sentenceForm.errors.timeout'),
-            other: t('sentenceForm.errors.other'),
-            empty: t('sentenceForm.errors.empty'),
-            invalid_file: t('sentenceForm.errors.invalid_file') || 'Please upload a valid image file.',
-            file_too_large: t('sentenceForm.errors.file_too_large') || 'Image file is too large. Maximum size is 2MB.',
-            image_processing: t('sentenceForm.errors.image_processing') || 'Error processing image. Please try again.'
-        };
-        return error.message || messages[error.type] || messages.other;
+        if (!error) return '';
+        
+        switch (error.type) {
+            case 'empty':
+                return t('sentenceForm.errors.empty');
+            case 'timeout':
+                return error.message || t('sentenceForm.errors.timeout');
+            case 'server':
+                return error.message || t('sentenceForm.errors.server');
+            case 'file_too_large':
+                return error.message || t('sentenceForm.errors.file_too_large');
+            case 'invalid_file':
+                return error.message || t('sentenceForm.errors.invalid_file');
+            case 'image_processing':
+                return error.message || t('sentenceForm.errors.image_processing');
+            case 'rate_limit_exceeded':
+                return error.message || t('sentenceForm.errors.rate_limit_exceeded');
+            case 'rate_limit_notification':
+                return error.notification?.message || '';
+            case 'purchased_analysis_used':
+                return error.message || t('sentenceForm.errors.purchased_analysis_used');
+            default:
+                return error.message || t('sentenceForm.errors.unknown');
+        }
     };
 
     return (
@@ -418,7 +522,7 @@ const SentenceForm = ({
             }
             {
                 error && (
-                    <div className={styles.error}>
+                    <div className={error.type === 'purchased_analysis_used' ? styles.infoMessage : styles.error}>
                         {getErrorMessage(error)}
                     </div>
                 )

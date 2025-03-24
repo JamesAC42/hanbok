@@ -39,6 +39,22 @@ export function AuthProvider({ children }) {
         }));
     }
     
+    const decrementRemainingSentenceAnalyses = () => {
+        setUser(prevUser => ({
+            ...prevUser,
+            remainingSentenceAnalyses: Math.max((prevUser.remainingSentenceAnalyses || 0) - 1, 0)
+        }));
+    }
+    
+    const updateWeeklySentenceQuota = (weekSentencesUsed, weekSentencesTotal, weekSentencesRemaining) => {
+        setUser(prevUser => ({
+            ...prevUser,
+            weekSentencesUsed,
+            weekSentencesTotal,
+            weekSentencesRemaining
+        }));
+    }
+    
     const login = async (response) => {
         try {
             const loginResponse = await fetch('/api/login', { 
@@ -100,6 +116,8 @@ export function AuthProvider({ children }) {
         loadSentence,
         decrementRemainingAudioGenerations,
         decrementRemainingImageExtracts,
+        decrementRemainingSentenceAnalyses,
+        updateWeeklySentenceQuota,
         isAuthenticated: !!user
     };
 

@@ -38,6 +38,15 @@ const Profile = () => {
                                 t('profile.tierTypes.unknown')
                             }
                         </p>
+                        {user.tier === 0 && (
+                            <p>
+                                <strong>{t('profile.weekSentencesRemaining')}:</strong> {
+                                    user.weekSentencesRemaining !== undefined ? 
+                                    `${user.weekSentencesRemaining}/${user.weekSentencesTotal || 30}` : 
+                                    `0/30`
+                                }
+                            </p>
+                        )}
                         <p>
                             <strong>{t('profile.remainingAudioGenerations')}:</strong> {
                                 user.tier === 1 ? t('profile.unlimited') :
@@ -64,6 +73,13 @@ const Profile = () => {
                                 user.tier === 1 ? t('profile.unlimited') :
                                 user.remainingImageExtracts == null ? "0" :
                                 user.remainingImageExtracts
+                            }
+                        </p>
+                        <p>
+                            <strong>{t('profile.remainingSentenceAnalyses')}:</strong> {
+                                user.tier === 1 ? t('profile.unlimited') :
+                                user.remainingSentenceAnalyses == null ? "0" :
+                                user.remainingSentenceAnalyses
                             }
                         </p>
                     </div>

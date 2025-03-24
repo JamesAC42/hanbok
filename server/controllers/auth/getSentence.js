@@ -2,13 +2,13 @@ const { getDb } = require('../../database');
 
 const getSentence = async (req, res) => {
     const { sentenceId } = req.params;
-    const userId = req.session.user.userId;
+    //const userId = req.session.user.userId;
 
     try {
         const db = getDb();
         const sentence = await db.collection('sentences').findOne({ 
             sentenceId: parseInt(sentenceId),
-            userId: userId
+            //userId: userId
         });
 
         if (!sentence) {

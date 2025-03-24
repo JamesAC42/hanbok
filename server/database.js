@@ -54,6 +54,24 @@ async function connectToDatabase() {
       { unique: true }
     );
 
+    // Add index for rate_limits collection
+    try {
+      await db.collection('rate_limits').createIndex(
+        { identifier: 1 }, 
+        { unique: true }
+      );
+      await db.collection('rate_limits').createIndex(
+        { weekStartDate: 1 }
+      );
+    } catch (error) {
+      // Ignore errors for indexes that already exist with different names
+      if (error.code !== 85 && error.code !== 11000) {
+        console.error('Error creating rate_limits indexes:', error);
+      } else {
+        console.log('Rate limits indexes already exist with different names, continuing...');
+      }
+    }
+
     // Initialize counters
     try {
       await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });

@@ -6,7 +6,7 @@ const getAudioURL = async (req, res) => {
         const db = getDb();
         const sentence = await db.collection('sentences').findOne({ 
             sentenceId: parseInt(req.params.sentenceId),
-            userId: req.session.user.userId  // Security: only allow access to own sentences
+            //userId: req.session.user.userId  // Security: only allow access to own sentences
         });
         
         if (!sentence) {

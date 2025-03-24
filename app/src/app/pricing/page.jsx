@@ -12,7 +12,8 @@ const PRICE_IDS = {
     BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
     AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
     MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
-    IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj'
+    IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj',
+    MORE_SENTENCES: 'price_1R5e8hDv6kE7Gata5CKPAu0Z'
 };
 
 //test
@@ -63,6 +64,43 @@ const Pricing = () => {
                         <h2>{t('pricing.upgradeOptions')}</h2>
 
                         <div className={pricingStyles.options}>
+                            
+                            <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
+                                <div className={pricingStyles.bestValue}>{t('pricing.bestValue')}</div>
+                                <h3>{t('pricing.monthlySubscription')}</h3>
+                                <p className={pricingStyles.price}>$10 {t('pricing.perMonth')}</p>
+                                <ul className={pricingStyles.featuresList}>
+                                    <li>{t('pricing.features.unlimited.analyses')}</li>
+                                    <li>{t('pricing.features.unlimited.sentences')}</li>
+                                    <li>{t('pricing.features.unlimited.images')}</li>
+                                    <li>{t('pricing.features.unlimited.words')}</li>
+                                    <li>{t('pricing.features.unlimited.audio')}</li>
+                                    <li>{t('pricing.features.unlimited.insights')}</li>
+                                </ul>
+                                <button 
+                                    className={pricingStyles.purchaseButton}
+                                    onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
+                                    disabled={loading}
+                                >
+                                    {t('pricing.buttons.subscribe')}
+                                </button>
+                            </div>
+                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
+                                <h3>{t('pricing.oneTimePurchase')}</h3>
+                                <p className={pricingStyles.price}>$1</p>
+                                <ul className={pricingStyles.featuresList}>
+                                    <li>
+                                        <strong>100</strong> {t('pricing.features.moreSentences')}
+                                    </li>
+                                </ul>
+                                <button 
+                                    className={pricingStyles.purchaseButton}
+                                    onClick={() => handlePurchase(PRICE_IDS.MORE_SENTENCES)}
+                                    disabled={loading}
+                                >
+                                    {t('pricing.buttons.buyNow')}
+                                </button>
+                            </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
                                 <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
                                 <h3>{t('pricing.oneTimePurchase')}</h3>
@@ -115,25 +153,6 @@ const Pricing = () => {
                                     disabled={loading}
                                 >
                                     {t('pricing.buttons.buyNow')}
-                                </button>
-                            </div>
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
-                                <div className={pricingStyles.bestValue}>{t('pricing.bestValue')}</div>
-                                <h3>{t('pricing.monthlySubscription')}</h3>
-                                <p className={pricingStyles.price}>$10 {t('pricing.perMonth')}</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>{t('pricing.features.unlimited.sentences')}</li>
-                                    <li>{t('pricing.features.unlimited.images')}</li>
-                                    <li>{t('pricing.features.unlimited.words')}</li>
-                                    <li>{t('pricing.features.unlimited.audio')}</li>
-                                    <li>{t('pricing.features.unlimited.insights')}</li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.subscribe')}
                                 </button>
                             </div>
                         </div>

@@ -39,29 +39,61 @@ export const es = {
             text: 'Ver código fuente'
         },
         email: {
-            label: 'Correo',
+            label: 'Email',
             text: 'Preguntas y comentarios'
+        },
+        discord: {
+            label: 'Discord',
+            text: 'Únete a nuestra comunidad de Discord'
         },
         updates: [
             {
-                date: '2025-02-23',
-                content: 'Se agregó soporte para japonés, chino, español, italiano y francés.'
+                date: '2025-03-23',
+                content: 'Añadir programa de tarjetas integrado y exportación de Anki.'
             },
             {
-                date: '2025-02-20',
-                content: 'Se agregó un foro de comentarios para que los usuarios envíen feedback y sugerencias.'
+                date: '2025-03-11',
+                content: 'Se solucionó el problema con el audio antiguo que no se actualizaba después de que caducaba el enlace.'
             },
             {
-                date: '2025-02-19',
-                content: 'Se agregaron relaciones de palabras para usuarios plus y se corrigieron varios problemas menores.'
+                date: '2025-03-10',
+                content: 'Se añadió un interruptor para mostrar pronunciación en el análisis de oraciones.'
             },
             {
-                date: '2025-02-16',
-                content: 'Lanzamiento beta inicial'
+                date: '2025-03-09',
+                content: 'Análisis mejorado para chino, ruso y japonés.'
+            },
+            {
+                date: '2025-03-03',
+                content: 'Mejor accesibilidad de teclado.'
+            },
+            {
+                date: '2025-03-01',
+                content: 'Añadidos efectos de sonido.'
+            },
+            {
+                date: '2025-02-28',
+                content: 'Añadida función de extracción de imágenes.'
             },
             {
                 date: '2025-02-26',
-                content: 'Se agregó soporte para alemán, holandés, ruso y turco.'
+                content: 'Se añadió soporte para alemán, holandés, ruso y turco.'
+            },
+            {
+                date: '2025-02-23',
+                content: 'Se añadió soporte para japonés, chino, español, italiano y francés.'
+            },
+            {
+                date: '2025-02-20',
+                content: 'Se añadió un foro de comentarios para que los usuarios envíen feedback y sugerencias.'
+            },
+            {
+                date: '2025-02-19',
+                content: 'Se añadieron relaciones de palabras para usuarios Plus y se solucionaron varios problemas menores.'
+            },
+            {
+                date: '2025-02-16',
+                content: 'Lanzamiento inicial beta'
             }
         ],
         upcomingFeaturesList: [
@@ -290,7 +322,15 @@ export const es = {
         relatedWordsMessage: 'Ver palabras relacionadas es una función Plus. ¡Actualiza tu cuenta para ver sinónimos, antónimos y expandir tu vocabulario!',
         storageMessage: 'Has alcanzado el número máximo de {type} guardados para tu plan actual.',
         viewPricing: 'Ver Precios',
-        maybeLater: 'Quizás Después'
+        maybeLater: 'Quizás Después',
+        sentenceAnalysesTitle: 'Límite semanal de análisis de oraciones alcanzado',
+        sentenceAnalysesMessage: 'Has usado todos tus 30 análisis de oraciones gratuitos semanales. Actualiza a Premium para análisis ilimitados, o compra 100 análisis adicionales por solo $1.',
+        firstFiveUsedTitle: 'Uso de análisis de oraciones semanal',
+        firstFiveUsedMessage: 'Has usado 5 de tus 30 análisis de oraciones gratuitos semanales. Considera actualizar a Premium para análisis ilimitados, o compra 100 análisis adicionales por solo $1.',
+        fifteenRemainingTitle: 'Actualización de análisis de oraciones semanal',
+        fifteenRemainingMessage: 'Te quedan 15 análisis de oraciones para esta semana. Actualiza a Premium para análisis ilimitados, o compra 100 análisis adicionales por solo $1.',
+        fiveRemainingTitle: 'Alerta de análisis de oraciones semanal',
+        fiveRemainingMessage: 'Solo te quedan 5 análisis de oraciones para esta semana. Actualiza a Premium o compra análisis adicionales, o compra 100 análisis adicionales por solo $1.'
     },
     loginRequired: {
         title: 'Inicio de Sesión Requerido',
@@ -369,5 +409,197 @@ export const es = {
         joinDiscord: 'Únete a Nuestro Discord',
         shareWebsite: 'Compartir con Amigos',
         linkCopied: '¡Enlace copiado al portapapeles! Compártelo con tus amigos.'
-    }
+    },
+    bookmarks: {
+        title: 'Marcadores',
+        sentences: 'Oraciones',
+        loading: 'Cargando...',
+        noSentences: 'No se encontraron oraciones guardadas.',
+        clickBookmark: 'Haz clic en el',
+        toSave: 'icono para guardar.',
+        savedOn: 'Guardado el',
+        prev: 'Anterior',
+        next: 'Siguiente',
+        pageOf: 'Página {current} de {total}',
+        fetchError: 'Error al obtener oraciones guardadas.'
+    },
+    cards: {
+        title: 'Tarjetas',
+        subtitle: 'Estudia tus palabras guardadas con repetición espaciada',
+        deckTitle: 'Mazo de tarjetas',
+        loading: 'Cargando...',
+        noDecks: 'No se encontraron mazos de tarjetas.',
+        saveWordsToCreate: 'Guarda palabras en diferentes idiomas para crear mazos.',
+        cards: 'tarjetas',
+        new: 'Nuevas',
+        learning: 'Aprendiendo',
+        relearning: 'Reaprendiendo',
+        review: 'Repaso',
+        due: 'Pendientes',
+        lastReviewed: 'Último repaso',
+        studyNow: 'Estudiar ahora',
+        completedForDay: '¡Buen trabajo! Has completado todas tus tarjetas para hoy.',
+        checkBackTomorrow: 'Vuelve mañana para mantener tu racha y continuar aprendiendo.',
+        cardsInDeck: 'Tarjetas en este mazo',
+        noCardsInDeck: 'Aún no hay tarjetas en este mazo.',
+        fetchError: 'Error al obtener tarjetas.',
+        deckNotFound: 'Mazo no encontrado.',
+        viewMode: 'Modo de visualización',
+        gridView: 'Cuadrícula',
+        tableView: 'Tabla',
+        front: 'Frente',
+        back: 'Reverso',
+        state: 'Estado',
+        interval: 'Intervalo',
+        easeFactor: 'Factor de facilidad',
+        nextReview: 'Próximo repaso',
+        reviews: 'Repasos',
+        lapses: 'Fallos',
+        days: 'días',
+        unknownWord: 'Palabra desconocida',
+        unknownTranslation: 'Traducción desconocida',
+        available: 'disponibles',
+        limitedTo: 'limitado a',
+        total: 'total',
+        studied: 'estudiado',
+        today: 'hoy',
+        deckSettings: 'Configuración del mazo',
+        settingsError: 'Error al cargar la configuración',
+        settingsUpdateError: 'Error al actualizar la configuración',
+        settingsSaved: 'Configuración guardada con éxito',
+        newCardsPerDay: 'Nuevas tarjetas por día',
+        newCardsPerDayHelp: 'Número máximo de nuevas tarjetas para introducir cada día',
+        reviewsPerDay: 'Repasos por día',
+        reviewsPerDayHelp: 'Número máximo de repasos para mostrar cada día',
+        showAdvanced: 'Mostrar configuración avanzada',
+        hideAdvanced: 'Ocultar configuración avanzada',
+        advancedSettings: 'Configuración avanzada',
+        advancedSettingsDescription: 'Estas configuraciones controlan el algoritmo de repetición espaciada. Cámbialas solo si entiendes cómo funcionan.',
+        learningSteps: 'Pasos de aprendizaje (minutos)',
+        learningStepsHelp: 'Lista de intervalos separados por comas (en minutos) para tarjetas en aprendizaje',
+        whatAreLearningSteps: '¿Qué son los pasos de aprendizaje?',
+        learningStepsExplanation1: 'Los pasos de aprendizaje son intervalos cortos (en minutos) por los que pasan las nuevas tarjetas antes de entrar en el programa regular de repaso.',
+        learningStepsExplanation2: 'Cuando ves una nueva tarjeta, la repasarás varias veces según estos pasos antes de que se gradúe al sistema de repetición espaciada.',
+        learningStepsExample: 'Ejemplo: Con pasos "1, 10, 60, 1440" (1min, 10min, 1hora, 1día), verás una nueva tarjeta 4 veces con intervalos crecientes si respondes correctamente cada vez.',
+        invalidLearningSteps: 'Los pasos de aprendizaje deben ser una lista de números positivos separados por comas',
+        saveSettings: 'Guardar configuración',
+        saving: 'Guardando...',
+        cancel: 'Cancelar',
+        settings: 'Configuración',
+        showing: 'Mostrando',
+        study: {
+            studying: 'Estudiando',
+            answer: 'Respuesta',
+            question: 'Pregunta',
+            showAnswer: 'Mostrar respuesta',
+            showQuestion: 'Mostrar pregunta',
+            rateYourRecall: '¿Qué tan bien recordaste esto?',
+            again: 'Otra vez',
+            hard: 'Difícil',
+            good: 'Bien',
+            easy: 'Fácil',
+            stepSettings: 'Pasos de aprendizaje',
+            defaultSteps: 'Predeterminados',
+            finishedStudying: '¡Has terminado por hoy! Vuelve mañana para seguir aprendiendo.',
+            errorUpdating: 'Error al actualizar el progreso de la tarjeta',
+            nextCard: 'Siguiente tarjeta',
+            currentProgress: 'Progreso',
+            cardsLeft: 'tarjetas restantes',
+            mute: 'Silenciar audio',
+            unmute: 'Activar audio',
+            playAudio: 'Reproducir audio',
+            showAgain: 'repetir en sesión',
+            newCards: 'Nuevas',
+            learningCards: 'Aprendiendo',
+            dueCards: 'Pendientes',
+            totalCards: 'Total',
+            spaceOrEnter: 'Presiona Espacio o Enter',
+            againShortcut: 'Presiona 1 para Otra vez',
+            hardShortcut: 'Presiona 2 para Difícil',
+            goodShortcut: 'Presiona 3 para Bien',
+            easyShortcut: 'Presiona 4 para Fácil',
+            showAnswerShortcut: 'Presiona Espacio o Enter para mostrar la respuesta'
+        }
+    },
+    common: {
+        back: 'Atrás',
+        page: 'Página',
+        of: 'de',
+        showing: 'Mostrando',
+        cards: 'tarjetas',
+        previous: 'Anterior',
+        next: 'Siguiente'
+    },
+    navbar: {
+        home: 'Inicio',
+        bookmarks: 'Marcadores',
+        cards: 'Tarjetas',
+        profile: 'Perfil',
+        about: 'Acerca de',
+        feedback: 'Comentarios',
+        pricing: 'Precios',
+    },
+    stats: {
+        studyStats: 'Estadísticas de estudio',
+        yourProgress: 'Tu progreso',
+        currentStreak: 'Racha actual',
+        maxStreak: 'Racha máxima',
+        studyActivity: 'Actividad de estudio',
+        cardsReviewed: 'Tarjetas repasadas',
+        newCardsStudied: 'Nuevas tarjetas',
+        reviewsCompleted: 'Repasos',
+        daysStudied: 'Días estudiados',
+        avgPerDay: 'Promedio por día',
+        activityLevel: 'Nivel de actividad',
+        noActivity: 'Sin actividad',
+        startStreak: '¡Comienza tu racha de estudio hoy!',
+        firstDayStreak: '¡Primer día de tu racha! ¡Sigue así!',
+        keepGoing: 'Estás ganando impulso. ¡Continúa!',
+        doingGreat: '¡Lo estás haciendo genial! ¡Mantén la racha!',
+        impressive: '¡Racha impresionante! ¡Estás haciendo un progreso real!',
+        amazing: '¡Dedicación asombrosa! Tu constancia está dando frutos.',
+        extraordinary: '¡Compromiso extraordinario! ¡Eres una máquina de aprendizaje de idiomas!',
+        legendary: '¡Racha legendaria! Tu dedicación es realmente inspiradora.',
+        noActivityYet: 'Aún no hay actividad de estudio registrada. ¡Comienza a estudiar para ver tu progreso!',
+        noStatsYet: 'Aún no hay estadísticas de estudio disponibles. ¡Completa algunos repasos para ver tu progreso!',
+        noStreakYet: 'Aún no hay racha. ¡Comienza a estudiar diariamente para construir una racha!',
+        statsError: 'Error al cargar las estadísticas de estudio'
+    },
+    days: {
+        mon: 'L',
+        tue: 'M',
+        wed: 'X',
+        thu: 'J',
+        fri: 'V',
+        sat: 'S',
+        sun: 'D'
+    },
+    flashcardsFeature: {
+        title: 'Tarjetas de repetición espaciada',
+        description: 'Nuestro sistema de tarjetas incorporado te ayuda a dominar el vocabulario de manera eficiente utilizando el algoritmo de repetición espaciada SM-2 comprobado. Aprende palabras que realmente encuentras en contenido real y construye memoria a largo plazo a través de la práctica diaria constante.',
+        addWordsAlt: 'Añadir palabras a tarjetas desde el análisis de oraciones',
+        mainAlt: 'Vista principal de mazos de tarjetas',
+        statsAlt: 'Vista de estadísticas de tarjetas',
+        studyAlt: 'Interfaz de estudio de tarjetas',
+        
+        addWords: {
+            title: 'Añade palabras mientras aprendes',
+            description: 'Añade fácilmente vocabulario directamente desde el análisis de oraciones con un clic. El sistema incluye automáticamente sinónimos y antónimos relacionados para enriquecer tu experiencia de aprendizaje.'
+        },
+        
+        main: {
+            title: 'Organizado por idioma',
+            description: 'Cada idioma que estás aprendiendo tiene su propio mazo. Ve de un vistazo cuántas tarjetas tienes en total, además de nuevas palabras, tarjetas en aprendizaje y repasos pendientes para hoy.'
+        },
+        
+        stats: {
+            title: 'Sigue tu progreso',
+            description: 'Monitorea tu aprendizaje con estadísticas detalladas, incluyendo conteo de racha diaria, racha máxima, mapa de calor de actividad de estudio y estadísticas generales como repasos totales y días de estudio.'
+        },
+        
+        study: {
+            title: 'Sesiones de estudio eficientes',
+            description: 'La interfaz de estudio muestra vocabulario en el frente y traducciones en el reverso. Escucha la pronunciación de audio y califica qué tan bien recordaste cada palabra para optimizar la programación de repasos futuros.'
+        }
+    },
 }; 

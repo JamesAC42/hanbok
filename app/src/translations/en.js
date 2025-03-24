@@ -23,7 +23,7 @@ export const en = {
         description: 'Hanbok is a comprehensive language learning tool designed to help you understand and master sentences in multiple languages. Hanbok breaks down sentences into their component parts, providing detailed analysis of grammar patterns, vocabulary, and usage for Korean, Japanese, Chinese, Spanish, Italian, and French.',
         screenshotAlt: 'screenshot',
         exampleAnalysis: 'Example sentence analysis',
-        registeredFeatures: 'Registered accounts get access to audio examples from both male and female native speakers, helping you perfect your pronunciation and understand natural speech patterns. We also provide cultural notes to give you context and deeper understanding of language usage.',
+        registeredFeatures: 'Registered accounts get access to audio examples from both male and female speakers, helping you perfect your pronunciation and understand natural speech patterns. We also provide cultural notes to give you context and deeper understanding of language usage.',
         culturalNotes: 'Cultural notes and variants for different contexts',
         benefitsDescription: 'Whether you\'re a beginner or an advanced learner, our tool helps you understand the nuances of grammar, vocabulary, and cultural context all in one place.',
         saveFeature: 'Save sentences that you find interesting or challenging for later reference. Soon, you\'ll be able to create personalized study decks from the words and grammar patterns you encounter, enabling efficient learning through spaced repetition techniques.',
@@ -146,6 +146,8 @@ export const en = {
         },
         remainingAudioGenerations: 'Remaining Audio Generations',
         remainingImageExtracts: 'Remaining Image Extracts',
+        remainingSentenceAnalyses: 'Remaining Sentence Analyses',
+        weekSentencesRemaining: 'Weekly Sentence Analyses Remaining',
         unlimited: 'Unlimited',
         maxSavedSentences: 'Max Saved Sentences',
         maxSavedWords: 'Max Saved Words',
@@ -193,10 +195,12 @@ export const en = {
             additionalAudio: 'An additional',
             audioGenerations: 'audio generations',
             imageExtractions: 'image extractions',
+            moreSentences: ' additional sentence analyses',
             unlimited: {
+                analyses: 'Unlimited sentence analyses',
                 sentences: 'Unlimited sentences saved',
                 images: 'Unlimited image extractions',
-                words: 'Unlimited saved words',
+                words: 'Unlimited flashcards',
                 audio: 'Unlimited audio generations',
                 insights: 'Unlimited word relation insights'
             }
@@ -319,7 +323,15 @@ export const en = {
         relatedWordsMessage: 'Viewing related words is a Plus feature. Upgrade your account to see synonyms, antonyms, and expand your vocabulary!',
         storageMessage: 'You\'ve reached the maximum number of saved {type} for your current plan.',
         viewPricing: 'View Pricing',
-        maybeLater: 'Maybe Later'
+        maybeLater: 'Maybe Later',
+        sentenceAnalysesTitle: 'Weekly Sentence Analysis Limit Reached',
+        sentenceAnalysesMessage: 'You have used all 30 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.',
+        firstFiveUsedTitle: 'Weekly Sentence Analysis Usage',
+        firstFiveUsedMessage: 'You have used 5 out of your 30 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.',
+        fifteenRemainingTitle: 'Weekly Sentence Analysis Update',
+        fifteenRemainingMessage: 'You have 15 sentence analyses remaining for this week. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.',
+        fiveRemainingTitle: 'Weekly Sentence Analysis Alert',
+        fiveRemainingMessage: 'You only have 5 sentence analyses remaining for this week. Upgrade to Premium or purchase additional analyses, or purchase an additional 100 analyses for just $1.'
     },
     loginRequired: {
         title: 'Login Required',
@@ -329,7 +341,7 @@ export const en = {
                 sub: 'Join thousands of Korean learners using Hanbok to improve their language skills.'
             },
             'audio': {
-                main: 'Create a free account to generate audio and hear native pronunciation!',
+                main: 'Create a free account to generate audio and hear lifelike pronunciation!',
                 sub: 'Join thousands of Korean learners using Hanbok to improve their speaking and listening.'
             },
             'image-extracts': {
@@ -353,7 +365,7 @@ export const en = {
             male: 'boy'
         },
         loginRequired: {
-            title: 'Sign in to generate audio samples and hear the sentence spoken by a native speaker.',
+            title: 'Sign in to generate audio samples and hear the sentence spoken by lifelike speakers.',
             cta: 'Make a free account',
         },
         noCredits: {
@@ -576,7 +588,7 @@ export const en = {
         
         study: {
             title: 'Efficient Study Sessions',
-            description: 'The study interface shows vocabulary on the front and translations on the back. Listen to native audio pronunciation and rate how well you remembered each word to optimize future review scheduling.'
+            description: 'The study interface shows vocabulary on the front and translations on the back. Listen to audio pronunciation and rate how well you remembered each word to optimize future review scheduling.'
         }
     },
 }; 

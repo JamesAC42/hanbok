@@ -42,7 +42,39 @@ export const tr = {
             label: 'E-posta',
             text: 'Sorular ve geri bildirim'
         },
+        discord: {
+            label: 'Discord',
+            text: 'Discord topluluğumuza katılın'
+        },
         updates: [
+            {
+                date: '2025-03-23',
+                content: 'Dahili kartlar programı ve Anki dışa aktarma eklendi.'
+            },
+            {
+                date: '2025-03-11',
+                content: 'Bağlantı süresi dolduktan sonra eski sesin yenilenmemesi sorunu düzeltildi.'
+            },
+            {
+                date: '2025-03-10',
+                content: 'Cümle analizinde telaffuz görüntüleme için geçiş düğmesi eklendi.'
+            },
+            {
+                date: '2025-03-09',
+                content: 'Çince, Rusça ve Japonca için geliştirilmiş analiz.'
+            },
+            {
+                date: '2025-03-03',
+                content: 'Daha iyi klavye erişilebilirliği.'
+            },
+            {
+                date: '2025-03-01',
+                content: 'Ses efektleri eklendi.'
+            },
+            {
+                date: '2025-02-28',
+                content: 'Görüntü çıkarma özelliği eklendi.'
+            },
             {
                 date: '2025-02-26',
                 content: 'Almanca, Flemenkçe, Rusça ve Türkçe dilleri için destek eklendi.'
@@ -290,7 +322,15 @@ export const tr = {
         relatedWordsMessage: 'İlgili kelimeleri görüntülemek bir Plus özelliğidir. Eşanlamlıları, zıt anlamlıları görmek ve kelime dağarcığınızı genişletmek için hesabınızı yükseltin!',
         storageMessage: 'Mevcut planınız için kaydedilen maksimum {type} sayısına ulaştınız.',
         viewPricing: 'Fiyatları Görüntüle',
-        maybeLater: 'Belki Daha Sonra'
+        maybeLater: 'Belki Daha Sonra',
+        sentenceAnalysesTitle: 'Haftalık Cümle Analizi Sınırına Ulaşıldı',
+        sentenceAnalysesMessage: '30 ücretsiz haftalık cümle analizinizin tamamını kullandınız. Sınırsız analiz için Premium\'a yükseltin veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        firstFiveUsedTitle: 'Haftalık Cümle Analizi Kullanımı',
+        firstFiveUsedMessage: '30 ücretsiz haftalık cümle analizinden 5 tanesini kullandınız. Sınırsız analiz için Premium\'a yükseltin veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        fifteenRemainingTitle: 'Haftalık Cümle Analizi Güncellemesi',
+        fifteenRemainingMessage: 'Bu hafta için 15 cümle analiziniz kaldı. Sınırsız analiz için Premium\'a yükseltin veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        fiveRemainingTitle: 'Haftalık Cümle Analizi Uyarısı',
+        fiveRemainingMessage: 'Bu hafta için sadece 5 cümle analiziniz kaldı. Premium\'a yükseltin veya ek analiz satın alın, ya da sadece 1$ karşılığında 100 ek analiz satın alın.'
     },
     loginRequired: {
         title: 'Giriş Gerekiyor',
@@ -369,5 +409,197 @@ export const tr = {
         joinDiscord: 'Discord\'umuza Katılın',
         shareWebsite: 'Arkadaşlarınızla Paylaşın',
         linkCopied: 'Bağlantı panoya kopyalandı! Arkadaşlarınızla paylaşın.'
+    },
+    bookmarks: {
+        title: 'Yer İmleri',
+        sentences: 'Cümleler',
+        loading: 'Yükleniyor...',
+        noSentences: 'Kaydedilen cümle bulunamadı.',
+        clickBookmark: 'Kaydetmek için',
+        toSave: 'simgeye tıklayın.',
+        savedOn: 'Kaydedildiği Tarih',
+        prev: 'Önceki',
+        next: 'Sonraki',
+        pageOf: 'Sayfa {current} / {total}',
+        fetchError: 'Kaydedilen cümleler alınırken hata oluştu.'
+    },
+    cards: {
+        title: 'Kartlar',
+        subtitle: 'Kaydedilen kelimelerinizi aralıklı tekrar ile çalışın',
+        deckTitle: 'Kart Destesi',
+        loading: 'Yükleniyor...',
+        noDecks: 'Kart destesi bulunamadı.',
+        saveWordsToCreate: 'Deste oluşturmak için farklı dillerde kelimeler kaydedin.',
+        cards: 'kart',
+        new: 'Yeni',
+        learning: 'Öğrenme',
+        relearning: 'Yeniden Öğrenme',
+        review: 'İnceleme',
+        due: 'Vadesi Gelen',
+        lastReviewed: 'Son inceleme',
+        studyNow: 'Şimdi Çalış',
+        completedForDay: 'Harika iş! Bugün için tüm kartlarınızı tamamladınız.',
+        checkBackTomorrow: 'Strekinizi sürdürmek ve öğrenmeye devam etmek için yarın tekrar kontrol edin.',
+        cardsInDeck: 'Bu destedeki kartlar',
+        noCardsInDeck: 'Bu destede henüz kart yok.',
+        fetchError: 'Kartlar alınırken hata oluştu.',
+        deckNotFound: 'Deste bulunamadı.',
+        viewMode: 'Görüntüleme modu',
+        gridView: 'Izgara',
+        tableView: 'Tablo',
+        front: 'Ön',
+        back: 'Arka',
+        state: 'Durum',
+        interval: 'Aralık',
+        easeFactor: 'Kolaylık',
+        nextReview: 'Sonraki İnceleme',
+        reviews: 'İncelemeler',
+        lapses: 'Hatalar',
+        days: 'gün',
+        unknownWord: 'Bilinmeyen kelime',
+        unknownTranslation: 'Bilinmeyen çeviri',
+        available: 'kullanılabilir',
+        limitedTo: 'sınırlı',
+        total: 'toplam',
+        studied: 'çalışıldı',
+        today: 'bugün',
+        deckSettings: 'Deste Ayarları',
+        settingsError: 'Ayarlar yüklenirken hata oluştu',
+        settingsUpdateError: 'Ayarlar güncellenirken hata oluştu',
+        settingsSaved: 'Ayarlar başarıyla kaydedildi',
+        newCardsPerDay: 'Günlük yeni kart',
+        newCardsPerDayHelp: 'Her gün gösterilecek maksimum yeni kart sayısı',
+        reviewsPerDay: 'Günlük inceleme',
+        reviewsPerDayHelp: 'Her gün gösterilecek maksimum inceleme sayısı',
+        showAdvanced: 'Gelişmiş Ayarları Göster',
+        hideAdvanced: 'Gelişmiş Ayarları Gizle',
+        advancedSettings: 'Gelişmiş Ayarlar',
+        advancedSettingsDescription: 'Bu ayarlar aralıklı tekrar algortimasını kontrol eder. Nasıl çalıştığınızdan emin değilseniz değiştirmeyin.',
+        learningSteps: 'Öğrenme adımları (dakika)',
+        learningStepsHelp: 'Öğrenme kartları için virgülle ayrılmış aralık listesi (dakika cinsinden)',
+        whatAreLearningSteps: 'Öğrenme Adımları Nedir?',
+        learningStepsExplanation1: 'Öğrenme adımları, yeni kartların düzenli inceleme programına girmeden önce geçtiği kısa aralıklardır (dakika cinsinden).',
+        learningStepsExplanation2: 'Yeni bir kart gördüğünüzde, aralıklı tekrar sistemine geçmeden önce bu adımlara göre birden çok kez inceleyeceksiniz.',
+        learningStepsExample: 'Örnek: "1, 10, 60, 1440" adımlarıyla (1dk, 10dk, 1sa, 1gün), her seferinde doğru yanıtlarsanız artan aralıklarla yeni bir kartı 4 kez göreceksiniz.',
+        invalidLearningSteps: 'Öğrenme adımları virgülle ayrılmış pozitif sayılar listesi olmalıdır',
+        saveSettings: 'Ayarları Kaydet',
+        saving: 'Kaydediliyor...',
+        cancel: 'İptal',
+        settings: 'Ayarlar',
+        showing: 'Gösteriliyor',
+        study: {
+            studying: 'Çalışılıyor',
+            answer: 'Cevap',
+            question: 'Soru',
+            showAnswer: 'Cevabı Göster',
+            showQuestion: 'Soruyu Göster',
+            rateYourRecall: 'Bu kelimeyi ne kadar iyi hatırladınız?',
+            again: 'Tekrar',
+            hard: 'Zor',
+            good: 'İyi',
+            easy: 'Kolay',
+            stepSettings: 'Öğrenme adımları',
+            defaultSteps: 'Varsayılan',
+            finishedStudying: 'Bugün için bitti! Öğrenmeye devam etmek için yarın tekrar gelin.',
+            errorUpdating: 'Kart ilerleme durumu güncellenirken hata oluştu',
+            nextCard: 'Sonraki Kart',
+            currentProgress: 'İlerleme',
+            cardsLeft: 'kart kaldı',
+            mute: 'Sesi kapat',
+            unmute: 'Sesi aç',
+            playAudio: 'Sesi oynat',
+            showAgain: 'oturumda tekrarla',
+            newCards: 'Yeni',
+            learningCards: 'Öğrenme',
+            dueCards: 'Vadesi Gelen',
+            totalCards: 'Toplam',
+            spaceOrEnter: 'Boşluk veya Enter\'e basın',
+            againShortcut: 'Tekrar için 1\'e basın',
+            hardShortcut: 'Zor için 2\'ye basın',
+            goodShortcut: 'İyi için 3\'e basın',
+            easyShortcut: 'Kolay için 4\'e basın',
+            showAnswerShortcut: 'Cevabı göstermek için Boşluk veya Enter\'e basın'
+        }
+    },
+    common: {
+        back: 'Geri',
+        page: 'Sayfa',
+        of: '/',
+        showing: 'Gösteriliyor',
+        cards: 'kart',
+        previous: 'Önceki',
+        next: 'Sonraki'
+    },
+    navbar: {
+        home: 'Ana Sayfa',
+        bookmarks: 'Yer İmleri',
+        cards: 'Kartlar',
+        profile: 'Profil',
+        about: 'Hakkında',
+        feedback: 'Geri Bildirim',
+        pricing: 'Fiyatlandırma',
+    },
+    stats: {
+        studyStats: 'Çalışma İstatistikleri',
+        yourProgress: 'İlerlemeniz',
+        currentStreak: 'Mevcut Seri',
+        maxStreak: 'Maksimum Seri',
+        studyActivity: 'Çalışma Aktivitesi',
+        cardsReviewed: 'İncelenen Kartlar',
+        newCardsStudied: 'Yeni Kartlar',
+        reviewsCompleted: 'İncelemeler',
+        daysStudied: 'Çalışılan Günler',
+        avgPerDay: 'Günlük Ortalama',
+        activityLevel: 'Aktivite Seviyesi',
+        noActivity: 'Aktivite yok',
+        startStreak: 'Çalışma serinize bugün başlayın!',
+        firstDayStreak: 'Serinizin ilk günü! Devam edin!',
+        keepGoing: 'İvme kazanıyorsunuz. Devam edin!',
+        doingGreat: 'Harika gidiyorsunuz! Seriyi devam ettirin!',
+        impressive: 'Etkileyici bir seri! Gerçekten ilerleme kaydediyorsunuz!',
+        amazing: 'Muhteşem bir adanmışlık! Tutarlılığınız sonuç veriyor!',
+        extraordinary: 'Olağanüstü bir kararlılık! Dil öğrenen bir makinesiniz!',
+        legendary: 'Efsanevi bir seri! Adanmışlığınız gerçekten ilham veriyor!',
+        noActivityYet: 'Henüz kayıtlı çalışma aktivitesi yok. İlerlemenizi görmek için çalışmaya başlayın!',
+        noStatsYet: 'Henüz çalışma istatistikleri mevcut değil. İlerlemenizi görmek için bazı incelemeleri tamamlayın!',
+        noStreakYet: 'Henüz seri yok. Seri oluşturmak için günlük çalışmaya başlayın!',
+        statsError: 'Çalışma istatistikleri yüklenirken hata oluştu'
+    },
+    days: {
+        mon: 'P',
+        tue: 'S',
+        wed: 'Ç',
+        thu: 'P',
+        fri: 'C',
+        sat: 'C',
+        sun: 'P'
+    },
+    flashcardsFeature: {
+        title: 'Aralıklı Tekrar Kartları',
+        description: 'Yerleşik kart sistemimiz, kanıtlanmış SM-2 aralıklı tekrar algoritmasını kullanarak kelime dağarcığını verimli bir şekilde öğrenmenize yardımcı olur. Gerçek içerikte karşılaştığınız kelimeleri öğrenin ve tutarlı günlük pratikle uzun vadeli hafıza oluşturun.',
+        addWordsAlt: 'Cümle analizinden kartlara kelime ekleyin',
+        mainAlt: 'Kartlar ana deste görünümü',
+        statsAlt: 'Kartlar istatistik görünümü',
+        studyAlt: 'Kartlar çalışma arayüzü',
+        
+        addWords: {
+            title: 'Öğrenirken Kelime Ekleyin',
+            description: 'Cümle analizinden tek tıklamayla kelime dağarcığı kolayca ekleyin. Sistem otomatik olarak öğrenme deneyiminizi zenginleştirmek için ilgili eşanlamlıları ve zıt anlamlıları dahil eder.'
+        },
+        
+        main: {
+            title: 'Dile Göre Düzenlenmiş',
+            description: 'Öğrendiğiniz her dil kendi destesine sahiptir. Toplam kaç kartınız olduğunu, ayrıca yeni kelimeleri, öğrenme kartlarını ve bugün için vadesi gelen incelemeleri bir bakışta görün.'
+        },
+        
+        stats: {
+            title: 'İlerlemenizi Takip Edin',
+            description: 'Öğrenmenizi günlük seri sayısı, maksimum seri, çalışma aktivitesi ısı haritası ve toplam incelemeler ve çalışma günleri gibi genel istatistikler de dahil olmak üzere ayrıntılı istatistiklerle izleyin.'
+        },
+        
+        study: {
+            title: 'Verimli Çalışma Oturumları',
+            description: 'Çalışma arayüzü, kelime dağarcığını ön tarafta ve çevirileri arka tarafta gösterir. Sesli telaffuzu dinleyin ve gelecekteki inceleme planlamasını optimize etmek için her kelimeyi ne kadar iyi hatırladığınızı değerlendirin.'
+        }
     },
 }; 

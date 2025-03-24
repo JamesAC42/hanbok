@@ -74,6 +74,8 @@ const updateCardProgress = require('./controllers/auth/updateCardProgress');
 const getStudyStats = require('./controllers/auth/getStudyStats');
 const exportDeck = require('./controllers/auth/exportDeck');
 
+const getRateLimits = require('./controllers/auth/getRateLimits');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -139,7 +141,7 @@ app.post('/api/submit', async (req, res) => {
     submitSentence(req, res);
 });
 
-app.get('/api/audio-url/:sentenceId', isAuthenticated, async (req, res) => {
+app.get('/api/audio-url/:sentenceId', async (req, res) => {
     getAudioURL(req, res);
 });
 
@@ -152,7 +154,7 @@ app.get('/api/word-audio', isAuthenticated, async (req, res) => {
     getWordAudioController(req, res);
 });
 
-app.get('/api/sentences/:sentenceId', isAuthenticated, async (req, res) => {
+app.get('/api/sentences/:sentenceId', async (req, res) => {
     getSentence(req, res);
 });
 
@@ -257,6 +259,10 @@ app.delete('/api/feedback/:feedbackId', isAuthenticated, async (req, res) => {
 // Admin routes
 app.get('/api/admin/feature-usage', isAuthenticated, async (req, res) => {
     getFeatureUsage(req, res);
+});
+
+app.get('/api/admin/rate-limits', isAuthenticated, async (req, res) => {
+    getRateLimits(req, res);
 });
 
 // Connect to Redis before starting the server

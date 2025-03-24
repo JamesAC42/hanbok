@@ -24,6 +24,14 @@ const polyfillData = async (user, db) => {
         user.remainingImageExtracts = 20;
     }
 
+    if (user.remainingSentenceAnalyses === undefined) {
+        await db.collection('users').updateOne(
+            { userId: user.userId },
+            { $set: { remainingSentenceAnalyses: 0 } }
+        );
+        user.remainingSentenceAnalyses = 0;
+    }
+
     return user;
 }
 

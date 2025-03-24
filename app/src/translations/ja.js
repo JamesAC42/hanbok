@@ -42,26 +42,58 @@ export const ja = {
             label: 'メール',
             text: '質問とフィードバック'
         },
+        discord: {
+            label: 'Discord',
+            text: '私たちのDiscordコミュニティに参加する'
+        },
         updates: [
             {
-                date: '2025-02-23',
-                content: '日本語、中国語、スペイン語、イタリア語、フランス語のサポートを追加しました。'
+                date: '2025-03-23',
+                content: '内蔵フラッシュカードプログラムとAnkiエクスポートを追加。'
             },
             {
-                date: '2025-02-20',
-                content: 'ユーザーフィードバックと提案のためのフィードバックフォーラムを追加しました。'
+                date: '2025-03-11',
+                content: 'リンクの有効期限が切れた後に古いオーディオが更新されない問題を修正。'
             },
             {
-                date: '2025-02-19',
-                content: 'プラスユーザー向けの単語関係機能を追加し、様々な軽微な問題を修正しました。'
+                date: '2025-03-10',
+                content: '文の分析で発音表示を切り替えるオプションを追加。'
             },
             {
-                date: '2025-02-16',
-                content: '初期ベータ版リリース'
+                date: '2025-03-09',
+                content: '中国語、ロシア語、日本語の分析を改善。'
+            },
+            {
+                date: '2025-03-03',
+                content: 'キーボードアクセシビリティを向上。'
+            },
+            {
+                date: '2025-03-01',
+                content: '効果音を追加。'
+            },
+            {
+                date: '2025-02-28',
+                content: '画像抽出機能を追加。'
             },
             {
                 date: '2025-02-26',
-                content: 'ドイツ語、オランダ語、ロシア語、トルコ語のサポートを追加しました。'
+                content: 'ドイツ語、オランダ語、ロシア語、トルコ語のサポートを追加。'
+            },
+            {
+                date: '2025-02-23',
+                content: '日本語、中国語、スペイン語、イタリア語、フランス語のサポートを追加。'
+            },
+            {
+                date: '2025-02-20',
+                content: 'ユーザーがフィードバックや提案を提出するためのフィードバックフォーラムを追加。'
+            },
+            {
+                date: '2025-02-19',
+                content: 'Plusユーザー向けの単語関連性を追加し、様々な軽微な問題を修正。'
+            },
+            {
+                date: '2025-02-16',
+                content: '初期ベータリリース'
             }
         ],
         upcomingFeaturesList: [
@@ -290,7 +322,15 @@ export const ja = {
         relatedWordsMessage: '関連語の表示はプラス機能です。アカウントをアップグレードして、類義語、対義語を見て語彙を増やしましょう！',
         storageMessage: '現在のプランで保存できる{type}の上限に達しました。',
         viewPricing: '料金を見る',
-        maybeLater: '後で'
+        maybeLater: '後で',
+        sentenceAnalysesTitle: '週間の文分析制限に達しました',
+        sentenceAnalysesMessage: '無料の週間文分析30回をすべて使用しました。無制限の分析にはプレミアムにアップグレードするか、追加の100回の分析を1ドルで購入してください。',
+        firstFiveUsedTitle: '週間の文分析使用状況',
+        firstFiveUsedMessage: '無料の週間文分析30回のうち5回を使用しました。無制限の分析にはプレミアムにアップグレードするか、追加の100回の分析を1ドルで購入することを検討してください。',
+        fifteenRemainingTitle: '週間の文分析更新',
+        fifteenRemainingMessage: '今週は文分析があと15回残っています。無制限の分析にはプレミアムにアップグレードするか、追加の100回の分析を1ドルで購入してください。',
+        fiveRemainingTitle: '週間の文分析アラート',
+        fiveRemainingMessage: '今週は文分析があと5回しか残っていません。プレミアムにアップグレードするか追加の分析を購入するか、追加の100回の分析を1ドルで購入してください。'
     },
     loginRequired: {
         title: 'ログインが必要です',
@@ -369,5 +409,197 @@ export const ja = {
         joinDiscord: 'Discordに参加する',
         shareWebsite: '友達と共有する',
         linkCopied: 'リンクがクリップボードにコピーされました！友達と共有してください。'
+    },
+    bookmarks: {
+        title: 'ブックマーク',
+        sentences: '文',
+        loading: '読み込み中...',
+        noSentences: '保存された文が見つかりません。',
+        clickBookmark: '保存するには',
+        toSave: 'アイコンをクリックしてください。',
+        savedOn: '保存日',
+        prev: '前へ',
+        next: '次へ',
+        pageOf: 'ページ {current}/{total}',
+        fetchError: '保存された文の取得中にエラーが発生しました。'
+    },
+    cards: {
+        title: 'フラッシュカード',
+        subtitle: '間隔反復法で保存した単語を学習する',
+        deckTitle: 'フラッシュカードデッキ',
+        loading: '読み込み中...',
+        noDecks: 'フラッシュカードデッキが見つかりません。',
+        saveWordsToCreate: 'デッキを作成するには、異なる言語で単語を保存してください。',
+        cards: 'カード',
+        new: '新規',
+        learning: '学習中',
+        relearning: '再学習',
+        review: '復習',
+        due: '期限',
+        lastReviewed: '最終復習',
+        studyNow: '今すぐ学習',
+        completedForDay: 'よくできました！今日のカードをすべて完了しました。',
+        checkBackTomorrow: 'ストリークを維持し、学習を続けるには明日また確認してください。',
+        cardsInDeck: 'このデッキのカード',
+        noCardsInDeck: 'このデッキにはまだカードがありません。',
+        fetchError: 'フラッシュカードの取得中にエラーが発生しました。',
+        deckNotFound: 'デッキが見つかりません。',
+        viewMode: '表示モード',
+        gridView: 'グリッド',
+        tableView: 'テーブル',
+        front: '表面',
+        back: '裏面',
+        state: '状態',
+        interval: '間隔',
+        easeFactor: '難易度',
+        nextReview: '次の復習',
+        reviews: '復習回数',
+        lapses: '失敗回数',
+        days: '日',
+        unknownWord: '不明な単語',
+        unknownTranslation: '不明な翻訳',
+        available: '利用可能',
+        limitedTo: '制限',
+        total: '合計',
+        studied: '学習済み',
+        today: '今日',
+        deckSettings: 'デッキ設定',
+        settingsError: '設定の読み込み中にエラーが発生しました',
+        settingsUpdateError: '設定の更新中にエラーが発生しました',
+        settingsSaved: '設定が正常に保存されました',
+        newCardsPerDay: '1日あたりの新規カード',
+        newCardsPerDayHelp: '毎日導入する新規カードの最大数',
+        reviewsPerDay: '1日あたりの復習',
+        reviewsPerDayHelp: '毎日表示する復習の最大数',
+        showAdvanced: '詳細設定を表示',
+        hideAdvanced: '詳細設定を非表示',
+        advancedSettings: '詳細設定',
+        advancedSettingsDescription: 'これらの設定は間隔反復アルゴリズムを制御します。動作の仕組みを理解している場合にのみ変更してください。',
+        learningSteps: '学習ステップ（分）',
+        learningStepsHelp: '学習カードの間隔リスト（分単位）、カンマ区切り',
+        whatAreLearningSteps: '学習ステップとは？',
+        learningStepsExplanation1: '学習ステップは、新しいカードが通常の復習スケジュールに入る前に経過する短い間隔（分単位）です。',
+        learningStepsExplanation2: '新しいカードを見るとき、間隔反復システムに移行する前に、これらのステップに従って複数回復習することになります。',
+        learningStepsExample: '例：ステップ「1, 10, 60, 1440」（1分、10分、1時間、1日）を使用すると、毎回正しく答えた場合、新しいカードは増加する間隔で4回表示されます。',
+        invalidLearningSteps: '学習ステップはカンマ区切りの正の数のリストである必要があります',
+        saveSettings: '設定を保存',
+        saving: '保存中...',
+        cancel: 'キャンセル',
+        settings: '設定',
+        showing: '表示中',
+        study: {
+            studying: '学習中',
+            answer: '回答',
+            question: '質問',
+            showAnswer: '回答を表示',
+            showQuestion: '質問を表示',
+            rateYourRecall: 'どれくらい覚えていましたか？',
+            again: 'もう一度',
+            hard: '難しい',
+            good: '良い',
+            easy: '簡単',
+            stepSettings: '学習ステップ',
+            defaultSteps: 'デフォルト',
+            finishedStudying: '今日は終了です！学習を続けるには明日また戻ってきてください。',
+            errorUpdating: 'カードの進捗状況の更新中にエラーが発生しました',
+            nextCard: '次のカード',
+            currentProgress: '進捗状況',
+            cardsLeft: '残りカード',
+            mute: '音声をミュート',
+            unmute: 'ミュート解除',
+            playAudio: '音声を再生',
+            showAgain: 'セッションで繰り返す',
+            newCards: '新規',
+            learningCards: '学習中',
+            dueCards: '期限',
+            totalCards: '合計',
+            spaceOrEnter: 'スペースまたはEnterキーを押す',
+            againShortcut: '「もう一度」は1キー',
+            hardShortcut: '「難しい」は2キー',
+            goodShortcut: '「良い」は3キー',
+            easyShortcut: '「簡単」は4キー',
+            showAnswerShortcut: '回答を表示するにはスペースまたはEnterキーを押してください'
+        }
+    },
+    common: {
+        back: '戻る',
+        page: 'ページ',
+        of: '/',
+        showing: '表示中',
+        cards: 'カード',
+        previous: '前へ',
+        next: '次へ'
+    },
+    navbar: {
+        home: 'ホーム',
+        bookmarks: 'ブックマーク',
+        cards: 'フラッシュカード',
+        profile: 'プロフィール',
+        about: '概要',
+        feedback: 'フィードバック',
+        pricing: '料金',
+    },
+    stats: {
+        studyStats: '学習統計',
+        yourProgress: '進捗状況',
+        currentStreak: '現在のストリーク',
+        maxStreak: '最大ストリーク',
+        studyActivity: '学習活動',
+        cardsReviewed: '復習したカード',
+        newCardsStudied: '新規カード',
+        reviewsCompleted: '完了した復習',
+        daysStudied: '学習日数',
+        avgPerDay: '1日平均',
+        activityLevel: '活動レベル',
+        noActivity: '活動なし',
+        startStreak: '今日から学習ストリークを始めましょう！',
+        firstDayStreak: 'ストリーク1日目！続けましょう！',
+        keepGoing: '勢いがついてきています。続けましょう！',
+        doingGreat: '素晴らしい進捗です！ストリークを維持しましょう！',
+        impressive: '印象的なストリークです！実際に進歩しています！',
+        amazing: '素晴らしい取り組みです！あなたの一貫性が実を結んでいます！',
+        extraordinary: '非凡な取り組みです！あなたは言語学習マシーンです！',
+        legendary: '伝説的なストリークです！あなたの献身は本当に刺激的です！',
+        noActivityYet: 'まだ学習活動が記録されていません。進捗を確認するには学習を開始してください！',
+        noStatsYet: 'まだ学習統計がありません。進捗を確認するには復習を完了してください！',
+        noStreakYet: 'まだストリークがありません。ストリークを構築するには毎日学習を始めてください！',
+        statsError: '学習統計の読み込み中にエラーが発生しました'
+    },
+    days: {
+        mon: '月',
+        tue: '火',
+        wed: '水',
+        thu: '木',
+        fri: '金',
+        sat: '土',
+        sun: '日'
+    },
+    flashcardsFeature: {
+        title: '間隔反復フラッシュカード',
+        description: '内蔵のフラッシュカードシステムは、実証済みのSM-2間隔反復アルゴリズムを使用して、効率的に語彙をマスターするのに役立ちます。実際のコンテンツで実際に遭遇する単語を学び、一貫した毎日の練習を通じて長期記憶を構築します。',
+        addWordsAlt: '文分析からフラッシュカードに単語を追加',
+        mainAlt: 'フラッシュカードのメインデッキビュー',
+        statsAlt: 'フラッシュカードの統計ビュー',
+        studyAlt: 'フラッシュカードの学習インターフェース',
+        
+        addWords: {
+            title: '学習中に単語を追加',
+            description: '文分析からワンクリックで簡単に語彙を追加できます。システムは自動的に関連する類義語と反意語を含め、学習体験を豊かにします。'
+        },
+        
+        main: {
+            title: '言語別に整理',
+            description: '学習している各言語には独自のデッキがあります。カードの総数と、今日の新しい単語、学習中のカード、期限が来た復習を一目で確認できます。'
+        },
+        
+        stats: {
+            title: '進捗状況を追跡',
+            description: '毎日のストリークカウント、最大ストリーク、学習活動ヒートマップ、および総復習回数や学習日数などの一般的な統計を含む詳細な統計で学習を監視します。'
+        },
+        
+        study: {
+            title: '効率的な学習セッション',
+            description: '学習インターフェースは、表面に語彙、裏面に翻訳を表示します。音声発音を聞き、各単語をどれだけよく覚えているかを評価して、将来の復習スケジュールを最適化します。'
+        }
     },
 }; 

@@ -39,29 +39,61 @@ export const zh = {
             text: '查看源代码'
         },
         email: {
-            label: '电子邮件',
+            label: '邮箱',
             text: '问题和反馈'
         },
+        discord: {
+            label: 'Discord',
+            text: '加入我们的Discord社区'
+        },
         updates: [
+            {
+                date: '2025-03-23',
+                content: '添加内置闪卡程序和Anki导出功能。'
+            },
+            {
+                date: '2025-03-11',
+                content: '修复了链接过期后旧音频不刷新的问题。'
+            },
+            {
+                date: '2025-03-10',
+                content: '在句子分析中添加了发音显示开关。'
+            },
+            {
+                date: '2025-03-09',
+                content: '改进了中文、俄语和日语的分析。'
+            },
+            {
+                date: '2025-03-03',
+                content: '改进了键盘无障碍功能。'
+            },
+            {
+                date: '2025-03-01',
+                content: '添加了音效。'
+            },
+            {
+                date: '2025-02-28',
+                content: '添加了图像提取功能。'
+            },
+            {
+                date: '2025-02-26',
+                content: '添加了德语、荷兰语、俄语和土耳其语支持。'
+            },
             {
                 date: '2025-02-23',
                 content: '添加了日语、中文、西班牙语、意大利语和法语支持。'
             },
             {
                 date: '2025-02-20',
-                content: '添加了用户反馈论坛，供用户提交反馈和建议。'
+                content: '添加了反馈论坛，供用户提交反馈和建议。'
             },
             {
                 date: '2025-02-19',
-                content: '为plus用户添加了词语关系功能，并修复了各种小问题。'
+                content: '为Plus用户添加了单词关系功能，并修复了各种小问题。'
             },
             {
                 date: '2025-02-16',
                 content: '初始测试版发布'
-            },
-            {
-                date: '2025-02-26',
-                content: '添加了德语、荷兰语、俄语和土耳其语支持。'
             }
         ],
         upcomingFeaturesList: [
@@ -290,7 +322,15 @@ export const zh = {
         relatedWordsMessage: '查看相关词是Plus功能。升级您的账户以查看同义词、反义词并扩充词汇量！',
         storageMessage: '您已达到当前计划的最大{type}保存数量。',
         viewPricing: '查看价格',
-        maybeLater: '稍后再说'
+        maybeLater: '稍后再说',
+        sentenceAnalysesTitle: '每周句子分析次数已达上限',
+        sentenceAnalysesMessage: '您已经用完了本周30次免费句子分析。升级至高级版获取无限分析，或者只需1美元购买额外100次分析。',
+        firstFiveUsedTitle: '每周句子分析使用情况',
+        firstFiveUsedMessage: '您已经使用了30次免费每周句子分析中的5次。考虑升级至高级版获取无限分析，或者只需1美元购买额外100次分析。',
+        fifteenRemainingTitle: '每周句子分析更新',
+        fifteenRemainingMessage: '您本周还剩15次句子分析。升级至高级版获取无限分析，或者只需1美元购买额外100次分析。',
+        fiveRemainingTitle: '每周句子分析提醒',
+        fiveRemainingMessage: '您本周只剩5次句子分析了。升级至高级版或购买额外分析，或者只需1美元购买额外100次分析。'
     },
     loginRequired: {
         title: '需要登录',
@@ -369,5 +409,197 @@ export const zh = {
         joinDiscord: '加入我们的Discord',
         shareWebsite: '与朋友分享',
         linkCopied: '链接已复制到剪贴板！与您的朋友分享。'
+    },
+    bookmarks: {
+        title: '书签',
+        sentences: '句子',
+        loading: '加载中...',
+        noSentences: '没有找到已保存的句子。',
+        clickBookmark: '点击',
+        toSave: '图标保存。',
+        savedOn: '保存于',
+        prev: '上一页',
+        next: '下一页',
+        pageOf: '第 {current} 页，共 {total} 页',
+        fetchError: '获取已保存句子时出错。'
+    },
+    cards: {
+        title: '闪卡',
+        subtitle: '使用间隔重复学习您保存的单词',
+        deckTitle: '闪卡牌组',
+        loading: '加载中...',
+        noDecks: '未找到闪卡牌组。',
+        saveWordsToCreate: '保存不同语言的单词以创建牌组。',
+        cards: '卡片',
+        new: '新的',
+        learning: '学习中',
+        relearning: '重新学习',
+        review: '复习',
+        due: '到期',
+        lastReviewed: '上次复习',
+        studyNow: '立即学习',
+        completedForDay: '做得好！您已完成今天的所有卡片。',
+        checkBackTomorrow: '明天再来继续您的学习并保持连续学习记录。',
+        cardsInDeck: '此牌组中的卡片',
+        noCardsInDeck: '此牌组中还没有卡片。',
+        fetchError: '获取闪卡时出错。',
+        deckNotFound: '未找到牌组。',
+        viewMode: '查看模式',
+        gridView: '网格',
+        tableView: '表格',
+        front: '正面',
+        back: '背面',
+        state: '状态',
+        interval: '间隔',
+        easeFactor: '难易度',
+        nextReview: '下次复习',
+        reviews: '复习次数',
+        lapses: '遗忘次数',
+        days: '天',
+        unknownWord: '未知单词',
+        unknownTranslation: '未知翻译',
+        available: '可用',
+        limitedTo: '限制为',
+        total: '总计',
+        studied: '已学习',
+        today: '今天',
+        deckSettings: '牌组设置',
+        settingsError: '加载设置时出错',
+        settingsUpdateError: '更新设置时出错',
+        settingsSaved: '设置已成功保存',
+        newCardsPerDay: '每天新卡片数',
+        newCardsPerDayHelp: '每天引入的最大新卡片数',
+        reviewsPerDay: '每天复习数',
+        reviewsPerDayHelp: '每天显示的最大复习数',
+        showAdvanced: '显示高级设置',
+        hideAdvanced: '隐藏高级设置',
+        advancedSettings: '高级设置',
+        advancedSettingsDescription: '这些设置控制间隔重复算法。只有在了解它们如何工作的情况下才更改它们。',
+        learningSteps: '学习步骤（分钟）',
+        learningStepsHelp: '学习卡片的间隔列表（以分钟为单位），用逗号分隔',
+        whatAreLearningSteps: '什么是学习步骤？',
+        learningStepsExplanation1: '学习步骤是新卡片在进入常规复习计划之前经历的短间隔（以分钟为单位）。',
+        learningStepsExplanation2: '当您看到一张新卡片时，您将根据这些步骤在它进入间隔重复系统之前多次复习它。',
+        learningStepsExample: '例如：使用步骤"1, 10, 60, 1440"（1分钟，10分钟，1小时，1天），如果每次都回答正确，您将以递增间隔看到一张新卡片4次。',
+        invalidLearningSteps: '学习步骤必须是逗号分隔的正数列表',
+        saveSettings: '保存设置',
+        saving: '保存中...',
+        cancel: '取消',
+        settings: '设置',
+        showing: '显示',
+        study: {
+            studying: '学习中',
+            answer: '答案',
+            question: '问题',
+            showAnswer: '显示答案',
+            showQuestion: '显示问题',
+            rateYourRecall: '您记得这个词有多好？',
+            again: '重来',
+            hard: '困难',
+            good: '良好',
+            easy: '容易',
+            stepSettings: '学习步骤',
+            defaultSteps: '默认',
+            finishedStudying: '您今天已完成！明天再来继续学习。',
+            errorUpdating: '更新卡片进度时出错',
+            nextCard: '下一张卡片',
+            currentProgress: '进度',
+            cardsLeft: '剩余卡片',
+            mute: '静音',
+            unmute: '取消静音',
+            playAudio: '播放音频',
+            showAgain: '在会话中重复',
+            newCards: '新的',
+            learningCards: '学习中',
+            dueCards: '到期',
+            totalCards: '总计',
+            spaceOrEnter: '按空格键或回车键',
+            againShortcut: '按1表示重来',
+            hardShortcut: '按2表示困难',
+            goodShortcut: '按3表示良好',
+            easyShortcut: '按4表示容易',
+            showAnswerShortcut: '按空格键或回车键显示答案'
+        }
+    },
+    common: {
+        back: '返回',
+        page: '页',
+        of: '/',
+        showing: '显示',
+        cards: '卡片',
+        previous: '上一页',
+        next: '下一页'
+    },
+    navbar: {
+        home: '首页',
+        bookmarks: '书签',
+        cards: '闪卡',
+        profile: '个人资料',
+        about: '关于',
+        feedback: '反馈',
+        pricing: '价格',
+    },
+    stats: {
+        studyStats: '学习统计',
+        yourProgress: '您的进度',
+        currentStreak: '当前连续天数',
+        maxStreak: '最长连续天数',
+        studyActivity: '学习活动',
+        cardsReviewed: '已复习卡片',
+        newCardsStudied: '新卡片',
+        reviewsCompleted: '复习',
+        daysStudied: '学习天数',
+        avgPerDay: '每天平均',
+        activityLevel: '活动水平',
+        noActivity: '无活动',
+        startStreak: '今天开始您的学习连续记录！',
+        firstDayStreak: '连续记录的第一天！继续加油！',
+        keepGoing: '您正在积累动力。继续！',
+        doingGreat: '做得很好！保持连续记录！',
+        impressive: '令人印象深刻的连续记录！您正在取得真正的进步！',
+        amazing: '惊人的毅力！您的坚持正在带来回报！',
+        extraordinary: '非凡的投入！您是一个语言学习机器！',
+        legendary: '传奇连续记录！您的奉献精神真的很鼓舞人心！',
+        noActivityYet: '尚未记录学习活动。开始学习以查看您的进度！',
+        noStatsYet: '尚无可用的学习统计数据。完成一些复习以查看您的进度！',
+        noStreakYet: '尚无连续记录。开始每日学习以建立连续记录！',
+        statsError: '加载学习统计数据时出错'
+    },
+    days: {
+        mon: '一',
+        tue: '二',
+        wed: '三',
+        thu: '四',
+        fri: '五',
+        sat: '六',
+        sun: '日'
+    },
+    flashcardsFeature: {
+        title: '间隔重复闪卡',
+        description: '我们的内置闪卡系统使用经过验证的SM-2间隔重复算法，帮助您高效掌握词汇。学习您在真实内容中实际遇到的单词，并通过每日一致的练习建立长期记忆。',
+        addWordsAlt: '从句子分析添加单词到闪卡',
+        mainAlt: '闪卡主牌组视图',
+        statsAlt: '闪卡统计视图',
+        studyAlt: '闪卡学习界面',
+        
+        addWords: {
+            title: '边学习边添加单词',
+            description: '轻松一键从句子分析中添加词汇。系统自动包含相关的同义词和反义词，丰富您的学习体验。'
+        },
+        
+        main: {
+            title: '按语言组织',
+            description: '您正在学习的每种语言都有自己的牌组。一目了然地看到您总共有多少张卡片，以及今天的新单词、学习卡片和到期复习。'
+        },
+        
+        stats: {
+            title: '跟踪您的进度',
+            description: '通过详细统计监控您的学习情况，包括每日连续记录、最大连续记录、学习活动热图，以及总复习次数和学习天数等一般统计数据。'
+        },
+        
+        study: {
+            title: '高效学习会话',
+            description: '学习界面在正面显示词汇，背面显示翻译。听取音频发音，并评价您对每个单词的记忆程度，以优化未来的复习计划。'
+        }
     },
 }; 
