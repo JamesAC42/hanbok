@@ -10,6 +10,7 @@ This directory contains migration scripts for the database.
 - `user_polyfill.js`: Adds missing fields to user documents.
 - `populate_feature_usage.js`: Populates feature usage statistics.
 - `populate_decks_and_cards.js`: Creates flashcard decks and cards based on users' saved words.
+- `fix_flashcard_interval.js`: Fixes inconsistency between 'interval' and 'intervalDays' fields in flashcards.
 
 ## Running Migrations
 
@@ -35,6 +36,15 @@ This migration script creates flashcard decks and cards based on users' saved wo
 4. For each word in the language group, it creates a flashcard and links it to the deck.
 
 The script sets all cards to the "new" state, making them immediately available for review.
+
+## fix_flashcard_interval.js
+
+This migration script fixes the inconsistency between 'interval' and 'intervalDays' fields in the flashcards collection. Some flashcards may have been created with 'interval' while the schema requires 'intervalDays', which can cause document validation errors during login or other operations.
+
+The script:
+1. Finds all flashcards with 'interval' property but missing 'intervalDays'
+2. Copies the value from 'interval' to 'intervalDays'
+3. Also updates reviewHistory entries to use 'intervalDays' instead of 'interval'
 
 ### Prerequisites
 

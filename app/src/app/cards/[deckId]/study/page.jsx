@@ -302,7 +302,7 @@ const StudyView = ({ params }) => {
                     date: new Date().toISOString(),
                     rating: rating === 'again' ? 1 : rating === 'hard' ? 2 : rating === 'good' ? 3 : 4,
                     timeTaken: 0,
-                    interval: cardStateToUpdate.intervalDays || 0
+                    intervalDays: cardStateToUpdate.intervalDays || 0
                 }];
             }
             

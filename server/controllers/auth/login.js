@@ -79,7 +79,13 @@ const login = async (req, res, redisClient) => {
                 await db.collection('rate_limits').insertOne(userRateLimit);
             }
         } else {
-            user = await polyfillData(user, db);
+            try {
+                user = await polyfillData(user, db);
+            } catch (polyfillError) {
+                console.error('Error during user data polyfill:', polyfillError);
+                // Continue with the login process even if polyfill fails
+                // This ensures users can still log in even if there's a schema validation issue
+            }
         }
 
         req.session.user = { userId: user.userId };

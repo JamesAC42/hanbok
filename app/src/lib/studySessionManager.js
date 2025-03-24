@@ -184,7 +184,7 @@ export class StudySessionManager {
             date: now,
             rating: sm2Grade,
             timeTaken: 0,
-            interval: 0
+            intervalDays: updatedCard.intervalDays || 0
         };
 
         updatedCard.reviewHistory = [...(updatedCard.reviewHistory || []), reviewHistoryEntry];
