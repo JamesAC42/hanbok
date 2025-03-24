@@ -21,6 +21,10 @@ const Admin = () => {
     const [error, setError] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
     
+    // New state for email list download
+    const [downloadingEmails, setDownloadingEmails] = useState(false);
+    const [emailCount, setEmailCount] = useState(0);
+    
     // State for rate limit data
     const [rateLimitData, setRateLimitData] = useState([]);
     const [loadingRateLimits, setLoadingRateLimits] = useState(true);
@@ -192,6 +196,38 @@ const Admin = () => {
         }
     };
     
+    // Function to handle email list download
+    const handleDownloadEmails = async () => {
+        if (downloadingEmails) return;
+        
+        try {
+            setDownloadingEmails(true);
+            
+            // First get the count
+            const countResponse = await fetch('/api/admin/email-list');
+            if (!countResponse.ok) {
+                throw new Error('Failed to fetch email count');
+            }
+            
+            const countData = await countResponse.json();
+            if (countData.success) {
+                setEmailCount(countData.count);
+                
+                // Trigger the download of the CSV file
+                // Note: We're keeping the parameter name 'format=text' the same to match the backend
+                // even though it now returns CSV data
+                window.open('/api/admin/email-list?format=text', '_blank');
+            } else {
+                throw new Error(countData.error || 'Unknown error');
+            }
+        } catch (err) {
+            console.error('Error downloading user email CSV:', err);
+            setError(err.message);
+        } finally {
+            setDownloadingEmails(false);
+        }
+    };
+    
     // Don't render while loading auth or if not an admin
     if (loading || !isAuthenticated || !isAdmin) {
         return null;
@@ -208,6 +244,28 @@ const Admin = () => {
                             Error: {error}
                         </div>
                     )}
+                    
+                    {/* New Admin Tools Section */}
+                    <section className={adminStyles.detailedSection}>
+                        <h2>Admin Tools</h2>
+                        <div className={adminStyles.adminTools}>
+                            <div className={adminStyles.toolCard}>
+                                <h3>User Email Export</h3>
+                                <p>Download a CSV file containing user email addresses and names (firstname, lastname).</p>
+                                <div className={adminStyles.statItem}>
+                                    <span>Total users:</span>
+                                    <strong>{emailCount > 0 ? emailCount.toLocaleString() : 'Unknown'}</strong>
+                                </div>
+                                <button 
+                                    className={adminStyles.adminButton}
+                                    onClick={handleDownloadEmails}
+                                    disabled={downloadingEmails}
+                                >
+                                    {downloadingEmails ? 'Downloading...' : 'Download CSV'}
+                                </button>
+                            </div>
+                        </div>
+                    </section>
                     
                     {/* Anonymous Users Rate Limit Section */}
                     <section className={adminStyles.detailedSection}>

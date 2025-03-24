@@ -76,6 +76,8 @@ const exportDeck = require('./controllers/auth/exportDeck');
 
 const getRateLimits = require('./controllers/auth/getRateLimits');
 
+const getEmailList = require('./controllers/admin/getEmailList');
+
 const PORT = 5666;
 
 app.use(cors({
@@ -263,6 +265,10 @@ app.get('/api/admin/feature-usage', isAuthenticated, async (req, res) => {
 
 app.get('/api/admin/rate-limits', isAuthenticated, async (req, res) => {
     getRateLimits(req, res);
+});
+
+app.get('/api/admin/email-list', isAuthenticated, async (req, res) => {
+    getEmailList(req, res);
 });
 
 // Connect to Redis before starting the server

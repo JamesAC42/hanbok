@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exciting New Features at Hanbok - Flashcards & Enhanced Language Support!</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .logo {
+            margin-top:1rem;
+            width: 290px;
+        }
+        h1 {
+            color: #5b21b6;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        h2 {
+            color: #7c3aed;
+            font-size: 1.4rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .new-badge {
+            display: inline-block;
+            background-color: #ef4444;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+            transform:translateY(-7px);
+            text-transform: uppercase;
+        }
+        .feature-container {
+            display: flex;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
+        }
+        .feature-image {
+            width: 100%;
+            border-radius: 0.5rem;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .feature-text {
+            flex: 2;
+        }
+        .feature-list {
+            margin-bottom: 1.5rem;
+        }
+        .feature-item {
+            margin-bottom: 0.5rem;
+        }
+        .feature-item:before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .button {
+            display: inline-block;
+            background-color: #7c3aed;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: bold;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #6d28d9;
+        }
+        .footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .social-link {
+            color: #6b7280;
+            text-decoration: none;
+        }
+        .social-link:hover {
+            color: #7c3aed;
+        }
+        .languages-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .language-item {
+            padding: 0.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.375rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://hanbokstudy.com/twitter-image.png" alt="Hanbok Logo" class="logo">
+        <h1><span class="new-badge">New</span> Exciting New Features at Hanbok!</h1>
+        <p>We're thrilled to announce several major enhancements to help you learn languages more effectively.</p>
+    </div>
+
+    <h2>Introducing Spaced Repetition Flashcards</h2>
+    <p>Our built-in flashcard system helps you master vocabulary efficiently using the proven SM-2 spaced repetition algorithm. Learn words you actually encounter in real content and build long-term memory through consistent daily practice.</p>
+    
+    <img src="https://hanbokstudy.com/images/screenshots/flashcards/flashcardsstats.png" alt="Flashcards stats view" class="feature-image">
+    <img src="https://hanbokstudy.com/images/screenshots/flashcards/flashcardsstudy.png" alt="Flashcards study view" class="feature-image">
+    
+    <div class="feature-list">
+        <div class="feature-item">
+            <strong>Add Words While You Learn</strong> - Easily add vocabulary directly from sentence analysis with one click. The system automatically includes related synonyms and antonyms to enrich your learning experience.
+        </div>
+        <div class="feature-item">
+            <strong>Organized by Language</strong> - Each language you're learning gets its own deck. See at a glance how many cards you have in total, plus new words, learning cards, and reviews due for today.
+        </div>
+        <div class="feature-item">
+            <strong>Track Your Progress</strong> - Monitor your learning with detailed statistics including daily streak count, maximum streak, study activity heatmap, and general stats like total reviews and study days.
+        </div>
+        <div class="feature-item">
+            <strong>Efficient Study Sessions</strong> - The study interface shows vocabulary on the front and translations on the back. Listen to audio pronunciation and rate how well you remembered each word to optimize future review scheduling.
+        </div>
+    </div>
+
+    <a href="https://hanbokstudy.com/cards" class="button">Try Flashcards Now</a>
+
+    <h2>Enhanced Language Support</h2>
+    <p>We've made significant improvements to our language analysis capabilities, focusing on better support for Asian and Slavic languages.</p>
+
+    <div class="feature-list">
+        <div class="feature-item">
+            <strong>Enhanced Chinese Analysis</strong> - Improved breakdown of Chinese characters, better translation, and context-specific notes.
+        </div>
+        <div class="feature-item">
+            <strong>Enhanced Russian with Transliteration</strong> - Better Russian language analysis with Cyrillic transliteration support.
+        </div>
+        <div class="feature-item">
+            <strong>Enhanced Japanese Support</strong> - Improved handling of kanji, hiragana, and katakana with better grammar explanations.
+        </div>
+        <div class="feature-item">
+            <strong>Fixed Font Rendering Issues</strong> - Addressed display issues with various writing systems for a smoother learning experience.
+        </div>
+    </div>
+
+    <p>Hanbok now supports these languages with full analysis capabilities:</p>
+    <div class="languages-grid">
+        <div class="language-item">Korean</div>
+        <div class="language-item">English</div>
+        <div class="language-item">Chinese</div>
+        <div class="language-item">Japanese</div>
+        <div class="language-item">Spanish</div>
+        <div class="language-item">Italian</div>
+        <div class="language-item">French</div>
+        <div class="language-item">German</div>
+        <div class="language-item">Dutch</div>
+        <div class="language-item">Russian</div>
+        <div class="language-item">Turkish</div>
+    </div>
+
+    <h2>Improved Accessibility</h2>
+    <p>We've enhanced keyboard accessibility throughout the application, making it easier for all users to navigate and use our features:</p>
+    <div class="feature-list">
+        <div class="feature-item">
+            <strong>Keyboard Shortcuts</strong> - Added keyboard shortcuts for common actions, including flashcard reviews (use number keys 1-4 to rate cards).
+        </div>
+        <div class="feature-item">
+            <strong>Focus Improvements</strong> - Better focus management for screen readers and keyboard-only users.
+        </div>
+        <div class="feature-item">
+            <strong>Sound Effects</strong> - Added sound effects to enhance the learning experience.
+        </div>
+    </div>
+
+    <h2>Join Our Growing Community</h2>
+    <p>If you're enjoying using Hanbok, we'd love for you to join our community! Share your experience with friends and help us grow.</p>
+    <div class="feature-list">
+        <div class="feature-item">
+            <strong>Discord Community</strong> - Join our Discord community for updates, give feedback, and to connect with other learners!
+        </div>
+        <div class="feature-item">
+            <strong>Feedback Forum</strong> - Share your thoughts and suggestions to help us improve.
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="https://discord.gg/EQVvphzctc" class="button" style="margin-right: 1rem;">Join Our Discord</a>
+        <a href="https://hanbokstudy.com/feedback" class="button" style="background-color: #10b981;">Leave Feedback</a>
+    </div>
+
+    <div class="footer">
+        <p>Thank you for being part of the Hanbok community. We're committed to creating the best language learning experience possible.</p>
+        <div class="social-links">
+            <a href="https://x.com/fifltriggi" class="social-link">Twitter</a>
+            <a href="https://github.com/JamesAC42/hanbok" class="social-link">GitHub</a>
+            <a href="mailto:admin@hanbokstudy.com" class="social-link">Email</a>
+        </div>
+        <p>© 2025 Hanbok Study. All rights reserved.</p>
+    </div>
+</body>
+</html> 

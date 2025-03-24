@@ -1,0 +1,82 @@
+NEW! EXCITING NEW FEATURES AT HANBOK
+
+We're thrilled to announce several major enhancements to help you learn languages more effectively.
+
+---------------------------------------------------------------------
+
+INTRODUCING SPACED REPETITION FLASHCARDS
+
+Our built-in flashcard system helps you master vocabulary efficiently using the proven SM-2 spaced repetition algorithm. Learn words you actually encounter in real content and build long-term memory through consistent daily practice.
+
+Key Features:
+
+✓ Add Words While You Learn - Easily add vocabulary directly from sentence analysis with one click. The system automatically includes related synonyms and antonyms to enrich your learning experience.
+
+✓ Organized by Language - Each language you're learning gets its own deck. See at a glance how many cards you have in total, plus new words, learning cards, and reviews due for today.
+
+✓ Track Your Progress - Monitor your learning with detailed statistics including daily streak count, maximum streak, study activity heatmap, and general stats like total reviews and study days.
+
+✓ Efficient Study Sessions - The study interface shows vocabulary on the front and translations on the back. Listen to audio pronunciation and rate how well you remembered each word to optimize future review scheduling.
+
+Try Flashcards Now: https://hanbokstudy.com/cards
+
+---------------------------------------------------------------------
+
+ENHANCED LANGUAGE SUPPORT
+
+We've made significant improvements to our language analysis capabilities, focusing on better support for Asian and Slavic languages.
+
+✓ Enhanced Chinese Analysis - Improved breakdown of Chinese characters, better translation, and context-specific notes.
+
+✓ Enhanced Russian with Transliteration - Better Russian language analysis with Cyrillic transliteration support.
+
+✓ Enhanced Japanese Support - Improved handling of kanji, hiragana, and katakana with better grammar explanations.
+
+✓ Fixed Font Rendering Issues - Addressed display issues with various writing systems for a smoother learning experience.
+
+Hanbok now supports these languages with full analysis capabilities:
+- Korean
+- English
+- Chinese
+- Japanese
+- Spanish
+- Italian
+- French
+- German
+- Dutch
+- Russian
+- Turkish
+
+---------------------------------------------------------------------
+
+IMPROVED ACCESSIBILITY
+
+We've enhanced keyboard accessibility throughout the application, making it easier for all users to navigate and use our features:
+
+✓ Keyboard Shortcuts - Added keyboard shortcuts for common actions, including flashcard reviews (use number keys 1-4 to rate cards).
+
+✓ Focus Improvements - Better focus management for screen readers and keyboard-only users.
+
+✓ Sound Effects - Added sound effects to enhance the learning experience.
+
+---------------------------------------------------------------------
+
+JOIN OUR GROWING COMMUNITY
+
+If you're enjoying using Hanbok, we'd love for you to join our community! Share your experience with friends and help us grow.
+
+✓ Discord Community - Join our Discord community for updates, give feedback, and to connect with other learners!
+   Join our Discord: https://discord.gg/EQVvphzctc
+
+✓ Feedback Forum - Share your thoughts and suggestions to help us improve.
+   Leave Feedback: https://hanbokstudy.com/feedback
+
+---------------------------------------------------------------------
+
+Thank you for being part of the Hanbok community. We're committed to creating the best language learning experience possible.
+
+Twitter: https://x.com/fifltriggi
+GitHub: https://github.com/JamesAC42/hanbok
+Email: admin@hanbokstudy.com
+
+© 2025 Hanbok Study. All rights reserved.
