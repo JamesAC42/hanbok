@@ -177,6 +177,20 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                     ))}
                 </div>
             }
+
+            {
+                !analysis && (
+                    <>
+                    <div className={styles.legal}>
+                            <a href="/terms-of-service.html">Terms of Service</a>
+                            <a href="/privacy-policy.html">Privacy Policy</a>
+                    </div>
+                    <div class={styles.copyright}>
+                        © 2025 Hanbok Study. All rights reserved.
+                    </div> 
+                    </>
+                )
+            }
         
             {
             analysis && 

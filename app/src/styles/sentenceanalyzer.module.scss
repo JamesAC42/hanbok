@@ -306,3 +306,26 @@
         transform: translateY(0);
     }
 }
+
+.legal {
+	display:flex;
+	flex-direction:row;
+	align-items:center;
+	justify-content:flex-start;
+	gap:1rem;
+
+	margin-top:5rem;
+	margin-bottom:2rem;
+	
+	a { 
+		box-shadow:0 0 0.5rem 0.1rem rgba(255, 255, 255, 0.708);
+		background:#ffffffc6;
+		padding:0.5rem;
+		border-radius:0.3rem;
+		display:block;
+		text-decoration:none;
+		color:#3a57da;
+		font-size:1rem;
+	}
+
+}
