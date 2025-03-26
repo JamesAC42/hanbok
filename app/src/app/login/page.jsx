@@ -43,12 +43,6 @@ const Login = () => {
                         </div>
                         <div className={loginStyles.feature}>
                             <div className={loginStyles.featureIcon}>
-                                <MaterialSymbolsNestClockFarsightAnalogRounded />
-                            </div>
-                            {t('login.features.flashcards')}
-                        </div>
-                        <div className={loginStyles.feature}>
-                            <div className={loginStyles.featureIcon}>
                                 <MdiHeadphones />
                             </div>
                             {t('login.features.audio')}

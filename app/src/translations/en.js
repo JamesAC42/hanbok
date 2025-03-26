@@ -169,10 +169,9 @@ export const en = {
     },
     login: {
         title: 'Login',
-        description: 'Log in with Google to unlock powerful features for your Korean learning journey. Don\'t have an account? One will be created for you automatically.',
+        description: 'Log in with Google to unlock powerful features for your language learning learning journey. Don\'t have an account? One will be created for you automatically.',
         features: {
-            save: 'Save sentences and words for later review',
-            flashcards: 'Coming soon: Spaced repetition flashcards',
+            save: 'Bookmark sentences and save words directly to your flashcard deck for later review',
             audio: '15 free audio sentence generations',
             premium: 'Access to upcoming premium features'
         },
