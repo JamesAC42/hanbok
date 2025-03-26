@@ -6,6 +6,26 @@ import styles from '@/styles/components/pagelayout.module.scss';
 import adminStyles from '@/styles/components/admin.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+// Register the ChartJS components
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const Admin = () => {
     const router = useRouter();
@@ -47,6 +67,17 @@ const Admin = () => {
     const [rateLimitTotalPages, setRateLimitTotalPages] = useState(1);
     const [rateLimitSortBy, setRateLimitSortBy] = useState('weekSentences');
     const [rateLimitSortOrder, setRateLimitSortOrder] = useState('desc');
+    
+    // New state for user analytics
+    const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30days');
+    const [analyticsData, setAnalyticsData] = useState(null);
+    const [signupData, setSignupData] = useState([]);
+    const [activityData, setActivityData] = useState([]);
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [activeUsers, setActiveUsers] = useState(0);
+    const [topUsers, setTopUsers] = useState([]);
+    const [loadingAnalytics, setLoadingAnalytics] = useState(false);
+    const [analyticsError, setAnalyticsError] = useState(null);
     
     // Check if user is authenticated
     useEffect(() => {
@@ -160,6 +191,56 @@ const Admin = () => {
         fetchRateLimitData();
     }, [user, isAdmin, rateLimitPage, rateLimitLimit, rateLimitSortBy, rateLimitSortOrder]);
     
+    // New effect for fetching user analytics data
+    useEffect(() => {
+        const fetchAnalyticsData = async () => {
+            if (!user || !isAdmin) return;
+            
+            try {
+                setLoadingAnalytics(true);
+                setAnalyticsError(null);
+                
+                // Fetch signup data
+                const signupResponse = await fetch(`/api/admin/feature-usage?analyticsType=signups&timeRange=${analyticsTimeRange}`);
+                if (!signupResponse.ok) {
+                    throw new Error('Failed to fetch signup analytics data');
+                }
+                
+                const signupResult = await signupResponse.json();
+                if (signupResult.success && signupResult.analytics) {
+                    setSignupData(signupResult.analytics.data || []);
+                    setTotalUsers(signupResult.analytics.totalUsers || 0);
+                }
+                
+                // Fetch activity data
+                const activityResponse = await fetch(`/api/admin/feature-usage?analyticsType=activity&timeRange=${analyticsTimeRange}`);
+                if (!activityResponse.ok) {
+                    throw new Error('Failed to fetch activity analytics data');
+                }
+                
+                const activityResult = await activityResponse.json();
+                if (activityResult.success && activityResult.analytics) {
+                    setActivityData(activityResult.analytics.data || []);
+                    setActiveUsers(activityResult.analytics.activeUsers || 0);
+                    setTopUsers(activityResult.analytics.topUsers || []);
+                }
+                
+            } catch (err) {
+                console.error('Error fetching analytics data:', err);
+                setAnalyticsError(err.message);
+            } finally {
+                setLoadingAnalytics(false);
+            }
+        };
+        
+        fetchAnalyticsData();
+    }, [user, isAdmin, analyticsTimeRange]);
+    
+    // Function to handle time range changes
+    const handleTimeRangeChange = (range) => {
+        setAnalyticsTimeRange(range);
+    };
+    
     // Format date for display
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
@@ -233,6 +314,123 @@ const Admin = () => {
         return null;
     }
     
+    // Prepare chart data for signups
+    const prepareSignupChartData = () => {
+        if (!signupData || signupData.length === 0) {
+            return {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'New User Signups',
+                        data: [],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    }
+                ]
+            };
+        }
+        
+        // Format dates for display and prepare data
+        return {
+            labels: signupData.map(day => {
+                const date = new Date(day.date);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }),
+            datasets: [
+                {
+                    label: 'New User Signups',
+                    data: signupData.map(day => day.count),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                }
+            ]
+        };
+    };
+    
+    // Prepare chart data for activity
+    const prepareActivityChartData = () => {
+        if (!activityData || activityData.length === 0) {
+            return {
+                labels: [],
+                datasets: [
+                    {
+                        label: 'Active Users',
+                        data: [],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    },
+                    {
+                        label: 'Sentences Generated',
+                        data: [],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    }
+                ]
+            };
+        }
+        
+        // Format dates for display and prepare data
+        return {
+            labels: activityData.map(day => {
+                const date = new Date(day.date);
+                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            }),
+            datasets: [
+                {
+                    label: 'Active Users',
+                    data: activityData.map(day => day.uniqueUsers),
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    yAxisID: 'y',
+                },
+                {
+                    label: 'Sentences Generated',
+                    data: activityData.map(day => day.totalUsage),
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    yAxisID: 'y1',
+                }
+            ]
+        };
+    };
+    
+    // Chart options
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'User Analytics',
+            },
+        },
+    };
+    
+    // Activity chart options with dual y-axes
+    const activityChartOptions = {
+        ...chartOptions,
+        scales: {
+            y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                title: {
+                    display: true,
+                    text: 'Users'
+                }
+            },
+            y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: {
+                    drawOnChartArea: false,
+                },
+                title: {
+                    display: true,
+                    text: 'Sentences'
+                }
+            },
+        }
+    };
+    
     return (
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
@@ -264,6 +462,140 @@ const Admin = () => {
                                     {downloadingEmails ? 'Downloading...' : 'Download CSV'}
                                 </button>
                             </div>
+                        </div>
+                    </section>
+                    
+                    {/* New User Analytics Section */}
+                    <section className={adminStyles.detailedSection}>
+                        <h2>User Analytics Dashboard</h2>
+                        
+                        {analyticsError && (
+                            <div className={adminStyles.error}>
+                                Error: {analyticsError}
+                            </div>
+                        )}
+                        
+                        {/* Time range controls */}
+                        <div className={adminStyles.controls}>
+                            <div className={adminStyles.timeRangeButtons}>
+                                <button 
+                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === '7days' ? adminStyles.active : ''}`} 
+                                    onClick={() => handleTimeRangeChange('7days')}
+                                >
+                                    Last 7 Days
+                                </button>
+                                <button 
+                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === '30days' ? adminStyles.active : ''}`} 
+                                    onClick={() => handleTimeRangeChange('30days')}
+                                >
+                                    Last 30 Days
+                                </button>
+                                <button 
+                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === '90days' ? adminStyles.active : ''}`} 
+                                    onClick={() => handleTimeRangeChange('90days')}
+                                >
+                                    Last 90 Days
+                                </button>
+                                <button 
+                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === 'all' ? adminStyles.active : ''}`} 
+                                    onClick={() => handleTimeRangeChange('all')}
+                                >
+                                    All Time
+                                </button>
+                            </div>
+                        </div>
+                        
+                        {/* Summary statistics for users */}
+                        <div className={adminStyles.summarySection}>
+                            <div className={adminStyles.summaryGrid}>
+                                <div className={adminStyles.summaryCard}>
+                                    <h3>User Statistics</h3>
+                                    <div className={adminStyles.statItem}>
+                                        <span>Total Users:</span>
+                                        <strong>{totalUsers.toLocaleString()}</strong>
+                                    </div>
+                                    <div className={adminStyles.statItem}>
+                                        <span>Active Users (Last 7 Days):</span>
+                                        <strong>{activeUsers.toLocaleString()}</strong>
+                                    </div>
+                                    <div className={adminStyles.statItem}>
+                                        <span>Active User Percentage:</span>
+                                        <strong>
+                                            {totalUsers > 0 
+                                                ? (activeUsers / totalUsers * 100).toFixed(1) + '%'
+                                                : '0.0%'}
+                                        </strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Charts Section */}
+                        <div className={adminStyles.chartsContainer}>
+                            {loadingAnalytics ? (
+                                <div className={adminStyles.loading}>Loading analytics data...</div>
+                            ) : (
+                                <>
+                                    {/* Signups Chart */}
+                                    <div className={adminStyles.chartWrapper}>
+                                        <h3>New User Signups</h3>
+                                        <div className={adminStyles.chart}>
+                                            <Bar 
+                                                data={prepareSignupChartData()} 
+                                                options={chartOptions} 
+                                                height={300}
+                                            />
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Activity Chart */}
+                                    <div className={adminStyles.chartWrapper}>
+                                        <h3>Daily User Activity</h3>
+                                        <div className={adminStyles.chart}>
+                                            <Bar 
+                                                data={prepareActivityChartData()} 
+                                                options={activityChartOptions} 
+                                                height={300}
+                                            />
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        
+                        {/* Top users by sentence generation */}
+                        <div className={adminStyles.topUsersSection}>
+                            <h3>Top Users by Sentence Generation</h3>
+                            {loadingAnalytics ? (
+                                <div className={adminStyles.loading}>Loading top users data...</div>
+                            ) : topUsers.length === 0 ? (
+                                <div className={adminStyles.noData}>No top users data available</div>
+                            ) : (
+                                <div className={adminStyles.tableContainer}>
+                                    <table className={adminStyles.usageTable}>
+                                        <thead>
+                                            <tr>
+                                                <th>User</th>
+                                                <th>Email</th>
+                                                <th>Tier</th>
+                                                <th>Sentences Generated</th>
+                                                <th>Last Used</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {topUsers.map((user, index) => (
+                                                <tr key={`${user.userId}-${index}`}>
+                                                    <td>{user.userName}</td>
+                                                    <td>{user.userEmail}</td>
+                                                    <td>{user.userTier === 0 ? 'Free' : 'Plus'}</td>
+                                                    <td>{user.count.toLocaleString()}</td>
+                                                    <td>{formatDate(user.lastUsed)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            )}
                         </div>
                     </section>
                     

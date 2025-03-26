@@ -253,4 +253,86 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* Analytics section styles */
+.timeRangeButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  
+  .timeButton {
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &:hover {
+      background-color: #e0e0e0;
+    }
+    
+    &.active {
+      background-color: #7c3aed;
+      color: white;
+      border-color: #7c3aed;
+    }
+  }
+}
+
+.chartsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.chartWrapper {
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+  }
+}
+
+.chart {
+  height: 20rem;
+  position: relative;
+}
+
+.topUsersSection {
+  margin-top: 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    color: #333;
+  }
+}
+
+@media (min-width: 992px) {
+  .chartsContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .chartWrapper {
+    flex: 1 1 calc(50% - 1rem);
+    min-width: 25rem;
+  }
 } 
