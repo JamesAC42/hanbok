@@ -68,7 +68,7 @@ const About = () => {
                         </div>
 
                         <div className={aboutStyles.screenshot}>
-                            <Image src="/images/screenshots/sentence.png" alt={t('about.screenshotAlt')} width={1243} height={869} />
+                            <Image src="/images/screenshots/example_sentence.png" alt={t('about.screenshotAlt')} width={1243} height={869} />
                             <p>{t('about.exampleAnalysis')}</p>
                         </div>
                         <p>{t('about.registeredFeatures')}</p>
