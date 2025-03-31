@@ -51,14 +51,12 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         // Then fall back to query param (from /?id= route)
         const idToLoad = propSentenceId || searchParams.get('id');
         if (idToLoad) {
-            console.log(idToLoad);
             loadSavedSentence(idToLoad);
         }
         fetchSiteStats();
     }, [searchParams, isAuthenticated, propSentenceId]);
 
     const loadSavedSentence = async (id) => {
-        console.log("loading saved sentence")
         const result = await loadSentence(id);
         if (result.success) {
             setAnalysis(result.sentence.analysis);

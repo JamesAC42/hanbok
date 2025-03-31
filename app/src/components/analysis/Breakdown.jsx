@@ -34,6 +34,9 @@ const Breakdown = ({
 	}
 
 	const handleWordClick = (item, isParticle = false) => {
+		if (item.type === "punctuation") {
+			return;
+		}
 		if (lockedWord && lockedWord.dictionary_form === item.dictionary_form) {
 			setLockedWord(null);
 			setWordInfo(null);

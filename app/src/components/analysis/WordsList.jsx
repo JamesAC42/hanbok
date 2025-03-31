@@ -364,9 +364,12 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
 
         let wordList = [];
         const seenWords = new Set();
-        
+
         analysis.components.forEach((word, index) => {
             if (!word.dictionary_form || seenWords.has(word.dictionary_form)) {
+                return;
+            }
+            if (word.type === "punctuation") {
                 return;
             }
             seenWords.add(word.dictionary_form);

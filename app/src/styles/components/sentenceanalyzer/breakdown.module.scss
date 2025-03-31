@@ -115,9 +115,13 @@
 
 		@include word-type-colors;
 
-		&:hover:not(.locked) {
+		&:hover:not(.locked):not([data-role="punctuation"]) {
 			transform: none;
 			@include word-type-color-hover;
+		}
+
+		&[data-role="punctuation"] {
+			cursor:default;
 		}
 
 		&.whitespace::after {
