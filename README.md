@@ -29,18 +29,25 @@ Originally a Korean language learning app, Hanbok is now a general purpose langu
 ## Demo
 
 ### Basic Sentence Analysis
-![Basic sentence analysis demo](./screenshots/1.gif)
+![Basic sentence analysis demo](./screenshots/demo1.webp)
+
 Break down sentences into their components to understand grammar patterns, vocabulary, and usage.
 
 ### Image Text Extraction
-![Image text extraction demo](./screenshots/2.gif)
+![Image text extraction demo](./screenshots/demo2.webp)
+
 Extract and analyze text from images to learn from real-world materials.
+
+### Spaced Repetition Flashcards
+![Flashcards demo](./screenshots/demo3.webp)
+
+Study words in a built in spaced repetition flashcard program.
 
 ## Roadmap
 
 Exciting new features coming soon:
 
-- Spaced Repetition Flashcards
+- Song lyric database with grammar and vocab breakdowns
 - Interactive Grammar Exercises  
 - Structured Daily Lessons
 - Real-time Voice Conversation Practice
