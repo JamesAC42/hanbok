@@ -3,6 +3,7 @@ const basicPrompt = require('../../llm/prompt');
 const chinesePrompt = require('../../llm/prompt_chinese');
 const japanesePrompt = require('../../llm/prompt_japanese');
 const russianPrompt = require('../../llm/prompt_russian');
+const { translateText } = require('../../llm/translate');
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
@@ -204,7 +205,7 @@ const incrementRateLimitsAndCheckNotifications = async (identifier, identifierTy
 
 const submitSentence = async (req, res) => {
 
-    let { text, originalLanguage = 'ko', translationLanguage = 'en' } = req.body;
+    let { text, originalLanguage = 'ko', translationLanguage = 'en', translate = false, translationContext = '' } = req.body;
 
     const userId = req.session.user ? req.session.user.userId : null;
     const db = getDb();
@@ -220,6 +221,70 @@ const submitSentence = async (req, res) => {
                 }
             }
         });
+    }
+
+    // Handle translation mode
+    if (translate === true) {
+        // Validate translation context
+        if (typeof translationContext !== 'string') {
+            return res.json({
+                message: {
+                    isValid: false,
+                    error: {
+                        type: "validation",
+                        message: "Translation context must be a string"
+                    }
+                }
+            });
+        }
+
+        if (translationContext.length > 100) {
+            return res.json({
+                message: {
+                    isValid: false,
+                    error: {
+                        type: "validation",
+                        message: "Translation context must be 100 characters or less"
+                    }
+                }
+            });
+        }
+
+        try {
+            // Translate text from translationLanguage to originalLanguage
+            const translationResult = await translateText(
+                text, 
+                translationLanguage, // Original language is actually the translation language
+                originalLanguage,    // Target language is the original language we want to analyze
+                translationContext
+            );
+
+            if (!translationResult.isValid) {
+                return res.json({
+                    message: {
+                        isValid: false,
+                        error: {
+                            type: "translation_error",
+                            message: translationResult.error?.message || "Failed to translate the text"
+                        }
+                    }
+                });
+            }
+
+            // Use the translated text for further processing
+            text = translationResult.translation;
+        } catch (error) {
+            console.error('Error translating text:', error);
+            return res.json({
+                message: {
+                    isValid: false,
+                    error: {
+                        type: "translation_error",
+                        message: "Failed to translate the text"
+                    }
+                }
+            });
+        }
     }
 
     let isImageSubmission = false;
@@ -299,7 +364,6 @@ const submitSentence = async (req, res) => {
             const extractionResult = await extractTextFromImage(text, originalLanguage);
             
             if (!extractionResult.success) {
-                console.log(extractionResult.message);
                 return res.json({
                     message: {
                         isValid: false,
@@ -510,6 +574,12 @@ const submitSentence = async (req, res) => {
             }
         }
 
+        // Include translation information if translation was used
+        const translationInfo = translate ? {
+            wasTranslated: true,
+            originalText: req.body.text, // The text before translation
+        } : {};
+
         res.json({ 
             message: parsedResponse,
             originalLanguage: originalLanguage,
@@ -518,7 +588,8 @@ const submitSentence = async (req, res) => {
             extractedFromImage: isImageSubmission,
             ...rateLimit,
             ...analysisUsage,
-            ...weeklyQuotaInfo
+            ...weeklyQuotaInfo,
+            ...translationInfo
         });
     } catch (error) {
         console.error('Error:', error);

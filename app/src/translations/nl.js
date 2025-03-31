@@ -48,6 +48,10 @@ export const nl = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Site opnieuw ontworpen en "Hoe zeg ik..." modus toegevoegd.'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Ingebouwd flashcardprogramma en Anki-export toegevoegd.'
             },
@@ -243,6 +247,8 @@ export const nl = {
     },
     sentenceForm: {
         placeholder: 'Voer een {language} zin in...',
+        placeholderNative: '{language} zin om te vertalen...',
+        placeholderContext: '(Optioneel) Gewenste context, ontvanger, formaliteitsniveau, enz.',
         analyze: 'Analyseren',
         analyzing: 'Analyseren...',
         processing_image: 'Afbeelding verwerken...',
@@ -263,6 +269,10 @@ export const nl = {
             other: 'Er is een fout opgetreden bij het analyseren van uw invoer.',
             empty: 'Voer een zin in.',
             file_too_large: 'Afbeeldingsbestand is te groot. Maximale grootte is 2MB.'
+        },
+        translateMode: {
+            analysis: 'Analyseer {language} zin',
+            translate: 'Hoe zeg ik...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const nl = {
         about: 'Over',
         feedback: 'Feedback',
         pricing: 'Prijzen',
+        logout: 'Uitloggen'
     },
     stats: {
         studyStats: 'Studiestatistieken',

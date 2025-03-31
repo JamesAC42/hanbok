@@ -1,3 +1,5 @@
+@import '../variables.module.scss';
+
 .bookmarksContent {
   position: relative;
   display: flex;
@@ -8,10 +10,14 @@
   width: 100%;
   margin: 0 auto;
   padding: 2rem;
-  background: #fff;
   border-radius: 0.5rem;
   box-shadow: 0.3rem 0.3rem 0 var(--foreground);
   animation: fadeIn 0.5s ease-in-out;
+  background-color: rgba(238, 255, 246, 0.865);
+  backdrop-filter: blur(10px);
+  box-shadow: 0.5rem 0.5rem 0 #2c3730;
+  z-index:2;
+  margin:0;
 
   .pageTitle {
     font-family: var(--font-display);
@@ -30,7 +36,7 @@
     border: none;
     border-radius: 0;
     box-shadow: none;
-    background-color: #ffffff;
+    transform:translateY(-1rem);
     min-height: 100dvh;
     justify-content: center;
   }
@@ -199,3 +205,7 @@
     }
   }
 } 
+
+.girl {
+  @include bottom-girl;
+}

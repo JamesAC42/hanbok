@@ -7,7 +7,7 @@
     background-color: #fff;
     color:#404040;
     border:1px solid #404040;
-    border-radius: 50%;
+    border-radius: 1.575rem;
     cursor: pointer;
     animation: sweepIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     opacity: 0;
@@ -29,12 +29,26 @@
     }
 }
 
+@mixin expanded-text {
+    width:fit-content;
+    padding:0 1.5rem;
+
+    .navBarItemText {
+        max-width:100%;
+        margin-left:1rem;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+}
+
 @mixin navbar-item-hover {
     &:hover {
-        transition: all 0.2s linear;
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         background-color: #404040;
         color:#fff;
         border-color:#000000;
+
+        @include expanded-text;
+
         //transform:translate(-0.25rem, -0.25rem) !important;  
         box-shadow: 0.5rem 0.5rem 0 #171717;
         &:first-child {
@@ -78,7 +92,7 @@
     top:50%;
     left:0;
     transform: translateY(-50%);
-    z-index: 100;
+    z-index: 1010;
 
     @media screen and (max-width: 1200px) {
         opacity: 0;
@@ -89,7 +103,7 @@
         &.visible {
             opacity: 1;
             pointer-events: all;
-            transform: translateY(-50%) translateX(0);
+            transform: translateY(-50%) translateX(-1rem);
         }
     }
 
@@ -100,14 +114,18 @@
         padding:2rem 1rem 2rem 1rem;
 
         @media screen and (max-width: 1200px) {
-            background:#ffffffef;
-            border-radius:1rem;
-            box-shadow: 0rem 0rem 2rem 4rem #ffffffeb;
+            background:#e5ffffe0;
+            backdrop-filter: blur(5px);
+            border-radius:0 1rem 1rem 0;
+            //box-shadow: 0rem 0rem 2rem 2rem #ffffff93;
+            padding:2rem 2rem 2rem 2rem;
 
             .navBarItem {
                 animation: none;
                 opacity: 1;
                 transform: translateX(0);
+
+                @include expanded-text;
             }
         }
     
@@ -122,6 +140,15 @@
 
             &:last-child {
                 margin-left: 0;
+            }
+
+            .navBarItemText {
+                font-size:0.8rem;
+                font-weight:bold;
+                text-transform:uppercase;
+                font-family:var(--font-display);
+                overflow:hidden;
+                max-width:0;   
             }
 
             @include navbar-item-hover;
@@ -145,6 +172,10 @@
                     box-shadow: 0.5rem 0.5rem 0 #94b7e3;
                 }
             }
+
+            @media screen and (max-width:1200px) {
+                @include expanded-text;
+            }
         }     
         
         @media screen and (max-height: 800px) {
@@ -164,8 +195,7 @@
     left:0;
     margin:1rem;
     display:none;
-    @include navbar-item-hover;
-    z-index:1000;
+    z-index: 1011;
     @media screen and (max-width: 1200px) {
         display:flex;
     }

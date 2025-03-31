@@ -48,6 +48,10 @@ export const en = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Redesigned site and add "How do I say..." mode.'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Add built in flashcard program and Anki export.'
             },
@@ -97,6 +101,8 @@ export const en = {
             }
         ],
         upcomingFeaturesList: [
+            'Long form input support',
+            'Song lyrics analysis',
             'Hear audio for individual words',
             'Interactive grammar exercises based on saved sentences',
             'Community features for sharing and discussing sentences',
@@ -235,14 +241,16 @@ export const en = {
             activeUsers: 'Users Learning Now'
         },
         exampleSentences: [
-            "I went to the store yesterday.",
-            "What time does the movie start?",
-            "The weather is really nice today.",
-            "I love learning new languages."
+            "I will go to the library tomorrow to study Korean.",
+            "I have been learning Korean for three years, but I'm still not fluent.",
+            "Could you please tell me where the nearest subway station is?",
+            "If it rains tomorrow, I will stay home and watch a movie instead of going to the park."
         ]
     },
     sentenceForm: {
-        placeholder: 'Enter a {language} sentence...',
+        placeholder: '{language} sentence to analyze...',
+        placeholderNative: '{language} sentence to translate...',
+        placeholderContext: '(Optional) Desired context, recipient, formality level, etc.',
         analyze: 'Analyze',
         analyzing: 'Analyzing...',
         processing_image: 'Processing image...',
@@ -263,6 +271,10 @@ export const en = {
             other: 'There was an error analyzing your input.',
             empty: 'Please enter a sentence.',
             file_too_large: 'Image file is too large. Maximum size is 2MB.',
+        },
+        translateMode: {
+            analysis: 'Analyze {language} sentence',
+            translate: 'How do I say...',
         }
     },
     analysis: {
@@ -526,6 +538,7 @@ export const en = {
         about: 'About',
         feedback: 'Feedback',
         pricing: 'Pricing',
+        logout: 'Logout'
     },
     stats: {
         studyStats: 'Study Statistics',

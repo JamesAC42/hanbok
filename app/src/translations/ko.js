@@ -48,6 +48,10 @@ export const ko = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: '사이트 재설계 및 "어떻게 말해야 하나요..." 모드 추가.'
+            },
+            {
                 date: '2025-03-23',
                 content: '내장 플래시카드 프로그램 및 Anki 내보내기 추가.'
             },
@@ -235,14 +239,16 @@ export const ko = {
             activeUsers: '현재 학습 중인 사용자'
         },
         exampleSentences: [
-            "그는 음악을 듣다가 잠들었어요.",
-            "어제 도서관에서 열심히 공부했어요.",
-            "버스 타임을 확인해 주세요.",
-            "맛있는 음식을 먹고 기분이 좋아졌어요."
+            "다음 주까지 이 보고서를 끝내야 하는데 시간이 부족할 것 같습니다.",
+            "한국에 가기 전에 한국어를 더 열심히 공부하고 싶어요.",
+            "아침에 일어났을 때 머리가 아파서 약을 먹었어요.",
+            "이 책은 제가 읽은 책 중에서 가장 재미있었던 것 같아요."
         ]
     },
     sentenceForm: {
         placeholder: '{language} 문장을 입력하세요...',
+        placeholderNative: '{language} 번역할 문장...',
+        placeholderContext: '(선택 사항) 원하는 컨텍스트, 수신자, 격식 수준 등.',
         analyze: '분석',
         analyzing: '분석 중...',
         processing_image: '이미지 처리 중...',
@@ -263,6 +269,10 @@ export const ko = {
             other: '입력 분석 중 오류가 발생했습니다.',
             empty: '문장을 입력해 주세요.',
             file_too_large: '이미지 파일이 너무 큽니다. 최대 크기는 2MB입니다.',
+        },
+        translateMode: {
+            analysis: '{language} 문장 분석',
+            translate: '이렇게 말하려면...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const ko = {
         about: '소개',
         feedback: '피드백',
         pricing: '가격',
+        logout: '로그아웃'
     },
     stats: {
         studyStats: '학습 통계',

@@ -48,6 +48,10 @@ export const fr = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Site redessiné et ajout du mode "Comment dit-on...".'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Ajout d\'un programme de cartes intégré et exportation Anki.'
             },
@@ -243,6 +247,8 @@ export const fr = {
     },
     sentenceForm: {
         placeholder: 'Entrez une phrase en {language}...',
+        placeholderNative: 'Phrase en {language} à traduire...',
+        placeholderContext: '(Optionnel) Contexte souhaité, destinataire, niveau de formalité, etc.',
         analyze: 'Analyser',
         analyzing: 'Analyse en cours...',
         processing_image: 'Traitement de l\'image...',
@@ -263,6 +269,10 @@ export const fr = {
             other: 'Une erreur s\'est produite lors de l\'analyse de votre entrée.',
             empty: 'Veuillez entrer une phrase.',
             file_too_large: 'Le fichier image est trop volumineux. La taille maximale est de 2 Mo.',
+        },
+        translateMode: {
+            analysis: 'Analyser une phrase en {language}',
+            translate: 'Comment dit-on...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const fr = {
         about: 'À propos',
         feedback: 'Commentaires',
         pricing: 'Tarifs',
+        logout: 'Déconnexion'
     },
     stats: {
         studyStats: 'Statistiques d\'étude',

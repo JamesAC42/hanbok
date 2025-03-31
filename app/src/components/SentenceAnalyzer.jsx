@@ -7,13 +7,16 @@ import Link from 'next/link';
 import styles from '@/styles/sentenceanalyzer.module.scss';
 import SentenceForm from '@/components/analysis/SentenceForm';
 import Analysis from '@/components/analysis/Analysis';
-import { LineMdTwitterX } from '@/components/icons/Twitter';
-import { LineMdGithub } from '@/components/icons/Github';
-import { LineMdEmail } from '@/components/icons/Email';
 import ChangeLanguageButton from '@/components/ChangeLanguageButton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
 import { resources } from '@/translations';
+import TranslationSwitcher from '@/components/TranslationSwitcher';
+
+import {FluentHatGraduation32Filled} from '@/components/icons/GradCap';
+import {IcSharpQueueMusic} from '@/components/icons/MusicLyrics';
+import {IcBaselineLiveHelp} from '@/components/icons/QuestionBubble';
+
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
     const searchParams = useSearchParams();
@@ -28,6 +31,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [showTransition, setShowTransition] = useState(false);
     const [error, setError] = useState(null);
     const [siteStats, setSiteStats] = useState(null);
+
+    const [translationMode, setTranslationMode] = useState(false);
 
     const handleExampleClick = (sentence) => {
         if (window.setInputText) {
@@ -85,6 +90,11 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         return t('home.subtitle').replace('{language}', languageName);
     };
 
+    const getNativeExampleSentences = () => {
+        const learningLanguageTranslations = resources[nativeLanguage];
+        return learningLanguageTranslations?.home?.exampleSentences || [];
+    }
+
     // Get example sentences in the learning language
     const getExampleSentences = () => {
         // Get the translations object for the learning language
@@ -92,13 +102,11 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         return learningLanguageTranslations?.home?.exampleSentences || [];
     };
 
-    console.log(language);
-
     return (
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>
 
-            <div className={styles.girlContainer}>
-            <Image src="/images/girl1.png" alt={t('login.girlImageAlt')} width={1920} height={1080} />
+            <div className={`${styles.girlContainer} ${analysis ? styles.hidden : ''}`}>
+                <Image src="/images/hanbokgirl.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
             </div>
     
             <h1 className={`${styles.title} ${analysis ? styles.titleWithAnalysis : ''}`}>
@@ -113,44 +121,22 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 {getLocalizedSubtitle()}
             </h2>
 
-            <div className={`${styles.links} ${analysis ? styles.linksWithAnalysis : ''}`}>
-                <ChangeLanguageButton />
-                <div className={styles.linkContainer}>
-                    <Link href="https://x.com/fifltriggi">
-                        <LineMdTwitterX />
-                    </Link>
-                    <Link href="https://github.com/JamesAC42/hanbok">
-                        <LineMdGithub />
-                    </Link>
-                    <Link href="mailto:jamescrovo450@gmail.com">
-                        <LineMdEmail />
-                    </Link>
-                </div>
+            <div className={styles.changeNativeLanguageOuter}>
                 <ChangeLanguageButton native={true} />
             </div>
-    
 
-            {siteStats && (
-                <div className={`${styles.statsContainer} ${analysis ? styles.statsContainerWithAnalysis : ''}`}>
-                    <div className={styles.statItem}>
-                        <span className={styles.statNumber}>{siteStats.totalSentences.toLocaleString()}</span>
-                        <span className={styles.statLabel}>{t('home.stats.sentencesAnalyzed')}</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statNumber}>{siteStats.totalWords.toLocaleString()}</span>
-                        <span className={styles.statLabel}>{t('home.stats.wordsLearned')}</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statNumber}>{siteStats.totalUsers.toLocaleString()}</span>
-                        <span className={styles.statLabel}>{t('home.stats.activeUsers')}</span>
-                    </div>
-                </div>
-            )}
+            <TranslationSwitcher 
+                translationMode={translationMode}
+                setTranslationMode={setTranslationMode}
+                originalLanguage={originalLanguage}
+                translationLanguage={translationLanguage}
+                analysis={!!analysis}
+            />
 
             {
-                !analysis && (
-                    <a className={styles.aboutLink} href="/about">What is this?</a>
-                )
+                // !analysis && (
+                //     <a className={styles.aboutLink} href="/about">What is this?</a>
+                // )
             }
 
             <SentenceForm
@@ -159,36 +145,78 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 setVoice1={setVoice1}
                 setVoice2={setVoice2}
                 setTransition={setShowTransition}
+                translationMode={translationMode}
                 />
 
             {
-                !analysis && <div className={styles.testSentences}>
-                    <h3>{t('home.tryExample')}</h3>
-                    {getExampleSentences().map((sentence, index) => (
-                        <div 
-                            key={index} 
-                            className={`${styles.exampleSentence} ${getFontClass(language)}`}
-                            onClick={() => handleExampleClick(sentence)}
-                            role="button"
-                            tabIndex={0}
-                        >
-                            {sentence}
-                        </div>
-                    ))}
-                </div>
-            }
-
-            {
                 !analysis && (
-                    <>
-                    <div className={styles.legal}>
-                            <a href="/terms-of-service.html">Terms of Service</a>
-                            <a href="/privacy-policy.html">Privacy Policy</a>
+                    <div className={styles.infoContainer}>
+    
+
+                    {
+                        !analysis && <div className={styles.testSentences}>
+                            <h3>{t('home.tryExample')}</h3>
+                            {(translationMode ? getNativeExampleSentences() : getExampleSentences()).map((sentence, index) => (
+                                <div 
+                                    key={index} 
+                                    className={`${styles.exampleSentence} ${getFontClass(language)}`}
+                                    onClick={() => handleExampleClick(sentence)}
+                                    role="button"
+                                    tabIndex={0}
+                                >
+                                    {sentence}
+                                </div>
+                            ))}
+                        </div>
+                    }
+
+                    {
+                        siteStats && (
+                            <div className={`${styles.statsContainer} ${analysis ? styles.statsContainerWithAnalysis : ''}`}>
+                                <div className={styles.statItem}>
+                                    <span className={styles.statNumber}>{siteStats.totalSentences.toLocaleString()}</span>
+                                    <span className={styles.statLabel}>{t('home.stats.sentencesAnalyzed')}</span>
+                                </div>
+                                <div className={styles.statItem}>
+                                    <span className={styles.statNumber}>{siteStats.totalWords.toLocaleString()}</span>
+                                    <span className={styles.statLabel}>{t('home.stats.wordsLearned')}</span>
+                                </div>
+                                <div className={styles.statItem}>
+                                    <span className={styles.statNumber}>{siteStats.totalUsers.toLocaleString()}</span>
+                                    <span className={styles.statLabel}>{t('home.stats.activeUsers')}</span>
+                                </div>
+                            </div>
+                        )
+                    }
+
+                        <div className={styles.quickLinks}>
+                            <Link href="/about" className={styles.quickLink}>
+                                <div className={styles.quickLinkIcons}>
+                                    <IcBaselineLiveHelp />
+                                </div>
+                                <div className={styles.quickLinkText}>
+                                    Learn more about Hanbok
+                                </div>
+                            </Link>
+                            <Link href="/cards" className={styles.quickLink}>
+                                <div className={styles.quickLinkIcons}>
+                                    <FluentHatGraduation32Filled />
+                                </div>
+                                <div className={styles.quickLinkText}>
+                                    Study with spaced repetition flashcards
+                                </div>                            
+                            </Link>
+                        </div>
+                    
+                        <div className={styles.legal}>
+                                <a href="/terms-of-service.html">Terms of Service</a>
+                                <a href="/privacy-policy.html">Privacy Policy</a>
+                        </div>
+                        <div className={styles.copyright}>
+                            © 2025 Hanbok Study. All rights reserved.
+                        </div> 
+
                     </div>
-                    <div class={styles.copyright}>
-                        © 2025 Hanbok Study. All rights reserved.
-                    </div> 
-                    </>
                 )
             }
         

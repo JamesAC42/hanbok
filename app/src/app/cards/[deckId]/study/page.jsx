@@ -601,15 +601,15 @@ const StudyView = ({ params }) => {
                     
                     {renderContent()}
                 </div>
-            </div>
-            <div className={styles.girlContainer}>
-                <Image
-                    src="/images/girl1.png"
-                    alt={t('common.girlImage')}
-                    width={1920}
-                    height={1080}
-                    priority
-                />
+                <div className={studyStyles.girl}>
+                    <Image
+                        src="/images/hanbokgirl.png"
+                        alt="girl"
+                        width={1024}
+                        height={1536}
+                        priority
+                    />
+                </div>
             </div>
         </div>
     );

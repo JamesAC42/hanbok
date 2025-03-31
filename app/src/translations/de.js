@@ -48,6 +48,10 @@ export const de = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Website neu gestaltet und "Wie sage ich..."-Modus hinzugefügt.'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Eingebautes Karteikartenprogramm und Anki-Export hinzugefügt.'
             },
@@ -243,6 +247,8 @@ export const de = {
     },
     sentenceForm: {
         placeholder: 'Geben Sie einen {language} Satz ein...',
+        placeholderNative: '{language} Satz zum Übersetzen...',
+        placeholderContext: '(Optional) Gewünschter Kontext, Empfänger, Formalitätsgrad usw.',
         analyze: 'Analysieren',
         analyzing: 'Analysieren...',
         processing_image: 'Bild wird verarbeitet...',
@@ -263,6 +269,10 @@ export const de = {
             other: 'Beim Analysieren Ihrer Eingabe ist ein Fehler aufgetreten.',
             empty: 'Bitte geben Sie einen Satz ein.',
             file_too_large: 'Bilddatei ist zu groß. Maximale Größe ist 2MB.',
+        },
+        translateMode: {
+            analysis: '{language} Satz analysieren',
+            translate: 'Wie sage ich...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const de = {
         about: 'Über uns',
         feedback: 'Feedback',
         pricing: 'Preise',
+        logout: 'Abmelden'
     },
     stats: {
         studyStats: 'Lernstatistiken',

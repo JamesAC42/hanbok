@@ -48,6 +48,10 @@ export const zh = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: '重新设计网站并添加"如何说..."模式。'
+            },
+            {
                 date: '2025-03-23',
                 content: '添加内置闪卡程序和Anki导出功能。'
             },
@@ -243,6 +247,8 @@ export const zh = {
     },
     sentenceForm: {
         placeholder: '请输入{language}句子...',
+        placeholderNative: '需要翻译的{language}句子...',
+        placeholderContext: '(可选) 所需语境、接收者、正式程度等。',
         analyze: '分析',
         analyzing: '分析中...',
         processing_image: '处理图像中...',
@@ -263,6 +269,10 @@ export const zh = {
             other: '分析输入时出错。',
             empty: '请输入句子。',
             file_too_large: '图像文件太大。最大大小为2MB。',
+        },
+        translateMode: {
+            analysis: '分析{language}句子',
+            translate: '如何说...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const zh = {
         about: '关于',
         feedback: '反馈',
         pricing: '价格',
+        logout: '登出'
     },
     stats: {
         studyStats: '学习统计',

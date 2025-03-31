@@ -48,6 +48,10 @@ export const ja = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'サイトを再設計し、「どう言えばいいですか...」モードを追加。'
+            },
+            {
                 date: '2025-03-23',
                 content: '内蔵フラッシュカードプログラムとAnkiエクスポートを追加。'
             },
@@ -243,6 +247,8 @@ export const ja = {
     },
     sentenceForm: {
         placeholder: '{language}の文章を入力してください...',
+        placeholderNative: '{language}から翻訳する文章...',
+        placeholderContext: '(任意) 希望するコンテキスト、受信者、フォーマルさのレベルなど。',
         analyze: '分析',
         analyzing: '分析中...',
         processing_image: '画像処理中...',
@@ -263,6 +269,10 @@ export const ja = {
             other: '入力の分析中にエラーが発生しました。',
             empty: '文章を入力してください。',
             file_too_large: '画像ファイルが大きすぎます。最大サイズは2MBです。',
+        },
+        translateMode: {
+            analysis: '{language}文章を分析',
+            translate: 'どう言えばいいですか...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const ja = {
         about: '概要',
         feedback: 'フィードバック',
         pricing: '料金',
+        logout: 'ログアウト'
     },
     stats: {
         studyStats: '学習統計',

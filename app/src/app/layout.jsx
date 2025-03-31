@@ -5,6 +5,7 @@ import "../styles/globals.scss";
 import NavBar from '@/components/NavBar';
 import Script from 'next/script';
 import { PopupProvider } from '@/contexts/PopupContext';
+import Image from 'next/image';
 
 export const metadata = {
   title: "Hanbok - Multi-Language Learning Tool",
@@ -66,6 +67,9 @@ export default function RootLayout({ children }) {
                 {children}
               </Suspense>
               <NavBar />
+              <div className="background-image">
+                <Image src="/images/background.png" alt="background" width={1536} height={1024} />
+              </div>
             </PopupProvider>
           </LanguageProvider>
         </AuthProvider>

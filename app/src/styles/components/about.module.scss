@@ -1,3 +1,5 @@
+@import '../variables.module.scss';
+
 .aboutContent {
   display: flex;
   flex-direction: column;
@@ -6,10 +8,13 @@
   max-width: 70rem;
   margin: 0 auto;
   padding: 3rem;
-  background-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(238, 255, 246, 0.865);
+  backdrop-filter: blur(10px);
+  box-shadow: 0.5rem 0.5rem 0 #2c3730;
   border-radius: 0.5rem;
   border: 1px solid var(--foreground);
-  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+  min-height:70dvh;
+  z-index:2;
 
   .section {
     width: 100%;
@@ -205,9 +210,9 @@
     border: none;
     border-radius: 0;
     box-shadow: none;
-    background-color: #ffffff;
     min-height: 100dvh;
     justify-content: center;
+    transform:translateY(-1rem);
 
     .section {
       h2 {
@@ -274,3 +279,6 @@
     list-style: none;
   }
 } 
+.girl {
+  @include bottom-girl;
+}

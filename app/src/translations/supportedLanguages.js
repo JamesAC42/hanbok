@@ -1,6 +1,5 @@
 export const supportedLanguages = {
     'ko': 'korean',
-    'en': 'english',
     'zh': 'chinese',
     'ja': 'japanese',
     'es': 'spanish',
@@ -10,4 +9,5 @@ export const supportedLanguages = {
     'nl': 'dutch',
     'ru': 'russian',
     'tr': 'turkish',
+    'en': 'english',
 }; 

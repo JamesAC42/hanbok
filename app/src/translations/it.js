@@ -48,6 +48,10 @@ export const it = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Sito ridisegnato e aggiunta modalità "Come si dice...".'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Aggiunto programma di flashcard integrato ed esportazione Anki.'
             },
@@ -243,6 +247,8 @@ export const it = {
     },
     sentenceForm: {
         placeholder: 'Inserisci una frase in {language}...',
+        placeholderNative: 'Frase in {language} da tradurre...',
+        placeholderContext: '(Opzionale) Contesto desiderato, destinatario, livello di formalità, ecc.',
         analyze: 'Analizza',
         analyzing: 'Analisi in corso...',
         processing_image: 'Elaborazione immagine...',
@@ -263,6 +269,10 @@ export const it = {
             other: 'Si è verificato un errore durante l\'analisi dell\'input.',
             empty: 'Inserisci una frase.',
             file_too_large: 'Il file immagine è troppo grande. La dimensione massima è di 2MB.',
+        },
+        translateMode: {
+            analysis: 'Analizza frase in {language}',
+            translate: 'Come si dice...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const it = {
         about: 'Info',
         feedback: 'Feedback',
         pricing: 'Prezzi',
+        logout: 'Esci'
     },
     stats: {
         studyStats: 'Statistiche di studio',

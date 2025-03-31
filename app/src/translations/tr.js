@@ -48,6 +48,10 @@ export const tr = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Site yeniden tasarlandı ve "Nasıl derim..." modu eklendi.'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Dahili kartlar programı ve Anki dışa aktarma eklendi.'
             },
@@ -243,6 +247,8 @@ export const tr = {
     },
     sentenceForm: {
         placeholder: '{language} cümlesi girin...',
+        placeholderNative: 'Çevirilecek {language} cümlesi...',
+        placeholderContext: '(İsteğe bağlı) İstenen bağlam, alıcı, resmiyet seviyesi vb.',
         analyze: 'Analiz Et',
         analyzing: 'Analiz ediliyor...',
         processing_image: 'Görüntü işleniyor...',
@@ -263,6 +269,10 @@ export const tr = {
             other: 'Girişinizi analiz ederken bir hata oluştu.',
             empty: 'Lütfen bir cümle girin.',
             file_too_large: 'Görüntü dosyası çok büyük. Maksimum boyut 2MB.'
+        },
+        translateMode: {
+            analysis: '{language} cümlesini analiz et',
+            translate: 'Nasıl derim...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const tr = {
         about: 'Hakkında',
         feedback: 'Geri Bildirim',
         pricing: 'Fiyatlandırma',
+        logout: 'Çıkış Yap'
     },
     stats: {
         studyStats: 'Çalışma İstatistikleri',

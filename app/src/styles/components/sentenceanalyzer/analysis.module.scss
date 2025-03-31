@@ -17,6 +17,7 @@
     box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1);
     border-radius:0.5rem;
     padding:2rem;
+    position:relative;
 
     &.transition {
         animation:update-blur 0.3s ease-in-out;
@@ -24,6 +25,29 @@
 
     @media screen and (max-width:725px) {
         padding:1rem;
+    }
+
+    .analysisControls {
+        position:absolute;
+        top:0;
+        right:0;
+        padding:1rem;
+        display:flex;
+        gap:0.5rem;
+
+        @media screen and (max-width:725px) {
+            padding:0.5rem;
+        }
+    }
+
+    .breadcrumbs {
+        font-size:1rem;
+        font-family:var(--font-display);
+        font-variation-settings:'wght' 600;
+        text-align:left;
+        margin-bottom:1rem;
+        color:#4d4d4d;
+        max-width:50%;
     }
 
     .translationHeader,

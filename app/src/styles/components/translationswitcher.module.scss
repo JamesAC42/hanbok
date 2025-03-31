@@ -1,0 +1,132 @@
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}   
+
+.translationSwitcherOuter {
+    @include flex-center;
+    flex-direction:column;
+    position:relative;
+
+    margin-bottom:1rem;
+    z-index:1000;
+
+    .translationSwitcherContainer {
+        @include flex-center;
+        position:relative;
+
+        .languageSwitcherOuter {
+            position:absolute;
+            top:50%;
+            left:0;
+            z-index:101;
+            transform:translate(calc(-100% - 1rem), -50%);
+
+            @media (max-width:1500px) {
+                top:0;
+                left:50%;
+                transform:translate(-50%, 0);
+            }
+        }
+
+        .translationSwitcherInner {
+            @include flex-center;
+            position: relative;
+
+            background:#ffffff33;
+            padding:0.5rem;
+            border-radius:0.5rem;
+            border:1px solid #6a7aa1;
+            backdrop-filter: blur(12px);
+            z-index:100;
+
+            @media (max-width:1500px) {
+                margin-top:4rem;
+            }
+
+            .translationSwitcherBar {
+                position: absolute;
+                bottom:0.5rem;
+                left:1.5rem;
+                width:20rem;
+                height:5px;
+                background:#4952cd;
+                z-index:100;
+                border-radius:2rem;
+
+                transition: transform 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+            
+                @media (max-width:1500px) {
+                    display:none;
+                }
+            }
+
+            .translateSwitcherItem {
+                @include flex-center;
+                flex: 1;
+                width:22rem;
+                padding:1rem 1.5rem;
+                text-align:center;
+                white-space:nowrap;
+                color:#878787;
+                border:1px solid #ddd;
+                backdrop-filter: blur(12px);
+                background:#f9f9f95a;
+                cursor:pointer;                
+                transition: all 0.2s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+
+                &:nth-child(2) {
+                    border-radius:0.5rem 0 0 0.5rem;
+                }
+
+                &:nth-child(3) {  
+                    border-radius:0 0.5rem 0.5rem 0;
+                }
+
+                .itemText {
+                    font-family: var(--font-display);
+                    font-weight:600;
+                }
+
+                &.active {
+                    color:#000000;
+                    background:#ffffffc0;
+                }
+            }
+
+            @media (max-width: 950px) {
+
+                padding:0.2rem;
+                .translateSwitcherItem {
+                    width:15rem;
+                    font-size:0.9rem;
+                    padding:0.5rem;
+                }
+
+                .translationSwitcherBar {
+                    width:15rem;
+                    bottom:0.2rem;
+                    left:0.2rem;
+                }
+            }
+
+            @media (max-width: 550px) {
+
+                align-items:stretch;
+                .translateSwitcherItem {
+                    width:10rem;
+                    font-size:0.8rem;
+                    white-space:wrap;
+                    vertical-align:middle;
+                }
+
+                .translationSwitcherBar {
+                    width:10rem;
+                    bottom:0.2rem;
+                    left:0.2rem;
+                }
+            }
+        }
+    }
+}

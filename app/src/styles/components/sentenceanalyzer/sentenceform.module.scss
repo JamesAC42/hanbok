@@ -4,6 +4,7 @@
     margin-bottom: 2rem;
     display: flex;
     gap: 1rem;
+    position: relative;
 
     animation: slide-fade-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
@@ -15,6 +16,10 @@
         
         input {
             font-size: 1.3rem;
+            @media screen and (max-width:725px) {
+                font-size:0.9rem;
+                padding:0.5rem;
+            }
         }
     
         @media screen and (max-width:725px) {
@@ -27,7 +32,35 @@
     &.formContainerWithAnalysis {
         input {
             font-size: 1.2rem;
+            @media screen and (max-width:725px) {
+                font-size:0.9rem;
+                padding:0.5rem;
+            }
         }
+    }
+
+    .translationSwitcherOuter {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        transform: translateY(0.5rem);
+    }
+
+    @keyframes fade-in {
+        0% {
+            opacity:0;
+            filter:blur(10px);
+            transform:translateY(2rem);
+        }
+        100% {
+            opacity:1;
+            filter:blur(0px);
+            transform:translateY(0);
+        }
+    }
+
+    .textInputContainer {
+        animation: fade-in 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 }
 

@@ -102,15 +102,8 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
           if (audioRefs.voice1) audioRefs.voice1.src = data.voice1;
           if (audioRefs.voice2) audioRefs.voice2.src = data.voice2;
           
-          // Try playing again
-          setTimeout(() => {
-            const activeAudio = activeSpeaker === 1 ? audioRefs.voice1 : audioRefs.voice2;
-            activeAudio?.play()
-              .catch(error => {
-                console.error('Error playing audio after refresh:', error);
-                setIsPlaying(false);
-              });
-          }, 500);
+          // Don't automatically play after refreshing URLs
+          setIsPlaying(false);
         } else {
           // If we didn't get valid URLs, the S3 objects might be missing
           console.log('No valid URLs returned, keys have been cleared on the server');

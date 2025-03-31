@@ -138,15 +138,15 @@ const About = () => {
                         </div>
                     </section>
                 </div>
-            </div>
-            <div className={styles.girlContainer}>
-                <Image
-                    src="/images/girl1.png"
-                    alt="girl"
-                    width={1920}
-                    height={1080}
-                    priority
-                />
+                <div className={aboutStyles.girl}>
+                    <Image
+                        src="/images/hanbokgirl.png"
+                        alt="girl"
+                        width={1024}
+                        height={1536}
+                        priority
+                    />
+                </div>
             </div>
         </div>
     );

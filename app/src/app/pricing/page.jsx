@@ -174,10 +174,10 @@ const Pricing = () => {
                 </div>
                 <div className={pricingStyles.girl}>
                     <Image
-                        src="/images/girl1.png"
+                        src="/images/hanbokgirl.png"
                         alt="girl"
-                        width={1249}
-                        height={637}
+                        width={1024}
+                        height={1536}
                         priority
                     />
                 </div>

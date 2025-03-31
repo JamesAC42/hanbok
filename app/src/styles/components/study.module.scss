@@ -13,6 +13,9 @@ $dark-text: #171717; // Dark text for good contrast
     position: relative;
     background:var(--background);
     border-radius:var(--border-radius);
+    background-color: rgba(238, 255, 246, 0.865);
+    backdrop-filter: blur(10px);
+    z-index:2;
 
     @media (max-width:800px) {
         margin-top:3rem;
@@ -431,6 +434,12 @@ $dark-text: #171717; // Dark text for good contrast
     display: flex;
     justify-content: center;
     margin-top: var(--spacing-medium);
+}
+
+.girl {
+    @include bottom-girl;
+    margin-left:auto;
+    z-index:1;
 }
 
 // Responsive styles

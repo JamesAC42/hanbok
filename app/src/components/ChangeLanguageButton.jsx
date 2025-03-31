@@ -95,6 +95,9 @@ const ChangeLanguageButton = ({ native = false }) => {
                                             className={styles.languagePickerButton}
                                         >
                                             {getIcon(lang)}
+                                            <div className={styles.languagePickerButtonText}>
+                                                {t(`languages.${supportedLanguages[lang]}`)}
+                                            </div>
                                         </button>
                                     </div>
                                 ))

@@ -1,3 +1,5 @@
+@import '../variables.module.scss';
+
 .pricingContent {
     display: flex;
     flex-direction: column;
@@ -6,13 +8,13 @@
     max-width: 70rem;
     margin: 0 auto;
     padding: 3rem;
-    background-color: rgba(255, 255, 255, 0.95);
-    /* A clean white look with bold accents */
     border-radius: 0.5rem;
     border: 0.0625rem solid var(--foreground);
-    box-shadow: 0.3rem 0.3rem 0 var(--foreground);
-
-  
+    background-color: rgba(238, 255, 246, 0.865);
+    backdrop-filter: blur(10px);
+    box-shadow: 0.5rem 0.5rem 0 #2c3730;
+    z-index:2;
+    margin:0;
 
     @media screen and (max-width: 725px) {
         padding:3rem 0;
@@ -23,10 +25,10 @@
         width: 100dvw;
         margin: 0;
         padding: 1rem;
+        transform:translateY(-1rem);
         border: none;
         border-radius: 0;
         box-shadow: none;
-        background-color: #ffffff;
         min-height: 100dvh;
         justify-content: center;
     }
@@ -260,15 +262,5 @@
 }
 
 .girl {
-    margin-top:2rem;
-    max-width: 80dvw;
-    img {
-        max-width: 50dvw;
-        height: auto;
-    }
-    @media screen and (max-width: 700px) {
-        img {
-            max-width: 90dvw;
-        }
-    }
+  @include bottom-girl;
 }

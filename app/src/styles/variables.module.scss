@@ -100,3 +100,14 @@ $word-types: (
       transform:translateY(0);
   }
 }
+
+@mixin bottom-girl {
+  margin-top:3rem;
+  position:sticky;
+  bottom:0rem;
+  z-index:1;
+  img {
+    width:10rem;
+    height:auto;
+  }
+}

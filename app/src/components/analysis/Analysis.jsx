@@ -23,11 +23,15 @@ const Analysis = ({
     showTransition,
     sentenceId
 }) => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const [prevWord, setPrevWord] = useState(null);
     const [wordInfo, setWordInfo] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const [showPronunciation, setShowPronunciation] = useState(true);
+
+    const capitalize = (word) => {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
 
     // Initialize showPronunciation from localStorage
     useEffect(() => {
@@ -60,12 +64,19 @@ const Analysis = ({
 
     return(
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
-            <SaveButton sentenceId={sentenceId} />
-            <SettingsButton 
-                showPronunciation={showPronunciation} 
-                setShowPronunciation={setShowPronunciation} 
-                language={originalLanguage}
-            />
+            
+            <div className={styles.analysisControls}>
+                <SaveButton sentenceId={sentenceId} />
+                <SettingsButton 
+                    showPronunciation={showPronunciation} 
+                    setShowPronunciation={setShowPronunciation} 
+                    language={originalLanguage}
+                />
+            </div>
+
+            <div className={styles.breadcrumbs}>
+                Sentence Breakdown {'>'} {capitalize(originalLanguage)} {'>'} {capitalize(translationLanguage)} 
+            </div>
             
             <div className={styles.sentenceHeader}>{t('analysis.original')}:</div>
             <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>

@@ -13,6 +13,8 @@ import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import { Upload } from '@/components/icons/Upload';
 
+import TranslationSwitcher from '@/components/TranslationSwitcher';
+
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
 // Add audio reference for the paste sound effect
@@ -25,12 +27,14 @@ const SentenceForm = ({
     setAnalysis,
     setVoice1,
     setVoice2,
-    setTransition
+    setTransition,
+    translationMode
 }) => {
     const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
     const { isAuthenticated, user, decrementRemainingImageExtracts, decrementRemainingSentenceAnalyses, updateWeeklySentenceQuota } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const [text, setText] = useState('');
+    const [textContext, setTextContext] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
@@ -53,6 +57,16 @@ const SentenceForm = ({
         const languageName = t(`languages.${languageKey}`);
         return t('sentenceForm.placeholder').replace('{language}', languageName);
     };
+
+    const getNativePlaceholder = () => {
+        const languageKey = supportedLanguages[nativeLanguage];
+        const languageName = t(`languages.${languageKey}`);
+        return t('sentenceForm.placeholderNative').replace('{language}', languageName);
+    };
+
+    const getContextPlaceholder = () => {
+        return t('sentenceForm.placeholderContext');
+    }
 
     useEffect(() => {
         let intervalId;
@@ -306,7 +320,9 @@ const SentenceForm = ({
                 body: JSON.stringify({
                     text: dataToSend,
                     originalLanguage: language,
-                    translationLanguage: nativeLanguage
+                    translationLanguage: nativeLanguage,
+                    translate: translationMode,
+                    translationContext: textContext
                 }),
                 signal: controller.signal
             });
@@ -344,7 +360,7 @@ const SentenceForm = ({
                 setImagePreview(null);
                 
                 // Update analysis state in parent component
-                setAnalysis(data.message.analysis);
+                //setAnalysis(data.message.analysis);
                 
                 // Clear voice keys
                 setVoice1(null);
@@ -468,10 +484,10 @@ const SentenceForm = ({
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.textInputContainer}>
                         <TextInput
-                            language={language}
+                            language={translationMode ? nativeLanguage : language}
                             value={text}
                             onChange={(e) => setText(e.target.value)}
-                            placeholder={getLocalizedPlaceholder()}
+                            placeholder={translationMode ? getNativePlaceholder() : getLocalizedPlaceholder()}
                             variant="large"
                             onPaste={handlePaste}
                             disabled={!!imagePreview}
@@ -482,6 +498,20 @@ const SentenceForm = ({
                             </div>
                         )}
                     </div>
+                    {
+                        translationMode && (  
+                            <div className={styles.textInputContainer}>
+                                <TextInput
+                                    language={nativeLanguage}
+                                    value={textContext}
+                                    onChange={(e) => setTextContext(e.target.value)}
+                                    placeholder={getContextPlaceholder()}
+                                    variant="large"
+                                    onPaste={null}
+                                />
+                            </div>
+                        )
+                    }
                     <div className={styles.buttonsContainer}>
                         <input
                             type="file"

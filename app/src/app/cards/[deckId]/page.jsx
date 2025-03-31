@@ -481,15 +481,6 @@ const DeckView = ({ params }) => {
                     {renderContent()}
                 </div>
             </div>
-            <div className={styles.girlContainer}>
-                <Image
-                    src="/images/girl1.png"
-                    alt={t('common.girlImage')}
-                    width={1920}
-                    height={1080}
-                    priority
-                />
-            </div>
         </div>
     );
 };

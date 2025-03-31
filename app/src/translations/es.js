@@ -48,6 +48,10 @@ export const es = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Sitio rediseñado y agregada modalidad "Cómo se dice...".'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Añadir programa de tarjetas integrado y exportación de Anki.'
             },
@@ -243,6 +247,8 @@ export const es = {
     },
     sentenceForm: {
         placeholder: 'Ingrese una oración en {language}...',
+        placeholderNative: 'Frase en {language} para traducir...',
+        placeholderContext: '(Opcional) Contexto deseado, destinatario, nivel de formalidad, etc.',
         analyze: 'Analizar',
         analyzing: 'Analizando...',
         processing_image: 'Procesando imagen...',
@@ -263,6 +269,10 @@ export const es = {
             other: 'Hubo un error al analizar su entrada.',
             empty: 'Por favor, ingrese una oración.',
             file_too_large: 'El archivo de imagen es demasiado grande. El tamaño máximo es de 2MB.',
+        },
+        translateMode: {
+            analysis: 'Analizar frase en {language}',
+            translate: 'Cómo se dice...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const es = {
         about: 'Acerca de',
         feedback: 'Comentarios',
         pricing: 'Precios',
+        logout: 'Cerrar sesión'
     },
     stats: {
         studyStats: 'Estadísticas de estudio',

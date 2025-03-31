@@ -69,15 +69,6 @@ const SuccessContent = () => {
                     )}
                 </div>
             </div>
-            <div className={styles.girlContainer}>
-                <Image
-                    src="/images/girl1.png"
-                    alt="girl"
-                    width={1920}
-                    height={1080}
-                    priority
-                />
-            </div>
         </div>
     );
 };

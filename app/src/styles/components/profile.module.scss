@@ -1,3 +1,5 @@
+@import '../variables.module.scss';
+
 .profileContent {
   display: flex;
   flex-direction: column;
@@ -6,10 +8,13 @@
   max-width: 40rem;
   margin: 0 auto;
   padding: 2rem;
-  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 0.5rem;
   border: 0.0625rem solid var(--foreground);
-  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+  background-color: rgba(238, 255, 246, 0.865);
+  backdrop-filter: blur(10px);
+  box-shadow: 0.5rem 0.5rem 0 #2c3730;
+  min-height:70dvh;
+  z-index:2;
 
   @media screen and (max-width: 725px) {
     padding: 1.5rem;
@@ -23,7 +28,7 @@
     border: none;
     border-radius: 0;
     box-shadow: none;
-    background-color: #ffffff;
+    transform:translateY(-1rem);
     min-height: 100dvh;
     justify-content: center;
   }
@@ -32,6 +37,7 @@
 .userDetails {
   margin-top: 0rem;
   padding: 2rem;
+  width:100%;
   border: 0.0625rem solid var(--foreground);
   border-radius: 0.5rem;
   background-color: #f9f9f9;
@@ -49,7 +55,7 @@
 }
 
 .tierInfo {
-  margin-top: 1rem;
+  margin-top: 0rem;
   padding: 1rem;
   border: 0.0625rem solid var(--foreground);
   border-radius: 0.5rem;
@@ -89,6 +95,10 @@
             color: #2d6ca3;
         }
     }
+}
+
+.girl {
+  @include bottom-girl;
 }
 
 @media screen and (max-width: 500px) {

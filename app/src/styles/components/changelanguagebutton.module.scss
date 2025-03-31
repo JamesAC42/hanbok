@@ -1,4 +1,4 @@
-$buttonSize:3.4rem;
+$buttonSize:3rem;
 
 @keyframes blurIn {
     0% {
@@ -41,19 +41,21 @@ $buttonSize:3.4rem;
 
         @keyframes expand {
             0% {
+                max-height:0;
                 transform:scale(0) translate(-100%,-100%);
             }
             100% {
+                max-height:100dvh;
                 transform:scale(1) translate(0,0);
             }
         }
 
         @keyframes expand-reverse {
             0% {
-                transform:scale(0) translate(-20%,-100%);
+                transform:scale(0) translate(-30%,-150%);
             }
             100% {
-                transform:scale(1) translate(-80%,0);
+                transform:scale(1) translate(-100%,0);
             }
         }
 
@@ -62,17 +64,19 @@ $buttonSize:3.4rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap:1.8rem;
-            background: white;
+            gap:1.4rem;
+            background: rgba(243, 243, 243, 0.852);
+            backdrop-filter: blur(10px);
             border-radius: 0.5rem;
-            padding: 2rem;
+            padding: 1rem;
+            padding-top:2rem;
             box-shadow: 0 0rem 1rem 0.2rem rgba(255, 255, 255, 0.715);
             justify-content: center;
             animation:expand 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
 
             .pickerHeader {
                 text-align:center;
-                color:#606060;
+                color:#000000;
                 h3 {
                     font-size:0.9rem;
                 }
@@ -80,9 +84,10 @@ $buttonSize:3.4rem;
             .pickerItemContainer {
                 width:100%;
                 display: flex;
+                flex-direction: column;
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 0.5rem;
+                gap: 1px;
                 width: 15rem;
             }
         }
@@ -93,19 +98,27 @@ $buttonSize:3.4rem;
                 border: none;
                 background: none;
                 cursor: pointer;
-                border-radius: 0.25rem;
-                border-radius:50%;
-                height:$buttonSize;
-                width:$buttonSize;
+                border-radius: 0.3rem;
+                width:100%;
                 border:1px solid #000;
                 transition: background-color 0.2s;
+                display:flex;
+                align-items:center;
+                justify-content:flex-start;
+                gap:1rem;
+                padding:0.2rem 0.5rem;
+
+                font-family: var(--font-display);
+                font-size:1rem;
+                color:#fff;
+                background:#30313dc9;
 
                 &:hover {
                     background-color: #040404;
                 }
 
                 svg {
-                    font-size: 3rem;
+                    font-size: 2rem;
                     transform:translateY(2px);
                 }
             }
@@ -113,7 +126,7 @@ $buttonSize:3.4rem;
 
         &.reverse {
             .pickerContent {
-                transform: translateX(-80%);
+                transform: translateX(-100%);
                 animation:expand-reverse 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
             }
         }

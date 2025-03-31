@@ -55,6 +55,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: relative;
+  background-image: url('/images/background.png');
+  background-repeat: repeat-y;
+  background-size: contain;
 }
 
 html,
@@ -81,6 +84,7 @@ body::before {
 .latin {
   font-family:var(--font-serif);
 }
+
 .korean {
   font-family:var(--font-kr-serif);
 }
@@ -91,4 +95,29 @@ body::before {
 
 .japanese {
   font-family:var(--font-jp-serif);
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100dvw;
+  height:100dvh;
+  z-index: -1;
+  img {
+    width:100%;
+    height:auto;
+    min-height:1014px;
+  }
+
+  @media screen and (max-width:1400px) {
+    right:0;
+    left:auto;
+    img {
+      height:100dvh;
+      min-height:100dvh;
+      min-width:1400px;
+      width:auto;
+    }
+  }
 }

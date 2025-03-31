@@ -48,6 +48,10 @@ export const ru = {
         },
         updates: [
             {
+                date: '2025-03-31',
+                content: 'Переработан дизайн сайта и добавлен режим "Как сказать...".'
+            },
+            {
                 date: '2025-03-23',
                 content: 'Добавлена встроенная программа карточек и экспорт в Anki.'
             },
@@ -243,6 +247,8 @@ export const ru = {
     },
     sentenceForm: {
         placeholder: 'Введите предложение на {language}...',
+        placeholderNative: 'Предложение на {language} для перевода...',
+        placeholderContext: '(Опционально) Желаемый контекст, получатель, уровень формальности и т.д.',
         analyze: 'Анализировать',
         analyzing: 'Анализ...',
         processing_image: 'Обработка изображения...',
@@ -263,6 +269,10 @@ export const ru = {
             other: 'Произошла ошибка при анализе вашего ввода.',
             empty: 'Пожалуйста, введите предложение.',
             file_too_large: 'Файл изображения слишком большой. Максимальный размер - 2МБ.',
+        },
+        translateMode: {
+            analysis: 'Анализировать предложение на {language}',
+            translate: 'Как сказать...',
         }
     },
     analysis: {
@@ -538,6 +548,7 @@ export const ru = {
         about: 'О нас',
         feedback: 'Обратная связь',
         pricing: 'Цены',
+        logout: 'Выход'
     },
     stats: {
         studyStats: 'Статистика обучения',
