@@ -7,7 +7,8 @@ const PRICE_IDS = {
     AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
     MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
     IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj',
-    MORE_SENTENCES: 'price_1R5e8hDv6kE7Gata5CKPAu0Z'
+    MORE_SENTENCES: 'price_1R5e8hDv6kE7Gata5CKPAu0Z',
+    BASIC_SUBSCRIPTION: 'price_1R94kODv6kE7Gata9Zwzvvom'
 };
 
 //test
@@ -35,6 +36,8 @@ const handleCheckoutComplete = async (session) => {
         if (!user) {
             throw new Error('User not found');
         }
+
+        let subscriptionUpdate;
 
         switch (priceId) {
             case PRICE_IDS.BASIC_UPGRADE: // Basic Upgrade
@@ -74,7 +77,22 @@ const handleCheckoutComplete = async (session) => {
                 break;
 
             case PRICE_IDS.MONTHLY_SUB: // Monthly Sub
-                const subscriptionUpdate = {
+                subscriptionUpdate = {
+                    tier: 2,
+                    'subscription.status': 'active',
+                    'subscription.startDate': new Date(),
+                    'subscription.stripeSubscriptionId': session.subscription,
+                    'subscription.customerId': session.customer
+                };
+
+                await db.collection('users').updateOne(
+                    { userId },
+                    { $set: subscriptionUpdate }
+                );
+                break;
+
+            case PRICE_IDS.BASIC_SUBSCRIPTION: // Basic Subscription
+                subscriptionUpdate = {
                     tier: 1,
                     'subscription.status': 'active',
                     'subscription.startDate': new Date(),

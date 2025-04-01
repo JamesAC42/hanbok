@@ -22,6 +22,8 @@ const Profile = () => {
     // Don't render anything while loading or if not authenticated
     if (loading || !isAuthenticated) return null;
 
+    const userNotFree = user.tier === 1 || user.tier === 2;
+
     return (
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
@@ -33,8 +35,9 @@ const Profile = () => {
                         <p><strong>{t('profile.email')}:</strong> {user.email}</p>
                         <p>
                             <strong>{t('profile.tier')}:</strong> {
-                                user.tier === 0 ? t('profile.tierTypes.basic') :
-                                user.tier === 1 ? t('profile.tierTypes.plus') :
+                                user.tier === 0 ? t('profile.tierTypes.free') :
+                                user.tier === 1 ? t('profile.tierTypes.basic') :
+                                user.tier === 2 ? t('profile.tierTypes.plus') :
                                 t('profile.tierTypes.unknown')
                             }
                         </p>
@@ -49,41 +52,51 @@ const Profile = () => {
                         )}
                         <p>
                             <strong>{t('profile.remainingAudioGenerations')}:</strong> {
-                                user.tier === 1 ? t('profile.unlimited') :
+                                user.tier === 2 ? t('profile.unlimited') :
                                 user.remainingAudioGenerations == null ? "0" :
                                 user.remainingAudioGenerations
                             }
                         </p>
                         <p>
                             <strong>{t('profile.maxSavedSentences')}:</strong> {
-                                user.tier === 1 ? t('profile.unlimited') :
+                                userNotFree ? t('profile.unlimited') :
                                 user.maxSavedSentences == null ? "0" :
                                 user.maxSavedSentences
                             }
                         </p>
                         <p>
                             <strong>{t('profile.maxSavedWords')}:</strong> {
-                                user.tier === 1 ? t('profile.unlimited') :
+                                userNotFree ? t('profile.unlimited') :
                                 user.maxSavedWords == null ? "0" :
                                 user.maxSavedWords
                             }
                         </p>
                         <p>
                             <strong>{t('profile.remainingImageExtracts')}:</strong> {
-                                user.tier === 1 ? t('profile.unlimited') :
+                                user.tier === 2 ? t('profile.unlimited') :
                                 user.remainingImageExtracts == null ? "0" :
                                 user.remainingImageExtracts
                             }
                         </p>
                         <p>
                             <strong>{t('profile.remainingSentenceAnalyses')}:</strong> {
-                                user.tier === 1 ? t('profile.unlimited') :
+                                userNotFree ? t('profile.unlimited') :
                                 user.remainingSentenceAnalyses == null ? "0" :
                                 user.remainingSentenceAnalyses
                             }
                         </p>
                     </div>
-                    {!user.feedbackAudioCreditRedeemed && (
+                    {
+                        userNotFree && (
+                            <div className={profileStyles.userDetails}>
+                                <h2>{t('profile.manageSubscription')}</h2>
+                                <a href="https://billing.stripe.com/p/login/fZe9EtgcAgFe6UU5kk">
+                                    {t('profile.manageSubscriptionLink')}
+                                </a>
+                            </div>
+                        )
+                    }
+                    {user.tier != 2 && !user.feedbackAudioCreditRedeemed && (
                         <div className={profileStyles.bonusAlert}>
                             <h3>{t('profile.bonusAlert.title')}</h3>
                             <p>
@@ -94,12 +107,17 @@ const Profile = () => {
                     <div className={profileStyles.tierInfo}>
                         {user.tier === 1 ? (
                             <>
+                                <p><strong>{t('profile.tierInfo.basic.title')}:</strong> {t('profile.tierInfo.basic.description')}</p>
+                                <p>{t('profile.tierInfo.moreDetails')} <Link href="/pricing">Pricing</Link> page.</p>
+                            </>
+                        ) : user.tier === 2 ? (
+                            <>
                                 <p><strong>{t('profile.tierInfo.plus.title')}:</strong> {t('profile.tierInfo.plus.description')}</p>
                                 <p>{t('profile.tierInfo.moreDetails')} <Link href="/pricing">Pricing</Link> page.</p>
                             </>
                         ) : (
                             <>
-                                <p><strong>{t('profile.tierInfo.basic.title')}:</strong> {t('profile.tierInfo.basic.description')}</p>
+                                <p><strong>{t('profile.tierInfo.free.title')}:</strong> {t('profile.tierInfo.free.description')}</p>
                                 <p>{t('profile.tierInfo.moreDetails')} <Link href="/pricing">Pricing</Link> page.</p>
                             </>
                         )}

@@ -146,6 +146,7 @@ export const en = {
         email: 'Email',
         tier: 'Tier',
         tierTypes: {
+            free: 'Free',
             basic: 'Basic',
             plus: 'Plus',
             unknown: 'Unknown'
@@ -157,18 +158,28 @@ export const en = {
         unlimited: 'Unlimited',
         maxSavedSentences: 'Max Saved Sentences',
         maxSavedWords: 'Max Saved Words',
+        manageSubscription: 'Manage Subscription',
+        manageSubscriptionLink: 'Click here to manage your subscription',
         bonusAlert: {
             title: 'Get 15 Free Audio Generations! 🎉',
             description: 'Share your feedback with us on our feedback page and receive 15 additional audio generations as a thank you!'
         },
         tierInfo: {
-            plus: {
-                title: 'Plus User Benefits',
-                description: 'Enjoy unlimited audio generations, priority support, and premium features!'
+            free: {
+                title: "Free User Benefits",
+                description: "You have limited sentence analyses, audio generations, image extractions, and saves. Upgrade to Basic for unlimited sentence analyses and saves!"
             },
             basic: {
                 title: 'Basic User Benefits',
-                description: 'You have limited audio generations available. Upgrade for more features and unlimited access.'
+                description: "Enjoy unlimited sentence analyses and saves. Upgrade to Plus for unlimited audio generations and image extractions!"
+            },
+            plus: {
+                title: 'Plus User Benefits',
+                description: 'Enjoy unlimited sentence analyses, audio generations, image extractions, saves, and priority support!'
+            },
+            basic: {
+                title: 'Basic User Benefits',
+                description: ''
             },
             moreDetails: 'For more details, visit our'
         }
@@ -355,13 +366,13 @@ export const en = {
         viewPricing: 'View Pricing',
         maybeLater: 'Maybe Later',
         sentenceAnalysesTitle: 'Weekly Sentence Analysis Limit Reached',
-        sentenceAnalysesMessage: 'You have used all 30 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.',
+        sentenceAnalysesMessage: 'You have used all 30 of your free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         firstFiveUsedTitle: 'Weekly Sentence Analysis Usage',
-        firstFiveUsedMessage: 'You have used 5 out of your 30 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.',
+        firstFiveUsedMessage: 'You have used 5 out of your 30 free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         fifteenRemainingTitle: 'Weekly Sentence Analysis Update',
-        fifteenRemainingMessage: 'You have 15 sentence analyses remaining for this week. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.',
+        fifteenRemainingMessage: 'You have 15 sentence analyses remaining for this week. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         fiveRemainingTitle: 'Weekly Sentence Analysis Alert',
-        fiveRemainingMessage: 'You only have 5 sentence analyses remaining for this week. Upgrade to Premium or purchase additional analyses, or purchase an additional 100 analyses for just $1.'
+        fiveRemainingMessage: 'You only have 5 sentence analyses remaining for this week. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.'
     },
     loginRequired: {
         title: 'Login Required',

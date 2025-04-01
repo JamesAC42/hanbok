@@ -24,7 +24,7 @@ const getWordRelations = async (req, res) => {
         // Check user's tier
         const user = await db.collection('users').findOne({ userId });
         
-        if (!user || user.tier !== 1) {
+        if (!user || user.tier === 0 || user.tier === 1) {
             return res.status(403).json({
                 success: false,
                 error: {

@@ -224,6 +224,18 @@ const submitSentence = async (req, res) => {
     }
 
     // Handle translation mode
+    if (translate === true && !text) {
+        return res.json({   
+            message: {
+                isValid: false,
+                error: {
+                    type: "validation",
+                    message: "Text is required for translation"
+                }
+            }
+        });
+    }
+
     if (translate === true) {
         // Validate translation context
         if (typeof translationContext !== 'string') {
@@ -316,7 +328,7 @@ const submitSentence = async (req, res) => {
     const MAX_BASE64_SIZE = 2.7 * 1024 * 1024; // ~2MB after base64 encoding
 
     // Check if the input is an image in base64 format
-    if (isBase64Image(text)) {
+    if (!translate && isBase64Image(text)) {
 
         if(!user) {
             return res.json({
@@ -336,7 +348,7 @@ const submitSentence = async (req, res) => {
             user.remainingImageExtracts = 20;
         }
 
-        if(user.tier === 0 && user.remainingImageExtracts <= 0) {
+        if((user.tier === 0 || user.tier === 1) && user.remainingImageExtracts <= 0) {
             return res.json({
                 message: {
                     isValid: false,
@@ -404,7 +416,7 @@ const submitSentence = async (req, res) => {
             });
         }
 
-        if(user.tier === 0) {
+        if(user.tier === 0 || user.tier === 1) {
             // Decrement the user's remainingImageExtracts after successful extraction
             await db.collection('users').updateOne(
                 { userId: userId },

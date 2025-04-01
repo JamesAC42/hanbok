@@ -20,7 +20,7 @@ const generateAudio = async (req, res) => {
             });
         }
 
-        if (user.tier === 0) {
+        if (user.tier === 0 || user.tier === 1) {
             const saved = user.remainingAudioGenerations;
             if (saved <= 0) {
                 return res.status(403).json({
@@ -55,7 +55,7 @@ const generateAudio = async (req, res) => {
         );
 
         // Decrement the remaining generations, but don't go below 0
-        if(user.tier === 0) {
+        if(user.tier === 0 || user.tier === 1) {
             await db.collection('users').updateOne(
                 { userId },
                 [
