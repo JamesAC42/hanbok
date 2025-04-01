@@ -243,7 +243,26 @@ export const de = {
             "Wann beginnt der Film?",
             "Das Wetter ist heute wirklich schön.",
             "Ich liebe es, neue Sprachen zu lernen."
-        ]
+        ],
+        about: {
+            exampleBreakdown: "Beispielanalyse",
+            features: "Funktionen",
+            breakdownHeader: "Satzanalyse und Übersetzung",
+            imageToTextHeader: "Bild-zu-Text-Erkennung",
+            flashcardsHeader: "Lernkarten mit zeitlich gestaffelten Wiederholungen",
+            whatUsersSayHeader: "Was Benutzer sagen",
+            callToActionHeader: "Bereit, dein Sprachenlernen zu beschleunigen?",
+            callToAction: "Schließe dich Hunderten von Lernenden an, die Hanbok nutzen, um Koreanisch, Chinesisch, Japanisch und mehr zu meistern.",
+            breakdownParagraph1: "Zergliedere Sätze Wort für Wort mit detaillierten Grammatikerklärungen. Perfekt, um Satzstrukturen zu verstehen und neuen Wortschatz im Kontext zu lernen.",
+            breakdownParagraph2: "Musst du etwas Bestimmtes sagen? Nutze unseren 'Wie sage ich'-Modus - gib einfach deinen Satz auf Deutsch (oder in deiner Muttersprache) ein, spezifiziere den gewünschten Kontext oder die Formalitätsebene, und wir helfen dir, es natürlich auszudrücken. Lerne die perfekte Art, Dinge zu sagen, während du genau verstehst, wie die Übersetzung funktioniert.",
+            imageToTextParagraph: "Lade einfach ein Bild mit Text hoch, und wir extrahieren und analysieren es für dich. Großartig zum Lernen von Materialien aus der realen Welt wie Manga, Manhwa, Anime, TV-Shows, Schildern, Speisekarten oder Social-Media-Beiträgen.",
+            flashcardsParagraph: "Speichere Wörter und Phrasen, die du dir merken möchtest. Unser intelligentes Lernkartensystem hilft dir, sie zum optimalen Zeitpunkt zu wiederholen, um dein Lernen zu maximieren.",
+            whatUsersSayParagraph: "Schließe dich Hunderten von Lernenden an, die Hanbok nutzen, um Koreanisch, Chinesisch, Japanisch und mehr zu meistern.",
+            multiLanguageHeader: "Mehrsprachige Unterstützung",
+            multiLanguageParagraph: "Übersetze zwischen Koreanisch und Deutsch, Englisch, Chinesisch, Japanisch und mehr. Unsere Plattform unterstützt eine breite Palette von Sprachen, so dass es einfach ist, jede Sprache zu lernen, die du möchtest.",
+            mobileSupportHeader: "Mobile Unterstützung",
+            mobileSupportParagraph: "Hanbok ist vollständig responsiv und funktioniert auf allen Geräten. Egal, ob du auf deinem Handy, Tablet oder Desktop bist, du kannst Hanbok zum Lernen nutzen!"
+        }
     },
     sentenceForm: {
         placeholder: 'Geben Sie einen {language} Satz ein...',

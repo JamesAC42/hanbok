@@ -243,7 +243,26 @@ export const tr = {
             "Film saat kaçta başlıyor?",
             "Bugün hava gerçekten güzel.",
             "Yeni diller öğrenmeyi seviyorum."
-        ]
+        ],
+        about: {
+            exampleBreakdown: "Örnek Analiz",
+            features: "Özellikler",
+            breakdownHeader: "Cümle Analizi ve Çeviri",
+            imageToTextHeader: "Görüntüden Metin Tanıma",
+            flashcardsHeader: "Aralıklı Tekrarlama Hafıza Kartları",
+            whatUsersSayHeader: "Kullanıcılar Ne Diyor",
+            callToActionHeader: "Dil öğrenmenizi hızlandırmaya hazır mısınız?",
+            callToAction: "Korece, Çince, Japonca ve daha fazlasını öğrenmek için Hanbok'u kullanan yüzlerce öğrenciye katılın.",
+            breakdownParagraph1: "Ayrıntılı dilbilgisi açıklamalarıyla cümleleri kelime kelime analiz edin. Cümle yapısını anlamak ve bağlam içinde yeni kelimeler öğrenmek için mükemmel.",
+            breakdownParagraph2: "Belirli bir şey mi söylemeniz gerekiyor? 'Nasıl derim' modunu kullanın - Türkçe (veya ana dilinizde) cümlenizi girin, istediğiniz bağlamı veya resmiyet seviyesini belirtin, ve size doğal bir şekilde ifade etmenize yardımcı olalım. Çevirinin nasıl çalıştığını tam olarak anlayarak şeyleri söylemenin mükemmel yolunu öğrenin.",
+            imageToTextParagraph: "Metin içeren bir görüntüyü basitçe yükleyin, biz sizin için çıkaracak ve analiz edeceğiz. Manga, manhwa, anime, TV programları, tabelalar, menüler veya sosyal medya paylaşımları gibi gerçek dünya materyallerinden öğrenmek için harika.",
+            flashcardsParagraph: "Hatırlamak istediğiniz kelimeleri ve ifadeleri kaydedin. Akıllı hafıza kartı sistemimiz, öğrenmenizi en üst düzeye çıkarmak için optimal zamanda gözden geçirmenize yardımcı olur.",
+            whatUsersSayParagraph: "Korece, Çince, Japonca ve daha fazlasını öğrenmek için Hanbok'u kullanan yüzlerce öğrenciye katılın.",
+            multiLanguageHeader: "Çoklu Dil Desteği",
+            multiLanguageParagraph: "Korece ve Türkçe, İngilizce, Çince, Japonca ve daha fazlası arasında çeviri yapın. Platformumuz geniş bir dil yelpazesini destekleyerek istediğiniz dili kolayca öğrenmenizi sağlar.",
+            mobileSupportHeader: "Mobil Destek",
+            mobileSupportParagraph: "Hanbok tamamen duyarlıdır ve tüm cihazlarda çalışır. İster telefonunuzda, tabletinizde veya masaüstünüzde olun, öğrenmek için Hanbok'u kullanabilirsiniz!"
+        }
     },
     sentenceForm: {
         placeholder: '{language} cümlesi girin...',

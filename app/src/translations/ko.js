@@ -110,7 +110,7 @@ export const ko = {
             '프리미엄 사용자를 위한 더 많은 기능!'
         ],
         supportedLanguages: '지원되는 언어',
-        languageSupportDescription: '한복은 이제 여러 언어를 지원하여 다음 언어로 문장을 분석하고 학습할 수 있습니다:',
+        languageSupportDescription: '한복은 이제 여러 언어를 지원하여 다음 언어로 문장을 분석하고 학습할 수 있습니다:'
     },
     feedback: {
         title: '피드백 포럼',
@@ -243,7 +243,26 @@ export const ko = {
             "한국에 가기 전에 한국어를 더 열심히 공부하고 싶어요.",
             "아침에 일어났을 때 머리가 아파서 약을 먹었어요.",
             "이 책은 제가 읽은 책 중에서 가장 재미있었던 것 같아요."
-        ]
+        ],
+        about: {
+            exampleBreakdown: "예문 분석",
+            features: "기능",
+            breakdownHeader: "문장 분석 및 번역",
+            imageToTextHeader: "이미지에서 텍스트 인식",
+            flashcardsHeader: "간격 반복 플래시카드",
+            whatUsersSayHeader: "사용자들의 평가",
+            callToActionHeader: "언어 학습을 가속화할 준비가 되셨나요?",
+            callToAction: "한복을 사용하여 한국어, 중국어, 일본어 등을 마스터하는 수백 명의 학습자들과 함께하세요.",
+            breakdownParagraph1: "단어별로 문장을 분석하고 자세한 문법 설명을 제공합니다. 문장 구조를 이해하고 문맥 속에서 새로운 어휘를 학습하는 데 완벽합니다.",
+            breakdownParagraph2: "특정 문장을 말하고 싶으신가요? '어떻게 말하나요' 모드를 사용하세요 - 한국어(또는 모국어)로 문장을 입력하고, 원하는 맥락이나 공식성 수준을 지정하면, 자연스럽게 표현할 수 있도록 도와드립니다. 번역이 어떻게 작동하는지 정확히 이해하면서 완벽한 표현 방법을 배우세요.",
+            imageToTextParagraph: "텍스트가 포함된 이미지를 간단히 업로드하면, 저희가 텍스트를 추출하고 분석해 드립니다. 만화, 만화, 애니메이션, TV 프로그램, 표지판, 메뉴 또는 소셜 미디어 게시물과 같은 실제 자료에서 학습하는 데 좋습니다.",
+            flashcardsParagraph: "기억하고 싶은 단어와 문구를 저장하세요. 스마트 플래시카드 시스템이 최적의 시간에 복습을 도와 학습 효과를 극대화합니다.",
+            whatUsersSayParagraph: "한복을 사용하여 한국어, 중국어, 일본어 등을 마스터하는 수백 명의 학습자들과 함께하세요.",
+            multiLanguageHeader: "다국어 지원",
+            multiLanguageParagraph: "한국어와 영어, 중국어, 일본어 등 다양한 언어 간 번역을 지원합니다. 저희 플랫폼은 광범위한 언어를 지원하여 원하는 언어를 쉽게 학습할 수 있습니다.",
+            mobileSupportHeader: "모바일 지원",
+            mobileSupportParagraph: "한복은 완전히 반응형이며 모든 기기에서 작동합니다. 스마트폰, 태블릿 또는 데스크톱 어디에서나 한복을 사용하여 학습할 수 있습니다!"
+        }
     },
     sentenceForm: {
         placeholder: '{language} 문장을 입력하세요...',

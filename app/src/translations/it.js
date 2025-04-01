@@ -243,7 +243,26 @@ export const it = {
             "Mi piace molto studiare le lingue.",
             "A che ora inizia il film?",
             "Ieri sono andato al supermercato."
-        ]
+        ],
+        about: {
+            exampleBreakdown: "Esempio di analisi",
+            features: "Funzionalità",
+            breakdownHeader: "Analisi e traduzione delle frasi",
+            imageToTextHeader: "Riconoscimento testo da immagini",
+            flashcardsHeader: "Flashcard con ripetizione spaziata",
+            whatUsersSayHeader: "Cosa dicono gli utenti",
+            callToActionHeader: "Pronto ad accelerare il tuo apprendimento linguistico?",
+            callToAction: "Unisciti a centinaia di studenti che usano Hanbok per padroneggiare coreano, cinese, giapponese e altro.",
+            breakdownParagraph1: "Analizza le frasi parola per parola con spiegazioni grammaticali dettagliate. Perfetto per comprendere la struttura delle frasi e imparare nuovo vocabolario nel contesto.",
+            breakdownParagraph2: "Hai bisogno di dire qualcosa di specifico? Usa la nostra modalità 'Come si dice' - basta inserire la tua frase in italiano (o nella tua lingua madre), specificare il contesto desiderato o il livello di formalità, e ti aiuteremo a esprimerlo naturalmente. Impara il modo perfetto di dire le cose comprendendo esattamente come funziona la traduzione.",
+            imageToTextParagraph: "Carica semplicemente un'immagine contenente testo, e lo estrarremo e analizzeremo per te. Ottimo per imparare da materiali del mondo reale come manga, manhwa, anime, programmi TV, insegne, menu o post sui social media.",
+            flashcardsParagraph: "Salva parole e frasi che vuoi ricordare. Il nostro sistema intelligente di flashcard ti aiuta a rivederle al momento ottimale per massimizzare il tuo apprendimento.",
+            whatUsersSayParagraph: "Unisciti a centinaia di studenti che usano Hanbok per padroneggiare coreano, cinese, giapponese e altro.",
+            multiLanguageHeader: "Supporto multilingue",
+            multiLanguageParagraph: "Traduci tra coreano e italiano, inglese, cinese, giapponese e altro. La nostra piattaforma supporta un'ampia gamma di lingue, rendendo facile imparare qualsiasi lingua tu desideri.",
+            mobileSupportHeader: "Supporto mobile",
+            mobileSupportParagraph: "Hanbok è completamente responsive e funziona su tutti i dispositivi. Che tu sia sul tuo telefono, tablet o desktop, puoi usare Hanbok per imparare!"
+        }
     },
     sentenceForm: {
         placeholder: 'Inserisci una frase in {language}...',

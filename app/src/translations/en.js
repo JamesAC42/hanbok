@@ -245,7 +245,26 @@ export const en = {
             "I have been learning Korean for three years, but I'm still not fluent.",
             "Could you please tell me where the nearest subway station is?",
             "If it rains tomorrow, I will stay home and watch a movie instead of going to the park."
-        ]
+        ],
+        about: {
+            exampleBreakdown: "Example Breakdown",
+            features: "Features",
+            breakdownHeader: "Sentence Breakdown and Translation",
+            imageToTextHeader: "Image to Text Recognition",
+            flashcardsHeader: "Spaced Repetition Flashcards",
+            whatUsersSayHeader: "What Users Are Saying",
+            callToActionHeader: "Ready to accelerate your language learning?",
+            callToAction: "Join hundreds of learners using Hanbok to master Korean, Chinese, Japanese and more.",
+            breakdownParagraph1: "Break down sentences word by word with detailed grammar explanations. Perfect for understanding sentence structure and learning new vocabulary in context.",
+            breakdownParagraph2: "Need to say something specific? Use our 'How do I say' mode - just enter your sentence in English (or your native language), specify the desired context or formality level, and we'll help you express it naturally. Learn the perfect way to say things while understanding exactly how the translation works.",
+            imageToTextParagraph: "Simply upload an image containing text, and we'll extract and analyze it for you. Great for learning from real-world materials like manga, manhwa, anime, TV shows, signs, menus, or social media posts.",
+            flashcardsParagraph: "Save words and phrases you want to remember. Our smart flashcard system helps you review them at the optimal time to maximize your learning.",
+            whatUsersSayParagraph: "Join hundreds of learners using Hanbok to master Korean, Chinese, Japanese and more.",
+            multiLanguageHeader: "Multi-Language Support",
+            multiLanguageParagraph: "Translate between Korean and English, Chinese, Japanese, and more. Our platform supports a wide range of languages, making it easy to learn any language you want.",
+            mobileSupportHeader: "Mobile Support",
+            mobileSupportParagraph: "Hanbok is fully responsive and works on all devices. Whether you're on your phone, tablet, or desktop, you can use Hanbok to learn!",
+        }
     },
     sentenceForm: {
         placeholder: '{language} sentence to analyze...',
@@ -538,6 +557,7 @@ export const en = {
         about: 'About',
         feedback: 'Feedback',
         pricing: 'Pricing',
+        lyrics: 'Lyrics',
         logout: 'Logout'
     },
     stats: {

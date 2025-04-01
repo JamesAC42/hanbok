@@ -243,7 +243,26 @@ export const nl = {
             "Hoe laat begint de film?",
             "Het weer is vandaag echt mooi.",
             "Ik hou van het leren van nieuwe talen."
-        ]
+        ],
+        about: {
+            exampleBreakdown: "Voorbeeldanalyse",
+            features: "Functies",
+            breakdownHeader: "Zinsontleding en Vertaling",
+            imageToTextHeader: "Afbeelding naar Tekstherkenning",
+            flashcardsHeader: "Spaced Repetition Flashcards",
+            whatUsersSayHeader: "Wat gebruikers zeggen",
+            callToActionHeader: "Klaar om je taalvaardigheden te versnellen?",
+            callToAction: "Doe mee met honderden leerlingen die Hanbok gebruiken om Koreaans, Chinees, Japans en meer te leren.",
+            breakdownParagraph1: "Ontleed zinnen woord voor woord met gedetailleerde grammaticale uitleg. Perfect voor het begrijpen van zinsstructuur en het leren van nieuwe woordenschat in context.",
+            breakdownParagraph2: "Wil je iets specifieks zeggen? Gebruik onze 'Hoe zeg ik' modus - voer gewoon je zin in het Nederlands (of je moedertaal) in, specificeer de gewenste context of formaliteitsniveau, en we helpen je het natuurlijk uit te drukken. Leer de perfecte manier om dingen te zeggen terwijl je precies begrijpt hoe de vertaling werkt.",
+            imageToTextParagraph: "Upload eenvoudig een afbeelding met tekst, en we extraheren en analyseren deze voor je. Ideaal voor het leren van materialen uit de echte wereld zoals manga, manhwa, anime, tv-shows, borden, menu's of sociale media-berichten.",
+            flashcardsParagraph: "Sla woorden en zinnen op die je wilt onthouden. Ons slimme flashcardsysteem helpt je ze op het optimale moment te herhalen om je leerproces te maximaliseren.",
+            whatUsersSayParagraph: "Doe mee met honderden leerlingen die Hanbok gebruiken om Koreaans, Chinees, Japans en meer te leren.",
+            multiLanguageHeader: "Ondersteuning voor Meerdere Talen",
+            multiLanguageParagraph: "Vertaal tussen Koreaans en Nederlands, Engels, Chinees, Japans en meer. Ons platform ondersteunt een breed scala aan talen, waardoor het gemakkelijk is om elke taal te leren die je wilt.",
+            mobileSupportHeader: "Mobiele Ondersteuning",
+            mobileSupportParagraph: "Hanbok is volledig responsive en werkt op alle apparaten. Of je nu op je telefoon, tablet of desktop zit, je kunt Hanbok gebruiken om te leren!"
+        }
     },
     sentenceForm: {
         placeholder: 'Voer een {language} zin in...',

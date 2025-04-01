@@ -243,7 +243,26 @@ export const ja = {
             "この本はとても面白いです。",
             "電車は何時に来ますか？",
             "日本語の勉強が楽しいです。"
-        ]
+        ],
+        about: {
+            exampleBreakdown: "例文解析",
+            features: "機能",
+            breakdownHeader: "文の分解と翻訳",
+            imageToTextHeader: "画像からテキスト認識",
+            flashcardsHeader: "間隔反復学習カード",
+            whatUsersSayHeader: "ユーザーの声",
+            callToActionHeader: "言語学習を加速する準備はできましたか？",
+            callToAction: "Hanbokを使って韓国語、中国語、日本語などをマスターしている何百人もの学習者に参加しましょう。",
+            breakdownParagraph1: "文を単語ごとに分解し、詳細な文法解説を提供します。文構造を理解し、コンテキスト内で新しい語彙を学ぶのに最適です。",
+            breakdownParagraph2: "特定のフレーズを言いたいですか？「どう言えばいいですか」モードを使用してください - 日本語（または母国語）で文を入力し、希望のコンテキストや丁寧さのレベルを指定すれば、自然に表現するお手伝いをします。翻訳がどのように機能するかを正確に理解しながら、物事を言う完璧な方法を学びましょう。",
+            imageToTextParagraph: "テキストを含む画像を単純にアップロードするだけで、私たちがあなたのためにそれを抽出して分析します。漫画、マンファ、アニメ、テレビ番組、看板、メニュー、ソーシャルメディアの投稿など、実世界の教材から学ぶのに最適です。",
+            flashcardsParagraph: "覚えたい単語やフレーズを保存しましょう。スマートなフラッシュカードシステムが最適なタイミングでそれらを復習するのを助け、学習を最大化します。",
+            whatUsersSayParagraph: "Hanbokを使って韓国語、中国語、日本語などをマスターしている何百人もの学習者に参加しましょう。",
+            multiLanguageHeader: "多言語サポート",
+            multiLanguageParagraph: "韓国語と日本語、英語、中国語などの間で翻訳できます。私たちのプラットフォームは幅広い言語をサポートしており、学びたい言語を簡単に学ぶことができます。",
+            mobileSupportHeader: "モバイルサポート",
+            mobileSupportParagraph: "Hanbokは完全にレスポンシブで、すべてのデバイスで動作します。スマートフォン、タブレット、デスクトップのどれを使っていても、Hanbokを使って学習できます！"
+        }
     },
     sentenceForm: {
         placeholder: '{language}の文章を入力してください...',

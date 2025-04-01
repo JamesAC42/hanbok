@@ -243,7 +243,26 @@ export const zh = {
             "你喜欢吃什么菜？",
             "现在几点了？",
             "我很喜欢学习语言。"
-        ]
+        ],
+        about: {
+            exampleBreakdown: "示例分析",
+            features: "功能",
+            breakdownHeader: "句子分解和翻译",
+            imageToTextHeader: "图像文字识别",
+            flashcardsHeader: "间隔重复记忆卡",
+            whatUsersSayHeader: "用户评价",
+            callToActionHeader: "准备加速您的语言学习吗？",
+            callToAction: "加入数百名使用Hanbok掌握韩语、中文、日语等语言的学习者。",
+            breakdownParagraph1: "逐词分解句子，提供详细的语法解释。完美地理解句子结构并在上下文中学习新词汇。",
+            breakdownParagraph2: "需要说些特定的话？使用我们的'如何说'模式 - 只需用中文（或您的母语）输入句子，指定所需的语境或正式程度，我们将帮助您自然地表达。学习完美表达的方式，同时准确理解翻译的工作原理。",
+            imageToTextParagraph: "只需上传包含文字的图像，我们将为您提取并分析文本。非常适合从漫画、韩漫、动漫、电视节目、标志、菜单或社交媒体帖子等真实世界材料中学习。",
+            flashcardsParagraph: "保存您想记住的单词和短语。我们的智能记忆卡系统会在最佳时间帮助您复习，最大化您的学习效果。",
+            whatUsersSayParagraph: "加入数百名使用Hanbok掌握韩语、中文、日语等语言的学习者。",
+            multiLanguageHeader: "多语言支持",
+            multiLanguageParagraph: "在韩语和中文、英语、日语等语言之间翻译。我们的平台支持广泛的语言，使您可以轻松学习任何想学的语言。",
+            mobileSupportHeader: "移动设备支持",
+            mobileSupportParagraph: "Hanbok完全响应式，适用于所有设备。无论您使用手机、平板还是桌面电脑，都可以使用Hanbok学习！"
+        }
     },
     sentenceForm: {
         placeholder: '请输入{language}句子...',

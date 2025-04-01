@@ -17,6 +17,8 @@ import {FluentHatGraduation32Filled} from '@/components/icons/GradCap';
 import {IcSharpQueueMusic} from '@/components/icons/MusicLyrics';
 import {IcBaselineLiveHelp} from '@/components/icons/QuestionBubble';
 
+import AboutHome from '@/components/AboutHome';
+
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
     const searchParams = useSearchParams();
@@ -205,6 +207,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                                 </div>                            
                             </Link>
                         </div>
+
+                        <AboutHome />
                     
                         <div className={styles.legal}>
                                 <a href="/terms-of-service.html">Terms of Service</a>
