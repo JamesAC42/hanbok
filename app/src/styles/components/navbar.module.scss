@@ -27,6 +27,16 @@
             transform:scale(2);
         }
     }
+
+    @media screen and (max-height: 800px) {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 1.25rem;
+
+        a, .navBarItemIcon {
+            font-size:0.9rem;
+        }
+    }
 }
 
 @mixin expanded-text {
@@ -52,37 +62,41 @@
         //transform:translate(-0.25rem, -0.25rem) !important;  
         box-shadow: 0.5rem 0.5rem 0 #171717;
         &:first-child {
-            box-shadow: 0.5rem 0.5rem 0 #c93838;
+            box-shadow: 0.5rem 0.5rem 0 #613a1b;
             background-color: #c93838;
             border-color:#000000;
         }
         &:nth-child(2) {
-            box-shadow: 0.5rem 0.5rem 0 #48a940;
+            box-shadow: 0.5rem 0.5rem 0 #17584a;
             background-color: #48a940;
 
         }
         &:nth-child(3) {
-            box-shadow: 0.5rem 0.5rem 0 #403bd1;
+            box-shadow: 0.5rem 0.5rem 0 #21232d;
             background-color: #403bd1;
 
         }
         &:nth-child(4) {
-            box-shadow: 0.5rem 0.5rem 0 #d1b936;
+            box-shadow: 0.5rem 0.5rem 0 #385c1a;
             background-color: #d1b936;
 
         }
         &:nth-child(5) {
-            box-shadow: 0.5rem 0.5rem 0 #1a946a;
+            box-shadow: 0.5rem 0.5rem 0 #214268;
             background-color: #1a946a;
 
         }
         &:nth-child(6) {
-            box-shadow: 0.5rem 0.5rem 0 #c74683;
+            box-shadow: 0.5rem 0.5rem 0 #4d1353;
             background-color: #c74683;
         }
         &:nth-child(7) {
-            box-shadow: 0.5rem 0.5rem 0 #3a6ccf;
+            box-shadow: 0.5rem 0.5rem 0 #2e194d;
             background-color: #3a6ccf;
+        }
+        &:nth-child(8) {
+            box-shadow: 0.5rem 0.5rem 0 #0a340f;
+            background-color: #24983d;
         }
     }
 }
@@ -110,7 +124,9 @@
     .navBarContent {
         display: flex;
         flex-direction: column;
-        gap:2.5rem;
+        height:100dvh;
+        justify-content: center;
+        gap:1.5rem;
         padding:2rem 1rem 2rem 1rem;
 
         @media screen and (max-width: 1200px) {
@@ -169,7 +185,7 @@
 
                 &:hover {
                     background:#5073ba;
-                    box-shadow: 0.5rem 0.5rem 0 #94b7e3;
+                    box-shadow: 0.5rem 0.5rem 0 #311a70;
                 }
             }
 
@@ -180,10 +196,6 @@
         
         @media screen and (max-height: 800px) {
             gap:1rem;
-        }  
-        
-        @media screen and (max-height: 600px) {
-            transform:scale(0.8);
         }
     }
 }
@@ -198,6 +210,12 @@
     z-index: 1011;
     @media screen and (max-width: 1200px) {
         display:flex;
+    }
+
+    @media screen and (max-height: 800px) {
+        width: 3.125rem;
+        height: 3.125rem;
+        border-radius: 1.575rem;
     }
 }
 

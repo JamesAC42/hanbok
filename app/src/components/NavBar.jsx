@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/components/navbar.module.scss';
 import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { MaterialSymbolsStyleCards } from './icons/Cards';
 import { MaterialSymbolsBookmarkSharp } from './icons/Bookmark';
@@ -23,6 +24,25 @@ const NavBar = () => {
     const { t } = useLanguage();
     
     const totalItems = user ? 6 : 3;
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            const navBar = document.querySelector(`.${styles.navBar}`);
+            const navToggle = document.querySelector(`.${styles.navBarToggle}`);
+            
+            if (isNavVisible && navBar && !navBar.contains(event.target) && !navToggle.contains(event.target)) {
+                setIsNavVisible(false);
+            }
+        };
+
+        if (isNavVisible) {
+            document.addEventListener('click', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [isNavVisible]);
 
     const handleLogout = () => {
         logout();
