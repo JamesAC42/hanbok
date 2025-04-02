@@ -271,6 +271,96 @@ app.get('/api/admin/email-list', isAuthenticated, async (req, res) => {
     getEmailList(req, res);
 });
 
+// Lyrics routes
+// Admin routes
+app.get('/api/admin/lyrics', isAuthenticated, async (req, res) => {
+    const { getAllLyrics } = require('./controllers/lyrics/adminLyrics');
+    getAllLyrics(req, res);
+});
+
+app.post('/api/admin/lyrics', isAuthenticated, async (req, res) => {
+    const { addLyrics } = require('./controllers/lyrics/adminLyrics');
+    addLyrics(req, res);
+});
+
+app.put('/api/admin/lyrics/:lyricId', isAuthenticated, async (req, res) => {
+    const { updateLyrics } = require('./controllers/lyrics/adminLyrics');
+    updateLyrics(req, res);
+});
+
+app.put('/api/admin/lyrics/:lyricId/published', isAuthenticated, async (req, res) => {
+    const { togglePublished } = require('./controllers/lyrics/adminLyrics');
+    togglePublished(req, res);
+});
+
+app.delete('/api/admin/lyrics/:lyricId', isAuthenticated, async (req, res) => {
+    const { deleteLyrics } = require('./controllers/lyrics/adminLyrics');
+    deleteLyrics(req, res);
+});
+
+// Lyrics analysis routes
+app.post('/api/admin/lyrics/:lyricId/analysis', isAuthenticated, async (req, res) => {
+    const { initializeAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    initializeAnalysis(req, res);
+});
+
+app.put('/api/admin/analysis/:analysisId', isAuthenticated, async (req, res) => {
+    const { updateAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    updateAnalysis(req, res);
+});
+
+app.delete('/api/admin/analysis/:analysisId', isAuthenticated, async (req, res) => {
+    const { deleteAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    deleteAnalysis(req, res);
+});
+
+// Public lyrics routes
+app.get('/api/lyrics', async (req, res) => {
+    const { getPublishedLyrics } = require('./controllers/lyrics/publicLyrics');
+    getPublishedLyrics(req, res);
+});
+
+app.get('/api/lyrics/filters', async (req, res) => {
+    const { getFilterOptions } = require('./controllers/lyrics/publicLyrics');
+    getFilterOptions(req, res);
+});
+
+app.get('/api/lyrics/:lyricId', async (req, res) => {
+    const { getPublishedLyric } = require('./controllers/lyrics/publicLyrics');
+    getPublishedLyric(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/analysis', async (req, res) => {
+    const { getAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    getAnalysis(req, res);
+});
+
+// Lyric suggestions routes
+app.get('/api/lyrics/suggestions', async (req, res) => {
+    const { getSuggestions } = require('./controllers/lyrics/lyricSuggestions');
+    getSuggestions(req, res);
+});
+
+app.post('/api/lyrics/suggestions', isAuthenticated, async (req, res) => {
+    const { addSuggestion } = require('./controllers/lyrics/lyricSuggestions');
+    addSuggestion(req, res);
+});
+
+app.post('/api/lyrics/suggestions/:suggestionId/upvote', isAuthenticated, async (req, res) => {
+    const { upvoteSuggestion } = require('./controllers/lyrics/lyricSuggestions');
+    upvoteSuggestion(req, res);
+});
+
+app.put('/api/admin/lyrics/suggestions/:suggestionId/status', isAuthenticated, async (req, res) => {
+    const { updateSuggestionStatus } = require('./controllers/lyrics/lyricSuggestions');
+    updateSuggestionStatus(req, res);
+});
+
+app.delete('/api/admin/lyrics/suggestions/:suggestionId', isAuthenticated, async (req, res) => {
+    const { deleteSuggestion } = require('./controllers/lyrics/lyricSuggestions');
+    deleteSuggestion(req, res);
+});
+
 // Connect to Redis before starting the server
 async function startServer() {
   try {
