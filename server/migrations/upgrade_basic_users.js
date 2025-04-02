@@ -48,12 +48,25 @@ async function run() {
 
         // Process each user in the current batch
         for (const user of batchUsers) {
-          await db.collection('users').updateOne(
-            { _id: user._id },
-            { 
-              $set: { tier: 2 }
+          try {
+            // Use findOneAndUpdate to ensure we don't violate schema validation
+            const result = await db.collection('users').findOneAndUpdate(
+              { _id: user._id },
+              { 
+                $set: { tier: 2 }
+              },
+              { 
+                returnDocument: 'after',
+                runValidators: true
+              }
+            );
+            
+            if (!result.value) {
+              console.error(`Failed to update user ${user._id}: User not found`);
             }
-          );
+          } catch (error) {
+            console.error(`Failed to update user ${user._id}:`, error.message);
+          }
         }
       }
     }
