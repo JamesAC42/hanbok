@@ -146,6 +146,7 @@ export const tr = {
         email: 'E-posta',
         tier: 'Seviye',
         tierTypes: {
+            free: 'Ücretsiz',
             basic: 'Temel',
             plus: 'Plus',
             unknown: 'Bilinmiyor'
@@ -154,21 +155,27 @@ export const tr = {
         remainingImageExtracts: 'Kalan Görüntü Çıkarımları',
         unlimited: 'Sınırsız',
         maxSavedSentences: 'Maksimum Kaydedilen Cümleler',
-        maxSavedWords: 'Maksimum Kaydedilen Kelimeler',
+        maxSavedWords: 'Maksimum kaydedilen kelime',
+        manageSubscription: 'Abonelik yönetimi',
+        manageSubscriptionLink: 'Aboneliğinizi yönetmek için buraya tıklayın',
         bonusAlert: {
             title: '15 Ücretsiz Ses Üretimi Kazanın! 🎉',
             description: 'Geri bildirim sayfamızda geri bildirimlerinizi paylaşın ve teşekkür olarak 15 ek ses üretimi kazanın!'
         },
         tierInfo: {
-            plus: {
-                title: 'Plus Kullanıcı Avantajları',
-                description: 'Sınırsız ses üretimi, öncelikli destek ve premium özelliklerin keyfini çıkarın!'
+            free: {
+                title: "Ücretsiz Kullanıcı Avantajları",
+                description: "Sınırlı cümle analizi, ses oluşturma, görsel çıkarma ve kaydetme özelliğiniz var. Sınırsız analiz ve kaydetme için Temel'e yükseltin!"
             },
             basic: {
                 title: 'Temel Kullanıcı Avantajları',
-                description: 'Sınırlı ses üretimi hakkınız var. Daha fazla özellik ve sınırsız erişim için yükseltin.'
+                description: "Sınırsız analiz ve kaydetmenin keyfini çıkarın. Sınırsız ses oluşturma ve görsel çıkarma için Plus'a yükseltin!"
             },
-            moreDetails: 'Daha fazla ayrıntı için, ziyaret edin'
+            plus: {
+                title: 'Plus Kullanıcı Avantajları',
+                description: 'Sınırsız cümle analizi, ses oluşturma, görsel çıkarma, kaydetme ve öncelikli destek özelliklerinin keyfini çıkarın!'
+            },
+            moreDetails: 'Daha fazla detay için ziyaret edin'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const tr = {
         viewPricing: 'Fiyatları Görüntüle',
         maybeLater: 'Belki Daha Sonra',
         sentenceAnalysesTitle: 'Haftalık Cümle Analizi Sınırına Ulaşıldı',
-        sentenceAnalysesMessage: '30 ücretsiz haftalık cümle analizinizin tamamını kullandınız. Sınırsız analiz için Premium\'a yükseltin veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        sentenceAnalysesMessage: 'Bu haftaki 30 ücretsiz cümle analizinizi kullandınız. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
         firstFiveUsedTitle: 'Haftalık Cümle Analizi Kullanımı',
-        firstFiveUsedMessage: '30 ücretsiz haftalık cümle analizinden 5 tanesini kullandınız. Sınırsız analiz için Premium\'a yükseltin veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        firstFiveUsedMessage: 'Bu haftaki 30 ücretsiz cümle analizinizden 5\'ini kullandınız. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
         fifteenRemainingTitle: 'Haftalık Cümle Analizi Güncellemesi',
-        fifteenRemainingMessage: 'Bu hafta için 15 cümle analiziniz kaldı. Sınırsız analiz için Premium\'a yükseltin veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        fifteenRemainingMessage: 'Bu hafta için 15 cümle analiziniz kaldı. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
         fiveRemainingTitle: 'Haftalık Cümle Analizi Uyarısı',
-        fiveRemainingMessage: 'Bu hafta için sadece 5 cümle analiziniz kaldı. Premium\'a yükseltin veya ek analiz satın alın, ya da sadece 1$ karşılığında 100 ek analiz satın alın.'
+        fiveRemainingMessage: 'Bu hafta için sadece 5 cümle analiziniz kaldı. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.'
     },
     loginRequired: {
         title: 'Giriş Gerekiyor',

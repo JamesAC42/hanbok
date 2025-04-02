@@ -146,6 +146,7 @@ export const nl = {
         email: 'E-mail',
         tier: 'Niveau',
         tierTypes: {
+            free: 'Gratis',
             basic: 'Basis',
             plus: 'Plus',
             unknown: 'Onbekend'
@@ -155,20 +156,26 @@ export const nl = {
         unlimited: 'Onbeperkt',
         maxSavedSentences: 'Maximaal opgeslagen zinnen',
         maxSavedWords: 'Maximaal opgeslagen woorden',
+        manageSubscription: 'Abonnement beheren',
+        manageSubscriptionLink: 'Klik hier om uw abonnement te beheren',
         bonusAlert: {
             title: 'Ontvang 15 gratis audio-generaties! 🎉',
             description: 'Deel je feedback op onze feedbackpagina en ontvang 15 extra audio-generaties als dank!'
         },
         tierInfo: {
-            plus: {
-                title: 'Plusgebruikersvoordelen',
-                description: 'Geniet van onbeperkte audio-generaties, prioriteitsondersteuning en premiumfuncties!'
+            free: {
+                title: "Voordelen voor Gratis Gebruikers",
+                description: "U heeft beperkte zinsanalyses, audiogeneratie, afbeeldingsextractie en opslag. Upgrade naar Basis voor onbeperkte analyses en opslag!"
             },
             basic: {
-                title: 'Basisgebruikersvoordelen',
-                description: 'Je hebt beperkte audio-generaties beschikbaar. Upgrade voor meer functies en onbeperkte toegang.'
+                title: 'Voordelen voor Basis Gebruikers',
+                description: "Geniet van onbeperkte analyses en opslag. Upgrade naar Plus voor onbeperkte audiogeneratie en afbeeldingsextractie!"
             },
-            moreDetails: 'Voor meer details, bezoek onze'
+            plus: {
+                title: 'Voordelen voor Plus Gebruikers',
+                description: 'Geniet van onbeperkte zinsanalyses, audiogeneratie, afbeeldingsextractie, opslag en prioriteitsondersteuning!'
+            },
+            moreDetails: 'Voor meer details, bezoek'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const nl = {
         viewPricing: 'Bekijk prijzen',
         maybeLater: 'Misschien later',
         sentenceAnalysesTitle: 'Wekelijkse limiet voor zinsanalyses bereikt',
-        sentenceAnalysesMessage: 'Je hebt alle 30 gratis wekelijkse zinsanalyses gebruikt. Upgrade naar Premium voor onbeperkte analyses, of koop 100 extra analyses voor slechts $1.',
+        sentenceAnalysesMessage: 'U heeft uw 30 gratis zinsanalyses voor deze week opgebruikt. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
         firstFiveUsedTitle: 'Gebruik van wekelijkse zinsanalyses',
-        firstFiveUsedMessage: 'Je hebt 5 van je 30 gratis wekelijkse zinsanalyses gebruikt. Overweeg om te upgraden naar Premium voor onbeperkte analyses, of koop 100 extra analyses voor slechts $1.',
+        firstFiveUsedMessage: 'U heeft 5 van uw 30 gratis zinsanalyses voor deze week gebruikt. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
         fifteenRemainingTitle: 'Update wekelijkse zinsanalyse',
-        fifteenRemainingMessage: 'Je hebt nog 15 zinsanalyses over voor deze week. Upgrade naar Premium voor onbeperkte analyses, of koop 100 extra analyses voor slechts $1.',
+        fifteenRemainingMessage: 'U heeft nog 15 zinsanalyses over voor deze week. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
         fiveRemainingTitle: 'Waarschuwing wekelijkse zinsanalyse',
-        fiveRemainingMessage: 'Je hebt nog maar 5 zinsanalyses over voor deze week. Upgrade naar Premium of koop extra analyses, of koop 100 extra analyses voor slechts $1.'
+        fiveRemainingMessage: 'U heeft nog maar 5 zinsanalyses over voor deze week. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.'
     },
     loginRequired: {
         title: 'Inloggen vereist',

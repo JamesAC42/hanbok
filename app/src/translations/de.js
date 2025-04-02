@@ -146,6 +146,7 @@ export const de = {
         email: 'E-Mail',
         tier: 'Stufe',
         tierTypes: {
+            free: 'Kostenlos',
             basic: 'Basis',
             plus: 'Plus',
             unknown: 'Unbekannt'
@@ -154,21 +155,27 @@ export const de = {
         remainingImageExtracts: 'Verbleibende Bildextraktionen',
         unlimited: 'Unbegrenzt',
         maxSavedSentences: 'Maximal gespeicherte Sätze',
-        maxSavedWords: 'Maximal gespeicherte Wörter',
+        maxSavedWords: 'Maximale gespeicherte Wörter',
+        manageSubscription: 'Abonnement verwalten',
+        manageSubscriptionLink: 'Klicken Sie hier, um Ihr Abonnement zu verwalten',
         bonusAlert: {
             title: 'Erhalten Sie 15 kostenlose Audio-Generierungen! 🎉',
             description: 'Teilen Sie Ihr Feedback auf unserer Feedback-Seite und erhalten Sie 15 zusätzliche Audio-Generierungen als Dankeschön!'
         },
         tierInfo: {
-            plus: {
-                title: 'Plus-Nutzer-Vorteile',
-                description: 'Genießen Sie unbegrenzte Audio-Generierungen, Prioritätsunterstützung und Premium-Funktionen!'
+            free: {
+                title: "Vorteile für kostenlose Nutzer",
+                description: "Sie haben begrenzte Satzanalysen, Audiogenerierung, Bildextraktion und Speicherung. Aktualisieren Sie auf Basis für unbegrenzte Analysen und Speicherung!"
             },
             basic: {
-                title: 'Basis-Nutzer-Vorteile',
-                description: 'Sie haben begrenzte Audio-Generierungen zur Verfügung. Upgrade für mehr Funktionen und unbegrenzten Zugang.'
+                title: 'Vorteile für Basis-Nutzer',
+                description: "Genießen Sie unbegrenzte Analysen und Speicherung. Aktualisieren Sie auf Plus für unbegrenzte Audiogenerierung und Bildextraktion!"
             },
-            moreDetails: 'Für weitere Details besuchen Sie unsere'
+            plus: {
+                title: 'Vorteile für Plus-Nutzer',
+                description: 'Genießen Sie unbegrenzte Satzanalysen, Audiogenerierung, Bildextraktion, Speicherung und priorisierten Support!'
+            },
+            moreDetails: 'Weitere Details finden Sie unter'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const de = {
         viewPricing: 'Preise anzeigen',
         maybeLater: 'Vielleicht später',
         sentenceAnalysesTitle: 'Wöchentliches Limit für Satzanalysen erreicht',
-        sentenceAnalysesMessage: 'Sie haben alle Ihre 30 kostenlosen wöchentlichen Satzanalysen aufgebraucht. Upgraden Sie auf Premium für unbegrenzte Analysen oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        sentenceAnalysesMessage: 'Sie haben Ihre 30 kostenlosen Satzanalysen für diese Woche aufgebraucht. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
         firstFiveUsedTitle: 'Wöchentliche Nutzung der Satzanalysen',
-        firstFiveUsedMessage: 'Sie haben 5 Ihrer 30 kostenlosen wöchentlichen Satzanalysen verwendet. Erwägen Sie ein Upgrade auf Premium für unbegrenzte Analysen oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        firstFiveUsedMessage: 'Sie haben 5 Ihrer 30 kostenlosen Satzanalysen für diese Woche verwendet. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
         fifteenRemainingTitle: 'Wöchentliches Update der Satzanalysen',
-        fifteenRemainingMessage: 'Sie haben noch 15 Satzanalysen für diese Woche übrig. Upgraden Sie auf Premium für unbegrenzte Analysen oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        fifteenRemainingMessage: 'Sie haben noch 15 Satzanalysen für diese Woche übrig. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
         fiveRemainingTitle: 'Wöchentliche Warnung für Satzanalysen',
-        fiveRemainingMessage: 'Sie haben nur noch 5 Satzanalysen für diese Woche übrig. Upgraden Sie auf Premium oder kaufen Sie zusätzliche Analysen, oder kaufen Sie 100 zusätzliche Analysen für nur 1$.'
+        fiveRemainingMessage: 'Sie haben nur noch 5 Satzanalysen für diese Woche übrig. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.'
     },
     loginRequired: {
         title: 'Anmeldung erforderlich',

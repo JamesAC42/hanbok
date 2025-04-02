@@ -146,6 +146,7 @@ export const es = {
         email: 'Correo electrónico',
         tier: 'Nivel',
         tierTypes: {
+            free: 'Gratis',
             basic: 'Básico',
             plus: 'Plus',
             unknown: 'Desconocido'
@@ -154,21 +155,27 @@ export const es = {
         remainingImageExtracts: 'Extracciones de Imágenes Restantes',
         unlimited: 'Ilimitado',
         maxSavedSentences: 'Máximo de Frases Guardadas',
-        maxSavedWords: 'Máximo de Palabras Guardadas',
+        maxSavedWords: 'Máximo de palabras guardadas',
+        manageSubscription: 'Gestionar suscripción',
+        manageSubscriptionLink: 'Haga clic aquí para gestionar su suscripción',
         bonusAlert: {
             title: '¡Obtén 15 Generaciones de Audio Gratis! 🎉',
             description: '¡Comparte tu opinión en nuestra página de feedback y recibe 15 generaciones de audio adicionales como agradecimiento!'
         },
         tierInfo: {
-            plus: {
-                title: 'Beneficios de Usuario Plus',
-                description: '¡Disfruta de generaciones de audio ilimitadas, soporte prioritario y funciones premium!'
+            free: {
+                title: "Beneficios de Usuario Gratis",
+                description: "Tienes análisis de oraciones, generación de audio, extracción de imágenes y guardado limitados. ¡Actualiza a Básico para obtener análisis y guardado ilimitados!"
             },
             basic: {
                 title: 'Beneficios de Usuario Básico',
-                description: 'Tienes generaciones de audio limitadas disponibles. Actualiza para más funciones y acceso ilimitado.'
+                description: "Disfruta de análisis y guardado ilimitados. ¡Actualiza a Plus para obtener generación de audio y extracción de imágenes ilimitadas!"
             },
-            moreDetails: 'Para más detalles, visita nuestra'
+            plus: {
+                title: 'Beneficios de Usuario Plus',
+                description: '¡Disfruta de análisis de oraciones, generación de audio, extracción de imágenes, guardado y soporte prioritario ilimitados!'
+            },
+            moreDetails: 'Para más detalles, visita'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const es = {
         viewPricing: 'Ver Precios',
         maybeLater: 'Quizás Después',
         sentenceAnalysesTitle: 'Límite semanal de análisis de oraciones alcanzado',
-        sentenceAnalysesMessage: 'Has usado todos tus 30 análisis de oraciones gratuitos semanales. Actualiza a Premium para análisis ilimitados, o compra 100 análisis adicionales por solo $1.',
+        sentenceAnalysesMessage: 'Has usado tus 30 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         firstFiveUsedTitle: 'Uso de análisis de oraciones semanal',
-        firstFiveUsedMessage: 'Has usado 5 de tus 30 análisis de oraciones gratuitos semanales. Considera actualizar a Premium para análisis ilimitados, o compra 100 análisis adicionales por solo $1.',
+        firstFiveUsedMessage: 'Has usado 5 de tus 30 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         fifteenRemainingTitle: 'Actualización de análisis de oraciones semanal',
-        fifteenRemainingMessage: 'Te quedan 15 análisis de oraciones para esta semana. Actualiza a Premium para análisis ilimitados, o compra 100 análisis adicionales por solo $1.',
+        fifteenRemainingMessage: 'Te quedan 15 análisis de oraciones esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         fiveRemainingTitle: 'Alerta de análisis de oraciones semanal',
-        fiveRemainingMessage: 'Solo te quedan 5 análisis de oraciones para esta semana. Actualiza a Premium o compra análisis adicionales, o compra 100 análisis adicionales por solo $1.'
+        fiveRemainingMessage: 'Solo te quedan 5 análisis de oraciones esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.'
     },
     loginRequired: {
         title: 'Inicio de Sesión Requerido',

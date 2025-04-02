@@ -146,8 +146,9 @@ export const zh = {
         email: '电子邮件',
         tier: '等级',
         tierTypes: {
-            basic: '基础版',
-            plus: '加强版',
+            free: '免费',
+            basic: '基础',
+            plus: '高级',
             unknown: '未知'
         },
         remainingAudioGenerations: '剩余音频生成次数',
@@ -155,20 +156,26 @@ export const zh = {
         unlimited: '无限制',
         maxSavedSentences: '最大保存句子数',
         maxSavedWords: '最大保存单词数',
+        manageSubscription: '订阅管理',
+        manageSubscriptionLink: '点击这里管理订阅',
         bonusAlert: {
             title: '获得15次免费音频生成！🎉',
             description: '在我们的反馈页面分享您的意见，即可获得额外15次音频生成机会作为感谢！'
         },
         tierInfo: {
-            plus: {
-                title: '加强版用户权益',
-                description: '享受无限音频生成、优先支持和高级功能！'
+            free: {
+                title: "免费用户权益",
+                description: "句子分析、语音生成、图片提取和保存功能有限。升级到基础版以获得无限制的句子分析和保存！"
             },
             basic: {
-                title: '基础版用户权益',
-                description: '您有限定次数的音频生成可用。升级以获取更多功能和无限访问权限。'
+                title: '基础用户权益',
+                description: "享受无限制的句子分析和保存。升级到高级版以获得无限制的语音生成和图片提取！"
             },
-            moreDetails: '更多详情，请访问我们的'
+            plus: {
+                title: '高级用户权益',
+                description: '享受无限制的句子分析、语音生成、图片提取、保存和优先支持！'
+            },
+            moreDetails: '更多详情请访问'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const zh = {
         viewPricing: '查看价格',
         maybeLater: '稍后再说',
         sentenceAnalysesTitle: '每周句子分析次数已达上限',
-        sentenceAnalysesMessage: '您已经用完了本周30次免费句子分析。升级至高级版获取无限分析，或者只需1美元购买额外100次分析。',
+        sentenceAnalysesMessage: '您已用完本周30次免费句子分析。每月$4即可获得无限制分析，或$1购买额外100次分析。',
         firstFiveUsedTitle: '每周句子分析使用情况',
-        firstFiveUsedMessage: '您已经使用了30次免费每周句子分析中的5次。考虑升级至高级版获取无限分析，或者只需1美元购买额外100次分析。',
+        firstFiveUsedMessage: '您已使用本周30次免费句子分析中的5次。每月$4即可获得无限制分析，或$1购买额外100次分析。',
         fifteenRemainingTitle: '每周句子分析更新',
-        fifteenRemainingMessage: '您本周还剩15次句子分析。升级至高级版获取无限分析，或者只需1美元购买额外100次分析。',
+        fifteenRemainingMessage: '您本周还剩15次句子分析。每月$4即可获得无限制分析，或$1购买额外100次分析。',
         fiveRemainingTitle: '每周句子分析提醒',
-        fiveRemainingMessage: '您本周只剩5次句子分析了。升级至高级版或购买额外分析，或者只需1美元购买额外100次分析。'
+        fiveRemainingMessage: '您本周只剩5次句子分析。每月$4即可获得无限制分析，或$1购买额外100次分析。'
     },
     loginRequired: {
         title: '需要登录',

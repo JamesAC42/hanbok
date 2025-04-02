@@ -146,6 +146,7 @@ export const it = {
         email: 'Email',
         tier: 'Livello',
         tierTypes: {
+            free: 'Gratuito',
             basic: 'Base',
             plus: 'Plus',
             unknown: 'Sconosciuto'
@@ -154,21 +155,27 @@ export const it = {
         remainingImageExtracts: 'Estrazioni Immagini Rimanenti',
         unlimited: 'Illimitato',
         maxSavedSentences: 'Massimo Frasi Salvate',
-        maxSavedWords: 'Massimo Parole Salvate',
+        maxSavedWords: 'Massimo parole salvate',
+        manageSubscription: 'Gestisci abbonamento',
+        manageSubscriptionLink: 'Clicca qui per gestire il tuo abbonamento',
         bonusAlert: {
             title: 'Ottieni 15 Generazioni Audio Gratuite! 🎉',
             description: 'Condividi il tuo feedback sulla nostra pagina di feedback e ricevi 15 generazioni audio aggiuntive come ringraziamento!'
         },
         tierInfo: {
-            plus: {
-                title: 'Vantaggi Utente Plus',
-                description: 'Goditi generazioni audio illimitate, supporto prioritario e funzionalità premium!'
+            free: {
+                title: "Vantaggi Utente Gratuito",
+                description: "Hai analisi delle frasi, generazione audio, estrazione immagini e salvataggi limitati. Aggiorna a Base per ottenere analisi e salvataggi illimitati!"
             },
             basic: {
                 title: 'Vantaggi Utente Base',
-                description: 'Hai generazioni audio limitate disponibili. Aggiorna per più funzionalità e accesso illimitato.'
+                description: "Goditi analisi e salvataggi illimitati. Aggiorna a Plus per ottenere generazione audio e estrazione immagini illimitate!"
             },
-            moreDetails: 'Per maggiori dettagli, visita la nostra'
+            plus: {
+                title: 'Vantaggi Utente Plus',
+                description: 'Goditi analisi delle frasi, generazione audio, estrazione immagini, salvataggi e supporto prioritario illimitati!'
+            },
+            moreDetails: 'Per maggiori dettagli, visita'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const it = {
         viewPricing: 'Vedi Prezzi',
         maybeLater: 'Forse Dopo',
         sentenceAnalysesTitle: 'Limite di analisi frase settimanale raggiunto',
-        sentenceAnalysesMessage: 'Hai utilizzato tutte le 30 analisi frase gratuite settimanali. Passa a Premium per analisi illimitate, o acquista 100 analisi aggiuntive per solo $1.',
+        sentenceAnalysesMessage: 'Hai esaurito i tuoi 30 analisi gratuite di frasi di questa settimana. Ottieni analisi illimitate per $4/mese, o acquista 100 analisi aggiuntive per solo $1.',
         firstFiveUsedTitle: 'Utilizzo analisi frase settimanale',
-        firstFiveUsedMessage: 'Hai utilizzato 5 delle tue 30 analisi frase gratuite settimanali. Considera di passare a Premium per analisi illimitate, o acquista 100 analisi aggiuntive per solo $1.',
+        firstFiveUsedMessage: 'Hai utilizzato 5 delle tue 30 analisi gratuite di frasi di questa settimana. Ottieni analisi illimitate per $4/mese, o acquista 100 analisi aggiuntive per solo $1.',
         fifteenRemainingTitle: 'Aggiornamento analisi frase settimanale',
-        fifteenRemainingMessage: 'Ti rimangono 15 analisi frase per questa settimana. Passa a Premium per analisi illimitate, o acquista 100 analisi aggiuntive per solo $1.',
+        fifteenRemainingMessage: 'Ti rimangono 15 analisi di frasi questa settimana. Ottieni analisi illimitate per $4/mese, o acquista 100 analisi aggiuntive per solo $1.',
         fiveRemainingTitle: 'Avviso analisi frase settimanale',
-        fiveRemainingMessage: 'Ti rimangono solo 5 analisi frase per questa settimana. Passa a Premium o acquista analisi aggiuntive, o acquista 100 analisi aggiuntive per solo $1.'
+        fiveRemainingMessage: 'Ti rimangono solo 5 analisi di frasi questa settimana. Ottieni analisi illimitate per $4/mese, o acquista 100 analisi aggiuntive per solo $1.'
     },
     loginRequired: {
         title: 'Login Richiesto',

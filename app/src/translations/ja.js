@@ -146,6 +146,7 @@ export const ja = {
         email: 'メールアドレス',
         tier: 'プラン',
         tierTypes: {
+            free: '無料',
             basic: 'ベーシック',
             plus: 'プラス',
             unknown: '不明'
@@ -154,21 +155,27 @@ export const ja = {
         remainingImageExtracts: '残りの画像抽出回数',
         unlimited: '無制限',
         maxSavedSentences: '保存可能な文章数',
-        maxSavedWords: '保存可能な単語数',
+        maxSavedWords: '最大保存単語数',
+        manageSubscription: 'サブスクリプション管理',
+        manageSubscriptionLink: 'サブスクリプション管理はこちらをクリック',
         bonusAlert: {
             title: '無料で15回の音声生成をゲット！🎉',
             description: 'フィードバックページで意見を共有すると、お礼として追加で15回の音声生成機会を提供します！'
         },
         tierInfo: {
-            plus: {
-                title: 'プラスユーザー特典',
-                description: '無制限の音声生成、優先サポート、プレミアム機能をお楽しみください！'
+            free: {
+                title: "無料ユーザーの特典",
+                description: "文の分析、音声生成、画像抽出、保存に制限があります。無制限の文の分析と保存のためにベーシックにアップグレードしましょう！"
             },
             basic: {
-                title: 'ベーシックユーザー特典',
-                description: '音声生成は制限付きです。より多くの機能と無制限アクセスにアップグレードしてください。'
+                title: 'ベーシックユーザーの特典',
+                description: "無制限の文の分析と保存を楽しめます。無制限の音声生成と画像抽出のためにプラスにアップグレードしましょう！"
             },
-            moreDetails: '詳細については、こちらをご覧ください'
+            plus: {
+                title: 'プラスユーザーの特典',
+                description: '無制限の文の分析、音声生成、画像抽出、保存、優先サポートを楽しめます！'
+            },
+            moreDetails: '詳細はこちらをご覧ください'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const ja = {
         viewPricing: '料金を見る',
         maybeLater: '後で',
         sentenceAnalysesTitle: '週間の文分析制限に達しました',
-        sentenceAnalysesMessage: '無料の週間文分析30回をすべて使用しました。無制限の分析にはプレミアムにアップグレードするか、追加の100回の分析を1ドルで購入してください。',
+        sentenceAnalysesMessage: '今週の無料文の分析30回分をすべて使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         firstFiveUsedTitle: '週間の文分析使用状況',
-        firstFiveUsedMessage: '無料の週間文分析30回のうち5回を使用しました。無制限の分析にはプレミアムにアップグレードするか、追加の100回の分析を1ドルで購入することを検討してください。',
+        firstFiveUsedMessage: '今週の無料文の分析30回分のうち5回分を使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         fifteenRemainingTitle: '週間の文分析更新',
-        fifteenRemainingMessage: '今週は文分析があと15回残っています。無制限の分析にはプレミアムにアップグレードするか、追加の100回の分析を1ドルで購入してください。',
+        fifteenRemainingMessage: '今週の残り文の分析回数は15回です。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         fiveRemainingTitle: '週間の文分析アラート',
-        fiveRemainingMessage: '今週は文分析があと5回しか残っていません。プレミアムにアップグレードするか追加の分析を購入するか、追加の100回の分析を1ドルで購入してください。'
+        fiveRemainingMessage: '今週の残り文の分析回数は5回です。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。'
     },
     loginRequired: {
         title: 'ログインが必要です',

@@ -146,6 +146,7 @@ export const ko = {
         email: '이메일',
         tier: '등급',
         tierTypes: {
+            free: '무료',
             basic: '기본',
             plus: '플러스',
             unknown: '알 수 없음'
@@ -155,18 +156,24 @@ export const ko = {
         unlimited: '무제한',
         maxSavedSentences: '최대 저장 문장 수',
         maxSavedWords: '최대 저장 단어 수',
+        manageSubscription: '구독 관리',
+        manageSubscriptionLink: '구독 관리를 위해 여기를 클릭하세요',
         bonusAlert: {
             title: '15개의 무료 음성 생성 받기! 🎉',
             description: '피드백 페이지에서 의견을 공유하시면 추가로 15개의 음성 생성 기회를 드립니다!'
         },
         tierInfo: {
-            plus: {
-                title: '플러스 사용자 혜택',
-                description: '무제한 음성 생성, 우선 지원 및 프리미엄 기능을 즐기세요!'
+            free: {
+                title: "무료 사용자 혜택",
+                description: "제한된 문장 분석, 음성 생성, 이미지 추출 및 저장이 가능합니다. 무제한 문장 분석과 저장을 위해 Basic으로 업그레이드하세요!"
             },
             basic: {
                 title: '기본 사용자 혜택',
-                description: '제한된 음성 생성이 가능합니다. 더 많은 기능과 무제한 액세스를 위해 업그레이드하세요.'
+                description: "무제한 문장 분석과 저장을 즐기세요. 무제한 음성 생성과 이미지 추출을 위해 Plus로 업그레이드하세요!"
+            },
+            plus: {
+                title: '플러스 사용자 혜택',
+                description: '무제한 문장 분석, 음성 생성, 이미지 추출, 저장 및 우선 지원을 즐기세요!'
             },
             moreDetails: '자세한 내용은 다음을 참조하세요'
         }
@@ -353,13 +360,13 @@ export const ko = {
         viewPricing: '요금제 보기',
         maybeLater: '나중에',
         sentenceAnalysesTitle: '주간 문장 분석 한도 도달',
-        sentenceAnalysesMessage: '무료 주간 문장 분석 30개를 모두 사용하셨습니다. 무제한 분석을 위해 프리미엄으로 업그레이드하거나, 단 $1로 추가 100개의 분석을 구매하세요.',
+        sentenceAnalysesMessage: '이번 주 무료 문장 분석 30회를 모두 사용하셨습니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.',
         firstFiveUsedTitle: '주간 문장 분석 사용량',
-        firstFiveUsedMessage: '무료 주간 문장 분석 30개 중 5개를 사용하셨습니다. 무제한 분석을 위해 프리미엄으로 업그레이드하거나, 단 $1로 추가 100개의 분석을 구매하는 것을 고려해보세요.',
+        firstFiveUsedMessage: '이번 주 무료 문장 분석 30회 중 5회를 사용하셨습니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.',
         fifteenRemainingTitle: '주간 문장 분석 업데이트',
-        fifteenRemainingMessage: '이번 주에 남은 문장 분석이 15개 있습니다. 무제한 분석을 위해 프리미엄으로 업그레이드하거나, 단 $1로 추가 100개의 분석을 구매하세요.',
+        fifteenRemainingMessage: '이번 주 남은 문장 분석 횟수는 15회입니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.',
         fiveRemainingTitle: '주간 문장 분석 알림',
-        fiveRemainingMessage: '이번 주에 남은 문장 분석이 5개뿐입니다. 프리미엄으로 업그레이드하거나 추가 분석을 구매하거나, 단 $1로 추가 100개의 분석을 구매하세요.'
+        fiveRemainingMessage: '이번 주 남은 문장 분석 횟수는 5회입니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.'
     },
     loginRequired: {
         title: '로그인 필요',

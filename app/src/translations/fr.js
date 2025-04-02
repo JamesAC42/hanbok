@@ -146,6 +146,7 @@ export const fr = {
         email: 'Email',
         tier: 'Niveau',
         tierTypes: {
+            free: 'Gratuit',
             basic: 'Basique',
             plus: 'Plus',
             unknown: 'Inconnu'
@@ -154,21 +155,27 @@ export const fr = {
         remainingImageExtracts: 'Extractions d\'Images Restantes',
         unlimited: 'Illimité',
         maxSavedSentences: 'Maximum de Phrases Sauvegardées',
-        maxSavedWords: 'Maximum de Mots Sauvegardés',
+        maxSavedWords: 'Maximum de mots sauvegardés',
+        manageSubscription: 'Gérer l\'abonnement',
+        manageSubscriptionLink: 'Cliquez ici pour gérer votre abonnement',
         bonusAlert: {
             title: 'Obtenez 15 Générations Audio Gratuites ! 🎉',
             description: 'Partagez votre avis sur notre page de feedback et recevez 15 générations audio supplémentaires en remerciement !'
         },
         tierInfo: {
-            plus: {
-                title: 'Avantages Utilisateur Plus',
-                description: 'Profitez des générations audio illimitées, du support prioritaire et des fonctionnalités premium !'
+            free: {
+                title: "Avantages Utilisateur Gratuit",
+                description: "Vous avez des analyses de phrases, générations audio, extractions d'images et sauvegardes limitées. Passez à Basique pour obtenir des analyses et sauvegardes illimitées !"
             },
             basic: {
                 title: 'Avantages Utilisateur Basique',
-                description: 'Vous avez des générations audio limitées disponibles. Passez à la version supérieure pour plus de fonctionnalités et un accès illimité.'
+                description: "Profitez d'analyses et de sauvegardes illimitées. Passez à Plus pour obtenir des générations audio et extractions d'images illimitées !"
             },
-            moreDetails: 'Pour plus de détails, visitez notre'
+            plus: {
+                title: 'Avantages Utilisateur Plus',
+                description: 'Profitez d\'analyses de phrases, générations audio, extractions d\'images, sauvegardes et support prioritaire illimités !'
+            },
+            moreDetails: 'Pour plus de détails, visitez'
         }
     },
     login: {
@@ -353,13 +360,13 @@ export const fr = {
         viewPricing: 'Voir les Prix',
         maybeLater: 'Plus Tard',
         sentenceAnalysesTitle: 'Limite hebdomadaire d\'analyses de phrases atteinte',
-        sentenceAnalysesMessage: 'Vous avez utilisé toutes vos 30 analyses de phrases gratuites hebdomadaires. Passez à Premium pour des analyses illimitées, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        sentenceAnalysesMessage: 'Vous avez utilisé vos 30 analyses gratuites de phrases de cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
         firstFiveUsedTitle: 'Utilisation hebdomadaire d\'analyses de phrases',
-        firstFiveUsedMessage: 'Vous avez utilisé 5 de vos 30 analyses de phrases gratuites hebdomadaires. Envisagez de passer à Premium pour des analyses illimitées, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        firstFiveUsedMessage: 'Vous avez utilisé 5 de vos 30 analyses gratuites de phrases de cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
         fifteenRemainingTitle: 'Mise à jour des analyses de phrases hebdomadaires',
-        fifteenRemainingMessage: 'Il vous reste 15 analyses de phrases pour cette semaine. Passez à Premium pour des analyses illimitées, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        fifteenRemainingMessage: 'Il vous reste 15 analyses de phrases cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
         fiveRemainingTitle: 'Alerte d\'analyses de phrases hebdomadaires',
-        fiveRemainingMessage: 'Il ne vous reste que 5 analyses de phrases pour cette semaine. Passez à Premium ou achetez des analyses supplémentaires, ou achetez 100 analyses supplémentaires pour seulement 1$.'
+        fiveRemainingMessage: 'Il ne vous reste que 5 analyses de phrases cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.'
     },
     loginRequired: {
         title: 'Connexion Requise',
