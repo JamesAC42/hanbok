@@ -192,6 +192,15 @@ $dark-text: #171717; // Dark text for good contrast
     transition: transform 0.3s ease;
     position: relative;
     
+    &.showAnswer {
+        .answerSide {
+            opacity: 1;
+            visibility: visible;
+            height: auto;
+            margin-top: 1rem;
+        }
+    }
+    
     h3 {
         font-size: var(--text-normal);
         color: var(--foreground-muted);
@@ -245,6 +254,11 @@ $dark-text: #171717; // Dark text for good contrast
     
     position: relative;
     margin-top: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease, margin 0.3s ease;
 }
 
 // Stats styles

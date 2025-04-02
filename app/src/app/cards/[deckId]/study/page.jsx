@@ -35,6 +35,11 @@ const StudyView = ({ params }) => {
     const [muted, setMuted] = useState(false);
     const [audioError, setAudioError] = useState(false);
     
+    // Reset showAnswer when currentCard changes
+    useEffect(() => {
+        setShowAnswer(false);
+    }, [currentCard]);
+    
     // Audio player reference
     const audioRef = useRef(null);
 
@@ -264,6 +269,9 @@ const StudyView = ({ params }) => {
         
         try {
             setUpdatingCard(true);
+
+            // Reset answer display immediately
+            setShowAnswer(false);
             
             console.log(`[study-page] Rating card ${currentCard.flashcardId} as '${rating}'. Initial state:`, {
                 reviewState: currentCard.reviewState,
@@ -348,9 +356,6 @@ const StudyView = ({ params }) => {
                 setError(t('cards.study.errorUpdating'));
                 return;
             }
-
-            // Reset answer display immediately
-            setShowAnswer(false);
             
         } catch (err) {
             console.error('Error rating card:', err);
@@ -460,28 +465,24 @@ const StudyView = ({ params }) => {
                 <div className={studyStyles.cardOuter}>
                     {currentCard && (
                         <div className={studyStyles.cardContent}>
-                            <div className={studyStyles.cardFace}>
+                            <div className={`${studyStyles.cardFace} ${showAnswer ? studyStyles.showAnswer : ''}`}>
                                 <div className={studyStyles.questionSide}>
                                     <h3>{t('cards.study.question')}</h3>
                                     <p className={`${cardLanguage} ${getFontClass(deck.language)}`} lang={cardLanguage}>{question}</p>
                                 </div>
-                                {
-                                    showAnswer && (    
-                                    <div className={studyStyles.answerSide}>
-                                        <h3>{t('cards.study.answer')}</h3>
-                                        <p lang="en">{answer}</p>
-                                        {currentCard.audioUrl && !audioError && (
-                                            <button 
-                                                className={studyStyles.playAudioButton}
-                                                onClick={handlePlayAudio}
-                                                aria-label={t('cards.study.playAudio')}
-                                            >
-                                                <MaterialSymbolsVolumeUp />
-                                            </button>
-                                        )}
-                                    </div>
-                                    )
-                                }
+                                <div className={studyStyles.answerSide}>
+                                    <h3>{t('cards.study.answer')}</h3>
+                                    <p lang="en">{answer}</p>
+                                    {currentCard.audioUrl && !audioError && (
+                                        <button 
+                                            className={studyStyles.playAudioButton}
+                                            onClick={handlePlayAudio}
+                                            aria-label={t('cards.study.playAudio')}
+                                        >
+                                            <MaterialSymbolsVolumeUp />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     )}
