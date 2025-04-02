@@ -287,7 +287,7 @@ const SentenceForm = ({
         }
 
         // Check if user has reached image extraction limit
-        if (imagePreview && user && user.tier === 0 && user.remainingImageExtracts <= 0) {
+        if (imagePreview && user && (user.tier === 0 || user.tier === 1) && user.remainingImageExtracts <= 0) {
             setLoading(false);
             showLimitReachedPopup('image-extracts');
             return;
@@ -346,7 +346,7 @@ const SentenceForm = ({
 
             if(data.message.isValid) {
                 // If this is an image submission and user is logged in
-                if (imagePreview && isAuthenticated && user.tier === 0) {
+                if (imagePreview && isAuthenticated && (user.tier === 0 || user.tier === 1)) {
                     decrementRemainingImageExtracts();
                 }
                 

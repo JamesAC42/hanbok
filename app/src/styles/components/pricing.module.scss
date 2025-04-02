@@ -201,6 +201,11 @@
   @media screen and (max-width: 500px) {
     margin-top:1rem;
   }
+
+  &:first-child {
+    background:#3dac4e;
+    box-shadow: 0rem 1rem 2rem 0rem #4aba75;
+  }
 }
 
 .bestValue {

@@ -67,7 +67,7 @@ const Pricing = () => {
                         <div className={pricingStyles.options}>
 
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
-                                <h3>{t('pricing.monthlySubscription')}</h3>
+                                <h3>{t('pricing.monthlySubscriptionBasic')}</h3>
                                 <p className={pricingStyles.price}>$4 {t('pricing.perMonth')}</p>
                                 <ul className={pricingStyles.featuresList}>
                                     <li>{t('pricing.features.unlimited.analyses')}</li>
@@ -84,7 +84,7 @@ const Pricing = () => {
                             </div>
                             <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
                                 <div className={pricingStyles.bestValue}>{t('pricing.bestValue')}</div>
-                                <h3>{t('pricing.monthlySubscription')}</h3>
+                                <h3>{t('pricing.monthlySubscriptionPlus')}</h3>
                                 <p className={pricingStyles.price}>$10 {t('pricing.perMonth')}</p>
                                 <ul className={pricingStyles.featuresList}>
                                     <li>{t('pricing.features.unlimited.analyses')}</li>

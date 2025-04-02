@@ -235,7 +235,7 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
             showLoginRequiredPopup('related-words');
             return;
         }
-        if (user.tier !== 1) {
+        if (user.tier !== 2) {
             showLimitReachedPopup('related-words');
             return;
         }

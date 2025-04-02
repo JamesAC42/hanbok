@@ -156,7 +156,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
         return;
       }
 
-      if(user.tier === 0 && !hasRemainingAudioGenerations()) {
+      if((user.tier === 0 || user.tier === 1) && !hasRemainingAudioGenerations()) {
         setShowPopup(true);
         return;
       }

@@ -177,10 +177,6 @@ export const en = {
                 title: 'Plus User Benefits',
                 description: 'Enjoy unlimited sentence analyses, audio generations, image extractions, saves, and priority support!'
             },
-            basic: {
-                title: 'Basic User Benefits',
-                description: ''
-            },
             moreDetails: 'For more details, visit our'
         }
     },
@@ -201,7 +197,8 @@ export const en = {
         upgradeOptions: 'Upgrade Options',
         limitedTimeOffer: 'Limited Time Only - 50% OFF',
         oneTimePurchase: 'One-Time Purchase',
-        monthlySubscription: 'Monthly Subscription',
+        monthlySubscriptionBasic: 'Monthly Subscription - Basic Tier',
+        monthlySubscriptionPlus: 'Monthly Subscription - Plus Tier',
         bestValue: 'Best Value',
         perMonth: '/ month',
         features: {
