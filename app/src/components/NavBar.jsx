@@ -11,7 +11,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/components/navbar.module.scss';
-import { useState } from 'react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { MaterialSymbolsStyleCards } from './icons/Cards';
