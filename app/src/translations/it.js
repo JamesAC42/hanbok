@@ -444,7 +444,15 @@ export const it = {
         leaveFeedback: 'Lascia un Feedback',
         joinDiscord: 'Unisciti al Nostro Discord',
         shareWebsite: 'Condividi con gli Amici',
-        linkCopied: 'Link copiato negli appunti! Condividilo con i tuoi amici.'
+        linkCopied: 'Link copiato negli appunti! Condividilo con i tuoi amici.',
+        howDoISayMode: 'Modalità "Come Si Dice..."',
+        howDoISayModeDesc: 'Esprimiti naturalmente in qualsiasi lingua! Scrivi semplicemente quello che vuoi dire, scegli il tuo tono, e ottieni traduzioni istantanee con spiegazioni dettagliate su come funzionano.',
+        newSubscription: 'Nuovo Piano di Abbonamento',
+        newSubscriptionDesc: 'Un nuovo abbonamento "Base" è ora disponibile - per soli 4€/mese, ottieni analisi delle frasi e salvataggi illimitati! Controlla la pagina dei prezzi.',
+        siteRedesignTitle: 'Ridisegno del Sito',
+        siteRedesignDesc: 'Hanbok ha un nuovo aspetto, spero che ti piaccia!',
+        comingSoonLyrics: 'Prossimamente: Analisi dei Testi delle Canzoni',
+        comingSoonLyricsDesc: 'Hanbok ospiterà presto un database di testi delle canzoni + analisi grammaticale e del vocabolario, inclusi K-Pop, Anime, J-Pop e altro basato sulle richieste degli utenti. Resta sintonizzato!'
     },
     bookmarks: {
         title: 'Segnalibri',

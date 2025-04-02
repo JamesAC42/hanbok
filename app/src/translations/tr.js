@@ -444,7 +444,15 @@ export const tr = {
         leaveFeedback: 'Geri Bildirim Bırakın',
         joinDiscord: 'Discord\'umuza Katılın',
         shareWebsite: 'Arkadaşlarınızla Paylaşın',
-        linkCopied: 'Bağlantı panoya kopyalandı! Arkadaşlarınızla paylaşın.'
+        linkCopied: 'Bağlantı panoya kopyalandı! Arkadaşlarınızla paylaşın.',
+        howDoISayMode: '"Nasıl Denir..." Modu',
+        howDoISayModeDesc: 'Kendinizi herhangi bir dilde doğal bir şekilde ifade edin! Sadece söylemek istediğinizi yazın, tonunuzu seçin ve nasıl çalıştıklarına dair detaylı açıklamalarla anında çeviriler alın.',
+        newSubscription: 'Yeni Abonelik Planı',
+        newSubscriptionDesc: 'Yeni bir "Temel" seviye abonelik şimdi mevcut - sadece 4€/ay karşılığında sınırsız cümle analizi ve kaydetme özelliği! Fiyatlandırma sayfasına göz atın.',
+        siteRedesignTitle: 'Site Yeniden Tasarımı',
+        siteRedesignDesc: 'Hanbok\'un yeni bir görünümü var, umarım beğenirsiniz!',
+        comingSoonLyrics: 'Yakında: Şarkı Sözleri Analizi',
+        comingSoonLyricsDesc: 'Hanbok yakında K-Pop, Anime, J-Pop ve kullanıcı isteklerine göre daha fazlasını içeren şarkı sözleri + dilbilgisi ve kelime analizi veritabanına ev sahipliği yapacak. Takipte kalın!'
     },
     bookmarks: {
         title: 'Yer İmleri',

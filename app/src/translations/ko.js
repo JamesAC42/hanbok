@@ -444,7 +444,15 @@ export const ko = {
         leaveFeedback: '피드백 남기기',
         joinDiscord: 'Discord에 참여하기',
         shareWebsite: '친구와 공유하기',
-        linkCopied: '링크가 클립보드에 복사되었습니다! 친구와 공유하세요.'
+        linkCopied: '링크가 클립보드에 복사되었습니다! 친구와 공유하세요.',
+        howDoISayMode: '"어떻게 말하나요..." 모드',
+        howDoISayModeDesc: '어떤 언어로도 자연스럽게 표현하세요! 말하고 싶은 것을 입력하고, 어조를 선택하면 즉시 번역과 자세한 설명을 받을 수 있습니다.',
+        newSubscription: '새로운 구독 플랜',
+        newSubscriptionDesc: '새로운 "기본" 구독이 출시되었습니다 - 월 4€로 무제한 문장 분석과 저장이 가능합니다! 가격 페이지를 확인해보세요.',
+        siteRedesignTitle: '사이트 리디자인',
+        siteRedesignDesc: 'Hanbok이 새로운 모습으로 바뀌었습니다. 마음에 드시길 바랍니다!',
+        comingSoonLyrics: '곧 출시: 가사 분석',
+        comingSoonLyricsDesc: 'Hanbok이 곧 K-POP, 애니메이션, J-POP 등의 가사 데이터베이스 + 문법 및 어휘 분석을 제공할 예정입니다. 사용자 요청에 따라 확장됩니다. 기대해주세요!'
     },
     bookmarks: {
         title: '북마크',
