@@ -444,7 +444,15 @@ export const zh = {
         leaveFeedback: '留下反馈',
         joinDiscord: '加入我们的Discord',
         shareWebsite: '与朋友分享',
-        linkCopied: '链接已复制到剪贴板！与您的朋友分享。'
+        linkCopied: '链接已复制到剪贴板！与您的朋友分享。',
+        howDoISayMode: '"怎么说..."模式',
+        howDoISayModeDesc: '用任何语言自然地表达自己！只需输入你想说的话，选择语气，就能获得即时翻译和详细的工作原理说明。',
+        newSubscription: '新订阅计划',
+        newSubscriptionDesc: '新的"基础"订阅现已推出 - 仅需4€/月，即可获得无限句子分析和保存功能！查看价格页面了解更多。',
+        siteRedesignTitle: '网站重新设计',
+        siteRedesignDesc: 'Hanbok有了新的外观，希望你喜欢！',
+        comingSoonLyrics: '即将推出：歌词分析',
+        comingSoonLyricsDesc: 'Hanbok很快将推出歌词数据库 + 语法和词汇分析，包括K-Pop、动漫、J-Pop等，基于用户需求。敬请期待！'
     },
     bookmarks: {
         title: '书签',

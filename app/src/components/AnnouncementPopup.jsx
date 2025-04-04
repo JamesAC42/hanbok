@@ -20,8 +20,8 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
     const handleShareClick = () => {
         if (navigator.share) {
             navigator.share({
-                title: 'Kankoku - Korean Learning Tool',
-                text: 'Check out this amazing Korean learning tool!',
+                title: 'Hanbok - Korean Learning Tool',
+                text: 'Check out this amazing language learning tool!',
                 url: window.location.origin,
             })
             .catch((error) => console.log('Error sharing:', error));
@@ -50,22 +50,17 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                 </div>
                 
                 <div className={styles.content}>
-                    <h3>{t('announcement.flashcardsTitle')}</h3>
-                    <p>{t('announcement.flashcardsDesc')}</p>
-                    
-                    <ul className={styles.featureList}>
-                        <li>{t('announcement.flashcardsFeature1')}</li>
-                        <li>{t('announcement.flashcardsFeature2')}</li>
-                        <li>{t('announcement.flashcardsFeature3')}</li>
-                        <li>{t('announcement.flashcardsFeature4')}</li>
-                    </ul>
-                    
-                    <button 
-                        className={styles.tryFeatureButton}
-                        onClick={handleFlashcardsClick}
-                    >
-                        <span className={styles.buttonText}>{t('announcement.tryFlashcards')}</span>
-                    </button>
+                    <h3>{t('announcement.howDoISayMode')}</h3>
+                    <p>{t('announcement.howDoISayModeDesc')}</p>
+
+                    <h3 className={styles.highlight}>{t('announcement.newSubscription')}</h3>
+                    <p className={styles.highlight}>{t('announcement.newSubscriptionDesc')}</p>
+
+                    <h3>{t('announcement.siteRedesignTitle')}</h3>
+                    <p>{t('announcement.siteRedesignDesc')}</p>
+
+                    <h3>{t('announcement.comingSoonLyrics')}</h3>
+                    <p>{t('announcement.comingSoonLyricsDesc')}</p>
                     
                     <div className={styles.communitySection}>
                         <h3>{t('announcement.communityTitle')}</h3>

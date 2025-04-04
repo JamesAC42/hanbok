@@ -246,10 +246,10 @@ export const ja = {
             activeUsers: '現在学習中のユーザー'
         },
         exampleSentences: [
-            "昨日映画を見に行きました。",
-            "この本はとても面白いです。",
-            "電車は何時に来ますか？",
-            "日本語の勉強が楽しいです。"
+            "私が食べたケーキは美味しかったです。",
+            "友達に本を貸してあげることができます。",
+            "雨が降っているのに外で遊んでいます。",
+            "明日までにレポートを提出しなければなりません。"
         ],
         about: {
             exampleBreakdown: "例文解析",
@@ -427,8 +427,8 @@ export const ja = {
         fetchError: '保存された{type}の読み込みに失敗しました。'
     },
     announcement: {
-        new: '新しい',
-        newFeatures: '新機能が利用可能です！',
+        new: '新',
+        newFeatures: '新機能が利用可能！',
         languageEnhancementsTitle: '言語サポートの強化',
         languageEnhancementsDesc: 'アジアとスラブの言語のサポートを強化することに重点を置いて、言語分析機能を大幅に改善しました。',
         enhancedChinese: '中国語の言語分析の強化',
@@ -444,7 +444,15 @@ export const ja = {
         leaveFeedback: 'フィードバックを残す',
         joinDiscord: 'Discordに参加する',
         shareWebsite: '友達と共有する',
-        linkCopied: 'リンクがクリップボードにコピーされました！友達と共有してください。'
+        linkCopied: 'リンクがクリップボードにコピーされました！友達と共有してください。',
+        howDoISayMode: '「どう言うの...」モード',
+        howDoISayModeDesc: 'どの言語でも自然に表現！言いたいことを入力し、トーンを選ぶだけで、即座に翻訳と詳細な説明が得られます。',
+        newSubscription: '新サブスクリプションプラン',
+        newSubscriptionDesc: '新しい「ベーシック」プランが登場 - 月額4€で無制限の文解析と保存が可能！料金ページをご確認ください。',
+        siteRedesignTitle: 'サイトリデザイン',
+        siteRedesignDesc: 'Hanbokが新しいデザインになりました。気に入っていただければ幸いです！',
+        comingSoonLyrics: '近日公開：歌詞分析',
+        comingSoonLyricsDesc: 'HanbokはまもなくK-POP、アニメ、J-POPなどの歌詞データベース + 文法・語彙分析を提供予定です。ユーザーの要望に基づいて展開されます。お楽しみに！'
     },
     bookmarks: {
         title: 'ブックマーク',

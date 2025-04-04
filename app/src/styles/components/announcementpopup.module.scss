@@ -18,7 +18,7 @@
     border-radius: 0.5rem;
     max-width: 36rem;
     width: 90%;
-    max-height: 90vh;
+    max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0.3rem 0.3rem 0 #000;
     border: 1px solid #000;
@@ -29,13 +29,15 @@
 .header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin-bottom: 1.5rem;
+    gap:1rem;
     
     h2 {
         margin: 0;
         font-family: var(--font-display);
         font-size: 1.75rem;
+        max-width: 80%;
     }
 }
 
@@ -60,6 +62,10 @@
         margin: 0.5rem 0 1rem;
         line-height: 1.6;
         color: var(--text-secondary);
+    }
+
+    & > *.highlight {
+        color:#3622e4;
     }
 }
 
