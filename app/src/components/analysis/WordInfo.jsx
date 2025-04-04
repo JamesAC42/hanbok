@@ -98,7 +98,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                             `${t('analysis.wordInfo.function')}: ` : 
                             `${t('analysis.wordInfo.notes')}: `
                         }
-                        {wordInfo.isParticle ? wordInfo.function.replaceAll('_', ' ') : wordInfo.meaning?.notes}
+                        {wordInfo.isParticle ? wordInfo.function?.replaceAll('_', ' ') : wordInfo.meaning?.notes}
                         </span>
                         </li>
                     }
@@ -112,7 +112,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                     {
                         !wordInfo.isParticle && wordInfo.grammar?.role ?
                         <div className={styles.roleInfo}>
-                            {t('analysis.wordInfo.role')} <span className={styles.wordRole}>{wordInfo.grammar.role.replaceAll('_', ' ')}</span>
+                            {t('analysis.wordInfo.role')} <span className={styles.wordRole}>{wordInfo.grammar.role?.replaceAll('_', ' ')}</span>
                         </div>
                         : wordInfo.isParticle && (
                         <div className={styles.roleInfo}>
@@ -123,18 +123,18 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
 
                     {/* Russian-specific case information */}
                     {
-                        language === 'ru' && wordInfo.grammar?.case &&
+                        language === 'ru' && typeof(wordInfo.grammar?.case) === 'object' && Object.keys(wordInfo.grammar.case).length > 0 &&
                         <div className={styles.caseInfo}>
-                            {t('analysis.wordInfo.case')} <span className={styles.wordCase}>{wordInfo.grammar.case.name.replaceAll('_', ' ')}</span><br/>
-                            {t('analysis.wordInfo.notes')}: {wordInfo.grammar.case.function}
+                            {t('analysis.wordInfo.case')} <span className={styles.wordCase}>{wordInfo.grammar.case?.name?.replaceAll('_', ' ')}</span><br/>
+                            {t('analysis.wordInfo.notes')}: {wordInfo.grammar.case?.function}
                         </div>
                     }
 
                     {/* Russian-specific aspect information */}
                     {
-                        language === 'ru' && wordInfo.grammar?.conjugation?.aspect &&
+                        language === 'ru' && typeof(wordInfo.grammar?.conjugation?.aspect) === 'string' &&
                         <div className={styles.aspectInfo}>
-                            {t('analysis.wordInfo.aspect')} <span className={styles.wordAspect}>{wordInfo.grammar.conjugation.aspect.replaceAll('_', ' ')}</span>
+                            {t('analysis.wordInfo.aspect')} <span className={styles.wordAspect}>{wordInfo.grammar.conjugation?.aspect?.replaceAll('_', ' ')}</span>
                         </div>
                     }
 
@@ -159,17 +159,17 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                     {
                         language === 'ja' && wordInfo.grammar?.conjugation?.form &&
                         <div className={styles.formInfo}>
-                            {t('analysis.wordInfo.form')} <span className={styles.wordForm}>{wordInfo.grammar.conjugation.form.replaceAll('_', ' ')}</span><br/>
-                            {wordInfo.grammar.conjugation.politeness && 
+                            {t('analysis.wordInfo.form')} <span className={styles.wordForm}>{wordInfo.grammar.conjugation?.form?.replaceAll('_', ' ')}</span><br/>
+                            {wordInfo.grammar.conjugation?.politeness && 
                                 <div className={styles.politenessInfo}>
-                                    {t('analysis.wordInfo.politeness')}: {wordInfo.grammar.conjugation.politeness.replaceAll('_', ' ')}
+                                    {t('analysis.wordInfo.politeness')}: {wordInfo.grammar.conjugation?.politeness?.replaceAll('_', ' ')}
                                 </div>
                             }
                         </div>
                     }
                     
                     {
-                        (wordInfo.grammar.particles && wordInfo.grammar.particles.length > 0) && (
+                        (wordInfo.grammar?.particles && wordInfo.grammar.particles.length > 0) && (
                         <div className={styles.wordInfoParticles}>
                             <div className={styles.wordInfoParticlesHeader}>
                             {t('analysis.wordInfo.particles')}
@@ -181,7 +181,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                                 {particle.particle}
                                 </span>
                                 <span className={styles.particleFunction}>
-                                {particle.function.replaceAll('_', ' ')}
+                                {particle.function?.replaceAll('_', ' ')}
                                 </span>
                                 </div>
                             ))}
