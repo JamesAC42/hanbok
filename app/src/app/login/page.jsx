@@ -21,7 +21,8 @@ const Login = () => {
         if (!loading && isAuthenticated) {
             router.push('/profile');
         }
-    }, [isAuthenticated, loading, router]);
+        document.title = t('login.pageTitle');
+    }, [isAuthenticated, loading, router, t]);
 
     if (loading) return null;
 

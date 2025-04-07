@@ -62,6 +62,17 @@ const Analysis = ({
         }
     }, [showTransition]);
 
+    useEffect(() => {
+        // Set the document title based on the analysis
+        // TODO: change this to follow the actual analysis object structure.
+        if(analysis.sentence.length > 10) {
+            document.title = `${t('analysis.pageTitle')} - ${analysis.sentence.substr(0, 10) + '...'}`;
+        } else {
+            document.title = `${t('analysis.pageTitle')} - ${analysis.sentence}`;
+        }
+    }
+    , [analysis, t]);
+    
     return(
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
             
