@@ -18,6 +18,7 @@ export const it = {
         turkish: 'Turco'
     },
     about: {
+        pageTitle: 'Hanbok - Chi Siamo',
         title: 'Chi Siamo',
         whatIsHanbok: 'Cos\'è hanbok?',
         description: 'Hanbok è uno strumento completo per l\'apprendimento delle lingue progettato per aiutarti a comprendere e padroneggiare le frasi in più lingue. Hanbok scompone le frasi nelle loro parti componenti, fornendo un\'analisi dettagliata dei modelli grammaticali, del vocabolario e dell\'uso per coreano, giapponese, cinese, spagnolo, italiano e francese.',
@@ -113,6 +114,7 @@ export const it = {
         languageSupportDescription: 'Hanbok ora supporta più lingue, permettendoti di analizzare e imparare frasi in una qualsiasi delle seguenti lingue:'
     },
     feedback: {
+        pageTitle: 'Hanbok - Feedback',
         title: 'Forum di Feedback',
         description: 'Condividi con noi i tuoi feedback e suggerimenti. Apprezziamo il tuo contributo e cerchiamo sempre modi per migliorare il nostro servizio.',
         submitPlaceholder: 'Condividi i tuoi pensieri o suggerimenti...',
@@ -140,6 +142,7 @@ export const it = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - Profilo',
         title: 'Profilo',
         userInfo: 'Informazioni Utente',
         name: 'Nome',
@@ -179,6 +182,7 @@ export const it = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - Accedi',
         title: 'Accedi',
         description: 'Accedi con Google per sbloccare potenti funzionalità per il tuo percorso di apprendimento del coreano. Non hai un account? Ne verrà creato uno automaticamente.',
         features: {
@@ -191,7 +195,8 @@ export const it = {
         secureSignIn: '🔐 Accesso Sicuro con Google',
         girlImageAlt: 'Illustrazione di una ragazza'
     },
-    pricing: {
+    pricing: { 
+        pageTitle: 'Hanbok - Prezzi',
         title: 'Prezzi',
         upgradeOptions: 'Opzioni di Aggiornamento',
         limitedTimeOffer: 'Tempo Limitato - SCONTO DEL 50%',
@@ -236,6 +241,7 @@ export const it = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - Home',
         title: 'hanbok',
         subtitle: 'Padroneggia il {language}. Una frase alla volta.',
         description: 'Scomponi le frasi coreane nei loro componenti e comprendi modelli grammaticali, vocabolario e utilizzo.',
@@ -302,6 +308,7 @@ export const it = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - Frase: ',
         original: 'Originale',
         translation: 'Traduzione',
         words: 'Parole',
@@ -455,6 +462,7 @@ export const it = {
         comingSoonLyricsDesc: 'Hanbok ospiterà presto un database di testi delle canzoni + analisi grammaticale e del vocabolario, inclusi K-Pop, Anime, J-Pop e altro basato sulle richieste degli utenti. Resta sintonizzato!'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - Segnalibri',
         title: 'Segnalibri',
         sentences: 'Frasi',
         loading: 'Caricamento...',
@@ -468,6 +476,7 @@ export const it = {
         fetchError: 'Errore nel recupero delle frasi salvate.'
     },
     cards: {
+        pageTitle: 'Hanbok - Flashcard',
         title: 'Flashcard',
         subtitle: 'Studia le tue parole salvate con la ripetizione spaziata',
         deckTitle: 'Mazzo Flashcard',
