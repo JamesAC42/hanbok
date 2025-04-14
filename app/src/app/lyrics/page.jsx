@@ -40,19 +40,41 @@ const Lyrics = () => {
             const artistMap = {};
             
             lyrics.forEach(lyric => {
-                if (!artistMap[lyric.artist]) {
-                    artistMap[lyric.artist] = {
-                        artist: lyric.artist,
-                        songs: []
-                    };
+                if (genre === 'anime') {
+                    // For anime, group by anime name instead of artist
+                    // Using anime field, or fallback to artist if not available
+                    const groupKey = lyric.anime || lyric.artist;
+                    
+                    if (!artistMap[groupKey]) {
+                        artistMap[groupKey] = {
+                            artist: groupKey,
+                            songs: []
+                        };
+                    }
+                    
+                    artistMap[groupKey].songs.push({
+                        lyricId: lyric.lyricId,
+                        title: lyric.title,
+                        artist: lyric.artist, // Keep artist info for display
+                        genre: lyric.genre,
+                        language: lyric.language
+                    });
+                } else {
+                    // Regular grouping by artist for other genres
+                    if (!artistMap[lyric.artist]) {
+                        artistMap[lyric.artist] = {
+                            artist: lyric.artist,
+                            songs: []
+                        };
+                    }
+                    
+                    artistMap[lyric.artist].songs.push({
+                        lyricId: lyric.lyricId,
+                        title: lyric.title,
+                        genre: lyric.genre,
+                        language: lyric.language
+                    });
                 }
-                
-                artistMap[lyric.artist].songs.push({
-                    lyricId: lyric.lyricId,
-                    title: lyric.title,
-                    genre: lyric.genre,
-                    language: lyric.language
-                });
             });
             
             // Convert map to array and sort by artist name
@@ -125,12 +147,15 @@ const Lyrics = () => {
                         <div className={lyricsStyles.lyricsList}>
                             {lyricsByArtist.map((artistGroup) => (
                                 <div key={artistGroup.artist} className={lyricsStyles.lyricsSection}>
-                                    <h3>{artistGroup.artist.charAt(0).toUpperCase()}</h3>
+                                    <h3>{activeCategory === 'anime' 
+                                        ? artistGroup.artist // Display the anime name directly
+                                        : artistGroup.artist.charAt(0).toUpperCase() // For other genres, display the first letter
+                                    }</h3>
                                     <ul>
                                         {artistGroup.songs.map((song) => (
                                             <li key={song.lyricId}>
                                                 <Link href={`/lyrics/${song.lyricId}`}>
-                                                    <span>{artistGroup.artist}</span> - <span>{song.title}</span>
+                                                    <span>{song.artist || artistGroup.artist}</span> - <span>{song.title}</span>
                                                 </Link>
                                             </li>
                                         ))}
