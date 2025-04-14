@@ -1,72 +1,78 @@
 'use client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import lyricsStyles from '@/styles/components/lyrics.module.scss';
-import { useState } from 'react';
-const lyrics = {
-    kpop: [
-        {
-            letter: 'A',
-            lyrics: [
-                {
-                    title: 'Autumn Leaves',
-                    artist: 'Autumn Band',
-                },
-                {
-                    title: 'Azure Sky',
-                    artist: 'Astro Stars',
-                }
-            ]
-        },
-        {
-            letter: 'B',
-            lyrics: [
-                {
-                    title: 'Blue Moon',
-                    artist: 'Bright Day',
-                },
-                {
-                    title: 'Beautiful World',
-                    artist: 'Binary Group',
-                }
-            ]
-        }
-    ],
-    jpop: [
-        {
-            letter: 'C',
-            lyrics: [
-                {
-                    title: 'Crystal Heart',
-                    artist: 'Cherry Tree',
-                },
-                {
-                    title: 'Cosmic Love',
-                    artist: 'Cloud Nine',
-                }
-            ]
-        }
-    ],
-    anime: [
-        {
-            letter: 'D',
-            lyrics: [
-                {
-                    title: 'Dream Walker',
-                    artist: 'Dawn Breakers',
-                },
-                {
-                    title: 'Digital World',
-                    artist: 'Dusk Riders',
-                }
-            ]
-        }
-    ]
-}
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useAdmin } from '@/contexts/AdminContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Lyrics = () => {
     const { t } = useLanguage();
+    const { isAdmin } = useAdmin();
+    const { user } = useAuth();
 
     const [activeCategory, setActiveCategory] = useState('kpop');
+    const [lyricsByArtist, setLyricsByArtist] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    // Fetch lyrics by genre
+    const fetchLyricsByGenre = async (genre) => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            const response = await fetch(`/api/lyrics?genre=${genre}`);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch lyrics');
+            }
+            
+            const data = await response.json();
+            
+            if (!data.success) {
+                throw new Error(data.message || 'Failed to fetch lyrics');
+            }
+            
+            // Organize lyrics by artist
+            const lyrics = data.lyrics;
+            const artistMap = {};
+            
+            lyrics.forEach(lyric => {
+                if (!artistMap[lyric.artist]) {
+                    artistMap[lyric.artist] = {
+                        artist: lyric.artist,
+                        songs: []
+                    };
+                }
+                
+                artistMap[lyric.artist].songs.push({
+                    lyricId: lyric.lyricId,
+                    title: lyric.title,
+                    genre: lyric.genre,
+                    language: lyric.language
+                });
+            });
+            
+            // Convert map to array and sort by artist name
+            const artistArray = Object.values(artistMap).sort((a, b) => 
+                a.artist.localeCompare(b.artist)
+            );
+            
+            setLyricsByArtist(artistArray);
+        } catch (err) {
+            console.error('Error fetching lyrics:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch lyrics when active category changes
+    useEffect(() => {
+        fetchLyricsByGenre(activeCategory);
+    }, [activeCategory]);
 
     return (
         <div className={lyricsStyles.lyricsContainer}>
@@ -77,6 +83,13 @@ const Lyrics = () => {
                     <p>
                         Find detailed translations and breakdowns of your favorite songs
                     </p>
+                    {
+                        isAdmin(user?.email) && (
+                            <div className={lyricsStyles.adminContainer}>
+                                <Link href="/lyrics/admin">Admin Panel</Link>
+                            </div>
+                        )
+                    }
                 </div>
 
                 <div className={lyricsStyles.lyricsListOuter}>
@@ -98,115 +111,38 @@ const Lyrics = () => {
                         <div className={`${lyricsStyles.category} ${lyricsStyles.jpop} ${activeCategory === 'jpop' ? lyricsStyles.active : ''}`} onClick={() => setActiveCategory('jpop')}>J-Pop</div>
                         <div className={`${lyricsStyles.category} ${lyricsStyles.anime} ${activeCategory === 'anime' ? lyricsStyles.active : ''}`} onClick={() => setActiveCategory('anime')}>Anime</div>
                     </div>
-                    <div className={lyricsStyles.lyricsList}>
-                        <div className={lyricsStyles.lyricsSection}>
-                            <div className={lyricsStyles.lyricsSectionLetter}>
-                                A
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionContent}>
-                                <div className={lyricsStyles.lyricsItem}>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionLetter}>
-                                A
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionContent}>
-                                <div className={lyricsStyles.lyricsItem}>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionLetter}>
-                                A
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionContent}>
-                                <div className={lyricsStyles.lyricsItem}>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionLetter}>
-                                A
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionContent}>
-                                <div className={lyricsStyles.lyricsItem}>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionLetter}>
-                                A
-                            </div>
-                            <div className={lyricsStyles.lyricsSectionContent}>
-                                <div className={lyricsStyles.lyricsItem}>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemTitle}>
-                                        Autumn Leaves
-                                    </div>
-                                    <div className={lyricsStyles.lyricsItemArtist}>
-                                        Autumn Band
-                                    
-                                    </div>
-                                </div>
-                            </div>
+                    
+                    {loading ? (
+                        <div className={lyricsStyles.loading}>Loading lyrics...</div>
+                    ) : error ? (
+                        <div className={lyricsStyles.error}>{error}</div>
+                    ) : lyricsByArtist.length === 0 ? (
+                        <div className={lyricsStyles.noLyrics}>
+                            <p>No songs available for {activeCategory.toUpperCase()} yet.</p>
+                            <p>Suggest a song to see it here!</p>
                         </div>
-                    </div>
+                    ) : (
+                        <div className={lyricsStyles.lyricsList}>
+                            {lyricsByArtist.map((artistGroup) => (
+                                <div key={artistGroup.artist} className={lyricsStyles.lyricsSection}>
+                                    <h3>{artistGroup.artist.charAt(0).toUpperCase()}</h3>
+                                    <ul>
+                                        {artistGroup.songs.map((song) => (
+                                            <li key={song.lyricId}>
+                                                <Link href={`/lyrics/${song.lyricId}`}>
+                                                    <span>{artistGroup.artist}</span> - <span>{song.title}</span>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                    
+                <div className={`${lyricsStyles.girlContainer}`}>
+                    <Image src="/images/hanbokgirlmusic.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
                 </div>
 
             </div>

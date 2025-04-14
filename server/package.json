@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "worker": "node workers/lyricAnalysisWorker.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +16,7 @@
     "@aws-sdk/s3-request-presigner": "^3.744.0",
     "@google/generative-ai": "^0.21.0",
     "bcrypt": "^5.1.1",
+    "bull": "^4.12.2",
     "connect-redis": "^8.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -24,6 +27,10 @@
     "mongodb": "^6.13.0",
     "openai": "^4.83.0",
     "redis": "^4.7.0",
-    "stripe": "^17.6.0"
+    "stripe": "^17.6.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
   }
 }

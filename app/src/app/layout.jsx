@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { AdminProvider } from '@/contexts/AdminContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import "../styles/globals.scss";
 import NavBar from '@/components/NavBar';
@@ -56,10 +57,11 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AuthProvider>
-          <LanguageProvider>
-            <PopupProvider>
-              <Script
-                  src="https://accounts.google.com/gsi/client"
+          <AdminProvider>
+            <LanguageProvider>
+              <PopupProvider>
+                <Script
+                    src="https://accounts.google.com/gsi/client"
                   strategy="afterInteractive"
               />
               <script defer src="https://umami.ovel.sh/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
@@ -70,8 +72,9 @@ export default function RootLayout({ children }) {
               <div className="background-image">
                 <Image src="/images/background.png" alt="background" width={1536} height={1024} />
               </div>
-            </PopupProvider>
-          </LanguageProvider>
+              </PopupProvider>
+            </LanguageProvider>
+          </AdminProvider>
         </AuthProvider>
       </body>
     </html>

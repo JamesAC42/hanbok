@@ -30,7 +30,11 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
         let text = wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form
         let p = null;
         if(language === 'ko') {
-            p = romanize(text);
+            try {
+                p = romanize(text);
+            } catch(err) {
+                p = text;
+            }
         } else {
             p = renderPronunciation(wordInfo, language);
         }
@@ -101,6 +105,11 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                         {wordInfo.isParticle ? wordInfo.function.replaceAll('_', ' ') : wordInfo.meaning?.notes}
                         </span>
                         </li>
+                    }
+                    {
+                        wordInfo.meaning?.poetic_meaning && (
+                            <li><span className={styles.poeticMeaning}>{t('analysis.wordInfo.poeticMeaning')}: {wordInfo.meaning.poetic_meaning}</span></li>
+                        )
                     }
                     </ul>
                     

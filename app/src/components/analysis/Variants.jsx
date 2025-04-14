@@ -10,7 +10,11 @@ const Variants = ({analysis, language, showPronunciation}) => {
         if(!showPronunciation) return null;
         let reading = variant.reading;
         if(language === 'ko') {
-            reading = romanize(variant.text);
+            try {
+                reading = romanize(variant.text);
+            } catch(err) {
+                console.log(err);
+            }
         }
         if(language === 'ru') {
             reading = variant.transliteration;
@@ -61,7 +65,7 @@ const Variants = ({analysis, language, showPronunciation}) => {
                                 <div className={styles.variantType}>
                                     {variant}
                                 </div>
-                                <div className={`${getFontClass(language)}`}>
+                                <div className={`${styles.variantText} ${getFontClass(language)}`}>
                                     {variants[variant].text}
                                 </div>
                                 {renderReading(variants[variant])}

@@ -1,4 +1,6 @@
 const { getDb } = require('../../database');
+const { getCachedLyricsData, cacheLyricsData } = require('../../utils/lyricsCache');
+const {isAdmin} = require("./adminLyrics");
 
 // Get all published lyrics
 async function getPublishedLyrics(req, res) {
@@ -23,6 +25,7 @@ async function getPublishedLyrics(req, res) {
         lyricId: 1,
         title: 1,
         artist: 1,
+        anime: 1,
         genre: 1,
         language: 1,
         dateCreated: 1
@@ -30,27 +33,10 @@ async function getPublishedLyrics(req, res) {
       .sort({ dateCreated: -1 })
       .toArray();
     
-    // Get available languages for each lyric
-    const lyricsWithLanguages = await Promise.all(
-      lyrics.map(async lyric => {
-        const availableAnalyses = await db.collection('lyrics_analysis')
-          .find({ 
-            lyricId: lyric.lyricId,
-            published: true 
-          })
-          .project({ language: 1 })
-          .toArray();
-        
-        return {
-          ...lyric,
-          availableLanguages: availableAnalyses.map(a => a.language)
-        };
-      })
-    );
-    
+    // Return the lyrics without fetching analysis
     return res.status(200).json({
       success: true,
-      lyrics: lyricsWithLanguages
+      lyrics: lyrics
     });
   } catch (error) {
     console.error('Error getting published lyrics:', error);
@@ -65,14 +51,14 @@ async function getPublishedLyrics(req, res) {
 // Get a single published lyric by ID
 async function getPublishedLyric(req, res) {
   try {
-    const lyricId = parseInt(req.params.lyricId);
+    const lyricId = req.params.lyricId;
+    const language = req.query.language || 'en'; // Default to English if not specified
     
     const db = getDb();
     
     // Get the lyric
     const lyric = await db.collection('lyrics').findOne({ 
-      lyricId, 
-      published: true 
+      lyricId
     });
     
     if (!lyric) {
@@ -81,22 +67,118 @@ async function getPublishedLyric(req, res) {
         message: 'Lyrics not found or not published'
       });
     }
+
+    const userIsAdmin = await isAdmin(req);
+
+    if (!lyric.published && !userIsAdmin) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lyrics not found or not published'
+      });
+    }
     
-    // Get available analysis languages
-    const availableAnalyses = await db.collection('lyrics_analysis')
-      .find({ 
-        lyricId: lyric.lyricId,
-        published: true 
-      })
-      .project({ language: 1 })
+    // Increment view count or create a new view record if it doesn't exist
+    let viewData = await db.collection('lyric_views').findOne({ lyricId });
+    
+    if (viewData) {
+      await db.collection('lyric_views').updateOne(
+        { lyricId },
+        { 
+          $inc: { viewCount: 1 },
+          $set: { lastViewed: new Date() }
+        }
+      );
+      viewData.viewCount += 1;
+    } else {
+      viewData = { 
+        lyricId, 
+        viewCount: 1, 
+        lastViewed: new Date() 
+      };
+      await db.collection('lyric_views').insertOne(viewData);
+    }
+    
+    const cachedData = await getCachedLyricsData(lyricId, language);
+    if (cachedData) {
+      return res.status(200).json({
+        success: true,
+        cached: true,
+        lyric: {
+          ...cachedData,
+          viewCount: viewData.viewCount
+        }
+      });
+    }
+    
+    // Get the analysis for the requested language
+    const analysis = await db.collection('lyrics_analysis').findOne({
+      lyricId: lyric._id.toString(),
+      language: language
+    });
+    
+    if (!analysis) {
+      // Return the lyric without analysis if no analysis is available
+      const result = {
+        ...lyric,
+        analysis: null,
+        sentences: [],
+        viewCount: viewData.viewCount
+      };
+      
+      // Cache the result without viewCount (we'll add it later when serving from cache)
+      const cacheResult = {
+        ...result
+      };
+      delete cacheResult.viewCount;
+      await cacheLyricsData(lyricId, language, cacheResult);
+      
+      return res.status(200).json({
+        success: true,
+        lyric: result
+      });
+    }
+    
+    // Parse the analysis data from JSON string
+    const analysisData = JSON.parse(analysis.analysisData || '[]');
+    
+    // Get all sentences for this analysis
+    const sentenceIds = analysisData.map(item => item.sentenceId);
+    const sentences = await db.collection('sentences')
+      .find({ sentenceId: { $in: sentenceIds } })
       .toArray();
+    
+    // Create a mapping of sentenceId to sentence data
+    const sentenceMap = {};
+    sentences.forEach(sentence => {
+      sentenceMap[sentence.sentenceId] = sentence;
+    });
+    
+    // Combine the analysis data with sentence data
+    const analysisWithSentences = analysisData.map(item => ({
+      ...item,
+      sentence: sentenceMap[item.sentenceId] || null
+    }));
+    
+    // Create the final result
+    const result = {
+      ...lyric,
+      analysis: {
+        ...analysis,
+        analysisData: analysisWithSentences
+      },
+      viewCount: viewData.viewCount
+    };
+    
+    // Cache the result without viewCount (we'll add it later when serving from cache)
+    const cacheResult = {
+      ...result
+    };
+    delete cacheResult.viewCount;
+    await cacheLyricsData(lyricId, language, cacheResult);
     
     return res.status(200).json({
       success: true,
-      lyric: {
-        ...lyric,
-        availableLanguages: availableAnalyses.map(a => a.language)
-      }
+      lyric: result
     });
   } catch (error) {
     console.error('Error getting published lyric:', error);

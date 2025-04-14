@@ -321,7 +321,8 @@ export const en = {
             aspect: 'The aspect of this verb is ',
             form: 'The form of this word is ',
             politeness: 'Politeness level',
-            case: 'The case of this word is '
+            case: 'The case of this word is ',
+            poeticMeaning: 'Poetic meaning'
         },
         conjugation: {
             tense: 'Tense',

@@ -32,12 +32,20 @@ const getCleanedType = (wordType) => {
 const getDisplayReading = (word, language, showPronunciation) => {
     if(!showPronunciation) return null;
     let reading = null;
-    if(language === 'ko') {
-        reading = romanize(word.originalWord);
-    } else if(language === 'ru') {
-        reading = word.transliteration;
-    } else if(word.reading) {
-        reading = word.reading;
+    try {
+        if(language === 'ko') {
+            try {
+                reading = romanize(word.originalWord);
+            } catch(err) {
+                reading = word.originalWord;
+            }
+        } else if(language === 'ru') {
+            reading = word.transliteration;
+        } else if(word.reading) {
+            reading = word.reading;
+        }
+    } catch(err) {
+        reading = word.originalWord;
     }
     if(reading) {
         return (

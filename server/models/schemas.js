@@ -123,6 +123,10 @@ const collections = {
           translationLanguage: {
             bsonType: "string",
             description: "Language code for the translation (e.g. 'en', 'ko')"
+          },
+          isLyric: {
+            bsonType: ["bool", "null"],
+            description: "Whether the sentence is part of a song."
           }
         }
       }
@@ -617,19 +621,27 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["lyricId", "title", "artist", "genre", "lyricsText", "dateCreated", "published"],
+        required: ["title", "genre", "lyricsText", "dateCreated", "published", "lyricId"],
         properties: {
-          lyricId: {
-            bsonType: "int",
+          _id: {
+            bsonType: "objectId",
             description: "Unique identifier for the lyrics"
+          },
+          lyricId: {
+            bsonType: "string",
+            description: "URL-friendly ID formed from artist and title"
           },
           title: {
             bsonType: "string",
             description: "Title of the song"
           },
           artist: {
-            bsonType: "string",
-            description: "Name of the artist/band"
+            bsonType: ["string", "null"],
+            description: "Name of the artist/band/anime"
+          },
+          anime: {
+            bsonType: ["string", "null"],
+            description: "Name of the anime"
           },
           genre: {
             bsonType: "string",
@@ -642,6 +654,10 @@ const collections = {
           published: {
             bsonType: "bool",
             description: "Whether the lyrics are publicly visible to users"
+          },
+          isNew: {
+            bsonType: "bool",
+            description: "Whether the lyrics are new"
           },
           dateCreated: {
             bsonType: "date",
@@ -660,7 +676,7 @@ const collections = {
     },
     indexes: [
       {
-        key: { lyricId: 1 },
+        key: { _id: 1 },
         unique: true
       },
       {
@@ -675,14 +691,14 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["analysisId", "lyricId", "analysisData", "language", "dateCreated"],
+        required: ["lyricId", "analysisData", "language", "dateCreated"],
         properties: {
-          analysisId: {
-            bsonType: "int",
-            description: "Unique identifier for the analysis"
+          _id: {
+            bsonType: "objectId",
+            description: "Unique identifier for the lyrics analysis"
           },
           lyricId: {
-            bsonType: "int",
+            bsonType: "string",
             description: "ID of the lyrics item this analysis is for"
           },
           language: {
@@ -695,15 +711,11 @@ const collections = {
           },
           analysisData: {
             bsonType: "string",
-            description: "JSON string of the analysis data, structured as a list of objects mapping line text to sentence analysis ID"
+            description: "JSON string of the analysis data, structured as a list of objects mapping line(s) to sentence analysis ID"
           },
           translationText: {
             bsonType: ["string", "null"],
             description: "Full translation of the entire lyrics text"
-          },
-          published: {
-            bsonType: ["bool", "null"],
-            description: "Whether the analysis is publicly visible to users"
           }
         }
       }
@@ -782,6 +794,34 @@ const collections = {
       },
       {
         key: { status: 1 }
+      }
+    ]
+  },
+  lyric_views: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["lyricId", "viewCount", "lastViewed"],
+        properties: {
+          lyricId: {
+            bsonType: "string",
+            description: "ID of the lyrics item this view count is for"
+          },
+          viewCount: {
+            bsonType: "int",
+            description: "Number of times the lyric has been viewed"
+          },
+          lastViewed: {
+            bsonType: "date",
+            description: "Date when the lyric was last viewed"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { lyricId: 1 },
+        unique: true
       }
     ]
   },

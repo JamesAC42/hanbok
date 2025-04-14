@@ -1,25 +1,53 @@
 const { getDb } = require('../../database');
 const { ObjectId } = require('mongodb');
 
-// Admin emails with permission to manage lyrics
-const ADMIN_EMAILS = ['admin@example.com', 'your-email@gmail.com']; // Update with your actual admin emails
+// Admin email with permission to manage lyrics
+const ADMIN_EMAIL = 'jamescrovo450@gmail.com';
 
-// Helper function to check if user is admin
+// Helper function to generate URL-friendly lyricId
+function generateLyricId(artist, title) {
+  // Convert to lowercase and replace spaces with hyphens
+  const sanitizedArtist = (artist || 'unknown').toLowerCase().replace(/\s+/g, '-');
+  const sanitizedTitle = title.toLowerCase().replace(/\s+/g, '-');
+  
+  // Remove any non-alphanumeric characters except hyphens
+  const cleanArtist = sanitizedArtist.replace(/[^a-z0-9-]/g, '');
+  const cleanTitle = sanitizedTitle.replace(/[^a-z0-9-]/g, '');
+  
+  return `${cleanArtist}-${cleanTitle}`;
+}
+
+// Check if the user is an admin
 async function isAdmin(req) {
-  if (!req.session.user) {
+  try {
+    // Check if user is authenticated
+    if (!req.session || !req.session.user || !req.session.user.userId) {
+      return false;
+    }
+    
+    const db = getDb();
+    
+    // Get the user from the database
+    const user = await db.collection('users').findOne({ 
+      userId: req.session.user.userId 
+    });
+    
+    if (!user) {
+      return false;
+    }
+    
+    // Check if the user's email matches the admin email
+    return user.email === ADMIN_EMAIL;
+  } catch (error) {
+    console.error('Error checking admin status:', error);
     return false;
   }
-  
-  const db = getDb();
-  const user = await db.collection('users').findOne({ userId: req.session.user.userId });
-  
-  return user && ADMIN_EMAILS.includes(user.email);
 }
 
 // Get all lyrics (admin only)
 async function getAllLyrics(req, res) {
   try {
-    if (!await isAdmin(req)) {
+    if (!isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
@@ -33,15 +61,14 @@ async function getAllLyrics(req, res) {
     
     // For each lyric, check if it has an analysis
     const lyricsWithAnalysisInfo = await Promise.all(lyrics.map(async lyric => {
-      const analyses = await db.collection('lyrics_analysis')
-        .find({ lyricId: lyric.lyricId })
-        .project({ analysisId: 1, language: 1 })
-        .toArray();
-      
+      const hasAnalysis = await db.collection('lyrics_analysis')
+        .find({ lyricId: lyric._id.toString() })
+        .limit(1) // Limit to 1 to check existence
+        .count(); // Count the number of documents
+
       return {
         ...lyric,
-        hasAnalysis: analyses.length > 0,
-        analyses: analyses
+        hasAnalysis: hasAnalysis > 0
       };
     }));
 
@@ -62,17 +89,17 @@ async function getAllLyrics(req, res) {
 // Add new lyrics (admin only)
 async function addLyrics(req, res) {
   try {
-    if (!await isAdmin(req)) {
+    if (!isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
       });
     }
 
-    const { title, artist, genre, youtubeUrl, lyricsText, language } = req.body;
+    const { title, artist, genre, youtubeUrl, lyricsText, language, published } = req.body;
     
     // Validation
-    if (!title || !artist || !genre || !lyricsText || !language) {
+    if (!title || !genre || !lyricsText || !language) {
       return res.status(400).json({
         success: false,
         message: 'Missing required fields'
@@ -81,29 +108,27 @@ async function addLyrics(req, res) {
 
     const db = getDb();
     
-    // Get next lyricId from counter
-    const counterUpdate = await db.collection('counters').findOneAndUpdate(
-      { _id: 'lyricId' },
-      { $inc: { seq: 1 } },
-      { returnDocument: 'after' }
-    );
-    
-    const lyricId = counterUpdate.value.seq;
+    // Generate URL-friendly ID
+    const lyricId = generateLyricId(artist, title);
     
     // Create new lyrics document
     const newLyric = {
-      lyricId,
       title,
-      artist,
+      artist: artist || null,
       genre,
       youtubeUrl: youtubeUrl || null,
-      published: false, // Default to unpublished
+      published: published || false,
       dateCreated: new Date(),
       lyricsText,
-      language
+      language,
+      isNew: true,
+      lyricId
     };
     
-    await db.collection('lyrics').insertOne(newLyric);
+    const result = await db.collection('lyrics').insertOne(newLyric);
+    
+    // Add the _id to the response
+    newLyric._id = result.insertedId;
     
     return res.status(201).json({
       success: true,
@@ -122,58 +147,116 @@ async function addLyrics(req, res) {
 // Update lyrics (admin only)
 async function updateLyrics(req, res) {
   try {
-    if (!await isAdmin(req)) {
+    if (!isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
       });
     }
 
-    const lyricId = parseInt(req.params.lyricId);
-    const { title, artist, genre, youtubeUrl, lyricsText, language, published } = req.body;
+    const lyricId = req.params.lyricId;
+    const { title, artist, genre, youtubeUrl, anime, lyricsText, language, published } = req.body;
     
     // Validation
-    if (!title && !artist && !genre && youtubeUrl === undefined && !lyricsText && !language && published === undefined) {
+    if (!title || !genre || !lyricsText || !language) {
       return res.status(400).json({
         success: false,
-        message: 'No fields to update'
+        message: 'Missing required fields'
       });
     }
 
     const db = getDb();
     
-    // Build update object with only the fields that are provided
-    const updateFields = {};
-    if (title) updateFields.title = title;
-    if (artist) updateFields.artist = artist;
-    if (genre) updateFields.genre = genre;
-    if (youtubeUrl !== undefined) updateFields.youtubeUrl = youtubeUrl;
-    if (lyricsText) updateFields.lyricsText = lyricsText;
-    if (language) updateFields.language = language;
-    if (published !== undefined) updateFields.published = published;
+    // Generate new URL-friendly ID if title or artist changed
+    const newLyricId = generateLyricId(artist, title);
     
-    const result = await db.collection('lyrics').findOneAndUpdate(
-      { lyricId },
-      { $set: updateFields },
-      { returnDocument: 'after' }
+    const updateResult = await db.collection('lyrics').updateOne(
+      { _id: new ObjectId(lyricId) },
+      {
+        $set: {
+          title,
+          artist: artist || null,
+          anime: anime || null,
+          genre,
+          youtubeUrl: youtubeUrl || null,
+          lyricsText,
+          language,
+          published: published || false,
+          lastModified: new Date(),
+          lyricId: newLyricId
+        }
+      }
     );
     
-    if (!result.value) {
+    if (updateResult.matchedCount === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Lyrics not found'
+        message: 'Lyric not found'
       });
     }
     
     return res.status(200).json({
       success: true,
-      lyric: result.value
+      message: 'Lyric updated successfully'
     });
   } catch (error) {
-    console.error('Error updating lyrics:', error);
+    console.error('Error updating lyric:', error);
     return res.status(500).json({
       success: false,
-      message: 'Failed to update lyrics',
+      message: 'Failed to update lyric',
+      error: error.message
+    });
+  }
+}
+
+// Delete lyrics (admin only)
+async function deleteLyrics(req, res) {
+  try {
+    if (!isAdmin(req)) {
+      return res.status(403).json({
+        success: false,
+        message: 'Unauthorized: Admin access required'
+      });
+    }
+
+    const lyricId = req.params.lyricId;
+    const db = getDb();
+    
+    // Get the lyric to retrieve its lyricId string
+    const lyric = await db.collection('lyrics').findOne({ _id: new ObjectId(lyricId) });
+    
+    if (!lyric) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lyric not found'
+      });
+    }
+    
+    // Delete the lyric
+    const deleteResult = await db.collection('lyrics').deleteOne({ _id: new ObjectId(lyricId) });
+    
+    if (deleteResult.deletedCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lyric not found'
+      });
+    }
+    
+    // Delete associated analyses
+    await db.collection('lyrics_analysis').deleteMany({ lyricId: lyric._id.toString() });
+    
+    // Delete the view count record
+    await db.collection('lyric_views').deleteOne({ lyricId: lyric.lyricId });
+    
+    return res.status(200).json({
+      success: true,
+      message: 'Lyric and associated data deleted successfully'
+    });
+  } catch (error) {
+    console.error('Error deleting lyric:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to delete lyric',
       error: error.message
     });
   }
@@ -182,7 +265,7 @@ async function updateLyrics(req, res) {
 // Toggle published status (admin only)
 async function togglePublished(req, res) {
   try {
-    if (!await isAdmin(req)) {
+    if (!isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
@@ -190,29 +273,37 @@ async function togglePublished(req, res) {
     }
 
     const lyricId = parseInt(req.params.lyricId);
+    const { published } = req.body;
     
+    if (published === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: 'Published status is required'
+      });
+    }
+
     const db = getDb();
     
-    // Get current lyric
-    const lyric = await db.collection('lyrics').findOne({ lyricId });
+    const updateResult = await db.collection('lyrics').updateOne(
+      { lyricId },
+      {
+        $set: {
+          published,
+          lastModified: new Date()
+        }
+      }
+    );
     
-    if (!lyric) {
+    if (updateResult.matchedCount === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Lyrics not found'
+        message: 'Lyric not found'
       });
     }
     
-    // Toggle published status
-    const result = await db.collection('lyrics').findOneAndUpdate(
-      { lyricId },
-      { $set: { published: !lyric.published } },
-      { returnDocument: 'after' }
-    );
-    
     return res.status(200).json({
       success: true,
-      lyric: result.value
+      message: `Lyric ${published ? 'published' : 'unpublished'} successfully`
     });
   } catch (error) {
     console.error('Error toggling published status:', error);
@@ -224,52 +315,11 @@ async function togglePublished(req, res) {
   }
 }
 
-// Delete lyrics (admin only)
-async function deleteLyrics(req, res) {
-  try {
-    if (!await isAdmin(req)) {
-      return res.status(403).json({
-        success: false,
-        message: 'Unauthorized: Admin access required'
-      });
-    }
-
-    const lyricId = parseInt(req.params.lyricId);
-    
-    const db = getDb();
-    
-    // Delete the lyrics
-    const result = await db.collection('lyrics').deleteOne({ lyricId });
-    
-    if (result.deletedCount === 0) {
-      return res.status(404).json({
-        success: false,
-        message: 'Lyrics not found'
-      });
-    }
-    
-    // Also delete any analyses for this lyric
-    await db.collection('lyrics_analysis').deleteMany({ lyricId });
-    
-    return res.status(200).json({
-      success: true,
-      message: 'Lyrics and associated analyses deleted'
-    });
-  } catch (error) {
-    console.error('Error deleting lyrics:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to delete lyrics',
-      error: error.message
-    });
-  }
-}
-
 module.exports = {
   getAllLyrics,
   addLyrics,
   updateLyrics,
-  togglePublished,
   deleteLyrics,
-  isAdmin // Export for use in other controllers
+  togglePublished,
+  isAdmin
 }; 

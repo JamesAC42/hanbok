@@ -10,6 +10,7 @@ import Variants from '@/components/analysis/Variants';
 import CulturalNotes from '@/components/analysis/CulturalNotes';
 import SaveButton from '@/components/analysis/SaveButton';
 import SettingsButton from '@/components/analysis/SettingsButton';
+import LyricalDevices from '@/components/analysis/LyricalDevices';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 import getFontClass from '@/lib/fontClass';
@@ -21,7 +22,8 @@ const Analysis = ({
     voice1,
     voice2,
     showTransition,
-    sentenceId
+    sentenceId,
+    isLyric
 }) => {
     const { t, language } = useLanguage();
     const [prevWord, setPrevWord] = useState(null);
@@ -90,6 +92,7 @@ const Analysis = ({
 
             <AudioPlayer
                 sentenceId={sentenceId}
+                isLyric={isLyric}
                 voice1={voice1}
                 voice2={voice2} />
 
@@ -108,6 +111,11 @@ const Analysis = ({
                 showPronunciation={showPronunciation} />
 
             <SentenceNotes analysis={analysis} />
+
+            {isLyric && (
+                <LyricalDevices 
+                    analysis={analysis}/>
+            )}
 
             <CulturalNotes analysis={analysis} />
 
