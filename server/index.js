@@ -308,21 +308,6 @@ app.get('/api/lyrics/filters', async (req, res) => {
     getFilterOptions(req, res);
 });
 
-app.get('/api/lyrics/:lyricId', async (req, res) => {
-    const { getPublishedLyric } = require('./controllers/lyrics/publicLyrics');
-    getPublishedLyric(req, res);
-});
-
-app.get('/api/lyrics/:lyricId/analysis', async (req, res) => {
-    const { getAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
-    getAnalysis(req, res);
-});
-
-app.get('/api/lyrics/:lyricId/fullAnalysis', async (req, res) => {
-    const { getFullAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
-    getFullAnalysis(req, res);
-});
-
 // Lyric suggestions routes
 app.get('/api/lyrics/suggestions', async (req, res) => {
     const { getSuggestions } = require('./controllers/lyrics/lyricSuggestions');
@@ -347,6 +332,22 @@ app.put('/api/admin/lyrics/suggestions/:suggestionId/status', isAuthenticated, a
 app.delete('/api/admin/lyrics/suggestions/:suggestionId', isAuthenticated, async (req, res) => {
     const { deleteSuggestion } = require('./controllers/lyrics/lyricSuggestions');
     deleteSuggestion(req, res);
+});
+
+// Single lyric and analysis routes (must come after specific routes)
+app.get('/api/lyrics/:lyricId', async (req, res) => {
+    const { getPublishedLyric } = require('./controllers/lyrics/publicLyrics');
+    getPublishedLyric(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/analysis', async (req, res) => {
+    const { getAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    getAnalysis(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/fullAnalysis', async (req, res) => {
+    const { getFullAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    getFullAnalysis(req, res);
 });
 
 // Add API route for deleting an analysis

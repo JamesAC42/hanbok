@@ -123,9 +123,9 @@ const Lyrics = () => {
                         <div className={lyricsStyles.suggestionsBoxDescription}>
                             I'm actively adding more songs based on your suggestions! Please submit the songs you would like to see, or vote on the ones that others have submitted.
                         </div>
-                        <div className={lyricsStyles.suggestionsBoxButton}>
+                        <Link href="/lyrics/suggestions" className={lyricsStyles.suggestionsBoxButton}>
                             Suggest a Song
-                        </div>
+                        </Link>
                     </div>
 
                     <div className={lyricsStyles.categories}>

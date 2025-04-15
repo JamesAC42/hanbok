@@ -8,6 +8,11 @@
     overflow-x: hidden;
     padding:3rem;
 
+    @media screen and (max-width: 725px) {
+        padding:0;
+        padding-top:3rem;
+    }
+
     .lyricsContent {
         display: flex;
         flex-direction: column;
@@ -19,6 +24,11 @@
         padding-bottom:0;
         min-height:70dvh;
         z-index:2;
+
+        @media screen and (max-width: 725px) {
+            width:100dvw;
+            max-width:100dvw; 
+        }
 
         .girlContainer {
             @include bottom-girl;
@@ -106,6 +116,9 @@
                 }   
                 
                 .suggestionsBoxButton {
+
+                    display:block;
+                    text-decoration:none;
                     margin-top:1rem;
                     
                     background:#25536d;
@@ -246,22 +259,7 @@
         }
       
         @media screen and (max-width: 500px) {
-          max-width: 100dvw;
-          width: 100dvw;
-          margin: 0;
-          padding: 1rem;
-          border: none;
-          border-radius: 0;
-          box-shadow: none;
-          min-height: 100dvh;
-          justify-content: center;
-          transform:translateY(-1rem);
-      
-          .section {
-            h2 {
-              font-size: 1.4rem;
-            }
-          }
+
         }
     }
 }

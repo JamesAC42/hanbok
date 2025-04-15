@@ -3,6 +3,7 @@ const { isAdmin } = require('./adminLyrics');
 
 // Get all lyric suggestions
 async function getSuggestions(req, res) {
+
   try {
     const db = getDb();
     
@@ -10,7 +11,6 @@ async function getSuggestions(req, res) {
     // Admins can see all by passing status=all or specific status
     let statusFilter = {};
     const requestedStatus = req.query.status;
-    
     if (await isAdmin(req)) {
       if (requestedStatus && requestedStatus !== 'all') {
         statusFilter = { status: requestedStatus };
@@ -45,11 +45,14 @@ async function getSuggestions(req, res) {
       
       suggestionsWithUserUpvoteStatus = await Promise.all(
         suggestions.map(async suggestion => {
-          // We would normally check a separate upvotes collection 
-          // For simplicity, we'll just return false for now
+          const userUpvote = await db.collection('lyric_suggestion_upvotes').findOne({
+            userId,
+            suggestionId: suggestion.suggestionId
+          });
+          
           return {
             ...suggestion,
-            userHasUpvoted: false
+            userHasUpvoted: !!userUpvote
           };
         })
       );
@@ -93,13 +96,54 @@ async function addSuggestion(req, res) {
     const db = getDb();
     
     // Get next suggestionId from counter
-    const counterUpdate = await db.collection('counters').findOneAndUpdate(
-      { _id: 'suggestionId' },
-      { $inc: { seq: 1 } },
-      { returnDocument: 'after' }
-    );
-    
-    const suggestionId = counterUpdate.value.seq;
+    let suggestionId = 1;
+    try {
+      // First make sure the counter exists, create it if it doesn't
+      const counterExists = await db.collection('counters').findOne({ _id: 'suggestionId' });
+      if (!counterExists) {
+        await db.collection('counters').insertOne({ _id: 'suggestionId', seq: 1 });
+        suggestionId = 1;
+      } else {
+        // Use findOneAndUpdate with returnDocument set to 'after'
+        const result = await db.collection('counters').findOneAndUpdate(
+          { _id: 'suggestionId' },
+          { $inc: { seq: 1 } },
+          { returnDocument: 'after' }
+        );
+        
+        // Check if result and result.value exist before accessing
+        if (result && result.value) {
+          suggestionId = result.value.seq;
+        } else {
+          // Fallback - get the current value
+          const current = await db.collection('counters').findOne({ _id: 'suggestionId' });
+          suggestionId = current ? current.seq : 1;
+        }
+      }
+    } catch (counterError) {
+      console.error('Error with suggestion counter:', counterError);
+      // Fallback strategy - find max existing ID and add 1
+      const highestSuggestion = await db.collection('lyric_suggestions')
+        .find({})
+        .sort({ suggestionId: -1 })
+        .limit(1)
+        .toArray();
+      
+      if (highestSuggestion.length > 0) {
+        suggestionId = highestSuggestion[0].suggestionId + 1;
+      }
+      
+      // Also try to fix the counter for next time
+      try {
+        await db.collection('counters').updateOne(
+          { _id: 'suggestionId' }, 
+          { $set: { seq: suggestionId } },
+          { upsert: true }
+        );
+      } catch (fixError) {
+        console.error('Could not fix counter:', fixError);
+      }
+    }
     
     // Create new suggestion
     const newSuggestion = {
@@ -117,9 +161,20 @@ async function addSuggestion(req, res) {
     
     await db.collection('lyric_suggestions').insertOne(newSuggestion);
     
+    // Add the creator's upvote to the upvotes collection
+    await db.collection('lyric_suggestion_upvotes').insertOne({
+      userId: req.session.user.userId,
+      suggestionId,
+      dateUpvoted: new Date()
+    });
+    
+    // Return with userHasUpvoted flag
     return res.status(201).json({
       success: true,
-      suggestion: newSuggestion
+      suggestion: {
+        ...newSuggestion,
+        userHasUpvoted: true
+      }
     });
   } catch (error) {
     console.error('Error adding suggestion:', error);
@@ -143,6 +198,7 @@ async function upvoteSuggestion(req, res) {
     }
 
     const suggestionId = parseInt(req.params.suggestionId);
+    const userId = req.session.user.userId;
     
     const db = getDb();
     
@@ -156,19 +212,55 @@ async function upvoteSuggestion(req, res) {
       });
     }
     
-    // In a real app, we'd check a separate collection for user upvotes
-    // For simplicity, we'll just increment the upvote count
-    // A more complete implementation would check if user already upvoted
+    // Check if user already upvoted
+    const existingUpvote = await db.collection('lyric_suggestion_upvotes').findOne({
+      userId,
+      suggestionId
+    });
     
-    const result = await db.collection('lyric_suggestions').findOneAndUpdate(
-      { suggestionId },
-      { $inc: { upvotes: 1 } },
-      { returnDocument: 'after' }
-    );
+    let updatedSuggestion;
+    let userHasUpvoted;
     
+    if (existingUpvote) {
+      // User already upvoted, so remove the upvote
+      await db.collection('lyric_suggestion_upvotes').deleteOne({
+        userId,
+        suggestionId
+      });
+
+      // Decrease upvote count
+      updatedSuggestion = await db.collection('lyric_suggestions').findOneAndUpdate(
+        { suggestionId },
+        { $inc: { upvotes: -1 } },
+        { returnDocument: 'after' }
+      );
+      
+      userHasUpvoted = false;
+    } else {
+      // User hasn't upvoted yet, so add the upvote
+      await db.collection('lyric_suggestion_upvotes').insertOne({
+        userId,
+        suggestionId,
+        dateUpvoted: new Date()
+      });
+
+      // Increase upvote count
+      updatedSuggestion = await db.collection('lyric_suggestions').findOneAndUpdate(
+        { suggestionId },
+        { $inc: { upvotes: 1 } },
+        { returnDocument: 'after' }
+      );
+      
+      userHasUpvoted = true;
+    }
+    
+    // Return updated suggestion with user upvote status
     return res.status(200).json({
       success: true,
-      suggestion: result.value
+      suggestion: {
+        ...updatedSuggestion,
+        userHasUpvoted
+      }
     });
   } catch (error) {
     console.error('Error upvoting suggestion:', error);
@@ -209,16 +301,29 @@ async function updateSuggestionStatus(req, res) {
       { returnDocument: 'after' }
     );
     
-    if (!result.value) {
+    if (!result) {
       return res.status(404).json({
         success: false,
         message: 'Suggestion not found'
       });
     }
     
+    // Check if the current user has upvoted this suggestion
+    let userHasUpvoted = false;
+    if (req.session.user) {
+      const upvote = await db.collection('lyric_suggestion_upvotes').findOne({
+        userId: req.session.user.userId,
+        suggestionId
+      });
+      userHasUpvoted = !!upvote;
+    }
+    
     return res.status(200).json({
       success: true,
-      suggestion: result.value
+      suggestion: {
+        ...result,
+        userHasUpvoted
+      }
     });
   } catch (error) {
     console.error('Error updating suggestion status:', error);
@@ -252,6 +357,9 @@ async function deleteSuggestion(req, res) {
         message: 'Suggestion not found'
       });
     }
+    
+    // Also clean up any upvotes for this suggestion
+    await db.collection('lyric_suggestion_upvotes').deleteMany({ suggestionId });
     
     return res.status(200).json({
       success: true,

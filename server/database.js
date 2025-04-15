@@ -67,6 +67,13 @@ async function connectToDatabase() {
       await db.collection('lyric_suggestions').createIndex({ upvotes: -1 });
       await db.collection('lyric_suggestions').createIndex({ userId: 1 });
       await db.collection('lyric_suggestions').createIndex({ status: 1 });
+      
+      // Add indexes for lyric suggestion upvotes
+      await db.collection('lyric_suggestion_upvotes').createIndex(
+        { userId: 1, suggestionId: 1 }, 
+        { unique: true }
+      );
+      await db.collection('lyric_suggestion_upvotes').createIndex({ suggestionId: 1 });
     } catch (error) {
       // Ignore errors for indexes that already exist with different names
       if (error.code !== 85 && error.code !== 11000) {

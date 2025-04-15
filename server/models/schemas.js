@@ -797,6 +797,37 @@ const collections = {
       }
     ]
   },
+  lyric_suggestion_upvotes: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "suggestionId", "dateUpvoted"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who upvoted"
+          },
+          suggestionId: {
+            bsonType: "int",
+            description: "ID of the suggestion that was upvoted"
+          },
+          dateUpvoted: {
+            bsonType: "date",
+            description: "Date when the upvote was created"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, suggestionId: 1 },
+        unique: true
+      },
+      {
+        key: { suggestionId: 1 }
+      }
+    ]
+  },
   lyric_views: {
     validator: {
       $jsonSchema: {
