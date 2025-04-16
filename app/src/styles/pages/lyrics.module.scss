@@ -112,6 +112,35 @@
     }
   }
 
+  .backButton {
+    text-decoration:none;
+    padding:0.5rem 1rem;
+    margin-top:1rem;
+    border-radius:0.5rem;
+    font-family: var(--font-display);
+    font-variation-settings: 'wght' 700;
+    text-align:center;
+
+    a {
+      text-decoration:none;
+      color:#252525;
+      background:#f8fefc63;
+      width:fit-content;
+      margin:0 auto;
+      transition:all 0.2s ease;
+
+      display:block;
+      padding:0.5rem 1rem;
+      border-radius:0.5rem;
+
+      &:hover {
+        background:#4c5aa9;
+        color:#ffffff;
+      }
+    }
+    
+  }
+
   .youtubeContainer {
     margin-top:2rem;
     display:flex;

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/pages/lyricsuggestions.module.scss';
 import Link from 'next/link';
 import { BxsUpvote } from '@/components/icons/Upvote';
@@ -21,6 +22,7 @@ const genreOptions = [
 const Suggestions = () => {
   const { user, isAuthenticated } = useAuth();
   const { isAdmin } = useAdmin();
+  const { t } = useLanguage();
   
   const [formData, setFormData] = useState({
     songName: '',
@@ -50,10 +52,10 @@ const Suggestions = () => {
       if (data.success) {
         setSuggestions(data.suggestions);
       } else {
-        setError(data.message || 'Failed to fetch suggestions');
+        setError(t('lyrics.suggestions.errors.fetchFailed'));
       }
     } catch (err) {
-      setError('Failed to connect to the server');
+      setError(t('lyrics.suggestions.errors.connectionError'));
       console.error(err);
     } finally {
       setLoading(false);
@@ -151,22 +153,21 @@ const Suggestions = () => {
       const data = await response.json();
       
       if (data.success) {
-        // Update the suggestion in the list
         setSuggestions(prev => 
           prev.map(s => s.suggestionId === suggestionId ? { ...s, status } : s)
         );
       } else {
-        console.error('Failed to update status:', data.message);
+        console.error(t('lyrics.suggestions.errors.updateStatusFailed', { message: data.message }));
       }
     } catch (err) {
-      console.error('Error updating suggestion status:', err);
+      console.error(t('lyrics.suggestions.errors.updateStatusFailed', { message: err.message }));
     }
   };
 
   const handleDelete = async (suggestionId) => {
     if (!isAdmin || !isAdmin(user?.email)) return;
     
-    if (!confirm('Are you sure you want to delete this suggestion?')) return;
+    if (!confirm(t('lyrics.suggestions.card.deleteConfirm'))) return;
     
     try {
       const response = await fetch(`/api/admin/lyrics/suggestions/${suggestionId}`, {
@@ -176,11 +177,10 @@ const Suggestions = () => {
       const data = await response.json();
       
       if (data.success) {
-        // Remove the suggestion from the list
         setSuggestions(prev => prev.filter(s => s.suggestionId !== suggestionId));
       }
     } catch (err) {
-      console.error('Error deleting suggestion:', err);
+      console.error(t('lyrics.suggestions.errors.deleteFailed'));
     }
   };
 
@@ -197,26 +197,26 @@ const Suggestions = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>Song Suggestions</h1>
-        <h2>Request your favorite songs to be added to our lyrics collection</h2>
+        <h1>{t('lyrics.suggestions.title')}</h1>
+        <h2>{t('lyrics.suggestions.subtitle')}</h2>
       </div>
       
       <div className={styles.formSection}>
-        <h3>Suggest a Song</h3>
+        <h3>{t('lyrics.suggestions.suggestSong')}</h3>
         
         {!isAuthenticated ? (
           <div className={styles.loginPrompt}>
-            <p>Please log in to suggest songs.</p>
+            <p>{t('lyrics.suggestions.loginPrompt')}</p>
             <p>
               <Link href="/login">
-                Log in
+                {t('lyrics.suggestions.login')}
               </Link>
             </p>
           </div>
         ) : (
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
-              <label htmlFor="songName">Song Name *</label>
+              <label htmlFor="songName">{t('lyrics.suggestions.form.songName')} *</label>
               <input
                 type="text"
                 id="songName"
@@ -228,7 +228,7 @@ const Suggestions = () => {
             </div>
             
             <div className={styles.formGroup}>
-              <label htmlFor="artist">Artist/Band *</label>
+              <label htmlFor="artist">{t('lyrics.suggestions.form.artist')} *</label>
               <input
                 type="text"
                 id="artist"
@@ -240,14 +240,14 @@ const Suggestions = () => {
             </div>
             
             <div className={styles.formGroup}>
-              <label htmlFor="genre">Genre</label>
+              <label htmlFor="genre">{t('lyrics.suggestions.form.genre')}</label>
               <select
                 id="genre"
                 name="genre"
                 value={formData.genre}
                 onChange={handleInputChange}
               >
-                <option value="">Select a genre</option>
+                <option value="">{t('common.select', { item: t('lyrics.suggestions.form.genre').toLowerCase() })}</option>
                 {genreOptions.map(genre => (
                   <option key={genre} value={genre}>{genre}</option>
                 ))}
@@ -255,7 +255,7 @@ const Suggestions = () => {
             </div>
             
             <div className={styles.formGroup}>
-              <label htmlFor="language">Language</label>
+              <label htmlFor="language">{t('lyrics.suggestions.form.language')}</label>
               <select
                 id="language"
                 name="language"
@@ -271,14 +271,14 @@ const Suggestions = () => {
             </div>
             
             <div className={styles.formGroup + ' ' + styles.fullWidth}>
-              <label htmlFor="youtubeUrl">YouTube URL (optional)</label>
+              <label htmlFor="youtubeUrl">{t('lyrics.suggestions.form.youtubeUrl')}</label>
               <input
                 type="url"
                 id="youtubeUrl"
                 name="youtubeUrl"
                 value={formData.youtubeUrl}
                 onChange={handleInputChange}
-                placeholder="https://www.youtube.com/watch?v=..."
+                placeholder={t('lyrics.suggestions.form.youtubeUrlPlaceholder')}
               />
             </div>
             
@@ -290,13 +290,13 @@ const Suggestions = () => {
             
             {submitSuccess && (
               <div className={styles.formGroup + ' ' + styles.fullWidth}>
-                <p style={{ color: 'green' }}>Suggestion submitted successfully!</p>
+                <p style={{ color: 'green' }}>{t('lyrics.suggestions.form.submitSuccess')}</p>
               </div>
             )}
             
             <div className={styles.buttonContainer}>
               <button type="submit" disabled={submitting}>
-                {submitting ? 'Submitting...' : 'Submit Suggestion'}
+                {submitting ? t('lyrics.suggestions.form.submitting') : t('lyrics.suggestions.form.submit')}
               </button>
             </div>
           </form>
@@ -305,7 +305,7 @@ const Suggestions = () => {
       
       {loading ? (
         <div className={styles.loadingContainer}>
-          Loading suggestions...
+          {t('lyrics.suggestions.status.loading')}
         </div>
       ) : error ? (
         <div className={styles.errorContainer}>
@@ -313,7 +313,7 @@ const Suggestions = () => {
         </div>
       ) : suggestions.length === 0 ? (
         <div className={styles.errorContainer}>
-          No suggestions found. Be the first to suggest a song!
+          {t('lyrics.suggestions.status.noSuggestions')}
         </div>
       ) : (
         <div className={styles.suggestionsList}>
@@ -321,7 +321,7 @@ const Suggestions = () => {
             <div key={suggestion.suggestionId} className={styles.suggestionCard}>
               <div className={styles.cardHeader}>
                 <h4>{suggestion.songName}</h4>
-                <h5>by {suggestion.artist}</h5>
+                <h5>{t('lyrics.suggestions.card.by')} {suggestion.artist}</h5>
               </div>
               
               <div className={styles.cardDetails}>
@@ -349,7 +349,7 @@ const Suggestions = () => {
                   rel="noopener noreferrer"
                   className={styles.youtubeLink}
                 >
-                  Watch on YouTube
+                  {t('lyrics.suggestions.status.watchOnYoutube')}
                 </a>
               )}
               
@@ -362,7 +362,7 @@ const Suggestions = () => {
                   <button 
                     className={`${styles.upvoteButton} ${suggestion.userHasUpvoted ? styles.active : ''}`}
                     onClick={() => handleUpvote(suggestion.suggestionId)}
-                    title={isAuthenticated ? 'Upvote this suggestion' : 'Log in to upvote'}
+                    title={isAuthenticated ? t('lyrics.suggestions.status.upvoteTitle.loggedIn') : t('lyrics.suggestions.status.upvoteTitle.loggedOut')}
                   >
                     <BxsUpvote />
                     <span>{suggestion.upvotes}</span>
@@ -372,7 +372,7 @@ const Suggestions = () => {
                     <button 
                       className={styles.deleteButton}
                       onClick={() => handleDelete(suggestion.suggestionId)}
-                      title="Delete this suggestion"
+                      title={t('lyrics.suggestions.status.deleteTitle')}
                     >
                       <MaterialSymbolsDeleteOutlineSharp />
                     </button>
@@ -386,10 +386,10 @@ const Suggestions = () => {
                     value={suggestion.status || 'pending'}
                     onChange={(e) => handleStatusChange(suggestion.suggestionId, e.target.value)}
                   >
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                    <option value="completed">Completed</option>
+                    <option value="pending">{t('lyrics.suggestions.status.pending')}</option>
+                    <option value="approved">{t('lyrics.suggestions.status.approved')}</option>
+                    <option value="rejected">{t('lyrics.suggestions.status.rejected')}</option>
+                    <option value="completed">{t('lyrics.suggestions.status.completed')}</option>
                   </select>
                 </div>
               )}

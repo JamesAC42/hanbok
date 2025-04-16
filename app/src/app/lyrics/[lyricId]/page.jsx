@@ -7,6 +7,7 @@ import Analysis from '@/components/analysis/Analysis';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { supportedLanguages } from '@/translations';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { MaterialSymbolsRightPanelClose } from '@/components/icons/RightPanelClose';
 import { MingcuteDownFill } from '@/components/icons/DownCarat';
@@ -341,7 +342,7 @@ const LyricsPage = () => {
     if (loading) {
         return (
             <div className={styles.lyricsContainer}>
-                <h1>Loading...</h1>
+                <h1>{t('lyrics.detail.loading')}</h1>
             </div>
         );
     }
@@ -349,7 +350,7 @@ const LyricsPage = () => {
     if (error) {
         return (
             <div className={styles.lyricsContainer}>
-                <h1>Error</h1>
+                <h1>{t('lyrics.detail.error')}</h1>
                 <p>{error}</p>
             </div>
         );
@@ -358,7 +359,7 @@ const LyricsPage = () => {
     if (!lyric) {
         return (
             <div className={styles.lyricsContainer}>
-                <h1>Lyrics not found</h1>
+                <h1>{t('lyrics.detail.notFound')}</h1>
             </div>
         );
     }
@@ -374,63 +375,67 @@ const LyricsPage = () => {
         <div className={styles.lyricsContainer}>
             <div className={styles.lyricsHeader}>
                 <h1>{lyric.title}</h1>
-                {lyric.artist && <h2>by: {lyric.artist}</h2>}
+                {lyric.artist && <h2>{t('lyrics.detail.by')}: {lyric.artist}</h2>}
                 <div className={styles.lyricTags}>
-                    <div className={styles.lyricTag}>Language: {supportedLanguages[lyric.language].toUpperCase()}</div>
-                    <div className={styles.lyricTag}>Genre: {lyric.genre.toUpperCase()}</div>
-                    {
-                        lyric.anime && (
-                            <div className={`${styles.lyricTag} ${styles.anime}`}>Anime: {lyric.anime}</div>
-                        )
-                    }
-                    {
-                        lyric.viewCount && (
-                            <div className={`${styles.lyricTag} ${styles.viewCount}`}>
-                                <BasilEyeSolid />
-                                {lyric.viewCount}
-                            </div>
-                        )
-                    }
-                </div>
-
-                {
-                    lyric.youtubeUrl && (
-                        <div className={styles.youtubeContainer}>
-                            <iframe 
-                                src={`https://www.youtube.com/embed/${lyric.youtubeUrl}`}
-                                title="YouTube video player"
-                            ></iframe>
-                        </div>
-                    )
-                }
-
-                {/* Add share buttons here */}
-                <div className={styles.shareButtonsContainer}>
-                    <div className={styles.shareButtons}>
-                        <button className={`${styles.shareButton} ${styles.twitter}`} onClick={handleTwitterShare}>
-                            <LineMdTwitterX />
-                            <span>X</span>
-                        </button>
-                        <button className={`${styles.shareButton} ${styles.email}`} onClick={handleEmailShare}>
-                            <LineMdEmail />
-                            <span>Email</span>
-                        </button>
-                        <button className={`${styles.shareButton} ${styles.discord}`} onClick={handleDiscordShare}>
-                            <IcTwotoneDiscord />
-                            <span>Discord</span>
-                        </button>
-                        <button className={`${styles.shareButton} ${styles.copy}`} onClick={handleCopyLink}>
-                            <MaterialSymbolsPublishRounded />
-                            <span>Copy Link</span>
-                        </button>
+                    <div className={styles.lyricTag}>
+                        {t('lyrics.detail.tags.language')}: {supportedLanguages[lyric.language].toUpperCase()}
                     </div>
-                    {shareTooltipVisible && (
-                        <div className={styles.shareTooltip}>
-                            Link copied to clipboard!
+                    <div className={styles.lyricTag}>
+                        {t('lyrics.detail.tags.genre')}: {lyric.genre.toUpperCase()}
+                    </div>
+                    {lyric.anime && (
+                        <div className={`${styles.lyricTag} ${styles.anime}`}>
+                            {t('lyrics.detail.tags.anime')}: {lyric.anime}
+                        </div>
+                    )}
+                    {lyric.viewCount && (
+                        <div className={`${styles.lyricTag} ${styles.viewCount}`}>
+                            <BasilEyeSolid />
+                            {lyric.viewCount}
                         </div>
                     )}
                 </div>
 
+                <div className={styles.backButton}>
+                    <Link href="/lyrics">
+                        {t('lyrics.detail.back')}
+                    </Link>
+                </div>
+
+                {lyric.youtubeUrl && (
+                    <div className={styles.youtubeContainer}>
+                        <iframe 
+                            src={`https://www.youtube.com/embed/${lyric.youtubeUrl}`}
+                            title="YouTube video player"
+                        ></iframe>
+                    </div>
+                )}
+
+                <div className={styles.shareButtonsContainer}>
+                    <div className={styles.shareButtons}>
+                        <button className={`${styles.shareButton} ${styles.twitter}`} onClick={handleTwitterShare}>
+                            <LineMdTwitterX />
+                            <span>{t('lyrics.detail.share.twitter')}</span>
+                        </button>
+                        <button className={`${styles.shareButton} ${styles.email}`} onClick={handleEmailShare}>
+                            <LineMdEmail />
+                            <span>{t('lyrics.detail.share.email')}</span>
+                        </button>
+                        <button className={`${styles.shareButton} ${styles.discord}`} onClick={handleDiscordShare}>
+                            <IcTwotoneDiscord />
+                            <span>{t('lyrics.detail.share.discord')}</span>
+                        </button>
+                        <button className={`${styles.shareButton} ${styles.copy}`} onClick={handleCopyLink}>
+                            <MaterialSymbolsPublishRounded />
+                            <span>{t('lyrics.detail.share.copyLink')}</span>
+                        </button>
+                    </div>
+                    {shareTooltipVisible && (
+                        <div className={styles.shareTooltip}>
+                            {t('lyrics.detail.share.copied')}
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className={styles.lyricsHelp}>
@@ -438,52 +443,51 @@ const LyricsPage = () => {
                     <div className={styles.lyricsHelpBubble}>
                         <HeroiconsQuestionMarkCircle16Solid />
                     </div>
-                    <h3>Lyric Breakdown</h3>
-                    <p>Click on a line in the lyrics to view the analysis</p>
+                    <h3>{t('lyrics.detail.help.title')}</h3>
+                    <p>{t('lyrics.detail.help.description')}</p>
                 </div>
             </div>
 
-            {/* Original lyrics text with highlighting */}
             <div className={`${styles.lyricsText} ${activeAnalysisIndex !== null ? styles.lyricsTextActive : ''}`}>
                 <div className={styles.columnHeaders}>
-                    <div className={styles.originalHeader}>Original</div>
-                    <div className={styles.translationHeader}>Translation</div>
+                    <div className={styles.originalHeader}>{t('lyrics.detail.columns.original')}</div>
+                    <div className={styles.translationHeader}>{t('lyrics.detail.columns.translation')}</div>
                 </div>
                 <div className={styles.viewTabs}>
                     <div 
                         className={`${styles.viewTab} ${activeView === 'original' ? styles.activeView : ''}`} 
                         onClick={() => setActiveView('original')}>
-                            Original
+                        {t('lyrics.detail.columns.original')}
                     </div>
                     <div 
                         className={`${styles.viewTab} ${activeView === 'translation' ? styles.activeView : ''}`} 
                         onClick={() => setActiveView('translation')}>
-                            Translation
+                        {t('lyrics.detail.columns.translation')}
                     </div>
                 </div>
                 {renderLyricsWithHighlighting()}
             </div>
-            {/* Current active analysis */}
+
             {(hasAnalysis && activeAnalysisIndex !== null) && (
                 <div className={`${styles.analysisContainer} ${closingAnalysis ? styles.closingAnalysis : ''}`}>
                     {activeAnalysis ? (
                         <div className={styles.activeAnalysis}>
-                            <div
-                                onClick={closeAnalysis}
-                                className={styles.closeAnalysis}>
+                            <div onClick={closeAnalysis} className={styles.closeAnalysis}>
                                 <div className={styles.closeAnalysisSymbolRight}>
                                     <MaterialSymbolsRightPanelClose /> 
                                 </div> 
                                 <div className={styles.closeAnalysisSymbolDown}>
                                     <MingcuteDownFill/> 
                                 </div> 
-                                Close
+                                {t('lyrics.detail.analysis.close')}
                             </div>
-                            <h3>Lyric Breakdown</h3>
+                            <h3>{t('lyrics.detail.analysis.title')}</h3>
                             <div className={styles.lineNumbers}>
                                 {Array.isArray(activeAnalysis.lines) 
-                                    ? `Lines ${activeAnalysis.lines[0]}-${activeAnalysis.lines[activeAnalysis.lines.length - 1]}` 
-                                    : `Line ${activeAnalysis.lines}`}
+                                    ? t('lyrics.detail.analysis.lines')
+                                        .replace('{start}', activeAnalysis.lines[0])
+                                        .replace('{end}', activeAnalysis.lines[activeAnalysis.lines.length - 1])
+                                    : t('lyrics.detail.analysis.line').replace('{number}', activeAnalysis.lines)}
                             </div>
                             <div className={styles.originalText}>
                                 <p>{activeAnalysis.text}</p>
@@ -511,7 +515,6 @@ const LyricsPage = () => {
             <div className={`${styles.musicGirl}`}>
                 <Image src="/images/hanbokgirlmusic.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
             </div>
-
         </div>
     );
 };

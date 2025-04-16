@@ -141,6 +141,7 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      font-family: var(--font-display);
       
       &:hover {
         background: #3540b5;
@@ -343,4 +344,6 @@
   padding: 3rem;
   font-size: 1.25rem;
   color: #666;
+  background:#fff;
+  border-radius:1rem;
 }

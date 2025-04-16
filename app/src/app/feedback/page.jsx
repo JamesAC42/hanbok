@@ -268,7 +268,7 @@ const Feedback = () => {
                                 {t('feedback.actions.previous')}
                             </button>
                             <span>
-                                {t('feedback.pagination.page', { current: page, total: totalPages })}
+                                {t('feedback.pagination.page').replace('{current}', page).replace('{total}', totalPages)}
                             </span>
                             <button 
                                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}

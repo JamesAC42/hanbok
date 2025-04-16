@@ -572,7 +572,8 @@ export const es = {
         showing: 'Mostrando',
         cards: 'tarjetas',
         previous: 'Anterior',
-        next: 'Siguiente'
+        next: 'Siguiente',
+        select: 'Seleccionar'
     },
     navbar: {
         home: 'Inicio',
@@ -582,6 +583,7 @@ export const es = {
         about: 'Acerca de',
         feedback: 'Comentarios',
         pricing: 'Precios',
+        lyrics: 'Letras',
         logout: 'Cerrar sesión'
     },
     stats: {
@@ -645,6 +647,109 @@ export const es = {
         study: {
             title: 'Sesiones de estudio eficientes',
             description: 'La interfaz de estudio muestra vocabulario en el frente y traducciones en el reverso. Escucha la pronunciación de audio y califica qué tan bien recordaste cada palabra para optimizar la programación de repasos futuros.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Sugerencias de Canciones",
+            subtitle: "Sugiere tus canciones favoritas para añadirlas a nuestra colección de letras",
+            suggestSong: "Sugerir Canción",
+            loginPrompt: "Por favor, inicia sesión para sugerir canciones.",
+            login: "Iniciar Sesión",
+            form: {
+                songName: "Nombre de la Canción",
+                artist: "Artista/Banda",
+                genre: "Género",
+                language: "Idioma",
+                youtubeUrl: "URL de YouTube (opcional)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Enviar Sugerencia",
+                submitting: "Enviando...",
+                submitSuccess: "¡Sugerencia enviada con éxito!",
+                requiredFields: "El nombre de la canción y el artista son obligatorios"
+            },
+            status: {
+                loading: "Cargando sugerencias...",
+                noSuggestions: "No se encontraron sugerencias. ¡Sé el primero en sugerir una canción!",
+                watchOnYoutube: "Ver en YouTube",
+                upvoteTitle: {
+                    loggedIn: "Apoyar esta sugerencia",
+                    loggedOut: "Inicia sesión para apoyar"
+                },
+                deleteTitle: "Eliminar esta sugerencia",
+                pending: "Pendiente",
+                approved: "Aprobado",
+                rejected: "Rechazado",
+                completed: "Completado"
+            },
+            card: {
+                by: "por",
+                deleteConfirm: "¿Estás seguro de que quieres eliminar esta sugerencia?"
+            },
+            errors: {
+                fetchFailed: "Error al cargar las sugerencias",
+                connectionError: "Error de conexión con el servidor",
+                submitFailed: "Error al enviar la sugerencia",
+                updateStatusFailed: "Error al actualizar el estado: {message}",
+                deleteFailed: "Error al eliminar la sugerencia"
+            }
+        },
+        title: "Letras",
+        description: "Encuentra traducciones detalladas y análisis de tus canciones favoritas",
+        adminPanel: "Panel de Administración",
+        suggestBox: {
+            title: "¡Sugiere Canciones!",
+            description: "¡Estoy añadiendo activamente más canciones basadas en tus sugerencias! Por favor, envía las canciones que te gustaría ver, o vota por las que otros han sugerido.",
+            button: "Sugerir una Canción"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Cargando letras...",
+            noLyrics: {
+                main: "Aún no hay canciones disponibles para {category}.",
+                suggestion: "¡Sugiere una canción para verla aquí!"
+            }
+        },
+        errors: {
+            fetchFailed: "Error al cargar las letras"
+        },
+        detail: {
+            loading: "Cargando...",
+            error: "Error",
+            notFound: "Letra no encontrada",
+            by: "por",
+            tags: {
+                language: "Idioma",
+                genre: "Género",
+                anime: "Anime",
+                views: "vistas"
+            },
+            share: {
+                twitter: "X",
+                email: "Correo",
+                discord: "Discord",
+                copyLink: "Copiar Enlace",
+                copied: "¡Enlace copiado al portapapeles!"
+            },
+            help: {
+                title: "Análisis de Letra",
+                description: "Haz clic en una línea de la letra para ver el análisis"
+            },
+            columns: {
+                original: "Original",
+                translation: "Traducción"
+            },
+            analysis: {
+                title: "Análisis de Letra",
+                lines: "Líneas {start}-{end}",
+                line: "Línea {number}",
+                close: "Cerrar"
+            },
+            back: "Volver a Letras"
         }
     },
 }; 

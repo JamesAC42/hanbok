@@ -568,11 +568,12 @@ export const zh = {
     common: {
         back: '返回',
         page: '页',
-        of: '/',
+        of: '的',
         showing: '显示',
         cards: '卡片',
         previous: '上一页',
-        next: '下一页'
+        next: '下一页',
+        select: '选择'
     },
     navbar: {
         home: '首页',
@@ -582,6 +583,7 @@ export const zh = {
         about: '关于',
         feedback: '反馈',
         pricing: '价格',
+        lyrics: '歌词',
         logout: '登出'
     },
     stats: {
@@ -645,6 +647,109 @@ export const zh = {
         study: {
             title: '高效学习会话',
             description: '学习界面在正面显示词汇，背面显示翻译。听取音频发音，并评价您对每个单词的记忆程度，以优化未来的复习计划。'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "歌曲建议",
+            subtitle: "推荐您喜欢的歌曲添加到我们的歌词库",
+            suggestSong: "推荐歌曲",
+            loginPrompt: "请登录以推荐歌曲。",
+            login: "登录",
+            form: {
+                songName: "歌曲名称",
+                artist: "歌手/乐队",
+                genre: "类型",
+                language: "语言",
+                youtubeUrl: "YouTube 链接（可选）",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "提交建议",
+                submitting: "提交中...",
+                submitSuccess: "建议提交成功！",
+                requiredFields: "歌曲名称和歌手为必填项"
+            },
+            status: {
+                loading: "加载建议中...",
+                noSuggestions: "未找到建议。成为第一个推荐歌曲的人！",
+                watchOnYoutube: "在 YouTube 上观看",
+                upvoteTitle: {
+                    loggedIn: "支持此建议",
+                    loggedOut: "登录以支持"
+                },
+                deleteTitle: "删除此建议",
+                pending: "待处理",
+                approved: "已批准",
+                rejected: "已拒绝",
+                completed: "已完成"
+            },
+            card: {
+                by: "来自",
+                deleteConfirm: "您确定要删除此建议吗？"
+            },
+            errors: {
+                fetchFailed: "加载建议失败",
+                connectionError: "连接服务器失败",
+                submitFailed: "提交建议失败",
+                updateStatusFailed: "更新状态失败: {message}",
+                deleteFailed: "删除建议失败"
+            }
+        },
+        title: "歌词",
+        description: "查找您喜爱歌曲的详细翻译和分析",
+        adminPanel: "管理面板",
+        suggestBox: {
+            title: "推荐歌曲！",
+            description: "我正在根据您的建议积极添加更多歌曲！请提交您想看到的歌曲，或为其他人的建议投票。",
+            button: "推荐歌曲"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "动漫"
+        },
+        status: {
+            loading: "加载歌词中...",
+            noLyrics: {
+                main: "暂无 {category} 歌曲。",
+                suggestion: "推荐一首歌曲在这里查看！"
+            }
+        },
+        errors: {
+            fetchFailed: "加载歌词失败"
+        },
+        detail: {
+            loading: "加载中...",
+            error: "错误",
+            notFound: "未找到歌词",
+            by: "来自",
+            tags: {
+                language: "语言",
+                genre: "类型",
+                anime: "动漫",
+                views: "观看次数"
+            },
+            share: {
+                twitter: "X",
+                email: "邮件",
+                discord: "Discord",
+                copyLink: "复制链接",
+                copied: "链接已复制到剪贴板！"
+            },
+            help: {
+                title: "歌词分析",
+                description: "点击歌词中的一行查看分析"
+            },
+            columns: {
+                original: "原文",
+                translation: "翻译"
+            },
+            analysis: {
+                title: "歌词分析",
+                lines: "第 {start}-{end} 行",
+                line: "第 {number} 行",
+                close: "关闭"
+            },
+            back: "返回歌词"
         }
     },
 }; 

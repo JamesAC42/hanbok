@@ -569,19 +569,21 @@ export const de = {
         back: 'Zurück',
         page: 'Seite',
         of: 'von',
-        showing: 'Anzeigen von',
+        showing: 'Zeige',
         cards: 'Karten',
-        previous: 'Zurück',
-        next: 'Weiter'
+        previous: 'Vorherige',
+        next: 'Nächste',
+        select: 'Auswählen'
     },
     navbar: {
         home: 'Startseite',
         bookmarks: 'Lesezeichen',
         cards: 'Karteikarten',
         profile: 'Profil',
-        about: 'Über uns',
+        about: 'Über',
         feedback: 'Feedback',
         pricing: 'Preise',
+        lyrics: 'Liedtexte',
         logout: 'Abmelden'
     },
     stats: {
@@ -645,6 +647,109 @@ export const de = {
         study: {
             title: 'Effiziente Lernsitzungen',
             description: 'Die Lernoberfläche zeigt Vokabeln auf der Vorderseite und Übersetzungen auf der Rückseite. Hören Sie die Audioaussprache und bewerten Sie, wie gut Sie sich an jedes Wort erinnert haben, um die Planung zukünftiger Wiederholungen zu optimieren.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Liedvorschläge",
+            subtitle: "Schlagen Sie Ihre Lieblingslieder vor, die zu unserer Liedersammlung hinzugefügt werden sollen",
+            suggestSong: "Lied vorschlagen",
+            loginPrompt: "Bitte melden Sie sich an, um Lieder vorzuschlagen.",
+            login: "Anmelden",
+            form: {
+                songName: "Liedname",
+                artist: "Künstler/Band",
+                genre: "Genre",
+                language: "Sprache",
+                youtubeUrl: "YouTube-URL (optional)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Vorschlag einreichen",
+                submitting: "Wird eingereicht...",
+                submitSuccess: "Vorschlag erfolgreich eingereicht!",
+                requiredFields: "Liedname und Künstler sind erforderlich"
+            },
+            status: {
+                loading: "Lade Vorschläge...",
+                noSuggestions: "Keine Vorschläge gefunden. Seien Sie der Erste, der ein Lied vorschlägt!",
+                watchOnYoutube: "Auf YouTube ansehen",
+                upvoteTitle: {
+                    loggedIn: "Diesen Vorschlag unterstützen",
+                    loggedOut: "Anmelden, um zu unterstützen"
+                },
+                deleteTitle: "Diesen Vorschlag löschen",
+                pending: "Ausstehend",
+                approved: "Genehmigt",
+                rejected: "Abgelehnt",
+                completed: "Abgeschlossen"
+            },
+            card: {
+                by: "von",
+                deleteConfirm: "Möchten Sie diesen Vorschlag wirklich löschen?"
+            },
+            errors: {
+                fetchFailed: "Vorschläge konnten nicht geladen werden",
+                connectionError: "Verbindung zum Server fehlgeschlagen",
+                submitFailed: "Vorschlag konnte nicht eingereicht werden",
+                updateStatusFailed: "Status konnte nicht aktualisiert werden: {message}",
+                deleteFailed: "Fehler beim Löschen des Vorschlags"
+            }
+        },
+        title: "Liedtexte",
+        description: "Finden Sie detaillierte Übersetzungen und Analysen Ihrer Lieblingslieder",
+        adminPanel: "Administrationsbereich",
+        suggestBox: {
+            title: "Schlagen Sie Lieder vor!",
+            description: "Ich füge aktiv mehr Lieder basierend auf Ihren Vorschlägen hinzu! Bitte reichen Sie die Lieder ein, die Sie sehen möchten, oder stimmen Sie für die Vorschläge anderer ab.",
+            button: "Lied vorschlagen"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Lade Liedtexte...",
+            noLyrics: {
+                main: "Noch keine Lieder für {category} verfügbar.",
+                suggestion: "Schlagen Sie ein Lied vor, um es hier zu sehen!"
+            }
+        },
+        errors: {
+            fetchFailed: "Liedtexte konnten nicht geladen werden"
+        },
+        detail: {
+            loading: "Wird geladen...",
+            error: "Fehler",
+            notFound: "Liedtext nicht gefunden",
+            by: "von",
+            tags: {
+                language: "Sprache",
+                genre: "Genre",
+                anime: "Anime",
+                views: "Aufrufe"
+            },
+            share: {
+                twitter: "X",
+                email: "E-Mail",
+                discord: "Discord",
+                copyLink: "Link kopieren",
+                copied: "Link in die Zwischenablage kopiert!"
+            },
+            help: {
+                title: "Liedtextanalyse",
+                description: "Klicken Sie auf eine Zeile im Liedtext, um die Analyse anzuzeigen"
+            },
+            columns: {
+                original: "Original",
+                translation: "Übersetzung"
+            },
+            analysis: {
+                title: "Liedtextanalyse",
+                lines: "Zeilen {start}-{end}",
+                line: "Zeile {number}",
+                close: "Schließen"
+            },
+            back: "Zurück zu Liedtexten"
         }
     },
 }; 

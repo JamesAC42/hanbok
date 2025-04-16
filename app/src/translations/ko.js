@@ -568,11 +568,12 @@ export const ko = {
     common: {
         back: '뒤로',
         page: '페이지',
-        of: '/',
+        of: '의',
         showing: '표시 중',
         cards: '카드',
         previous: '이전',
-        next: '다음'
+        next: '다음',
+        select: '선택'
     },
     navbar: {
         home: '홈',
@@ -582,6 +583,7 @@ export const ko = {
         about: '소개',
         feedback: '피드백',
         pricing: '가격',
+        lyrics: '가사',
         logout: '로그아웃'
     },
     stats: {
@@ -645,6 +647,109 @@ export const ko = {
         study: {
             title: '효율적인 학습 세션',
             description: '학습 인터페이스는 앞면에 어휘를, 뒷면에 번역을 보여줍니다. 오디오 발음을 듣고 각 단어를 얼마나 잘 기억했는지 평가하여 향후 복습 일정을 최적화하세요.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "노래 제안",
+            subtitle: "좋아하는 노래를 제안하여 우리의 가사 컬렉션에 추가해보세요",
+            suggestSong: "노래 제안",
+            loginPrompt: "노래를 제안하려면 로그인하세요.",
+            login: "로그인",
+            form: {
+                songName: "노래 제목",
+                artist: "아티스트/밴드",
+                genre: "장르",
+                language: "언어",
+                youtubeUrl: "YouTube URL (선택)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "제안 제출",
+                submitting: "제출 중...",
+                submitSuccess: "제안이 성공적으로 제출되었습니다!",
+                requiredFields: "노래 제목과 아티스트는 필수입니다"
+            },
+            status: {
+                loading: "제안 로딩 중...",
+                noSuggestions: "제안이 없습니다. 첫 번째 제안자가 되어보세요!",
+                watchOnYoutube: "YouTube에서 보기",
+                upvoteTitle: {
+                    loggedIn: "이 제안 지지하기",
+                    loggedOut: "로그인하여 지지하기"
+                },
+                deleteTitle: "이 제안 삭제",
+                pending: "대기 중",
+                approved: "승인됨",
+                rejected: "거절됨",
+                completed: "완료됨"
+            },
+            card: {
+                by: "작성자",
+                deleteConfirm: "이 제안을 삭제하시겠습니까?"
+            },
+            errors: {
+                fetchFailed: "제안을 불러오는데 실패했습니다",
+                connectionError: "서버 연결에 실패했습니다",
+                submitFailed: "제안 제출에 실패했습니다",
+                updateStatusFailed: "상태 업데이트 실패: {message}",
+                deleteFailed: "제안 삭제에 실패했습니다"
+            }
+        },
+        title: "가사",
+        description: "좋아하는 노래의 상세한 번역과 분석을 찾아보세요",
+        adminPanel: "관리자 패널",
+        suggestBox: {
+            title: "노래를 제안해보세요!",
+            description: "여러분의 제안을 바탕으로 더 많은 노래를 추가하고 있습니다! 보고 싶은 노래를 제출하거나 다른 사람들이 제안한 노래에 투표해주세요.",
+            button: "노래 제안"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "애니메이션"
+        },
+        status: {
+            loading: "가사 로딩 중...",
+            noLyrics: {
+                main: "{category} 노래가 아직 없습니다.",
+                suggestion: "여기서 보고 싶은 노래를 제안해보세요!"
+            }
+        },
+        errors: {
+            fetchFailed: "가사를 불러오는데 실패했습니다"
+        },
+        detail: {
+            loading: "로딩 중...",
+            error: "오류",
+            notFound: "가사를 찾을 수 없습니다",
+            by: "작성자",
+            tags: {
+                language: "언어",
+                genre: "장르",
+                anime: "애니메이션",
+                views: "조회수"
+            },
+            share: {
+                twitter: "X",
+                email: "이메일",
+                discord: "Discord",
+                copyLink: "링크 복사",
+                copied: "링크가 클립보드에 복사되었습니다!"
+            },
+            help: {
+                title: "가사 분석",
+                description: "가사의 줄을 클릭하여 분석을 확인하세요"
+            },
+            columns: {
+                original: "원문",
+                translation: "번역"
+            },
+            analysis: {
+                title: "가사 분석",
+                lines: "{start}-{end}줄",
+                line: "{number}줄",
+                close: "닫기"
+            },
+            back: "가사로 돌아가기"
         }
     },
 }; 

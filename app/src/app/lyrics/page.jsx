@@ -26,13 +26,13 @@ const Lyrics = () => {
             const response = await fetch(`/api/lyrics?genre=${genre}`);
             
             if (!response.ok) {
-                throw new Error('Failed to fetch lyrics');
+                throw new Error(t('lyrics.errors.fetchFailed'));
             }
             
             const data = await response.json();
             
             if (!data.success) {
-                throw new Error(data.message || 'Failed to fetch lyrics');
+                throw new Error(data.message || t('lyrics.errors.fetchFailed'));
             }
             
             // Organize lyrics by artist
@@ -99,49 +99,59 @@ const Lyrics = () => {
     return (
         <div className={lyricsStyles.lyricsContainer}>
             <div className={lyricsStyles.lyricsContent}>
-                <h1 className={lyricsStyles.pageTitle}>Lyrics</h1>
+                <h1 className={lyricsStyles.pageTitle}>{t('lyrics.title')}</h1>
                 
                 <div className={lyricsStyles.section}>
-                    <p>
-                        Find detailed translations and breakdowns of your favorite songs
-                    </p>
-                    {
-                        isAdmin(user?.email) && (
-                            <div className={lyricsStyles.adminContainer}>
-                                <Link href="/lyrics/admin">Admin Panel</Link>
-                            </div>
-                        )
-                    }
+                    <p>{t('lyrics.description')}</p>
+                    {isAdmin(user?.email) && (
+                        <div className={lyricsStyles.adminContainer}>
+                            <Link href="/lyrics/admin">{t('lyrics.adminPanel')}</Link>
+                        </div>
+                    )}
                 </div>
 
                 <div className={lyricsStyles.lyricsListOuter}>
-
                     <div className={lyricsStyles.suggestionsBox}>
                         <div className={lyricsStyles.suggestionsBoxTitle}>
-                            Suggest Songs!
+                            {t('lyrics.suggestBox.title')}
                         </div>  
                         <div className={lyricsStyles.suggestionsBoxDescription}>
-                            I'm actively adding more songs based on your suggestions! Please submit the songs you would like to see, or vote on the ones that others have submitted.
+                            {t('lyrics.suggestBox.description')}
                         </div>
                         <Link href="/lyrics/suggestions" className={lyricsStyles.suggestionsBoxButton}>
-                            Suggest a Song
+                            {t('lyrics.suggestBox.button')}
                         </Link>
                     </div>
 
                     <div className={lyricsStyles.categories}>
-                        <div className={`${lyricsStyles.category} ${lyricsStyles.kpop} ${activeCategory === 'kpop' ? lyricsStyles.active : ''}`} onClick={() => setActiveCategory('kpop')}>K-Pop</div>
-                        <div className={`${lyricsStyles.category} ${lyricsStyles.jpop} ${activeCategory === 'jpop' ? lyricsStyles.active : ''}`} onClick={() => setActiveCategory('jpop')}>J-Pop</div>
-                        <div className={`${lyricsStyles.category} ${lyricsStyles.anime} ${activeCategory === 'anime' ? lyricsStyles.active : ''}`} onClick={() => setActiveCategory('anime')}>Anime</div>
+                        <div 
+                            className={`${lyricsStyles.category} ${lyricsStyles.kpop} ${activeCategory === 'kpop' ? lyricsStyles.active : ''}`} 
+                            onClick={() => setActiveCategory('kpop')}
+                        >
+                            {t('lyrics.categories.kpop')}
+                        </div>
+                        <div 
+                            className={`${lyricsStyles.category} ${lyricsStyles.jpop} ${activeCategory === 'jpop' ? lyricsStyles.active : ''}`} 
+                            onClick={() => setActiveCategory('jpop')}
+                        >
+                            {t('lyrics.categories.jpop')}
+                        </div>
+                        <div 
+                            className={`${lyricsStyles.category} ${lyricsStyles.anime} ${activeCategory === 'anime' ? lyricsStyles.active : ''}`} 
+                            onClick={() => setActiveCategory('anime')}
+                        >
+                            {t('lyrics.categories.anime')}
+                        </div>
                     </div>
                     
                     {loading ? (
-                        <div className={lyricsStyles.loading}>Loading lyrics...</div>
+                        <div className={lyricsStyles.loading}>{t('lyrics.status.loading')}</div>
                     ) : error ? (
                         <div className={lyricsStyles.error}>{error}</div>
                     ) : lyricsByArtist.length === 0 ? (
                         <div className={lyricsStyles.noLyrics}>
-                            <p>No songs available for {activeCategory.toUpperCase()} yet.</p>
-                            <p>Suggest a song to see it here!</p>
+                            <p>{t('lyrics.status.noLyrics.main').replace('{category}', activeCategory.toUpperCase())}</p>
+                            <p>{t('lyrics.status.noLyrics.suggestion')}</p>
                         </div>
                     ) : (
                         <div className={lyricsStyles.lyricsList}>
@@ -169,7 +179,6 @@ const Lyrics = () => {
                 <div className={`${lyricsStyles.girlContainer}`}>
                     <Image src="/images/hanbokgirlmusic.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
                 </div>
-
             </div>
         </div>
     );
