@@ -48,6 +48,11 @@
                 border:1px solid #28369e;
             }
 
+            .variantText {
+                font-size:1.5rem;
+                color:#000000;
+            }
+
             .variantReading {
                 border-top:1px solid #767676;
                 font-size:1.2rem;
@@ -118,6 +123,10 @@
                 border: 2px solid #000000;
                 padding: 1.1rem 1.4rem;
                 border-radius:0.5rem;
+
+                .variantText {
+                    font-size:1.2rem;
+                }
 
                 .variantType {
                     border-radius:1rem;

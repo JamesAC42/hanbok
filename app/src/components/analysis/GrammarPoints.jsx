@@ -37,7 +37,11 @@ const GrammarPoints = ({analysis, language, showPronunciation}) => {
         if(!showPronunciation) return null;
         let p = example.reading;
         if(language === "ko") {
-            p = romanize(example.original);
+            try {
+                p = romanize(example.original);
+            } catch(err) {
+                p = example.original;
+            }
         }
         if(language === "ru") {
             p = example.transliteration;

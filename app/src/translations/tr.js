@@ -572,16 +572,18 @@ export const tr = {
         showing: 'Gösteriliyor',
         cards: 'kart',
         previous: 'Önceki',
-        next: 'Sonraki'
+        next: 'Sonraki',
+        select: 'Seç'
     },
     navbar: {
         home: 'Ana Sayfa',
-        bookmarks: 'Yer İmleri',
+        bookmarks: 'Yer İşaretleri',
         cards: 'Kartlar',
         profile: 'Profil',
         about: 'Hakkında',
         feedback: 'Geri Bildirim',
         pricing: 'Fiyatlandırma',
+        lyrics: 'Şarkı Sözleri',
         logout: 'Çıkış Yap'
     },
     stats: {
@@ -645,6 +647,109 @@ export const tr = {
         study: {
             title: 'Verimli Çalışma Oturumları',
             description: 'Çalışma arayüzü, kelime dağarcığını ön tarafta ve çevirileri arka tarafta gösterir. Sesli telaffuzu dinleyin ve gelecekteki inceleme planlamasını optimize etmek için her kelimeyi ne kadar iyi hatırladığınızı değerlendirin.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Şarkı Önerileri",
+            subtitle: "Favori şarkılarınızı şarkı sözü koleksiyonumuza eklemek için önerin",
+            suggestSong: "Şarkı Öner",
+            loginPrompt: "Lütfen şarkı önermek için giriş yapın.",
+            login: "Giriş Yap",
+            form: {
+                songName: "Şarkı Adı",
+                artist: "Sanatçı/Grup",
+                genre: "Tür",
+                language: "Dil",
+                youtubeUrl: "YouTube URL (isteğe bağlı)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Öneriyi Gönder",
+                submitting: "Gönderiliyor...",
+                submitSuccess: "Öneri başarıyla gönderildi!",
+                requiredFields: "Şarkı adı ve sanatçı zorunludur"
+            },
+            status: {
+                loading: "Öneriler yükleniyor...",
+                noSuggestions: "Öneri bulunamadı. İlk öneren siz olun!",
+                watchOnYoutube: "YouTube'da İzle",
+                upvoteTitle: {
+                    loggedIn: "Bu öneriyi destekle",
+                    loggedOut: "Desteklemek için giriş yap"
+                },
+                deleteTitle: "Bu öneriyi sil",
+                pending: "Beklemede",
+                approved: "Onaylandı",
+                rejected: "Reddedildi",
+                completed: "Tamamlandı"
+            },
+            card: {
+                by: "tarafından",
+                deleteConfirm: "Bu öneriyi silmek istediğinizden emin misiniz?"
+            },
+            errors: {
+                fetchFailed: "Öneriler yüklenemedi",
+                connectionError: "Sunucuya bağlanılamadı",
+                submitFailed: "Öneri gönderilemedi",
+                updateStatusFailed: "Durum güncellenemedi: {message}",
+                deleteFailed: "Öneri silinemedi"
+            }
+        },
+        title: "Şarkı Sözleri",
+        description: "Favori şarkılarınızın detaylı çevirilerini ve analizlerini bulun",
+        adminPanel: "Yönetici Paneli",
+        suggestBox: {
+            title: "Şarkı Önerin!",
+            description: "Önerilerinize dayanarak daha fazla şarkı ekliyorum! Lütfen görmek istediğiniz şarkıları gönderin veya başkalarının önerilerine oy verin.",
+            button: "Şarkı Öner"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Şarkı sözleri yükleniyor...",
+            noLyrics: {
+                main: "{category} için henüz şarkı bulunmuyor.",
+                suggestion: "Burada görmek istediğiniz şarkıyı önerin!"
+            }
+        },
+        errors: {
+            fetchFailed: "Şarkı sözleri yüklenemedi"
+        },
+        detail: {
+            loading: "Yükleniyor...",
+            error: "Hata",
+            notFound: "Şarkı sözü bulunamadı",
+            by: "tarafından",
+            tags: {
+                language: "Dil",
+                genre: "Tür",
+                anime: "Anime",
+                views: "görüntülenme"
+            },
+            share: {
+                twitter: "X",
+                email: "E-posta",
+                discord: "Discord",
+                copyLink: "Bağlantıyı Kopyala",
+                copied: "Bağlantı panoya kopyalandı!"
+            },
+            help: {
+                title: "Şarkı Sözü Analizi",
+                description: "Analizi görmek için şarkı sözündeki bir satıra tıklayın"
+            },
+            columns: {
+                original: "Orijinal",
+                translation: "Çeviri"
+            },
+            analysis: {
+                title: "Şarkı Sözü Analizi",
+                lines: "{start}-{end}. Satırlar",
+                line: "{number}. Satır",
+                close: "Kapat"
+            },
+            back: "Şarkı Sözlerine Dön"
         }
     },
 }; 

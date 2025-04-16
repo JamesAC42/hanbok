@@ -16,7 +16,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
-const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
+const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) => {
 
     const { t } = useLanguage();
     const [activeSpeaker, setActiveSpeaker] = useState(1);
@@ -137,7 +137,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2 }) => {
     }
 
     const shouldLock = () => {
-      return !loggedIn() || noAudio()
+      return (!loggedIn() && !isLyric) || noAudio()
     }
 
     const handleSpeakerSwitch = () => {

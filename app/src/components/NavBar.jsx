@@ -9,6 +9,7 @@ import { SolarChatRoundMoneyBold } from './icons/Money';
 import { MingcuteCommentFill } from './icons/CommentFill';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
+import {IcSharpQueueMusic} from './icons/MusicLyrics';
 import { useRouter } from 'next/navigation';
 import styles from '@/styles/components/navbar.module.scss';
 import { useState, useEffect } from 'react';
@@ -89,7 +90,7 @@ const NavBar = () => {
                     </div>
                 )}
                 {user && (
-                    <div className={`${styles.navBarItem} ${styles.cardsNew}`} style={{ '--nav-index': 3 }}>   
+                    <div className={`${styles.navBarItem} `} style={{ '--nav-index': 3 }}>   
                         <Link href="/cards">
                             <MaterialSymbolsCardsStarRounded />
                             <div className={styles.navBarItemText}>{t('navbar.cards')}</div>
@@ -102,21 +103,31 @@ const NavBar = () => {
                         <div className={styles.navBarItemText}>{t('navbar.about')}</div>
                     </Link>
                 </div>
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 5 : 3 }}>   
+                {
+                    false && (
+                        <div className={`${styles.navBarItem} ${styles.cardsNew}`} style={{ '--nav-index': user ? 5 : 3 }}>   
+                            <Link href="/lyrics">
+                                <IcSharpQueueMusic />
+                                <div className={styles.navBarItemText}>{t('navbar.lyrics')}</div>
+                            </Link>
+                        </div>
+                    )
+                }
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 6 : 4 }}>   
                     <Link href="/feedback">
                         <MingcuteCommentFill />
                         <div className={styles.navBarItemText}>{t('navbar.feedback')}</div>
                     </Link>
                 </div>
                 
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 6 : 4 }}>   
+                <div className={styles.navBarItem} style={{ '--nav-index': user ? 7 : 5 }}>   
                     <Link href="/pricing">
                         <SolarChatRoundMoneyBold />
                         <div className={styles.navBarItemText}>{t('navbar.pricing')}</div>
                     </Link>
                 </div>
                 {user && (
-                    <div className={styles.navBarItem} style={{ '--nav-index': 7 }}>   
+                    <div className={styles.navBarItem} style={{ '--nav-index': user ? 8 : 6 }}>   
                         <div 
                             onClick={handleLogout}
                             className={styles.navBarItemIcon}>

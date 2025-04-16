@@ -1,11 +1,13 @@
 const {prompt_anthropic} = require('./anthropic');
 const {prompt_gemini} = require('./gemini');
 const {prompt_openai} = require('./openai');
+const {prompt_geminiThinking} = require('./geminiThinking');
 
 const models = {
     anthropic: prompt_anthropic,
     gemini: prompt_gemini,
-    openai: prompt_openai
+    openai: prompt_openai,
+    geminiThinking: prompt_geminiThinking
 }
 
 const generateResponse = async (text, model) => {

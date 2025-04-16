@@ -569,19 +569,21 @@ export const nl = {
         back: 'Terug',
         page: 'Pagina',
         of: 'van',
-        showing: 'Tonen',
+        showing: 'Toont',
         cards: 'kaarten',
         previous: 'Vorige',
-        next: 'Volgende'
+        next: 'Volgende',
+        select: 'Selecteren'
     },
     navbar: {
         home: 'Home',
         bookmarks: 'Bladwijzers',
-        cards: 'Flashcards',
+        cards: 'Kaarten',
         profile: 'Profiel',
         about: 'Over',
         feedback: 'Feedback',
         pricing: 'Prijzen',
+        lyrics: 'Songteksten',
         logout: 'Uitloggen'
     },
     stats: {
@@ -645,6 +647,109 @@ export const nl = {
         study: {
             title: 'Efficiënte studiesessies',
             description: 'De studie-interface toont woordenschat aan de voorkant en vertalingen aan de achterkant. Luister naar audio-uitspraak en beoordeel hoe goed je elk woord onthield om toekomstige herhalingsplanning te optimaliseren.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Liedjesuggesties",
+            subtitle: "Stel je favoriete liedjes voor om toe te voegen aan onze tekstencollectie",
+            suggestSong: "Liedje Voorstellen",
+            loginPrompt: "Log in om liedjes voor te stellen.",
+            login: "Inloggen",
+            form: {
+                songName: "Liedtitel",
+                artist: "Artiest/Band",
+                genre: "Genre",
+                language: "Taal",
+                youtubeUrl: "YouTube URL (optioneel)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Suggestie Indienen",
+                submitting: "Wordt ingediend...",
+                submitSuccess: "Suggestie succesvol ingediend!",
+                requiredFields: "Liedtitel en artiest zijn verplicht"
+            },
+            status: {
+                loading: "Suggesties laden...",
+                noSuggestions: "Geen suggesties gevonden. Wees de eerste die een liedje voorstelt!",
+                watchOnYoutube: "Bekijk op YouTube",
+                upvoteTitle: {
+                    loggedIn: "Steun deze suggestie",
+                    loggedOut: "Log in om te steunen"
+                },
+                deleteTitle: "Verwijder deze suggestie",
+                pending: "In behandeling",
+                approved: "Goedgekeurd",
+                rejected: "Afgewezen",
+                completed: "Voltooid"
+            },
+            card: {
+                by: "door",
+                deleteConfirm: "Weet je zeker dat je deze suggestie wilt verwijderen?"
+            },
+            errors: {
+                fetchFailed: "Kon suggesties niet laden",
+                connectionError: "Kon geen verbinding maken met de server",
+                submitFailed: "Kon suggestie niet indienen",
+                updateStatusFailed: "Kon status niet bijwerken: {message}",
+                deleteFailed: "Kon suggestie niet verwijderen"
+            }
+        },
+        title: "Songteksten",
+        description: "Vind gedetailleerde vertalingen en analyses van je favoriete liedjes",
+        adminPanel: "Beheerpaneel",
+        suggestBox: {
+            title: "Stel Liedjes Voor!",
+            description: "Ik voeg actief meer liedjes toe op basis van jullie suggesties! Stuur de liedjes in die je graag zou willen zien, of stem op de suggesties van anderen.",
+            button: "Liedje Voorstellen"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Songteksten laden...",
+            noLyrics: {
+                main: "Nog geen liedjes beschikbaar voor {category}.",
+                suggestion: "Stel een liedje voor om het hier te zien!"
+            }
+        },
+        errors: {
+            fetchFailed: "Kon songteksten niet laden"
+        },
+        detail: {
+            loading: "Laden...",
+            error: "Fout",
+            notFound: "Songtekst niet gevonden",
+            by: "door",
+            tags: {
+                language: "Taal",
+                genre: "Genre",
+                anime: "Anime",
+                views: "weergaven"
+            },
+            share: {
+                twitter: "X",
+                email: "E-mail",
+                discord: "Discord",
+                copyLink: "Link Kopiëren",
+                copied: "Link gekopieerd naar klembord!"
+            },
+            help: {
+                title: "Songtekstanalyse",
+                description: "Klik op een regel in de songtekst om de analyse te zien"
+            },
+            columns: {
+                original: "Origineel",
+                translation: "Vertaling"
+            },
+            analysis: {
+                title: "Songtekstanalyse",
+                lines: "Regels {start}-{end}",
+                line: "Regel {number}",
+                close: "Sluiten"
+            },
+            back: "Terug naar Songteksten"
         }
     },
 }; 

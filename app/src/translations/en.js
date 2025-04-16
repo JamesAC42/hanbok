@@ -321,7 +321,8 @@ export const en = {
             aspect: 'The aspect of this verb is ',
             form: 'The form of this word is ',
             politeness: 'Politeness level',
-            case: 'The case of this word is '
+            case: 'The case of this word is ',
+            poeticMeaning: 'Poetic meaning'
         },
         conjugation: {
             tense: 'Tense',
@@ -529,7 +530,8 @@ export const en = {
         showing: 'Showing',
         cards: 'cards',
         previous: 'Previous',
-        next: 'Next'
+        next: 'Next',
+        select: 'Select'
     },
     announcement: {
         new: 'New',
@@ -637,6 +639,109 @@ export const en = {
         study: {
             title: 'Efficient Study Sessions',
             description: 'The study interface shows vocabulary on the front and translations on the back. Listen to audio pronunciation and rate how well you remembered each word to optimize future review scheduling.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Song Suggestions",
+            subtitle: "Request your favorite songs to be added to our lyrics collection",
+            suggestSong: "Suggest a Song",
+            loginPrompt: "Please log in to suggest songs.",
+            login: "Log in",
+            form: {
+                songName: "Song Name",
+                artist: "Artist/Band",
+                genre: "Genre",
+                language: "Language",
+                youtubeUrl: "YouTube URL (optional)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Submit Suggestion",
+                submitting: "Submitting...",
+                submitSuccess: "Suggestion submitted successfully!",
+                requiredFields: "Song name and artist are required"
+            },
+            status: {
+                loading: "Loading suggestions...",
+                noSuggestions: "No suggestions found. Be the first to suggest a song!",
+                watchOnYoutube: "Watch on YouTube",
+                upvoteTitle: {
+                    loggedIn: "Upvote this suggestion",
+                    loggedOut: "Log in to upvote"
+                },
+                deleteTitle: "Delete this suggestion",
+                pending: "Pending",
+                approved: "Approved",
+                rejected: "Rejected",
+                completed: "Completed"
+            },
+            card: {
+                by: "by",
+                deleteConfirm: "Are you sure you want to delete this suggestion?"
+            },
+            errors: {
+                fetchFailed: "Failed to fetch suggestions",
+                connectionError: "Failed to connect to the server",
+                submitFailed: "Failed to submit suggestion",
+                updateStatusFailed: "Failed to update status: {message}",
+                deleteFailed: "Error deleting suggestion"
+            }
+        },
+        title: "Lyrics",
+        description: "Find detailed translations and breakdowns of your favorite songs",
+        adminPanel: "Admin Panel",
+        suggestBox: {
+            title: "Suggest Songs!",
+            description: "I'm actively adding more songs based on your suggestions! Please submit the songs you would like to see, or vote on the ones that others have submitted.",
+            button: "Suggest a Song"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Loading lyrics...",
+            noLyrics: {
+                main: "No songs available for {category} yet.",
+                suggestion: "Suggest a song to see it here!"
+            }
+        },
+        errors: {
+            fetchFailed: "Failed to fetch lyrics"
+        },
+        detail: {
+            loading: "Loading...",
+            error: "Error",
+            notFound: "Lyrics not found",
+            by: "by",
+            tags: {
+                language: "Language",
+                genre: "Genre",
+                anime: "Anime",
+                views: "views"
+            },
+            share: {
+                twitter: "X",
+                email: "Email",
+                discord: "Discord",
+                copyLink: "Copy Link",
+                copied: "Link copied to clipboard!"
+            },
+            help: {
+                title: "Lyric Breakdown",
+                description: "Click on a line in the lyrics to view the analysis"
+            },
+            columns: {
+                original: "Original",
+                translation: "Translation"
+            },
+            analysis: {
+                title: "Lyric Breakdown",
+                lines: "Lines {start}-{end}",
+                line: "Line {number}",
+                close: "Close"
+            },
+            back: "Back to Lyrics"
         }
     },
 }; 

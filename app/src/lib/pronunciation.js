@@ -16,7 +16,6 @@ const renderPronunciation = (item, language) => {
                 return null;
         }
     } catch (error) {
-        console.error('Error rendering pronunciation:', error);
         return null;
     }
 }

@@ -569,19 +569,21 @@ export const it = {
         back: 'Indietro',
         page: 'Pagina',
         of: 'di',
-        showing: 'Mostrando',
+        showing: 'Mostra',
         cards: 'carte',
         previous: 'Precedente',
-        next: 'Successivo'
+        next: 'Successivo',
+        select: 'Seleziona'
     },
     navbar: {
         home: 'Home',
-        bookmarks: 'Segnalibri',
+        bookmarks: 'Preferiti',
         cards: 'Flashcard',
         profile: 'Profilo',
-        about: 'Info',
+        about: 'Informazioni',
         feedback: 'Feedback',
         pricing: 'Prezzi',
+        lyrics: 'Testi',
         logout: 'Esci'
     },
     stats: {
@@ -645,6 +647,109 @@ export const it = {
         study: {
             title: 'Sessioni di studio efficienti',
             description: 'L\'interfaccia di studio mostra il vocabolario sul fronte e le traduzioni sul retro. Ascolta la pronuncia audio e valuta quanto hai ricordato bene ogni parola per ottimizzare la pianificazione dei ripassi futuri.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Suggerimenti di Canzoni",
+            subtitle: "Suggerisci le tue canzoni preferite per aggiungerle alla nostra collezione di testi",
+            suggestSong: "Suggerisci una Canzone",
+            loginPrompt: "Per favore, accedi per suggerire canzoni.",
+            login: "Accedi",
+            form: {
+                songName: "Titolo della Canzone",
+                artist: "Artista/Band",
+                genre: "Genere",
+                language: "Lingua",
+                youtubeUrl: "URL YouTube (opzionale)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Invia Suggerimento",
+                submitting: "Invio in corso...",
+                submitSuccess: "Suggerimento inviato con successo!",
+                requiredFields: "Il titolo della canzone e l'artista sono obbligatori"
+            },
+            status: {
+                loading: "Caricamento suggerimenti...",
+                noSuggestions: "Nessun suggerimento trovato. Sii il primo a suggerire una canzone!",
+                watchOnYoutube: "Guarda su YouTube",
+                upvoteTitle: {
+                    loggedIn: "Sostieni questo suggerimento",
+                    loggedOut: "Accedi per sostenere"
+                },
+                deleteTitle: "Elimina questo suggerimento",
+                pending: "In attesa",
+                approved: "Approvato",
+                rejected: "Rifiutato",
+                completed: "Completato"
+            },
+            card: {
+                by: "di",
+                deleteConfirm: "Sei sicuro di voler eliminare questo suggerimento?"
+            },
+            errors: {
+                fetchFailed: "Errore nel caricamento dei suggerimenti",
+                connectionError: "Errore di connessione al server",
+                submitFailed: "Errore nell'invio del suggerimento",
+                updateStatusFailed: "Errore nell'aggiornamento dello stato: {message}",
+                deleteFailed: "Errore nell'eliminazione del suggerimento"
+            }
+        },
+        title: "Testi",
+        description: "Trova traduzioni dettagliate e analisi delle tue canzoni preferite",
+        adminPanel: "Pannello di Amministrazione",
+        suggestBox: {
+            title: "Suggerisci Canzoni!",
+            description: "Sto aggiungendo attivamente più canzoni basate sui tuoi suggerimenti! Per favore, invia le canzoni che vorresti vedere, o vota per quelle che altri hanno suggerito.",
+            button: "Suggerisci una Canzone"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Caricamento testi...",
+            noLyrics: {
+                main: "Nessuna canzone disponibile per {category} al momento.",
+                suggestion: "Suggerisci una canzone per vederla qui!"
+            }
+        },
+        errors: {
+            fetchFailed: "Errore nel caricamento dei testi"
+        },
+        detail: {
+            loading: "Caricamento...",
+            error: "Errore",
+            notFound: "Testo non trovato",
+            by: "di",
+            tags: {
+                language: "Lingua",
+                genre: "Genere",
+                anime: "Anime",
+                views: "visualizzazioni"
+            },
+            share: {
+                twitter: "X",
+                email: "Email",
+                discord: "Discord",
+                copyLink: "Copia Link",
+                copied: "Link copiato negli appunti!"
+            },
+            help: {
+                title: "Analisi del Testo",
+                description: "Clicca su una riga del testo per vedere l'analisi"
+            },
+            columns: {
+                original: "Originale",
+                translation: "Traduzione"
+            },
+            analysis: {
+                title: "Analisi del Testo",
+                lines: "Righe {start}-{end}",
+                line: "Riga {number}",
+                close: "Chiudi"
+            },
+            back: "Torna ai Testi"
         }
     },
 }; 

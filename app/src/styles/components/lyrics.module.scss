@@ -1,0 +1,265 @@
+@import '../variables.module.scss';
+
+.lyricsContainer {
+
+    height:100dvh;
+    width:100dvw;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding:3rem;
+
+    @media screen and (max-width: 725px) {
+        padding:0;
+        padding-top:3rem;
+    }
+
+    .lyricsContent {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width:80rem;
+        max-width: 80dvw;
+        margin: 0 auto;
+        padding: 1rem 0rem;
+        padding-bottom:0;
+        min-height:70dvh;
+        z-index:2;
+
+        @media screen and (max-width: 725px) {
+            width:100dvw;
+            max-width:100dvw; 
+        }
+
+        .girlContainer {
+            @include bottom-girl;
+            bottom:0rem;
+            img {
+                transform:translateY(2.5rem);
+            }
+        }
+
+        .pageTitle {
+            font-size:4.5rem;
+            font-family: var(--font-display);
+            font-variation-settings: 'wght' 800;
+            margin-bottom: 2rem;
+            color:#fff;
+        }
+      
+        .section {
+          background: linear-gradient(90deg, rgba(230, 240, 255, 0.916), rgba(230, 255, 240, 0.888));
+          padding:1rem 2rem;
+          border-radius:0.5rem;
+          position:relative;
+
+          p {
+            text-align:center;
+            font-size:1.1rem;
+            font-family: var(--font-display);
+            font-variation-settings: 'wght' 600;
+            color:#000000;
+          }
+
+          .adminContainer {
+            width:100%;
+            transform:none;
+            margin-top:1rem;
+            text-align:center;
+
+            a {
+                font-size:1.1rem;
+                font-family: var(--font-display);
+                text-decoration:none;
+                font-variation-settings: 'wght' 600;
+            }
+          }
+        }
+
+        .lyricsListOuter {
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            align-items:stretch;
+            margin-top:2rem;
+            z-index:2;
+
+            background: linear-gradient(315deg, rgba(171, 222, 234, 0.68), rgba(211, 241, 211, 0.776));
+
+            box-shadow: 0.5rem 0.5rem 0 #2c3730;
+
+            backdrop-filter: blur(10px);
+            border-radius:1rem;
+            min-height:20rem;
+            padding:1rem;
+            position:relative;
+
+            .suggestionsBox {
+                background:#f7fffedb;
+                border:1px solid #000;
+                border-radius:0.5rem;
+                padding:2rem;
+                margin-bottom:1rem;
+
+                .suggestionsBoxTitle {
+                    font-size:1.7rem;
+                    font-family: var(--font-display);
+                    font-variation-settings: 'wght' 700;
+                    margin-bottom:0.5rem;
+                    text-align:center;
+                }
+
+                .suggestionsBoxDescription {
+                    font-size:1rem;
+                    font-family: var(--font-body);
+                    font-variation-settings: 'wght' 500;
+                    text-align:center;
+                }   
+                
+                .suggestionsBoxButton {
+
+                    display:block;
+                    text-decoration:none;
+                    margin-top:1rem;
+                    
+                    background:#25536d;
+                    font-family: var(--font-display);
+                    font-variation-settings: 'wght' 700;
+                    color:#fff;
+                    width:fit-content;
+                    margin:0 auto;
+                    margin-top:1rem;
+                    padding:0.5rem 1rem;
+                    border-radius:0.5rem;
+                    cursor:pointer;
+                    text-align:center;
+                    transition:all 0.2s ease-in-out;
+                }
+                
+            }
+
+            .categories {
+    
+                display:flex;
+                gap:0.5rem;
+                justify-content:flex-start;
+                width:100%;
+    
+                .category {
+                    padding:0.5rem 1rem;
+                    border-radius:0.5rem;
+                    color:#000000;
+                    background-color: #ffffff;
+                    cursor:pointer;
+                    font-family: var(--font-display);
+                    font-variation-settings: 'wght' 700;
+                    font-size:1rem;
+                    transition:all 0.2s ease-in-out;
+    
+                    &:hover, &.active {
+                        color:#ffffff;
+                        &.kpop {
+                            background-color: #5566ff;
+                        }
+        
+                        &.jpop {
+                            background-color: #e04343;
+                        }
+        
+                        &.anime {
+                            background-color: #5c24b6;
+                        }
+                    }
+                }
+            }
+
+            .lyricsList {
+                margin-top:1rem;
+                background:#f9fffdfb;
+                border-radius:0.5rem;
+                padding:0.5rem 1rem;
+                .lyricsSection {
+                    padding:1rem;
+
+                    h3 {
+                        font-size:2rem;
+                        font-family: var(--font-display);
+                        font-variation-settings: 'wght' 700;
+                        margin-bottom:1rem;
+                    }
+
+                    ul {
+                        list-style:none;
+                        padding:0;
+                        margin:0.5rem 0;
+                        
+                        li {
+                            margin:0.5rem 0;
+                            a {
+                                font-size:1.2rem;
+                                color:#2f439a;
+                                text-decoration:none;
+                                &:hover {
+                                    text-decoration:underline;
+                                }
+
+                                span.newSong {
+                                    display:inline-block;
+                                    background-color: #f74545;
+                                    box-shadow: 0 0 0.5rem 0.2rem #f74545;
+                                    color:#fff4c1;
+                                    padding:0.2rem 0.5rem;
+                                    border-radius:0.5rem;
+                                    font-size:0.8rem;
+                                    margin-left:1rem;
+                                }
+                            }
+                        }
+                    }       
+                }
+            }
+
+            .loading, .error, .noLyrics {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                min-height: 20rem;
+                font-family: var(--font-display);
+                font-variation-settings: 'wght' 600;
+                font-size: 1.5rem;
+                text-align: center;
+                padding: 2rem;
+            }
+
+            .error {
+                color: #f74545;
+            }
+            
+            .noLyrics {
+                color: #2c3730;
+                
+                p {
+                    margin: 0.5rem 0;
+                    
+                    &:first-child {
+                        font-size: 1.8rem;
+                        font-variation-settings: 'wght' 700;
+                    }
+                    
+                    &:last-child {
+                        font-size: 1.2rem;
+                        font-variation-settings: 'wght' 500;
+                    }
+                }
+            }
+        }
+
+        @media screen and (max-width: 725px) {
+            
+        }
+      
+        @media screen and (max-width: 500px) {
+
+        }
+    }
+}

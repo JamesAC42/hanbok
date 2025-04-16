@@ -569,10 +569,11 @@ export const fr = {
         back: 'Retour',
         page: 'Page',
         of: 'sur',
-        showing: 'Affichage de',
+        showing: 'Affichage',
         cards: 'cartes',
         previous: 'Précédent',
-        next: 'Suivant'
+        next: 'Suivant',
+        select: 'Sélectionner'
     },
     navbar: {
         home: 'Accueil',
@@ -582,6 +583,7 @@ export const fr = {
         about: 'À propos',
         feedback: 'Commentaires',
         pricing: 'Tarifs',
+        lyrics: 'Paroles',
         logout: 'Déconnexion'
     },
     stats: {
@@ -645,6 +647,109 @@ export const fr = {
         study: {
             title: 'Sessions d\'étude efficaces',
             description: 'L\'interface d\'étude affiche le vocabulaire au recto et les traductions au verso. Écoutez la prononciation audio et évaluez la qualité de votre mémorisation pour chaque mot afin d\'optimiser la programmation des futures révisions.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Suggestions de Chansons",
+            subtitle: "Suggérez vos chansons préférées pour les ajouter à notre collection de paroles",
+            suggestSong: "Suggérer une Chanson",
+            loginPrompt: "Veuillez vous connecter pour suggérer des chansons.",
+            login: "Se Connecter",
+            form: {
+                songName: "Titre de la Chanson",
+                artist: "Artiste/Groupe",
+                genre: "Genre",
+                language: "Langue",
+                youtubeUrl: "URL YouTube (optionnel)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Envoyer la Suggestion",
+                submitting: "Envoi en cours...",
+                submitSuccess: "Suggestion envoyée avec succès !",
+                requiredFields: "Le titre de la chanson et l'artiste sont obligatoires"
+            },
+            status: {
+                loading: "Chargement des suggestions...",
+                noSuggestions: "Aucune suggestion trouvée. Soyez le premier à suggérer une chanson !",
+                watchOnYoutube: "Regarder sur YouTube",
+                upvoteTitle: {
+                    loggedIn: "Soutenir cette suggestion",
+                    loggedOut: "Connectez-vous pour soutenir"
+                },
+                deleteTitle: "Supprimer cette suggestion",
+                pending: "En attente",
+                approved: "Approuvé",
+                rejected: "Rejeté",
+                completed: "Terminé"
+            },
+            card: {
+                by: "par",
+                deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette suggestion ?"
+            },
+            errors: {
+                fetchFailed: "Échec du chargement des suggestions",
+                connectionError: "Échec de la connexion au serveur",
+                submitFailed: "Échec de l'envoi de la suggestion",
+                updateStatusFailed: "Échec de la mise à jour du statut : {message}",
+                deleteFailed: "Erreur lors de la suppression de la suggestion"
+            }
+        },
+        title: "Paroles",
+        description: "Trouvez des traductions détaillées et des analyses de vos chansons préférées",
+        adminPanel: "Panneau d'Administration",
+        suggestBox: {
+            title: "Suggérez des Chansons !",
+            description: "J'ajoute activement plus de chansons basées sur vos suggestions ! Veuillez soumettre les chansons que vous aimeriez voir, ou votez pour celles que d'autres ont suggérées.",
+            button: "Suggérer une Chanson"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Anime"
+        },
+        status: {
+            loading: "Chargement des paroles...",
+            noLyrics: {
+                main: "Aucune chanson disponible pour {category} pour le moment.",
+                suggestion: "Suggérez une chanson pour la voir ici !"
+            }
+        },
+        errors: {
+            fetchFailed: "Échec du chargement des paroles"
+        },
+        detail: {
+            loading: "Chargement...",
+            error: "Erreur",
+            notFound: "Paroles non trouvées",
+            by: "par",
+            tags: {
+                language: "Langue",
+                genre: "Genre",
+                anime: "Anime",
+                views: "vues"
+            },
+            share: {
+                twitter: "X",
+                email: "E-mail",
+                discord: "Discord",
+                copyLink: "Copier le Lien",
+                copied: "Lien copié dans le presse-papiers !"
+            },
+            help: {
+                title: "Analyse des Paroles",
+                description: "Cliquez sur une ligne des paroles pour voir l'analyse"
+            },
+            columns: {
+                original: "Original",
+                translation: "Traduction"
+            },
+            analysis: {
+                title: "Analyse des Paroles",
+                lines: "Lignes {start}-{end}",
+                line: "Ligne {number}",
+                close: "Fermer"
+            },
+            back: "Retour aux Paroles"
         }
     },
 }; 

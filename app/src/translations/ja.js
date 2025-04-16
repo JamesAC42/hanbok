@@ -568,11 +568,12 @@ export const ja = {
     common: {
         back: '戻る',
         page: 'ページ',
-        of: '/',
+        of: 'の',
         showing: '表示中',
         cards: 'カード',
         previous: '前へ',
-        next: '次へ'
+        next: '次へ',
+        select: '選択'
     },
     navbar: {
         home: 'ホーム',
@@ -582,6 +583,7 @@ export const ja = {
         about: '概要',
         feedback: 'フィードバック',
         pricing: '料金',
+        lyrics: '歌詞',
         logout: 'ログアウト'
     },
     stats: {
@@ -645,6 +647,109 @@ export const ja = {
         study: {
             title: '効率的な学習セッション',
             description: '学習インターフェースは、表面に語彙、裏面に翻訳を表示します。音声発音を聞き、各単語をどれだけよく覚えているかを評価して、将来の復習スケジュールを最適化します。'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "曲の提案",
+            subtitle: "お気に入りの曲を提案して、私たちの歌詞コレクションに追加しましょう",
+            suggestSong: "曲を提案",
+            loginPrompt: "曲を提案するにはログインしてください。",
+            login: "ログイン",
+            form: {
+                songName: "曲名",
+                artist: "アーティスト/バンド",
+                genre: "ジャンル",
+                language: "言語",
+                youtubeUrl: "YouTube URL（任意）",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "提案を送信",
+                submitting: "送信中...",
+                submitSuccess: "提案が送信されました！",
+                requiredFields: "曲名とアーティストは必須です"
+            },
+            status: {
+                loading: "提案を読み込み中...",
+                noSuggestions: "提案が見つかりません。最初の提案者になりましょう！",
+                watchOnYoutube: "YouTubeで見る",
+                upvoteTitle: {
+                    loggedIn: "この提案を支持する",
+                    loggedOut: "ログインして支持する"
+                },
+                deleteTitle: "この提案を削除",
+                pending: "保留中",
+                approved: "承認済み",
+                rejected: "却下",
+                completed: "完了"
+            },
+            card: {
+                by: "by",
+                deleteConfirm: "この提案を削除してもよろしいですか？"
+            },
+            errors: {
+                fetchFailed: "提案の読み込みに失敗しました",
+                connectionError: "サーバーへの接続に失敗しました",
+                submitFailed: "提案の送信に失敗しました",
+                updateStatusFailed: "ステータスの更新に失敗しました: {message}",
+                deleteFailed: "提案の削除に失敗しました"
+            }
+        },
+        title: "歌詞",
+        description: "お気に入りの曲の詳細な翻訳と分析を見つけましょう",
+        adminPanel: "管理パネル",
+        suggestBox: {
+            title: "曲を提案しよう！",
+            description: "あなたの提案に基づいて、より多くの曲を追加しています！見たい曲を送信するか、他の人が提案した曲に投票してください。",
+            button: "曲を提案"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "アニメ"
+        },
+        status: {
+            loading: "歌詞を読み込み中...",
+            noLyrics: {
+                main: "{category}の曲はまだ利用できません。",
+                suggestion: "ここで見たい曲を提案してください！"
+            }
+        },
+        errors: {
+            fetchFailed: "歌詞の読み込みに失敗しました"
+        },
+        detail: {
+            loading: "読み込み中...",
+            error: "エラー",
+            notFound: "歌詞が見つかりません",
+            by: "by",
+            tags: {
+                language: "言語",
+                genre: "ジャンル",
+                anime: "アニメ",
+                views: "閲覧数"
+            },
+            share: {
+                twitter: "X",
+                email: "メール",
+                discord: "Discord",
+                copyLink: "リンクをコピー",
+                copied: "リンクをクリップボードにコピーしました！"
+            },
+            help: {
+                title: "歌詞分析",
+                description: "歌詞の行をクリックして分析を表示"
+            },
+            columns: {
+                original: "原文",
+                translation: "翻訳"
+            },
+            analysis: {
+                title: "歌詞分析",
+                lines: "{start}-{end}行",
+                line: "{number}行目",
+                close: "閉じる"
+            },
+            back: "歌詞に戻る"
         }
     },
 }; 

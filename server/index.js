@@ -7,6 +7,10 @@ const session = require('express-session');
 const {createClient} = require('redis');
 const {RedisStore} = require('connect-redis');
 
+// Import Bull queue and cleanup function
+const { analysisQueue } = require('./jobs/queue');
+const { cleanupRedisConnections } = require('./controllers/lyrics/generateLyricAnalysis');
+
 // Create Redis client with configuration
 const redisClient = createClient({
   password: process.env.REDIS_PW || undefined,
@@ -32,6 +36,7 @@ const redisStore = new RedisStore({
 });
 
 const { connectToDatabase, getDb } = require('./database');
+const { setRedisClient } = require('./utils/lyricsCache');
 
 const submitSentence = require('./controllers/auth/submitSentence');
 const getAudioURL = require('./controllers/auth/getAudioURL');
@@ -77,6 +82,11 @@ const exportDeck = require('./controllers/auth/exportDeck');
 const getRateLimits = require('./controllers/auth/getRateLimits');
 
 const getEmailList = require('./controllers/admin/getEmailList');
+const getAdmins = require('./controllers/admin/getAdmins');
+
+// Import admin lyrics controllers
+const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
+const { generateLyricAnalysis } = require('./controllers/lyrics/generateLyricAnalysis');
 
 const PORT = 5666;
 
@@ -271,19 +281,144 @@ app.get('/api/admin/email-list', isAuthenticated, async (req, res) => {
     getEmailList(req, res);
 });
 
+app.get('/api/admin/admins', isAuthenticated, async (req, res) => {
+    getAdmins(req, res);
+});
+
+// Admin lyrics routes
+app.get('/api/lyrics/admin', isAuthenticated, getAllLyrics);
+app.post('/api/lyrics/admin', isAuthenticated, addLyrics);
+app.put('/api/lyrics/admin/:lyricId', isAuthenticated, updateLyrics);
+app.delete('/api/lyrics/admin/:lyricId', isAuthenticated, deleteLyrics);
+app.put('/api/lyrics/admin/:lyricId/published', isAuthenticated, togglePublished);
+
+// Add the route for generating lyric analysis (SSE endpoint)
+app.get('/api/lyrics/admin/generate-analysis/:lyricId', isAuthenticated, async (req, res) => {
+    generateLyricAnalysis(req, res);
+});
+
+// Public lyrics routes
+app.get('/api/lyrics', async (req, res) => {
+    const { getPublishedLyrics } = require('./controllers/lyrics/publicLyrics');
+    getPublishedLyrics(req, res);
+});
+
+app.get('/api/lyrics/filters', async (req, res) => {
+    const { getFilterOptions } = require('./controllers/lyrics/publicLyrics');
+    getFilterOptions(req, res);
+});
+
+// Lyric suggestions routes
+app.get('/api/lyrics/suggestions', async (req, res) => {
+    const { getSuggestions } = require('./controllers/lyrics/lyricSuggestions');
+    getSuggestions(req, res);
+});
+
+app.post('/api/lyrics/suggestions', isAuthenticated, async (req, res) => {
+    const { addSuggestion } = require('./controllers/lyrics/lyricSuggestions');
+    addSuggestion(req, res);
+});
+
+app.post('/api/lyrics/suggestions/:suggestionId/upvote', isAuthenticated, async (req, res) => {
+    const { upvoteSuggestion } = require('./controllers/lyrics/lyricSuggestions');
+    upvoteSuggestion(req, res);
+});
+
+app.put('/api/admin/lyrics/suggestions/:suggestionId/status', isAuthenticated, async (req, res) => {
+    const { updateSuggestionStatus } = require('./controllers/lyrics/lyricSuggestions');
+    updateSuggestionStatus(req, res);
+});
+
+app.delete('/api/admin/lyrics/suggestions/:suggestionId', isAuthenticated, async (req, res) => {
+    const { deleteSuggestion } = require('./controllers/lyrics/lyricSuggestions');
+    deleteSuggestion(req, res);
+});
+
+// Single lyric and analysis routes (must come after specific routes)
+app.get('/api/lyrics/:lyricId', async (req, res) => {
+    const { getPublishedLyric } = require('./controllers/lyrics/publicLyrics');
+    getPublishedLyric(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/analysis', async (req, res) => {
+    const { getAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    getAnalysis(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/fullAnalysis', async (req, res) => {
+    const { getFullAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    getFullAnalysis(req, res);
+});
+
+// Add API route for deleting an analysis
+app.delete('/api/lyrics/:lyricId/analysis', isAuthenticated, async (req, res) => {
+    const { deleteAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
+    deleteAnalysis(req, res);
+});
+
 // Connect to Redis before starting the server
 async function startServer() {
   try {
     await redisClient.connect();
+    // Initialize lyricsCache with the Redis client
+    setRedisClient(redisClient);
+    
     await connectToDatabase();
+    
+    // Log any active jobs
+    const activeJobs = await analysisQueue.getActive();
+    console.log(`Found ${activeJobs.length} active analysis jobs on startup`);
+    
+    // Initialize job event listeners
+    analysisQueue.on('completed', (job) => {
+      console.log(`Job ${job.id} completed for lyric analysis`);
+    });
+    
+    analysisQueue.on('failed', (job, error) => {
+      console.error(`Job ${job.id} failed with error:`, error);
+    });
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
+    
+    // Set up graceful shutdown
+    setupGracefulShutdown();
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
   }
+}
+
+// Cleanup function for graceful shutdown
+function setupGracefulShutdown() {
+  const shutdown = async () => {
+    console.log('Server is shutting down...');
+    
+    try {
+      // Close Bull queue
+      console.log('Closing Bull queue...');
+      await analysisQueue.close();
+      
+      // Clean up Redis connections in generateLyricAnalysis
+      console.log('Cleaning up Redis connections...');
+      await cleanupRedisConnections();
+      
+      // Close main Redis client
+      console.log('Closing main Redis client...');
+      await redisClient.quit();
+      
+      console.log('Cleanup complete, exiting process');
+      process.exit(0);
+    } catch (err) {
+      console.error('Error during cleanup:', err);
+      process.exit(1);
+    }
+  };
+  
+  // Handle termination signals
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }
 
 startServer().catch(console.error);

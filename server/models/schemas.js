@@ -123,6 +123,10 @@ const collections = {
           translationLanguage: {
             bsonType: "string",
             description: "Language code for the translation (e.g. 'en', 'ko')"
+          },
+          isLyric: {
+            bsonType: ["bool", "null"],
+            description: "Whether the sentence is part of a song."
           }
         }
       }
@@ -610,6 +614,245 @@ const collections = {
       {
         key: { currentStreak: -1 },
         name: "current_streak_index"
+      }
+    ]
+  },
+  lyrics: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["title", "genre", "lyricsText", "dateCreated", "published", "lyricId"],
+        properties: {
+          _id: {
+            bsonType: "objectId",
+            description: "Unique identifier for the lyrics"
+          },
+          lyricId: {
+            bsonType: "string",
+            description: "URL-friendly ID formed from artist and title"
+          },
+          title: {
+            bsonType: "string",
+            description: "Title of the song"
+          },
+          artist: {
+            bsonType: ["string", "null"],
+            description: "Name of the artist/band/anime"
+          },
+          anime: {
+            bsonType: ["string", "null"],
+            description: "Name of the anime"
+          },
+          genre: {
+            bsonType: "string",
+            description: "Genre of the song"
+          },
+          youtubeUrl: {
+            bsonType: ["string", "null"],
+            description: "URL to the YouTube video of the song"
+          },
+          published: {
+            bsonType: "bool",
+            description: "Whether the lyrics are publicly visible to users"
+          },
+          isNew: {
+            bsonType: "bool",
+            description: "Whether the lyrics are new"
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "Date when the lyrics were added"
+          },
+          lyricsText: {
+            bsonType: "string",
+            description: "Full lyrics text of the song"
+          },
+          language: {
+            bsonType: "string",
+            description: "Main language of the lyrics (e.g., 'ko', 'ja')"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { _id: 1 },
+        unique: true
+      },
+      {
+        key: { published: 1 }
+      },
+      {
+        key: { language: 1 }
+      }
+    ]
+  },
+  lyrics_analysis: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["lyricId", "analysisData", "language", "dateCreated"],
+        properties: {
+          _id: {
+            bsonType: "objectId",
+            description: "Unique identifier for the lyrics analysis"
+          },
+          lyricId: {
+            bsonType: "string",
+            description: "ID of the lyrics item this analysis is for"
+          },
+          language: {
+            bsonType: "string",
+            description: "Language code for the analysis (e.g., 'en' for English)"
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "Date when the analysis was created"
+          },
+          analysisData: {
+            bsonType: "string",
+            description: "JSON string of the analysis data, structured as a list of objects mapping line(s) to sentence analysis ID"
+          },
+          translationText: {
+            bsonType: ["string", "null"],
+            description: "Full translation of the entire lyrics text"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { analysisId: 1 },
+        unique: true
+      },
+      {
+        key: { lyricId: 1, language: 1 },
+        unique: true
+      }
+    ]
+  },
+  lyric_suggestions: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["suggestionId", "songName", "artist", "userId", "dateCreated", "upvotes"],
+        properties: {
+          suggestionId: {
+            bsonType: "int",
+            description: "Unique identifier for the song suggestion"
+          },
+          songName: {
+            bsonType: "string",
+            description: "Name of the suggested song"
+          },
+          artist: {
+            bsonType: "string",
+            description: "Name of the artist/band"
+          },
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who suggested the song"
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "Date when the suggestion was created"
+          },
+          upvotes: {
+            bsonType: "int",
+            description: "Number of upvotes for this suggestion"
+          },
+          genre: {
+            bsonType: ["string", "null"],
+            description: "Genre of the song (optional)"
+          },
+          youtubeUrl: {
+            bsonType: ["string", "null"],
+            description: "URL to the YouTube video of the song (optional)"
+          },
+          language: {
+            bsonType: ["string", "null"],
+            description: "Main language of the lyrics (optional)"
+          },
+          status: {
+            bsonType: ["string", "null"],
+            enum: ["pending", "approved", "rejected", "completed"],
+            description: "Status of the suggestion"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { suggestionId: 1 },
+        unique: true
+      },
+      {
+        key: { upvotes: -1 }
+      },
+      {
+        key: { userId: 1 }
+      },
+      {
+        key: { status: 1 }
+      }
+    ]
+  },
+  lyric_suggestion_upvotes: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "suggestionId", "dateUpvoted"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who upvoted"
+          },
+          suggestionId: {
+            bsonType: "int",
+            description: "ID of the suggestion that was upvoted"
+          },
+          dateUpvoted: {
+            bsonType: "date",
+            description: "Date when the upvote was created"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, suggestionId: 1 },
+        unique: true
+      },
+      {
+        key: { suggestionId: 1 }
+      }
+    ]
+  },
+  lyric_views: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["lyricId", "viewCount", "lastViewed"],
+        properties: {
+          lyricId: {
+            bsonType: "string",
+            description: "ID of the lyrics item this view count is for"
+          },
+          viewCount: {
+            bsonType: "int",
+            description: "Number of times the lyric has been viewed"
+          },
+          lastViewed: {
+            bsonType: "date",
+            description: "Date when the lyric was last viewed"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { lyricId: 1 },
+        unique: true
       }
     ]
   },

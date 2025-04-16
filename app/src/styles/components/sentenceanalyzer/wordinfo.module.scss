@@ -171,10 +171,9 @@
 					span.wordCase {
 						background:#8a8a8a;
 						color:#fff;
-						white-space:nowrap;
 						margin-left:0.5rem;
 						overflow:hidden;
-						text-overflow:ellipsis;
+						max-width:50%;
 						padding:0.2rem 0.5rem;
 						border-radius:0.2rem;
 						transform:translateY(-5px);

@@ -54,6 +54,35 @@ async function connectToDatabase() {
       { unique: true }
     );
 
+    // Add indexes for lyrics collections
+    try {
+      await db.collection('lyrics').createIndex({ lyricId: 1 }, { unique: true });
+      await db.collection('lyrics').createIndex({ published: 1 });
+      await db.collection('lyrics').createIndex({ language: 1 });
+      
+      await db.collection('lyrics_analysis').createIndex({ analysisId: 1 }, { unique: true });
+      await db.collection('lyrics_analysis').createIndex({ lyricId: 1, language: 1 }, { unique: true });
+      
+      await db.collection('lyric_suggestions').createIndex({ suggestionId: 1 }, { unique: true });
+      await db.collection('lyric_suggestions').createIndex({ upvotes: -1 });
+      await db.collection('lyric_suggestions').createIndex({ userId: 1 });
+      await db.collection('lyric_suggestions').createIndex({ status: 1 });
+      
+      // Add indexes for lyric suggestion upvotes
+      await db.collection('lyric_suggestion_upvotes').createIndex(
+        { userId: 1, suggestionId: 1 }, 
+        { unique: true }
+      );
+      await db.collection('lyric_suggestion_upvotes').createIndex({ suggestionId: 1 });
+    } catch (error) {
+      // Ignore errors for indexes that already exist with different names
+      if (error.code !== 85 && error.code !== 11000) {
+        console.error('Error creating lyrics indexes:', error);
+      } else {
+        console.log('Lyrics indexes already exist with different names, continuing...');
+      }
+    }
+
     // Add index for rate_limits collection
     try {
       await db.collection('rate_limits').createIndex(
@@ -77,6 +106,9 @@ async function connectToDatabase() {
       await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });
       await db.collection('counters').insertOne({ _id: 'sentenceId', seq: 0 });
       await db.collection('counters').insertOne({ _id: 'feedbackId', seq: 0 });
+      await db.collection('counters').insertOne({ _id: 'lyricId', seq: 0 });
+      await db.collection('counters').insertOne({ _id: 'analysisId', seq: 0 });
+      await db.collection('counters').insertOne({ _id: 'suggestionId', seq: 0 });
     } catch (error) {
       // Ignore duplicate key error as counters might already exist
       if (error.code !== 11000) {

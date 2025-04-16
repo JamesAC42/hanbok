@@ -572,7 +572,8 @@ export const ru = {
         showing: 'Показано',
         cards: 'карточек',
         previous: 'Предыдущая',
-        next: 'Следующая'
+        next: 'Следующая',
+        select: 'Выбрать'
     },
     navbar: {
         home: 'Главная',
@@ -580,9 +581,10 @@ export const ru = {
         cards: 'Карточки',
         profile: 'Профиль',
         about: 'О нас',
-        feedback: 'Обратная связь',
+        feedback: 'Отзывы',
         pricing: 'Цены',
-        logout: 'Выход'
+        lyrics: 'Тексты песен',
+        logout: 'Выйти'
     },
     stats: {
         studyStats: 'Статистика обучения',
@@ -645,6 +647,109 @@ export const ru = {
         study: {
             title: 'Эффективные сессии обучения',
             description: 'Интерфейс обучения показывает словарный запас на лицевой стороне и переводы на обратной. Слушайте аудио-произношение и оценивайте, насколько хорошо вы запомнили каждое слово, чтобы оптимизировать планирование будущих повторений.'
+        }
+    },
+    lyrics: {
+        suggestions: {
+            title: "Предложения песен",
+            subtitle: "Предложите свои любимые песни для добавления в нашу коллекцию текстов",
+            suggestSong: "Предложить песню",
+            loginPrompt: "Пожалуйста, войдите, чтобы предложить песни.",
+            login: "Войти",
+            form: {
+                songName: "Название песни",
+                artist: "Исполнитель/Группа",
+                genre: "Жанр",
+                language: "Язык",
+                youtubeUrl: "URL YouTube (опционально)",
+                youtubeUrlPlaceholder: "https://www.youtube.com/watch?v=...",
+                submit: "Отправить предложение",
+                submitting: "Отправка...",
+                submitSuccess: "Предложение успешно отправлено!",
+                requiredFields: "Название песни и исполнитель обязательны"
+            },
+            status: {
+                loading: "Загрузка предложений...",
+                noSuggestions: "Предложений не найдено. Будьте первым, кто предложит песню!",
+                watchOnYoutube: "Смотреть на YouTube",
+                upvoteTitle: {
+                    loggedIn: "Поддержать это предложение",
+                    loggedOut: "Войдите, чтобы поддержать"
+                },
+                deleteTitle: "Удалить это предложение",
+                pending: "В ожидании",
+                approved: "Одобрено",
+                rejected: "Отклонено",
+                completed: "Завершено"
+            },
+            card: {
+                by: "от",
+                deleteConfirm: "Вы уверены, что хотите удалить это предложение?"
+            },
+            errors: {
+                fetchFailed: "Не удалось загрузить предложения",
+                connectionError: "Не удалось подключиться к серверу",
+                submitFailed: "Не удалось отправить предложение",
+                updateStatusFailed: "Не удалось обновить статус: {message}",
+                deleteFailed: "Не удалось удалить предложение"
+            }
+        },
+        title: "Тексты песен",
+        description: "Найдите подробные переводы и анализ ваших любимых песен",
+        adminPanel: "Панель администратора",
+        suggestBox: {
+            title: "Предложите песни!",
+            description: "Я активно добавляю больше песен на основе ваших предложений! Пожалуйста, отправьте песни, которые вы хотели бы увидеть, или проголосуйте за предложения других.",
+            button: "Предложить песню"
+        },
+        categories: {
+            kpop: "K-Pop",
+            jpop: "J-Pop",
+            anime: "Аниме"
+        },
+        status: {
+            loading: "Загрузка текстов...",
+            noLyrics: {
+                main: "Пока нет песен для {category}.",
+                suggestion: "Предложите песню, чтобы увидеть её здесь!"
+            }
+        },
+        errors: {
+            fetchFailed: "Не удалось загрузить тексты"
+        },
+        detail: {
+            loading: "Загрузка...",
+            error: "Ошибка",
+            notFound: "Текст не найден",
+            by: "от",
+            tags: {
+                language: "Язык",
+                genre: "Жанр",
+                anime: "Аниме",
+                views: "просмотров"
+            },
+            share: {
+                twitter: "X",
+                email: "Email",
+                discord: "Discord",
+                copyLink: "Копировать ссылку",
+                copied: "Ссылка скопирована в буфер обмена!"
+            },
+            help: {
+                title: "Анализ текста",
+                description: "Нажмите на строку в тексте, чтобы увидеть анализ"
+            },
+            columns: {
+                original: "Оригинал",
+                translation: "Перевод"
+            },
+            analysis: {
+                title: "Анализ текста",
+                lines: "Строки {start}-{end}",
+                line: "Строка {number}",
+                close: "Закрыть"
+            },
+            back: "Назад к текстам"
         }
     },
 }; 
