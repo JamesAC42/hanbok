@@ -57,6 +57,20 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         }
         fetchSiteStats();
     }, [searchParams, isAuthenticated, propSentenceId]);
+    
+
+    useEffect(() => {
+        // Set the document title based on the analysis
+        console.log('analysis', analysis);
+        if(!!analysis) {
+            if(analysis?.sentence?.original?.length > 10) {
+                document.title = `${t('analysis.pageTitle')} - ${analysis.sentence.original.substr(0, 10) + '...'}`;
+            } else {
+                document.title = `${t('analysis.pageTitle')} - ${analysis.sentence.original}`;
+            }
+        }
+    }
+    , [analysis]);
 
     const loadSavedSentence = async (id) => {
         const result = await loadSentence(id);
