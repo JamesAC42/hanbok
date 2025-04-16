@@ -17,7 +17,10 @@ const Profile = () => {
         if (!loading && !isAuthenticated) {
             router.replace('/login');
         }
-    }, [isAuthenticated, loading, router]);
+        if(!loading && isAuthenticated) {
+            document.title = `${t('profile.pageTitle')} - ${user.name}`;
+        }
+    }, [isAuthenticated, loading, router, t]);
 
     // Don't render anything while loading or if not authenticated
     if (loading || !isAuthenticated) return null;

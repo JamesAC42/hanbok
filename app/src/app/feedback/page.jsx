@@ -126,7 +126,8 @@ const Feedback = () => {
 
     useEffect(() => {
         fetchFeedback();
-    }, [page]);
+        document.title = t('feedback.pageTitle');
+    }, [page, t]);
 
     const handleSubmit = async (e, parentId = null) => {
         e.preventDefault();

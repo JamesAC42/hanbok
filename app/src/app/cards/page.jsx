@@ -20,7 +20,8 @@ const Cards = () => {
         if (!loading && !isAuthenticated) {
             router.replace('/login');
         }
-    }, [isAuthenticated, loading, router]);
+        document.title = t('cards.pageTitle');
+    }, [isAuthenticated, loading, router, t]);
 
     useEffect(() => {
         async function fetchDecks() {

@@ -18,6 +18,7 @@ export const nl = {
         turkish: 'Turks'
     },
     about: {
+        pageTitle: 'Hanbok - Over',
         title: 'Over',
         whatIsHanbok: 'Wat is hanbok?',
         description: 'Hanbok is een uitgebreide taalleerhulpmiddel ontworpen om je te helpen zinnen in meerdere talen te begrijpen en te beheersen. Hanbok breekt zinnen af in hun componenten en biedt gedetailleerde analyses van grammaticale patronen, woordenschat en gebruik voor Koreaans, Japans, Chinees, Spaans, Italiaans en Frans.',
@@ -113,6 +114,7 @@ export const nl = {
         languageSupportDescription: 'Hanbok ondersteunt nu meerdere talen, waardoor je zinnen kunt analyseren en leren in elk van de volgende talen:'
     },
     feedback: {
+        pageTitle: 'Hanbok - Feedback',
         title: 'Feedbackforum',
         description: 'Deel je feedback en suggesties met ons. We waarderen je input en zijn altijd op zoek naar manieren om onze service te verbeteren.',
         submitPlaceholder: 'Deel je gedachten of suggesties...',
@@ -140,6 +142,7 @@ export const nl = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - Profiel',
         title: 'Profiel',
         userInfo: 'Gebruikersinformatie',
         name: 'Naam',
@@ -179,6 +182,7 @@ export const nl = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - Inloggen',
         title: 'Inloggen',
         description: 'Log in met Google om krachtige functies voor je Koreaanse leerreis te ontgrendelen. Heb je geen account? Er wordt automatisch een account voor je aangemaakt.',
         features: {
@@ -192,6 +196,7 @@ export const nl = {
         girlImageAlt: 'Illustratie van een meisje'
     },
     pricing: {
+        pageTitle: 'Hanbok - Prijzen',
         title: 'Prijzen',
         upgradeOptions: 'Upgrade-opties',
         limitedTimeOffer: 'Beperkte tijd - 50% KORTING',
@@ -236,6 +241,7 @@ export const nl = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - Thuis',
         title: 'hanbok',
         subtitle: 'Beheers {language}. Eén zin tegelijk.',
         description: 'Breek Koreaanse zinnen af in hun componenten en begrijp grammaticale patronen, woordenschat en gebruik.',
@@ -302,6 +308,7 @@ export const nl = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - Zin: ',
         original: 'Origineel',
         translation: 'Vertaling',
         words: 'Woorden',
@@ -455,6 +462,7 @@ export const nl = {
         linkCopied: 'Link gekopieerd naar klembord! Deel het met je vrienden.'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - Bladwijzers',
         title: 'Bladwijzers',
         sentences: 'Zinnen',
         loading: 'Laden...',
@@ -468,6 +476,7 @@ export const nl = {
         fetchError: 'Fout bij het ophalen van opgeslagen zinnen.'
     },
     cards: {
+        pageTitle: 'Hanbok - Flashcards',
         title: 'Flashcards',
         subtitle: 'Bestudeer je opgeslagen woorden met gespreide herhaling',
         deckTitle: 'Flashcard Deck',

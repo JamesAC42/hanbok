@@ -18,6 +18,7 @@ export const tr = {
         turkish: 'Türkçe'
     },
     about: {
+        pageTitle: 'Hanbok - Hakkında',
         title: 'Hakkında',
         whatIsHanbok: 'Hanbok nedir?',
         description: 'Hanbok, birden fazla dilde cümleleri anlamanıza ve ustalaşmanıza yardımcı olmak için tasarlanmış kapsamlı bir dil öğrenme aracıdır. Hanbok, cümleleri bileşenlerine ayırır ve Korece, Japonca, Çince, İspanyolca, İtalyanca ve Fransızca için dilbilgisi kalıpları, kelime bilgisi ve kullanımın ayrıntılı analizini sağlar.',
@@ -113,6 +114,7 @@ export const tr = {
         languageSupportDescription: 'Hanbok artık birden fazla dili destekliyor, aşağıdaki dillerden herhangi birinde cümleleri analiz etmenizi ve öğrenmenizi sağlıyor:'
     },
     feedback: {
+        pageTitle: 'Hanbok - Geri Bildirim',
         title: 'Geri Bildirim Forumu',
         description: 'Lütfen geri bildirim ve önerilerinizi bizimle paylaşın. Geri bildiriminizi önemsiyoruz ve hizmetimizi geliştirmek için her zaman yollar arıyoruz.',
         submitPlaceholder: 'Düşüncelerinizi veya önerilerinizi paylaşın...',
@@ -140,6 +142,7 @@ export const tr = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - Profil',
         title: 'Profil',
         userInfo: 'Kullanıcı Bilgileri',
         name: 'İsim',
@@ -179,6 +182,7 @@ export const tr = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - Giriş',
         title: 'Giriş Yap',
         description: 'Google ile giriş yaparak Korece öğrenme yolculuğunuz için güçlü özelliklerin kilidini açın. Hesabınız yok mu? Otomatik olarak oluşturulacaktır.',
         features: {
@@ -192,6 +196,7 @@ export const tr = {
         girlImageAlt: 'Bir kızın illüstrasyonu'
     },
     pricing: {
+        pageTitle: 'Hanbok - Fiyatlandırma',
         title: 'Fiyatlandırma',
         upgradeOptions: 'Yükseltme Seçenekleri',
         limitedTimeOffer: 'Sınırlı Süre - %50 İNDİRİM',
@@ -236,6 +241,7 @@ export const tr = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - Ana Sayfa',
         title: 'hanbok',
         subtitle: '{language} ustalaşın. Bir cümle bir seferde.',
         description: 'Korece cümleleri bileşenlerine ayırın ve dilbilgisi kalıplarını, kelime bilgisini ve kullanımı anlayın.',
@@ -302,6 +308,7 @@ export const tr = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - Cümle: ',
         original: 'Orijinal',
         translation: 'Çeviri',
         words: 'Kelimeler',
@@ -455,6 +462,7 @@ export const tr = {
         comingSoonLyricsDesc: 'Hanbok yakında K-Pop, Anime, J-Pop ve kullanıcı isteklerine göre daha fazlasını içeren şarkı sözleri + dilbilgisi ve kelime analizi veritabanına ev sahipliği yapacak. Takipte kalın!'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - Yer İmleri',
         title: 'Yer İmleri',
         sentences: 'Cümleler',
         loading: 'Yükleniyor...',
@@ -468,6 +476,7 @@ export const tr = {
         fetchError: 'Kaydedilen cümleler alınırken hata oluştu.'
     },
     cards: {
+        pageTitle: 'Hanbok - Kartlar',
         title: 'Kartlar',
         subtitle: 'Kaydedilen kelimelerinizi aralıklı tekrar ile çalışın',
         deckTitle: 'Kart Destesi',

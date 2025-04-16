@@ -18,6 +18,7 @@ export const de = {
         turkish: 'Türkisch'
     },
     about: {
+        pageTitle: 'Hanbok - Über',
         title: 'Über',
         whatIsHanbok: 'Was ist Hanbok?',
         description: 'Hanbok ist ein umfassendes Sprachlernwerkzeug, das Ihnen hilft, Sätze in mehreren Sprachen zu verstehen und zu beherrschen. Hanbok zerlegt Sätze in ihre Bestandteile und bietet eine detaillierte Analyse von Grammatikmustern, Wortschatz und Gebrauch für Koreanisch, Japanisch, Chinesisch, Spanisch, Italienisch und Französisch.',
@@ -113,6 +114,7 @@ export const de = {
         languageSupportDescription: 'Hanbok unterstützt jetzt mehrere Sprachen, sodass Sie Sätze in einer der folgenden Sprachen analysieren und lernen können:'
     },
     feedback: {
+        pageTitle: 'Hanbok - Feedback',
         title: 'Feedback-Forum',
         description: 'Bitte teilen Sie uns Ihr Feedback und Ihre Vorschläge mit. Wir schätzen Ihr Feedback und suchen immer nach Möglichkeiten, unseren Service zu verbessern.',
         submitPlaceholder: 'Teilen Sie Ihre Gedanken oder Vorschläge...',
@@ -140,6 +142,7 @@ export const de = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - Profil',
         title: 'Profil',
         userInfo: 'Benutzerinformationen',
         name: 'Name',
@@ -179,6 +182,7 @@ export const de = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - Anmelden',
         title: 'Anmelden',
         description: 'Melden Sie sich mit Google an, um leistungsstarke Funktionen für Ihre Koreanisch-Lernreise freizuschalten. Haben Sie kein Konto? Es wird automatisch für Sie erstellt.',
         features: {
@@ -192,6 +196,7 @@ export const de = {
         girlImageAlt: 'Illustration eines Mädchens'
     },
     pricing: {
+        pageTitle: 'Hanbok - Preise',
         title: 'Preise',
         upgradeOptions: 'Upgrade-Optionen',
         limitedTimeOffer: 'Nur für begrenzte Zeit - 50% RABATT',
@@ -236,6 +241,7 @@ export const de = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - Startseite',
         title: 'hanbok',
         subtitle: 'Beherrschen Sie {language}. Ein Satz nach dem anderen.',
         description: 'Zerlegen Sie koreanische Sätze in ihre Bestandteile und verstehen Sie Grammatikmuster, Wortschatz und Gebrauch.',
@@ -302,6 +308,7 @@ export const de = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - Satz: ',
         original: 'Original',
         translation: 'Übersetzung',
         words: 'Wörter',
@@ -455,6 +462,7 @@ export const de = {
         linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie es mit Ihren Freunden.'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - Lesezeichen',
         title: 'Lesezeichen',
         sentences: 'Sätze',
         loading: 'Wird geladen...',
@@ -468,6 +476,7 @@ export const de = {
         fetchError: 'Fehler beim Abrufen gespeicherter Sätze.'
     },
     cards: {
+        pageTitle: 'Hanbok - Karteikarten',
         title: 'Karteikarten',
         subtitle: 'Lernen Sie Ihre gespeicherten Wörter mit Spaced Repetition',
         deckTitle: 'Karteikarten-Stapel',

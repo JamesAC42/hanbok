@@ -4,7 +4,7 @@ import styles from '@/styles/components/pagelayout.module.scss';
 import pricingStyles from '@/styles/components/pricing.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 //real
@@ -29,6 +29,10 @@ const Pricing = () => {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const { t } = useLanguage();
+
+    useEffect(() => {
+        document.title = t('pricing.pageTitle');
+    }, [t]);
 
     const handlePurchase = async (priceId) => {
         if (!user) {
