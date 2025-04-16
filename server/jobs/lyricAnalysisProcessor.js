@@ -92,9 +92,12 @@ async function processLyricAnalysis(job) {
     
     // Array to store group-to-sentenceId mappings
     const analysisMapping = [];
+
+    console.log("Lyrics lines:", lyricsLines);
     
     // Process each group
     for (let group of groups) {
+      console.log("Processing group:", group);
       let sentence = "";
       for (let line of group) {
         sentence += " " + lyricsLines[line];
@@ -121,6 +124,7 @@ async function processLyricAnalysis(job) {
       let sentenceObject = null;
 
       if(!existingSentence) {
+        console.log("Analyzing sentence:", sentence);
         const parsedResponse = await generateResponse(
           prompt + sentence, 
           'gemini'
