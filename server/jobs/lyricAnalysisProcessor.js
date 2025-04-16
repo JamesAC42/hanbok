@@ -106,81 +106,102 @@ async function processLyricAnalysis(job) {
         message: `Analyzing segment ${processedGroups + 1}/${totalGroups} (${sentence})...`
       });
       
-      const parsedResponse = await generateResponse(
-        prompt + sentence, 
-        'gemini'
-      );
-      
-      if(!parsedResponse || !parsedResponse.isValid) {
-        throw new Error('Invalid response from Gemini');
-      }
-      
-      if(!parsedResponse.analysis) {
-        throw new Error('No analysis found in the response');
-      }
-      
-      const analysis = parsedResponse.analysis;
-      
-      try {
-        // Get next sentence ID
-        const counterDoc = await db.collection('counters').findOneAndUpdate(
-          { _id: 'sentenceId' },
-          { $inc: { seq: 1 } },
-          { upsert: true, returnDocument: 'after' }
+      // First try to find a sentence with voice keys
+      let existingSentence = await db.collection('sentences').findOne({
+        text: sentence,
+        originalLanguage: lyric.language,
+        translationLanguage: 'en',
+        isLyric: true,
+        $or: [
+            { voice1Key: { $ne: null } },
+            { voice2Key: { $ne: null } }
+        ]
+      });
+
+      let sentenceObject = null;
+
+      if(!existingSentence) {
+        const parsedResponse = await generateResponse(
+          prompt + sentence, 
+          'gemini'
         );
-
-        let textToRead;
-        if(lyric.language === 'ja') {
-            textToRead = analysis.sentence.reading ?? sentence;
-        } else {
-            textToRead = sentence;
+        
+        if(!parsedResponse || !parsedResponse.isValid) {
+          console.log(parsedResponse);
+          throw new Error('Invalid response from Gemini.');
         }
+        
+        if(!parsedResponse.analysis) {
+          throw new Error('No analysis found in the response');
+        }
+        
+        const analysis = parsedResponse.analysis;
+        
+        try {
+          // Get next sentence ID
+          const counterDoc = await db.collection('counters').findOneAndUpdate(
+            { _id: 'sentenceId' },
+            { $inc: { seq: 1 } },
+            { upsert: true, returnDocument: 'after' }
+          );
+  
+          let textToRead;
+          if(lyric.language === 'ja') {
+              textToRead = analysis.sentence.reading ?? sentence;
+          } else {
+              textToRead = sentence;
+          }
+  
+          console.log('textToRead', textToRead);
+  
+          // Update progress
+          await storeProgress(clientId, {
+            type: 'status',
+            message: `Analysis generated. Generating audio...`
+          });
+          const { voice1, voice2 } = await generateSpeech(textToRead);
+          console.log('voice1', voice1);
+          console.log('voice2', voice2);
+        
+          // Create sentence document
+          const sentenceDoc = {
+            sentenceId: counterDoc.seq,
+            userId: user.userId,
+            text: sentence,
+            analysis: analysis,
+            voice1Key: voice1,
+            voice2Key: voice2,
+            dateAudioGenerated: new Date(),
+            originalLanguage: lyric.language,
+            translationLanguage: 'en',
+            dateCreated: new Date(),
+            fromImage: false,
+            isLyric: true
+          };
+          
+          // Store in database
+          await db.collection('sentences').insertOne(sentenceDoc);
+          sentenceObject = sentenceDoc;
 
-        console.log('textToRead', textToRead);
-
-        // Update progress
-        await storeProgress(clientId, {
-          type: 'status',
-          message: `Analysis generated. Generating audio...`
-        });
-        const { voice1, voice2 } = await generateSpeech(textToRead);
-        console.log('voice1', voice1);
-        console.log('voice2', voice2);
-        
-        // Create sentence document
-        const sentenceDoc = {
-          sentenceId: counterDoc.seq,
-          userId: user.userId,
-          text: sentence,
-          analysis: analysis,
-          voice1Key: voice1,
-          voice2Key: voice2,
-          dateAudioGenerated: new Date(),
-          originalLanguage: lyric.language,
-          translationLanguage: 'en',
-          dateCreated: new Date(),
-          fromImage: false,
-          isLyric: true
-        };
-        
-        // Store in database
-        await db.collection('sentences').insertOne(sentenceDoc);
-        
-        // Add mapping of group lines to sentenceId
-        analysisMapping.push({
-          lines: group,
-          sentenceId: sentenceDoc.sentenceId,
-          text: sentence.trim()
-        });
-        
-        await storeProgress(clientId, {
-          type: 'status',
-          message: `Saved analysis to database. ID: ${sentenceDoc.sentenceId}`
-        });
-
-      } catch (dbError) {
-        throw new Error('Failed to save analysis to database: ' + dbError.message);
+        } catch (dbError) {
+          throw new Error('Failed to save analysis to database: ' + dbError.message);
+        }
+      } else {
+        console.log('Existing sentence found. Continuing...');
+        sentenceObject = existingSentence;
       }
+      
+      // Add mapping of group lines to sentenceId
+      analysisMapping.push({
+        lines: group,
+        sentenceId: sentenceObject.sentenceId,
+        text: sentenceObject.text
+      });
+      
+      await storeProgress(clientId, {
+        type: 'status',
+        message: `Saved analysis to database. ID: ${sentenceObject.sentenceId}`
+      });
       
       processedGroups++;
       

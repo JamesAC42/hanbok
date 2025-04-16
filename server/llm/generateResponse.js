@@ -12,10 +12,12 @@ const models = {
 
 const generateResponse = async (text, model) => {
     let attempts = 0;
-    let maxAttempts = 2;
+    let maxAttempts = 5;
     let parsedResponse = null;
     while(!parsedResponse && attempts < maxAttempts) {
         try {
+            console.log("Generating response...");
+            console.log(`Attempt ${attempts + 1} of ${maxAttempts}`);
             let response = await models[model](text);
 
             // Strip away ```json and ``` if present
@@ -25,6 +27,8 @@ const generateResponse = async (text, model) => {
 
             parsedResponse = JSON.parse(response);
         } catch (error) {
+            console.log("Error parsing response", error);
+            console.log("Trying again...");
             console.log(error);
             attempts++;
         }
