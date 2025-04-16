@@ -18,6 +18,7 @@ export const es = {
         turkish: 'Turco'
     },
     about: {
+        pageTitle: 'Hanbok - Acerca de',
         title: 'Acerca de',
         whatIsHanbok: '¿Qué es hanbok?',
         description: 'Hanbok es una herramienta integral de aprendizaje de idiomas diseñada para ayudarte a entender y dominar oraciones en múltiples idiomas. Hanbok descompone las oraciones en sus partes componentes, proporcionando un análisis detallado de patrones gramaticales, vocabulario y uso para coreano, japonés, chino, español, italiano y francés.',
@@ -113,6 +114,7 @@ export const es = {
         languageSupportDescription: 'Hanbok ahora admite varios idiomas, lo que le permite analizar y aprender oraciones en cualquiera de los siguientes idiomas:'
     },
     feedback: {
+        pageTitle: 'Hanbok - Comentarios',
         title: 'Foro de Comentarios',
         description: 'Por favor, comparte tus comentarios y sugerencias con nosotros. Valoramos tu opinión y siempre buscamos formas de mejorar nuestro servicio.',
         submitPlaceholder: 'Comparte tus pensamientos o sugerencias...',
@@ -140,6 +142,7 @@ export const es = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - Perfil',
         title: 'Perfil',
         userInfo: 'Información del Usuario',
         name: 'Nombre',
@@ -179,6 +182,7 @@ export const es = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - Iniciar Sesión',
         title: 'Iniciar Sesión',
         description: 'Inicia sesión con Google para desbloquear funciones poderosas para tu viaje de aprendizaje del coreano. ¿No tienes una cuenta? Se creará una automáticamente.',
         features: {
@@ -192,6 +196,7 @@ export const es = {
         girlImageAlt: 'Ilustración de una chica'
     },
     pricing: {
+        pageTitle: 'Hanbok - Precios',
         title: 'Precios',
         upgradeOptions: 'Opciones de Actualización',
         limitedTimeOffer: 'Tiempo Limitado - 50% DE DESCUENTO',
@@ -236,6 +241,7 @@ export const es = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - Inicio',
         title: 'hanbok',
         subtitle: 'Domina el {language}. Una frase a la vez.',
         description: 'Descompón oraciones coreanas en sus componentes y comprende patrones gramaticales, vocabulario y uso.',
@@ -302,6 +308,7 @@ export const es = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - Frase:  ',
         original: 'Original',
         translation: 'Traducción',
         words: 'Palabras',
@@ -455,6 +462,7 @@ export const es = {
         linkCopied: '¡Enlace copiado al portapapeles! Compártelo con tus amigos.'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - Marcadores',
         title: 'Marcadores',
         sentences: 'Oraciones',
         loading: 'Cargando...',
@@ -468,6 +476,7 @@ export const es = {
         fetchError: 'Error al obtener oraciones guardadas.'
     },
     cards: {
+        pageTitle: 'Hanbok - Tarjetas',
         title: 'Tarjetas',
         subtitle: 'Estudia tus palabras guardadas con repetición espaciada',
         deckTitle: 'Mazo de tarjetas',

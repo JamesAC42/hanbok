@@ -18,6 +18,7 @@ export const ko = {
         turkish: '터키어'
     },
     about: {
+        pageTitle: 'Hanbok - 소개',
         title: '소개',
         whatIsHanbok: '한복이란?',
         description: 'hanbok은 여러 언어로 문장을 이해하고 마스터하는 데 도움을 주는 종합적인 언어 학습 도구입니다. hanbok은 문장을 구성 요소로 분석하여 한국어, 일본어, 중국어, 스페인어, 이탈리아어, 프랑스어의 문법 패턴, 어휘, 사용법에 대한 상세한 분석을 제공합니다.',
@@ -113,6 +114,7 @@ export const ko = {
         languageSupportDescription: '한복은 이제 여러 언어를 지원하여 다음 언어로 문장을 분석하고 학습할 수 있습니다:'
     },
     feedback: {
+        pageTitle: 'Hanbok - 피드백',
         title: '피드백 포럼',
         description: '여러분의 피드백과 제안을 공유해 주세요. 우리는 여러분의 의견을 소중히 여기며 서비스를 개선하기 위해 항상 노력하고 있습니다.',
         submitPlaceholder: '의견이나 제안을 공유해 주세요...',
@@ -140,6 +142,7 @@ export const ko = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - 프로필',
         title: '프로필',
         userInfo: '사용자 정보',
         name: '이름',
@@ -179,6 +182,7 @@ export const ko = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - 로그인',
         title: '로그인',
         description: 'Google로 로그인하여 한국어 학습 여정을 위한 강력한 기능을 활용하세요. 계정이 없으신가요? 자동으로 생성됩니다.',
         features: {
@@ -192,6 +196,7 @@ export const ko = {
         girlImageAlt: '소녀 일러스트레이션'
     },
     pricing: {
+        pageTitle: 'Hanbok - 가격',
         title: '가격',
         upgradeOptions: '업그레이드 옵션',
         limitedTimeOffer: '한정 시간 제공 - 50% 할인',
@@ -236,6 +241,7 @@ export const ko = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - 홈',
         title: 'hanbok',
         subtitle: '{language} 마스터하기. 한 문장씩.',
         description: '한국어 문장을 구성 요소로 분석하여 문법 패턴, 어휘, 사용법을 이해하세요.',
@@ -302,6 +308,7 @@ export const ko = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - 문장: ',
         original: '원문',
         translation: '번역',
         words: '단어',
@@ -455,6 +462,7 @@ export const ko = {
         comingSoonLyricsDesc: 'Hanbok이 곧 K-POP, 애니메이션, J-POP 등의 가사 데이터베이스 + 문법 및 어휘 분석을 제공할 예정입니다. 사용자 요청에 따라 확장됩니다. 기대해주세요!'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - 북마크',
         title: '북마크',
         sentences: '문장',
         loading: '로딩 중...',
@@ -468,6 +476,7 @@ export const ko = {
         fetchError: '저장된 문장을 가져오는 중 오류가 발생했습니다.'
     },
     cards: {
+        pageTitle: 'Hanbok - 플래시카드',
         title: '플래시카드',
         subtitle: '간격 반복을 통해 저장한 단어를 학습하세요',
         deckTitle: '플래시카드 덱',

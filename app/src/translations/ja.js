@@ -18,6 +18,7 @@ export const ja = {
         turkish: 'トルコ語'
     },
     about: {
+        pageTitle: 'Hanbokについて',
         title: '概要',
         whatIsHanbok: 'hanbokとは？',
         description: 'hanbokは複数の言語で文章を理解し習得するための総合的な言語学習ツールです。文章を構成要素に分解し、韓国語、日本語、中国語、スペイン語、イタリア語、フランス語の文法パターン、語彙、使用法の詳細な分析を提供します。',
@@ -113,6 +114,7 @@ export const ja = {
         languageSupportDescription: 'hanbokは現在複数の言語をサポートしており、以下の言語で文章を分析し学習することができます:'
     },
     feedback: {
+        pageTitle: 'Hanbokフィードバック',
         title: 'フィードバックフォーラム',
         description: 'フィードバックやご提案をお寄せください。皆様のご意見を大切にし、サービスの改善に努めています。',
         submitPlaceholder: 'ご意見やご提案を共有してください...',
@@ -140,6 +142,7 @@ export const ja = {
         }
     },
     profile: {
+        pageTitle: 'Hanbokプロフィール',
         title: 'プロフィール',
         userInfo: 'ユーザー情報',
         name: '名前',
@@ -179,6 +182,7 @@ export const ja = {
         }
     },
     login: {
+        pageTitle: 'Hanbokにログイン',
         title: 'ログイン',
         description: 'Googleでログインして、韓国語学習のための強力な機能をご利用ください。アカウントをお持ちでない方は、自動的に作成されます。',
         features: {
@@ -192,6 +196,7 @@ export const ja = {
         girlImageAlt: '女の子のイラスト'
     },
     pricing: {
+        pageTitle: 'Hanbokの料金',
         title: '料金',
         upgradeOptions: 'アップグレードオプション',
         limitedTimeOffer: '期間限定 - 50%オフ',
@@ -236,6 +241,7 @@ export const ja = {
         }
     },
     home: {
+        pageTitle: 'Hanbokホームページ',
         title: 'hanbok',
         subtitle: '{language}をマスターしよう。一文ずつ。',
         description: '韓国語の文章を構成要素に分解し、文法パターン、語彙、使用法を理解しましょう。',
@@ -302,6 +308,7 @@ export const ja = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok文章: ',
         original: '原文',
         translation: '翻訳',
         words: '単語',
@@ -455,6 +462,7 @@ export const ja = {
         comingSoonLyricsDesc: 'HanbokはまもなくK-POP、アニメ、J-POPなどの歌詞データベース + 文法・語彙分析を提供予定です。ユーザーの要望に基づいて展開されます。お楽しみに！'
     },
     bookmarks: {
+        pageTitle: 'Hanbokブックマーク',
         title: 'ブックマーク',
         sentences: '文',
         loading: '読み込み中...',
@@ -468,6 +476,7 @@ export const ja = {
         fetchError: '保存された文の取得中にエラーが発生しました。'
     },
     cards: {
+        pageTitle: 'Hanbokフラッシュカード',
         title: 'フラッシュカード',
         subtitle: '間隔反復法で保存した単語を学習する',
         deckTitle: 'フラッシュカードデッキ',

@@ -18,6 +18,7 @@ export const zh = {
         turkish: '土耳其语'
     },
     about: {
+        pageTitle: 'Hanbok - 关于',
         title: '关于',
         whatIsHanbok: '什么是hanbok？',
         description: 'hanbok是一个综合语言学习工具，旨在帮助您理解和掌握多种语言的句子。hanbok将句子分解为组成部分，为韩语、日语、中文、西班牙语、意大利语和法语提供语法模式、词汇和用法的详细分析。',
@@ -113,6 +114,7 @@ export const zh = {
         languageSupportDescription: 'hanbok现在支持多种语言，让您可以分析和学习以下任何语言的句子:'
     },
     feedback: {
+        pageTitle: 'Hanbok - 反馈',
         title: '反馈论坛',
         description: '请与我们分享您的反馈和建议。我们重视您的意见，并一直在寻找改进服务的方法。',
         submitPlaceholder: '分享您的想法或建议...',
@@ -140,6 +142,7 @@ export const zh = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - 个人资料',
         title: '个人资料',
         userInfo: '用户信息',
         name: '姓名',
@@ -179,6 +182,7 @@ export const zh = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - 登录',
         title: '登录',
         description: '使用Google登录，解锁强大的韩语学习功能。没有账号？系统会自动为您创建一个。',
         features: {
@@ -192,6 +196,7 @@ export const zh = {
         girlImageAlt: '女孩插图'
     },
     pricing: {
+        pageTitle: 'Hanbok - 价格',
         title: '价格',
         upgradeOptions: '升级选项',
         limitedTimeOffer: '限时优惠 - 50%折扣',
@@ -236,6 +241,7 @@ export const zh = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - 首页',
         title: 'hanbok',
         subtitle: '掌握{language}。一句一句来。',
         description: '将韩语句子分解为组成部分，理解语法模式、词汇和用法。',
@@ -302,6 +308,7 @@ export const zh = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - 句子: ',
         original: '原文',
         translation: '翻译',
         words: '单词',
@@ -455,6 +462,7 @@ export const zh = {
         comingSoonLyricsDesc: 'Hanbok很快将推出歌词数据库 + 语法和词汇分析，包括K-Pop、动漫、J-Pop等，基于用户需求。敬请期待！'
     },
     bookmarks: {
+        pageTitle: 'Hanbok - 书签',
         title: '书签',
         sentences: '句子',
         loading: '加载中...',
@@ -468,6 +476,7 @@ export const zh = {
         fetchError: '获取已保存句子时出错。'
     },
     cards: {
+        pageTitle: 'Hanbok - 闪卡',
         title: '闪卡',
         subtitle: '使用间隔重复学习您保存的单词',
         deckTitle: '闪卡牌组',

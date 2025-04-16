@@ -25,7 +25,8 @@ const Bookmarks = () => {
         if (!loading && !isAuthenticated) {
             router.replace('/login');
         }
-    }, [isAuthenticated, loading, router]);
+        document.title = t('bookmarks.pageTitle');
+    }, [isAuthenticated, loading, router, t]);
 
     useEffect(() => {
         async function fetchSentences() {

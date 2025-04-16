@@ -18,6 +18,7 @@ export const en = {
         turkish: 'Turkish'
     },
     about: {
+        pageTitle: 'Hanbok - About',
         title: 'About',
         whatIsHanbok: 'What is hanbok?',
         description: 'Hanbok is a comprehensive language learning tool designed to help you understand and master sentences in multiple languages. Hanbok breaks down sentences into their component parts, providing detailed analysis of grammar patterns, vocabulary, and usage for Korean, Japanese, Chinese, Spanish, Italian, and French.',
@@ -113,6 +114,7 @@ export const en = {
         languageSupportDescription: 'Hanbok now supports multiple languages, allowing you to analyze and learn sentences in any of the following languages:'
     },
     feedback: {
+        pageTitle: 'Hanbok - Feedback',
         title: 'Feedback Forum',
         description: 'Please share your feedback and suggestions with us. We value your input and are always looking for ways to improve our service.',
         submitPlaceholder: 'Share your thoughts or suggestions...',
@@ -140,6 +142,7 @@ export const en = {
         }
     },
     profile: {
+        pageTitle: 'Hanbok - Profile',
         title: 'Profile',
         userInfo: 'User Info',
         name: 'Name',
@@ -181,6 +184,7 @@ export const en = {
         }
     },
     login: {
+        pageTitle: 'Hanbok - Login',
         title: 'Login',
         description: 'Log in with Google to unlock powerful features for your language learning learning journey. Don\'t have an account? One will be created for you automatically.',
         features: {
@@ -193,6 +197,7 @@ export const en = {
         girlImageAlt: 'Illustration of a girl'
     },
     pricing: {
+        pageTitle: 'Hanbok - Pricing',
         title: 'Pricing',
         upgradeOptions: 'Upgrade Options',
         limitedTimeOffer: 'Limited Time Only - 50% OFF',
@@ -239,6 +244,7 @@ export const en = {
         }
     },
     home: {
+        pageTitle: 'Hanbok - Home',
         title: 'hanbok',
         subtitle: 'Master {language}. One sentence at a time.',
         description: 'Break down Korean sentences into their components and understand grammar patterns, vocabulary, and usage.',
@@ -305,6 +311,7 @@ export const en = {
         }
     },
     analysis: {
+        pageTitle: 'Hanbok - Sentence: ',
         original: 'Original',
         translation: 'Translation',
         words: 'Words',
@@ -412,6 +419,7 @@ export const en = {
         }
     },
     bookmarks: {
+        pageTitle: 'Hanbok - Bookmarks',
         title: 'Bookmarks',
         sentences: 'Sentences',
         loading: 'Loading...',
@@ -425,6 +433,7 @@ export const en = {
         fetchError: 'Error fetching saved sentences.'
     },
     cards: {
+        pageTitle: 'Hanbok - Flashcards',
         title: 'Flashcards',
         subtitle: 'Study your saved words with spaced repetition',
         deckTitle: 'Flashcard Deck',
