@@ -26,6 +26,17 @@ const analysisQueue = new Queue('lyrics-analysis', {
     },
     removeOnComplete: false, // Keep completed jobs for history
     removeOnFail: false, // Keep failed jobs for debugging
+    retry: {
+      attempts: 3,
+      backoff: {
+        type: 'exponential',
+        delay: 1000,
+      },
+      shouldRetry: (error) => {
+        const errorMessage = error.message || '';
+        return !errorMessage.toLowerCase().includes('duplicate') && !errorMessage.includes('E11000');
+      }
+    }
   }
 });
 

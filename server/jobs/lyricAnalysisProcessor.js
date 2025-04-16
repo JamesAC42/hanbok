@@ -233,6 +233,21 @@ async function processLyricAnalysis(job) {
       message: 'Creating lyrics analysis record...'
     });
     
+    // Check if analysis already exists
+    const existingAnalysis = await db.collection('lyrics_analysis').findOne({
+      lyricId: lyric._id.toString()
+    });
+    
+    if (existingAnalysis) {
+      console.log(`Analysis already exists for lyric ${lyricId}, skipping creation`);
+      await storeProgress(clientId, {
+        type: 'complete',
+        message: 'Analysis already exists',
+        progress: 100
+      });
+      return { success: true, lyricId, completed: true, alreadyExists: true };
+    }
+    
     // Create a new entry in the lyrics_analysis collection
     const analysisEntry = {
       lyricId: lyric._id.toString(), // Store as string to match the ObjectId
