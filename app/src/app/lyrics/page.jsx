@@ -16,6 +16,10 @@ const Lyrics = () => {
     const [lyricsByArtist, setLyricsByArtist] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        document.title = t('lyrics.pageTitle');
+    }, []);
 
     // Fetch lyrics by genre
     const fetchLyricsByGenre = async (genre) => {

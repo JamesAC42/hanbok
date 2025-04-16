@@ -25,7 +25,7 @@ const StudyView = ({ params }) => {
     const [deckSettings, setDeckSettings] = useState(null);
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
-    const { t } = useLanguage();
+    const { t, supportedLanguages } = useLanguage();
     const [studySession, setStudySession] = useState(null);
 
     const [currentCard, setCurrentCard] = useState(null);
@@ -55,6 +55,16 @@ const StudyView = ({ params }) => {
             router.replace('/login');
         }
     }, [isAuthenticated, loading, router]);
+    
+    const capitalize = (str) => {   
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    useEffect(() => {
+        if(!!deck) {
+            document.title = t('cards.studyPageTitle').replace('{language}', capitalize(supportedLanguages[deck.language]) || 'Unknown');
+        }
+    }, [deck, t]);
 
     useEffect(() => {
         async function fetchDeckDetails() {

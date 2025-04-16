@@ -435,6 +435,8 @@ export const en = {
     },
     cards: {
         pageTitle: 'Hanbok - Flashcards',
+        deckPageTitle: 'Hanbok - {language} Flashcards',
+        studyPageTitle: 'Hanbok - Studying {language} Flashcards',
         title: 'Flashcards',
         subtitle: 'Study your saved words with spaced repetition',
         deckTitle: 'Flashcard Deck',
@@ -651,7 +653,11 @@ export const en = {
         }
     },
     lyrics: {
+        pageTitle: 'Hanbok - Lyrics',
+        lyricPageTitle: 'Hanbok - {song} Lyrics',
+        adminPageTitle: 'Hanbok - Lyrics Admin Panel',
         suggestions: {
+            pageTitle: 'Hanbok - Song Suggestions',
             title: "Song Suggestions",
             subtitle: "Request your favorite songs to be added to our lyrics collection",
             suggestSong: "Suggest a Song",

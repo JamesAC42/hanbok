@@ -42,6 +42,7 @@ const Suggestions = () => {
   // Fetch all suggestions
   useEffect(() => {
     fetchSuggestions();
+    document.title = t('lyrics.suggestions.pageTitle');
   }, []);
 
   const fetchSuggestions = async () => {

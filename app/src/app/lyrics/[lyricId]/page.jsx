@@ -68,6 +68,12 @@ const LyricsPage = () => {
     }, [lyricId, selectedLanguage]);
 
     useEffect(() => {
+        if(!!lyric) {
+            document.title = t('lyrics.lyricPageTitle').replace('{song}', lyric.artist ? lyric.artist + ' - ' + lyric.title : lyric.title);
+        }
+    }, [lyric, t]);
+
+    useEffect(() => {
         // Hide share tooltip after 3 seconds
         if (shareTooltipVisible) {
             const timer = setTimeout(() => {

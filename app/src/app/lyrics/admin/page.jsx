@@ -11,11 +11,13 @@ import { MaterialSymbolsBackspace } from '@/components/icons/Exit';
 import { IcSharpPreview } from '@/components/icons/Preview';
 import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
 import Link from 'next/link';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AdminLyrics = () => {
     const router = useRouter();
     const { user, isAuthenticated, loading } = useAuth();
     const [lyrics, setLyrics] = useState([]);
+    const { t } = useLanguage();
     const [selectedLyric, setSelectedLyric] = useState(null);
     const [isCreating, setIsCreating] = useState(false);
     const [loadingLyrics, setLoadingLyrics] = useState(true);
@@ -49,6 +51,10 @@ const AdminLyrics = () => {
             terminal.scrollTop = terminal.scrollHeight;
         }
     }, [analysisLog]);
+
+    useEffect(() => {
+        document.title = t('lyrics.adminPageTitle');
+    }, []);
 
     // Check if user is authenticated and is admin
     useEffect(() => {

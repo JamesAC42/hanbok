@@ -42,6 +42,16 @@ const DeckView = ({ params }) => {
         }
     }, [isAuthenticated, loading, router]);
 
+    const capitalize = (str) => {   
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    useEffect(() => {
+        if(!!deck) {
+            document.title = t('cards.deckPageTitle').replace('{language}', capitalize(supportedLanguages[deck.language]) || 'Unknown');
+        }
+    }, [deck, t]);
+
     // Reset pagination when view mode changes or cards are loaded
     useEffect(() => {
         setCurrentPage(1);
