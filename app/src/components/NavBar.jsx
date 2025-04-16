@@ -103,16 +103,12 @@ const NavBar = () => {
                         <div className={styles.navBarItemText}>{t('navbar.about')}</div>
                     </Link>
                 </div>
-                {
-                    false && (
-                        <div className={`${styles.navBarItem} ${styles.cardsNew}`} style={{ '--nav-index': user ? 5 : 3 }}>   
-                            <Link href="/lyrics">
-                                <IcSharpQueueMusic />
-                                <div className={styles.navBarItemText}>{t('navbar.lyrics')}</div>
-                            </Link>
-                        </div>
-                    )
-                }
+                <div className={`${styles.navBarItem} ${styles.cardsNew}`} style={{ '--nav-index': user ? 5 : 3 }}>   
+                    <Link href="/lyrics">
+                        <IcSharpQueueMusic />
+                        <div className={styles.navBarItemText}>{t('navbar.lyrics')}</div>
+                    </Link>
+                </div>
                 <div className={styles.navBarItem} style={{ '--nav-index': user ? 6 : 4 }}>   
                     <Link href="/feedback">
                         <MingcuteCommentFill />
