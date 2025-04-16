@@ -459,7 +459,11 @@ export const it = {
         siteRedesignTitle: 'Ridisegno del Sito',
         siteRedesignDesc: 'Hanbok ha un nuovo aspetto, spero che ti piaccia!',
         comingSoonLyrics: 'Prossimamente: Analisi dei Testi delle Canzoni',
-        comingSoonLyricsDesc: 'Hanbok ospiterà presto un database di testi delle canzoni + analisi grammaticale e del vocabolario, inclusi K-Pop, Anime, J-Pop e altro basato sulle richieste degli utenti. Resta sintonizzato!'
+        comingSoonLyricsDesc: 'Hanbok ospiterà presto un database di testi delle canzoni + analisi grammaticale e del vocabolario, inclusi K-Pop, Anime, J-Pop e altro basato sulle richieste degli utenti. Resta sintonizzato!',
+        lyricsPageTitle: 'Nuova pagina dei testi disponibile!',
+        lyricsPageDesc: 'Siamo lieti di annunciare il lancio della nostra nuova pagina dei testi, con canzoni popolari di K-Pop, J-Pop e Anime, inclusa l\'analisi dettagliata di grammatica, vocabolario e contesto culturale.',
+        lyricsPageFeatures: 'Ora puoi suggerire canzoni che vorresti vedere analizzate, votare per i prossimi aggiunti ed esplorare la nostra crescente collezione di analisi di canzoni. Nuove canzoni verranno aggiunte frequentemente in base alle tue suggerimenti!',
+        viewLyrics: 'Vedi pagina dei testi'
     },
     bookmarks: {
         pageTitle: 'Hanbok - Segnalibri',

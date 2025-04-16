@@ -459,7 +459,11 @@ export const de = {
         leaveFeedback: 'Feedback hinterlassen',
         joinDiscord: 'Treten Sie unserem Discord bei',
         shareWebsite: 'Mit Freunden teilen',
-        linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie es mit Ihren Freunden.'
+        linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie es mit Ihren Freunden.',
+        lyricsPageTitle: 'Neue Lyrics-Seite ist online!',
+        lyricsPageDesc: 'Wir freuen uns, die Veröffentlichung unserer neuen Lyrics-Seite bekannt zu geben, mit beliebten K-Pop, J-Pop und Anime-Songs, die detaillierte Analysen von Grammatik, Vokabular und kulturellem Kontext enthalten.',
+        lyricsPageFeatures: 'Sie können jetzt Songs vorschlagen, die Sie analysiert sehen möchten, über zukünftige Ergänzungen abstimmen und unsere wachsende Sammlung von Song-Analysen erkunden. Neue Songs werden häufig basierend auf Ihren Vorschlägen hinzugefügt!',
+        viewLyrics: 'Zur Lyrics-Seite'
     },
     bookmarks: {
         pageTitle: 'Hanbok - Lesezeichen',

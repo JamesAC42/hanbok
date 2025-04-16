@@ -50,17 +50,22 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                 </div>
                 
                 <div className={styles.content}>
-                    <h3>{t('announcement.howDoISayMode')}</h3>
-                    <p>{t('announcement.howDoISayModeDesc')}</p>
-
+                    <h3>{t('announcement.lyricsPageTitle')}</h3>
+                    <p>{t('announcement.lyricsPageDesc')}</p>
+                    <p>{t('announcement.lyricsPageFeatures')}</p>
+                    <button 
+                        className={styles.lyricsButton}
+                        onClick={() => {
+                            router.push('/lyrics');
+                            onClose();
+                        }}
+                        aria-label={t('announcement.viewLyrics')}
+                    >
+                        <span className={styles.buttonText}>{t('announcement.viewLyrics')}</span>
+                    </button>
+                    
                     <h3 className={styles.highlight}>{t('announcement.newSubscription')}</h3>
                     <p className={styles.highlight}>{t('announcement.newSubscriptionDesc')}</p>
-
-                    <h3>{t('announcement.siteRedesignTitle')}</h3>
-                    <p>{t('announcement.siteRedesignDesc')}</p>
-
-                    <h3>{t('announcement.comingSoonLyrics')}</h3>
-                    <p>{t('announcement.comingSoonLyricsDesc')}</p>
                     
                     <div className={styles.communitySection}>
                         <h3>{t('announcement.communityTitle')}</h3>

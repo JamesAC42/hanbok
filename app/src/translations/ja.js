@@ -459,7 +459,11 @@ export const ja = {
         siteRedesignTitle: 'サイトリデザイン',
         siteRedesignDesc: 'Hanbokが新しいデザインになりました。気に入っていただければ幸いです！',
         comingSoonLyrics: '近日公開：歌詞分析',
-        comingSoonLyricsDesc: 'HanbokはまもなくK-POP、アニメ、J-POPなどの歌詞データベース + 文法・語彙分析を提供予定です。ユーザーの要望に基づいて展開されます。お楽しみに！'
+        comingSoonLyricsDesc: 'HanbokはまもなくK-POP、アニメ、J-POPなどの歌詞データベース + 文法・語彙分析を提供予定です。ユーザーの要望に基づいて展開されます。お楽しみに！',
+        lyricsPageTitle: '新しい歌詞ページが公開されました！',
+        lyricsPageDesc: '人気のK-POP、J-POP、アニメソングの文法、語彙、文化的背景の詳細な分析を提供する新しい歌詞ページを紹介します。',
+        lyricsPageFeatures: '分析してほしい曲を提案したり、追加予定の曲に投票したり、成長し続ける曲の分析コレクションを探索できます。皆様の提案に基づいて新しい曲が頻繁に追加されます！',
+        viewLyrics: '歌詞ページを見る'
     },
     bookmarks: {
         pageTitle: 'Hanbokブックマーク',

@@ -8,7 +8,7 @@ const PopupContext = createContext();
 
 // Current announcement data
 const CURRENT_ANNOUNCEMENT = {
-    id: '2025-04-01', // Use this as a key to track in localStorage
+    id: '2025-04-16', // Use this as a key to track in localStorage
     content: {
         // Content will be pulled from translations
     }

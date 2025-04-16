@@ -459,7 +459,11 @@ export const tr = {
         siteRedesignTitle: 'Site Yeniden Tasarımı',
         siteRedesignDesc: 'Hanbok\'un yeni bir görünümü var, umarım beğenirsiniz!',
         comingSoonLyrics: 'Yakında: Şarkı Sözleri Analizi',
-        comingSoonLyricsDesc: 'Hanbok yakında K-Pop, Anime, J-Pop ve kullanıcı isteklerine göre daha fazlasını içeren şarkı sözleri + dilbilgisi ve kelime analizi veritabanına ev sahipliği yapacak. Takipte kalın!'
+        comingSoonLyricsDesc: 'Hanbok yakında K-Pop, Anime, J-Pop ve kullanıcı isteklerine göre daha fazlasını içeren şarkı sözleri + dilbilgisi ve kelime analizi veritabanına ev sahipliği yapacak. Takipte kalın!',
+        lyricsPageTitle: 'Yeni şarkı sözleri sayfası yayında!',
+        lyricsPageDesc: 'Popüler K-Pop, J-Pop ve Anime şarkılarının dilbilgisi, kelime dağarcığı ve kültürel bağlam açısından detaylı analizlerini içeren yeni şarkı sözleri sayfamızı duyurmaktan mutluluk duyuyoruz.',
+        lyricsPageFeatures: 'Artık analiz edilmesini istediğiniz şarkıları önerebilir, gelecek eklemeler için oy kullanabilir ve büyüyen şarkı analiz koleksiyonumuzu keşfedebilirsiniz. Yeni şarkılar önerilerinize göre sık sık eklenecek!',
+        viewLyrics: 'Şarkı Sözleri Sayfasını Görüntüle'
     },
     bookmarks: {
         pageTitle: 'Hanbok - Yer İmleri',

@@ -69,6 +69,26 @@
     }
 }
 
+.lyricsButton {
+    background: #3622e4;
+    color: white;
+    border: 1px solid #3622e4;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    transition: all 0.2s ease;
+    font-weight: 600;
+    display: block;
+    margin: 1.5rem auto;
+    width: fit-content;
+
+    &:hover {
+        transform: translate(-0.15rem, -0.15rem);
+        box-shadow: 0.15rem 0.15rem 0 #3622e4;
+    }
+}
+
 .featureList {
     margin: 0.5rem 0 1.5rem;
     padding-left: 1.5rem;

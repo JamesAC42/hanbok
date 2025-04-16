@@ -459,7 +459,11 @@ export const ko = {
         siteRedesignTitle: '사이트 리디자인',
         siteRedesignDesc: 'Hanbok이 새로운 모습으로 바뀌었습니다. 마음에 드시길 바랍니다!',
         comingSoonLyrics: '곧 출시: 가사 분석',
-        comingSoonLyricsDesc: 'Hanbok이 곧 K-POP, 애니메이션, J-POP 등의 가사 데이터베이스 + 문법 및 어휘 분석을 제공할 예정입니다. 사용자 요청에 따라 확장됩니다. 기대해주세요!'
+        comingSoonLyricsDesc: 'Hanbok이 곧 K-POP, 애니메이션, J-POP 등의 가사 데이터베이스 + 문법 및 어휘 분석을 제공할 예정입니다. 사용자 요청에 따라 확장됩니다. 기대해주세요!',
+        lyricsPageTitle: '새로운 가사 페이지가 오픈되었습니다!',
+        lyricsPageDesc: '인기 있는 K-Pop, J-Pop, 애니메이션 노래들의 문법, 어휘, 문화적 맥락에 대한 상세한 분석을 제공하는 새로운 가사 페이지를 소개합니다.',
+        lyricsPageFeatures: '분석하고 싶은 노래를 제안하고, 추가될 노래에 투표하며, 점점 더 커지는 노래 분석 모음집을 탐색해보세요. 여러분의 제안을 바탕으로 새로운 노래들이 자주 추가될 예정입니다!',
+        viewLyrics: '가사 페이지 보기',
     },
     bookmarks: {
         pageTitle: 'Hanbok - 북마크',

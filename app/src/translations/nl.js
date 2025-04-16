@@ -459,7 +459,11 @@ export const nl = {
         leaveFeedback: 'Laat Feedback Achter',
         joinDiscord: 'Doe mee met onze Discord',
         shareWebsite: 'Deel met Vrienden',
-        linkCopied: 'Link gekopieerd naar klembord! Deel het met je vrienden.'
+        linkCopied: 'Link gekopieerd naar klembord! Deel het met je vrienden.',
+        lyricsPageTitle: 'Nieuwe songtekstenpagina is live!',
+        lyricsPageDesc: 'We zijn verheugd om de lancering van onze nieuwe songtekstenpagina aan te kondigen, met populaire K-Pop, J-Pop en Anime-liedjes met gedetailleerde analyses van grammatica, vocabulaire en culturele context.',
+        lyricsPageFeatures: 'Je kunt nu liedjes voorstellen die je geanalyseerd wilt zien, stemmen op toekomstige toevoegingen en onze groeiende collectie liedjesanalyses verkennen. Nieuwe liedjes worden regelmatig toegevoegd op basis van je suggesties!',
+        viewLyrics: 'Bekijk songtekstenpagina'
     },
     bookmarks: {
         pageTitle: 'Hanbok - Bladwijzers',

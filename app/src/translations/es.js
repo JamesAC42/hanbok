@@ -459,7 +459,11 @@ export const es = {
         leaveFeedback: 'Dejar Comentarios',
         joinDiscord: 'Únete a Nuestro Discord',
         shareWebsite: 'Compartir con Amigos',
-        linkCopied: '¡Enlace copiado al portapapeles! Compártelo con tus amigos.'
+        linkCopied: '¡Enlace copiado al portapapeles! Compártelo con tus amigos.',
+        lyricsPageTitle: '¡Nueva página de letras disponible!',
+        lyricsPageDesc: 'Nos complace anunciar el lanzamiento de nuestra nueva página de letras, con canciones populares de K-Pop, J-Pop y Anime, incluyendo análisis detallados de gramática, vocabulario y contexto cultural.',
+        lyricsPageFeatures: 'Ahora puedes sugerir canciones que te gustaría ver analizadas, votar por próximas adiciones y explorar nuestra creciente colección de análisis de canciones. ¡Se agregarán nuevas canciones frecuentemente basadas en tus sugerencias!',
+        viewLyrics: 'Ver página de letras'
     },
     bookmarks: {
         pageTitle: 'Hanbok - Marcadores',

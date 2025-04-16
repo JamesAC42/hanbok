@@ -459,7 +459,11 @@ export const zh = {
         siteRedesignTitle: '网站重新设计',
         siteRedesignDesc: 'Hanbok有了新的外观，希望你喜欢！',
         comingSoonLyrics: '即将推出：歌词分析',
-        comingSoonLyricsDesc: 'Hanbok很快将推出歌词数据库 + 语法和词汇分析，包括K-Pop、动漫、J-Pop等，基于用户需求。敬请期待！'
+        comingSoonLyricsDesc: 'Hanbok很快将推出歌词数据库 + 语法和词汇分析，包括K-Pop、动漫、J-Pop等，基于用户需求。敬请期待！',
+        lyricsPageTitle: '新歌词页面已上线！',
+        lyricsPageDesc: '我们很高兴推出新的歌词页面，提供流行K-POP、J-POP和动漫歌曲的语法、词汇和文化背景的详细分析。',
+        lyricsPageFeatures: '您现在可以建议想要分析的歌曲，对即将添加的歌曲进行投票，并探索我们不断增长的歌曲分析收藏。我们将根据您的建议频繁添加新歌曲！',
+        viewLyrics: '查看歌词页面'
     },
     bookmarks: {
         pageTitle: 'Hanbok - 书签',
