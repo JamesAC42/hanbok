@@ -64,25 +64,30 @@ async function processLyricAnalysis(job) {
       type: 'status',
       message: 'Starting lyric analysis. Segmenting lyrics...'
     });
-    
+
+    let lyricsInputLines = lyric.lyricsText.split("\n");
+    console.log("Lyrics input lines:", lyricsInputLines);
+    lyricsInputLines = lyricsInputLines.filter(line => line.length > 0);
+    console.log("Lyrics input lines:", lyricsInputLines);
+
+    let lyricsInputForPrompt = "";
+    let lyricsLines = {};
+    let l = 1;
+    for(let line of lyricsInputLines) {
+      lyricsInputForPrompt += `${l}. ${line}\n`;
+      lyricsLines[l] = line;
+      l++;
+    }
+
+    console.log("Lyrics input for prompt:", lyricsInputForPrompt);
+
     let segments = await generateResponse(
-      SEGMENT_LYRICS_PROMPT(SupportedLanguages[lyric.language]) + '\n' + lyric.lyricsText,
+      SEGMENT_LYRICS_PROMPT(SupportedLanguages[lyric.language]) + '\n' + lyricsInputForPrompt,
       'geminiThinking'
     );
     
     if (!segments || !segments.groups) {
       throw new Error('No segments found in the response');
-    }
-    
-    // Process lyrics lines
-    let lyricsLines = {};
-    let lyricsSplit = lyric.lyricsText.split("\n");
-    let currentLine = 1;
-    for (let i = 0; i < lyricsSplit.length; i++) {
-      if(lyricsSplit[i].length > 0) {
-        lyricsLines[currentLine] = lyricsSplit[i];
-        currentLine++;
-      }
     }
     
     const prompt = getLyricsAnalysisPrompt(lyric.language, 'en', lyric.lyricsText);
