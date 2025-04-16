@@ -3,9 +3,10 @@ const SupportedLanguages = require('../supported_languages');
 const LYRICS_ANALYSIS_PROMPT = (originalLanguage = 'ko', translationLanguage = 'en') => `You are a ${SupportedLanguages[originalLanguage]} song lyrics analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is a proper ${SupportedLanguages[originalLanguage]} song lyric segment or line. Then analyze the input in the context of the full lyrics and return a JSON response.
 
 Rules for validation:
-1. The input should contain ${SupportedLanguages[originalLanguage]} characters
-2. The input should be either:
-   - A ${SupportedLanguages[originalLanguage]} lyric line/segment (it is OK if it does not have perfect grammar or is poetic/metaphorical), OR
+1. The input should contain at least some ${SupportedLanguages[originalLanguage]} characters
+2. The input can be:
+   - A pure ${SupportedLanguages[originalLanguage]} lyric line/segment
+   - A mixed language lyric line/segment containing ${SupportedLanguages[originalLanguage]} and other languages
    - A valid ${SupportedLanguages[originalLanguage]} word or phrase in the context of song lyrics
 3. Random characters strung together are not valid
 4. The input should make semantic sense in the context of the full lyrics
