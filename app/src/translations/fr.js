@@ -352,7 +352,8 @@ export const fr = {
         },
         settingsButton: {
             title: "Paramètres",
-            showPronunciations: "Afficher les prononciations"
+            showPronunciations: "Afficher les prononciations",
+            playSoundEffects: "Jouer les effets sonores"
         },
         grammar: 'Grammaire',
         examples: 'Exemples'

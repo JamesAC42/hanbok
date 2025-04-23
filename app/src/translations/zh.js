@@ -352,7 +352,8 @@ export const zh = {
         },
         settingsButton: {
             title: "设置",
-            showPronunciations: "显示发音"
+            showPronunciations: "显示发音",
+            playSoundEffects: "播放音效"
         },
         grammar: '语法',
         examples: '例句'

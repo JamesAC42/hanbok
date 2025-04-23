@@ -352,7 +352,8 @@ export const ru = {
         },
         settingsButton: {
             title: "Настройки",
-            showPronunciations: "Показать произношения"
+            showPronunciations: "Показывать произношение",
+            playSoundEffects: "Воспроизводить звуковые эффекты"
         },
         grammar: 'Грамматика',
         examples: 'Примеры'

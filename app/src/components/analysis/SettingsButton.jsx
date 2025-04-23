@@ -6,9 +6,24 @@ import {MaterialSymbolsSettingsRounded} from '@/components/icons/Settings';
 
 const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [playSoundEffects, setPlaySoundEffects] = useState(true);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
     const { t } = useLanguage();
+
+    useEffect(() => {
+        const storedShowPronunciation = localStorage.getItem('showPronunciation');
+        if (storedShowPronunciation !== null) {
+            setShowPronunciation(JSON.parse(storedShowPronunciation));
+        }
+
+        const storedPlaySoundEffects = localStorage.getItem('playSoundEffects');
+        if (storedPlaySoundEffects !== null) {
+            setPlaySoundEffects(JSON.parse(storedPlaySoundEffects));
+        } else {
+            localStorage.setItem('playSoundEffects', JSON.stringify(true));
+        }
+    }, [setShowPronunciation]);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -20,7 +35,12 @@ const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) =
         localStorage.setItem('showPronunciation', JSON.stringify(newValue));
     };
 
-    // Close menu when clicking outside
+    const toggleSoundEffects = () => {
+        const newValue = !playSoundEffects;
+        setPlaySoundEffects(newValue);
+        localStorage.setItem('playSoundEffects', JSON.stringify(newValue));
+    };
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -67,6 +87,19 @@ const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) =
                         </label>
                         <span className={styles.settingsLabel}>
                             {t('analysis.settingsButton.showPronunciations', 'Show pronunciations')}
+                        </span>
+                    </div>
+                    <div className={styles.settingsMenuItem}>
+                        <label className={styles.settingsToggle}>
+                            <input 
+                                type="checkbox" 
+                                checked={playSoundEffects} 
+                                onChange={toggleSoundEffects}
+                            />
+                            <span className={styles.toggleSlider}></span>
+                        </label>
+                        <span className={styles.settingsLabel}>
+                            {t('analysis.settingsButton.playSoundEffects', 'Play sound effects')}
                         </span>
                     </div>
                 </div>

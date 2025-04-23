@@ -352,7 +352,8 @@ export const ja = {
         },
         settingsButton: {
             title: "設定",
-            showPronunciations: "発音を表示"
+            showPronunciations: "発音を表示",
+            playSoundEffects: "効果音を再生"
         },
         grammar: '文法',
         examples: '例文'

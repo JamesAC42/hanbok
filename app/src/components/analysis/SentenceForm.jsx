@@ -94,21 +94,24 @@ const SentenceForm = ({
 
     // Function to play the paste sound
     const playPasteSound = () => {
-        if (pasteSound) {
+        const shouldPlay = localStorage.getItem('playSoundEffects') !== 'false';
+        if (shouldPlay && pasteSound) {
             pasteSound.currentTime = 0;
             pasteSound.volume = 0.3;
             pasteSound.play().catch(err => console.error('Error playing sound:', err));
         }
     };
     const playStartSound = () => {
-        if (startSound) {
+        const shouldPlay = localStorage.getItem('playSoundEffects') !== 'false';
+        if (shouldPlay && startSound) {
             startSound.currentTime = 0;
             startSound.volume = 0.02;
             startSound.play().catch(err => console.error('Error playing sound:', err));
         }
     };
     const playFinishedSound = () => {
-        if (finishedSound) {
+        const shouldPlay = localStorage.getItem('playSoundEffects') !== 'false';
+        if (shouldPlay && finishedSound) {
             finishedSound.currentTime = 0;
             finishedSound.volume = 0.7;
             finishedSound.play().catch(err => console.error('Error playing sound:', err));

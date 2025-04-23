@@ -352,10 +352,11 @@ export const ko = {
         },
         settingsButton: {
             title: "설정",
-            showPronunciations: "발음 표시"
+            showPronunciations: "발음 보기",
+            playSoundEffects: "효과음 재생"
         },
         grammar: '문법',
-        examples: '예문'
+        examples: '예시'
     },
     limitReached: {
         storageTitle: '저장 한도 도달',

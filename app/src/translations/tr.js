@@ -352,7 +352,8 @@ export const tr = {
         },
         settingsButton: {
             title: "Ayarlar",
-            showPronunciations: "Telaffuzları göster"
+            showPronunciations: "Telaffuzları göster",
+            playSoundEffects: "Ses efektlerini çal"
         },
         grammar: 'Dilbilgisi',
         examples: 'Örnekler'

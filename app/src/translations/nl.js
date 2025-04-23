@@ -352,7 +352,8 @@ export const nl = {
         },
         settingsButton: {
             title: "Instellingen",
-            showPronunciations: "Uitspraken tonen"
+            showPronunciations: "Uitspraak weergeven",
+            playSoundEffects: "Geluidseffecten afspelen"
         },
         grammar: 'Grammatica',
         examples: 'Voorbeelden'
