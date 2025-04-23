@@ -590,7 +590,7 @@ export const tr = {
     },
     navbar: {
         home: 'Ana Sayfa',
-        bookmarks: 'Yer İşaretleri',
+        bookmarks: 'Yer İmleri',
         cards: 'Kartlar',
         profile: 'Profil',
         about: 'Hakkında',
@@ -764,5 +764,16 @@ export const tr = {
             },
             back: "Şarkı Sözlerine Dön"
         }
+    },
+    subscriptionPrompt: {
+        title: 'Hanbok Geliştirmeyi Destekleyin!',
+        description: 'Hanbok\'u beğeniyor musunuz? Lütfen yeni özellikler geliştirmeye, mevcutları iyileştirmeye ve siteyi çalışır durumda tutmaya devam edebilmem için siteyi desteklemeyi düşünün!',
+        basicTierTitle: 'Temel Seviye - $4/ay',
+        basicTierDesc: 'Tüm öğrenme ihtiyaçlarınız için sınırsız cümle analizi, sınırsız kaydedilmiş cümle ve sınırsız bilgi kartı edinin.',
+        plusTierTitle: 'Plus Seviye - $10/ay',
+        plusTierDesc: 'Her şeyin kilidini açın! Sınırsız analiz, kaydetme, ses üretimi, görüntü çıkarma, kelime bilgileri ve öncelikli destek.',
+        callToAction: 'Desteğiniz büyük bir fark yaratıyor!',
+        viewPricing: 'Planları Görüntüle veya Bağış Yap',
+        maybeLater: 'Belki Sonra'
     },
 }; 

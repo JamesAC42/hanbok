@@ -765,4 +765,15 @@ export const zh = {
             back: "返回歌词"
         }
     },
+    subscriptionPrompt: {
+        title: '支持Hanbok开发！',
+        description: '喜欢使用Hanbok吗？请考虑支持本网站，以便我能继续开发新功能、改进现有功能并保持网站运行！',
+        basicTierTitle: '基础版 - 每月$4',
+        basicTierDesc: '获得无限制的句子分析、保存的句子和抽认卡，满足您所有的学习需求。',
+        plusTierTitle: '高级版 - 每月$10',
+        plusTierDesc: '解锁所有功能！无限制的分析、保存、音频生成、图像提取、单词见解和优先支持。',
+        callToAction: '您的支持至关重要！',
+        viewPricing: '查看计划或捐赠',
+        maybeLater: '以后再说'
+    },
 }; 

@@ -459,7 +459,7 @@ export const fr = {
         leaveFeedback: 'Laisser un commentaire',
         joinDiscord: 'Rejoignez notre Discord',
         shareWebsite: 'Partager avec des amis',
-        linkCopied: 'Lien copié dans le presse-papiers! Partagez-le avec vos amis.',
+        linkCopied: 'Lien copié dans le presse-papiers ! Partagez-le avec vos amis.',
         lyricsPageTitle: 'Nouvelle page de paroles disponible !',
         lyricsPageDesc: 'Nous sommes ravis d\'annoncer le lancement de notre nouvelle page de paroles, présentant des chansons populaires de K-Pop, J-Pop et d\'Anime avec des analyses détaillées de grammaire, de vocabulaire et de contexte culturel.',
         lyricsPageFeatures: 'Vous pouvez maintenant suggérer des chansons que vous aimeriez voir analysées, voter pour les prochaines ajouts et explorer notre collection croissante d\'analyses de chansons. De nouvelles chansons seront ajoutées fréquemment en fonction de vos suggestions !',
@@ -764,5 +764,16 @@ export const fr = {
             },
             back: "Retour aux Paroles"
         }
+    },
+    subscriptionPrompt: {
+        title: 'Soutenez le développement de Hanbok !',
+        description: 'Vous appréciez Hanbok ? Pensez à soutenir le site pour que je puisse continuer à développer de nouvelles fonctionnalités, améliorer celles existantes et maintenir le site en ligne !',
+        basicTierTitle: 'Niveau Basique - 4 $/mois',
+        basicTierDesc: 'Obtenez des analyses de phrases illimitées, des sauvegardes de phrases illimitées et des flashcards illimitées pour tous vos besoins d\'apprentissage.',
+        plusTierTitle: 'Niveau Plus - 10 $/mois',
+        plusTierDesc: 'Débloquez tout ! Analyses, sauvegardes, générations audio, extractions d\'images, informations sur les mots illimitées et support prioritaire.',
+        callToAction: 'Votre soutien fait une énorme différence !',
+        viewPricing: 'Voir les Forfaits ou Faire un Don',
+        maybeLater: 'Peut-être plus tard'
     },
 }; 

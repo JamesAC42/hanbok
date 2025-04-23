@@ -451,7 +451,7 @@ export const ko = {
         leaveFeedback: '피드백 남기기',
         joinDiscord: 'Discord에 참여하기',
         shareWebsite: '친구와 공유하기',
-        linkCopied: '링크가 클립보드에 복사되었습니다! 친구와 공유하세요.',
+        linkCopied: '클립보드에 링크가 복사되었습니다! 친구들과 공유하세요.',
         howDoISayMode: '"어떻게 말하나요..." 모드',
         howDoISayModeDesc: '어떤 언어로도 자연스럽게 표현하세요! 말하고 싶은 것을 입력하고, 어조를 선택하면 즉시 번역과 자세한 설명을 받을 수 있습니다.',
         newSubscription: '새로운 구독 플랜',
@@ -764,5 +764,16 @@ export const ko = {
             },
             back: "가사로 돌아가기"
         }
+    },
+    subscriptionPrompt: {
+        title: 'Hanbok 개발 지원하기!',
+        description: 'Hanbok이 마음에 드시나요? 새로운 기능을 개발하고 기존 기능을 개선하며 사이트를 계속 운영할 수 있도록 지원을 고려해 주세요!',
+        basicTierTitle: '베이직 티어 - 월 $4',
+        basicTierDesc: '모든 학습 요구에 맞는 무제한 문장 분석 및 저장된 문장, 플래시카드를 이용하세요.',
+        plusTierTitle: '플러스 티어 - 월 $10',
+        plusTierDesc: '모든 기능을 잠금 해제하세요! 무제한 분석, 저장, 오디오 생성, 이미지 추출, 단어 인사이트 및 우선 지원.',
+        callToAction: '여러분의 지원이 큰 힘이 됩니다!',
+        viewPricing: '플랜 보기 또는 기부하기',
+        maybeLater: '나중에'
     },
 }; 

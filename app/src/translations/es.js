@@ -765,4 +765,15 @@ export const es = {
             back: "Volver a Letras"
         }
     },
+    subscriptionPrompt: {
+        title: '¡Apoya el desarrollo de Hanbok!',
+        description: '¿Disfrutando de Hanbok? ¡Por favor, considera apoyar el sitio para que pueda continuar desarrollando nuevas funciones, mejorando las existentes y manteniendo el sitio en funcionamiento!',
+        basicTierTitle: 'Nivel Básico - $4/mes',
+        basicTierDesc: 'Obtén análisis ilimitados de frases, frases guardadas ilimitadas y tarjetas ilimitadas para todas tus necesidades de aprendizaje.',
+        plusTierTitle: 'Nivel Plus - $10/mes',
+        plusTierDesc: '¡Desbloquea todo! Análisis, guardados, generaciones de audio, extracciones de imágenes, información de palabras ilimitadas y soporte prioritario.',
+        callToAction: '¡Tu apoyo marca una gran diferencia!',
+        viewPricing: 'Ver Planes o Donar',
+        maybeLater: 'Quizás más tarde'
+    },
 }; 

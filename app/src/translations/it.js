@@ -590,7 +590,7 @@ export const it = {
     },
     navbar: {
         home: 'Home',
-        bookmarks: 'Preferiti',
+        bookmarks: 'Segnalibri',
         cards: 'Flashcard',
         profile: 'Profilo',
         about: 'Informazioni',
@@ -764,5 +764,16 @@ export const it = {
             },
             back: "Torna ai Testi"
         }
+    },
+    subscriptionPrompt: {
+        title: 'Sostieni lo sviluppo di Hanbok!',
+        description: 'Ti piace Hanbok? Per favore, considera di sostenere il sito così posso continuare a sviluppare nuove funzionalità, migliorare quelle esistenti e mantenere il sito attivo!',
+        basicTierTitle: 'Livello Base - $4/mese',
+        basicTierDesc: 'Ottieni analisi illimitate delle frasi, salvataggi illimitati delle frasi e flashcard illimitate per tutte le tue esigenze di apprendimento.',
+        plusTierTitle: 'Livello Plus - $10/mese',
+        plusTierDesc: 'Sblocca tutto! Analisi, salvataggi, generazioni audio, estrazioni di immagini, approfondimenti sulle parole illimitati e supporto prioritario.',
+        callToAction: 'Il tuo supporto fa un\'enorme differenza!',
+        viewPricing: 'Visualizza Piani o Dona',
+        maybeLater: 'Forse più tardi'
     },
 }; 

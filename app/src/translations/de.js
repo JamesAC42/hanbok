@@ -459,7 +459,7 @@ export const de = {
         leaveFeedback: 'Feedback hinterlassen',
         joinDiscord: 'Treten Sie unserem Discord bei',
         shareWebsite: 'Mit Freunden teilen',
-        linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie es mit Ihren Freunden.',
+        linkCopied: 'Link in die Zwischenablage kopiert! Teilen Sie ihn mit Ihren Freunden.',
         lyricsPageTitle: 'Neue Lyrics-Seite ist online!',
         lyricsPageDesc: 'Wir freuen uns, die Veröffentlichung unserer neuen Lyrics-Seite bekannt zu geben, mit beliebten K-Pop, J-Pop und Anime-Songs, die detaillierte Analysen von Grammatik, Vokabular und kulturellem Kontext enthalten.',
         lyricsPageFeatures: 'Sie können jetzt Songs vorschlagen, die Sie analysiert sehen möchten, über zukünftige Ergänzungen abstimmen und unsere wachsende Sammlung von Song-Analysen erkunden. Neue Songs werden häufig basierend auf Ihren Vorschlägen hinzugefügt!',
@@ -764,5 +764,16 @@ export const de = {
             },
             back: "Zurück zu Liedtexten"
         }
+    },
+    subscriptionPrompt: {
+        title: 'Unterstütze die Entwicklung von Hanbok!',
+        description: 'Gefällt Ihnen Hanbok? Bitte erwägen Sie, die Seite zu unterstützen, damit ich weiterhin neue Funktionen entwickeln, bestehende verbessern und die Seite am Laufen halten kann!',
+        basicTierTitle: 'Basis-Stufe - 4 $/Monat',
+        basicTierDesc: 'Erhalten Sie unbegrenzte Satzanalysen, unbegrenzt gespeicherte Sätze und unbegrenzte Lernkarten für all Ihre Lernbedürfnisse.',
+        plusTierTitle: 'Plus-Stufe - 10 $/Monat',
+        plusTierDesc: 'Schalte alles frei! Unbegrenzte Analysen, Speicherungen, Audio-Generierungen, Bildextraktionen, Wort-Einblicke und priorisierter Support.',
+        callToAction: 'Ihre Unterstützung macht einen großen Unterschied!',
+        viewPricing: 'Pläne anzeigen oder spenden',
+        maybeLater: 'Vielleicht später'
     },
 }; 

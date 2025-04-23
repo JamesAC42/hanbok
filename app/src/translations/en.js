@@ -576,11 +576,22 @@ export const en = {
         accessibilityDesc: 'We\'ve enhanced keyboard accessibility throughout the application, making it easier for all users to navigate and use our features.',
         communityTitle: 'Join Our Growing Community',
         communityDesc: 'If you\'re enjoying using Hanbok, we\'d love for you to join our community! Share your experience with friends and help us grow.',
-        discordInvite: 'Join our Discord community for updates, give feedback,and to connect with other learners!',
+        discordInvite: 'Join our Discord community for updates, give feedback, and to connect with other learners!',
         leaveFeedback: 'Leave Feedback',
         joinDiscord: 'Join Our Discord',
         shareWebsite: 'Share With Friends',
         linkCopied: 'Link copied to clipboard! Share it with your friends.'
+    },
+    subscriptionPrompt: {
+        title: 'Support Hanbok Development!',
+        description: 'Enjoying Hanbok? Please consider supporting the site so I can continue to develop new features, improve existing ones, and keep the site running!',
+        basicTierTitle: 'Basic Tier - $4/month',
+        basicTierDesc: 'Get unlimited sentence analyses, saved sentences, flashcards for all your learning needs.',
+        plusTierTitle: 'Plus Tier - $10/month',
+        plusTierDesc: 'Unlock everything! Unlimited analyses, saves, audio generations, image extractions, word insights, and priority support.',
+        callToAction: 'Your support makes a huge difference!',
+        viewPricing: 'View Plans or Donate',
+        maybeLater: 'Maybe Later'
     },
     navbar: {
         home: 'Home',

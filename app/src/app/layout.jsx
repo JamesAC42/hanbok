@@ -1,3 +1,4 @@
+
 import { Suspense } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { AdminProvider } from '@/contexts/AdminContext';
@@ -7,6 +8,7 @@ import NavBar from '@/components/NavBar';
 import Script from 'next/script';
 import { PopupProvider } from '@/contexts/PopupContext';
 import Image from 'next/image';
+import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
 
 export const metadata = {
   title: "Hanbok - Multi-Language Learning Tool",
@@ -60,18 +62,20 @@ export default function RootLayout({ children }) {
           <AdminProvider>
             <LanguageProvider>
               <PopupProvider>
-                <Script
+                <ClientLayoutWrapper>
+                  <Script
                     src="https://accounts.google.com/gsi/client"
-                  strategy="afterInteractive"
-              />
-              <script defer src="https://umami.ovel.sh/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
-              <Suspense fallback={<div>Loading...</div>}>
-                {children}
-              </Suspense>
-              <NavBar />
-              <div className="background-image">
-                <Image src="/images/background.png" alt="background" width={1536} height={1024} />
-              </div>
+                    strategy="afterInteractive"
+                  />
+                  <script defer src="https://umami.ovel.sh/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
+                  <Suspense fallback={<div>Loading...</div>}>
+                    {children}
+                  </Suspense>
+                  <NavBar />
+                  <div className="background-image">
+                    <Image src="/images/background.png" alt="background" width={1536} height={1024} />
+                  </div>
+                </ClientLayoutWrapper>
               </PopupProvider>
             </LanguageProvider>
           </AdminProvider>

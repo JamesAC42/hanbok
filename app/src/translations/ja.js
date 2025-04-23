@@ -765,4 +765,15 @@ export const ja = {
             back: "歌詞に戻る"
         }
     },
+    subscriptionPrompt: {
+        title: 'Hanbok開発を支援する！',
+        description: 'Hanbokを楽しんでいますか？新しい機能を開発し、既存の機能を改善し、サイトを運営し続けるために、サイトのサポートをご検討ください！',
+        basicTierTitle: 'ベーシックティア - 月額$4',
+        basicTierDesc: 'すべての学習ニーズに対応する無制限の文分析と保存された文、フラッシュカードをご利用いただけます。',
+        plusTierTitle: 'プラスティア - 月額$10',
+        plusTierDesc: 'すべてをアンロック！無制限の分析、保存、音声生成、画像抽出、単語の洞察、優先サポート。',
+        callToAction: '皆様のサポートが大きな力となります！',
+        viewPricing: 'プランを表示または寄付する',
+        maybeLater: '後で'
+    },
 }; 

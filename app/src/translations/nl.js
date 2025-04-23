@@ -765,4 +765,15 @@ export const nl = {
             back: "Terug naar Songteksten"
         }
     },
+    subscriptionPrompt: {
+        title: 'Steun de ontwikkeling van Hanbok!',
+        description: 'Geniet je van Hanbok? Overweeg alstublieft de site te ondersteunen, zodat ik nieuwe functies kan blijven ontwikkelen, bestaande kan verbeteren en de site draaiende kan houden!',
+        basicTierTitle: 'Basisniveau - $4/maand',
+        basicTierDesc: 'Krijg onbeperkte zinsanalyses, onbeperkt opgeslagen zinnen en onbeperkte flashcards voor al je leerbehoeften.',
+        plusTierTitle: 'Plusniveau - $10/maand',
+        plusTierDesc: 'Ontgrendel alles! Onbeperkte analyses, opslag, audiogeneraties, afbeeldingsextracties, woordinzichten en prioriteitsondersteuning.',
+        callToAction: 'Uw steun maakt een enorm verschil!',
+        viewPricing: 'Bekijk Plannen of Doneer',
+        maybeLater: 'Misschien later'
+    },
 }; 
