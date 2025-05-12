@@ -2,6 +2,8 @@ import styles from "@/styles/components/abouthome.module.scss";
 import Image from "next/image";
 import { useLanguage } from '@/contexts/LanguageContext';
 
+import TestimonialCard from "@/components/TestimonialCard";
+
 const testimonials = [
     {
         text: "I loveeee this site!! the translations are super helpful and has boosted my understanding of Korean sentence structure and grammar!",
@@ -149,6 +151,16 @@ const AboutHome = () => {
             
             <h3>{t('home.about.multiLanguageHeader')}</h3>
             <p>{t('home.about.multiLanguageParagraph')}</p>
+
+            <TestimonialCard 
+                quote="너무 좋다" 
+                author="Sung Hyo Park"/>
+            <TestimonialCard 
+                quote="I loveeee this site!! the translations are super helpful!" 
+                author="W映月"/>
+            <TestimonialCard 
+                quote="This is such an insanely useful tool. Especially that you can see the vocabulary listed at the end." 
+                author="u/tatamigalaxy_"/>
 
             <h3>{t('home.about.mobileSupportHeader')}</h3>
             <p>{t('home.about.mobileSupportParagraph')}</p>

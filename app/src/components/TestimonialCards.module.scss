@@ -1,0 +1,39 @@
+/* TestimonialCard.css */
+.testimonialCard {
+    max-width: 400px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    font-family:var(--font-display);
+    width:100%;
+  }
+  
+  .stars {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  
+  .starIcon {
+    width: 24px;
+    height: 24px;
+    margin: 0 2px;
+    color: #f5c518;
+  }
+  
+  .quote {
+    font-style: italic;
+    color: #333;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  
+  .author {
+    font-weight: 700;
+    color: #555;
+  }
