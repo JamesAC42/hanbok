@@ -78,6 +78,7 @@ const initiateStudySession = require('./controllers/auth/initiateStudySession');
 const updateCardProgress = require('./controllers/auth/updateCardProgress');
 const getStudyStats = require('./controllers/auth/getStudyStats');
 const exportDeck = require('./controllers/auth/exportDeck');
+const editDeckCard = require('./controllers/auth/editDeckCard');
 
 const getRateLimits = require('./controllers/auth/getRateLimits');
 
@@ -236,6 +237,11 @@ app.put('/api/decks/:deckId/settings', isAuthenticated, async (req, res) => {
 // New route for exporting deck data in Anki format
 app.get('/api/decks/:deckId/export', isAuthenticated, async (req, res) => {
     exportDeck(req, res);
+});
+
+// New route for editing/deleting deck cards
+app.put('/api/decks/:deckId/cards/:cardId', isAuthenticated, async (req, res) => {
+    editDeckCard(req, res);
 });
 
 // New route for study statistics

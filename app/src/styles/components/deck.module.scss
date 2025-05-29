@@ -464,10 +464,15 @@ input:checked + .slider:before {
   transition: all 0.2s ease;
   border: 0.0625rem solid #e0e0e0;
   height: 100%;
+  position: relative;
   
   &:hover {
     transform: translateY(-0.25rem);
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+    
+    .cardEditButton {
+      opacity: 1;
+    }
   }
 }
 
@@ -584,4 +589,83 @@ input:checked + .slider:before {
   font-weight: 500;
   line-height: 1.5;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.cardEditButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+  
+  &:hover {
+    background: #f3f4f6;
+    color: #374151;
+    transform: scale(1.1);
+  }
+  
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+// Table row hover effect
+.tableRow {
+  &:hover {
+    background-color: #f9f9f9;
+    
+    .tableEditButton {
+      opacity: 1;
+    }
+  }
+}
+
+.actionsColumn {
+  width: 3rem;
+  text-align: center;
+}
+
+.actionsCell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.tableEditButton {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  margin: 0 auto;
+  
+  &:hover {
+    background: #f3f4f6;
+    color: #374151;
+    transform: scale(1.1);
+  }
+  
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
 } 

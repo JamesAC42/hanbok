@@ -10,7 +10,9 @@ import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsSettingsRounded } from '@/components/icons/Settings';
 import { MaterialSymbolsDownloadRounded } from '@/components/icons/Download';
+import { MaterialSymbolsMoreVertRounded } from '@/components/icons/MoreVert';
 import DeckSettings from '@/components/cards/DeckSettings';
+import EditCardModal from '@/components/cards/EditCardModal';
 import StudyStatsDisplay from '@/components/StudyStatsDisplay';
 import { use } from 'react';
 
@@ -36,6 +38,10 @@ const DeckView = ({ params }) => {
     // Add exportStatus state to show loading state during export
     const [exportStatus, setExportStatus] = useState('idle'); // 'idle', 'loading', 'error'
     
+    // Edit modal state
+    const [editingCard, setEditingCard] = useState(null);
+    const [showEditModal, setShowEditModal] = useState(false);
+
     useEffect(() => {
         if (!loading && !isAuthenticated) {
             router.replace('/login');
@@ -159,6 +165,41 @@ const DeckView = ({ params }) => {
         return date.toLocaleDateString();
     };
 
+    // Edit card functions
+    const handleEditCard = (card) => {
+        setEditingCard(card);
+        setShowEditModal(true);
+    };
+
+    const handleCloseEditModal = () => {
+        setShowEditModal(false);
+        setEditingCard(null);
+    };
+
+    const handleCardSaved = (updatedCard) => {
+        // Update the specific card in the cards array
+        setCards(prevCards => 
+            prevCards.map(card => 
+                card.flashcardId === editingCard.flashcardId 
+                    ? { ...card, customFront: updatedCard.customFront, customBack: updatedCard.customBack }
+                    : card
+            )
+        );
+    };
+
+    const handleCardDeleted = (deletedCardId) => {
+        // Remove the card from the cards array
+        setCards(prevCards => 
+            prevCards.filter(card => card.flashcardId !== deletedCardId)
+        );
+        
+        // Update deck card count
+        setDeck(prevDeck => ({
+            ...prevDeck,
+            cardCount: Math.max(0, (prevDeck.cardCount || 0) - 1)
+        }));
+    };
+
     // Calculate pagination values
     const indexOfLastCard = currentPage * cardsPerPage;
     const indexOfFirstCard = indexOfLastCard - cardsPerPage;
@@ -217,15 +258,23 @@ const DeckView = ({ params }) => {
                 <div className={deckStyles.cardsGrid}>
                     {currentCards.map(card => (
                         <div key={card.flashcardId} className={deckStyles.cardItem}>
+                            <button 
+                                className={deckStyles.cardEditButton}
+                                onClick={() => handleEditCard(card)}
+                                aria-label={t('cards.editCard')}
+                                title={t('cards.editCard')}
+                            >
+                                <MaterialSymbolsMoreVertRounded />
+                            </button>
                             <div className={deckStyles.cardFront}>
                                 <span className={deckStyles.wordText}>
-                                    {card.content?.originalWord || t('cards.unknownWord')}
+                                    {card.customFront || card.content?.originalWord || t('cards.unknownWord')}
                                 </span>
                             </div>
                             <div className={deckStyles.cardDivider}></div>
                             <div className={deckStyles.cardBack}>
                                 <span className={deckStyles.translationText}>
-                                    {card.content?.translatedWord || t('cards.unknownTranslation')}
+                                    {card.customBack || card.content?.translatedWord || t('cards.unknownTranslation')}
                                 </span>
                             </div>
                         </div>
@@ -257,13 +306,14 @@ const DeckView = ({ params }) => {
                                 <th>{t('cards.nextReview')}</th>
                                 <th>{t('cards.reviews')}</th>
                                 <th>{t('cards.lapses')}</th>
+                                <th className={deckStyles.actionsColumn}>{t('cards.actions')}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {currentCards.map(card => (
-                                <tr key={card.flashcardId}>
-                                    <td>{card.content?.originalWord || t('cards.unknownWord')}</td>
-                                    <td>{card.content?.translatedWord || t('cards.unknownTranslation')}</td>
+                                <tr key={card.flashcardId} className={deckStyles.tableRow}>
+                                    <td>{card.customFront || card.content?.originalWord || t('cards.unknownWord')}</td>
+                                    <td>{card.customBack || card.content?.translatedWord || t('cards.unknownTranslation')}</td>
                                     <td>
                                         <span className={deckStyles[card.reviewState || 'new']}>
                                             {t(`cards.${card.reviewState || 'new'}`)}
@@ -274,6 +324,16 @@ const DeckView = ({ params }) => {
                                     <td>{formatDate(card.nextReviewDate)}</td>
                                     <td>{card.repetitionNumber || 0}</td>
                                     <td>{card.lapses || 0}</td>
+                                    <td className={deckStyles.actionsCell}>
+                                        <button 
+                                            className={deckStyles.tableEditButton}
+                                            onClick={() => handleEditCard(card)}
+                                            aria-label={t('cards.editCard')}
+                                            title={t('cards.editCard')}
+                                        >
+                                            <MaterialSymbolsMoreVertRounded />
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -491,6 +551,16 @@ const DeckView = ({ params }) => {
                     {renderContent()}
                 </div>
             </div>
+            
+            {/* Edit Card Modal */}
+            <EditCardModal
+                card={editingCard}
+                isOpen={showEditModal}
+                onClose={handleCloseEditModal}
+                onSave={handleCardSaved}
+                onDelete={handleCardDeleted}
+                deckId={deckId}
+            />
         </div>
     );
 };
