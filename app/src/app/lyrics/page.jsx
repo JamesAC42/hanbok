@@ -52,6 +52,8 @@ const Lyrics = () => {
                     if (!artistMap[groupKey]) {
                         artistMap[groupKey] = {
                             artist: groupKey,
+                            isAnime: true,
+                            animeName: lyric.anime,
                             songs: []
                         };
                     }
@@ -68,6 +70,7 @@ const Lyrics = () => {
                     if (!artistMap[lyric.artist]) {
                         artistMap[lyric.artist] = {
                             artist: lyric.artist,
+                            isAnime: false,
                             songs: []
                         };
                     }
@@ -161,10 +164,7 @@ const Lyrics = () => {
                         <div className={lyricsStyles.lyricsList}>
                             {lyricsByArtist.map((artistGroup) => (
                                 <div key={artistGroup.artist} className={lyricsStyles.lyricsSection}>
-                                    <h3>{activeCategory === 'anime' 
-                                        ? artistGroup.artist // Display the anime name directly
-                                        : artistGroup.artist.charAt(0).toUpperCase() // For other genres, display the first letter
-                                    }</h3>
+                                    <h3>{artistGroup.isAnime && artistGroup.animeName ? artistGroup.animeName : artistGroup.artist}</h3>
                                     <ul>
                                         {artistGroup.songs.map((song) => (
                                             <li key={song.lyricId}>
