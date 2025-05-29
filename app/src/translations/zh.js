@@ -156,6 +156,8 @@ export const zh = {
         },
         remainingAudioGenerations: '剩余音频生成次数',
         remainingImageExtracts: '剩余图像提取次数',
+        remainingSentenceAnalyses: '剩余句子分析',
+        weekSentencesRemaining: '剩余每周句子分析',
         unlimited: '无限制',
         maxSavedSentences: '最大保存句子数',
         maxSavedWords: '最大保存单词数',
@@ -201,7 +203,8 @@ export const zh = {
         upgradeOptions: '升级选项',
         limitedTimeOffer: '限时优惠 - 50%折扣',
         oneTimePurchase: '一次性购买',
-        monthlySubscription: '月度订阅',
+        monthlySubscriptionBasic: '月度订阅 - 基础层',
+        monthlySubscriptionPlus: '月度订阅 - 增强层',
         bestValue: '最优惠',
         perMonth: '/ 月',
         features: {
@@ -212,7 +215,9 @@ export const zh = {
             additionalImageExtracts: '额外',
             audioGenerations: '音频生成',
             imageExtractions: '图像提取',
+            moreSentences: ' 额外句子分析',
             unlimited: {
+                analyses: '无限句子分析',
                 sentences: '无限保存句子',
                 words: '无限保存单词',
                 audio: '无限音频生成',
@@ -325,7 +330,8 @@ export const zh = {
             aspect: '这个动词的体是 ',
             form: '这个词的形式是 ',
             politeness: '礼貌程度',
-            case: '这个词的格是 '
+            case: '这个词的格是 ',
+            poeticMeaning: '诗意'
         },
         hoverExplanation: '将鼠标悬停在单词上查看解释。',
         conjugation: {

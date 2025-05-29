@@ -156,6 +156,8 @@ export const de = {
         },
         remainingAudioGenerations: 'Verbleibende Audio-Generierungen',
         remainingImageExtracts: 'Verbleibende Bildextraktionen',
+        remainingSentenceAnalyses: 'Verbleibende Satzanalysen',
+        weekSentencesRemaining: 'Verbleibende Wöchentliche Satzanalysen',
         unlimited: 'Unbegrenzt',
         maxSavedSentences: 'Maximal gespeicherte Sätze',
         maxSavedWords: 'Maximale gespeicherte Wörter',
@@ -201,7 +203,8 @@ export const de = {
         upgradeOptions: 'Upgrade-Optionen',
         limitedTimeOffer: 'Nur für begrenzte Zeit - 50% RABATT',
         oneTimePurchase: 'Einmaliger Kauf',
-        monthlySubscription: 'Monatliches Abonnement',
+        monthlySubscriptionBasic: 'Monatliches Abonnement - Basic-Stufe',
+        monthlySubscriptionPlus: 'Monatliches Abonnement - Plus-Stufe',
         bestValue: 'Bester Wert',
         perMonth: '/ Monat',
         features: {
@@ -212,7 +215,9 @@ export const de = {
             additionalImageExtracts: 'Zusätzlich',
             audioGenerations: 'Audio-Generierungen',
             imageExtractions: 'Bildextraktionen',
+            moreSentences: ' zusätzliche Satzanalysen',
             unlimited: {
+                analyses: 'Unbegrenzte Satzanalysen',
                 sentences: 'Unbegrenzt gespeicherte Sätze',
                 words: 'Unbegrenzt gespeicherte Wörter',
                 audio: 'Unbegrenzte Audio-Generierungen',
@@ -325,7 +330,8 @@ export const de = {
             aspect: 'Der Aspekt dieses Verbs ist ',
             form: 'Die Form dieses Wortes ist ',
             politeness: 'Höflichkeitsstufe',
-            case: 'Der Fall dieses Wortes ist '
+            case: 'Der Fall dieses Wortes ist ',
+            poeticMeaning: 'Poetische Bedeutung'
         },
         conjugation: {
             tense: 'Zeitform',
@@ -587,7 +593,12 @@ export const de = {
         cards: 'Karten',
         previous: 'Vorherige',
         next: 'Nächste',
-        select: 'Auswählen'
+        select: 'Auswählen',
+        save: 'Speichern',
+        cancel: 'Abbrechen',
+        delete: 'Löschen',
+        close: 'Schließen',
+        saving: 'Speichern...'
     },
     navbar: {
         home: 'Startseite',

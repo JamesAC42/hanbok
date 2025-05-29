@@ -156,6 +156,8 @@ export const es = {
         },
         remainingAudioGenerations: 'Generaciones de Audio Restantes',
         remainingImageExtracts: 'Extracciones de Imágenes Restantes',
+        remainingSentenceAnalyses: 'Análisis de Oraciones Restantes',
+        weekSentencesRemaining: 'Análisis de Oraciones Semanales Restantes',
         unlimited: 'Ilimitado',
         maxSavedSentences: 'Máximo de Frases Guardadas',
         maxSavedWords: 'Máximo de palabras guardadas',
@@ -201,7 +203,8 @@ export const es = {
         upgradeOptions: 'Opciones de Actualización',
         limitedTimeOffer: 'Tiempo Limitado - 50% DE DESCUENTO',
         oneTimePurchase: 'Compra Única',
-        monthlySubscription: 'Suscripción Mensual',
+        monthlySubscriptionBasic: 'Suscripción Mensual - Nivel Básico',
+        monthlySubscriptionPlus: 'Suscripción Mensual - Nivel Plus',
         bestValue: 'Mejor Valor',
         perMonth: '/ mes',
         features: {
@@ -209,10 +212,11 @@ export const es = {
             to: 'a',
             increaseWords: 'Aumentar el límite de palabras guardadas de',
             additionalAudio: 'Adicional',
-            additionalImageExtracts: 'Adicional',
             audioGenerations: 'generaciones de audio',
             imageExtractions: 'extracciones de imágenes',
+            moreSentences: ' análisis de oraciones adicionales',
             unlimited: {
+                analyses: 'Análisis de oraciones ilimitados',
                 sentences: 'Frases guardadas ilimitadas',
                 words: 'Palabras guardadas ilimitadas',
                 audio: 'Generaciones de audio ilimitadas',
@@ -325,7 +329,8 @@ export const es = {
             aspect: 'El aspecto de este verbo es ',
             form: 'La forma de esta palabra es ',
             politeness: 'Nivel de cortesía',
-            case: 'El caso de esta palabra es '
+            case: 'El caso de esta palabra es ',
+            poeticMeaning: 'Significado Poético'
         },
         conjugation: {
             tense: 'Tiempo',
@@ -587,7 +592,12 @@ export const es = {
         cards: 'tarjetas',
         previous: 'Anterior',
         next: 'Siguiente',
-        select: 'Seleccionar'
+        select: 'Seleccionar',
+        save: 'Guardar',
+        cancel: 'Cancelar',
+        delete: 'Eliminar',
+        close: 'Cerrar',
+        saving: 'Guardando...'
     },
     navbar: {
         home: 'Inicio',

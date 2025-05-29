@@ -156,6 +156,8 @@ export const fr = {
         },
         remainingAudioGenerations: 'Générations Audio Restantes',
         remainingImageExtracts: 'Extractions d\'Images Restantes',
+        remainingSentenceAnalyses: 'Analyses de Phrases Restantes',
+        weekSentencesRemaining: 'Analyses de Phrases Hebdomadaires Restantes',
         unlimited: 'Illimité',
         maxSavedSentences: 'Maximum de Phrases Sauvegardées',
         maxSavedWords: 'Maximum de mots sauvegardés',
@@ -201,7 +203,8 @@ export const fr = {
         upgradeOptions: 'Options de Mise à Niveau',
         limitedTimeOffer: 'Temps Limité - 50% DE RÉDUCTION',
         oneTimePurchase: 'Achat Unique',
-        monthlySubscription: 'Abonnement Mensuel',
+        monthlySubscriptionBasic: 'Abonnement Mensuel - Niveau Basique',
+        monthlySubscriptionPlus: 'Abonnement Mensuel - Niveau Plus',
         bestValue: 'Meilleure Valeur',
         perMonth: '/ mois',
         features: {
@@ -209,14 +212,15 @@ export const fr = {
             to: 'à',
             increaseWords: 'Augmenter la limite de mots sauvegardés de',
             additionalAudio: 'Supplémentaire',
-            additionalImageExtracts: 'Supplémentaire',
             audioGenerations: 'générations audio',
             imageExtractions: 'extractions d\'images',
+            moreSentences: ' analyses de phrases supplémentaires',
             unlimited: {
+                analyses: 'Analyses de phrases illimitées',
                 sentences: 'Phrases sauvegardées illimitées',
-                words: 'Mots sauvegardés illimités',
-                audio: 'Générations audio illimitées',
                 images: 'Extractions d\'images illimitées',
+                words: 'Cartes mémoire illimitées',
+                audio: 'Générations audio illimitées',
                 insights: 'Informations illimitées sur les relations entre les mots'
             }
         },
@@ -325,7 +329,8 @@ export const fr = {
             aspect: 'L\'aspect de ce verbe est ',
             form: 'La forme de ce mot est ',
             politeness: 'Niveau de politesse',
-            case: 'Le cas de ce mot est '
+            case: 'Le cas de ce mot est ',
+            poeticMeaning: 'Signification Poétique'
         },
         hoverExplanation: 'Survolez un mot pour voir son explication.',
         conjugation: {
@@ -587,7 +592,12 @@ export const fr = {
         cards: 'cartes',
         previous: 'Précédent',
         next: 'Suivant',
-        select: 'Sélectionner'
+        select: 'Sélectionner',
+        save: 'Enregistrer',
+        cancel: 'Annuler',
+        delete: 'Supprimer',
+        close: 'Fermer',
+        saving: 'Enregistrement...'
     },
     navbar: {
         home: 'Accueil',

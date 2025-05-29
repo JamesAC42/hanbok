@@ -156,6 +156,8 @@ export const tr = {
         },
         remainingAudioGenerations: 'Kalan Ses Üretimleri',
         remainingImageExtracts: 'Kalan Görüntü Çıkarımları',
+        remainingSentenceAnalyses: 'Kalan Cümle Analizleri',
+        weekSentencesRemaining: 'Kalan Haftalık Cümle Analizleri',
         unlimited: 'Sınırsız',
         maxSavedSentences: 'Maksimum Kaydedilen Cümleler',
         maxSavedWords: 'Maksimum kaydedilen kelime',
@@ -201,7 +203,8 @@ export const tr = {
         upgradeOptions: 'Yükseltme Seçenekleri',
         limitedTimeOffer: 'Sınırlı Süre - %50 İNDİRİM',
         oneTimePurchase: 'Tek Seferlik Satın Alma',
-        monthlySubscription: 'Aylık Abonelik',
+        monthlySubscriptionBasic: 'Aylık Abonelik - Temel Seviye',
+        monthlySubscriptionPlus: 'Aylık Abonelik - Plus Seviye',
         bestValue: 'En İyi Değer',
         perMonth: '/ ay',
         features: {
@@ -212,7 +215,9 @@ export const tr = {
             additionalImageExtracts: 'Ek',
             audioGenerations: 'ses üretimi',
             imageExtractions: 'görüntü çıkarımı',
+            moreSentences: ' ek cümle analizi',
             unlimited: {
+                analyses: 'Sınırsız cümle analizi',
                 sentences: 'Sınırsız kaydedilen cümleler',
                 words: 'Sınırsız kaydedilen kelimeler',
                 audio: 'Sınırsız ses üretimi',
@@ -325,7 +330,8 @@ export const tr = {
             aspect: 'Bu fiilin görünüşü ',
             form: 'Bu kelimenin biçimi ',
             politeness: 'Nezaket seviyesi',
-            case: 'Bu kelimenin hali '
+            case: 'Bu kelimenin hali ',
+            poeticMeaning: 'Poetik Anlam'
         },
         conjugation: {
             tense: 'Zaman',

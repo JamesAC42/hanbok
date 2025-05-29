@@ -156,6 +156,8 @@ export const ru = {
         },
         remainingAudioGenerations: 'Оставшиеся генерации аудио',
         remainingImageExtracts: 'Оставшиеся извлечения изображений',
+        remainingSentenceAnalyses: 'Оставшиеся анализы предложений',
+        weekSentencesRemaining: 'Оставшиеся еженедельные анализы предложений',
         unlimited: 'Неограниченно',
         maxSavedSentences: 'Максимум сохраненных предложений',
         maxSavedWords: 'Максимум сохраненных слов',
@@ -201,7 +203,8 @@ export const ru = {
         upgradeOptions: 'Варианты обновления',
         limitedTimeOffer: 'Только ограниченное время - 50% СКИДКА',
         oneTimePurchase: 'Одноразовая покупка',
-        monthlySubscription: 'Ежемесячная подписка',
+        monthlySubscriptionBasic: 'Месячная подписка - Базовый уровень',
+        monthlySubscriptionPlus: 'Месячная подписка - Плюс уровень',
         bestValue: 'Лучшая цена',
         perMonth: '/ месяц',
         features: {
@@ -212,7 +215,9 @@ export const ru = {
             additionalImageExtracts: 'Дополнительно',
             audioGenerations: 'генераций аудио',
             imageExtractions: 'извлечений изображений',
+            moreSentences: ' дополнительные анализы предложений',
             unlimited: {
+                analyses: 'Неограниченные анализы предложений',
                 sentences: 'Неограниченное количество сохраненных предложений',
                 words: 'Неограниченное количество сохраненных слов',
                 audio: 'Неограниченное количество генераций аудио',
@@ -325,7 +330,8 @@ export const ru = {
             aspect: 'Вид этого глагола ',
             form: 'Форма этого слова ',
             politeness: 'Уровень вежливости',
-            case: 'Падеж этого слова '
+            case: 'Падеж этого слова ',
+            poeticMeaning: 'Поэтическое значение'
         },
         conjugation: {
             tense: 'Время',

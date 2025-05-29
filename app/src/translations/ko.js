@@ -156,6 +156,8 @@ export const ko = {
         },
         remainingAudioGenerations: '남은 음성 생성 횟수',
         remainingImageExtracts: '남은 이미지 추출 횟수',
+        remainingSentenceAnalyses: '남은 문장 분석',
+        weekSentencesRemaining: '남은 주간 문장 분석',
         unlimited: '무제한',
         maxSavedSentences: '최대 저장 문장 수',
         maxSavedWords: '최대 저장 단어 수',
@@ -201,7 +203,8 @@ export const ko = {
         upgradeOptions: '업그레이드 옵션',
         limitedTimeOffer: '한정 시간 제공 - 50% 할인',
         oneTimePurchase: '일회성 구매',
-        monthlySubscription: '월간 구독',
+        monthlySubscriptionBasic: '월간 구독 - 베이직 티어',
+        monthlySubscriptionPlus: '월간 구독 - 플러스 티어',
         bestValue: '최고의 가치',
         perMonth: '/ 월',
         features: {
@@ -212,7 +215,9 @@ export const ko = {
             additionalImageExtracts: '추가',
             audioGenerations: '음성 생성',
             imageExtractions: '이미지 추출',
+            moreSentences: ' 추가 문장 분석',
             unlimited: {
+                analyses: '무제한 문장 분석',
                 sentences: '무제한 문장 저장',
                 words: '무제한 단어 저장',
                 audio: '무제한 음성 생성',
@@ -325,7 +330,8 @@ export const ko = {
             aspect: '이 동사의 상은 ',
             form: '이 단어의 형태는 ',
             politeness: '존댓말 수준',
-            case: '이 단어의 격은 '
+            case: '이 단어의 격은 ',
+            poeticMeaning: '시적 의미'
         },
         hoverExplanation: '설명을 보려면 단어 위에 마우스를 올리세요.',
         conjugation: {

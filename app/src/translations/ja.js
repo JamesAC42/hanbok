@@ -156,6 +156,8 @@ export const ja = {
         },
         remainingAudioGenerations: '残りの音声生成回数',
         remainingImageExtracts: '残りの画像抽出回数',
+        remainingSentenceAnalyses: '残りの文章分析',
+        weekSentencesRemaining: '残りの週間文章分析',
         unlimited: '無制限',
         maxSavedSentences: '保存可能な文章数',
         maxSavedWords: '最大保存単語数',
@@ -201,7 +203,8 @@ export const ja = {
         upgradeOptions: 'アップグレードオプション',
         limitedTimeOffer: '期間限定 - 50%オフ',
         oneTimePurchase: '一回限りの購入',
-        monthlySubscription: '月額サブスクリプション',
+        monthlySubscriptionBasic: '月額サブスクリプション - ベーシックティア',
+        monthlySubscriptionPlus: '月額サブスクリプション - プラスティア',
         bestValue: 'ベストバリュー',
         perMonth: '/ 月',
         features: {
@@ -212,7 +215,9 @@ export const ja = {
             additionalImageExtracts: '追加',
             audioGenerations: '音声生成',
             imageExtractions: '画像抽出',
+            moreSentences: ' 追加の文章分析',
             unlimited: {
+                analyses: '無制限の文章分析',
                 sentences: '無制限の文章保存',
                 words: '無制限の単語保存',
                 audio: '無制限の音声生成',
@@ -325,7 +330,8 @@ export const ja = {
             aspect: 'この動詞のアスペクトは ',
             form: 'この単語の形式は ',
             politeness: '丁寧さのレベル',
-            case: 'この単語の格は '
+            case: 'この単語の格は ',
+            poeticMeaning: '詩的意味'
         },
         hoverExplanation: '単語の上にマウスを置くと説明が表示されます。',
         conjugation: {

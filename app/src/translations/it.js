@@ -156,6 +156,8 @@ export const it = {
         },
         remainingAudioGenerations: 'Generazioni Audio Rimanenti',
         remainingImageExtracts: 'Estrazioni Immagini Rimanenti',
+        remainingSentenceAnalyses: 'Analisi di Frasi Rimanenti',
+        weekSentencesRemaining: 'Analisi di Frasi Settimanali Rimanenti',
         unlimited: 'Illimitato',
         maxSavedSentences: 'Massimo Frasi Salvate',
         maxSavedWords: 'Massimo parole salvate',
@@ -201,7 +203,8 @@ export const it = {
         upgradeOptions: 'Opzioni di Aggiornamento',
         limitedTimeOffer: 'Tempo Limitato - SCONTO DEL 50%',
         oneTimePurchase: 'Acquisto Una Tantum',
-        monthlySubscription: 'Abbonamento Mensile',
+        monthlySubscriptionBasic: 'Abbonamento Mensile - Livello Base',
+        monthlySubscriptionPlus: 'Abbonamento Mensile - Livello Plus',
         bestValue: 'Miglior Valore',
         perMonth: '/ mese',
         features: {
@@ -212,7 +215,9 @@ export const it = {
             additionalImageExtracts: 'Ulteriori',
             audioGenerations: 'generazioni audio',
             imageExtractions: 'estrazioni immagini',
+            moreSentences: ' analisi di frasi aggiuntive',
             unlimited: {
+                analyses: 'Analisi di frasi illimitate',
                 sentences: 'Frasi salvate illimitate',
                 words: 'Parole salvate illimitate',
                 audio: 'Generazioni audio illimitate',
@@ -325,7 +330,8 @@ export const it = {
             aspect: 'L\'aspetto di questo verbo è ',
             form: 'La forma di questa parola è ',
             politeness: 'Livello di cortesia',
-            case: 'Il caso di questa parola è '
+            case: 'Il caso di questa parola è ',
+            poeticMeaning: 'Significato Poetico'
         },
         hoverExplanation: 'Passa il mouse su una parola per la spiegazione.',
         conjugation: {

@@ -156,6 +156,8 @@ export const nl = {
         },
         remainingAudioGenerations: 'Resterende audio-generaties',
         remainingImageExtracts: 'Resterende beeldextracties',
+        remainingSentenceAnalyses: 'Resterende Zinanalyses',
+        weekSentencesRemaining: 'Resterende Wekelijkse Zinanalyses',
         unlimited: 'Onbeperkt',
         maxSavedSentences: 'Maximaal opgeslagen zinnen',
         maxSavedWords: 'Maximaal opgeslagen woorden',
@@ -201,7 +203,8 @@ export const nl = {
         upgradeOptions: 'Upgrade-opties',
         limitedTimeOffer: 'Beperkte tijd - 50% KORTING',
         oneTimePurchase: 'Eenmalige aankoop',
-        monthlySubscription: 'Maandelijkse abonnement',
+        monthlySubscriptionBasic: 'Maandelijks Abonnement - Basis Niveau',
+        monthlySubscriptionPlus: 'Maandelijks Abonnement - Plus Niveau',
         bestValue: 'Beste waarde',
         perMonth: '/ maand',
         features: {
@@ -212,7 +215,9 @@ export const nl = {
             additionalImageExtracts: 'Extra',
             audioGenerations: 'audio-generaties',
             imageExtractions: 'beeldextracties',
+            moreSentences: ' extra zinanalyses',
             unlimited: {
+                analyses: 'Onbeperkte zinanalyses',
                 sentences: 'Onbeperkt opgeslagen zinnen',
                 words: 'Onbeperkt opgeslagen woorden',
                 audio: 'Onbeperkte audio-generaties',
@@ -325,7 +330,8 @@ export const nl = {
             aspect: 'Het aspect van dit werkwoord is ',
             form: 'De vorm van dit woord is ',
             politeness: 'Beleefdheidsgraad',
-            case: 'De naamval van dit woord is '
+            case: 'De naamval van dit woord is ',
+            poeticMeaning: 'Poëtische Betekenis'
         },
         conjugation: {
             tense: 'Tijd',
