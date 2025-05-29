@@ -576,14 +576,6 @@ const DeckView = ({ params }) => {
                     
                     {viewMode === 'grid' ? renderGridView() : renderTableView()}
                 </div>
-
-                {showSettings && (
-                    <DeckSettings 
-                        deckId={deckId} 
-                        onClose={toggleSettings}
-                        onSettingsUpdated={refreshDeckData}
-                    />
-                )}
             </>
         );
     };
@@ -621,6 +613,15 @@ const DeckView = ({ params }) => {
                 deckId={deckId}
                 mode={modalMode}
             />
+            
+            {/* Deck Settings Modal */}
+            {showSettings && (
+                <DeckSettings 
+                    deckId={deckId} 
+                    onClose={toggleSettings}
+                    onSettingsUpdated={refreshDeckData}
+                />
+            )}
         </div>
     );
 };

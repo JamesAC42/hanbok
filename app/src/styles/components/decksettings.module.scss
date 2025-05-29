@@ -4,36 +4,37 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  animation: fadeIn 0.2s ease-in-out;
+  padding: 1rem;
 }
 
 .settingsContent {
-  background-color: white;
-  border-radius: 0.5rem;
+  background: white;
+  border-radius: 0.75rem;
   width: 90%;
-  max-width: 30rem;
+  max-width: 32rem;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
-  animation: slideUp 0.3s ease-in-out;
+  box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.15);
+  animation: modalAppear 0.2s ease-out;
 }
 
 .settingsHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.5rem;
-  border-bottom: 0.0625rem solid #e0e0e0;
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
   
   h2 {
     margin: 0;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 600;
+    color: #111827;
   }
 }
 
@@ -41,11 +42,19 @@
   background: none;
   border: none;
   font-size: 1.5rem;
+  color: #6b7280;
   cursor: pointer;
-  color: var(--text-secondary);
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
   
   &:hover {
-    color: var(--text-primary);
+    background-color: #f3f4f6;
+    color: #374151;
   }
 }
 
@@ -60,19 +69,23 @@
     display: block;
     font-weight: 500;
     margin-bottom: 0.5rem;
+    color: #374151;
+    font-size: 0.875rem;
   }
   
   input {
     width: 100%;
     padding: 0.75rem;
-    border: 0.0625rem solid #e0e0e0;
-    border-radius: 0.25rem;
-    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
     
     &:focus {
       outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 0.125rem rgba(22, 163, 74, 0.2);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
   }
 }
@@ -80,7 +93,7 @@
 .helpText {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #6b7280;
 }
 
 .advancedToggle {
@@ -91,9 +104,10 @@
 .advancedButton {
   background: none;
   border: none;
-  color: var(--text-secondary);
+  color: #6b7280;
   font-size: 0.875rem;
   font-weight: 500;
+  font-family: inherit;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -104,8 +118,8 @@
   transition: all 0.2s ease;
   
   &:hover {
-    background-color: #f0f0f0;
-    color: var(--text-primary);
+    background-color: #f3f4f6;
+    color: #374151;
   }
 }
 
@@ -124,7 +138,7 @@
   padding: 1.5rem;
   margin-bottom: 2rem;
   border: 0.0625rem solid #e0e0e0;
-  animation: fadeIn 0.3s ease-in-out;
+  animation: modalAppear 0.2s ease-out;
 }
 
 .advancedHeader {
@@ -139,7 +153,7 @@
 
 .advancedDescription {
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: #6b7280;
   margin: 0;
 }
 
@@ -173,20 +187,22 @@
 }
 
 .saveButton, .cancelButton {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.25rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
   font-weight: 500;
+  font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .saveButton {
-  background-color: #16a34a;
+  background-color: #10b981;
   color: white;
   border: none;
   
-  &:hover {
-    background-color: #15803d;
+  &:hover:not(:disabled) {
+    background-color: #059669;
   }
   
   &:disabled {
@@ -196,47 +212,44 @@
 }
 
 .cancelButton {
-  background-color: white;
-  color: var(--text-primary);
-  border: 0.0625rem solid #e0e0e0;
+  background: none;
+  color: #6b7280;
+  border: 0.125rem solid #d1d5db;
   
-  &:hover {
-    background-color: #f9f9f9;
+  &:hover:not(:disabled) {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
   }
 }
 
 .error {
-  background-color: #fee2e2;
-  color: #b91c1c;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
   padding: 0.75rem;
-  border-radius: 0.25rem;
-  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
 }
 
 .success {
-  background-color: #dcfce7;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
   color: #15803d;
   padding: 0.75rem;
-  border-radius: 0.25rem;
-  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
 }
 
-@keyframes fadeIn {
+@keyframes modalAppear {
   from {
     opacity: 0;
+    transform: scale(0.95) translateY(-1.25rem);
   }
   to {
     opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(1rem);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 } 
