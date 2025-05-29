@@ -28,6 +28,52 @@ async function addDeckCard(req, res) {
       });
     }
 
+    // Check for duplicate cards in this deck based on front content
+    const existingCards = await db.collection('deck_cards').aggregate([
+      { $match: { deckId: parseInt(deckId) } },
+      {
+        $lookup: {
+          from: 'flashcards',
+          localField: 'flashcardId',
+          foreignField: 'flashcardId',
+          as: 'flashcard'
+        }
+      },
+      { $unwind: '$flashcard' },
+      {
+        $lookup: {
+          from: 'words',
+          localField: 'flashcard.contentId',
+          foreignField: 'wordId',
+          as: 'word'
+        }
+      },
+      { $unwind: { path: '$word', preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          flashcardId: 1,
+          frontContent: {
+            $ifNull: [
+              '$flashcard.customFront',
+              '$word.originalWord'
+            ]
+          }
+        }
+      }
+    ]).toArray();
+
+    const trimmedFront = front.trim().toLowerCase();
+    const duplicateCard = existingCards.find(card => 
+      card.frontContent && card.frontContent.toLowerCase() === trimmedFront
+    );
+
+    if (duplicateCard) {
+      return res.status(409).json({
+        success: false,
+        error: 'A card with this front content already exists in this deck'
+      });
+    }
+
     // Get user info to check limits
     const user = await db.collection('users').findOne({ userId });
     
