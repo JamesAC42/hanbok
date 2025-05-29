@@ -35,9 +35,17 @@ const StudyView = ({ params }) => {
     const [muted, setMuted] = useState(false);
     const [audioError, setAudioError] = useState(false);
     
+    // Enhanced state for better UX
+    const [cardFlipping, setCardFlipping] = useState(false);
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [ratingInProgress, setRatingInProgress] = useState(null);
+    
     // Reset showAnswer when currentCard changes
     useEffect(() => {
         setShowAnswer(false);
+        setCardFlipping(false);
+        setShowCelebration(false);
+        setRatingInProgress(null);
     }, [currentCard]);
     
     // Audio player reference
@@ -251,7 +259,12 @@ const StudyView = ({ params }) => {
     }, [showAnswer, currentCard, updatingCard]);
 
     const handleShowAnswer = () => {
-        setShowAnswer(true);
+        setCardFlipping(true);
+        // Small delay to sync with animation
+        setTimeout(() => {
+            setShowAnswer(true);
+            setCardFlipping(false);
+        }, 150);
     };
 
     const handleBackClick = () => {
@@ -279,6 +292,13 @@ const StudyView = ({ params }) => {
         
         try {
             setUpdatingCard(true);
+            setRatingInProgress(rating);
+
+            // Show celebration for good/easy ratings
+            if (rating === 'good' || rating === 'easy') {
+                setShowCelebration(true);
+                setTimeout(() => setShowCelebration(false), 800);
+            }
 
             // Reset answer display immediately
             setShowAnswer(false);
@@ -372,6 +392,7 @@ const StudyView = ({ params }) => {
             setError(t('cards.study.errorUpdating'));
         } finally {
             setUpdatingCard(false);
+            setRatingInProgress(null);
         }
     };
 
@@ -475,23 +496,25 @@ const StudyView = ({ params }) => {
                 <div className={studyStyles.cardOuter}>
                     {currentCard && (
                         <div className={studyStyles.cardContent}>
-                            <div className={`${studyStyles.cardFace} ${showAnswer ? studyStyles.showAnswer : ''}`}>
+                            <div className={`${studyStyles.cardFace} ${showAnswer ? studyStyles.showAnswer : ''} ${cardFlipping ? studyStyles.flipping : ''} ${showCelebration ? studyStyles.celebration : ''}`}>
                                 <div className={studyStyles.questionSide}>
                                     <h3>{t('cards.study.question')}</h3>
                                     <p className={`${cardLanguage} ${getFontClass(deck.language)}`} lang={cardLanguage}>{question}</p>
                                 </div>
                                 <div className={studyStyles.answerSide}>
-                                    <h3>{t('cards.study.answer')}</h3>
-                                    <p lang="en">{answer}</p>
-                                    {currentCard.audioUrl && !audioError && (
-                                        <button 
-                                            className={studyStyles.playAudioButton}
-                                            onClick={handlePlayAudio}
-                                            aria-label={t('cards.study.playAudio')}
-                                        >
-                                            <MaterialSymbolsVolumeUp />
-                                        </button>
-                                    )}
+                                    <div className={studyStyles.answerHeader}>
+                                        <h3>{t('cards.study.answer')}</h3>
+                                        {currentCard.audioUrl && !audioError && (
+                                            <button 
+                                                className={studyStyles.playAudioButton}
+                                                onClick={handlePlayAudio}
+                                                aria-label={t('cards.study.playAudio')}
+                                            >
+                                                <MaterialSymbolsVolumeUp />
+                                            </button>
+                                        )}
+                                    </div>
+                                    <p className={studyStyles.answerText} lang="en">{answer}</p>
                                 </div>
                             </div>
                         </div>
@@ -502,25 +525,25 @@ const StudyView = ({ params }) => {
                     {deckSettings && (
                         <div className={studyStyles.statsContainer}>
                             <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.newCards')}:</span>
+                                <span className={studyStyles.statLabel}>{t('cards.study.newCards')}</span>
                                 <span className={studyStyles.statValue}>
                                     {studySession?.stats?.new || 0}
                                 </span>
                             </div>
                             <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.learningCards')}:</span>
+                                <span className={studyStyles.statLabel}>{t('cards.study.learningCards')}</span>
                                 <span className={studyStyles.statValue}>
                                     {studySession?.stats?.learning || 0}
                                 </span>
                             </div>
                             <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.dueCards')}:</span>
+                                <span className={studyStyles.statLabel}>{t('cards.study.dueCards')}</span>
                                 <span className={studyStyles.statValue}>
                                     {studySession?.stats?.due || 0}
                                 </span>
                             </div>
                             <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.totalCards')}:</span>
+                                <span className={studyStyles.statLabel}>{t('cards.study.totalCards')}</span>
                                 <span className={studyStyles.statValue}>
                                     {studySession?.stats?.total || 0}
                                 </span>
@@ -537,7 +560,7 @@ const StudyView = ({ params }) => {
                                 <div className={studyStyles.ratingButtons}>
                                     <button 
                                         ref={againButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.againButton}`}
+                                        className={`${studyStyles.ratingButton} ${studyStyles.againButton} ${ratingInProgress === 'again' ? studyStyles.processing : ''}`}
                                         onClick={() => handleCardRating('again')}
                                         disabled={updatingCard}
                                         title={t('cards.study.againShortcut')}
@@ -547,7 +570,7 @@ const StudyView = ({ params }) => {
                                     </button>
                                     <button 
                                         ref={hardButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.hardButton}`}
+                                        className={`${studyStyles.ratingButton} ${studyStyles.hardButton} ${ratingInProgress === 'hard' ? studyStyles.processing : ''}`}
                                         onClick={() => handleCardRating('hard')}
                                         disabled={updatingCard}
                                         title={t('cards.study.hardShortcut')}
@@ -557,7 +580,7 @@ const StudyView = ({ params }) => {
                                     </button>
                                     <button 
                                         ref={goodButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.goodButton}`}
+                                        className={`${studyStyles.ratingButton} ${studyStyles.goodButton} ${ratingInProgress === 'good' ? studyStyles.processing : ''}`}
                                         onClick={() => handleCardRating('good')}
                                         disabled={updatingCard}
                                         title={t('cards.study.goodShortcut')}
@@ -567,7 +590,7 @@ const StudyView = ({ params }) => {
                                     </button>
                                     <button 
                                         ref={easyButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.easyButton}`}
+                                        className={`${studyStyles.ratingButton} ${studyStyles.easyButton} ${ratingInProgress === 'easy' ? studyStyles.processing : ''}`}
                                         onClick={() => handleCardRating('easy')}
                                         disabled={updatingCard}
                                         title={t('cards.study.easyShortcut')}
@@ -582,7 +605,7 @@ const StudyView = ({ params }) => {
                                 ref={showAnswerButtonRef}
                                 className={studyStyles.showAnswerButton}
                                 onClick={handleShowAnswer}
-                                disabled={updatingCard}
+                                disabled={updatingCard || cardFlipping}
                                 title={t('cards.study.showAnswerShortcut')}
                             >
                                 {t('cards.study.showAnswer')}

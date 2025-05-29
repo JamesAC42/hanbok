@@ -1,9 +1,14 @@
 @import '../variables.module.scss';
 
-// Define theme colors that avoid the white-on-white issue
-$primary-button: #3d64e8; // Blue for primary buttons
-$primary-button-hover: #2a4cc2;
-$dark-text: #171717; // Dark text for good contrast
+// Enhanced theme colors for better engagement
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$success-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+$warning-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+$error-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+$info-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+$card-gradient: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+$primary-button: #667eea;
+$primary-button-hover: #5a67d8;
 
 .studyContent {
     width: 100%;
@@ -11,31 +16,86 @@ $dark-text: #171717; // Dark text for good contrast
     margin: 0 auto;
     padding: var(--spacing-large);
     position: relative;
-    background:var(--background);
-    border-radius:var(--border-radius);
-    background-color: rgba(238, 255, 246, 0.865);
-    backdrop-filter: blur(10px);
-    z-index:2;
+    background: linear-gradient(135deg, rgba(238, 255, 246, 0.95) 0%, rgba(255, 248, 235, 0.9) 100%);
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    animation: slideInUp 0.4s ease-out;
 
-    @media (max-width:800px) {
-        margin-top:3rem;
-        background:var(--background);
-        border-radius:var(--border-radius);
+    @media (max-width: 800px) {
+        margin-top: 3rem;
+        background: var(--background);
+        border-radius: var(--border-radius);
     }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(2rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cardFlip {
+    0% { transform: rotateY(0deg); }
+    50% { transform: rotateY(-15deg) scale(1.02); }
+    100% { transform: rotateY(0deg); }
+}
+
+@keyframes successCelebration {
+    0% { transform: scale(1) rotate(0deg); }
+    25% { transform: scale(1.1) rotate(5deg); }
+    50% { transform: scale(1.05) rotate(-3deg); }
+    75% { transform: scale(1.08) rotate(2deg); }
+    100% { transform: scale(1) rotate(0deg); }
 }
 
 .header {
     margin-bottom: var(--spacing-large);
     text-align: center;
+    position: relative;
     
     h2 {
-        font-family:var(--font-display);
-        font-size: 1.9rem;
+        font-family: var(--font-display);
+        font-size: 2.2rem;
         font-weight: 800;
-        color: var(--foreground);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        animation: slideInUp 0.5s ease-out 0.1s both;
     }
-    @media (max-width:800px) {
-        display:none;
+    
+    &::after {
+        content: '';
+        display: block;
+        width: 4rem;
+        height: 0.2rem;
+        background: $primary-gradient;
+        margin: 1rem auto;
+        border-radius: 0.1rem;
+        animation: slideInUp 0.5s ease-out 0.2s both;
+    }
+    
+    @media (max-width: 800px) {
+        display: none;
     }
 }
 
@@ -43,71 +103,88 @@ $dark-text: #171717; // Dark text for good contrast
     position: absolute;
     top: 0.5rem;
     left: 0.5rem;
-    padding:0.5rem;
-    border-radius: 0.25rem;
-    transition: background 0.2s ease;
-    background: none;
+    padding: 0.8rem;
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.9);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--foreground);
-    font-size: var(--text-large);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
     
     &:hover {
-        background:#dddddd;
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-0.125rem) scale(1.05);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
 
     &.backButtonEmpty {
-        @media (max-width:800px) {
-            top:2rem;
+        @media (max-width: 800px) {
+            top: 2rem;
         }
     }
 }
 
-// Mute button styling
 .muteButton {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
-    transition: background 0.2s ease;
-    background: none;
+    padding: 0.8rem;
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.9);
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--foreground);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
     
     &:hover {
-        background: #dddddd;
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-0.125rem) scale(1.05);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
 }
 
 .studyContainer {
-    background-color: var(--background);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-large);
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+    background: $card-gradient;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
     margin-bottom: var(--spacing-large);
     position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.25rem;
+        background: $primary-gradient;
+        border-radius: 1.5rem 1.5rem 0 0;
+    }
 }
 
 .studyStats {
-    background-color: var(--background-alt);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-medium);
-    margin-bottom: var(--spacing-medium);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-top:1rem;
+    margin-bottom: 0rem;
     text-align: center;
-    
-    p {
-        margin: 0.5rem 0;
-        font-size: var(--text-small);
-        color: var(--foreground-muted);
-    }
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: slideInUp 0.4s ease-out 0.15s both;
 }
 
 .emptyState {
@@ -115,19 +192,23 @@ $dark-text: #171717; // Dark text for good contrast
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 3rem 0;
+    padding: 4rem 2rem;
     text-align: center;
-    background:var(--background);
-    border-radius:var(--border-radius);
+    background: $card-gradient;
+    border-radius: 1.5rem;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
+    animation: slideInUp 0.4s ease-out;
 
     p {
-        font-size: var(--text-normal);
-        color: var(--foreground-muted);
-        margin-bottom: var(--spacing-medium);
+        font-size: 1.25rem;
+        color: var(--foreground);
+        margin-bottom: 2rem;
+        font-weight: 500;
     }
-    @media (max-width:800px) {
+    
+    @media (max-width: 800px) {
         p {
-            margin-top:2rem;
+            margin-top: 2rem;
         }
     }
 }
@@ -151,31 +232,34 @@ $dark-text: #171717; // Dark text for good contrast
     color: var(--foreground-muted);
     text-align: center;
     padding: 2rem 0;
+    animation: pulse 1.5s infinite;
 }
 
 .error {
     color: var(--error-foreground);
-    background-color: var(--error-background);
+    background: $error-gradient;
     text-align: center;
     font-size: var(--text-normal);
-    padding: var(--spacing-medium);
-    border-radius: var(--border-radius);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0.5rem 1rem rgba(255, 154, 158, 0.2);
 }
 
-// Card styles
+// Enhanced card styles
 .cardOuter {
     width: 100%;
-    min-height: 16rem;
+    min-height: 20rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: var(--spacing-medium);
+    perspective: 1000px;
 }
 
 .cardContent {
     width: 100%;
     height: 100%;
-    min-height: 12rem;
+    min-height: 16rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -184,373 +268,799 @@ $dark-text: #171717; // Dark text for good contrast
 
 .cardFace {
     width: 100%;
-    max-width: 40rem;
-    background-color: var(--background-alt);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-large);
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
+    max-width: 45rem;
+    background: $card-gradient;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.12);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.1) 50%, transparent 51%);
+        pointer-events: none;
+    }
+    
+    &.flipping {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
     
     &.showAnswer {
+        animation: cardFlip 0.4s ease-out;
+        transform: scale(1.02);
+        box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+        
         .answerSide {
             opacity: 1;
             visibility: visible;
             height: auto;
-            margin-top: 1rem;
+            margin-top: 2rem;
+            animation: slideInUp 0.25s ease-out 0.2s both;
+        }
+    }
+    
+    &.celebration {
+        animation: successCelebration 0.5s ease-out;
+        
+        &::after {
+            content: '🎉';
+            position: absolute;
+            top: -2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: confetti 0.8s ease-out;
+            pointer-events: none;
         }
     }
     
     h3 {
-        font-size: var(--text-normal);
+        font-size: 1rem;
         color: var(--foreground-muted);
-        margin-bottom: var(--spacing-small);
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+        font-weight: 600;
     }
     
     p {
-        font-size: var(--text-large);
+        font-size: 2rem;
         color: var(--foreground);
         margin: 0;
         text-align: center;
+        line-height: 1.3;
+        font-weight: 500;
     }
 }
 
 .playAudioButton {
-    position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    background-color: rgba(0, 0, 0, 0.08);
-    color: var(--foreground);
-    border: none;
+    background: rgba(102, 126, 234, 0.1);
+    color: $primary-button;
+    border: 2px solid rgba(102, 126, 234, 0.2);
     border-radius: 50%;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1.25rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 1rem;
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+    margin-left: 0.75rem;
+    transform:translate(-0.5rem, -0.25rem);
     
     &:hover {
-        background-color: rgba(0, 0, 0, 0.15);
+        background: $primary-button;
+        color: white;
+        transform: translate(-0.5rem, -0.25rem) scale(1.1);
+        box-shadow: 0 0.5rem 1rem rgba(102, 126, 234, 0.3);
+    }
+    
+    &:active {
+        animation: pulse 0.2s ease-out;
     }
 }
 
 .questionSide, .answerSide {
-    transition: opacity 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .questionSide {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+    position: relative;
+    
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 3rem;
+        height: 2px;
+        background: $primary-gradient;
+        border-radius: 1px;
+    }
 }
 
 .answerSide {
     h3 {
         color: $primary-button;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+        
+        &::after {
+            content: '✨';
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
     }
     
     position: relative;
-    margin-top: 1rem;
+    margin-top: 2rem;
     opacity: 0;
     visibility: hidden;
     height: 0;
     overflow: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease, margin 0.3s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Stats styles
-.statsContainer {
+.answerHeader {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.answerText {
+    margin-top: 0;
+}
+
+// Enhanced stats styles
+.statsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+    gap: 1rem;
+    max-width: 25rem;
+    margin: 0 auto;
 }
 
 .statItem {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--background);
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    min-width: 4.5rem;
-    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 1rem;
+    position: relative;
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    
+    &:hover {
+        transform: translateY(-0.25rem);
+        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
+    }
     
     .statLabel {
-        font-size: var(--text-small);
+        font-size: 0.75rem;
         color: var(--foreground-muted);
-        margin-bottom: 0.25rem;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+        font-weight: 600;
     }
     
     .statValue {
-        font-size: var(--text-normal);
+        font-size: 1.5rem;
         color: var(--foreground);
-        font-weight: 600;
+        font-weight: 700;
+        line-height: 1;
     }
 }
 
-// Different colored backgrounds for each stat type
+// Colored stat indicators
 .statItem:nth-child(1) {
-    border-bottom: 0.2rem solid #4caf50; // Green for new cards
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.25rem;
+        background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
+        border-radius: 1rem 1rem 0 0;
+    }
 }
 
 .statItem:nth-child(2) {
-    border-bottom: 0.2rem solid #2196f3; // Blue for learning cards
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.25rem;
+        background: linear-gradient(135deg, #2196f3 0%, #03a9f4 100%);
+        border-radius: 1rem 1rem 0 0;
+    }
 }
 
 .statItem:nth-child(3) {
-    border-bottom: 0.2rem solid #ff9800; // Orange for due cards
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.25rem;
+        background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
+        border-radius: 1rem 1rem 0 0;
+    }
 }
 
 .statItem:nth-child(4) {
-    border-bottom: 0.2rem solid #9c27b0; // Purple for total
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.25rem;
+        background: linear-gradient(135deg, #9c27b0 0%, #e91e63 100%);
+        border-radius: 1rem 1rem 0 0;
+    }
 }
 
-// Card rating controls
+// Enhanced rating controls
 .ratingControls {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: var(--spacing-medium);
+    margin-top: 2rem;
+    animation: slideInUp 0.4s ease-out 0.2s both;
     
     h4 {
-        font-size: var(--text-normal);
+        font-size: 1.1rem;
         color: var(--foreground);
-        margin-bottom: var(--spacing-small);
-        font-weight: 500;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        text-align: center;
     }
 }
 
 .ratingButtons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--spacing-small);
-    margin-top: var(--spacing-small);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 32rem;
 }
 
 .ratingButton {
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--border-radius);
-    font-size: var(--text-small);
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
     border: none;
-    font-family:var(--font-display);
+    font-family: var(--font-display);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 6rem;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 2px solid transparent;
     
-    &:hover {
-        transform: translateY(-0.125rem);
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: left 0.3s ease-out;
     }
     
-    &:active {
-        transform: translateY(0);
+    &.processing {
+        transform: scale(0.95);
+        opacity: 0.8;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+    }
+    
+    &:hover:not(.processing) {
+        transform: translateY(-0.25rem) scale(1.03);
+        box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.15);
+        
+        &::before {
+            left: 100%;
+        }
+    }
+    
+    &:active:not(.processing) {
+        transform: translateY(-0.125rem) scale(1.01);
+        animation: successCelebration 0.4s ease-out;
     }
     
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
+.ratingLabel {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+}
+
 .ratingShortcut {
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-    opacity: 0.7;
+    font-size: 0.7rem;
+    opacity: 0.8;
     font-weight: 400;
 }
 
-.ratingInterval {
-    font-size: 0.7rem;
-    opacity: 0.9;
-}
-
 .againButton {
-    background-color: var(--error-background);
-    color: var(--error-foreground);
+    background: $error-gradient;
+    color: rgba(214, 48, 49, 0.8);
+    color: rgba(141, 50, 50, 0.913);
+    border-color: rgba(214, 48, 49, 0.2);
     
     &:hover {
-        background-color: var(--error-foreground);
+        background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
         color: white;
+        border-color: #ff7675;
     }
 }
 
 .hardButton {
-    background-color: var(--warning-background);
-    color: var(--warning-foreground);
+    background: $warning-gradient;
+    color: rgba(225, 112, 85, 0.8);
+    color: rgba(184, 73, 45, 0.968);
+    border-color: rgba(225, 112, 85, 0.2);
     
     &:hover {
-        background-color: var(--warning-foreground);
+        background: linear-gradient(135deg, #fdcb6e 0%, #fd79a8 100%);
         color: white;
+        border-color: #fdcb6e;
     }
 }
 
 .goodButton {
-    background-color: var(--success-background);
-    color: var(--success-foreground);
+    background: $success-gradient;
+    color: rgba(19, 67, 58, 0.8);
+    border-color: rgba(38, 158, 134, 0.2);
     
     &:hover {
-        background-color: var(--success-foreground);
+        background: linear-gradient(135deg, #00cec9 0%, #55a3ff 100%);
         color: white;
+        border-color: #00cec9;
     }
 }
 
 .easyButton {
-    background-color: var(--info-background);
-    color: var(--info-foreground);
+    background: $info-gradient;
+    color: rgba(108, 92, 231, 0.8);
+    color: rgba(65, 50, 176, 0.904);
+    border-color: rgba(108, 92, 231, 0.2);
     
     &:hover {
-        background-color: var(--info-foreground);
+        background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
         color: white;
+        border-color: #a29bfe;
     }
 }
 
 .showAnswerButton {
-    background-color: $primary-button;
+    background: $primary-gradient;
     color: white;
     border: none;
-    border-radius: var(--border-radius);
-    padding: 0.75rem 2rem;
-    font-size: var(--text-normal);
-    font-family:var(--font-display);
+    border-radius: 1rem;
+    padding: 1.25rem 3rem;
+    font-size: 1.1rem;
+    font-family: var(--font-display);
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1.5rem rgba(102, 126, 234, 0.3);
+    animation: slideInUp 0.4s ease-out 0.25s both;
     
-    &:hover {
-        background-color: $primary-button-hover;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.3s ease-out;
+    }
+    
+    &:hover:not(:disabled) {
+        transform: translateY(-0.25rem) scale(1.05);
+        box-shadow: 0 1rem 2rem rgba(102, 126, 234, 0.4);
+        
+        &::before {
+            left: 100%;
+        }
+    }
+    
+    &:active:not(:disabled) {
+        animation: pulse 0.2s ease-out;
     }
     
     &:disabled {
-        opacity: 0.6;
+        opacity: 0.7;
         cursor: not-allowed;
+        transform: none;
+        
+        &::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 1.5rem;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
     }
 }
 
 .keyboardHint {
     display: block;
-    font-size: 0.75rem;
-    margin-top: 0.25rem;
-    opacity: 0.8;
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    opacity: 0.9;
     font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .studyControls {
     display: flex;
     justify-content: center;
-    margin-top: var(--spacing-medium);
+    margin-top: 0rem;
 }
 
 .girl {
     @include bottom-girl;
-    margin-left:auto;
-    z-index:1;
+    margin-left: auto;
+    z-index: 1;
 }
 
-// Responsive styles
+// Enhanced responsive styles
 @media (max-width: 768px) {
     .studyContent {
-        padding: var(--spacing-medium);
+        padding: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .backButton, .muteButton {
+        padding: 0.75rem;
+        top: 1rem;
     }
     
     .backButton {
-        top: var(--spacing-medium);
-        left: var(--spacing-medium);
+        left: 1rem;
     }
     
     .muteButton {
-        top: var(--spacing-medium);
-        right: var(--spacing-medium);
+        right: 1rem;
     }
     
-    .header h1 {
-        font-size: var(--text-large);
+    .header h2 {
+        font-size: 1.8rem;
     }
     
     .studyContainer {
-        padding: var(--spacing-medium);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
     }
     
     .studyStats {
-        padding: var(--spacing-small);
-        
-        p {
-            font-size: var(--text-xsmall);
-        }
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem;
     }
     
     .statsContainer {
-        gap: 0.35rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        max-width: none;
     }
     
     .statItem {
-        padding: 0.35rem 0.75rem;
-        min-width: 3.5rem;
+        padding: 0.5rem 0.25rem;
+        border-radius: 0.5rem;
+        flex: 1;
+        min-width: 0;
         
         .statLabel {
-            font-size: var(--text-xsmall);
+            font-size: 0.6rem;
+            margin-bottom: 0.25rem;
+            line-height: 1.2;
         }
         
         .statValue {
-            font-size: var(--text-small);
+            font-size: 1.1rem;
+            line-height: 1;
         }
+    }
+    
+    .cardOuter {
+        min-height: 14rem;
+        margin-bottom: 1rem;
     }
     
     .cardContent {
-        min-height: 10rem;
-        padding: var(--spacing-small);
+        min-height: 12rem;
+        padding: 1rem;
     }
     
     .cardFace {
-        padding: var(--spacing-medium);
+        padding: 1.5rem;
+        border-radius: 1rem;
         
         h3 {
-            font-size: var(--text-small);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
         }
         
         p {
-            font-size: var(--text-normal);
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+    }
+    
+    .questionSide {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+    
+    .answerSide {
+        margin-top: 1.25rem;
+        
+        h3 {
+            margin-bottom: 1rem;
+        }
+    }
+    
+    .playAudioButton {
+        width: 1.75rem;
+        height: 1.75rem;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+    }
+    
+    .ratingControls {
+        margin-top: 1rem;
+        
+        h4 {
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+    }
+    
+    .ratingButtons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        max-width: 18rem;
+        margin: 0 auto;
+    }
+    
+    .ratingButton {
+        padding: 0.75rem 0.75rem;
+        font-size: 0.8rem;
+        border-radius: 0.75rem;
+        
+        .ratingLabel {
+            font-size: 0.8rem;
+        }
+    }
+    
+    .ratingShortcut {
+        font-size: 0.65rem;
+    }
+    
+    .showAnswerButton {
+        padding: 1rem 2rem;
+        font-size: 0.95rem;
+        border-radius: 0.75rem;
+    }
+    
+    .keyboardHint {
+        display: none;
+    }
+    
+    .studyControls {
+        margin-top: 0rem;
+    }
+    
+    // Improve empty state for mobile
+    .emptyState {
+        padding: 3rem 1.5rem;
+        
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            margin-top: 1rem;
+        }
+    }
+}
+
+// Extra small screens
+@media (max-width: 480px) {
+    .studyContent {
+        padding: 0.75rem;
+    }
+    
+    .studyContainer {
+        padding: 1.25rem;
+    }
+    
+    .studyStats {
+        padding: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .statsContainer {
+        gap: 0.25rem;
+    }
+    
+    .statItem {
+        padding: 0.375rem 0.125rem;
+        
+        .statValue {
+            font-size: 1rem;
+        }
+        
+        .statLabel {
+            font-size: 0.55rem;
+        }
+    }
+    
+    .cardOuter {
+        min-height: 12rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .cardFace {
+        padding: 1.25rem;
+        
+        h3 {
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        p {
+            font-size: 1.3rem;
+        }
+    }
+    
+    .questionSide {
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+    
+    .answerSide {
+        margin-top: 1rem;
+        
+        h3 {
+            margin-bottom: 0.75rem;
+        }
+    }
+    
+    .playAudioButton {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 0.8rem;
+        margin-left: 0.25rem;
+    }
+    
+    .ratingControls {
+        margin-top: 0.75rem;
+        
+        h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
         }
     }
     
     .ratingButtons {
         gap: 0.5rem;
+        max-width: 16rem;
     }
     
     .ratingButton {
-        padding: 0.5rem 1rem;
-        font-size: var(--text-xsmall);
-        min-width: 5rem;
-    }
-    
-    .ratingShortcut {
-        font-size: 0.65rem;
-        margin-top: 0.2rem;
+        padding: 0.625rem 0.5rem;
+        font-size: 0.75rem;
     }
     
     .showAnswerButton {
-        padding: 0.5rem 1.5rem;
-        font-size: var(--text-small);
+        padding: 0.875rem 1.75rem;
+        font-size: 0.9rem;
     }
     
-    .keyboardHint {
-        font-size: 0.65rem;
-        margin-top: 0.2rem;
+    .studyControls {
+        margin-top: 0.75rem;
     }
-    
-    .playAudioButton {
-        width: 2rem;
-        height: 2rem;
-        bottom: 0.5rem;
-        right: 0.5rem;
+}
+
+// Additional keyframes for the new animations
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+// Add celebration confetti effect
+@keyframes confetti {
+    0% { 
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% { 
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.celebration {
+    &::after {
+        content: '🎉';
+        position: absolute;
+        top: -2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2rem;
+        animation: confetti 0.8s ease-out;
+        pointer-events: none;
     }
 }
