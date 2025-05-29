@@ -79,6 +79,7 @@ const updateCardProgress = require('./controllers/auth/updateCardProgress');
 const getStudyStats = require('./controllers/auth/getStudyStats');
 const exportDeck = require('./controllers/auth/exportDeck');
 const editDeckCard = require('./controllers/auth/editDeckCard');
+const addDeckCard = require('./controllers/auth/addDeckCard');
 
 const getRateLimits = require('./controllers/auth/getRateLimits');
 
@@ -242,6 +243,11 @@ app.get('/api/decks/:deckId/export', isAuthenticated, async (req, res) => {
 // New route for editing/deleting deck cards
 app.put('/api/decks/:deckId/cards/:cardId', isAuthenticated, async (req, res) => {
     editDeckCard(req, res);
+});
+
+// New route for adding cards to a deck
+app.post('/api/decks/:deckId/cards', isAuthenticated, async (req, res) => {
+    addDeckCard(req, res);
 });
 
 // New route for study statistics

@@ -536,17 +536,22 @@ export const en = {
         },
         actions: 'Actions',
         editCard: 'Edit card',
+        addCard: 'Add card',
+        addFirstCard: 'Add your first card',
         exportDeck: 'Export deck',
         exportDeckForAnki: 'Export deck for Anki',
         exportError: 'Failed to export deck',
         editModal: {
             title: 'Edit Card',
+            createTitle: 'Create New Card',
             frontPlaceholder: 'Enter the front side of the card...',
             backPlaceholder: 'Enter the back side of the card...',
             fieldsRequired: 'Both front and back fields are required',
             saveError: 'Failed to save card',
+            createError: 'Failed to create card',
             deleteError: 'Failed to delete card',
-            confirmDelete: 'Are you sure you want to delete this card? This action cannot be undone.'
+            confirmDelete: 'Are you sure you want to delete this card? This action cannot be undone.',
+            create: 'Create Card'
         }
     },
     common: {

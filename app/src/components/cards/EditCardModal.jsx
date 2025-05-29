@@ -4,23 +4,29 @@ import styles from '@/styles/components/editCardModal.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 
-const EditCardModal = ({ card, isOpen, onClose, onSave, onDelete, deckId }) => {
+const EditCardModal = ({ card, isOpen, onClose, onSave, onDelete, deckId, mode = 'edit' }) => {
     const { t } = useLanguage();
     const [front, setFront] = useState('');
     const [back, setBack] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
 
-    // Update form values when card changes
+    const isCreateMode = mode === 'create';
+
+    // Update form values when card changes or when switching to create mode
     useEffect(() => {
-        if (card) {
+        if (isCreateMode) {
+            setFront('');
+            setBack('');
+            setError(null);
+        } else if (card) {
             setFront(card.customFront || card.content?.originalWord || '');
             setBack(card.customBack || card.content?.translatedWord || '');
             setError(null);
         }
-    }, [card]);
+    }, [card, isCreateMode]);
 
-    if (!isOpen || !card) return null;
+    if (!isOpen) return null;
 
     const handleSave = async () => {
         if (!front.trim() || !back.trim()) {
@@ -32,32 +38,56 @@ const EditCardModal = ({ card, isOpen, onClose, onSave, onDelete, deckId }) => {
         setError(null);
 
         try {
-            const response = await fetch(`/api/decks/${deckId}/cards/${card.flashcardId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'update',
-                    customFront: front.trim(),
-                    customBack: back.trim(),
-                }),
-            });
+            let response, data;
 
-            const data = await response.json();
-
-            if (data.success) {
-                onSave({
-                    customFront: front.trim(),
-                    customBack: back.trim()
+            if (isCreateMode) {
+                // Create new card
+                response = await fetch(`/api/decks/${deckId}/cards`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        front: front.trim(),
+                        back: back.trim(),
+                    }),
                 });
-                onClose();
+                data = await response.json();
+
+                if (data.success) {
+                    onSave(data.card);
+                    onClose();
+                } else {
+                    setError(data.error || t('cards.editModal.createError'));
+                }
             } else {
-                setError(data.error || t('cards.editModal.saveError'));
+                // Update existing card
+                response = await fetch(`/api/decks/${deckId}/cards/${card.flashcardId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'update',
+                        customFront: front.trim(),
+                        customBack: back.trim(),
+                    }),
+                });
+                data = await response.json();
+
+                if (data.success) {
+                    onSave({
+                        customFront: front.trim(),
+                        customBack: back.trim()
+                    });
+                    onClose();
+                } else {
+                    setError(data.error || t('cards.editModal.saveError'));
+                }
             }
         } catch (err) {
             console.error('Error saving card:', err);
-            setError(t('cards.editModal.saveError'));
+            setError(isCreateMode ? t('cards.editModal.createError') : t('cards.editModal.saveError'));
         } finally {
             setIsSubmitting(false);
         }
@@ -107,7 +137,7 @@ const EditCardModal = ({ card, isOpen, onClose, onSave, onDelete, deckId }) => {
         <div className={styles.modalOverlay} onClick={handleCancel}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
                 <div className={styles.modalHeader}>
-                    <h3>{t('cards.editModal.title')}</h3>
+                    <h3>{isCreateMode ? t('cards.editModal.createTitle') : t('cards.editModal.title')}</h3>
                     <button 
                         className={styles.closeButton}
                         onClick={handleCancel}
@@ -150,13 +180,15 @@ const EditCardModal = ({ card, isOpen, onClose, onSave, onDelete, deckId }) => {
                 </div>
 
                 <div className={styles.modalFooter}>
-                    <button
-                        className={styles.deleteButton}
-                        onClick={handleDelete}
-                        disabled={isSubmitting}
-                    >
-                        {t('common.delete')}
-                    </button>
+                    {!isCreateMode && (
+                        <button
+                            className={styles.deleteButton}
+                            onClick={handleDelete}
+                            disabled={isSubmitting}
+                        >
+                            {t('common.delete')}
+                        </button>
+                    )}
                     
                     <div className={styles.actionButtons}>
                         <button
@@ -172,7 +204,7 @@ const EditCardModal = ({ card, isOpen, onClose, onSave, onDelete, deckId }) => {
                             onClick={handleSave}
                             disabled={isSubmitting || !front.trim() || !back.trim()}
                         >
-                            {isSubmitting ? t('common.saving') : t('common.save')}
+                            {isSubmitting ? t('common.saving') : (isCreateMode ? t('cards.editModal.create') : t('common.save'))}
                         </button>
                     </div>
                 </div>
