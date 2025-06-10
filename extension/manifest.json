@@ -1,0 +1,56 @@
+{
+  "manifest_version": 3,
+  "name": "Kankoku Language Assistant",
+  "version": "1.0.0",
+  "description": "A language learning extension that highlights your vocabulary words, analyzes sentences, and provides native audio for language learning.",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "contextMenus",
+    "identity"
+  ],
+  
+  "host_permissions": [
+    "http://localhost:5666/*",
+    "https://hanbokstudy.com/*"
+  ],
+  
+  "background": {
+    "service_worker": "background.js"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Kankoku Language Assistant",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": ["popup.html", "analysis-popup.html", "analysis-popup.js", "analysis-popup.css"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+} 
