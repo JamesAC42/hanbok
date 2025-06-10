@@ -1,0 +1,388 @@
+/* Kankoku Language Assistant - Content Script Styles */
+
+/* Popup animation keyframes */
+@keyframes kankoku-popup-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes kankoku-popup-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.95);
+  }
+}
+
+/* Base styles for all popups - defines initial (hidden) state */
+.kankoku-popup {
+  position: absolute;
+  background: white;
+  border: 0.0625rem solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.1);
+  z-index: 10001;
+  max-width: 18.75rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  
+  opacity: 0;
+  transform: translateY(-0.75rem) scale(0.95); /* Start slightly above and smaller */
+  pointer-events: none;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out; /* Default transition for exit */
+}
+
+/* Active state for popups - makes it visible and interactive */
+.kankoku-popup.kankoku-popup-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Vocabulary highlighting styles */
+.kankoku-highlight {
+  background-color: #fef3c7 !important;
+  border-bottom: 0.125rem solid #f59e0b !important;
+  border-radius: 0.125rem !important;
+  padding: 0.0625rem 0.125rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+}
+
+.kankoku-highlight:hover {
+  background-color: #fde68a !important;
+  transform: scale(1.05) !important;
+}
+
+/* Notification styles */
+.kankoku-notification {
+  padding: 0.75rem 1rem !important;
+  border-radius: 0.375rem !important;
+  margin-bottom: 0.5rem !important;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.1) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  color: white !important;
+  font-weight: 500 !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.kankoku-notification-info {
+  background-color: #3b82f6 !important;
+}
+
+.kankoku-notification-success {
+  background-color: #10b981 !important;
+}
+
+.kankoku-notification-error {
+  background-color: #ef4444 !important;
+}
+
+/* Popup base styles */
+.kankoku-popup-base {
+  position: fixed !important;
+  background: white !important;
+  border: 0.0625rem solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.1) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  z-index: 10001 !important;
+}
+
+/* Button styles */
+.kankoku-button {
+  border: none !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.25rem !important;
+  font-size: 0.75rem !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit !important;
+  text-align: center !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.25rem !important;
+}
+
+.kankoku-button:hover {
+  transform: translateY(-0.0625rem) !important;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.kankoku-button:active {
+  transform: translateY(0) !important;
+}
+
+.kankoku-button-primary {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.kankoku-button-primary:hover {
+  background-color: #2563eb !important;
+}
+
+.kankoku-button-success {
+  background-color: #10b981 !important;
+  color: white !important;
+}
+
+.kankoku-button-success:hover {
+  background-color: #059669 !important;
+}
+
+.kankoku-button-secondary {
+  background-color: #6b7280 !important;
+  color: white !important;
+}
+
+.kankoku-button-secondary:hover {
+  background-color: #4b5563 !important;
+}
+
+.kankoku-button-purple {
+  background-color: #8b5cf6 !important;
+  color: white !important;
+}
+
+.kankoku-button-purple:hover {
+  background-color: #7c3aed !important;
+}
+
+/* Analysis popup styles */
+#kankoku-analysis-popup {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: white !important;
+  border: 0.0625rem solid #e5e7eb !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  box-shadow: 0 1.25rem 1.5625rem -0.3125rem rgba(0, 0, 0, 0.1) !important;
+  z-index: 10002 !important;
+  max-width: 37.5rem !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5rem !important;
+  animation: kankoku-popup-in 0.2s ease-out !important;
+}
+
+#kankoku-analysis-popup::backdrop {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+}
+
+@keyframes kankoku-popup-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Word breakdown grid */
+.kankoku-word-grid {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+}
+
+.kankoku-word-card {
+  border: 0.0625rem solid #e5e7eb !important;
+  border-radius: 0.375rem !important;
+  padding: 0.5rem !important;
+  background: white !important;
+  font-size: 0.75rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+}
+
+.kankoku-word-card:hover {
+  background-color: #f3f4f6 !important;
+  border-color: #d1d5db !important;
+  transform: translateY(-0.0625rem) !important;
+}
+
+.kankoku-word-original {
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.kankoku-word-meaning {
+  color: #6b7280 !important;
+  margin-bottom: 0.125rem !important;
+}
+
+.kankoku-word-pos {
+  color: #9ca3af !important;
+  font-size: 0.625rem !important;
+  font-style: italic !important;
+}
+
+/* Grammar notes */
+.kankoku-grammar-notes {
+  color: #4b5563 !important;
+  padding: 0.75rem !important;
+  background: #fef3c7 !important;
+  border-radius: 0.375rem !important;
+  border-left: 0.25rem solid #f59e0b !important;
+  margin: 1rem 0 !important;
+}
+
+/* Text sections */
+.kankoku-text-section {
+  margin-bottom: 1rem !important;
+}
+
+.kankoku-text-label {
+  font-weight: 600 !important;
+  margin-bottom: 0.5rem !important;
+  color: #1f2937 !important;
+  font-size: 0.875rem !important;
+}
+
+.kankoku-text-content {
+  font-size: 1rem !important;
+  padding: 0.75rem !important;
+  background: #f9fafb !important;
+  border-radius: 0.375rem !important;
+  line-height: 1.5 !important;
+  color: #374151 !important;
+}
+
+/* Selection and word popups */
+#kankoku-selection-popup,
+#kankoku-word-popup {
+  position: absolute !important;
+  background: white !important;
+  border: 0.0625rem solid #e5e7eb !important;
+  border-radius: 0.5rem !important;
+  padding: 1rem !important;
+  box-shadow: 0 0.625rem 0.9375rem -0.1875rem rgba(0, 0, 0, 0.1) !important;
+  z-index: 10001 !important;
+  max-width: 18.75rem !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  animation: none !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 48rem) {
+  #kankoku-analysis-popup {
+    max-width: 90vw !important;
+    margin: 1rem !important;
+    padding: 1rem !important;
+  }
+  
+  .kankoku-word-grid {
+    gap: 0.25rem !important;
+  }
+  
+  .kankoku-word-card {
+    min-width: calc(50% - 0.125rem) !important;
+  }
+  
+  #kankoku-selection-popup,
+  #kankoku-word-popup {
+    max-width: 16rem !important;
+    padding: 0.75rem !important;
+  }
+}
+
+/* Hide scrollbar for popup */
+#kankoku-analysis-popup::-webkit-scrollbar {
+  width: 0.375rem !important;
+}
+
+#kankoku-analysis-popup::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+  border-radius: 0.1875rem !important;
+}
+
+#kankoku-analysis-popup::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 0.1875rem !important;
+}
+
+#kankoku-analysis-popup::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
+/* Focus styles for accessibility */
+.kankoku-button:focus {
+  outline: 0.125rem solid #3b82f6 !important;
+  outline-offset: 0.125rem !important;
+}
+
+.kankoku-word-card:focus {
+  outline: 0.125rem solid #3b82f6 !important;
+  outline-offset: 0.0625rem !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .kankoku-highlight {
+    background-color: #ffeb3b !important;
+    border-bottom-color: #ff9800 !important;
+    border-width: 0.1875rem !important;
+  }
+  
+  .kankoku-notification {
+    border: 0.125rem solid currentColor !important;
+  }
+  
+  #kankoku-analysis-popup,
+  #kankoku-selection-popup,
+  #kankoku-word-popup {
+    border-width: 0.125rem !important;
+    border-color: #000000 !important;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .kankoku-highlight,
+  .kankoku-button,
+  .kankoku-word-card {
+    transition: none !important;
+  }
+  
+  #kankoku-analysis-popup,
+  #kankoku-selection-popup,
+  #kankoku-word-popup {
+    animation: none !important;
+  }
+  
+  .kankoku-notification {
+    transition: opacity 0.1s ease !important;
+  }
+} 
