@@ -1,0 +1,62 @@
+:root, div.theme-default {
+    --background: #ffffff;
+    --background-alt: #f5f5f5;
+    --foreground: #171717;
+    --foreground-muted: #6a6a6a;
+    --primary: #3d64e8;
+    --primary-dark: #2a4cc2;
+    --secondary: #000000;
+    --shadow: #000000;
+  
+    --error-background: rgba(252, 207, 207, 0.877);
+    --error-foreground: #b81f1f;
+    --warning-background: #ffefd5;
+    --warning-foreground: #d67e17;
+    --success-background: #d4ffda;
+    --success-foreground: #0d903c;
+    --info-background: #d4e6ff;
+    --info-foreground: #2c64e9;
+  
+    --text-xsmall: 0.7rem;
+    --text-small: 0.8rem;
+    --text-normal: 1rem;
+    --text-large: 1.5rem;
+    --text-xlarge: 2rem;
+  
+    --spacing-xsmall: 0.25rem;
+    --spacing-small: 0.5rem;
+    --spacing-medium: 1rem;
+    --spacing-large: 2rem;
+    --spacing-xlarge: 3rem;
+  
+    --border-radius: 0.3rem;
+  
+    --font-body: 'Merriweather', serif;
+    --font-display: 'Montserrat', sans-serif;
+    --font-kr-sans: 'Noto Sans KR', sans-serif;
+    --font-serif: 'Noto Serif', serif;
+    --font-kr-serif: 'Noto Serif KR', serif;
+    --font-sc-serif: 'Noto Serif SC', serif;
+    --font-jp-serif: 'Noto Serif JP', serif;
+    --font-lilita: 'Lilita One', sans-serif;
+}
+
+div.theme-blackwhite {
+    --background: #ffffff;
+    --background-alt: #f5f5f5;
+    --foreground: #171717;
+    --foreground-muted: #6a6a6a;
+    --primary: #3d64e8;
+    --primary-dark: #2a4cc2;
+    --secondary: #000000;
+    --shadow: #000000;
+  
+    --error-background: rgba(252, 207, 207, 0.877);
+    --error-foreground: #b81f1f;
+    --warning-background: #ffefd5;
+    --warning-foreground: #d67e17;
+    --success-background: #d4ffda;
+    --success-foreground: #0d903c;
+    --info-background: #d4e6ff;
+    --info-foreground: #2c64e9;
+}
