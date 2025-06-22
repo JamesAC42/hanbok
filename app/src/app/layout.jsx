@@ -18,7 +18,7 @@ export const metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico' },
-      { url: '/icon.png', type: 'image/png' },
+      { url: '/hanbokicon.png', type: 'image/png' },
     ],
     apple: [
       { url: '/apple-touch-icon.png' }
@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="512x512" href="/icon.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/hanbokicon-512x512.png" />
       </head>
       <body>
         <AuthProvider>

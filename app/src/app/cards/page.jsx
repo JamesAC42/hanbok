@@ -7,6 +7,7 @@ import cardsStyles from '@/styles/components/cards.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import FlashcardsFeature from '@/components/FlashcardsFeature';
+import Dashboard from '@/components/Dashboard';
 
 const Cards = () => {
     const router = useRouter();
@@ -139,27 +140,29 @@ const Cards = () => {
     if (loading || !isAuthenticated) return null;
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
-                <div className={cardsStyles.cardsContent}>
-                    <div className={cardsStyles.header}>
-                        <h1 className={styles.pageTitle}>{t('cards.title')}</h1>
-                        <p className={cardsStyles.subtitle}>{t('cards.subtitle')}</p>
+        <Dashboard>
+            <div className={styles.pageContainer}>
+                <div className={styles.pageContent}>
+                    <div className={cardsStyles.cardsContent}>
+                        <div className={cardsStyles.header}>
+                            <h1 className={styles.pageTitle}>{t('cards.title')}</h1>
+                            <p className={cardsStyles.subtitle}>{t('cards.subtitle')}</p>
+                        </div>
+                        
+                        {renderContent()}
                     </div>
-                    
-                    {renderContent()}
+                    <div className={cardsStyles.girl}>
+                        <Image
+                            src="/images/hanbokgirl.png"
+                            alt="girl"
+                            width={1024}
+                            height={1536}
+                            priority
+                        />
+                    </div>
                 </div>
-                <div className={cardsStyles.girl}>
-                    <Image
-                        src="/images/hanbokgirl.png"
-                        alt="girl"
-                        width={1024}
-                        height={1536}
-                        priority
-                    />
-                </div>
-            </div>
-        </div>
+            </div>  
+        </Dashboard>
     );
 };
 

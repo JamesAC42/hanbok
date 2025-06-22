@@ -15,6 +15,7 @@ import { MaterialSymbolsAdd } from '@/components/icons/Plus';
 import DeckSettings from '@/components/cards/DeckSettings';
 import EditCardModal from '@/components/cards/EditCardModal';
 import StudyStatsDisplay from '@/components/StudyStatsDisplay';
+import Dashboard from '@/components/Dashboard';
 import { use } from 'react';
 
 const DeckView = ({ params }) => {
@@ -584,45 +585,47 @@ const DeckView = ({ params }) => {
     if (loading || !isAuthenticated) return null;
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
-                <div className={deckStyles.deckContent}>
-                    <button 
-                        className={deckStyles.backButton}
-                        onClick={handleBackClick}
-                        aria-label={t('common.back')}
-                    >
-                        <MaterialSymbolsArrowBackRounded />
-                    </button>
-                    
-                    <div className={deckStyles.header}>
-                        <h1>{t('cards.deckTitle')}</h1>
+        <Dashboard>
+            <div className={styles.pageContainer}>
+                <div className={styles.pageContent}>
+                    <div className={deckStyles.deckContent}>
+                        <button 
+                            className={deckStyles.backButton}
+                            onClick={handleBackClick}
+                            aria-label={t('common.back')}
+                        >
+                            <MaterialSymbolsArrowBackRounded />
+                        </button>
+                        
+                        <div className={deckStyles.header}>
+                            <h1>{t('cards.deckTitle')}</h1>
+                        </div>
+                        
+                        {renderContent()}
                     </div>
-                    
-                    {renderContent()}
                 </div>
-            </div>
-            
-            {/* Edit Card Modal */}
-            <EditCardModal
-                card={editingCard}
-                isOpen={showEditModal}
-                onClose={handleCloseEditModal}
-                onSave={handleCardSaved}
-                onDelete={handleCardDeleted}
-                deckId={deckId}
-                mode={modalMode}
-            />
-            
-            {/* Deck Settings Modal */}
-            {showSettings && (
-                <DeckSettings 
-                    deckId={deckId} 
-                    onClose={toggleSettings}
-                    onSettingsUpdated={refreshDeckData}
+                
+                {/* Edit Card Modal */}
+                <EditCardModal
+                    card={editingCard}
+                    isOpen={showEditModal}
+                    onClose={handleCloseEditModal}
+                    onSave={handleCardSaved}
+                    onDelete={handleCardDeleted}
+                    deckId={deckId}
+                    mode={modalMode}
                 />
-            )}
-        </div>
+                
+                {/* Deck Settings Modal */}
+                {showSettings && (
+                    <DeckSettings 
+                        deckId={deckId} 
+                        onClose={toggleSettings}
+                        onSettingsUpdated={refreshDeckData}
+                    />
+                )}
+            </div>
+        </Dashboard>
     );
 };
 

@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 import { MingcuteCommentFill } from '@/components/icons/CommentFill';
+import Dashboard from '@/components/Dashboard';
 
 // Move FeedbackItem outside the main component
 const FeedbackItem = ({ 
@@ -207,8 +208,9 @@ const Feedback = () => {
     };
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
+        <Dashboard>
+            <div className={styles.pageContainer}>
+                <div className={styles.pageContent}>
                 <div className={feedbackStyles.feedbackContent}>
                     <h1 className={styles.pageTitle}>{t('feedback.title')}</h1>
 
@@ -290,7 +292,8 @@ const Feedback = () => {
                     />
                 </div>
             </div>
-        </div>
+            </div>
+        </Dashboard>
     );
 };
 

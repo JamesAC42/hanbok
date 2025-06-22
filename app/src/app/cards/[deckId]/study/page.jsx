@@ -11,6 +11,7 @@ import { MaterialSymbolsVolumeUp } from '@/components/icons/VolumeOn';
 import { MaterialSymbolsVolumeOff } from '@/components/icons/VolumeOff';
 import { use } from 'react';
 import getFontClass from '@/lib/fontClass';
+import Dashboard from '@/components/Dashboard';
 // Import our new study session manager
 import studySessionManager from '@/lib/studySessionManager';
 
@@ -624,28 +625,30 @@ const StudyView = ({ params }) => {
     if (!deck) return null;
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
-                <div className={studyStyles.studyContent}>
-                    
-                    <div className={studyStyles.header}>
-                        <h2 className={studyStyles.deckName}>
-                        {t('cards.study.studying') + " "}{deck.name}</h2>
+        <Dashboard>
+            <div className={styles.pageContainer}>
+                <div className={styles.pageContent}>
+                    <div className={studyStyles.studyContent}>
+                        
+                        <div className={studyStyles.header}>
+                            <h2 className={studyStyles.deckName}>
+                            {t('cards.study.studying') + " "}{deck.name}</h2>
+                        </div>
+                        
+                        {renderContent()}
                     </div>
-                    
-                    {renderContent()}
-                </div>
-                <div className={studyStyles.girl}>
-                    <Image
-                        src="/images/hanbokgirl.png"
-                        alt="girl"
-                        width={1024}
-                        height={1536}
-                        priority
-                    />
+                    <div className={studyStyles.girl}>
+                        <Image
+                            src="/images/hanbokgirl.png"
+                            alt="girl"
+                            width={1024}
+                            height={1536}
+                            priority
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
+        </Dashboard>
     );
 };
 

@@ -8,7 +8,7 @@
   "theme_color": "#ffffff",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "/hanbokicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },

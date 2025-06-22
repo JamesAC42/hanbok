@@ -7,6 +7,7 @@ import styles from '@/styles/components/pagelayout.module.scss';
 import profileStyles from '@/styles/components/profile.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
+import Dashboard from '@/components/Dashboard';
 
 const Profile = () => {
     const router = useRouter();
@@ -28,6 +29,7 @@ const Profile = () => {
     const userNotFree = user.tier === 1 || user.tier === 2;
 
     return (
+        <Dashboard>
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={profileStyles.profileContent}>
@@ -137,6 +139,7 @@ const Profile = () => {
                 </div>
             </div>
         </div>
+        </Dashboard>
     );
 };
 

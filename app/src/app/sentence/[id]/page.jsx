@@ -4,6 +4,7 @@ import { use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import SentenceAnalyzer from '@/components/SentenceAnalyzer';
+import Dashboard from '@/components/Dashboard';
 
 const SentencePage = ({ params }) => {
     const router = useRouter();
@@ -19,7 +20,9 @@ const SentencePage = ({ params }) => {
     // Don't render anything while loading or if not authenticated
     if (loading) return null;
 
-    return <SentenceAnalyzer sentenceId={resolvedParams.id} />;
+    return <Dashboard>
+        <SentenceAnalyzer sentenceId={resolvedParams.id} />
+    </Dashboard>;
 };
 
 export default SentencePage; 

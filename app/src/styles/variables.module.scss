@@ -114,3 +114,29 @@ $word-types: (
     height:auto;
   }
 }
+
+@mixin flex-center {
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+@mixin flex-center-row {
+  @include flex-center;
+  flex-direction:row;
+}
+
+@mixin flex-center-column {
+  @include flex-center;
+  flex-direction:column;
+}
+
+@mixin flex-center-row-between {
+  @include flex-center-row;
+  justify-content:space-between;
+}
+
+@mixin flex-center-column-between {
+  @include flex-center-column;
+  justify-content:space-between;
+} 

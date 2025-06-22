@@ -517,9 +517,8 @@
                 align-items:stretch;
                 .footerLinkColumnHeader {
                     font-family:var(--font-lilita);
-                    font-size:1.8rem;
-                    text-decoration:underline;
-                    color:#fff;
+                    font-size:1.3rem;
+                    color:#5c85c7;
                     margin-bottom:1rem;
                 }
                 .footerLinkColumnLinks {
@@ -532,7 +531,7 @@
                     a {
                         text-decoration: none;
                         color:#fff;
-                        font-family:var(--font-display);
+                        font-family:var(--font-lilita);
                         font-size:1.2rem;
                         margin-bottom:0.5rem;
                         transition:all 0.2s ease;
@@ -546,11 +545,11 @@
         }
 
         .footerCopyright {
-            font-family:var(--font-serif);
-            font-size:1rem;
-            color:#c4c1f4;
+            font-family:var(--font-lilita);
+            font-size:1.2rem;
+            color:#6761bfae;
 
-            border-left:1px solid #5a6da1;
+            border-left:1px solid #272e42;
 
             padding-left:6rem;
             padding-top:0.5rem;

@@ -4,6 +4,7 @@ import SentenceAnalyzer from '@/components/SentenceAnalyzer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/home/page.module.scss';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import {IcBaselinePerson} from '@/components/icons/Profile';
@@ -36,7 +37,7 @@ function TestimonialCard({quote}) {
 
 export default function Home() {
   const { supportedLanguages } = useLanguage();
-  
+  const router = useRouter();
   // Add structured data for SEO
   useEffect(() => {
     const script = document.createElement('script');
@@ -71,12 +72,12 @@ export default function Home() {
             <Link href="/lyrics">Lyrics</Link>
         </div>
         <div className={styles.headerNavCenter}>
-          <Image src="/icon.png" alt="Hanbok" width={32} height={32} />
+          <Image src="/hanbokicon.png" alt="Hanbok" width={32} height={32} />
           hanbok
         </div>
         <div className={styles.headerNavRight}>
             <Link href="/login"><IcBaselinePerson className={styles.profileIcon} /></Link>
-            <div className={styles.getStartedButton}>
+            <div className={styles.getStartedButton} onClick={() => router.push("/analyze")}>
               Get Started
             </div>
         </div>
@@ -117,7 +118,9 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.heroCTAContainer}>
-              <div className={styles.heroCTA}>
+              <div 
+                onClick={() => router.push("/analyze")}
+                className={styles.heroCTA}>
                 GET STARTED FOR FREE <MdiArrowRightBoldCircle />
 
               </div>

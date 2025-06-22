@@ -63,84 +63,25 @@ const NavBar = () => {
         { name: t('navbar.pricing'), path: '/pricing' },
     ];
 
-    if (loading) return null;
-
     return (
-        <>
-        <div className={`${styles.navBar} ${isNavVisible ? styles.visible : ''}`}>
-            <div className={styles.navBarContent} style={{ '--total-items': totalItems }}>
-                <div className={styles.navBarItem} style={{ '--nav-index': 0 }}>  
-                    <Link href="/">
-                        <TablerAlphabetKorean />
-                        <div className={styles.navBarItemText}>{t('navbar.home')}</div>
-                    </Link>
+        <div className={styles.navBar}>
+            <div className={styles.navBarSection}>
+                <div className={styles.navBarItem}>
+                    <div className={styles.navBarItemIcon}>section</div>
+                    <div className={styles.navBarItemText}>section</div>
                 </div>
-                <div className={styles.navBarItem} style={{ '--nav-index': 1 }}>   
-                    <Link href="/profile">
-                        <IcBaselinePerson />
-                        <div className={styles.navBarItemText}>{t('navbar.profile')}</div>
-                    </Link>
+                <div className={styles.navBarItem}>
+                    <div className={styles.navBarItemIcon}>section</div>
+                    <div className={styles.navBarItemText}>section</div>
                 </div>
-                {user && (
-                    <div className={styles.navBarItem} style={{ '--nav-index': 2 }}>   
-                        <Link href="/bookmarks">
-                            <MaterialSymbolsBookmarkSharp />
-                            <div className={styles.navBarItemText}>{t('navbar.bookmarks')}</div>
-                        </Link>
-                    </div>
-                )}
-                {user && (
-                    <div className={`${styles.navBarItem} `} style={{ '--nav-index': 3 }}>   
-                        <Link href="/cards">
-                            <MaterialSymbolsCardsStarRounded />
-                            <div className={styles.navBarItemText}>{t('navbar.cards')}</div>
-                        </Link>
-                    </div>
-                )}
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 4 : 2 }}>   
-                    <Link href="/about">
-                        <MakiInformation11 />
-                        <div className={styles.navBarItemText}>{t('navbar.about')}</div>
-                    </Link>
+            </div>
+            <div className={styles.navBarSection}>
+                <div className={styles.navBarItem}>
+                    <div className={styles.navBarItemIcon}></div>
+                    <div className={styles.navBarItemText}>section</div>
                 </div>
-                <div className={`${styles.navBarItem} ${styles.cardsNew}`} style={{ '--nav-index': user ? 5 : 3 }}>   
-                    <Link href="/lyrics">
-                        <IcSharpQueueMusic />
-                        <div className={styles.navBarItemText}>{t('navbar.lyrics')}</div>
-                    </Link>
-                </div>
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 6 : 4 }}>   
-                    <Link href="/feedback">
-                        <MingcuteCommentFill />
-                        <div className={styles.navBarItemText}>{t('navbar.feedback')}</div>
-                    </Link>
-                </div>
-                
-                <div className={styles.navBarItem} style={{ '--nav-index': user ? 7 : 5 }}>   
-                    <Link href="/pricing">
-                        <SolarChatRoundMoneyBold />
-                        <div className={styles.navBarItemText}>{t('navbar.pricing')}</div>
-                    </Link>
-                </div>
-                {user && (
-                    <div className={styles.navBarItem} style={{ '--nav-index': user ? 8 : 6 }}>   
-                        <div 
-                            onClick={handleLogout}
-                            className={styles.navBarItemIcon}>
-                            <SolarLogoutLinear />
-                            <div className={styles.navBarItemText}>{t('navbar.logout')}</div>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
-
-        <div className={styles.navBarToggle} onClick={toggleNav}>
-            <div className={styles.navBarItemIcon}>
-                <MaterialSymbolsMenu />
-            </div>
-        </div>
-        </>
     )
 }
 

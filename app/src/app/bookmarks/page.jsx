@@ -8,6 +8,8 @@ import Image from 'next/image';
 import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+import Dashboard from '@/components/Dashboard';
+
 const Bookmarks = () => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
@@ -148,27 +150,29 @@ const Bookmarks = () => {
     if (loading || !isAuthenticated) return null;
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
-                <div className={bookmarksStyles.bookmarksContent}>
-                    {renderLanguageSelector()}
-                    <div className={bookmarksStyles.header}>
-                        <h1 className={styles.pageTitle}>{t('bookmarks.title')}</h1>
+        <Dashboard>
+            <div className={styles.pageContainer}>
+                <div className={styles.pageContent}>
+                    <div className={bookmarksStyles.bookmarksContent}>
+                        {renderLanguageSelector()}
+                        <div className={bookmarksStyles.header}>
+                            <h1 className={styles.pageTitle}>{t('bookmarks.title')}</h1>
+                        </div>
+                        
+                        {renderContent()}
                     </div>
-                    
-                    {renderContent()}
-                </div>
-                <div className={bookmarksStyles.girl}>
-                    <Image
-                        src="/images/hanbokgirl.png"
-                        alt="girl"
-                        width={1024}
-                        height={1536}
-                        priority
-                    />
+                    <div className={bookmarksStyles.girl}>
+                        <Image
+                            src="/images/hanbokgirl.png"
+                            alt="girl"
+                            width={1024}
+                            height={1536}
+                            priority
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
+        </Dashboard>
     );
 };
 

@@ -1,231 +1,33 @@
-@mixin navbar-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 3.125rem;
-    height: 3.125rem;
-    background-color: #fff;
-    color:#404040;
-    border:1px solid #404040;
-    border-radius: 1.575rem;
-    cursor: pointer;
-    animation: sweepIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    opacity: 0;
-    animation-fill-mode: forwards;
-    box-shadow: 0.25rem 0.25rem 0 #171717;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-    a, .navBarItemIcon {
-        text-decoration: none;
-        color:inherit;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        svg {
-            transform:scale(2);
-        }
-    }
-
-    @media screen and (max-height: 800px) {
-        width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 1.25rem;
-
-        a, .navBarItemIcon {
-            font-size:0.9rem;
-        }
-    }
-}
-
-@mixin expanded-text {
-    width:fit-content;
-    padding:0 1.5rem;
-
-    .navBarItemText {
-        max-width:100%;
-        margin-left:1rem;
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-}
-
-@mixin navbar-item-hover {
-    &:hover {
-        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        background-color: #404040;
-        color:#fff;
-        border-color:#000000;
-
-        @include expanded-text;
-
-        //transform:translate(-0.25rem, -0.25rem) !important;  
-        box-shadow: 0.5rem 0.5rem 0 #171717;
-        &:first-child {
-            box-shadow: 0.5rem 0.5rem 0 #613a1b;
-            background-color: #c93838;
-            border-color:#000000;
-        }
-        &:nth-child(2) {
-            box-shadow: 0.5rem 0.5rem 0 #17584a;
-            background-color: #48a940;
-
-        }
-        &:nth-child(3) {
-            box-shadow: 0.5rem 0.5rem 0 #21232d;
-            background-color: #403bd1;
-
-        }
-        &:nth-child(4) {
-            box-shadow: 0.5rem 0.5rem 0 #385c1a;
-            background-color: #d1b936;
-
-        }
-        &:nth-child(5) {
-            box-shadow: 0.5rem 0.5rem 0 #214268;
-            background-color: #1a946a;
-
-        }
-        &:nth-child(6) {
-            box-shadow: 0.5rem 0.5rem 0 #4d1353;
-            background-color: #c74683;
-        }
-        &:nth-child(7) {
-            box-shadow: 0.5rem 0.5rem 0 #2e194d;
-            background-color: #3a6ccf;
-        }
-        &:nth-child(8) {
-            box-shadow: 0.5rem 0.5rem 0 #0a340f;
-            background-color: #24983d;
-        }
-    }
-}
-
 .navBar {
-    position: fixed;
-    top:50%;
-    left:0;
-    transform: translateY(-50%);
-    z-index: 1010;
-
-    @media screen and (max-width: 1200px) {
-        opacity: 0;
-        pointer-events: none;
-        transform: translateY(-50%) translateX(-10rem);
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-        &.visible {
-            opacity: 1;
-            pointer-events: all;
-            transform: translateY(-50%) translateX(-1rem);
-        }
-    }
-
-    .navBarContent {
-        display: flex;
-        flex-direction: column;
-        height:100dvh;
-        justify-content: center;
-        gap:1.5rem;
-        padding:2rem 1rem 2rem 1rem;
-
-        @media screen and (max-width: 1200px) {
-            background:#e5ffffe0;
-            backdrop-filter: blur(5px);
-            border-radius:0 1rem 1rem 0;
-            //box-shadow: 0rem 0rem 2rem 2rem #ffffff93;
-            padding:2rem 2rem 2rem 2rem;
-
-            .navBarItem {
-                animation: none;
-                opacity: 1;
-                transform: translateX(0);
-
-                @include expanded-text;
-            }
-        }
     
+    position:relative;
+    width:15rem;
+    border-right:1px solid var(--foreground-light);
+
+    .navBarSection {
+        display:flex;
+        flex-direction:column;
+
         .navBarItem {
-            @include navbar-item;
-            margin-left: 0.6rem;
-            animation-delay: calc(0.1s * var(--nav-index, 0));
-
-            &:first-child {
-                margin-left: 0;
-            }
-
-            &:last-child {
-                margin-left: 0;
-            }
-
-            .navBarItemText {
-                font-size:0.8rem;
-                font-weight:bold;
-                text-transform:uppercase;
-                font-family:var(--font-display);
-                overflow:hidden;
-                max-width:0;   
-            }
-
-            @include navbar-item-hover;
-
-            &.cardsNew {
-                background:#edfffe;
-                box-shadow: 0.25rem 0.25rem 0 #4c7fc2;
-                &::after {
-                    content:"";
-                    position:absolute;
-                    top:0;
-                    left:0;
-                    height:1rem;
-                    width:1rem;
-                    background:#607aff;
-                    border-radius:50%;
-                }
-
-                &:hover {
-                    background:#5073ba;
-                    box-shadow: 0.5rem 0.5rem 0 #311a70;
-                }
-            }
-
-            @media screen and (max-width:1200px) {
-                @include expanded-text;
-            }
-        }     
-        
-        @media screen and (max-height: 800px) {
+            display:flex;
+            flex-direction:row;
+            justify-content:flex-start;
+            align-items:center;
             gap:1rem;
+
+            .navBarItemIcon {
+                width:2rem;
+                height:2rem;
+                background:var(--foreground-light);
+                border-radius:50%;
+            }
+
+            .navBarItemText {           
+                font-family:var(--font-body);
+                font-size:1.2rem;
+                color:#000;
+            }
         }
     }
-}
 
-.navBarToggle {
-    @include navbar-item;
-    position:fixed;
-    top:0;
-    left:0;
-    margin:1rem;
-    display:none;
-    z-index: 1011;
-    @media screen and (max-width: 1200px) {
-        display:flex;
-    }
-
-    @media screen and (max-height: 800px) {
-        width: 3.125rem;
-        height: 3.125rem;
-        border-radius: 1.575rem;
-    }
-}
-
-@keyframes sweepIn {
-    0% {
-        opacity: 0;
-        transform: translateX(-10rem);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0);
-    }
 }
