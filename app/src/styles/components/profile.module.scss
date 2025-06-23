@@ -22,6 +22,23 @@
   }
 }
 
+.signOut {
+  margin-top: 1rem;
+  padding:0.5rem 1rem;
+  border-radius:0.5rem;
+  cursor:pointer;
+  background:var(--background-alt);
+  color:var(--foreground);
+  font-family:var(--font-funnel);
+  width:fit-content;
+  font-size:0.9rem;
+  font-weight:700;
+  margin-bottom:1rem;
+  &:hover {
+    background:var(--foreground-lighter);
+  }
+}
+
 .userDetails {
   margin-top: 2rem;
   width:100%;

@@ -109,7 +109,7 @@ const Bookmarks = () => {
 
     const renderContent = () => {
         if (loadingContent) {
-            return <p>{t('bookmarks.loading')}</p>;
+            return <p className={bookmarksStyles.loading}>{t('bookmarks.loading')}</p>;
         }
 
         if (error) {
@@ -151,26 +151,11 @@ const Bookmarks = () => {
 
     return (
         <Dashboard>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageContent}>
-                    <div className={bookmarksStyles.bookmarksContent}>
-                        {renderLanguageSelector()}
-                        <div className={bookmarksStyles.header}>
-                            <h1 className={styles.pageTitle}>{t('bookmarks.title')}</h1>
-                        </div>
-                        
-                        {renderContent()}
-                    </div>
-                    <div className={bookmarksStyles.girl}>
-                        <Image
-                            src="/images/hanbokgirl.png"
-                            alt="girl"
-                            width={1024}
-                            height={1536}
-                            priority
-                        />
-                    </div>
-                </div>
+            <div className={bookmarksStyles.bookmarksContent}>
+                {renderLanguageSelector()}
+                <h1 className={bookmarksStyles.pageTitle}>{t('bookmarks.title')}</h1>
+                
+                {renderContent()}
             </div>
         </Dashboard>
     );

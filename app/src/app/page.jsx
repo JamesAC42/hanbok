@@ -76,7 +76,7 @@ export default function Home() {
           hanbok
         </div>
         <div className={styles.headerNavRight}>
-            <Link href="/login"><IcBaselinePerson className={styles.profileIcon} /></Link>
+            <Link href={"/profile"}><IcBaselinePerson className={styles.profileIcon} /></Link>
             <div className={styles.getStartedButton} onClick={() => router.push("/analyze")}>
               Get Started
             </div>

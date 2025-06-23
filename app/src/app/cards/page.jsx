@@ -69,7 +69,7 @@ const Cards = () => {
 
     const renderContent = () => {
         if (loadingContent) {
-            return <p>{t('cards.loading')}</p>;
+            return <p className={cardsStyles.loading}>{t('cards.loading')}</p>;
         }
 
         if (error) {
@@ -141,27 +141,11 @@ const Cards = () => {
 
     return (
         <Dashboard>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageContent}>
-                    <div className={cardsStyles.cardsContent}>
-                        <div className={cardsStyles.header}>
-                            <h1 className={styles.pageTitle}>{t('cards.title')}</h1>
-                            <p className={cardsStyles.subtitle}>{t('cards.subtitle')}</p>
-                        </div>
-                        
-                        {renderContent()}
-                    </div>
-                    <div className={cardsStyles.girl}>
-                        <Image
-                            src="/images/hanbokgirl.png"
-                            alt="girl"
-                            width={1024}
-                            height={1536}
-                            priority
-                        />
-                    </div>
-                </div>
-            </div>  
+            <div className={cardsStyles.cardsContent}>
+                <h1 className={cardsStyles.pageTitle}>{t('cards.title')}</h1>
+                
+                {renderContent()}
+            </div>
         </Dashboard>
     );
 };

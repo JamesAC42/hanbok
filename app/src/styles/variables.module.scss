@@ -154,3 +154,8 @@ $word-types: (
     font-family:var(--font-lilita);
   }
 }
+
+@mixin loading-text { 
+  text-align:center;
+  margin:4rem 0;
+}

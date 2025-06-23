@@ -18,8 +18,13 @@ const Profile = () => {
 
     const { theme, toggleTheme } = useTheme();
     const router = useRouter();
-    const { user, isAuthenticated, loading } = useAuth();
+    const { user, isAuthenticated, loading, logout } = useAuth();
     const { t } = useLanguage();
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    }
 
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -39,6 +44,9 @@ const Profile = () => {
         <Dashboard>
             <div className={profileStyles.profileContent}>
                 <h1 className={profileStyles.pageTitle}>{t('profile.title')}</h1>
+                <div className={profileStyles.signOut}>
+                    <div onClick={handleLogout}>Sign Out</div>
+                </div>
                 <div className={profileStyles.userDetails}>
                     <h2>{t('profile.userInfo')}</h2>
                     <p><strong>{t('profile.name')}:</strong> {user.name}</p>
