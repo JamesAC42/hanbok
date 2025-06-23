@@ -11,23 +11,7 @@ $primary-button: #667eea;
 $primary-button-hover: #5a67d8;
 
 .studyContent {
-    width: 100%;
-    max-width: 75rem;
-    margin: 0 auto;
-    padding: var(--spacing-large);
-    position: relative;
-    background: linear-gradient(135deg, rgba(238, 255, 246, 0.95) 0%, rgba(255, 248, 235, 0.9) 100%);
-    border-radius: var(--border-radius);
-    backdrop-filter: blur(15px);
-    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
-    z-index: 2;
-    animation: slideInUp 0.4s ease-out;
-
-    @media (max-width: 800px) {
-        margin-top: 3rem;
-        background: var(--background);
-        border-radius: var(--border-radius);
-    }
+    @include dashboard-page;
 }
 
 @keyframes slideInUp {
@@ -106,7 +90,7 @@ $primary-button-hover: #5a67d8;
     padding: 0.8rem;
     border-radius: 50%;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--background-alt);
     border: none;
     cursor: pointer;
     display: flex;
@@ -117,7 +101,7 @@ $primary-button-hover: #5a67d8;
     backdrop-filter: blur(10px);
     
     &:hover {
-        background: rgba(255, 255, 255, 1);
+        background: var(--background-alt);
         transform: translateY(-0.125rem) scale(1.05);
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
@@ -136,7 +120,7 @@ $primary-button-hover: #5a67d8;
     padding: 0.8rem;
     border-radius: 50%;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--background-alt);
     border: none;
     cursor: pointer;
     display: flex;
@@ -147,20 +131,20 @@ $primary-button-hover: #5a67d8;
     backdrop-filter: blur(10px);
     
     &:hover {
-        background: rgba(255, 255, 255, 1);
+        background: var(--background-alt);
         transform: translateY(-0.125rem) scale(1.05);
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     }
 }
 
 .studyContainer {
-    background: $card-gradient;
+    background:var(--background-alt);
     border-radius: 1.5rem;
     padding: 2rem;
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
     margin-bottom: var(--spacing-large);
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--shadow);
     overflow: hidden;
     
     &::before {
@@ -176,14 +160,13 @@ $primary-button-hover: #5a67d8;
 }
 
 .studyStats {
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--background-alt);
     border-radius: 1rem;
     padding: 1.5rem;
     margin-top:1rem;
     margin-bottom: 0rem;
     text-align: center;
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
     animation: slideInUp 0.4s ease-out 0.15s both;
 }
 
@@ -194,7 +177,7 @@ $primary-button-hover: #5a67d8;
     justify-content: center;
     padding: 4rem 2rem;
     text-align: center;
-    background: $card-gradient;
+    background: var(--background-alt);
     border-radius: 1.5rem;
     box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
     animation: slideInUp 0.4s ease-out;
@@ -269,25 +252,14 @@ $primary-button-hover: #5a67d8;
 .cardFace {
     width: 100%;
     max-width: 45rem;
-    background: $card-gradient;
+    background: var(--background-alt);
     border-radius: 1.5rem;
     padding: 2.5rem;
     box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.12);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--shadow);
     overflow: hidden;
-    
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, transparent 49%, rgba(255, 255, 255, 0.1) 50%, transparent 51%);
-        pointer-events: none;
-    }
     
     &.flipping {
         transform: scale(0.98);
@@ -444,14 +416,16 @@ $primary-button-hover: #5a67d8;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--background-alt);
     padding: 1rem;
     border-radius: 1rem;
     position: relative;
     box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--shadow);
     backdrop-filter: blur(10px);
+
+    overflow:hidden;
     
     &:hover {
         transform: translateY(-0.25rem);
@@ -483,7 +457,7 @@ $primary-button-hover: #5a67d8;
         top: 0;
         left: 0;
         right: 0;
-        height: 0.25rem;
+        height: 0.5rem;
         background: linear-gradient(135deg, #4caf50 0%, #8bc34a 100%);
         border-radius: 1rem 1rem 0 0;
     }
@@ -496,7 +470,7 @@ $primary-button-hover: #5a67d8;
         top: 0;
         left: 0;
         right: 0;
-        height: 0.25rem;
+        height: 0.5rem;
         background: linear-gradient(135deg, #2196f3 0%, #03a9f4 100%);
         border-radius: 1rem 1rem 0 0;
     }
@@ -509,7 +483,7 @@ $primary-button-hover: #5a67d8;
         top: 0;
         left: 0;
         right: 0;
-        height: 0.25rem;
+        height: 0.5rem;
         background: linear-gradient(135deg, #ff9800 0%, #ffc107 100%);
         border-radius: 1rem 1rem 0 0;
     }
@@ -522,7 +496,7 @@ $primary-button-hover: #5a67d8;
         top: 0;
         left: 0;
         right: 0;
-        height: 0.25rem;
+        height: 0.5rem;
         background: linear-gradient(135deg, #9c27b0 0%, #e91e63 100%);
         border-radius: 1rem 1rem 0 0;
     }

@@ -626,27 +626,14 @@ const StudyView = ({ params }) => {
 
     return (
         <Dashboard>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageContent}>
-                    <div className={studyStyles.studyContent}>
-                        
-                        <div className={studyStyles.header}>
-                            <h2 className={studyStyles.deckName}>
-                            {t('cards.study.studying') + " "}{deck.name}</h2>
-                        </div>
-                        
-                        {renderContent()}
-                    </div>
-                    <div className={studyStyles.girl}>
-                        <Image
-                            src="/images/hanbokgirl.png"
-                            alt="girl"
-                            width={1024}
-                            height={1536}
-                            priority
-                        />
-                    </div>
+            <div className={studyStyles.studyContent}>
+                
+                <div className={studyStyles.header}>
+                    <h2 className={studyStyles.deckName}>
+                    {t('cards.study.studying') + " "}{deck.name}</h2>
                 </div>
+                
+                {renderContent()}
             </div>
         </Dashboard>
     );
