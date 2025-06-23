@@ -173,7 +173,7 @@ function Sidebar() {
                             className={`
                                 ${styles.sidebarSectionItem}
                                 ${expanding ? styles.expanding : ""}
-                                ${getActiveClass("/cards")}`}
+                                ${getActiveClass(["/cards"])}`}
                             onClick={() => navigateTo("/cards")}>
                             <div className={styles.sidebarSectionItemIcon}>
                                 <PhCardsFill />

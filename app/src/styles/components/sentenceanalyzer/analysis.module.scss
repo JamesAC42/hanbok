@@ -13,8 +13,10 @@
 .analysis {
     position: relative;
     backdrop-filter:blur(20px);
-    background:rgba(255, 255, 255, 0.815);
+    background:var(--background-alt);
+    background:none;
     box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1);
+    box-shadow:none;
     border-radius:0.5rem;
     padding:2rem;
     position:relative;
