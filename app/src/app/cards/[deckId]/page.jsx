@@ -586,45 +586,41 @@ const DeckView = ({ params }) => {
 
     return (
         <Dashboard>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageContent}>
-                    <div className={deckStyles.deckContent}>
-                        <button 
-                            className={deckStyles.backButton}
-                            onClick={handleBackClick}
-                            aria-label={t('common.back')}
-                        >
-                            <MaterialSymbolsArrowBackRounded />
-                        </button>
-                        
-                        <div className={deckStyles.header}>
-                            <h1>{t('cards.deckTitle')}</h1>
-                        </div>
-                        
-                        {renderContent()}
-                    </div>
+            <div className={deckStyles.deckContent}>
+                <button 
+                    className={deckStyles.backButton}
+                    onClick={handleBackClick}
+                    aria-label={t('common.back')}
+                >
+                    <MaterialSymbolsArrowBackRounded />
+                </button>
+                
+                <div className={deckStyles.header}>
+                    <h1>{t('cards.deckTitle')}</h1>
                 </div>
                 
-                {/* Edit Card Modal */}
-                <EditCardModal
-                    card={editingCard}
-                    isOpen={showEditModal}
-                    onClose={handleCloseEditModal}
-                    onSave={handleCardSaved}
-                    onDelete={handleCardDeleted}
-                    deckId={deckId}
-                    mode={modalMode}
-                />
-                
-                {/* Deck Settings Modal */}
-                {showSettings && (
-                    <DeckSettings 
-                        deckId={deckId} 
-                        onClose={toggleSettings}
-                        onSettingsUpdated={refreshDeckData}
-                    />
-                )}
+                {renderContent()}
             </div>
+            
+            {/* Edit Card Modal */}
+            <EditCardModal
+                card={editingCard}
+                isOpen={showEditModal}
+                onClose={handleCloseEditModal}
+                onSave={handleCardSaved}
+                onDelete={handleCardDeleted}
+                deckId={deckId}
+                mode={modalMode}
+            />
+            
+            {/* Deck Settings Modal */}
+            {showSettings && (
+                <DeckSettings 
+                    deckId={deckId} 
+                    onClose={toggleSettings}
+                    onSettingsUpdated={refreshDeckData}
+                />
+            )}
         </Dashboard>
     );
 };

@@ -4,7 +4,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.662);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +14,7 @@
 }
 
 .modal {
-  background: white;
+  background: var(--background-alt);
   border-radius: 0.75rem;
   max-width: 32rem;
   width: 100%;
@@ -39,13 +40,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--shadow);
 
   h3 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--foreground);
   }
 }
 
@@ -53,7 +54,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #6b7280;
+  color: var(--foreground-light);
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 0.25rem;
@@ -64,8 +65,8 @@
   font-family: inherit;
   
   &:hover {
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: var(--background-alt);
+    color: var(--foreground);
   }
 }
 
@@ -74,9 +75,9 @@
 }
 
 .error {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background-color: var(--error-background);
+  border: 1px solid var(--error-foreground);
+  color: var(--error-foreground);
   padding: 0.75rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
@@ -90,14 +91,14 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
-    color: #374151;
+    color: var(--foreground);
     font-size: 0.875rem;
   }
 
   textarea {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--shadow);
     border-radius: 0.5rem;
     font-size: 0.875rem;
     line-height: 1.5;
@@ -105,21 +106,23 @@
     min-height: 4.5rem;
     font-family: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: var(--background);
+    color: var(--foreground);
 
     &:focus {
       outline: none;
-      border-color: #3b82f6;
+      border-color: var(--shadow);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
 
     &:disabled {
-      background-color: #f9fafb;
-      color: #6b7280;
+      background-color: var(--background-alt);
+      color: var(--foreground-light);
       cursor: not-allowed;
     }
 
     &::placeholder {
-      color: #9ca3af;
+      color: var(--foreground-light);
     }
   }
 }
@@ -129,13 +132,13 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--shadow);
   gap: 1rem;
 }
 
 .deleteButton {
-  background-color: #ef4444;
-  color: white;
+  background-color: var(--error-foreground);
+  color: var(--error-background);
   border: none;
   padding: 0.625rem 1.25rem;
   border-radius: 0.5rem;
@@ -146,7 +149,7 @@
   transition: all 0.2s ease;
   
   &:hover:not(:disabled) {
-    background-color: #dc2626;
+    background-color: var(--error-foreground);
   }
   
   &:disabled {
@@ -162,8 +165,8 @@
 
 .cancelButton {
   background: none;
-  border: 0.125rem solid #d1d5db;
-  color: #6b7280;
+  border: 0.125rem solid var(--shadow);
+  color: var(--foreground);
   padding: 0.625rem 1.25rem;
   border-radius: 0.5rem;
   font-size: 0.875rem;
@@ -173,9 +176,9 @@
   transition: all 0.2s ease;
   
   &:hover:not(:disabled) {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
-    color: #374151;
+    background-color: var(--background-alt);
+    border-color: var(--shadow);
+    color: var(--foreground);
   }
   
   &:disabled {
@@ -185,8 +188,8 @@
 }
 
 .saveButton {
-  background-color: #10b981;
-  color: white;
+  background-color: var(--success-foreground);
+  color: var(--success-background);
   border: none;
   padding: 0.625rem 1.25rem;
   border-radius: 0.5rem;
@@ -197,11 +200,11 @@
   transition: all 0.2s ease;
   
   &:hover:not(:disabled) {
-    background-color: #059669;
+    background-color: var(--shadow);
   }
   
   &:disabled {
-    background-color: #9ca3af;
+    background-color: var(--foreground-light);
     cursor: not-allowed;
   }
 }

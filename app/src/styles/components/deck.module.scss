@@ -1,19 +1,9 @@
+@import "../variables.module.scss";
+
 .deckContent {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  max-width: 70rem;
-  width: 100%;
-  margin: 0 auto;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  animation: fadeIn 0.5s ease-in-out;
-  background-color: rgba(238, 255, 246, 0.865);
-  backdrop-filter: blur(10px);
-  box-shadow: 0.5rem 0.5rem 0 #2c3730;
-  z-index:2;
+  
+  @include dashboard-page;
+  position:relative;
 
   @media screen and (max-width: 725px) {
     padding: 1.5rem;
@@ -41,8 +31,10 @@
   margin-top:1rem;
   font-weight:800;
   h1 {
-    font-family:var(--font-display) !important;
+    color:var(--foreground);
+    font-family:var(--font-lilita) !important;
     margin-top:0 !important;
+    font-size:3rem;
   }
   
   @media screen and (max-width: 725px) {
@@ -66,12 +58,8 @@
   transition: all 0.2s ease;
   cursor: pointer;
   z-index: 1000;
-  background:#ffffff;
   font-family: inherit;
-
-  &:hover {
-    background:#dddddd;
-  }
+  color:var(--foreground);
 
   @media screen and (max-width: 725px) {
     position: static;
@@ -90,6 +78,10 @@
     }
   }
 
+  &:hover {
+    background-color: var(--background-alt);
+  }
+
   @media screen and (max-width: 500px) {
     margin: 1rem auto 0.5rem auto;
   }
@@ -104,10 +96,9 @@
 
 .deckInfo {
   width: 100%;
-  background-color: #f9f9f9;
-  padding: 1.5rem;
+  background-color: var(--background);
+  margin-bottom:2rem;
   border-radius: 0.5rem;
-  border: 0.0625rem solid #e0e0e0;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -117,6 +108,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color:var(--foreground);
 }
 
 .deckActions {
@@ -139,8 +131,7 @@
   font-family: inherit;
   
   &:hover {
-    color: var(--text-primary);
-    background-color: #f0f0f0;
+    background-color: var(--background-alt);
   }
 }
 
@@ -158,8 +149,7 @@
   font-family: inherit;
   
   &:hover {
-    color: var(--text-primary);
-    background-color: #f0f0f0;
+    background-color: var(--background-alt);
   }
   
   &:disabled {
@@ -205,8 +195,8 @@
 
 .cardCount {
   font-size: 1rem;
-  color: var(--text-secondary);
-  background-color: #ffffff;
+  background-color: var(--background-alt);
+  color:var(--foreground);
   padding: 0.5rem 1rem;
   border-radius: 2rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
@@ -216,7 +206,8 @@
   display: flex;
   justify-content: space-between;
   padding: 1rem;
-  background-color: #ffffff;
+  background-color: var(--background-alt);
+  color: var(--foreground);
   border-radius: 0.5rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
 }
@@ -230,7 +221,7 @@
 
 .statLabel {
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: var(--foreground);
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -264,7 +255,7 @@
   white-space: normal;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  background-color: #f8f9fa;
+  background-color: var(--background-alt);
   box-shadow: inset 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.05);
 }
 
@@ -285,6 +276,8 @@
   transition: all 0.2s ease;
   box-shadow: 0 0.25rem 0.5rem rgba(22, 163, 74, 0.3);
   font-family: inherit;
+
+  font-family:var(--font-display);
   
   svg {
     font-size: 1.5rem;
@@ -319,8 +312,8 @@
 }
 
 .cardsList {
-  width: 100%;
   margin-top: 2rem;
+  padding:0;
 }
 
 .cardsListHeader {
@@ -328,8 +321,9 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
+  color:var(--foreground);
   padding-bottom: 0.5rem;
-  border-bottom: 0.0625rem solid #e0e0e0;
+  border-bottom: 0.0625rem solid var(--foreground-lighter);
   
   
   @media screen and (max-width: 725px) {
@@ -350,7 +344,7 @@
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: var(--foreground);
 }
 
 /* Toggle Switch */
@@ -359,6 +353,7 @@
   display: inline-block;
   width: 3rem;
   height: 1.5rem;
+  color:var(--foreground);
 }
 
 .switch input {
@@ -374,7 +369,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: var(--foreground-light);
   transition: .4s;
   border-radius: 1.5rem;
 }
@@ -386,7 +381,7 @@
   width: 1.125rem;
   left: 0.1875rem;
   bottom: 0.1875rem;
-  background-color: white;
+  background-color: var(--background);
   transition: .4s;
   border-radius: 50%;
 }
@@ -424,19 +419,20 @@ input:checked + .slider:before {
   th, td {
     padding: 0.75rem;
     text-align: left;
-    border-bottom: 0.0625rem solid #e0e0e0;
+    border-bottom: 0.0625rem solid var(--shadow);
+    color: var(--foreground);
   }
-  
+
   th {
-    background-color: #f9f9f9;
+    background-color: var(--background-alt);
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--foreground);
     position: sticky;
     top: 0;
   }
   
   tr:hover {
-    background-color: #f9f9f9;
+    background-color: var(--background-alt);
   }
   
   td {
@@ -458,7 +454,7 @@ input:checked + .slider:before {
 }
 
 .cardItem {
-  background-color: #ffffff;
+  background-color: var(--background-alt);
   border-radius: 0.5rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
   padding: 1rem;
@@ -466,7 +462,7 @@ input:checked + .slider:before {
   flex-direction: column;
   gap: 0.5rem;
   transition: all 0.2s ease;
-  border: 0.0625rem solid #e0e0e0;
+  border: 0.0625rem solid var(--shadow);
   height: 100%;
   position: relative;
   
@@ -490,7 +486,7 @@ input:checked + .slider:before {
 
 .cardDivider {
   height: 0.0625rem;
-  background-color: #e0e0e0;
+  background-color: var(--shadow);
   width: 100%;
 }
 
@@ -498,17 +494,17 @@ input:checked + .slider:before {
   font-size: 1.25rem;
   font-weight: 500;
   font-family: var(--font-kr-serif);
-  color: var(--text-primary);
+  color: var(--foreground);
 }
 
 .translationText {
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--foreground);
 }
 
 .noCards {
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--foreground-light);
   font-style: italic;
   margin: 2rem 0;
 }
@@ -529,15 +525,15 @@ input:checked + .slider:before {
   margin-top: 2rem;
   padding: 1rem 0;
   width: 100%;
-  border-top: 0.0625rem solid #e0e0e0;
-  background-color: #f9f9f9;
+  border-top: 0.0625rem solid var(--shadow);
+  background-color: var(--background-alt);
   border-radius: 0.5rem;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
 }
 
 .paginationButton {
-  background-color: #ffffff;
-  border: 0.0625rem solid #e0e0e0;
+  background-color: var(--background-alt);
+  border: 0.0625rem solid var(--shadow);
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
   font-size: 0.875rem;
@@ -546,10 +542,11 @@ input:checked + .slider:before {
   min-width: 6rem;
   text-align: center;
   font-weight: 500;
+  color:var(--foreground);
   font-family: inherit;
   
   &:hover:not(:disabled) {
-    background-color: #f0f0f0;
+    background-color: var(--background-alt);
     transform: translateY(-0.125rem);
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
   }
@@ -562,13 +559,13 @@ input:checked + .slider:before {
 
 .paginationInfo {
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  background-color: var(--background-alt);
+  color: var(--foreground);
   text-align: center;
   min-width: 10rem;
-  background-color: #ffffff;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
-  border: 0.0625rem solid #e0e0e0;
+  border: 0.0625rem solid var(--shadow);
 
   @media (max-width: 620px) {
     display:none;
@@ -578,18 +575,19 @@ input:checked + .slider:before {
 .cardRange {
   font-size: 0.75rem;
   margin-top: 0.25rem;
-  color: var(--text-tertiary, #6b7280);
+  background-color: var(--background-alt);
+  color: var(--foreground);
 }
 
 .completedMessage {
-  background-color: #e6f7ff;
-  color: #0072b1;
+  background-color: var(--background-alt);
+  color: var(--foreground);
   padding: 1rem;
   border-radius: 0.5rem;
   text-align: center;
   margin: 0 auto 1rem auto;
   max-width: 30rem;
-  border-left: 0.25rem solid #1890ff;
+  border-left: 0.25rem solid var(--shadow);
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5;
@@ -600,8 +598,8 @@ input:checked + .slider:before {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e0e0e0;
+  background: var(--background-alt);
+  border: 1px solid var(--shadow);
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
@@ -611,14 +609,14 @@ input:checked + .slider:before {
   cursor: pointer;
   opacity: 0;
   transition: all 0.2s ease;
-  color: #6b7280;
+  color: var(--foreground);
   backdrop-filter: blur(4px);
   z-index: 10;
   font-family: inherit;
   
   &:hover {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--background-alt);
+    color: var(--foreground);
     transform: scale(1.1);
   }
   
@@ -631,7 +629,7 @@ input:checked + .slider:before {
 // Table row hover effect
 .tableRow {
   &:hover {
-    background-color: #f9f9f9;
+    background-color: var(--background-alt);
     
     .tableEditButton {
       opacity: 1;
@@ -651,7 +649,7 @@ input:checked + .slider:before {
 
 .tableEditButton {
   background: none;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--foreground-light);
   border-radius: 50%;
   width: 2rem;
   height: 2rem;
@@ -661,13 +659,13 @@ input:checked + .slider:before {
   cursor: pointer;
   opacity: 0;
   transition: all 0.2s ease;
-  color: #6b7280;
+  color: var(--foreground);
   margin: 0 auto;
   font-family: inherit;
   
   &:hover {
-    background: #f3f4f6;
-    color: #374151;
+    background: var(--background);
+    color: var(--foreground-light);
     transform: scale(1.1);
   }
   
@@ -679,8 +677,9 @@ input:checked + .slider:before {
 
 // Add card styles for grid view
 .addCardItem {
-  background-color: #f8f9fa;
-  border: 2px dashed #d1d5db;
+  background-color: var(--background-alt);
+  border: 2px dashed var(--shadow);
+  color: var(--foreground);
   border-radius: 0.5rem;
   padding: 1rem;
   display: flex;
@@ -689,15 +688,17 @@ input:checked + .slider:before {
   min-height: 8rem;
   cursor: pointer;
   transition: all 0.2s ease;
+  .addCardButton {
+    color: var(--foreground);
+  }
   
   &:hover {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
+    background-color: var(--background-alt);
+    border-color: var(--shadow);
     transform: translateY(-0.125rem);
     
     .addCardButton {
-      color: #374151;
-      
+      filter:brightness(1.1);
       svg {
         transform: scale(1.1);
       }
@@ -710,7 +711,7 @@ input:checked + .slider:before {
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  color: #6b7280;
+  color: var(--foreground-light);
   transition: all 0.2s ease;
   font-family: inherit;
   
@@ -738,8 +739,7 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #3b82f6;
-  color: white;
+  background-color: var(--background-alt);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
@@ -748,10 +748,11 @@ input:checked + .slider:before {
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: var(--foreground);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   
   &:hover {
-    background-color: #2563eb;
+    filter:brightness(1.1);
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
   }

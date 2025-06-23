@@ -4,7 +4,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.662);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +14,7 @@
 }
 
 .settingsContent {
-  background: white;
+  background: var(--background-alt);
   border-radius: 0.75rem;
   width: 90%;
   max-width: 32rem;
@@ -28,13 +29,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--shadow);
   
   h2 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
-    color: #111827;
+    color: var(--foreground);
   }
 }
 
@@ -42,7 +43,7 @@
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #6b7280;
+  color: var(--foreground);
   cursor: pointer;
   padding: 0.25rem;
   border-radius: 0.25rem;
@@ -53,8 +54,8 @@
   font-family: inherit;
   
   &:hover {
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: var(--background-alt);
+    color: var(--foreground);
   }
 }
 
@@ -69,22 +70,24 @@
     display: block;
     font-weight: 500;
     margin-bottom: 0.5rem;
-    color: #374151;
+    color: var(--foreground);
     font-size: 0.875rem;
   }
   
   input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--shadow);
     border-radius: 0.5rem;
     font-size: 0.875rem;
     font-family: inherit;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: var(--background);
+    color: var(--foreground);
     
     &:focus {
       outline: none;
-      border-color: #3b82f6;
+      border-color: var(--shadow);
       box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
   }
@@ -93,7 +96,7 @@
 .helpText {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--foreground);
 }
 
 .advancedToggle {
@@ -104,7 +107,7 @@
 .advancedButton {
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--foreground);
   font-size: 0.875rem;
   font-weight: 500;
   font-family: inherit;
@@ -116,10 +119,9 @@
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   transition: all 0.2s ease;
-  
+
   &:hover {
-    background-color: #f3f4f6;
-    color: #374151;
+    background-color: var(--background-alt);
   }
 }
 
@@ -133,11 +135,11 @@
 }
 
 .advancedSettings {
-  background-color: #f9f9f9;
+  background-color: var(--background-alt);
   border-radius: 0.5rem;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  border: 0.0625rem solid #e0e0e0;
+  border: 0.0625rem solid var(--shadow);
   animation: modalAppear 0.2s ease-out;
 }
 
@@ -153,13 +155,13 @@
 
 .advancedDescription {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--foreground);
   margin: 0;
 }
 
 .infoBox {
-  background-color: #f0f9ff;
-  border: 0.0625rem solid #bae6fd;
+  background-color: var(--background-alt);
+  border: 0.0625rem solid var(--shadow);
   border-radius: 0.25rem;
   padding: 1rem;
   margin-top: 1rem;
@@ -168,13 +170,13 @@
     font-size: 0.875rem;
     font-weight: 600;
     margin: 0 0 0.5rem 0;
-    color: #0369a1;
+    color: var(--foreground);
   }
   
   p {
     font-size: 0.8125rem;
     margin: 0.5rem 0;
-    color: #0c4a6e;
+    color: var(--foreground);
     line-height: 1.4;
   }
 }
@@ -197,12 +199,12 @@
 }
 
 .saveButton {
-  background-color: #10b981;
-  color: white;
+  background-color: var(--success-foreground);
+  color: var(--success-background);
   border: none;
   
   &:hover:not(:disabled) {
-    background-color: #059669;
+    background-color: var(--shadow);
   }
   
   &:disabled {
@@ -213,20 +215,20 @@
 
 .cancelButton {
   background: none;
-  color: #6b7280;
-  border: 0.125rem solid #d1d5db;
+  color: var(--foreground);
+  border: 0.125rem solid var(--shadow);
   
   &:hover:not(:disabled) {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
-    color: #374151;
+    background-color: var(--background-alt);
+    border-color: var(--shadow);
+    color: var(--foreground);
   }
 }
 
 .error {
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background-color: var(--error-background);
+  border: 1px solid var(--error-foreground);
+  color: var(--error-foreground);
   padding: 0.75rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
@@ -234,9 +236,9 @@
 }
 
 .success {
-  background-color: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #15803d;
+  background-color: var(--success-background);
+  border: 1px solid var(--success-foreground);
+  color: var(--success-foreground);
   padding: 0.75rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
