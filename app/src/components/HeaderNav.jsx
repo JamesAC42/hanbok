@@ -3,8 +3,10 @@ import styles from '@/styles/components/headernav.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import {IcBaselinePerson} from '@/components/icons/Profile';
+import { useRouter } from 'next/navigation';    
 
 function HeaderNav() {
+    const router = useRouter();
     return (
         <div className={styles.headerNav}>
             <div className={styles.headerNavLeft}>
@@ -14,8 +16,7 @@ function HeaderNav() {
                 <Link href="/feedback">Feedback</Link>
             </div>
             <div className={styles.headerNavCenter}>
-                <Image src="/hanbokicon.png" alt="Hanbok" width={32} height={32} />
-                hanbok
+                <Link href="/">hanbok</Link>
             </div>
             <div className={styles.headerNavRight}>
                 <Link href={"/profile"}><IcBaselinePerson className={styles.profileIcon} /></Link>

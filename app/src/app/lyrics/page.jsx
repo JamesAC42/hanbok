@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { useAdmin } from '@/contexts/AdminContext';
 import { useAuth } from '@/contexts/AuthContext';
 
+import ContentPage from '@/components/ContentPage';
+
 const Lyrics = () => {
     const { t } = useLanguage();
     const { isAdmin } = useAdmin();
@@ -104,6 +106,7 @@ const Lyrics = () => {
     }, [activeCategory]);
 
     return (
+        <ContentPage>
         <div className={lyricsStyles.lyricsContainer}>
             <div className={lyricsStyles.lyricsContent}>
                 <h1 className={lyricsStyles.pageTitle}>{t('lyrics.title')}</h1>
@@ -184,7 +187,8 @@ const Lyrics = () => {
                     <Image src="/images/hanbokgirlmusic.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
                 </div>
             </div>
-        </div>
+        </div>    
+        </ContentPage>
     );
 };
 

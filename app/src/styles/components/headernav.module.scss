@@ -73,17 +73,17 @@
     }
 
     .headerNavCenter {
+        position:absolute;
         @include header-nav-item;
+        top:50%;
+        left:50%;
+        transform:translate(calc(-50% - 0.5rem),-50%);
         gap:0.5rem;
-        font-family:var(--font-display);
-        font-weight:700;
-        font-size:1.8rem;
-        color:#fff;
-        font-family:var(--font-lilita);
-        img {
-            height:1.4rem;
-            width:auto;
-            transform:translateY(2px);
+        a {
+            font-weight:700;
+            font-size:1.8rem;
+            color:#fff;
+            font-family:var(--font-lilita);
         }
     }
 
