@@ -97,7 +97,7 @@ const SentenceForm = ({
         const shouldPlay = localStorage.getItem('playSoundEffects') !== 'false';
         if (shouldPlay && pasteSound) {
             pasteSound.currentTime = 0;
-            pasteSound.volume = 0.3;
+            pasteSound.volume = 0.2;
             pasteSound.play().catch(err => console.error('Error playing sound:', err));
         }
     };
@@ -113,7 +113,7 @@ const SentenceForm = ({
         const shouldPlay = localStorage.getItem('playSoundEffects') !== 'false';
         if (shouldPlay && finishedSound) {
             finishedSound.currentTime = 0;
-            finishedSound.volume = 0.7;
+            finishedSound.volume = 0.02;
             finishedSound.play().catch(err => console.error('Error playing sound:', err));
         }
     };

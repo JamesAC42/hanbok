@@ -1,4 +1,4 @@
-:root, div.theme-default {
+:root, div.theme-light {
     --background: #ffffff;
     --background-alt: #f5f5f5;
     --foreground: #171717;
@@ -44,14 +44,16 @@
     --font-funnel: 'FunnelSans', sans-serif;
 }
 
-div.theme-blackwhite {
-    --background: #ffffff;
-    --background-alt: #f5f5f5;
-    --foreground: #171717;
-    --foreground-muted: #6a6a6a;
-    --primary: #3d64e8;
-    --primary-dark: #2a4cc2;
-    --secondary: #000000;
+div.theme-dark {
+    --background: #1a1a1a;
+    --background-alt: #3e3e3e;
+    --foreground: #ffffff;
+    --foreground-muted: #646464;
+    --foreground-light: #686868;
+    --foreground-lighter: #060606;
+    --primary: #c2d0ff;
+    --primary-dark: #6d88eb;
+    --secondary: #f8f8f8;
     --shadow: #000000;
   
     --error-background: rgba(252, 207, 207, 0.877);

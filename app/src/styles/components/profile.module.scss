@@ -1,20 +1,8 @@
 @import '../variables.module.scss';
 
 .profileContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 2rem;
-  border-radius: 0.5rem;
-  border: 0.0625rem solid var(--foreground);
-  background-color: rgba(238, 255, 246, 0.865);
-  backdrop-filter: blur(10px);
-  box-shadow: 0.5rem 0.5rem 0 #2c3730;
-  min-height:70dvh;
-  z-index:2;
+
+  @include dashboard-page;
 
   @media screen and (max-width: 725px) {
     padding: 1.5rem;
@@ -36,17 +24,15 @@
 
 .userDetails {
   margin-top: 0rem;
-  padding: 2rem;
   width:100%;
-  border: 0.0625rem solid var(--foreground);
   border-radius: 0.5rem;
-  background-color: #f9f9f9;
   font-size:1rem;
 }
 
 .userDetails h2 {
   font-size:1rem;
   margin-bottom: 1rem;
+  font-family:var(--font-lilita);
 }
 
 .userDetails p {

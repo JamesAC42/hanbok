@@ -3,29 +3,48 @@
 @keyframes expand {
     0% {
         width:fit-content;
-        max-width:2rem;
+        max-width:4rem;
+        width:4rem;
     }
     100% {
         width:fit-content;
         max-width:15rem;
+        width:15rem;
+    }
+}
+
+@keyframes expand-text {
+    0% {
+        opacity:0;
+        max-width:0;
+        width:0;
+    }
+    100% {
+        opacity:1;
+        max-width:15rem;
+        width:15rem;
     }
 }
 
 .sidebar {
+    box-sizing:border-box;
     width:15rem;
     height:100dvh;
 
+    background:var(--background);
+
     border-right:1px solid var(--foreground-light);
 
-    transition:width 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition:width 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
 
     .sidebarInner {
         width:15rem;
         height:100dvh;
         position:relative;
+        box-sizing:border-box;
 
         padding:1rem;
-        transition:width 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition:width 0.1s cubic-bezier(0.455, 0.03, 0.515, 0.955);
 
         @include flex-center-column;
         justify-content:flex-start;
@@ -41,6 +60,8 @@
                 flex-direction:row;
                 justify-content:space-between;
                 align-items:center;
+                color:var(--foreground);
+
                 .homeIcon {
                     height:2rem;
                     width:2rem;
@@ -97,7 +118,7 @@
                     width:100%;
                     border-radius:0.5rem;
                     background:var(--foreground-lighter);
-                    z-index:-1;
+                    z-index:0;
                     display:none;
 
                     transition:transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -110,6 +131,8 @@
                 .sidebarSectionItem {
                     @include flex-center-row;
                     justify-content:flex-start;
+                    position:relative;
+                    z-index:1;
 
                     background:none;
                     border-radius:0.5rem;
@@ -118,8 +141,9 @@
                         background:var(--foreground-lighter);
                     }
 
-                    &.profileSection {
-                        transition:all 0.2 linear;
+                    &.profileSection,
+                    &.newAnalysisSection {
+                        transition:background 0.2s ease-in-out;
 
                         &:hover {
                             background:var(--foreground-lighter);
@@ -130,6 +154,9 @@
                         width:2rem;
                         height:2rem;
                         @include flex-center;
+                        color:var(--foreground);
+                        flex:0 0 2rem;
+                        min-width:2rem;
                     }
     
                     .sidebarSectionItemText {
@@ -141,6 +168,7 @@
                         overflow: hidden;
                         text-overflow: ellipsis;
                         min-width:0;
+                        color:var(--foreground);
                     }
 
                     &.sidebarSectionItemPricing {
@@ -157,21 +185,16 @@
 
         }
     }
-
-    @keyframes expand-main {
-        0% {
-            width:4rem;
-        }
-        100% {
-            width:15rem;
-        }
-    }
     
     &.collapsed {
-        width:4rem;
-        overflow:hidden;
+        width: calc(4rem + 1px);
+        max-width: calc(4rem + 1px);
+        overflow: hidden;
 
         .sidebarInner {
+            width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
 
             .sidebarSection {
                 .sidebarHeader {
@@ -188,17 +211,16 @@
                         max-width:100%;
                     }
                     100% {
-                        max-width:2rem;
+                        max-width:4rem;
                     }
                 }
 
                 .sidebarSectionItems {
                     .sidebarItemFloatyThing {
-                        width:2rem;
+                        width:100%;
                     }
                     .sidebarSectionItem {
-                        animation:collapse 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                        max-width:2rem;
+                        width:100%;
                         .sidebarSectionItemText {
                             display:none;
                         }
@@ -207,56 +229,52 @@
             }
         }
     }
+
+    @mixin expand-animation {
+        animation:expand 0.2s cubic-bezier(0.86, 0, 0.07, 1);
+    }
+
+    @mixin expand-text-animation {
+        animation:expand-text 0.2s cubic-bezier(0.86, 0, 0.07, 1);
+    }
+
+    @mixin expand-transition {
+        transition:all 0.2s cubic-bezier(0.86, 0, 0.07, 1);
+    }
     
     &.collapsed.expanding {
-        transition:width 0.2s linear;
-        animation:expand-main 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-        @keyframes expand-inner {
-            0% {
-                max-width:4rem;
-                width:4rem;
-            }
-            100% {
-                max-width:15rem;
-                width:15rem;
-            }
-        }
+        @include expand-animation;
 
-        @keyframes expand-text {
-            0% {
-                opacity:0;
-                max-width:0;
-            }
-            100% {
-                opacity:1;
-                max-width:15rem;
-            }
-        }
         .sidebarInner {
-            transition:width 0.2s linear;
-            animation:expand-inner 0.2s linear;
 
+            @include expand-animation;
             .sidebarSection {
+
+                .sidebarHeader {
+                    .collapseButton {
+                        @include expand-transition;
+                        opacity:0;
+                    }
+                }
                 .sidebarSectionItems {
                     .sidebarItemFloatyThing {
                         width:100%;
                     }
                     .sidebarSectionItem {
+                        @include expand-transition;
                         max-width:15rem;
 
                         @include flex-center-row;
                         justify-content:flex-start;
                         flex-wrap:nowrap;
 
-                        animation:expand 0.2s linear;
                         max-width:15rem;
-                        animation:expand 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    
-
+                        @include expand-animation;
+                        animation-delay:0.1s;
                         .sidebarSectionItemText {
                             display:inline-block;
-                            animation:expand-text 0.4s linear;
+                            @include expand-text-animation;
                         }
                     }
                 }

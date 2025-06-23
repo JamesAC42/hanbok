@@ -140,3 +140,13 @@ $word-types: (
   @include flex-center-column;
   justify-content:space-between;
 } 
+
+@mixin dashboard-page {
+  padding:2rem 10rem;
+
+  .pageTitle {
+    font-size:3rem;
+    color:var(--foreground-muted);
+    font-family:var(--font-lilita);
+  }
+}

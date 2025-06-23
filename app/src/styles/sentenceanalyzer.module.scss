@@ -273,63 +273,6 @@
 			}
 		}
 	}
-	
-	.statsContainer {
-		display: flex;
-		gap: 2rem;
-		justify-content: flex-start;
-		margin-top: 0rem;
-		padding: 0.5rem;
-		border-radius: 0.2rem;
-		background: rgba(255, 255, 255, 0.336);
-		border:1px solid #6f81df;
-		backdrop-filter: blur(2px);
-		margin-bottom:1rem;
-		border-radius:0.5rem;
-		width:fit-content;
-
-		.statItem {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			min-width: 8rem;
-			padding: 0.5rem;
-		}
-		
-		.statNumber {
-			font-size: 1.5rem;
-			font-weight: bold;
-			color: #392f2c;
-		}
-		
-		.statLabel {
-			font-size: 1rem;
-			color: rgba(114, 88, 88, 0.886);
-			text-align: center;
-		}
-
-		&.statsContainerWithAnalysis {
-			display:none;
-		}
-
-		@media screen and (max-width:725px) {
-			margin-bottom:2rem;
-			gap:0rem;
-			justify-content:space-around;
-			width:100%;
-			.statItem {
-				padding:0.2rem;
-				min-width:5rem;
-			}
-			.statNumber {
-				font-size:1.2rem;
-			}
-			.statLabel {
-				font-size:0.7rem;
-				max-width:3rem;
-			}
-		}
-	}
 
 	.testSentences {
 		margin-bottom:2rem;

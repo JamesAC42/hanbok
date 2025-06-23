@@ -1,8 +1,9 @@
+"use client";
+
 import styles from "@/styles/components/sidebar.module.scss";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useRef } from "react";
 
 import { MaterialSymbolsVariableAddRounded } from "./icons/AddSentence";
 import { MaterialSymbolsBookmarkSharp } from "./icons/Bookmark";
@@ -33,25 +34,29 @@ function Sidebar() {
 
     const router = useRouter();
 
-    const section1Ref = useRef(null);
-    const section2Ref = useRef(null);
-
     function setHoverTransform(section, i) {
         if (section === 1) {
             setSectionOneTransform((2 * i) + "rem");
             setShowSectionOneHover(true);
-        } else {
+        } else if (section === 2) {
             setSectionTwoTransform((2 * i) + "rem");
             setShowSectionTwoHover(true);
         }
     }
 
     useEffect(() => {
+        
         setActivePath(window.location.pathname);
+
+        if (typeof window !== 'undefined') {
+            let saved = localStorage.getItem('sidebarCollapsed');
+            saved = saved ? JSON.parse(saved) : false;
+            setCollapsed(saved);
+        }
+
     }, []);
 
     function getActiveClass(page) {
-
         let onPath = false;
         if (typeof page === "string") {    
             if (page === activePath) {
@@ -66,7 +71,6 @@ function Sidebar() {
             });
             return onPath ? styles.active : "";
         }
-        
     }
 
     function navigateTo(path) {
@@ -75,15 +79,16 @@ function Sidebar() {
     }
 
     function toggleCollapse() {
-
         if (collapsed) {
             setExpanding(true);
             setTimeout(() => {
                 setCollapsed(false);
+                localStorage.setItem('sidebarCollapsed', 'false');
                 setExpanding(false);
-            }, 200);
+            }, 100);
         } else {
             setCollapsed(true);
+            localStorage.setItem('sidebarCollapsed', 'true');
         }
     }
 
@@ -122,18 +127,13 @@ function Sidebar() {
                         </div>
                     </div>
                 </div>
-                <div 
-                    className={styles.sidebarSection} 
-                    ref={section1Ref}
-                    onMouseEnter={() => setShowSectionOneHover(true)}
-                    onMouseLeave={() => setShowSectionOneHover(false)}>
+                <div className={styles.sidebarSection}>
                     <div className={styles.sidebarSectionItems}>
                         <div
-                            onMouseEnter={() => setHoverTransform(1, 0)}
                             className={`
                                 ${styles.sidebarSectionItem}
                                 ${expanding ? styles.expanding : ""}
-                                ${getActiveClass(["/analyze", "/sentence/"])}`}
+                                ${styles.newAnalysisSection}`}
                             onClick={() => navigateTo("/analyze")}>
                             <div className={styles.sidebarSectionItemIcon}>
                                 <MaterialSymbolsVariableAddRounded />
@@ -142,8 +142,15 @@ function Sidebar() {
                                 Analyze Text
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div 
+                    className={styles.sidebarSection}
+                    onMouseEnter={() => setShowSectionOneHover(true)}
+                    onMouseLeave={() => setShowSectionOneHover(false)}>
+                    <div className={styles.sidebarSectionItems}>
                         <div 
-                            onMouseEnter={() => setHoverTransform(1, 1)}
+                            onMouseEnter={() => setHoverTransform(1,0)}
                             className={`
                                 ${styles.sidebarSectionItem}
                                 ${expanding ? styles.expanding : ""}
@@ -157,7 +164,7 @@ function Sidebar() {
                             </div>
                         </div>
                         <div 
-                            onMouseEnter={() => setHoverTransform(1, 2)}
+                            onMouseEnter={() => setHoverTransform(1, 1)}
                             className={`
                                 ${styles.sidebarSectionItem}
                                 ${expanding ? styles.expanding : ""}
@@ -171,7 +178,7 @@ function Sidebar() {
                             </div>
                         </div>
                         <div 
-                            onMouseEnter={() => setHoverTransform(1, 3)}
+                            onMouseEnter={() => setHoverTransform(1, 2)}
                             className={`
                                 ${styles.sidebarSectionItem}
                                 ${expanding ? styles.expanding : ""}
@@ -185,7 +192,7 @@ function Sidebar() {
                             </div>
                         </div>
                             <div 
-                            onMouseEnter={() => setHoverTransform(1, 4)}
+                            onMouseEnter={() => setHoverTransform(1, 3)}
                             className={`
                                 ${styles.sidebarSectionItem}
                                 ${expanding ? styles.expanding : ""}
@@ -207,7 +214,7 @@ function Sidebar() {
                         </div>
                     </div>
                 </div>
-                <div className={styles.sidebarSection} ref={section2Ref}
+                <div className={styles.sidebarSection}
                     onMouseEnter={() => setShowSectionTwoHover(true)}
                     onMouseLeave={() => setShowSectionTwoHover(false)}>
                     <div 
