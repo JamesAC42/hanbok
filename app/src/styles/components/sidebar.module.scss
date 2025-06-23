@@ -29,6 +29,8 @@
 .sidebar {
     box-sizing:border-box;
     width:15rem;
+    min-width:15rem;
+    max-width:15rem;
     height:100dvh;
 
     background:var(--background);
@@ -81,6 +83,7 @@
                     width:2rem;
                     font-size:1rem;
                     position:relative;
+                    min-width:2rem;
                     
                     @include flex-center;
 
@@ -116,6 +119,7 @@
                     left:0;
                     height:2rem;
                     width:100%;
+                    min-width:2rem;
                     border-radius:0.5rem;
                     background:var(--foreground-lighter);
                     z-index:0;
@@ -136,6 +140,7 @@
 
                     background:none;
                     border-radius:0.5rem;
+                    min-width:2rem;
 
                     &.active {
                         background:var(--foreground-lighter);
@@ -191,19 +196,24 @@
 
     @keyframes collapse {
         0% {
-            max-width:100%;
+            max-width:15rem;
+            min-width:15rem;
         }
         100% {
             max-width:4rem;
+            min-width:4rem;
         }
+    }
+
+    @mixin collapse-animation {
+        animation:collapse 0.2s ease-in-out;
     }
     
     &.collapsed {
         width: calc(4rem + 1px);
         max-width: calc(4rem + 1px);
+        min-width: calc(4rem + 1px);
         overflow: hidden;
-
-        //animation:collapse 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         .sidebarInner {
             width: 100%;
@@ -222,10 +232,14 @@
 
                 .sidebarSectionItems {
                     .sidebarItemFloatyThing {
-                        width:100%;
+                        width:2rem;
+                        min-width:2rem;
+                        max-width:2rem;
                     }
                     .sidebarSectionItem {
-                        width:100%;
+                        width:2rem;
+                        min-width:2rem;
+                        max-width:2rem;
                         .sidebarSectionItemText {
                             display:none;
                         }
@@ -233,6 +247,22 @@
                 }
             }
         }
+    }
+
+    &.animateCollapse {
+        
+        @include collapse-animation;
+        .sidebarInner {
+            .sidebarSection {
+                .sidebarSectionItems {
+                    .sidebarItemFloatyThing,
+                    .sidebarSectionItem {
+                        @include collapse-animation;
+                    }
+                }
+            }
+        }
+
     }
 
     @mixin expand-animation {

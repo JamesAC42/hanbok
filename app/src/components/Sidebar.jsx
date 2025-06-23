@@ -31,6 +31,7 @@ function Sidebar() {
 
     const [activePath, setActivePath] = useState(null);
     const [expanding, setExpanding] = useState(false);
+    const [collapsing, setCollapsing] = useState(false);
 
     const router = useRouter();
 
@@ -74,7 +75,6 @@ function Sidebar() {
     }
 
     function navigateTo(path) {
-        setActivePath(window.location.pathname);
         router.push(path);
     }
 
@@ -87,13 +87,17 @@ function Sidebar() {
                 setExpanding(false);
             }, 100);
         } else {
-            setCollapsed(true);
-            localStorage.setItem('sidebarCollapsed', 'true');
+            setCollapsing(true);
+            setTimeout(() => {
+                setCollapsed(true);
+                localStorage.setItem('sidebarCollapsed', 'true');
+                setCollapsing(false);
+            }, 100);
         }
     }
 
     return (
-        <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""} ${expanding ? styles.expanding : ""}`}>
+        <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""} ${expanding ? styles.expanding : ""} ${collapsing ? styles.animateCollapse : ""}`}>
             <div className={styles.sidebarInner}>
                 <div className={styles.sidebarSection}>
                     <div className={styles.sidebarHeader}>
