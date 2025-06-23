@@ -194,21 +194,6 @@
         }
     }
 
-    @keyframes collapse {
-        0% {
-            max-width:15rem;
-            min-width:15rem;
-        }
-        100% {
-            max-width:4rem;
-            min-width:4rem;
-        }
-    }
-
-    @mixin collapse-animation {
-        animation:collapse 0.2s ease-in-out;
-    }
-    
     &.collapsed {
         width: calc(4rem + 1px);
         max-width: calc(4rem + 1px);
@@ -249,15 +234,54 @@
         }
     }
 
+    @keyframes collapse {
+        0% {
+            max-width:15rem;
+            min-width:15rem;
+        }
+        100% {
+            max-width:4rem;
+            min-width:4rem;
+        }
+    }
+
+    @keyframes collapse-text {
+
+        0% {
+            max-width:10rem;
+        }
+        100% {
+            max-width:4rem;
+        }
+    }
+
+    @mixin collapse-animation {
+        animation:collapse 0.2s ease-in-out;
+    }
+
+    @mixin collapse-text-animation {
+        animation:collapse-text 0.2s ease-in-out;
+    }
+
     &.animateCollapse {
         
         @include collapse-animation;
         .sidebarInner {
             .sidebarSection {
+                .sidebarHeader {
+                    .collapseButton {
+                        opacity:0;
+                    }
+                }
                 .sidebarSectionItems {
                     .sidebarItemFloatyThing,
                     .sidebarSectionItem {
-                        @include collapse-animation;
+                        overflow:hidden;
+                        .sidebarSectionItemText {
+                            white-space: nowrap;
+                            overflow: hidden;
+                        }
+                        @include collapse-text-animation;
                     }
                 }
             }
