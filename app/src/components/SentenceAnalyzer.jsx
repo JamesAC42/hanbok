@@ -105,13 +105,17 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     return (
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>
     
-            <TranslationSwitcher 
-                translationMode={translationMode}
-                setTranslationMode={setTranslationMode}
-                originalLanguage={originalLanguage}
-                translationLanguage={translationLanguage}
-                analysis={!!analysis}
-            />
+            { 
+                !analysis && (
+                <TranslationSwitcher 
+                    translationMode={translationMode}
+                    setTranslationMode={setTranslationMode}
+                    originalLanguage={originalLanguage}
+                    translationLanguage={translationLanguage}
+                    analysis={!!analysis}
+                />
+                )
+            }
 
             {
                 // !analysis && (
@@ -119,14 +123,18 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 // )
             }
 
-            <SentenceForm
-                analysis={analysis}
-                setAnalysis={handleNewAnalysis}
-                setVoice1={setVoice1}
-                setVoice2={setVoice2}
-                setTransition={setShowTransition}
-                translationMode={translationMode}
-                />
+            { 
+                !analysis && (
+                    <SentenceForm
+                        analysis={analysis}
+                        setAnalysis={handleNewAnalysis}
+                        setVoice1={setVoice1}
+                        setVoice2={setVoice2}
+                        setTransition={setShowTransition}
+                        translationMode={translationMode}
+                        />
+                )
+            }
 
             {
                 !analysis && (

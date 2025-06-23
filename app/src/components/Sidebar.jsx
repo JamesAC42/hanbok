@@ -18,6 +18,7 @@ import { Fa6SolidParagraph } from "./icons/Paragraph";
 import { MaterialSymbolsLibraryBooksSharp } from "./icons/LibraryBooks";
 import { CuidaSidebarCollapseOutline } from "./icons/Collapse";
 import { IcBaselinePerson } from "./icons/Profile";
+import { MaterialSymbolsHistory } from "./icons/History";
 
 function Sidebar() {
 
@@ -195,7 +196,7 @@ function Sidebar() {
                                 My Grammar
                             </div>
                         </div>
-                            <div 
+                        <div 
                             onMouseEnter={() => setHoverTransform(1, 3)}
                             className={`
                                 ${styles.sidebarSectionItem}
@@ -207,6 +208,20 @@ function Sidebar() {
                             </div>
                             <div className={styles.sidebarSectionItemText}>
                                 Tutor
+                            </div>
+                        </div>
+                        <div 
+                            onMouseEnter={() => setHoverTransform(1, 4)}
+                            className={`
+                                ${styles.sidebarSectionItem}
+                                ${expanding ? styles.expanding : ""}
+                                ${getActiveClass("/history")}`}
+                            onClick={() => navigateTo("/history")}>
+                            <div className={styles.sidebarSectionItemIcon}>
+                                <MaterialSymbolsHistory />
+                            </div>
+                            <div className={styles.sidebarSectionItemText}>
+                                History
                             </div>
                         </div>
 
@@ -304,6 +319,14 @@ function Sidebar() {
                                 transform: `translateY(${sectionTwoTransform})`}
                             }>
                         </div>
+                    </div>
+                </div>
+                <div className={styles.sidebarSection}>
+                    <div
+                        className={styles.sidebarSectionHeader}>
+                        Recent
+                    </div>
+                    <div className={styles.sidebarSectionItems}>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import ContentPage from '@/components/ContentPage';
+
 
 //real
 const PRICE_IDS = {
@@ -61,6 +63,7 @@ const Pricing = () => {
     };
 
     return (
+        <ContentPage>
         <div className={styles.pageContainer}>
             <div className={styles.pageContent}>
                 <div className={pricingStyles.pricingContent}>
@@ -204,6 +207,7 @@ const Pricing = () => {
                 </div>
             </div>
         </div>
+        </ContentPage>
     );
 };
 

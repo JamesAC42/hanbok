@@ -1,11 +1,13 @@
 'use client';
-import { useEffect } from 'react';
-import SentenceAnalyzer from '@/components/SentenceAnalyzer';
-import { useLanguage } from '@/contexts/LanguageContext';
-import Dashboard from '@/components/Dashboard';
+import styles from '@/styles/pages/lessons.module.scss';
+import ContentPage from '@/components/ContentPage';
 
 export default function Home() {
   return (
-    <div></div>
+    <ContentPage>
+        <div className={styles.lessonsContainer}>
+            <h1 className={styles.pageTitle}>Lessons</h1>
+        </div>
+    </ContentPage>
   );
 }

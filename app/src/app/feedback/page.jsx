@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 import { MingcuteCommentFill } from '@/components/icons/CommentFill';
-import Dashboard from '@/components/Dashboard';
+import ContentPage from '@/components/ContentPage';
 
 // Move FeedbackItem outside the main component
 const FeedbackItem = ({ 
@@ -208,92 +208,92 @@ const Feedback = () => {
     };
 
     return (
-        <Dashboard>
+        <ContentPage>
             <div className={styles.pageContainer}>
                 <div className={styles.pageContent}>
-                <div className={feedbackStyles.feedbackContent}>
-                    <h1 className={styles.pageTitle}>{t('feedback.title')}</h1>
+                    <div className={feedbackStyles.feedbackContent}>
+                        <h1 className={styles.pageTitle}>{t('feedback.title')}</h1>
 
-                    <p>{t('feedback.description')}</p>
-                    
-                    {isAuthenticated ? (
-                        <form onSubmit={(e) => handleSubmit(e)} className={feedbackStyles.newFeedbackForm}>
-                            <textarea
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                                placeholder={t('feedback.submitPlaceholder')}
-                            />
-                            <button type="submit">{t('feedback.submitButton')}</button>
-                        </form>
-                    ) : (
-                        <div className={feedbackStyles.loginPrompt}>
-                            {t('feedback.loginPrompt')} <Link href="/login">log in</Link>
-                        </div>
-                    )}
-                    
-                    {error && <div className={feedbackStyles.error}>{error}</div>}
-
-                    {loading ? (
-                        <div className={feedbackStyles.loading}>{t('feedback.loading')}</div>
-                    ) : feedback.length === 0 ? (
-                        <div className={feedbackStyles.emptyState}>
-                            <MingcuteCommentFill />
-                            <p>{t('feedback.emptyState')}</p>
-                        </div>
-                    ) : (
-                        <div className={feedbackStyles.feedbackList}>
-                            {feedback.map((item) => (
-                                <FeedbackItem 
-                                    key={item.feedbackId} 
-                                    item={item}
-                                    onReply={setReplyingTo}
-                                    onDelete={handleDelete}
-                                    replyingTo={replyingTo}
-                                    replyText={replyText}
-                                    onReplyTextChange={handleReplyTextChange}
-                                    onSubmitReply={handleSubmit}
-                                    onCancelReply={handleCancelReply}
-                                    formatDate={formatDate}
-                                    isAuthenticated={isAuthenticated}
-                                    userId={user?.userId}
-                                    t={t}
+                        <p>{t('feedback.description')}</p>
+                        
+                        {isAuthenticated ? (
+                            <form onSubmit={(e) => handleSubmit(e)} className={feedbackStyles.newFeedbackForm}>
+                                <textarea
+                                    value={newComment}
+                                    onChange={(e) => setNewComment(e.target.value)}
+                                    placeholder={t('feedback.submitPlaceholder')}
                                 />
-                            ))}
-                        </div>
-                    )}
+                                <button type="submit">{t('feedback.submitButton')}</button>
+                            </form>
+                        ) : (
+                            <div className={feedbackStyles.loginPrompt}>
+                                {t('feedback.loginPrompt')} <Link href="/login">log in</Link>
+                            </div>
+                        )}
+                        
+                        {error && <div className={feedbackStyles.error}>{error}</div>}
 
-                    {totalPages > 1 && (
-                        <div className={feedbackStyles.pagination}>
-                            <button 
-                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                disabled={page === 1}
-                            >
-                                {t('feedback.actions.previous')}
-                            </button>
-                            <span>
-                                {t('feedback.pagination.page').replace('{current}', page).replace('{total}', totalPages)}
-                            </span>
-                            <button 
-                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                disabled={page === totalPages}
-                            >
-                                {t('feedback.actions.next')}
-                            </button>
-                        </div>
-                    )}
-                </div>
-                <div className={feedbackStyles.girl}>
-                    <Image
-                        src="/images/hanbokgirl.png"
-                        alt="girl"
-                        width={1024}
-                        height={1536}
-                        priority
-                    />
+                        {loading ? (
+                            <div className={feedbackStyles.loading}>{t('feedback.loading')}</div>
+                        ) : feedback.length === 0 ? (
+                            <div className={feedbackStyles.emptyState}>
+                                <MingcuteCommentFill />
+                                <p>{t('feedback.emptyState')}</p>
+                            </div>
+                        ) : (
+                            <div className={feedbackStyles.feedbackList}>
+                                {feedback.map((item) => (
+                                    <FeedbackItem 
+                                        key={item.feedbackId} 
+                                        item={item}
+                                        onReply={setReplyingTo}
+                                        onDelete={handleDelete}
+                                        replyingTo={replyingTo}
+                                        replyText={replyText}
+                                        onReplyTextChange={handleReplyTextChange}
+                                        onSubmitReply={handleSubmit}
+                                        onCancelReply={handleCancelReply}
+                                        formatDate={formatDate}
+                                        isAuthenticated={isAuthenticated}
+                                        userId={user?.userId}
+                                        t={t}
+                                    />
+                                ))}
+                            </div>
+                        )}
+
+                        {totalPages > 1 && (
+                            <div className={feedbackStyles.pagination}>
+                                <button 
+                                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                                    disabled={page === 1}
+                                >
+                                    {t('feedback.actions.previous')}
+                                </button>
+                                <span>
+                                    {t('feedback.pagination.page').replace('{current}', page).replace('{total}', totalPages)}
+                                </span>
+                                <button 
+                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={page === totalPages}
+                                >
+                                    {t('feedback.actions.next')}
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    <div className={feedbackStyles.girl}>
+                        <Image
+                            src="/images/hanbokgirl.png"
+                            alt="girl"
+                            width={1024}
+                            height={1536}
+                            priority
+                        />
+                    </div>
                 </div>
             </div>
-            </div>
-        </Dashboard>
+        </ContentPage>
     );
 };
 

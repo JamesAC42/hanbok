@@ -11,7 +11,7 @@ function HeaderNav() {
         <div className={styles.headerNav}>
             <div className={styles.headerNavLeft}>
                 <Link href="/pricing" className={styles.headerLinkSpecial}>Pricing</Link>
-                <Link href="/blog">Blog</Link>
+                <Link href="/lessons">Lessons</Link>
                 <Link href="/lyrics">Lyrics</Link>
                 <Link href="/feedback">Feedback</Link>
             </div>
