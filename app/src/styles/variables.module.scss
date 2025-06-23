@@ -159,3 +159,47 @@ $word-types: (
   text-align:center;
   margin:4rem 0;
 }
+
+@mixin hero-cta {
+  font-family: var(--font-display);
+  background: linear-gradient(135deg, #7091ff, #26a579);
+  color: #fff;
+  padding: 0.5rem 1.5rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 800;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+
+  &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+          45deg,
+          transparent,
+          transparent 40%,
+          rgba(255, 255, 255, 0.2) 40%,
+          rgba(255, 255, 255, 0.2) 60%,
+          transparent 60%,
+          transparent
+      );
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.5s ease;
+  }
+
+  &:hover {
+      opacity: 0.9;
+      transform:scale(1.05);
+      
+      &::before {
+          transform: translateX(100%) rotate(45deg);
+      }
+  }
+}

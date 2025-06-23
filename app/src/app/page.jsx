@@ -7,13 +7,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-import {IcBaselinePerson} from '@/components/icons/Profile';
 import {MaterialSymbolsCheckCircleOutlineRounded} from '@/components/icons/CheckCircle';
 import {MdiArrowRightBoldCircle} from '@/components/icons/ArrowRight';
 import {MaterialSymbolsLightKidStar} from '@/components/icons/StarFilled';
 import {SolarMapArrowLeftBoldDuotone} from '@/components/icons/ArrowLeftDuotone';
 
 import { IcTwotoneDiscord } from '@/components/icons/DiscordIcon';
+
+import ContentPage from '@/components/ContentPage';
+
+import HeaderNav from '@/components/HeaderNav';
 
 function TestimonialCard({quote}) {
   return (
@@ -64,25 +67,7 @@ export default function Home() {
   }, [supportedLanguages]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.headerNav}>
-        <div className={styles.headerNavLeft}>
-            <Link href="/pricing" className={styles.headerLinkSpecial}>Pricing</Link>
-            <Link href="/blog">Blog</Link>
-            <Link href="/lyrics">Lyrics</Link>
-        </div>
-        <div className={styles.headerNavCenter}>
-          <Image src="/hanbokicon.png" alt="Hanbok" width={32} height={32} />
-          hanbok
-        </div>
-        <div className={styles.headerNavRight}>
-            <Link href={"/profile"}><IcBaselinePerson className={styles.profileIcon} /></Link>
-            <div className={styles.getStartedButton} onClick={() => router.push("/analyze")}>
-              Get Started
-            </div>
-        </div>
-      </div>
-
+    <ContentPage>
       <div className={styles.heroSection}>
 
         <Image src="/images/background.png" alt="Hero Image" fill priority style={{ objectFit: 'cover' }} />
@@ -252,6 +237,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </ContentPage>
   );
 }
