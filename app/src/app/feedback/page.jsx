@@ -9,6 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 import { MingcuteCommentFill } from '@/components/icons/CommentFill';
 import ContentPage from '@/components/ContentPage';
+import Footer from '@/components/Footer';
 
 // Move FeedbackItem outside the main component
 const FeedbackItem = ({ 
@@ -108,7 +109,7 @@ const Feedback = () => {
 
     const fetchFeedback = async () => {
         try {
-            const response = await fetch(`/api/feedback?page=${page}&limit=20`);
+            const response = await fetch(`/api/feedback?page=${page}&limit=10`);
             const data = await response.json();
             
             if (data.success) {
@@ -209,30 +210,38 @@ const Feedback = () => {
 
     return (
         <ContentPage>
-            <div className={styles.pageContainer}>
-                <div className={styles.pageContent}>
-                    <div className={feedbackStyles.feedbackContent}>
-                        <h1 className={styles.pageTitle}>{t('feedback.title')}</h1>
+            <div className={feedbackStyles.feedbackPage}>
+                <div className={feedbackStyles.feedbackHero}>
+                    <h1 className={feedbackStyles.heroTitle}>{t('feedback.title')}</h1>
+                    <p className={feedbackStyles.heroSubtitle}>{t('feedback.description')}</p>
+                </div>
 
-                        <p>{t('feedback.description')}</p>
-                        
-                        {isAuthenticated ? (
+                <div className={feedbackStyles.feedbackContainer}>
+                    {/* New Comment Form */}
+                    {isAuthenticated ? (
+                        <div className={feedbackStyles.newCommentSection}>
                             <form onSubmit={(e) => handleSubmit(e)} className={feedbackStyles.newFeedbackForm}>
                                 <textarea
                                     value={newComment}
                                     onChange={(e) => setNewComment(e.target.value)}
                                     placeholder={t('feedback.submitPlaceholder')}
+                                    className={feedbackStyles.commentTextarea}
                                 />
-                                <button type="submit">{t('feedback.submitButton')}</button>
+                                <button type="submit" className={feedbackStyles.submitButton}>
+                                    {t('feedback.submitButton')}
+                                </button>
                             </form>
-                        ) : (
-                            <div className={feedbackStyles.loginPrompt}>
-                                {t('feedback.loginPrompt')} <Link href="/login">log in</Link>
-                            </div>
-                        )}
-                        
-                        {error && <div className={feedbackStyles.error}>{error}</div>}
+                        </div>
+                    ) : (
+                        <div className={feedbackStyles.loginPrompt}>
+                            <p>{t('feedback.loginPrompt')} <Link href="/login">log in</Link></p>
+                        </div>
+                    )}
+                    
+                    {error && <div className={feedbackStyles.error}>{error}</div>}
 
+                    {/* Feedback List */}
+                    <div className={feedbackStyles.feedbackSection}>
                         {loading ? (
                             <div className={feedbackStyles.loading}>{t('feedback.loading')}</div>
                         ) : feedback.length === 0 ? (
@@ -267,32 +276,40 @@ const Feedback = () => {
                                 <button 
                                     onClick={() => setPage(p => Math.max(1, p - 1))}
                                     disabled={page === 1}
+                                    className={feedbackStyles.paginationButton}
                                 >
                                     {t('feedback.actions.previous')}
                                 </button>
-                                <span>
+                                <span className={feedbackStyles.paginationInfo}>
                                     {t('feedback.pagination.page').replace('{current}', page).replace('{total}', totalPages)}
                                 </span>
                                 <button 
                                     onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                     disabled={page === totalPages}
+                                    className={feedbackStyles.paginationButton}
                                 >
                                     {t('feedback.actions.next')}
                                 </button>
                             </div>
                         )}
                     </div>
-                    <div className={feedbackStyles.girl}>
-                        <Image
-                            src="/images/hanbokgirl.png"
-                            alt="girl"
-                            width={1024}
-                            height={1536}
-                            priority
-                        />
+                </div>
+
+                <div className={feedbackStyles.supportSection}>
+                    <Image 
+                        src="/images/backgrounddark.png" 
+                        alt="Background" 
+                        fill 
+                        priority 
+                        style={{ objectFit: 'cover' }} 
+                    />
+                    <div className={feedbackStyles.supportContent}>
+                        <h2>Keep the Feedback Coming!</h2>
+                        <p>Your feedback helps us improve Hanbok for everyone. Thank you for being part of our community!</p>
                     </div>
                 </div>
             </div>
+            <Footer />
         </ContentPage>
     );
 };

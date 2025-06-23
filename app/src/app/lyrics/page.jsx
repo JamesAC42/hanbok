@@ -1,13 +1,15 @@
 'use client';
 import { useLanguage } from '@/contexts/LanguageContext';
-import lyricsStyles from '@/styles/components/lyrics.module.scss';
+import lyricsStyles from '@/styles/pages/lyrics.module.scss';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAdmin } from '@/contexts/AdminContext';
 import { useAuth } from '@/contexts/AuthContext';
-
+import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import ContentPage from '@/components/ContentPage';
+
+import Footer from '@/components/Footer';
 
 const Lyrics = () => {
     const { t } = useLanguage();
@@ -15,13 +17,37 @@ const Lyrics = () => {
     const { user } = useAuth();
 
     const [activeCategory, setActiveCategory] = useState('kpop');
+    const [viewMode, setViewMode] = useState('categories'); // 'categories' or 'songs'
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [lyricsByArtist, setLyricsByArtist] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+
+    // Category data with images
+    const categories = [
+        {
+            id: 'kpop',
+            name: t('lyrics.categories.kpop'),
+            image: '/images/lyrics/straykids.webp',
+            description: 'Korean Pop Music'
+        },
+        {
+            id: 'jpop',
+            name: t('lyrics.categories.jpop'),
+            image: '/images/lyrics/yoasobi.webp',
+            description: 'Japanese Pop Music'
+        },
+        {
+            id: 'anime',
+            name: t('lyrics.categories.anime'),
+            image: '/images/lyrics/renaicirculation.jpg',
+            description: 'Anime Theme Songs'
+        }
+    ];
     
     useEffect(() => {
         document.title = t('lyrics.pageTitle');
-    }, []);
+    }, [t]);
 
     // Fetch lyrics by genre
     const fetchLyricsByGenre = async (genre) => {
@@ -48,7 +74,6 @@ const Lyrics = () => {
             lyrics.forEach(lyric => {
                 if (genre === 'anime') {
                     // For anime, group by anime name instead of artist
-                    // Using anime field, or fallback to artist if not available
                     const groupKey = lyric.anime || lyric.artist;
                     
                     if (!artistMap[groupKey]) {
@@ -63,7 +88,7 @@ const Lyrics = () => {
                     artistMap[groupKey].songs.push({
                         lyricId: lyric.lyricId,
                         title: lyric.title,
-                        artist: lyric.artist, // Keep artist info for display
+                        artist: lyric.artist,
                         genre: lyric.genre,
                         language: lyric.language
                     });
@@ -100,94 +125,136 @@ const Lyrics = () => {
         }
     };
 
-    // Fetch lyrics when active category changes
-    useEffect(() => {
-        fetchLyricsByGenre(activeCategory);
-    }, [activeCategory]);
+    const handleCategoryClick = (categoryId) => {
+        setActiveCategory(categoryId);
+        setSelectedCategory(categories.find(cat => cat.id === categoryId));
+        setViewMode('songs');
+        fetchLyricsByGenre(categoryId);
+    };
+
+    const handleBackToCategories = () => {
+        setViewMode('categories');
+        setSelectedCategory(null);
+        setLyricsByArtist([]);
+    };
 
     return (
         <ContentPage>
-        <div className={lyricsStyles.lyricsContainer}>
-            <div className={lyricsStyles.lyricsContent}>
-                <h1 className={lyricsStyles.pageTitle}>{t('lyrics.title')}</h1>
-                
-                <div className={lyricsStyles.section}>
-                    <p>{t('lyrics.description')}</p>
-                    {isAdmin(user?.email) && (
-                        <div className={lyricsStyles.adminContainer}>
-                            <Link href="/lyrics/admin">{t('lyrics.adminPanel')}</Link>
-                        </div>
-                    )}
+            <div className={lyricsStyles.lyricsPage}>
+                <div className={lyricsStyles.lyricsHero}>
+                    <h1 className={lyricsStyles.heroTitle}>{t('lyrics.title')}</h1>
+                    <p className={lyricsStyles.heroSubtitle}>{t('lyrics.description')}</p>
                 </div>
 
-                <div className={lyricsStyles.lyricsListOuter}>
-                    <div className={lyricsStyles.suggestionsBox}>
-                        <div className={lyricsStyles.suggestionsBoxTitle}>
-                            {t('lyrics.suggestBox.title')}
-                        </div>  
-                        <div className={lyricsStyles.suggestionsBoxDescription}>
-                            {t('lyrics.suggestBox.description')}
-                        </div>
-                        <Link href="/lyrics/suggestions" className={lyricsStyles.suggestionsBoxButton}>
-                            {t('lyrics.suggestBox.button')}
-                        </Link>
-                    </div>
-
-                    <div className={lyricsStyles.categories}>
-                        <div 
-                            className={`${lyricsStyles.category} ${lyricsStyles.kpop} ${activeCategory === 'kpop' ? lyricsStyles.active : ''}`} 
-                            onClick={() => setActiveCategory('kpop')}
-                        >
-                            {t('lyrics.categories.kpop')}
-                        </div>
-                        <div 
-                            className={`${lyricsStyles.category} ${lyricsStyles.jpop} ${activeCategory === 'jpop' ? lyricsStyles.active : ''}`} 
-                            onClick={() => setActiveCategory('jpop')}
-                        >
-                            {t('lyrics.categories.jpop')}
-                        </div>
-                        <div 
-                            className={`${lyricsStyles.category} ${lyricsStyles.anime} ${activeCategory === 'anime' ? lyricsStyles.active : ''}`} 
-                            onClick={() => setActiveCategory('anime')}
-                        >
-                            {t('lyrics.categories.anime')}
-                        </div>
-                    </div>
-                    
-                    {loading ? (
-                        <div className={lyricsStyles.loading}>{t('lyrics.status.loading')}</div>
-                    ) : error ? (
-                        <div className={lyricsStyles.error}>{error}</div>
-                    ) : lyricsByArtist.length === 0 ? (
-                        <div className={lyricsStyles.noLyrics}>
-                            <p>{t('lyrics.status.noLyrics.main').replace('{category}', activeCategory.toUpperCase())}</p>
-                            <p>{t('lyrics.status.noLyrics.suggestion')}</p>
-                        </div>
-                    ) : (
-                        <div className={lyricsStyles.lyricsList}>
-                            {lyricsByArtist.map((artistGroup) => (
-                                <div key={artistGroup.artist} className={lyricsStyles.lyricsSection}>
-                                    <h3>{artistGroup.isAnime && artistGroup.animeName ? artistGroup.animeName : artistGroup.artist}</h3>
-                                    <ul>
-                                        {artistGroup.songs.map((song) => (
-                                            <li key={song.lyricId}>
-                                                <Link href={`/lyrics/${song.lyricId}`}>
-                                                    <span>{song.artist || artistGroup.artist}</span> - <span>{song.title}</span>
-                                                </Link>
-                                            </li>
-                                        ))}
-                                    </ul>
+                <div className={lyricsStyles.lyricsHomeContainer}>
+                    <div className={lyricsStyles.mainContent}>
+                        {viewMode === 'categories' ? (
+                            // Categories View
+                            <>
+                                <div className={lyricsStyles.categoriesGrid}>
+                                    {categories.map((category) => (
+                                        <div 
+                                            key={category.id}
+                                            className={lyricsStyles.categoryCard}
+                                            onClick={() => handleCategoryClick(category.id)}
+                                        >
+                                            <div className={lyricsStyles.categoryImageContainer}>
+                                                <Image
+                                                    src={category.image}
+                                                    alt={category.name}
+                                                    fill
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                                <div className={lyricsStyles.categoryOverlay} />
+                                            </div>
+                                            <div className={lyricsStyles.categoryInfo}>
+                                                <h3>{category.name}</h3>
+                                                <p>{category.description}</p>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            </>
+                        ) : (
+                            // Songs View
+                            <>
+                                <div className={lyricsStyles.categoryHeader}>
+                                    <div className={lyricsStyles.categoryBanner}>
+                                        <Image
+                                            src={selectedCategory?.image}
+                                            alt={selectedCategory?.name}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
+                                        />
+                                        <div className={lyricsStyles.categoryBannerOverlay} />
+                                        <div className={lyricsStyles.categoryBannerContent}>
+                                            <button 
+                                                className={lyricsStyles.backButton}
+                                                onClick={handleBackToCategories}
+                                            >
+                                                <MaterialSymbolsArrowBackRounded />
+                                                Back to Categories
+                                            </button>
+                                            <h2>{selectedCategory?.name}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={lyricsStyles.songsContent}>
+                                    {loading ? (
+                                        <div className={lyricsStyles.loading}>{t('lyrics.status.loading')}</div>
+                                    ) : error ? (
+                                        <div className={lyricsStyles.error}>{error}</div>
+                                    ) : lyricsByArtist.length === 0 ? (
+                                        <div className={lyricsStyles.noLyrics}>
+                                            <p>{t('lyrics.status.noLyrics.main').replace('{category}', activeCategory.toUpperCase())}</p>
+                                            <p>{t('lyrics.status.noLyrics.suggestion')}</p>
+                                        </div>
+                                    ) : (
+                                        <div className={lyricsStyles.lyricsList}>
+                                            {lyricsByArtist.map((artistGroup) => (
+                                                <div key={artistGroup.artist} className={lyricsStyles.lyricsSection}>
+                                                    <h3>{artistGroup.isAnime && artistGroup.animeName ? artistGroup.animeName : artistGroup.artist}</h3>
+                                                    <ul>
+                                                        {artistGroup.songs.map((song) => (
+                                                            <li key={song.lyricId}>
+                                                                <Link href={`/lyrics/${song.lyricId}`}>
+                                                                    <span>{song.artist || artistGroup.artist}</span> - <span>{song.title}</span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Suggestions Sidebar */}
+                    <div className={lyricsStyles.sidebarContainer}>
+                        <div className={lyricsStyles.suggestionsPanel}>
+                            <h3>{t('lyrics.suggestBox.title')}</h3>
+                            <p>{t('lyrics.suggestBox.description')}</p>
+                            <Link href="/lyrics/suggestions" className={lyricsStyles.suggestButton}>
+                                {t('lyrics.suggestBox.button')}
+                            </Link>
                         </div>
-                    )}
+
+                        {isAdmin(user?.email) && (
+                            <div className={lyricsStyles.adminPanel}>
+                                <h3>Admin Panel</h3>
+                                <Link href="/lyrics/admin" className={lyricsStyles.adminButton}>
+                                    {t('lyrics.adminPanel')}
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                 </div>
-                    
-                <div className={`${lyricsStyles.girlContainer}`}>
-                    <Image src="/images/hanbokgirlmusic.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
-                </div>
+                <Footer />
             </div>
-        </div>    
         </ContentPage>
     );
 };

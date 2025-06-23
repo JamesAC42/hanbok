@@ -1,0 +1,130 @@
+@import '@/styles/variables.module.scss'; 
+
+
+.joinDiscord {
+    width:100dvw;
+    height:10rem;
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:visible;
+
+    background:linear-gradient(to bottom, #0a0a1a, #09091e);
+    background:#0a0a1a;
+
+    .joinDiscordBubble {
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        transform:translateY(-50%);
+        justify-content:space-between;
+        background-color:#5676df;
+        border:2px solid #88a2f9;
+        box-shadow:0 5px 15px 5px rgba(0, 0, 0, 0.384);
+        color:#fff;
+        padding:2rem 4rem;
+        width:70dvw;
+        border-radius:1rem;
+        font-family:var(--font-lilita);
+        font-size:1.8rem;
+
+        a {
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            justify-content:center;
+            gap:0.5rem;
+            border-radius:1rem;
+            padding:0.5rem 1rem;
+            text-decoration:none;
+            background:#5952ea;
+            color:#fff;
+            border:2px solid #d1cfff;
+            font-family:var(--font-lilita);
+            transition:all 0.2s ease;
+            svg  {
+                transform:translateY(0px);
+            }
+
+            &:hover {
+                filter:brightness(1.2);
+            }
+        }
+    }
+}
+
+.footer {
+    width:100dvw;
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    background:#0a0a1a;
+
+    padding:5rem 0 10rem 0;
+
+    .footerContent {
+        display:flex;
+        flex-direction:row;
+        justify-content:center;
+        align-items:stretch;
+        width:80dvw;
+
+        gap:6rem;
+
+        .footerLinks {
+            display:flex;
+            flex-direction:row;
+            justify-content:space-between;
+            align-items:stretch;
+            width:50%;
+
+            .footerLinkColumn {
+                display:flex;
+                flex-direction:column;
+                justify-content:flex-start;
+                align-items:stretch;
+                .footerLinkColumnHeader {
+                    font-family:var(--font-lilita);
+                    font-size:1.3rem;
+                    color:#5c85c7;
+                    margin-bottom:1rem;
+                }
+                .footerLinkColumnLinks {
+                    display:flex;
+                    flex-direction:column;
+                    justify-content:center;
+                    align-items:flex-start;
+                    text-align:left;
+
+                    a {
+                        text-decoration: none;
+                        color:#fff;
+                        font-family:var(--font-lilita);
+                        font-size:1.2rem;
+                        margin-bottom:0.5rem;
+                        transition:all 0.2s ease;
+                        &:hover {   
+                            color:#c4c4c4;
+                            opacity:0.8;
+                        }
+                    }
+                }
+            }
+        }
+
+        .footerCopyright {
+            font-family:var(--font-lilita);
+            font-size:1.2rem;
+            color:#6761bfae;
+
+            border-left:1px solid #272e42;
+
+            padding-left:6rem;
+            padding-top:0.5rem;
+            text-align:right;
+        }
+    }
+}

@@ -8,6 +8,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { supportedLanguages } from '@/translations';
 import Image from 'next/image';
 import Link from 'next/link';
+import ContentPage from '@/components/ContentPage';
+import Footer from '@/components/Footer';
 
 import { MaterialSymbolsRightPanelClose } from '@/components/icons/RightPanelClose';
 import { MingcuteDownFill } from '@/components/icons/DownCarat';
@@ -347,26 +349,32 @@ const LyricsPage = () => {
 
     if (loading) {
         return (
-            <div className={styles.lyricsContainer}>
-                <h1>{t('lyrics.detail.loading')}</h1>
-            </div>
+            <ContentPage>
+                <div className={styles.lyricsContainer}>
+                    <h1>{t('lyrics.detail.loading')}</h1>
+                </div>
+            </ContentPage>
         );
     }
 
     if (error) {
         return (
-            <div className={styles.lyricsContainer}>
-                <h1>{t('lyrics.detail.error')}</h1>
-                <p>{error}</p>
-            </div>
+            <ContentPage>
+                <div className={styles.lyricsContainer}>
+                    <h1>{t('lyrics.detail.error')}</h1>
+                    <p>{error}</p>
+                </div>
+            </ContentPage>
         );
     }
 
     if (!lyric) {
         return (
-            <div className={styles.lyricsContainer}>
-                <h1>{t('lyrics.detail.notFound')}</h1>
-            </div>
+            <ContentPage>
+                <div className={styles.lyricsContainer}>
+                    <h1>{t('lyrics.detail.notFound')}</h1>
+                </div>
+            </ContentPage>
         );
     }
 
@@ -378,150 +386,150 @@ const LyricsPage = () => {
 
     // Render the lyric information and analysis
     return (
-        <div className={styles.lyricsContainer}>
-            <div className={styles.lyricsHeader}>
-                <h1>{lyric.title}</h1>
-                {lyric.artist && <h2>{t('lyrics.detail.by')}: {lyric.artist}</h2>}
-                <div className={styles.lyricTags}>
-                    <div className={styles.lyricTag}>
-                        {t('lyrics.detail.tags.language')}: {supportedLanguages[lyric.language].toUpperCase()}
-                    </div>
-                    <div className={styles.lyricTag}>
-                        {t('lyrics.detail.tags.genre')}: {lyric.genre.toUpperCase()}
-                    </div>
-                    {lyric.anime && (
-                        <div className={`${styles.lyricTag} ${styles.anime}`}>
-                            {t('lyrics.detail.tags.anime')}: {lyric.anime}
+        <ContentPage>
+            <div className={styles.lyricsContainer}>
+                <div className={styles.lyricsHeader}>
+                    <h1>{lyric.title}</h1>
+                    {lyric.artist && <h2>{t('lyrics.detail.by')}: {lyric.artist}</h2>}
+                    <div className={styles.lyricTags}>
+                        <div className={styles.lyricTag}>
+                            {t('lyrics.detail.tags.language')}: {supportedLanguages[lyric.language].toUpperCase()}
                         </div>
-                    )}
-                    {lyric.viewCount && (
-                        <div className={`${styles.lyricTag} ${styles.viewCount}`}>
-                            <BasilEyeSolid />
-                            {lyric.viewCount}
+                        <div className={styles.lyricTag}>
+                            {t('lyrics.detail.tags.genre')}: {lyric.genre.toUpperCase()}
                         </div>
-                    )}
-                </div>
-
-                <div className={styles.backButton}>
-                    <Link href="/lyrics">
-                        {t('lyrics.detail.back')}
-                    </Link>
-                </div>
-
-                {lyric.youtubeUrl && (
-                    <div className={styles.youtubeContainer}>
-                        <iframe 
-                            src={`https://www.youtube.com/embed/${lyric.youtubeUrl}`}
-                            title="YouTube video player"
-                        ></iframe>
-                    </div>
-                )}
-
-                <div className={styles.shareButtonsContainer}>
-                    <div className={styles.shareButtons}>
-                        <button className={`${styles.shareButton} ${styles.twitter}`} onClick={handleTwitterShare}>
-                            <LineMdTwitterX />
-                            <span>{t('lyrics.detail.share.twitter')}</span>
-                        </button>
-                        <button className={`${styles.shareButton} ${styles.email}`} onClick={handleEmailShare}>
-                            <LineMdEmail />
-                            <span>{t('lyrics.detail.share.email')}</span>
-                        </button>
-                        <button className={`${styles.shareButton} ${styles.discord}`} onClick={handleDiscordShare}>
-                            <IcTwotoneDiscord />
-                            <span>{t('lyrics.detail.share.discord')}</span>
-                        </button>
-                        <button className={`${styles.shareButton} ${styles.copy}`} onClick={handleCopyLink}>
-                            <MaterialSymbolsPublishRounded />
-                            <span>{t('lyrics.detail.share.copyLink')}</span>
-                        </button>
-                    </div>
-                    {shareTooltipVisible && (
-                        <div className={styles.shareTooltip}>
-                            {t('lyrics.detail.share.copied')}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <div className={styles.lyricsHelp}>
-                <div className={styles.lyricsHelpInner}>
-                    <div className={styles.lyricsHelpBubble}>
-                        <HeroiconsQuestionMarkCircle16Solid />
-                    </div>
-                    <h3>{t('lyrics.detail.help.title')}</h3>
-                    <p>{t('lyrics.detail.help.description')}</p>
-                </div>
-            </div>
-
-            <div className={`${styles.lyricsText} ${activeAnalysisIndex !== null ? styles.lyricsTextActive : ''}`}>
-                <div className={styles.columnHeaders}>
-                    <div className={styles.originalHeader}>{t('lyrics.detail.columns.original')}</div>
-                    <div className={styles.translationHeader}>{t('lyrics.detail.columns.translation')}</div>
-                </div>
-                <div className={styles.viewTabs}>
-                    <div 
-                        className={`${styles.viewTab} ${activeView === 'original' ? styles.activeView : ''}`} 
-                        onClick={() => setActiveView('original')}>
-                        {t('lyrics.detail.columns.original')}
-                    </div>
-                    <div 
-                        className={`${styles.viewTab} ${activeView === 'translation' ? styles.activeView : ''}`} 
-                        onClick={() => setActiveView('translation')}>
-                        {t('lyrics.detail.columns.translation')}
-                    </div>
-                </div>
-                {renderLyricsWithHighlighting()}
-            </div>
-
-            {(hasAnalysis && activeAnalysisIndex !== null) && (
-                <div className={`${styles.analysisContainer} ${closingAnalysis ? styles.closingAnalysis : ''}`}>
-                    {activeAnalysis ? (
-                        <div className={styles.activeAnalysis}>
-                            <div onClick={closeAnalysis} className={styles.closeAnalysis}>
-                                <div className={styles.closeAnalysisSymbolRight}>
-                                    <MaterialSymbolsRightPanelClose /> 
-                                </div> 
-                                <div className={styles.closeAnalysisSymbolDown}>
-                                    <MingcuteDownFill/> 
-                                </div> 
-                                {t('lyrics.detail.analysis.close')}
+                        {lyric.anime && (
+                            <div className={`${styles.lyricTag} ${styles.anime}`}>
+                                {t('lyrics.detail.tags.anime')}: {lyric.anime}
                             </div>
-                            <h3>{t('lyrics.detail.analysis.title')}</h3>
-                            <div className={styles.lineNumbers}>
-                                {Array.isArray(activeAnalysis.lines) 
-                                    ? t('lyrics.detail.analysis.lines')
-                                        .replace('{start}', activeAnalysis.lines[0])
-                                        .replace('{end}', activeAnalysis.lines[activeAnalysis.lines.length - 1])
-                                    : t('lyrics.detail.analysis.line').replace('{number}', activeAnalysis.lines)}
+                        )}
+                        {lyric.viewCount && (
+                            <div className={`${styles.lyricTag} ${styles.viewCount}`}>
+                                <BasilEyeSolid />
+                                {lyric.viewCount}
                             </div>
-                            <div className={styles.originalText}>
-                                <p>{activeAnalysis.text}</p>
-                                {activeAnalysis.sentence?.translation && (
-                                    <p className={styles.lineTranslation}>{activeAnalysis.sentence.translation}</p>
+                        )}
+                    </div>
+
+                    <div className={styles.backButton}>
+                        <Link href="/lyrics">
+                            {t('lyrics.detail.back')}
+                        </Link>
+                    </div>
+
+                    {lyric.youtubeUrl && (
+                        <div className={styles.youtubeContainer}>
+                            <iframe 
+                                src={`https://www.youtube.com/embed/${lyric.youtubeUrl}`}
+                                title="YouTube video player"
+                            ></iframe>
+                        </div>
+                    )}
+
+                    <div className={styles.shareButtonsContainer}>
+                        <div className={styles.shareButtons}>
+                            <button className={`${styles.shareButton} ${styles.twitter}`} onClick={handleTwitterShare}>
+                                <LineMdTwitterX />
+                                <span>{t('lyrics.detail.share.twitter')}</span>
+                            </button>
+                            <button className={`${styles.shareButton} ${styles.email}`} onClick={handleEmailShare}>
+                                <LineMdEmail />
+                                <span>{t('lyrics.detail.share.email')}</span>
+                            </button>
+                            <button className={`${styles.shareButton} ${styles.discord}`} onClick={handleDiscordShare}>
+                                <IcTwotoneDiscord />
+                                <span>{t('lyrics.detail.share.discord')}</span>
+                            </button>
+                            <button className={`${styles.shareButton} ${styles.copy}`} onClick={handleCopyLink}>
+                                <MaterialSymbolsPublishRounded />
+                                <span>{t('lyrics.detail.share.copyLink')}</span>
+                            </button>
+                        </div>
+                        {shareTooltipVisible && (
+                            <div className={styles.shareTooltip}>
+                                {t('lyrics.detail.share.copied')}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className={styles.lyricsHelp}>
+                        <div className={styles.lyricsHelpInner}>
+                            <div className={styles.lyricsHelpBubble}>
+                                <HeroiconsQuestionMarkCircle16Solid />
+                            </div>
+                            <h3>{t('lyrics.detail.help.title')}</h3>
+                            <p>{t('lyrics.detail.help.description')}</p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div className={`${styles.lyricsText} ${activeAnalysisIndex !== null ? styles.lyricsTextActive : ''}`}>
+                    <div className={styles.columnHeaders}>
+                        <div className={styles.originalHeader}>{t('lyrics.detail.columns.original')}</div>
+                        <div className={styles.translationHeader}>{t('lyrics.detail.columns.translation')}</div>
+                    </div>
+                    <div className={styles.viewTabs}>
+                        <div 
+                            className={`${styles.viewTab} ${activeView === 'original' ? styles.activeView : ''}`} 
+                            onClick={() => setActiveView('original')}>
+                            {t('lyrics.detail.columns.original')}
+                        </div>
+                        <div 
+                            className={`${styles.viewTab} ${activeView === 'translation' ? styles.activeView : ''}`} 
+                            onClick={() => setActiveView('translation')}>
+                            {t('lyrics.detail.columns.translation')}
+                        </div>
+                    </div>
+                    {renderLyricsWithHighlighting()}
+                </div>
+
+                {(hasAnalysis && activeAnalysisIndex !== null) && (
+                    <div className={`${styles.analysisContainer} ${closingAnalysis ? styles.closingAnalysis : ''}`}>
+                        {activeAnalysis ? (
+                            <div className={styles.activeAnalysis}>
+                                <div onClick={closeAnalysis} className={styles.closeAnalysis}>
+                                    <div className={styles.closeAnalysisSymbolRight}>
+                                        <MaterialSymbolsRightPanelClose /> 
+                                    </div> 
+                                    <div className={styles.closeAnalysisSymbolDown}>
+                                        <MingcuteDownFill/> 
+                                    </div> 
+                                    {t('lyrics.detail.analysis.close')}
+                                </div>
+                                <h3>{t('lyrics.detail.analysis.title')}</h3>
+                                <div className={styles.lineNumbers}>
+                                    {Array.isArray(activeAnalysis.lines) 
+                                        ? t('lyrics.detail.analysis.lines')
+                                            .replace('{start}', activeAnalysis.lines[0])
+                                            .replace('{end}', activeAnalysis.lines[activeAnalysis.lines.length - 1])
+                                        : t('lyrics.detail.analysis.line').replace('{number}', activeAnalysis.lines)}
+                                </div>
+                                <div className={styles.originalText}>
+                                    <p>{activeAnalysis.text}</p>
+                                    {activeAnalysis.sentence?.translation && (
+                                        <p className={styles.lineTranslation}>{activeAnalysis.sentence.translation}</p>
+                                    )}
+                                </div>
+                                {activeAnalysis.sentence?.analysis && (
+                                    <Analysis 
+                                        analysis={activeAnalysis.sentence.analysis} 
+                                        voice1={activeAnalysis.sentence.voice1Key} 
+                                        voice2={activeAnalysis.sentence.voice2Key}
+                                        originalLanguage={lyric.language}
+                                        translationLanguage={lyric.analysis.language}
+                                        showTransition={false}
+                                        sentenceId={activeAnalysis.sentence.sentenceId}
+                                        isLyric={true}
+                                    />
                                 )}
                             </div>
-                            {activeAnalysis.sentence?.analysis && (
-                                <Analysis 
-                                    analysis={activeAnalysis.sentence.analysis} 
-                                    voice1={activeAnalysis.sentence.voice1Key} 
-                                    voice2={activeAnalysis.sentence.voice2Key}
-                                    originalLanguage={lyric.language}
-                                    translationLanguage={lyric.analysis.language}
-                                    showTransition={false}
-                                    sentenceId={activeAnalysis.sentence.sentenceId}
-                                    isLyric={true}
-                                />
-                            )}
-                        </div>
-                    ) : null}
-                </div>
-            )}
- 
-            <div className={`${styles.musicGirl}`}>
-                <Image src="/images/hanbokgirlmusic.png" alt={t('login.girlImageAlt')} width={1024} height={1536} />
+                        ) : null}
+                    </div>
+                )}
             </div>
-        </div>
+            <Footer />
+        </ContentPage>
     );
 };
 

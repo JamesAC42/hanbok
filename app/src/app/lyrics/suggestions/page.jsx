@@ -8,6 +8,7 @@ import styles from '@/styles/pages/lyricsuggestions.module.scss';
 import Link from 'next/link';
 import { BxsUpvote } from '@/components/icons/Upvote';
 import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
+import ContentPage from '@/components/ContentPage';
 
 const languageOptions = [
   { value: 'ko', label: 'Korean' },
@@ -43,7 +44,7 @@ const Suggestions = () => {
   useEffect(() => {
     fetchSuggestions();
     document.title = t('lyrics.suggestions.pageTitle');
-  }, []);
+  }, [t]);
 
   const fetchSuggestions = async () => {
     try {
@@ -196,209 +197,217 @@ const Suggestions = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1>{t('lyrics.suggestions.title')}</h1>
-        <h2>{t('lyrics.suggestions.subtitle')}</h2>
-      </div>
-      
-      <div className={styles.formSection}>
-        <h3>{t('lyrics.suggestions.suggestSong')}</h3>
-        
-        {!isAuthenticated ? (
-          <div className={styles.loginPrompt}>
-            <p>{t('lyrics.suggestions.loginPrompt')}</p>
-            <p>
-              <Link href="/login">
-                {t('lyrics.suggestions.login')}
-              </Link>
-            </p>
-          </div>
-        ) : (
-          <form className={styles.form} onSubmit={handleSubmit}>
-            <div className={styles.formGroup}>
-              <label htmlFor="songName">{t('lyrics.suggestions.form.songName')} *</label>
-              <input
-                type="text"
-                id="songName"
-                name="songName"
-                value={formData.songName}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            
-            <div className={styles.formGroup}>
-              <label htmlFor="artist">{t('lyrics.suggestions.form.artist')} *</label>
-              <input
-                type="text"
-                id="artist"
-                name="artist"
-                value={formData.artist}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            
-            <div className={styles.formGroup}>
-              <label htmlFor="genre">{t('lyrics.suggestions.form.genre')}</label>
-              <select
-                id="genre"
-                name="genre"
-                value={formData.genre}
-                onChange={handleInputChange}
-              >
-                <option value="">{t('common.select', { item: t('lyrics.suggestions.form.genre').toLowerCase() })}</option>
-                {genreOptions.map(genre => (
-                  <option key={genre} value={genre}>{genre}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div className={styles.formGroup}>
-              <label htmlFor="language">{t('lyrics.suggestions.form.language')}</label>
-              <select
-                id="language"
-                name="language"
-                value={formData.language}
-                onChange={handleInputChange}
-              >
-                {languageOptions.map(option => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div className={styles.formGroup + ' ' + styles.fullWidth}>
-              <label htmlFor="youtubeUrl">{t('lyrics.suggestions.form.youtubeUrl')}</label>
-              <input
-                type="url"
-                id="youtubeUrl"
-                name="youtubeUrl"
-                value={formData.youtubeUrl}
-                onChange={handleInputChange}
-                placeholder={t('lyrics.suggestions.form.youtubeUrlPlaceholder')}
-              />
-            </div>
-            
-            {submissionError && (
-              <div className={styles.formGroup + ' ' + styles.fullWidth}>
-                <p style={{ color: 'red' }}>{submissionError}</p>
-              </div>
-            )}
-            
-            {submitSuccess && (
-              <div className={styles.formGroup + ' ' + styles.fullWidth}>
-                <p style={{ color: 'green' }}>{t('lyrics.suggestions.form.submitSuccess')}</p>
-              </div>
-            )}
-            
-            <div className={styles.buttonContainer}>
-              <button type="submit" disabled={submitting}>
-                {submitting ? t('lyrics.suggestions.form.submitting') : t('lyrics.suggestions.form.submit')}
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
-      
-      {loading ? (
-        <div className={styles.loadingContainer}>
-          {t('lyrics.suggestions.status.loading')}
+    <ContentPage>
+      <div className={styles.suggestionsPage}>
+        <div className={styles.suggestionsHero}>
+          <h1 className={styles.heroTitle}>{t('lyrics.suggestions.title')}</h1>
+          <p className={styles.heroSubtitle}>{t('lyrics.suggestions.subtitle')}</p>
         </div>
-      ) : error ? (
-        <div className={styles.errorContainer}>
-          {error}
-        </div>
-      ) : suggestions.length === 0 ? (
-        <div className={styles.errorContainer}>
-          {t('lyrics.suggestions.status.noSuggestions')}
-        </div>
-      ) : (
-        <div className={styles.suggestionsList}>
-          {suggestions.map(suggestion => (
-            <div key={suggestion.suggestionId} className={styles.suggestionCard}>
-              <div className={styles.cardHeader}>
-                <h4>{suggestion.songName}</h4>
-                <h5>{t('lyrics.suggestions.card.by')} {suggestion.artist}</h5>
+
+        <div className={styles.suggestionsContainer}>
+          {/* Suggestion Form */}
+          <div className={styles.formSection}>
+            <h2>{t('lyrics.suggestions.suggestSong')}</h2>
+            
+            {!isAuthenticated ? (
+              <div className={styles.loginPrompt}>
+                <p>{t('lyrics.suggestions.loginPrompt')}</p>
+                <Link href="/login" className={styles.loginLink}>
+                  {t('lyrics.suggestions.login')}
+                </Link>
               </div>
-              
-              <div className={styles.cardDetails}>
-                {suggestion.genre && (
-                  <span className={`${styles.tag} ${styles.genre}`}>{suggestion.genre}</span>
-                )}
-                
-                {suggestion.language && (
-                  <span className={`${styles.tag} ${styles.language}`}>
-                    {languageOptions.find(l => l.value === suggestion.language)?.label || suggestion.language}
-                  </span>
-                )}
-                
-                {suggestion.status && (
-                  <span className={`${styles.tag} ${styles.status} ${styles[suggestion.status]}`}>
-                    {suggestion.status.charAt(0).toUpperCase() + suggestion.status.slice(1)}
-                  </span>
-                )}
-              </div>
-              
-              {suggestion.youtubeUrl && (
-                <a 
-                  href={suggestion.youtubeUrl} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className={styles.youtubeLink}
-                >
-                  {t('lyrics.suggestions.status.watchOnYoutube')}
-                </a>
-              )}
-              
-              <div className={styles.cardActions}>
-                <span className={styles.date}>
-                  {formatDate(suggestion.dateCreated)}
-                </span>
-                
-                <div className={styles.actionButtons}>
-                  <button 
-                    className={`${styles.upvoteButton} ${suggestion.userHasUpvoted ? styles.active : ''}`}
-                    onClick={() => handleUpvote(suggestion.suggestionId)}
-                    title={isAuthenticated ? t('lyrics.suggestions.status.upvoteTitle.loggedIn') : t('lyrics.suggestions.status.upvoteTitle.loggedOut')}
-                  >
-                    <BxsUpvote />
-                    <span>{suggestion.upvotes}</span>
-                  </button>
+            ) : (
+              <form className={styles.form} onSubmit={handleSubmit}>
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="songName">{t('lyrics.suggestions.form.songName')} *</label>
+                    <input
+                      type="text"
+                      id="songName"
+                      name="songName"
+                      value={formData.songName}
+                      onChange={handleInputChange}
+                      required
+                      className={styles.formInput}
+                    />
+                  </div>
                   
-                  {isAdmin && isAdmin(user?.email) && (
-                    <button 
-                      className={styles.deleteButton}
-                      onClick={() => handleDelete(suggestion.suggestionId)}
-                      title={t('lyrics.suggestions.status.deleteTitle')}
+                  <div className={styles.formGroup}>
+                    <label htmlFor="artist">{t('lyrics.suggestions.form.artist')} *</label>
+                    <input
+                      type="text"
+                      id="artist"
+                      name="artist"
+                      value={formData.artist}
+                      onChange={handleInputChange}
+                      required
+                      className={styles.formInput}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="genre">{t('lyrics.suggestions.form.genre')}</label>
+                    <select
+                      id="genre"
+                      name="genre"
+                      value={formData.genre}
+                      onChange={handleInputChange}
+                      className={styles.formSelect}
                     >
-                      <MaterialSymbolsDeleteOutlineSharp />
-                    </button>
-                  )}
+                      <option value="">{t('common.select', { item: t('lyrics.suggestions.form.genre').toLowerCase() })}</option>
+                      {genreOptions.map(genre => (
+                        <option key={genre} value={genre}>{genre}</option>
+                      ))}
+                    </select>
+                  </div>
+                  
+                  <div className={styles.formGroup}>
+                    <label htmlFor="language">{t('lyrics.suggestions.form.language')}</label>
+                    <select
+                      id="language"
+                      name="language"
+                      value={formData.language}
+                      onChange={handleInputChange}
+                      className={styles.formSelect}
+                    >
+                      {languageOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
+                
+                <div className={styles.formGroup}>
+                  <label htmlFor="youtubeUrl">{t('lyrics.suggestions.form.youtubeUrl')}</label>
+                  <input
+                    type="url"
+                    id="youtubeUrl"
+                    name="youtubeUrl"
+                    value={formData.youtubeUrl}
+                    onChange={handleInputChange}
+                    placeholder={t('lyrics.suggestions.form.youtubeUrlPlaceholder')}
+                    className={styles.formInput}
+                  />
+                </div>
+                
+                {submissionError && (
+                  <div className={styles.errorMessage}>{submissionError}</div>
+                )}
+                
+                {submitSuccess && (
+                  <div className={styles.successMessage}>{t('lyrics.suggestions.form.submitSuccess')}</div>
+                )}
+                
+                <button type="submit" disabled={submitting} className={styles.submitButton}>
+                  {submitting ? t('lyrics.suggestions.form.submitting') : t('lyrics.suggestions.form.submit')}
+                </button>
+              </form>
+            )}
+          </div>
+          
+          {/* Suggestions List */}
+          <div className={styles.suggestionsSection}>
+            <h2>Community Suggestions</h2>
+            
+            {loading ? (
+              <div className={styles.loading}>{t('lyrics.suggestions.status.loading')}</div>
+            ) : error ? (
+              <div className={styles.error}>{error}</div>
+            ) : suggestions.length === 0 ? (
+              <div className={styles.emptyState}>
+                <p>{t('lyrics.suggestions.status.noSuggestions')}</p>
               </div>
-              
-              {isAdmin && isAdmin(user?.email) && (
-                <div className={styles.adminActions}>
-                  <select 
-                    value={suggestion.status || 'pending'}
-                    onChange={(e) => handleStatusChange(suggestion.suggestionId, e.target.value)}
-                  >
-                    <option value="pending">{t('lyrics.suggestions.status.pending')}</option>
-                    <option value="approved">{t('lyrics.suggestions.status.approved')}</option>
-                    <option value="rejected">{t('lyrics.suggestions.status.rejected')}</option>
-                    <option value="completed">{t('lyrics.suggestions.status.completed')}</option>
-                  </select>
-                </div>
-              )}
-            </div>
-          ))}
+            ) : (
+              <div className={styles.suggestionsList}>
+                {suggestions.map(suggestion => (
+                  <div key={suggestion.suggestionId} className={styles.suggestionCard}>
+                    <div className={styles.cardHeader}>
+                      <h4>{suggestion.songName}</h4>
+                      <span className={styles.artist}>{t('lyrics.suggestions.card.by')} {suggestion.artist}</span>
+                    </div>
+                    
+                    <div className={styles.cardDetails}>
+                      {suggestion.genre && (
+                        <span className={`${styles.tag} ${styles.genre}`}>{suggestion.genre}</span>
+                      )}
+                      
+                      {suggestion.language && (
+                        <span className={`${styles.tag} ${styles.language}`}>
+                          {languageOptions.find(l => l.value === suggestion.language)?.label || suggestion.language}
+                        </span>
+                      )}
+                      
+                      {suggestion.status && (
+                        <span className={`${styles.tag} ${styles.status} ${styles[suggestion.status]}`}>
+                          {suggestion.status.charAt(0).toUpperCase() + suggestion.status.slice(1)}
+                        </span>
+                      )}
+                    </div>
+                    
+                    {suggestion.youtubeUrl && (
+                      <a 
+                        href={suggestion.youtubeUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className={styles.youtubeLink}
+                      >
+                        {t('lyrics.suggestions.status.watchOnYoutube')}
+                      </a>
+                    )}
+                    
+                    <div className={styles.cardActions}>
+                      <span className={styles.date}>
+                        {formatDate(suggestion.dateCreated)}
+                      </span>
+                      
+                      <div className={styles.actionButtons}>
+                        <button 
+                          className={`${styles.upvoteButton} ${suggestion.userHasUpvoted ? styles.active : ''}`}
+                          onClick={() => handleUpvote(suggestion.suggestionId)}
+                          title={isAuthenticated ? t('lyrics.suggestions.status.upvoteTitle.loggedIn') : t('lyrics.suggestions.status.upvoteTitle.loggedOut')}
+                        >
+                          <BxsUpvote />
+                          <span>{suggestion.upvotes}</span>
+                        </button>
+                        
+                        {isAdmin && isAdmin(user?.email) && (
+                          <button 
+                            className={styles.deleteButton}
+                            onClick={() => handleDelete(suggestion.suggestionId)}
+                            title={t('lyrics.suggestions.status.deleteTitle')}
+                          >
+                            <MaterialSymbolsDeleteOutlineSharp />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {isAdmin && isAdmin(user?.email) && (
+                      <div className={styles.adminActions}>
+                        <select 
+                          value={suggestion.status || 'pending'}
+                          onChange={(e) => handleStatusChange(suggestion.suggestionId, e.target.value)}
+                          className={styles.statusSelect}
+                        >
+                          <option value="pending">{t('lyrics.suggestions.status.pending')}</option>
+                          <option value="approved">{t('lyrics.suggestions.status.approved')}</option>
+                          <option value="rejected">{t('lyrics.suggestions.status.rejected')}</option>
+                          <option value="completed">{t('lyrics.suggestions.status.completed')}</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      )}
-    </div>
+      </div>
+    </ContentPage>
   );
 };
 

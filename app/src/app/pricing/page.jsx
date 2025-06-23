@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import ContentPage from '@/components/ContentPage';
-
+import Footer from '@/components/Footer';
 
 //real
 const PRICE_IDS = {
@@ -64,149 +64,182 @@ const Pricing = () => {
 
     return (
         <ContentPage>
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
-                <div className={pricingStyles.pricingContent}>
-                    <h1 className={styles.pageTitle}>{t('pricing.title')}</h1>
-                    <section className={pricingStyles.section}>
-                        <h2>{t('pricing.upgradeOptions')}</h2>
-
-                        <div className={pricingStyles.options}>
-
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
-                                <h3>{t('pricing.monthlySubscriptionBasic')}</h3>
-                                <p className={pricingStyles.price}>$4 {t('pricing.perMonth')}</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>{t('pricing.features.unlimited.analyses')}</li>
-                                    <li>{t('pricing.features.unlimited.sentences')}</li>
-                                    <li>{t('pricing.features.unlimited.words')}</li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.BASIC_SUBSCRIPTION)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.subscribe')}
-                                </button>
-                            </div>
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.subscription}`}>
-                                <div className={pricingStyles.bestValue}>{t('pricing.bestValue')}</div>
-                                <h3>{t('pricing.monthlySubscriptionPlus')}</h3>
-                                <p className={pricingStyles.price}>$10 {t('pricing.perMonth')}</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>{t('pricing.features.unlimited.analyses')}</li>
-                                    <li>{t('pricing.features.unlimited.sentences')}</li>
-                                    <li>{t('pricing.features.unlimited.images')}</li>
-                                    <li>{t('pricing.features.unlimited.words')}</li>
-                                    <li>{t('pricing.features.unlimited.audio')}</li>
-                                    <li>{t('pricing.features.unlimited.insights')}</li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.subscribe')}
-                                </button>
-                            </div>
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
-                                <h3>{t('pricing.oneTimePurchase')}</h3>
-                                <p className={pricingStyles.price}>$1</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>
-                                        <strong>100</strong> {t('pricing.features.moreSentences')}
-                                    </li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.MORE_SENTENCES)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.buyNow')}
-                                </button>
-                            </div>
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
-                                <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
-                                <h3>{t('pricing.oneTimePurchase')}</h3>
-                                <p className={pricingStyles.price}>$4</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>
-                                        {t('pricing.features.increaseSentences')} <strong>30</strong> {t('pricing.features.to')} <strong>150</strong>
-                                    </li>
-                                    <li>
-                                        {t('pricing.features.increaseWords')} <strong>60</strong> {t('pricing.features.to')} <strong>200</strong>
-                                    </li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.BASIC_UPGRADE)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.buyNow')}
-                                </button>
-                            </div>
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
-                                <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
-                                <h3>{t('pricing.oneTimePurchase')}</h3>
-                                <p className={pricingStyles.price}>$6</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>
-                                        {t('pricing.features.additionalAudio')} <strong>50</strong> {t('pricing.features.audioGenerations')}
-                                    </li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.AUDIO_PACK)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.buyNow')}
-                                </button>
-                            </div>
-                            <div className={`${pricingStyles.optionCard} ${pricingStyles.oneTime}`}>
-                                <div className={pricingStyles.badge}>{t('pricing.limitedTimeOffer')}</div>
-                                <h3>{t('pricing.oneTimePurchase')}</h3>
-                                <p className={pricingStyles.price}>$5</p>
-                                <ul className={pricingStyles.featuresList}>
-                                    <li>
-                                        <strong>150</strong> {t('pricing.features.imageExtractions')}
-                                    </li>
-                                </ul>
-                                <button 
-                                    className={pricingStyles.purchaseButton}
-                                    onClick={() => handlePurchase(PRICE_IDS.IMAGE_PACK)}
-                                    disabled={loading}
-                                >
-                                    {t('pricing.buttons.buyNow')}
-                                </button>
-                            </div>
-                        </div>
-                        <div className={pricingStyles.kofi}>
-                            <div className={pricingStyles.kofiText}>
-                                {t('pricing.donate.text')}
-                            </div>
-                            <a href='https://ko-fi.com/U7U21B323R' target='_blank'>
-                                <img 
-                                    height='36' 
-                                    style={{border:"0px", height: "40px"}} 
-                                    src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' 
-                                    border='0' 
-                                    alt='Buy Me a Coffee at ko-fi.com' 
-                                />
-                            </a>
-                        </div>
-                    </section>
+            <div className={pricingStyles.pricingPage}>
+                <div className={pricingStyles.pricingHero}>
+                    <h1 className={pricingStyles.heroTitle}>{t('pricing.title')}</h1>
+                    <p className={pricingStyles.heroSubtitle}>Choose the perfect plan for your Korean learning journey</p>
                 </div>
-                <div className={pricingStyles.girl}>
-                    <Image
-                        src="/images/hanbokgirl.png"
-                        alt="girl"
-                        width={1024}
-                        height={1536}
-                        priority
+
+                {/* Main Subscription Plans */}
+                <section className={pricingStyles.mainPlansSection}>
+                    <div className={pricingStyles.mainPlansContainer}>
+                        
+                        {/* Free Plan */}
+                        <div className={`${pricingStyles.planCard} ${pricingStyles.freePlan}`}>
+                            <div className={pricingStyles.planHeader}>
+                                <h3 className={pricingStyles.planName}>Free</h3>
+                                <div className={pricingStyles.planPrice}>
+                                    <span className={pricingStyles.currency}>$</span>
+                                    <span className={pricingStyles.amount}>0</span>
+                                    <span className={pricingStyles.period}>forever</span>
+                                </div>
+                            </div>
+                            <ul className={pricingStyles.planFeatures}>
+                                <li>30 sentence analyses per day</li>
+                                <li>60 word lookups per day</li>
+                                <li>Basic grammar insights</li>
+                                <li>Community support</li>
+                            </ul>
+                            <button className={`${pricingStyles.planButton} ${pricingStyles.freeButton}`} onClick={() => router.push('/analyze')}>
+                                Get Started Free
+                            </button>
+                        </div>
+
+                        {/* Basic Plan */}
+                        <div className={`${pricingStyles.planCard} ${pricingStyles.basicPlan}`}>
+                            <div className={pricingStyles.planHeader}>
+                                <h3 className={pricingStyles.planName}>Basic</h3>
+                                <div className={pricingStyles.planPrice}>
+                                    <span className={pricingStyles.currency}>$</span>
+                                    <span className={pricingStyles.amount}>4</span>
+                                    <span className={pricingStyles.period}>per month</span>
+                                </div>
+                            </div>
+                            <ul className={pricingStyles.planFeatures}>
+                                <li>Unlimited sentence analyses</li>
+                                <li>Unlimited word lookups</li>
+                                <li>Advanced grammar insights</li>
+                                <li>Priority support</li>
+                                <li>Progress tracking</li>
+                            </ul>
+                            <button 
+                                className={`${pricingStyles.planButton} ${pricingStyles.basicButton}`}
+                                onClick={() => handlePurchase(PRICE_IDS.BASIC_SUBSCRIPTION)}
+                                disabled={loading}
+                            >
+                                {t('pricing.buttons.subscribe')}
+                            </button>
+                        </div>
+
+                        {/* Plus Plan */}
+                        <div className={`${pricingStyles.planCard} ${pricingStyles.plusPlan}`}>
+                            <div className={pricingStyles.popularBadge}>Most Popular</div>
+                            <div className={pricingStyles.planHeader}>
+                                <h3 className={pricingStyles.planName}>Plus</h3>
+                                <div className={pricingStyles.planPrice}>
+                                    <span className={pricingStyles.currency}>$</span>
+                                    <span className={pricingStyles.amount}>10</span>
+                                    <span className={pricingStyles.period}>per month</span>
+                                </div>
+                            </div>
+                            <ul className={pricingStyles.planFeatures}>
+                                <li>Everything in Basic</li>
+                                <li>Unlimited image text extraction</li>
+                                <li>Unlimited audio generation</li>
+                                <li>Advanced analytics & insights</li>
+                                <li>Premium support</li>
+                                <li>Early access to new features</li>
+                            </ul>
+                            <button 
+                                className={`${pricingStyles.planButton} ${pricingStyles.plusButton}`}
+                                onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
+                                disabled={loading}
+                            >
+                                {t('pricing.buttons.subscribe')}
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* One-time Purchases */}
+                <section className={pricingStyles.oneTimeSection}>
+                    <h2 className={pricingStyles.oneTimeTitle}>Boost Your Experience</h2>
+                    <p className={pricingStyles.oneTimeSubtitle}>Need extra credits or features? Get them with these one-time purchases.</p>
+                    
+                    <div className={pricingStyles.oneTimeGrid}>
+                        <div className={pricingStyles.oneTimeCard}>
+                            <h4>Extra Sentences</h4>
+                            <div className={pricingStyles.oneTimePrice}>$1</div>
+                            <p>100 additional sentence analyses</p>
+                            <button 
+                                className={pricingStyles.oneTimeButton}
+                                onClick={() => handlePurchase(PRICE_IDS.MORE_SENTENCES)}
+                                disabled={loading}
+                            >
+                                {t('pricing.buttons.buyNow')}
+                            </button>
+                        </div>
+
+                        <div className={pricingStyles.oneTimeCard}>
+                            <div className={pricingStyles.limitedOffer}>Limited Offer</div>
+                            <h4>Basic Upgrade</h4>
+                            <div className={pricingStyles.oneTimePrice}>$4</div>
+                            <p>Increase daily limits: 30→150 sentences, 60→200 words</p>
+                            <button 
+                                className={pricingStyles.oneTimeButton}
+                                onClick={() => handlePurchase(PRICE_IDS.BASIC_UPGRADE)}
+                                disabled={loading}
+                            >
+                                {t('pricing.buttons.buyNow')}
+                            </button>
+                        </div>
+
+                        <div className={pricingStyles.oneTimeCard}>
+                            <div className={pricingStyles.limitedOffer}>Limited Offer</div>
+                            <h4>Audio Pack</h4>
+                            <div className={pricingStyles.oneTimePrice}>$6</div>
+                            <p>50 additional audio generations for pronunciation practice</p>
+                            <button 
+                                className={pricingStyles.oneTimeButton}
+                                onClick={() => handlePurchase(PRICE_IDS.AUDIO_PACK)}
+                                disabled={loading}
+                            >
+                                {t('pricing.buttons.buyNow')}
+                            </button>
+                        </div>
+
+                        <div className={pricingStyles.oneTimeCard}>
+                            <div className={pricingStyles.limitedOffer}>Limited Offer</div>
+                            <h4>Image Pack</h4>
+                            <div className={pricingStyles.oneTimePrice}>$5</div>
+                            <p>150 image text extractions for learning from real content</p>
+                            <button 
+                                className={pricingStyles.oneTimeButton}
+                                onClick={() => handlePurchase(PRICE_IDS.IMAGE_PACK)}
+                                disabled={loading}
+                            >
+                                {t('pricing.buttons.buyNow')}
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Ko-fi Section */}
+                <section className={pricingStyles.supportSection}>
+                    <Image 
+                        src="/images/backgrounddark.png" 
+                        alt="Background" 
+                        fill 
+                        priority 
+                        style={{ objectFit: 'cover' }} 
                     />
-                </div>
+                    <div className={pricingStyles.supportContent}>
+                        <h2>Support the Project</h2>
+                        <p className={pricingStyles.supportText}>
+                            {t('pricing.donate.text')}
+                        </p>
+                        <a href='https://ko-fi.com/U7U21B323R' target='_blank' className={pricingStyles.kofiLink}>
+                            <img 
+                                height='40' 
+                                src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' 
+                                alt='Buy Me a Coffee at ko-fi.com' 
+                            />
+                        </a>
+                    </div>
+                </section>
+
             </div>
-        </div>
+            <Footer />
         </ContentPage>
     );
 };
