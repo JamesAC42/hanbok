@@ -14,21 +14,23 @@ $buttonSize:3rem;
 .languageButtonOuter {
     position:relative;
     height:$buttonSize;
-    width:$buttonSize;
+    width:fit-content;
     display:flex;
     align-items:center;
     justify-content:center;
+
+    margin-top:0.5rem;
 
     .picker {
 
         position: fixed;
         height: 100dvh;
         width: 100dvw;
-        background: #00000029;
         backdrop-filter: blur(3px);
         top: 0;
         left: 0;
         z-index: 2000;
+        background:#00000029;
         animation: blurIn 0.2s ease-in-out;
 
         .pickerBackground {
@@ -41,21 +43,10 @@ $buttonSize:3rem;
 
         @keyframes expand {
             0% {
-                max-height:0;
-                transform:scale(0) translate(-100%,-100%);
+                opacity:0;
             }
             100% {
-                max-height:100dvh;
-                transform:scale(1) translate(0,0);
-            }
-        }
-
-        @keyframes expand-reverse {
-            0% {
-                transform:scale(0) translate(-30%,-150%);
-            }
-            100% {
-                transform:scale(1) translate(-100%,0);
+                opacity:1;
             }
         }
 
@@ -65,20 +56,20 @@ $buttonSize:3rem;
             flex-direction: column;
             align-items: center;
             gap:1.4rem;
-            background: rgba(243, 243, 243, 0.852);
+            background: var(--background-alt);
             backdrop-filter: blur(10px);
             border-radius: 0.5rem;
             padding: 1rem;
             padding-top:2rem;
-            box-shadow: 0 0rem 1rem 0.2rem rgba(255, 255, 255, 0.715);
             justify-content: center;
             animation:expand 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
 
             .pickerHeader {
                 text-align:center;
-                color:#000000;
+                color:var(--foreground);
+                font-family:var(--font-funnel);
                 h3 {
-                    font-size:0.9rem;
+                    font-size:1rem;
                 }
             }
             .pickerItemContainer {
@@ -100,7 +91,6 @@ $buttonSize:3rem;
                 cursor: pointer;
                 border-radius: 0.3rem;
                 width:100%;
-                border:1px solid #000;
                 transition: background-color 0.2s;
                 display:flex;
                 align-items:center;
@@ -108,13 +98,14 @@ $buttonSize:3rem;
                 gap:1rem;
                 padding:0.2rem 0.5rem;
 
-                font-family: var(--font-display);
+                font-family: var(--font-funnel);
                 font-size:1rem;
-                color:#fff;
-                background:#30313dc9;
+
+                color:var(--foreground);
+                background:var(--background-alt);
 
                 &:hover {
-                    background-color: #040404;
+                    background-color: var(--foreground-lighter);
                 }
 
                 svg {
@@ -127,7 +118,6 @@ $buttonSize:3rem;
         &.reverse {
             .pickerContent {
                 transform: translateX(-100%);
-                animation:expand-reverse 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
             }
         }
     }
@@ -140,12 +130,22 @@ $buttonSize:3rem;
     justify-content: center;
     position:relative;
     height:$buttonSize;
-    width:$buttonSize;
-    border-radius:50%;
-    border:1px solid #21446c;
+    width:fit-content;
+    border-radius:0.5rem;
     overflow:hidden;
-    background:#fff;
+    background:var(--background-alt);
     animation:blurIn 0.2s ease-in-out;
+    padding:0 1rem;
+    font-family:var(--font-funnel);
+    font-size:1rem;
+    color:var(--foreground);
+    cursor:pointer;
+    &:hover {
+        background:var(--foreground-lighter);
+    }
+    svg {
+        margin-left:0.5rem;
+    }
     .languageButton {
         background: none;
         border: none;
@@ -154,13 +154,13 @@ $buttonSize:3rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        background:#fff;
+        background:var(--background-alt);
         &:hover {
             opacity: 0.8;
         }
     
         svg {
-            transform:scale(3) translateY(0px);
+            transform:scale(2) translateY(0px);
         }
     }
 }
@@ -171,8 +171,8 @@ $buttonSize:3rem;
     bottom: calc(100% + 0.5rem);
     left: 50%;
     transform: translateX(-50%);
-    background-color: #333;
-    color: white;
+    background-color: var(--background-alt);
+    color: var(--foreground);
     padding: 0.5rem 1rem;
     border-radius: 0.25rem;
     font-size: 0.875rem;
@@ -187,14 +187,14 @@ $buttonSize:3rem;
         transform: translateX(-50%);
         border-width: 0.25rem;
         border-style: solid;
-        border-color: #333 transparent transparent transparent;
+        border-color: var(--background-alt) transparent transparent transparent;
     }
 }
 
 .closeTooltip {
     background: none;
     border: none;
-    color: white;
+    color: var(--foreground);
     margin-left: 0.5rem;
     cursor: pointer;
     padding: 0 0.25rem;

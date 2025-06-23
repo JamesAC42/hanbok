@@ -142,11 +142,15 @@ $word-types: (
 } 
 
 @mixin dashboard-page {
-  padding:2rem 10rem;
+  padding:4rem 6rem;
+
+  max-height:100dvh;
+  flex-grow:1;
+  overflow-y:auto;
 
   .pageTitle {
     font-size:3rem;
-    color:var(--foreground-muted);
+    color:var(--foreground);
     font-family:var(--font-lilita);
   }
 }

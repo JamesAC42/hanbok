@@ -36,8 +36,8 @@ const ChangeLanguageButton = ({ native = false }) => {
     const handleButtonClick = (event) => {
         const buttonRect = event.currentTarget.getBoundingClientRect();
         setPickerPosition({
-            top: buttonRect.bottom + window.scrollY,
-            left: buttonRect.left + window.scrollX
+            top: `calc(${buttonRect.top - window.scrollY}px - 15rem)`, 
+            left: `calc(${buttonRect.right + window.scrollX}px + 10rem)`
         });
         setShowPicker(!showPicker);
     };
@@ -50,6 +50,9 @@ const ChangeLanguageButton = ({ native = false }) => {
     return (
         <div className={styles.languageButtonOuter}>
             <div className={styles.buttonContainer} onClick={handleButtonClick}>
+                
+                Language:
+                
                 <div 
                     className={styles.languageButton}
                     onClick={handleTooltipClose}
@@ -76,8 +79,8 @@ const ChangeLanguageButton = ({ native = false }) => {
                         <div 
                             className={styles.pickerContent}
                             style={{
-                                top: `${pickerPosition.top}px`,
-                                left: `${pickerPosition.left}px`
+                                top: `${pickerPosition.top}`,
+                                left: `${pickerPosition.left}`
                             }}
                         >
                             <div className={styles.pickerHeader}>

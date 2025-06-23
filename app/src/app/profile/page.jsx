@@ -60,10 +60,6 @@ const Profile = () => {
                             }
                         </p>
                     )}
-
-                    <div className={profileStyles.changeNativeLanguageOuter}>
-                        <ChangeLanguageButton native={true} />
-                    </div>
                     <p>
                         <strong>{t('profile.remainingAudioGenerations')}:</strong> {
                             user.tier === 2 ? t('profile.unlimited') :
@@ -101,14 +97,25 @@ const Profile = () => {
                     </p>
                 </div>
 
-                <div className={profileStyles.themeToggle} onClick={() => toggleTheme(theme === "dark" ? "light" : "dark")}>
-                    {theme === "dark" ? <SiSunFill /> : <TablerMoonFilled />}
+                <div className={profileStyles.settingsContainer}>
+                    <div className={profileStyles.settingsHeader}>
+                        <h2>Settings</h2>
+                    </div>
+                    <div className={profileStyles.themeToggle} onClick={() => toggleTheme(theme === "dark" ? "light" : "dark")}>
+                        Theme: 
+                        {theme === "dark" ? <TablerMoonFilled /> : <SiSunFill />}
+                    </div>
+
+                    <div className={profileStyles.changeNativeLanguageOuter}>
+                        <ChangeLanguageButton native={true} />
+                    </div>
                 </div>
+
                 {
                     userNotFree && (
-                        <div className={profileStyles.userDetails}>
+                        <div className={profileStyles.manageSubscription}>
                             <h2>{t('profile.manageSubscription')}</h2>
-                            <a href="https://billing.stripe.com/p/login/fZe9EtgcAgFe6UU5kk">
+                            <a href="https://billing.stripe.com/p/login/fZe9EtgcAgFe6UU5kk" target="_blank">
                                 {t('profile.manageSubscriptionLink')}
                             </a>
                         </div>

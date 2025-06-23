@@ -173,9 +173,12 @@
 
                     &.sidebarSectionItemPricing {
                         background:#7125c3;
-                        color:#fff;
                         transition:background 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
+                        .sidebarSectionItemIcon,
+                        .sidebarSectionItemText {
+                            color:#fff;
+                        }
                         &:hover {
                             background:rgb(145, 128, 223);
                         }
@@ -185,11 +188,22 @@
 
         }
     }
+
+    @keyframes collapse {
+        0% {
+            max-width:100%;
+        }
+        100% {
+            max-width:4rem;
+        }
+    }
     
     &.collapsed {
         width: calc(4rem + 1px);
         max-width: calc(4rem + 1px);
         overflow: hidden;
+
+        //animation:collapse 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
         .sidebarInner {
             width: 100%;
@@ -204,15 +218,6 @@
                 }
                 .sidebarSectionHeader {
                     color:var(--background);
-                }
-
-                @keyframes collapse {
-                    0% {
-                        max-width:100%;
-                    }
-                    100% {
-                        max-width:4rem;
-                    }
                 }
 
                 .sidebarSectionItems {

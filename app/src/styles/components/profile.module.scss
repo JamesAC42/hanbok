@@ -23,21 +23,29 @@
 }
 
 .userDetails {
-  margin-top: 0rem;
+  margin-top: 2rem;
   width:100%;
   border-radius: 0.5rem;
-  font-size:1rem;
+  font-size:1.2rem;
+  font-family:var(--font-funnel);
 }
 
 .userDetails h2 {
-  font-size:1rem;
+  font-size:1.3rem;
   margin-bottom: 1rem;
-  font-family:var(--font-lilita);
+  font-family:var(--font-funnel);
+  color:var(--foreground-muted);
 }
 
 .userDetails p {
   font-size:1rem;
   margin-bottom: 1rem;
+  font-family:var(--font-funnel);
+  color:var(--foreground);  
+
+  strong {
+    font-weight:700;
+  }
 }
 
 .userDetails a {
@@ -47,47 +55,98 @@
   word-wrap: break-word;
 }
 
+.themeToggle {
+  height:3rem;
+  width:fit-content;
+  @include flex-center;
+  background:var(--background-alt);
+  color:var(--foreground);
+  border-radius:0.5rem;
+  cursor:pointer;
+  font-family:var(--font-funnel);
+  padding:0 1rem;
+  svg {
+    margin-left:0.5rem;
+  }
+  &:hover {
+    background:var(--foreground-lighter);
+  }
+}
+
 .tierInfo {
   margin-top: 0rem;
   padding: 1rem;
-  border: 0.0625rem solid var(--foreground);
   border-radius: 0.5rem;
-  background-color: #fff;
   font-size: 1rem;
+
+  background:var(--background-alt);
+  color:var(--foreground);
+  font-family:var(--font-funnel);
 }
 
 .tierInfo a {
-  color: #7990ff;
+  color:var(--primary);
   text-decoration: underline;
 }
 
 .bonusAlert {
     margin-top: 2rem;
     padding: 1.5rem;
-    background-color: #e3f2fd;
-    border: 1px solid #3f88c5;
+    background:var(--background-alt);
+    border: 1px solid var(--foreground-light);
     border-radius: 0.5rem;
-    text-align: center;
+    text-align: center; 
 
     h3 {
-        color: #3f88c5;
+        color:var(--primary);
         margin-bottom: 0.5rem;
         font-family: var(--font-display);
     }
 
     p {
-        color: #404040;
+        color:var(--foreground);
         margin: 0;
     }
 
     a {
-        color: #3f88c5;
+        color:var(--primary);
         text-decoration: underline;
         
         &:hover {
-            color: #2d6ca3;
+            color:var(--primary-dark);
         }
     }
+}
+
+.settingsContainer {
+  margin-top: 2rem;
+
+  .settingsHeader {
+    h2 {
+      font-size:1.3rem;
+      margin-bottom: 1rem;
+      font-family:var(--font-funnel);
+      color:var(--foreground-muted);
+    }
+  }
+}
+
+.manageSubscription {
+  margin-top: 2rem;
+  padding: 1rem;
+  background:var(--background-alt);
+  
+  h2 {
+    font-family:var(--font-funnel);
+    font-size:1.1rem;
+    color:var(--foreground);
+  }
+
+  a {
+    font-family:var(--font-funnel);
+    font-size:1rem;
+    color:var(--primary);
+  }
 }
 
 .girl {
