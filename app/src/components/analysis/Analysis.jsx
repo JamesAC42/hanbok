@@ -112,7 +112,7 @@ const Analysis = ({
 
             <SentenceNotes analysis={analysis} />
 
-            {isLyric && (
+            {true && (
                 <LyricalDevices 
                     analysis={analysis}/>
             )}

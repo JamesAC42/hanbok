@@ -9,7 +9,7 @@
     justify-content: center;
     transition: all 0.2s ease;
     font-size: 1.5rem;
-    color: var(--color-text);
+    color: var(--foreground);
     opacity: 0.5;
 
     &:hover {
@@ -18,8 +18,8 @@
     }
 
     &.saved {
-        opacity: 1;
-        color: var(--color-primary);
+        opacity: 1; 
+        color: var(--primary);
     }
 
     &.loading {

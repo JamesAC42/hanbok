@@ -15,7 +15,7 @@
     backdrop-filter:blur(20px);
     background:var(--background-alt);
     background:none;
-    box-shadow:0 0 10px 0 rgba(0, 0, 0, 0.1);
+    box-shadow:0 0 10px 0 var(--shadow);
     box-shadow:none;
     border-radius:0.5rem;
     padding:2rem;
@@ -48,7 +48,7 @@
         font-variation-settings:'wght' 600;
         text-align:left;
         margin-bottom:1rem;
-        color:#4d4d4d;
+        color:var(--foreground);
         max-width:50%;
     }
 
@@ -58,6 +58,7 @@
         font-weight:light;
         text-align:center;
         margin-bottom:0.5rem;
+        color:var(--foreground);
     }
 
     .translation,
@@ -65,6 +66,7 @@
         font-size:1.7rem;
         font-weight:bold;
         text-align:center;
+        color:var(--foreground);
         @media screen and (max-width:725px) {
             font-size:1.2rem;
         }

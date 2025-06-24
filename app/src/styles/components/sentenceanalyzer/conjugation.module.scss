@@ -28,7 +28,7 @@
         .tense, .formality, .person, .number, .gender, .mood {
             font-weight:normal;
             font-size:1.1rem;
-            border:1px solid #000;
+            border:1px solid var(--foreground-light);
             border-radius:0.5rem;
             width:fit-content;
             overflow:hidden;
@@ -38,15 +38,15 @@
             .tenseLabel, .formalityLabel, .personLabel, .numberLabel, .genderLabel, .moodLabel {
                 width: 100%;
                 font-weight: 800;
-                background: #000000;
-                color: #ffffff;
+                background: var(--foreground-light);
+                color: var(--foreground);
                 padding: 0.5rem 0.8rem;
             }
             
             .tenseValue, .formalityValue, .personValue, .numberValue, .genderValue, .moodValue {
                 width: 100%;
-                background: #fff;
-                color: #000;
+                background: var(--background-alt);
+                color: var(--foreground);
                 padding: 0.5rem 0.8rem;
             }
         }
@@ -72,7 +72,7 @@
             text-align:center;
             padding-bottom:0.5rem;
             font-size:1.4rem;
-            border-bottom:1px solid #c9c9c9;
+            border-bottom:1px solid var(--foreground);
             font-weight:300;
         }
         .stepsContent {
@@ -85,12 +85,12 @@
                 td {
                     padding:0.5rem 1rem;
                     text-align:left;
-                    border-bottom:1px solid #eaeaea;
+                    border-bottom:1px solid var(--foreground-light);
                 }
                 
                 .stepNumber {
                     width:2.5rem;
-                    color:#666;
+                    color:var(--foreground-light);
                     font-weight:normal;
                 }
                 
@@ -100,7 +100,7 @@
                 }
                 
                 .explanation {
-                    color:#444;
+                    color:var(--foreground);
                 }
                 
                 .stringStep {

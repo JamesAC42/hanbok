@@ -7,6 +7,7 @@
 		font-weight: bold;
 		text-align: left;
 		margin-bottom: 1rem;
+		color:var(--foreground);
 	}
 
     .variant {
@@ -23,16 +24,16 @@
 
             position:relative;
 
-            border: 1px solid #000000;
+            border: 1px solid var(--foreground-light);
             padding: 2rem;
             margin-bottom: 1rem;
-            box-shadow: 0.3rem 0.3rem 0 #000000;
+            box-shadow: 0.3rem 0.3rem 0 var(--shadow);
             border-radius:0.5rem;
             margin-left:3rem;
 
             max-width:50%;
 
-            background:#fff;
+            background:var(--background);
 
             .variantType {
                 position:absolute;
@@ -43,21 +44,22 @@
                 transform:translate(-30%, -40%);
                 font-size:1.2rem;
                 font-weight:bold;
-                color:#000000;
-                background:#fff;
-                border:1px solid #28369e;
+                color:var(--foreground);
+                background:var(--background-alt);
+                border:1px solid var(--primary);
             }
 
             .variantText {
                 font-size:1.5rem;
-                color:#000000;
+                color:var(--foreground);
             }
 
             .variantReading {
-                border-top:1px solid #767676;
+                border-top:1px solid var(--foreground-light);
                 font-size:1.2rem;
                 padding:0.5rem 0;
                 margin-top:0.5rem;
+                color:var(--foreground-light);
             }
         }
         
@@ -65,7 +67,7 @@
         .variantWhenToUse {
             font-family: var(--font-body);
             font-size:1.3rem;
-            color:#000000;
+            color:var(--foreground);
             opacity:0.6;
             flex:1;
             text-align:center;
@@ -119,8 +121,7 @@
                 font-size:1.8rem;
     
                 position:relative;
-    
-                border: 2px solid #000000;
+                border: 2px solid var(--foreground-light);
                 padding: 1.1rem 1.4rem;
                 border-radius:0.5rem;
 

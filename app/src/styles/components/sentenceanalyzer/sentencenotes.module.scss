@@ -6,6 +6,7 @@
         font-weight: bold;
         margin-bottom: 1rem;
         text-align: left;
+        color:var(--foreground);
     }
 
     .sentenceNotesGrid {
@@ -18,11 +19,13 @@
             font-family: var(--font-body);
             font-size: 1.1rem;
             font-weight: bold;
+            color:var(--foreground-light);
         }
 
         .sentenceNoteValue {  
             font-family: var(--font-body);
             font-size: 1.1rem;
+            color:var(--foreground);
         }
     }
     @media screen and (max-width:725px) {
