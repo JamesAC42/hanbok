@@ -106,7 +106,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         <div className={`${styles.container} ${analysis ? styles.containerWithAnalysis : ''}`}>
     
             { 
-                !analysis && (
+                !analysis && false && (
                 <TranslationSwitcher 
                     translationMode={translationMode}
                     setTranslationMode={setTranslationMode}
@@ -117,14 +117,10 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 )
             }
 
-            {
-                // !analysis && (
-                //     <a className={styles.aboutLink} href="/about">What is this?</a>
-                // )
-            }
-
             { 
-                !analysis && (
+                !analysis && 
+                (
+                    <>
                     <SentenceForm
                         analysis={analysis}
                         setAnalysis={handleNewAnalysis}
@@ -132,32 +128,23 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                         setVoice2={setVoice2}
                         setTransition={setShowTransition}
                         translationMode={translationMode}
+                        setTranslationMode={setTranslationMode}
                         />
-                )
-            }
-
-            {
-                !analysis && (
-                    <div className={styles.infoContainer}>
-    
-                    {
-                        !analysis && <div className={styles.testSentences}>
-                            <h3>{t('home.tryExample')}</h3>
-                            {(translationMode ? getNativeExampleSentences() : getExampleSentences()).map((sentence, index) => (
-                                <div 
-                                    key={index} 
-                                    className={`${styles.exampleSentence} ${getFontClass(language)}`}
-                                    onClick={() => handleExampleClick(sentence)}
-                                    role="button"
-                                    tabIndex={0}
-                                >
-                                    {sentence}
-                                </div>
-                            ))}
-                        </div>
-                    }
-
+                    <h3 className={styles.tryExampleHeader}>{t('home.tryExample')}</h3>
+                    <div className={styles.testSentences}>
+                        {(translationMode ? getNativeExampleSentences() : getExampleSentences()).map((sentence, index) => (
+                            <div 
+                                key={index} 
+                                className={`${styles.exampleSentence} ${language === 'ko' ? styles.koreanSans : getFontClass(language)}`}
+                                onClick={() => handleExampleClick(sentence)}
+                                role="button"
+                                tabIndex={0}
+                            >
+                                {sentence}
+                            </div>
+                        ))}
                     </div>
+                    </>
                 )
             }
         

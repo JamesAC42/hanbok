@@ -13,6 +13,8 @@ import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import { Upload } from '@/components/icons/Upload';
 
+import { useTheme } from '@/contexts/ThemeContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
@@ -28,7 +30,8 @@ const SentenceForm = ({
     setVoice1,
     setVoice2,
     setTransition,
-    translationMode
+    translationMode,
+    setTranslationMode
 }) => {
     const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
     const { isAuthenticated, user, decrementRemainingImageExtracts, decrementRemainingSentenceAnalyses, updateWeeklySentenceQuota } = useAuth();
@@ -42,6 +45,7 @@ const SentenceForm = ({
     const [isProcessingImage, setIsProcessingImage] = useState(false);
     const fileInputRef = useRef(null);
     const router = useRouter();
+    const { theme } = useTheme();
 
     const loadingMessages = [
         t('sentenceForm.loading.structure'),
@@ -483,7 +487,37 @@ const SentenceForm = ({
                     )}
                 </div>
             )}
+
+            <div className={styles.languageSwitcherOuter}>
+                <LanguageSwitcher />
+
+                <div
+                    onClick={() => setTranslationMode(!translationMode)}
+                    className={styles.translationModeSwitch}>
+                    <div className={styles.translationModeSwitchInner}>
+                        <div className={styles.translationModeSwitchText}>
+                            Mode: 
+                            {
+                                translationMode ? ' Translate' : ' Analyze'
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div className={styles.formContainerSplashImage}>
+                <div className={styles.formContainerSplashImageText}>
+                    {
+                        translationMode ? 'How do I say...?' : 'Got a sentence? Let\'s dissect it.'
+                    }
+                </div>
+                <div className={styles.formContainerSplashImageInner}>
+                    <img className={theme === 'dark' ? styles.dark : ''} src="/images/promptbackground.png" alt="Splash image" />
+                </div>
+            </div>
+                
             <div className={`${styles.formContainer} ${analysis ? styles.formContainerWithAnalysis : ''}`}>
+                
                 <form onSubmit={handleSubmit} className={styles.form}>
                     <div className={styles.textInputContainer}>
                         <TextInput
@@ -492,6 +526,7 @@ const SentenceForm = ({
                             onChange={(e) => setText(e.target.value)}
                             placeholder={translationMode ? getNativePlaceholder() : getLocalizedPlaceholder()}
                             variant="large"
+                            maxLength={1000}
                             onPaste={handlePaste}
                             disabled={!!imagePreview}
                         />
@@ -507,6 +542,7 @@ const SentenceForm = ({
                                 <TextInput
                                     language={nativeLanguage}
                                     value={textContext}
+                                    maxLength={1000}
                                     onChange={(e) => setTextContext(e.target.value)}
                                     placeholder={getContextPlaceholder()}
                                     variant="large"
@@ -537,6 +573,7 @@ const SentenceForm = ({
                             type="submit" 
                             disabled={loading || isProcessingImage}
                             variant="primary"
+                            className={styles.analyzeButton}
                         >
                             {loading ? t('sentenceForm.analyzing') : t('sentenceForm.analyze')}
                         </Button>

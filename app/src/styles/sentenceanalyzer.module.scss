@@ -1,3 +1,5 @@
+@import './variables.module.scss';
+
 @keyframes fade-in-blur {
 0% {
 	opacity: 0;
@@ -23,209 +25,83 @@
 }
 
 .container {
+	@include dashboard-page;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-end;
+	min-height: 100dvh;
+	padding-top: 4rem;
 
-	height:100dvh;
-	width:100dvw;
+	padding:0;
 
-	overflow-x:hidden;
-	overflow-y:auto;
-
-	padding: 2rem 5rem;
-	padding-bottom:0;
-	margin: 0 auto;
 	position:relative;
 
-	@media screen and (max-width: 1200px) {
-		padding:2rem 7rem;
-	}
-	@media screen and (max-width: 950px) {
-		padding:2rem;
-	}
-	@media screen and (max-width:725px) {
-		padding:0.5rem;
+	@media screen and (max-width: 725px) {
+		padding-top: 2rem;
+		padding-left: 2rem;
+		padding-right: 2rem;
 	}
 
-	.girlContainer {
-		position: fixed;
-		bottom: 0;
-		right:0;
-		width:50rem;
-		height:auto;
-		z-index: 1001;
-		transform:translate(-5rem, 16rem);
-		
-		pointer-events: none;
+	&.containerWithAnalysis {
+		display: block;
 
-		img {
-			width:100%;
-			height:auto;
-			margin:0 auto;
-		}
-
-		&.hidden {
-			display:none;
-		}
-
-		@media (max-width:1800px) {
-			width:40rem;
-		}
-
-		@media (max-width:1500px) {
-			width:30rem;
-		}
-
-		@media (max-width:1300px) {
-			width:20rem;
-			transform:translate(-2rem, 10rem);
-		}
-
-		@media (max-width:1200px) {
-			display:none;
+		@media screen and (max-width: 725px) {
+			padding-top: 2rem;
 		}
 	}
+}
 
-	.title {
-		margin-top:2rem;
-		margin-bottom: 1rem;
-		text-align: center;
-		font-family: var(--font-display);
-		font-variation-settings: 'wght' 800;
-		font-size: 5.5rem;
-		display: flex;
-		justify-content: center;
-		gap: 0.25rem;
+.tryExampleHeader {
+	font-family:var(--font-funnel);
+	margin-bottom:1rem;
+	color:var(--foreground);
+}
 
-		transition:all .2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		.titleLetter {
-			display: inline-block;
-			opacity:0;
-			transform-origin: bottom;
-			@include fade-in-animation;
-			color:#fff;
-			text-shadow: 
-				-0.1rem -0.1rem 0 #000,
-				0.1rem -0.1rem 0 #000,
-				-0.1rem 0.1rem 0 #000,
-				0.1rem 0.1rem 0 #000;
-			
-			animation-fill-mode: forwards;
+.testSentences {
+	margin-bottom:6rem;
 
-			@for $i from 1 through 7 {
-				&:nth-child(#{$i}) {
-				animation-delay: #{$i * 0.08}s;
-				}
-			}
-		}
-		@media screen and (max-width:725px) {
-			margin-top:10dvh;
-			font-size:3rem;
-			gap:0.1rem;
-		}
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:center;
+	gap:0.5rem;
 
-		&.titleWithAnalysis {
-			margin-top:0;
-			text-align:left;
-			font-size:2rem;
-			justify-content:flex-start;
+	max-width:60dvw;
 
-			@media screen and (max-width: 950px) {
-				justify-content:center;
-			}
-			@media screen and (max-width:725px) {
-				margin-top:0.7rem;
-			}
-		}
-	}
-
-	.subtitle {
-		margin-bottom:2rem;
-
-		text-align:center;
-		font-family: var(--font-display);
-		font-variation-settings: 'wght' 400;
-		font-family: var(--font-display);
-		font-size:1.7rem;
-		color:#ffffff;
-		text-shadow: 
-			-0.0625rem -0.0625rem 0 #000,
-			0.0625rem -0.0625rem 0 #000,
-			-0.0625rem 0.0625rem 0 #000,
-			0.0625rem 0.0625rem 0 #000;
-		@media screen and (max-width:725px) {
-			font-size:1.3rem;
-			padding:0 1rem;
-		}
-
-		&.subtitleWithAnalysis {
-			display:none;
-			transition:all .2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-		}
-	}
-
-	.aboutLink {
-		display:block;
-		text-decoration:none;
-		color:#3a57da;
+	.exampleSentence {
+		font-size:0.9rem;
 		margin-bottom:0.5rem;
-		margin-left:0.5rem;
-	}
+		position:relative;
+		width:fit-content;
+		padding:0.5rem;
+		cursor:pointer;
+		border-radius:0.3rem;
 
-	.links {
-		display:flex;
-		flex-direction:row;
-		align-items:center;
-		justify-content: space-between;
-		margin-bottom:2rem;
-		padding:0 2rem;
+		padding:0.5rem 1rem;
+		border-radius:1.5rem;
+		border:2px solid var(--foreground-light);
+		color:var(--foreground);
 
-		.linkContainer {
-			border-radius:3rem;
-			padding:0.5rem 1.3rem;
-			background:#000000;
-			gap:1rem;
-			display:flex;
-			flex-direction:row;
-			transition:all .2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-			
-			a {
-				color:#fff;
-				font-size:1.6rem;
-				svg {
-					transform:translateY(3px);
-				}
-				&:hover {
-					color:#3943cf;
-				}
-			}
-	
-		}
+		transition:all .2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 
+		overflow:hidden;
 		@media screen and (max-width:725px) {
-			margin-bottom:2rem;
-			padding:0 1rem;
-			.linkContainer {
-				a {
-					font-size:1.4rem;
-				}
-			}
+			font-size:1rem;
 		}
-		&.linksWithAnalysis {
-			display:none;
-		}
-	}
 
-	.changeNativeLanguageOuter {
-		position:absolute;
-		top:0;
-		right:0;
-		margin:1rem;
+		&.koreanSans {
+			font-family:var(--font-kr-sans);
+		}
+
+		&:hover {
+			background:var(--foreground);
+			color:var(--background);
+		}
 	}
 }
 
 .infoContainer {
-	background: linear-gradient(315deg, rgba(227, 242, 255, 0.68), rgba(220, 255, 220, 0.776));
-	background: linear-gradient(315deg, rgba(171, 222, 234, 0.68), rgba(211, 241, 211, 0.776));
-	box-shadow:0 0 0.5rem 0.1rem rgba(255, 255, 255, 0.831);
+	
 	width:50dvw;
 	border-radius:0.5rem;
 	padding:2rem;
@@ -274,56 +150,6 @@
 		}
 	}
 
-	.testSentences {
-		margin-bottom:2rem;
-		h3 {
-			color:#4a3838;
-			margin-bottom:1rem;
-
-			@media screen and (max-width:725px) {
-				font-size:1rem;
-				margin-bottom:0.5rem;
-			}
-	
-		}
-		.exampleSentence {
-			font-size:1.2rem;
-			margin-bottom:0.5rem;
-			position:relative;
-			width:fit-content;
-			padding:0.5rem;
-			cursor:pointer;
-			border-radius:0.3rem;
-	
-			transition:all .2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-	
-			overflow:hidden;
-			@media screen and (max-width:725px) {
-				font-size:1rem;
-			}
-	
-			&::after {
-				position:absolute;
-				content:'';
-				bottom:0;
-				left:0;
-				width:100%;
-				height:100%;
-				//background:#3b3434;
-				background:#406358;
-				transform:translateY(calc(100%));
-				transition:all .2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-				z-index:-1;
-			}
-	
-			&:hover {
-				color:#fff;
-				&::after {
-					transform:translateY(0);
-				}
-			}
-		}
-	}
 
 	.legal {
 		display:flex;

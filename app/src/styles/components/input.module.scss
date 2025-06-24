@@ -10,11 +10,12 @@
   transform: translate(0, 0);
   box-shadow: 0 0 0 transparent;
 
-  &:focus {
-    outline: none;
-    transform: translate(-0.125rem, -0.125rem);
-    box-shadow: 0.375rem 0.375rem 0 var(--foreground);
-  }
+  font-family:var(--font-funnel);
+  border:none;
+  outline:none;
+  font-size:1.2rem;
+  padding:0;
+  min-width:60dvw;
 
   &:disabled {
     opacity: 0.5;
@@ -35,5 +36,14 @@
   &.small {
     font-size: var(--text-small);
     padding: calc(var(--spacing-small) / 2);
+  }
+
+  &.textarea {
+    resize: none;
+    overflow: hidden;
+    min-height: 1.2rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
 } 

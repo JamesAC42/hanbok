@@ -6,15 +6,17 @@
 
 .translationSwitcherOuter {
     @include flex-center;
-    flex-direction:column;
-    position:relative;
+    
+    position:absolute;
+    top:0;
 
-    margin-bottom:1rem;
-    z-index:1000;
+
 
     .translationSwitcherContainer {
         @include flex-center;
         position:relative;
+
+        justify-content:space-between;
 
         .languageSwitcherOuter {
             position:absolute;

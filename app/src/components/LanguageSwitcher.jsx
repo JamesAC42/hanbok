@@ -119,9 +119,14 @@ const LanguageSwitcher = ({ analysis }) => {
                     {generateDropdown()}
                 </div>
             )}
-            <div className={`${styles.helpTextImage} ${analysis ? styles.hidden : ''}`}>
-                <Image src="/images/switchlanguagehelptext.png" alt="language-switcher" width={512} height={341} />
-            </div>
+
+            {
+                false && (
+                    <div className={`${styles.helpTextImage} ${analysis ? styles.hidden : ''}`}>
+                        <Image src="/images/switchlanguagehelptext.png" alt="language-switcher" width={512} height={341} />
+                    </div>
+                )
+            }
         </div>
     )
 }
