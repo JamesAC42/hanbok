@@ -145,7 +145,7 @@
 .languageSelector {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 1rem;
   display: flex;
   align-items: center;
   z-index: 10000;
@@ -185,6 +185,11 @@
       max-height: 100rem;
       animation: expand 0.5s ease-in-out;
     }
+  }
+
+  @media screen and (max-width: 500px) {
+    top:1rem;
+    right:0rem;
   }
 } 
 

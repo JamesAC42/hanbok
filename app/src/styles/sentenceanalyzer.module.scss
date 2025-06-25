@@ -31,23 +31,15 @@
 	align-items: center;
 	justify-content: flex-end;
 	min-height: 100dvh;
-	padding-top: 4rem;
 
 	padding:0;
 
 	position:relative;
 
-	@media screen and (max-width: 725px) {
-		padding-top: 2rem;
-		padding-left: 2rem;
-		padding-right: 2rem;
-	}
-
 	&.containerWithAnalysis {
 		display: block;
 
 		@media screen and (max-width: 725px) {
-			padding-top: 2rem;
 		}
 	}
 }
@@ -98,6 +90,26 @@
 			color:var(--background);
 		}
 	}
+    @media screen and (max-width: 750px) {
+		max-width:95dvw;
+		gap:0.2rem;
+		margin-bottom:0rem;
+		max-height:11rem;
+		overflow:hidden;
+		.exampleSentence {
+			font-size:0.8rem;
+		}
+    }
+    @media screen and (max-height: 650px) {
+		max-width:70dvw;
+		gap:0.2rem;
+		margin-bottom:0rem;
+		max-height:11rem;
+		overflow:hidden;
+		.exampleSentence {
+			font-size:0.8rem;
+		}
+    }
 }
 
 .infoContainer {

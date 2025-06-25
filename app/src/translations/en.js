@@ -434,6 +434,18 @@ export const en = {
         pageOf: 'Page {current} of {total}',
         fetchError: 'Error fetching saved sentences.'
     },
+    history: {
+        pageTitle: 'Hanbok - History',
+        title: 'History',
+        loading: 'Loading...',
+        noSentences: 'No sentences found.',
+        generateSentences: 'Generate some sentences to see them here!',
+        createdOn: 'Created on',
+        prev: 'Previous',
+        next: 'Next',
+        pageOf: 'Page {current} of {total}',
+        fetchError: 'Failed to fetch sentences.'
+    },
     cards: {
         pageTitle: 'Hanbok - Flashcards',
         deckPageTitle: 'Hanbok - {language} Flashcards',

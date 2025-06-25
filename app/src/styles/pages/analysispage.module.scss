@@ -1,6 +1,8 @@
 .analysisContainer {
 
+    max-height:100dvh;
+    overflow-y:auto;
     @media screen and (max-width: 1000px) {
-        margin-top:4rem;
+        margin-top:0rem;
     }
 }

@@ -245,22 +245,28 @@ function Sidebar() {
                                     Flashcards
                                 </div>
                             </div>
+
+                            {
+                                false && (
+                                    <div 
+                                        onMouseEnter={() => setHoverTransform(1, 2)}
+                                        className={`
+                                            ${styles.sidebarSectionItem}
+                                            ${expanding ? styles.expanding : ""}
+                                            ${getActiveClass("/grammar")}`}
+                                        onClick={() => navigateTo("/grammar")}>
+                                        <div className={styles.sidebarSectionItemIcon}>
+                                            <Fa6SolidParagraph />
+                                        </div>
+                                        <div className={styles.sidebarSectionItemText}>
+                                            My Grammar
+                                        </div>
+                                    </div>
+                                )
+                            }
+
                             <div 
                                 onMouseEnter={() => setHoverTransform(1, 2)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/grammar")}`}
-                                onClick={() => navigateTo("/grammar")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <Fa6SolidParagraph />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    My Grammar
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform(1, 3)}
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}
@@ -274,7 +280,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <div 
-                                onMouseEnter={() => setHoverTransform(1, 4)}
+                                onMouseEnter={() => setHoverTransform(1, 3)}
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}
@@ -382,14 +388,6 @@ function Sidebar() {
                                     transform: `translateY(${sectionTwoTransform})`}
                                 }>
                             </div>
-                        </div>
-                    </div>
-                    <div className={styles.sidebarSection}>
-                        <div
-                            className={styles.sidebarSectionHeader}>
-                            Recent
-                        </div>
-                        <div className={styles.sidebarSectionItems}>
                         </div>
                     </div>
                 </div>

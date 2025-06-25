@@ -10,6 +10,8 @@
     border:1px solid var(--foreground-light);
     border-radius:0.7rem;
 
+    z-index:1001;
+
     .languageItem {
         font-family: var(--font-display);
         font-weight:600;
@@ -113,6 +115,23 @@
 
         }
 
+    }
+
+    @media screen and (max-width: 500px) {
+        .languageSwitcherContainer {
+            height:2rem;
+            width:8rem;
+        }
+        .languageItem {
+            font-size:0.8rem;
+            height:2rem;
+            width:8rem;
+            .languageItemInner {
+                .languageItemText {
+                    font-size:0.8rem;
+                }
+            }
+        }
     }
 
     .helpTextImage {

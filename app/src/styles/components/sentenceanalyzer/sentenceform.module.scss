@@ -25,6 +25,20 @@
             background:var(--background-alt);
         }
     }
+
+    @media screen and (max-width: 1000px) {
+        margin-left:5rem;
+        transform:translateY(-2px);
+    }
+
+    @media screen and (max-width: 500px) {  
+
+        align-items:flex-start;
+        .translationModeSwitch {
+            font-size:0.8rem;
+            padding:0.5rem 1rem;
+        }
+    }
 }
 
 .formContainerSplashImage {
@@ -67,6 +81,38 @@
             }
         }
     }
+
+    @media screen and (max-width: 1000px) {
+        .formContainerSplashImageInner {
+            transform:translate(-50%, -70%);
+            img {
+                width:80dvw;
+            }
+        }
+    }
+
+    @media screen and (max-width: 750px) {
+        .formContainerSplashImageText {
+            font-size:2rem;
+            width:95dvw;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .formContainerSplashImageInner {
+            transform:translate(-50%, -80%);
+            img {
+                width:150dvw;
+            }
+        }
+    }
+
+    @media screen and (max-height: 650px) {
+        .formContainerSplashImageText {
+            font-size:2rem;
+            width:95dvw;
+        }
+    }
 }
 
 .formContainer {
@@ -81,7 +127,7 @@
     border-radius:4rem;
     padding:2.5rem 3rem;
 
-    z-index:2;
+    z-index:1;
 
     animation: slide-fade-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
@@ -128,6 +174,28 @@
     .textInputContainer {
         animation: fade-in 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
+
+    @media screen and (max-width: 850px) {
+        padding:1rem;
+        border-radius:1.2rem;
+        width:95dvw;
+        margin-bottom:1rem;
+    }
+    
+    @media screen and (max-width: 750px) {
+        .form {
+            gap:0rem;
+        }
+    }
+    @media screen and (max-height: 650px) {
+        padding:1rem;
+        border-radius:1.2rem;
+        width:75dvw;
+        margin-bottom:1rem;
+        .form {
+            gap:0rem;
+        }
+    }
 }
 
 .buttonsContainer {
@@ -139,8 +207,7 @@
     justify-content:space-between;
     
     @media screen and (max-width:725px) {
-        flex-direction: column;
-        gap: 0.3rem;
+
     }
 }
 
@@ -150,19 +217,31 @@
 
 .uploadButton {
     display: flex;
+    flex-direction:row;
     align-items: center;
     justify-content: center;
 
     border-radius:50%;
     height:3rem;
     width:3rem;
+    max-width:3rem;
+    background:var(--background);
+    color:var(--foreground);
+    padding: 0 !important;
+    overflow: visible;
     
     svg {
         transform:scale(1.5);
     }
     
-    @media screen and (max-width:725px) {
-        width: 100%;
+    @media screen and (max-width: 750px) {
+        height:2rem;
+        width:2rem;
+        max-width:2rem;
+        
+        svg {
+            transform:scale(1.0);
+        }
     }
 }
 

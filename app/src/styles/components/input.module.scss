@@ -46,4 +46,12 @@
     word-wrap: break-word;
     white-space: pre-wrap;
   }
+
+  @media screen and (max-width: 850px) {
+    font-size:1rem;
+
+    &.textarea {
+      font-size:1rem;
+    }
+  }
 } 

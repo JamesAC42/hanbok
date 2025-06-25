@@ -50,6 +50,10 @@
         margin-bottom:1rem;
         color:var(--foreground);
         max-width:50%;
+
+        @media screen and (max-width:725px) {
+            margin-left:4rem;
+        }
     }
 
     .translationHeader,

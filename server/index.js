@@ -177,6 +177,11 @@ app.get('/api/user/sentences', isAuthenticated, async (req, res) => {
     getUserSentences(req, res);
 });
 
+app.get('/api/user/history', isAuthenticated, async (req, res) => {
+    const getUserSentences = require('./controllers/auth/getUserSentences');
+    getUserSentences(req, res);
+});
+
 app.post('/api/sentences/:sentenceId/save', isAuthenticated, async (req, res) => {
     saveSentence(req, res);
 });
