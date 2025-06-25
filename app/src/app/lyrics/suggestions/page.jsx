@@ -10,6 +10,8 @@ import { BxsUpvote } from '@/components/icons/Upvote';
 import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
 import ContentPage from '@/components/ContentPage';
 
+import Footer from '@/components/Footer';
+
 const languageOptions = [
   { value: 'ko', label: 'Korean' },
   { value: 'ja', label: 'Japanese' },
@@ -407,6 +409,7 @@ const Suggestions = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </ContentPage>
   );
 };

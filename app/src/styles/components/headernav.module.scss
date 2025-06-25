@@ -10,6 +10,123 @@
     gap:2rem;
 }
 
+// Hamburger menu button
+.hamburgerButton {
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 3rem;
+    height: 3rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1002;
+
+    .hamburgerIcon {
+        font-size: 1.5rem;
+        color: #fff;
+        transition: all 0.2s ease;
+        @include flex-center;
+    }
+
+    &:hover .hamburgerIcon {
+        opacity: 0.7;
+    }
+}
+
+// Sidebar styles
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -20rem;
+    width: 20rem;
+    height: 100vh;
+    background-color: #090e1ff0;
+    backdrop-filter: blur(15px);
+    z-index: 1003;
+    transition: left 0.2s ease;
+    padding-top: 6rem;
+
+    &.sidebarOpen {
+        left: 0;
+    }
+
+    @media screen and (min-width: 50.0625rem) { // 801px and above
+        display: none !important;
+    }
+}
+
+.sidebarContent {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+
+    a {
+        font-family: var(--font-serif);
+        font-weight: 800;
+        color: #f3f3f3;
+        text-decoration: none;
+        font-size: 1.2rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s ease;
+
+        &:hover {
+            opacity: 0.7;
+            padding-left: 1rem;
+        }
+
+        &.headerLinkSpecial {
+            color: #ffffff;
+            position: relative;
+            
+            &:after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: 1rem;
+                transform: translateY(-50%);
+                height: 0.75rem;
+                width: 0.75rem;
+                border-radius: 50%;
+                background-color: #ec6b47;
+            }
+        }
+    }
+
+    .getStartedButton {
+        @include hero-cta;
+        margin-top: 1rem;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        font-family: var(--font-serif);
+        font-weight: 800;
+        transition: all 0.2s ease;
+        
+        &:hover {
+            transform: translateY(-0.125rem);
+            opacity: 0.9;
+        }
+    }
+}
+
+.sidebarOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1002;
+
+    @media screen and (min-width: 50.0625rem) { // 801px and above
+        display: none !important;
+    }
+}
 
 .headerNav {
     position:fixed;
@@ -18,6 +135,7 @@
     width:100dvw;
     display:flex;
     justify-content:space-between;
+    align-items:center;
 
     background-color:#0f1c4bd3;
     background-color:#05251788;
@@ -46,8 +164,8 @@
                 top:0;
                 right:0;
                 transform:translate(calc(100%),-20%);
-                height:12px;
-                width:12px;
+                height:0.75rem;
+                width:0.75rem;
                 border-radius:50%;
                 background-color:#ec6b47;
             }
@@ -95,5 +213,31 @@
     }
 
     z-index:1000;
-    
+
+    @media screen and (max-width: 1100px) {
+        .headerNavCenter {
+            display:none;
+        }
+    }
+
+    @media screen and (max-width: 50rem) { // 800px
+        padding: 0.5rem 2rem;
+        
+        .hamburgerButton {
+            display: flex;
+        }
+        
+        .headerNavLeft {
+            display: none;
+        }
+        
+        .headerNavRight {
+            gap: 1rem;
+            
+            .getStartedButton {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+        }
+    }
 }

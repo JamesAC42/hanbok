@@ -53,6 +53,17 @@
             }
         }
     }
+
+    @media screen and (max-width:1000px) {
+        .joinDiscordBubble {
+            padding:1rem 2rem;
+            width:90dvw;
+
+            a {
+                font-size:1rem;
+            }
+        }
+    }
 }
 
 .footer {
@@ -125,6 +136,49 @@
             padding-left:6rem;
             padding-top:0.5rem;
             text-align:right;
+        }
+    }
+
+    @media screen and (max-width:1200px) {
+        flex-direction:column;
+        .footerContent {
+            flex-direction:column;
+            width:90dvw;
+            .footerLinks {
+                width:100%;
+                justify-content:center;
+                gap:2rem;
+            }
+            .footerCopyright {
+                border-left:none;
+                padding-left:0;
+                text-align:center;
+            }
+        }
+    }
+
+    @media screen and (max-width:480px) {
+        .footerContent {
+            .footerLinks {
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+                gap:2rem;
+                .footerLinkColumn {
+                    align-items:center;
+                    text-align:center;
+                    .footerLinkColumnHeader {
+                        font-size:2rem;
+                    }
+                    .footerLinkColumnLinks {
+                        @include flex-center-column;
+                        a {
+                            text-align:center;
+                            font-size:1.5rem;
+                        }
+                    }
+                }
+            }
         }
     }
 }
