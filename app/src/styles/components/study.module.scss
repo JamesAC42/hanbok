@@ -743,20 +743,21 @@ $primary-button-hover: #5a67d8;
 @media (max-width: 768px) {
     .studyContent {
         padding: 1rem;
-        margin-top: 2rem;
+        margin-top: 4rem;
     }
     
     .backButton, .muteButton {
         padding: 0.75rem;
-        top: 1rem;
+        top: 0.5rem;
+        z-index:100;
     }
     
     .backButton {
-        left: 1rem;
+        left: 0.5rem;
     }
     
     .muteButton {
-        right: 1rem;
+        right: 0.5rem;
     }
     
     .header h2 {
@@ -791,6 +792,7 @@ $primary-button-hover: #5a67d8;
         .statLabel {
             font-size: 0.6rem;
             margin-bottom: 0.25rem;
+            margin-top:0.5rem;
             line-height: 1.2;
         }
         

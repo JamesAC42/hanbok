@@ -152,6 +152,11 @@ $word-types: (
     font-size:3rem;
     color:var(--foreground);
     font-family:var(--font-lilita);
+
+    @media screen and (max-width: 725px) {
+      margin-top:4rem;
+      text-align:center;
+    }
   }
 }
 
