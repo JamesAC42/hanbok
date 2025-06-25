@@ -1064,9 +1064,8 @@
 
 .activeAnalysis {
     padding: 1.5rem;
-    border: 1px solid #eaeaea;
     border-radius: 0.5rem 0 0 0.5rem;
-    background: #fff;
+    background: var(--background);
     box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
 
@@ -1075,6 +1074,7 @@
         border-radius: 0.5rem;
         box-shadow: 0.15rem 0.15rem 0.2rem rgba(0, 0, 0, 0.6);
         box-shadow: 0 -3rem 0.5rem 1rem rgb(255, 255, 255);
+        box-shadow: 0 0.125rem 0.5rem var(--foreground-light);
         background: linear-gradient(to right, #4571f4, #6b8df6);
         color: #ffffff;
         font-family: var(--font-display);
@@ -1130,6 +1130,7 @@
     }
 
     h3 {
+        color:var(--foreground);  
         padding: 0 0.5rem;
     }
 
@@ -1153,14 +1154,16 @@
     margin-bottom: 0.5rem;
     font-weight: 500;
     padding: 0 0.5rem;
+    color:var(--foreground);  
 }
 
 .originalText {
     font-size: 1.125rem;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px dashed #eee;
-    padding: 0 0.5rem;
+    border-bottom: 1px dashed var(--foreground-light);
+    padding: 0.5rem;
+    color:var(--foreground);  
     
     .lineTranslation {
         font-size: 1rem;
