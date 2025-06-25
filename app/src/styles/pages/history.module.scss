@@ -34,15 +34,15 @@
 
 .sentenceItem {
     background-color: var(--background-alt);
-    padding: 1.5rem;
-    padding-bottom: 0.5rem;
+    padding: 1rem;
+    padding-bottom: 0rem;
     margin-bottom: 0rem;
     border-radius: 0.5rem;
     border: 0.0625rem solid var(--background-alt);
     cursor: pointer;
     width: 100%;
     animation: fadeIn 0.5s ease-in-out;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 
     &:hover {
         outline: 2px solid var(--foreground-muted);
@@ -50,7 +50,7 @@
 }
 
 .sentenceText {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
     color: var(--foreground);
     font-family: var(--font-kr-serif);
