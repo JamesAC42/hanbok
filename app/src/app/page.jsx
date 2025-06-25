@@ -178,8 +178,14 @@ export default function Home() {
       <div className={styles.getStartedSection}>
         <Image src="/images/backgrounddark.png" alt="Hero Image" fill priority style={{ objectFit: 'cover' }} />
           <div className={styles.getStartedContent}>
-            <h1>Get Started</h1>
-            <p className={styles.infoSubHeader}>Hanbok is a multi-language learning tool that helps you learn languages with AI-powered sentence analysis, vocabulary tools, and cultural insights.</p>
+            <h1>Accelerate your learning, now!</h1>
+
+            <div 
+                onClick={() => router.push("/analyze")}
+                className={styles.heroCTA}>
+                GET STARTED FOR FREE <MdiArrowRightBoldCircle />
+
+              </div>          
           </div>
       </div>
       <Footer />
