@@ -12,6 +12,8 @@ import { MdiHeadphones } from '@/components/icons/Headphones';
 import { MajesticonsLightbulbShine } from '@/components/icons/Lightbulb';
 import { MaterialSymbolsNestClockFarsightAnalogRounded } from '@/components/icons/Clock';
 
+import ContentPage from '@/components/ContentPage';
+
 const Login = () => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
@@ -27,8 +29,11 @@ const Login = () => {
     if (loading) return null;
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
+        <ContentPage>
+        <div className={loginStyles.loginPage}>
+            <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
+            
+            <div className={loginStyles.loginContainer}>
                 <div className={loginStyles.loginContent}>
                     <h1 className={loginStyles.loginTitle}>{t('login.title')}</h1>
                     <p className={loginStyles.loginDescription}>
@@ -66,16 +71,8 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-            <div className={styles.girlContainer}>
-                <Image
-                    src="/images/girl1.png"
-                    alt={t('login.girlImageAlt')}
-                    width={1920}
-                    height={1080}
-                    priority
-                />
-            </div>
         </div>
+        </ContentPage>
     );
 };
 
