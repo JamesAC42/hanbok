@@ -6,6 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import SentenceAnalyzer from '@/components/SentenceAnalyzer';
 import Dashboard from '@/components/Dashboard';
 
+import styles from '@/styles/pages/analysispage.module.scss';
+
 const SentencePage = ({ params }) => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
@@ -21,7 +23,9 @@ const SentencePage = ({ params }) => {
     if (loading) return null;
 
     return <Dashboard>
-        <SentenceAnalyzer sentenceId={resolvedParams.id} />
+        <div className={styles.analysisContainer}>
+            <SentenceAnalyzer sentenceId={resolvedParams.id} />
+        </div>
     </Dashboard>;
 };
 
