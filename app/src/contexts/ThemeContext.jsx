@@ -21,17 +21,12 @@ export function ThemeProvider({ children }) {
         localStorage.setItem('theme', theme);
     }, [theme]);
 
-    const toggleTheme = (newTheme) => {
-        setTheme(newTheme);
-    };
-
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme, loading }}>
+        <ThemeContext.Provider value={{ theme, setTheme, loading }}>
             <div className={`theme-${theme}`}>
                 {children}
             </div>
         </ThemeContext.Provider>
     );
 }
-
 export const useTheme = () => useContext(ThemeContext);

@@ -13,10 +13,11 @@ import { SiSunFill } from "@/components/icons/Sun";
 import { TablerMoonFilled } from "@/components/icons/Moon";
 
 import { useTheme } from '@/contexts/ThemeContext';
+import themes from '@/lib/themes';
 
 const Profile = () => {
 
-    const { theme, toggleTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
     const router = useRouter();
     const { user, isAuthenticated, loading, logout } = useAuth();
     const { t } = useLanguage();
@@ -45,7 +46,7 @@ const Profile = () => {
             <div className={profileStyles.profileContent}>
                 <h1 className={profileStyles.pageTitle}>{t('profile.title')}</h1>
                 <div className={profileStyles.signOut}>
-                    <div onClick={handleLogout}>Sign Out</div>
+                    <div onClick={handleLogout}>{t('profile.signOut')}</div>
                 </div>
                 <div className={profileStyles.userDetails}>
                     <h2>{t('profile.userInfo')}</h2>
@@ -107,11 +108,17 @@ const Profile = () => {
 
                 <div className={profileStyles.settingsContainer}>
                     <div className={profileStyles.settingsHeader}>
-                        <h2>Settings</h2>
+                        <h2>{t('profile.settings')}</h2>
                     </div>
-                    <div className={profileStyles.themeToggle} onClick={() => toggleTheme(theme === "dark" ? "light" : "dark")}>
-                        Theme: 
-                        {theme === "dark" ? <TablerMoonFilled /> : <SiSunFill />}
+                    <div className={profileStyles.themeToggle}>
+                        {themes.map((listTheme) => (
+                            <div 
+                                className={`${profileStyles.themeToggleItem} ${theme === listTheme ? profileStyles.active : ""}`} 
+                                key={listTheme} 
+                                onClick={() => setTheme(listTheme)}>
+                                {t('profile.themes.' + listTheme)}
+                            </div>
+                        ))}
                     </div>
 
                     <div className={profileStyles.changeNativeLanguageOuter}>

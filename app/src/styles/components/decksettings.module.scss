@@ -201,6 +201,7 @@
 .saveButton {
   background-color: var(--success-foreground);
   color: var(--success-background);
+  color:var(--foreground);
   border: none;
   
   &:hover:not(:disabled) {

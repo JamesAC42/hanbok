@@ -1,1 +1,113 @@
 @import '@/styles/variables.module.scss';
+
+.lessonsPage {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0a0a1a, #154584, rgb(5, 39, 82));
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  max-height: 100dvh;
+  overflow-y: auto;
+
+  img {
+    z-index: 1;
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+.lessonsContainer {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 60rem;
+  display: flex;
+  justify-content: center;
+}
+
+.lessonsContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
+  border: 0.125rem solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.35);
+  }
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1.5rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    padding: 1rem;
+    border-radius: 0.75rem;
+  }
+}
+
+.textContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pageTitle {
+  font-family: var(--font-lilita);
+  font-size: 4rem;
+  color: #181a29;
+  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  margin: 0;
+  line-height: 1.2;
+
+  @media screen and (max-width: 768px) {
+    font-size: 3rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    font-size: 2.5rem;
+  }
+}
+
+.imageContent {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.constructionImage {
+  object-fit: contain;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 15rem !important;
+    height: auto !important;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: 12.5rem !important;
+    height: auto !important;
+  }
+}

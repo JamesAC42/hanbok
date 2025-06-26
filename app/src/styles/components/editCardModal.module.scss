@@ -63,6 +63,7 @@
   align-items: center;
   justify-content: center;
   font-family: inherit;
+  color:var(--foreground);
   
   &:hover {
     background-color: var(--background-alt);
@@ -147,6 +148,7 @@
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
+  color:var(--foreground);
   
   &:hover:not(:disabled) {
     background-color: var(--error-foreground);
@@ -198,6 +200,7 @@
   font-family: inherit;
   cursor: pointer;
   transition: all 0.2s ease;
+  color:var(--foreground);
   
   &:hover:not(:disabled) {
     background-color: var(--shadow);

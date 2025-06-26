@@ -89,6 +89,9 @@
     flex: 1;
     overflow-y: auto;
     padding: 0.5rem;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--foreground-muted) var(--background-alt);
 }
 
 .conversationItem {
@@ -252,15 +255,23 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
-    object-fit: cover;
     border: 0.125rem solid var(--foreground-light);
     flex-shrink: 0;
     margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    
+    img {
+        width:2.5rem;
+        height:auto;;
+    }
     
     @media (max-width: 768px) {
         width: 2rem;
         height: 2rem;
-        display:none;
+        display: none;
     }
 }
 
@@ -562,13 +573,24 @@
     width: 8rem;
     height: 8rem;
     border-radius: 50%;
-    object-fit: cover;
-    border: 0.25rem solid var(--foreground-light);
     animation: fadeIn 0.8s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border:1px solid var(--foreground);
+
+    img {
+        width:8rem;
+        height:auto;
+    }
     
     @media (max-width: 768px) {
         width: 5rem;
         height: 5rem;
+        img {
+            width:5rem;
+        }
     }
 }
 
@@ -709,7 +731,6 @@
     }
     
     .messageWrapper {
-
     }
 
     .message {
@@ -719,6 +740,9 @@
     .tutorBubble {
         width: 2rem;
         height: 2rem;
+        img {
+            width:2rem;
+        }
     }
     
     .chatInput {

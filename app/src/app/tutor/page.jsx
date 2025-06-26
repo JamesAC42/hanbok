@@ -1,12 +1,17 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import Dashboard from '@/components/Dashboard';
 import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/pages/tutor.module.scss';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function TutorPage() {
+  const router = useRouter();
+  const { isAuthenticated, loading } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [currentConversation, setCurrentConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -34,6 +39,13 @@ export default function TutorPage() {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Authentication check
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isAuthenticated, loading, router]);
 
   useEffect(() => {
     scrollToBottom();
@@ -79,7 +91,7 @@ export default function TutorPage() {
         setConversationCount(countData);
       }
     } catch (error) {
-      console.error('Error loading sentence preview:', error);
+      //console.error('Error loading sentence preview:', error);
     }
   };
 
@@ -94,10 +106,10 @@ export default function TutorPage() {
         const data = await response.json();
         setConversations(data.conversations);
       } else {
-        console.error('Failed to load conversations');
-      }
+        //console.error('Failed to load conversations');
+      } 
     } catch (error) {
-      console.error('Error loading conversations:', error);
+      //console.error('Error loading conversations:', error);
     } finally {
       setIsLoadingConversations(false);
     }
@@ -116,10 +128,10 @@ export default function TutorPage() {
         setMessages(data.conversation.messages);
         setSidebarCollapsed(true);
       } else {
-        console.error('Failed to load conversation');
+        //console.error('Failed to load conversation');
       }
     } catch (error) {
-      console.error('Error loading conversation:', error);
+      //console.error('Error loading conversation:', error);
     } finally {
       setIsLoading(false);
     }
@@ -273,18 +285,18 @@ export default function TutorPage() {
                     break;
                 }
               } catch (parseError) {
-                console.error('Error parsing SSE data:', parseError);
+                //console.error('Error parsing SSE data:', parseError);
               }
             }
           }
         }
       } catch (streamError) {
-        console.error('Error reading stream:', streamError);
+        //console.error('Error reading stream:', streamError);
         throw streamError;
       }
       
     } catch (error) {
-      console.error('Error creating conversation:', error);
+      //console.error('Error creating conversation:', error);
       alert(error.message || 'Failed to create conversation');
       setMessages([]);
       setIsLoading(false);
@@ -434,7 +446,7 @@ export default function TutorPage() {
       }
 
     } catch (error) {
-      console.error('Error sending message:', error);
+      //console.error('Error sending message:', error);
       alert(error.message || 'Failed to send message');
       // Remove the user message we optimistically added
       setMessages(prev => prev.slice(0, -1));
@@ -464,7 +476,7 @@ export default function TutorPage() {
         alert(error.message || 'Failed to delete conversation');
       }
     } catch (error) {
-      console.error('Error deleting conversation:', error);
+      //console.error('Error deleting conversation:', error);
       alert('Failed to delete conversation');
     }
   };
@@ -491,6 +503,9 @@ export default function TutorPage() {
       minute: '2-digit'
     });
   };
+
+  // Don't render while main auth is loading
+  if (loading || !isAuthenticated) return null;
 
   return (
     <Dashboard>
@@ -636,11 +651,14 @@ export default function TutorPage() {
                 {messages.map((message, index) => (
                   <div key={index} className={`${styles.messageWrapper} ${styles[message.role]}`}>
                     {message.role === 'assistant' && (
-                      <img 
-                        src="/images/tutorgirl.png" 
-                        alt="AI Tutor" 
-                        className={styles.tutorBubble}
-                      />
+                      <div className={styles.tutorBubble}>
+                        <Image 
+                          src="/images/speakers/female.png"
+                          alt="AI Tutor" 
+                          width={633}
+                          height={784}
+                        />
+                      </div>
                     )}
                     <div className={`${styles.message} ${styles[message.role]} ${message.isStreaming ? styles.streaming : ''}`}>
                       {message.role === 'assistant' ? (
@@ -667,11 +685,15 @@ export default function TutorPage() {
                 
                 {isLoading && !messages.some(msg => msg.isStreaming) && (
                   <div className={`${styles.messageWrapper} ${styles.assistant}`}>
-                    <img 
-                      src="/images/tutorgirl.png" 
-                      alt="AI Tutor" 
-                      className={styles.tutorBubble}
-                    />
+                    <div className={styles.tutorBubble}>
+                      <Image 
+                        src="/images/speakers/female.png"
+                        alt="AI Tutor" 
+                        width={633}
+                        height={784}
+                      />
+                    </div>
+                    
                     <div className={styles.loadingMessage}>
                       <span>AI is thinking</span>
                       <div className={styles.loadingDots}>
@@ -688,11 +710,15 @@ export default function TutorPage() {
           ) : (
             <div className={styles.emptyState}>
               <div className={styles.tutorIntro}>
-                <img 
-                  src="/images/tutorgirl.png" 
-                  alt="AI Tutor" 
-                  className={styles.tutorCharacter}
-                />
+                <div className={styles.tutorCharacter}>
+                  <Image 
+                    src="/images/speakers/female.png"
+                    alt="AI Tutor" 
+                    width={633}
+                    height={784}
+                    className={styles.tutorCharacter}
+                  />
+                </div>
                 <div className={styles.tutorIntroText}>
                   <h2>Questions? - Ask Anything!</h2>
                   <div className={styles.languageSwitcher}>

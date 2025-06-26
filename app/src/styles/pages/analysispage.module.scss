@@ -2,6 +2,7 @@
 
     max-height:100dvh;
     overflow-y:auto;
+    flex-grow:1;
     @media screen and (max-width: 1000px) {
         margin-top:0rem;
     }

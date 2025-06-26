@@ -467,6 +467,10 @@ const SentenceForm = ({
         }
     };
 
+    function isDark(theme) {
+        return theme === 'dark' || theme === "miku" || theme === "lizard" || theme === 'forest' || theme === 'edo';
+    }
+
     return (
         <>
             {imagePreview && (
@@ -508,11 +512,11 @@ const SentenceForm = ({
             <div className={styles.formContainerSplashImage}>
                 <div className={styles.formContainerSplashImageText}>
                     {
-                        translationMode ? 'How do I say...?' : 'Got a sentence? Let\'s dissect it.'
+                        translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')
                     }
                 </div>
                 <div className={styles.formContainerSplashImageInner}>
-                    <img className={theme === 'dark' ? styles.dark : ''} src="/images/promptbackground.png" alt="Splash image" />
+                    <img className={isDark(theme) ? styles.dark : ''} src="/images/promptbackground.png" alt="Splash image" />
                 </div>
             </div>
                 

@@ -65,3 +65,201 @@ div.theme-dark {
     --info-background: #d4e6ff;
     --info-foreground: #2c64e9;
 }
+
+div.theme-sepia {
+    --background: #f0eee8;
+    --background-alt: #e7dfd9;
+    --foreground: #434343;
+    --foreground-muted: #606060;
+    --foreground-light: #777f85;
+    --foreground-lighter: #fef9f5;
+    --primary: #607dbf;
+    --primary-dark: #4a5c8f;
+    --secondary: #4b4b4b;
+    --shadow: #b1b1b1;
+  
+    --error-background: rgba(255, 77, 77, 0.1);
+    --error-foreground: #ff4d4d;
+    --warning-background: #fff4e6;
+    --warning-foreground: #cc7a00;
+    --success-background: rgba(69, 226, 61, 0.1);
+    --success-foreground: #45e23d;
+    --info-background: rgba(96, 125, 191, 0.1);
+    --info-foreground: #607dbf;
+}
+
+div.theme-neopolitan {
+    --background: #fffcf1;
+    --background-alt: #ffe7fc;
+    --foreground: #7d6765;
+    --foreground-muted: #614846;
+    --foreground-light: #9f756f;
+    --foreground-lighter: #dec4b7;
+    --primary: #9b38e2;
+    --primary-dark: #7a2bb5;
+    --secondary: #e471e0;
+    --shadow: #f552f3;
+  
+    --error-background: rgba(255, 61, 61, 0.1);
+    --error-foreground: #ff3d3d;
+    --warning-background: #fff4e6;
+    --warning-foreground: #cc7a00;
+    --success-background: rgba(69, 226, 61, 0.1);
+    --success-foreground: #45e23d;
+    --info-background: rgba(155, 56, 226, 0.1);
+    --info-foreground: #9b38e2;
+}
+
+div.theme-forest {
+    --background: #0B0C10;
+    --background-alt: #000403;
+    --foreground: #4EBA6F;
+    --foreground-muted: #3f6f61;
+    --foreground-light: #499c6b;
+    --foreground-lighter: #070a0b;
+    --primary: #6bb75a;
+    --primary-dark: #4EBA6F;
+    --secondary: #4a6776;
+    --shadow: #224973;
+  
+    --error-background: rgba(255, 46, 99, 0.1);
+    --error-foreground: #FF2E63;
+    --warning-background: #2a1f0d;
+    --warning-foreground: #cc9900;
+    --success-background: rgba(78, 186, 111, 0.1);
+    --success-foreground: #4EBA6F;
+    --info-background: rgba(107, 183, 90, 0.1);
+    --info-foreground: #6bb75a;
+}
+
+div.theme-wiiu {    
+    --background: #FFFFFF;
+    --background-alt: #f0f3f7;
+    --foreground: #000000;
+    --foreground-muted: #999999;
+    --foreground-light: #666666;
+    --foreground-lighter: #F2F2F2;
+    --primary: #0066CC;
+    --primary-dark: #004499;
+    --secondary: #333333;
+    --shadow: #cccccc;
+  
+    --error-background: rgba(255, 0, 0, 0.1);
+    --error-foreground: #FF0000;
+    --warning-background: #fff4e6;
+    --warning-foreground: #cc7a00;
+    --success-background: rgba(0, 204, 0, 0.1);
+    --success-foreground: #00CC00;
+    --info-background: rgba(0, 102, 204, 0.1);
+    --info-foreground: #0066CC;
+}
+
+div.theme-edo {
+    --background: #0f0e17;
+    --background-alt: #050507;
+    --foreground: #ff4c4c;
+    --foreground-muted: #d24457;
+    --foreground-light: #ff6e55;
+    --foreground-lighter: #05030b;
+    --primary: #ffa3a3;
+    --primary-dark: #cd5b5b;
+    --secondary: #8a1f17;
+    --shadow: #2a1419;
+  
+    --error-background: rgba(255, 28, 28, 0.1);
+    --error-foreground: #ff1c1c;
+    --warning-background: #2a1f0d;
+    --warning-foreground: #f57964;
+    --success-background: rgba(38, 201, 165, 0.1);
+    --success-foreground: #26c9a5;
+    --info-background: rgba(255, 163, 163, 0.1);
+    --info-foreground: #ffa3a3;
+}
+
+div.theme-lizard {
+    --background: #202c3a;
+    --background-alt: #132534;
+    --foreground: #d7e855;
+    --foreground-muted: #238a42;
+    --foreground-light: #47b87a;
+    --foreground-lighter: #1d2636;
+    --primary: #95f378;
+    --primary-dark: #6bb559;
+    --secondary: #61ad72;
+    --shadow: #d2f080;
+  
+    --error-background: rgba(252, 216, 40, 0.1);
+    --error-foreground: #fcd828;
+    --warning-background: #2a1f0d;
+    --warning-foreground: #d7e855;
+    --success-background: rgba(69, 226, 61, 0.1);
+    --success-foreground: #45e23d;
+    --info-background: rgba(230, 83, 210, 0.1);
+    --info-foreground: #e653d2;
+}
+
+div.theme-frutiger {
+    --background: #0051ff;
+    --background-alt: #2243c7;
+    --foreground: #34ff19;
+    --foreground-muted: #06b326;
+    --foreground-light: #00d20e;
+    --foreground-lighter: #0041a9;
+    --primary: #ffffff;
+    --primary-dark: #e6e6e6;
+    --secondary: #00bc3f;
+    --shadow: #6aa8ff;
+  
+    --error-background: rgba(255, 183, 39, 0.1);
+    --error-foreground: #ffb727;
+    --warning-background: rgba(246, 158, 57, 0.1);
+    --warning-foreground: #f69e39;
+    --success-background: rgba(0, 204, 0, 0.1);
+    --success-foreground: #00CC00;
+    --info-background: rgba(246, 158, 57, 0.1);
+    --info-foreground: #f69e39;
+}
+
+div.theme-miku {
+    --background: #272a30;
+    --background-alt: #161619;
+    --foreground: #ff729f;
+    --foreground-muted: #5198d5;
+    --foreground-light: #f77396;
+    --foreground-lighter: #1e2329;
+    --primary: #50e1eb;
+    --primary-dark: #3bb8c2;
+    --secondary: #1e9fd7;
+    --shadow: #6aa8ff;
+  
+    --error-background: rgba(255, 68, 68, 0.1);
+    --error-foreground: #ff4444;
+    --warning-background: rgba(255, 90, 128, 0.1);
+    --warning-foreground: #ff5a80;
+    --success-background: rgba(40, 206, 148, 0.1);
+    --success-foreground: #28ce94;
+    --info-background: rgba(255, 90, 128, 0.1);
+    --info-foreground: #ff5a80;
+}
+
+div.theme-rocket {
+    --background: #fefefe;
+    --background-alt: #eeedf8;
+    --foreground: #1b2aff;
+    --foreground-muted: #f5534d;
+    --foreground-light: #fe526c;
+    --foreground-lighter: #f1f1f1;
+    --primary: #ff4141;
+    --primary-dark: #e63737;
+    --secondary: #214fd7;
+    --shadow: #ff3d47;
+  
+    --error-background: rgba(255, 121, 121, 0.1);
+    --error-foreground: #ff7979;
+    --warning-background: rgba(245, 178, 77, 0.1);
+    --warning-foreground: #f5b24d;
+    --success-background: rgba(28, 235, 80, 0.1);
+    --success-foreground: #1ceb50;
+    --info-background: rgba(24, 8, 255, 0.1);
+    --info-foreground: #1808ff;
+}

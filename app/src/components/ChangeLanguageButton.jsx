@@ -51,7 +51,7 @@ const ChangeLanguageButton = ({ native = false }) => {
         <div className={styles.languageButtonOuter}>
             <div className={styles.buttonContainer} onClick={handleButtonClick}>
                 
-                Language:
+                {t('languagePicker.language')}:
                 
                 <div 
                     className={styles.languageButton}

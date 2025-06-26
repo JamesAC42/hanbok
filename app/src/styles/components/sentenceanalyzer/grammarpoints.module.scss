@@ -101,8 +101,8 @@
 
                     .grammarListItemExampleOriginal {
                         font-size:1.5rem;
-                        background: linear-gradient(to left, var(--foreground-light), var(--foreground-light));
-                        color:var(--foreground);
+                        background: linear-gradient(to left, var(--foreground), var(--foreground-light));
+                        color:var(--background);
                         position:relative;
 
                         .pronunciation {    

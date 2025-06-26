@@ -4,6 +4,7 @@ import styles from "@/styles/components/sidebar.module.scss";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 import { MaterialSymbolsVariableAddRounded } from "./icons/AddSentence";
 import { MaterialSymbolsBookmarkSharp } from "./icons/Bookmark";
@@ -30,6 +31,8 @@ function HamburgerMenuIcon() {
 }
 
 function Sidebar() {
+
+    const { t } = useLanguage();
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -190,7 +193,7 @@ function Sidebar() {
                                     <IcBaselinePerson />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    My Account
+                                    {t('sidebar.myAccount')}
                                 </div>
                             </div>
                         </div>
@@ -207,7 +210,7 @@ function Sidebar() {
                                     <MaterialSymbolsVariableAddRounded />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Analyze Text
+                                    {t('sidebar.analyzeText')}
                                 </div>
                             </div>
                         </div>
@@ -228,7 +231,7 @@ function Sidebar() {
                                     <MaterialSymbolsBookmarkSharp />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Saved Sentences
+                                    {t('sidebar.savedSentences')}
                                 </div>
                             </div>
                             <div 
@@ -242,7 +245,7 @@ function Sidebar() {
                                     <PhCardsFill />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Flashcards
+                                    {t('sidebar.flashcards')}
                                 </div>
                             </div>
 
@@ -259,7 +262,7 @@ function Sidebar() {
                                             <Fa6SolidParagraph />
                                         </div>
                                         <div className={styles.sidebarSectionItemText}>
-                                            My Grammar
+                                            {t('sidebar.myGrammar')}
                                         </div>
                                     </div>
                                 )
@@ -276,7 +279,7 @@ function Sidebar() {
                                     <IcSharpSchool />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Tutor
+                                    {t('sidebar.tutor')}
                                 </div>
                             </div>
                             <div 
@@ -290,7 +293,7 @@ function Sidebar() {
                                     <MaterialSymbolsHistory />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    History
+                                    {t('sidebar.history')}
                                 </div>
                             </div>
 
@@ -308,7 +311,7 @@ function Sidebar() {
                         <div 
                             onMouseEnter={() => setShowSectionTwoHover(false)}
                             className={styles.sidebarSectionHeader}>
-                            Navigation
+                            {t('sidebar.navigation')}
                         </div>
                         <div className={styles.sidebarSectionItems}>
                             <div 
@@ -322,7 +325,7 @@ function Sidebar() {
                                     <IcSharpQueueMusic />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Lyrics
+                                    {t('sidebar.lyrics')}
                                 </div>
                             </div>
                             <div 
@@ -336,7 +339,7 @@ function Sidebar() {
                                     <MaterialSymbolsLibraryBooksSharp />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Lessons
+                                    {t('sidebar.lessons')}
                                 </div>
                             </div>
                             <div 
@@ -350,7 +353,7 @@ function Sidebar() {
                                     <MingcuteCommentFill />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    Feedback
+                                    {t('sidebar.feedback')}
                                 </div>
                             </div>
                             <div 
@@ -364,7 +367,7 @@ function Sidebar() {
                                     <MynauiSparklesSolid />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
-                                    View Plans
+                                    {t('sidebar.viewPlans')}
                                 </div>
                             </div>
 

@@ -72,24 +72,6 @@
   word-wrap: break-word;
 }
 
-.themeToggle {
-  height:3rem;
-  width:fit-content;
-  @include flex-center;
-  background:var(--background-alt);
-  color:var(--foreground);
-  border-radius:0.5rem;
-  cursor:pointer;
-  font-family:var(--font-funnel);
-  padding:0 1rem;
-  svg {
-    margin-left:0.5rem;
-  }
-  &:hover {
-    background:var(--foreground-lighter);
-  }
-}
-
 .tierInfo {
   margin-top: 0rem;
   padding: 1rem;
@@ -136,6 +118,10 @@
 }
 
 .settingsContainer {
+
+  display:flex;
+  flex-direction:column;
+  gap:0rem;
   margin-top: 2rem;
 
   .settingsHeader {
@@ -144,6 +130,34 @@
       margin-bottom: 1rem;
       font-family:var(--font-funnel);
       color:var(--foreground-muted);
+    }
+  }
+
+  .themeToggle {
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    gap:0.5rem;
+    background:var(--background-alt);
+    border-radius:0.5rem;
+    justify-content:flex-start;
+    padding:0.5rem;
+    width:fit-content;
+
+    .themeToggleItem {
+      padding:0.5rem 1rem;
+      cursor:pointer;
+      margin:0.2rem;
+      color:var(--foreground);
+      border-radius:0.5rem;
+      font-family:var(--font-funnel);
+      &:hover {
+        outline:1px solid var(--foreground);
+      }
+
+      &.active {
+        background:var(--background);
+      }
     }
   }
 }
