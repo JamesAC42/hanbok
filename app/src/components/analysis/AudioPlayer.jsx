@@ -64,7 +64,6 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
         if (activeAudio) {
           activeAudio.play()
             .catch(error => {
-              console.error('Error playing audio:', error);
               
               // Check if the error is due to an expired URL (NotSupportedError or network error)
               if (error.name === 'NotSupportedError' || error.name === 'NetworkError') {
@@ -111,7 +110,6 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
         }
       })
       .catch(error => {
-        console.error('Error refreshing audio URLs:', error);
         setIsPlaying(false);
       })
       .finally(() => {
@@ -175,11 +173,9 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
           setVoices({voice1: data.voice1, voice2: data.voice2});
           decrementRemainingAudioGenerations();
         } else {
-          console.error('Error generating audio:', data.error);
         }
       })
       .catch(error => {
-        console.error('Error generating audio:', error);
       })
       .finally(() => {
         setLoadingAudio(false);
@@ -215,7 +211,6 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
         
         // Add error event listener to detect expired URLs when loading
         audioRefs.voice1.onerror = () => {
-          console.error('Error loading voice1 audio');
           if (!isRefreshing && !loadingAudio) {
             refreshAudioUrls();
           }
@@ -226,7 +221,6 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
         
         // Add error event listener to detect expired URLs when loading
         audioRefs.voice2.onerror = () => {
-          console.error('Error loading voice2 audio');
           if (!isRefreshing && !loadingAudio) {
             refreshAudioUrls();
           }

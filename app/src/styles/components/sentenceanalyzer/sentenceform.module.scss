@@ -341,7 +341,9 @@
     @media screen and (max-width:725px) {
         flex-direction: column;
         gap: 0.8rem;
-        padding: 2rem;
+        padding: 1rem 2rem;
+        font-size:0.8rem;
+        margin-bottom:0.8rem;
         svg {
             transform: scale(1.9);
         }
@@ -354,6 +356,9 @@
     text-align: center;
     opacity: 1;
     transition: opacity 0.5s ease-in-out;
+    @media screen and (max-width:725px) {
+        font-size:0.8rem;
+    }
 }
 
 .fadeTransition {

@@ -902,6 +902,116 @@ const collections = {
         key: { weekStartDate: 1 }
       }
     ]
+  },
+  conversations: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["conversationId", "userId", "title", "dateCreated", "lastUpdated", "messageCount"],
+        properties: {
+          conversationId: {
+            bsonType: "int",
+            description: "Unique identifier for the conversation"
+          },
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who owns this conversation"
+          },
+          title: {
+            bsonType: "string",
+            description: "Title/name of the conversation, auto-generated or user-set"
+          },
+          sentenceId: {
+            bsonType: ["int", "null"],
+            description: "Optional ID of the sentence this conversation is linked to"
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "When the conversation was created"
+          },
+          lastUpdated: {
+            bsonType: "date",
+            description: "When the conversation was last updated"
+          },
+          messageCount: {
+            bsonType: "int",
+            description: "Total number of messages in this conversation"
+          },
+          userMessageCount: {
+            bsonType: "int",
+            description: "Number of user messages (for tier limits)"
+          },
+          isDeleted: {
+            bsonType: ["bool", "null"],
+            description: "Whether the conversation has been soft deleted"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { conversationId: 1 },
+        unique: true,
+        partialFilterExpression: { isDeleted: false }
+      },
+      {
+        key: { userId: 1, lastUpdated: -1 },
+        name: "user_conversations_index"
+      },
+      {
+        key: { sentenceId: 1 },
+        name: "sentence_conversations_index"
+      },
+      {
+        key: { userId: 1, sentenceId: 1 },
+        name: "user_sentence_index"
+      }
+    ]
+  },
+  conversation_messages: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["messageId", "conversationId", "role", "content", "timestamp"],
+        properties: {
+          messageId: {
+            bsonType: "int",
+            description: "Unique identifier for the message"
+          },
+          conversationId: {
+            bsonType: "int",
+            description: "ID of the conversation this message belongs to"
+          },
+          role: {
+            bsonType: "string",
+            enum: ["user", "assistant", "system"],
+            description: "Role of the message sender"
+          },
+          content: {
+            bsonType: "string",
+            description: "Content of the message"
+          },
+          timestamp: {
+            bsonType: "date",
+            description: "When the message was created"
+          },
+          metadata: {
+            bsonType: ["object", "null"],
+            description: "Optional metadata for the message (tokens used, etc.)"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { messageId: 1 },
+        unique: true
+      },
+      {
+        key: { conversationId: 1, timestamp: 1 },
+        name: "conversation_messages_index"
+      }
+    ]
   }
 };
 

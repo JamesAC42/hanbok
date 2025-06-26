@@ -54,6 +54,27 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         if (idToLoad) {
             loadSavedSentence(idToLoad);
         }
+        
+        // Check for pending analysis from localStorage (from tutor examples)
+        const pendingAnalysis = localStorage.getItem('pendingAnalysis');
+        if (pendingAnalysis) {
+            // Clear the localStorage item
+            localStorage.removeItem('pendingAnalysis');
+            
+            // Set the text in the input field if the global function is available
+            if (window.setInputText) {
+                window.setInputText(pendingAnalysis);
+            } else {
+                // If the function isn't available yet, try again after a short delay
+                const timer = setTimeout(() => {
+                    if (window.setInputText) {
+                        window.setInputText(pendingAnalysis);
+                    }
+                }, 100);
+                
+                return () => clearTimeout(timer);
+            }
+        }
     }, [searchParams, isAuthenticated, propSentenceId]);
     
 
@@ -159,6 +180,18 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 showTransition={showTransition}
                 sentenceId={propSentenceId || searchParams.get('id')} />
             }
+
+            {/* Floating Chat Button */}
+            {analysis && isAuthenticated && (propSentenceId || searchParams.get('id')) && (
+                <Link 
+                    href={`/tutor?sentenceId=${propSentenceId || searchParams.get('id')}`}
+                    className={styles.floatingChatButton}
+                    title="Ask AI tutor about this sentence"
+                >
+                    <IcBaselineLiveHelp />
+                    <span>Ask AI</span>
+                </Link>
+            )}
 
             {error && (
                 <div className={styles.error}>

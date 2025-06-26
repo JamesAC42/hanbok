@@ -581,7 +581,7 @@ const SentenceForm = ({
                 </form>
             </div>
             {
-                (!error && loading) && (
+                !error && loading && (
                     <div className={styles.loading}>
                         <SvgSpinnersRingResize />
                         <div className={`${styles.loadingText} ${styles.fadeTransition}`}>

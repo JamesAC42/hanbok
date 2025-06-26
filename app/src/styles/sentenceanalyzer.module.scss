@@ -112,6 +112,9 @@
 			font-size:0.8rem;
 		}
     }
+    @media screen and (max-height: 600px) {
+		max-height:8rem;
+    }
 }
 
 .infoContainer {
@@ -184,4 +187,68 @@
 		}
 	
 	}
+}
+
+.girl {
+    @include bottom-girl;
+}
+
+.floatingChatButton {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--foreground);
+    color: var(--background);
+    border: none;
+    border-radius: 3rem;
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+    animation: float 3s ease-in-out infinite;
+    
+    &:hover {
+        transform: translateY(-0.25rem) scale(1.05);
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.3);
+    }
+    
+    svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    
+    @media (max-width: 768px) {
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.875rem 1.25rem;
+        font-size: 0.8rem;
+        
+        svg {
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        span {
+            display: none;
+        }
+        padding: 0.875rem;
+        border-radius: 50%;
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-0.5rem);
+    }
 }

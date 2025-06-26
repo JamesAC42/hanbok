@@ -101,18 +101,21 @@ async function connectToDatabase() {
       }
     }
 
-    // Initialize counters
-    try {
-      await db.collection('counters').insertOne({ _id: 'userId', seq: 0 });
-      await db.collection('counters').insertOne({ _id: 'sentenceId', seq: 0 });
-      await db.collection('counters').insertOne({ _id: 'feedbackId', seq: 0 });
-      await db.collection('counters').insertOne({ _id: 'lyricId', seq: 0 });
-      await db.collection('counters').insertOne({ _id: 'analysisId', seq: 0 });
-      await db.collection('counters').insertOne({ _id: 'suggestionId', seq: 0 });
-    } catch (error) {
-      // Ignore duplicate key error as counters might already exist
-      if (error.code !== 11000) {
-        throw error;
+    // Initialize counters - use upsert to avoid duplicate key errors
+    const counters = [
+      'userId', 'sentenceId', 'feedbackId', 'lyricId', 
+      'analysisId', 'suggestionId', 'conversationId', 'messageId'
+    ];
+    
+    for (const counterId of counters) {
+      try {
+        await db.collection('counters').updateOne(
+          { _id: counterId },
+          { $setOnInsert: { _id: counterId, seq: 0 } },
+          { upsert: true }
+        );
+      } catch (error) {
+        console.error(`Error initializing counter ${counterId}:`, error);
       }
     }
     
@@ -130,7 +133,31 @@ function getDb() {
   return db;
 }
 
+// Helper function to manually initialize missing counters
+async function initializeCounters() {
+  const database = getDb();
+  const counters = [
+    'userId', 'sentenceId', 'feedbackId', 'lyricId', 
+    'analysisId', 'suggestionId', 'conversationId', 'messageId'
+  ];
+  
+  for (const counterId of counters) {
+    try {
+      const existing = await database.collection('counters').findOne({ _id: counterId });
+      if (!existing) {
+        await database.collection('counters').insertOne({ _id: counterId, seq: 0 });
+        console.log(`Initialized counter: ${counterId}`);
+      } else {
+        console.log(`Counter already exists: ${counterId} (seq: ${existing.seq})`);
+      }
+    } catch (error) {
+      console.error(`Error checking/initializing counter ${counterId}:`, error);
+    }
+  }
+}
+
 module.exports = {
   connectToDatabase,
   getDb,
+  initializeCounters,
 };

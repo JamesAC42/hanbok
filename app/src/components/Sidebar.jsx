@@ -344,20 +344,6 @@ function Sidebar() {
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/about")}`} 
-                                onClick={() => navigateTo("/about")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MakiInformation11 />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    About
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform(2, 3)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
                                     ${getActiveClass("/feedback")}`} 
                                 onClick={() => navigateTo("/feedback")}>
                                 <div className={styles.sidebarSectionItemIcon}>
@@ -368,7 +354,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <div 
-                                onMouseEnter={() => setHoverTransform(2, 4)}
+                                onMouseEnter={() => setHoverTransform(2, 3)}
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}

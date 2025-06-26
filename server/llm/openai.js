@@ -5,7 +5,7 @@ const openai = new OpenAI({
 
 const prompt_openai = async (text) => {
     const response = await openai.chat.completions.create({
-        model: "chatgpt-4o-latest",
+        model: "gpt-4-turbo-2024-04-09", // Using GPT-4 Turbo latest version
         messages: [
             {role: "user", content: text}
         ]

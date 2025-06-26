@@ -1,0 +1,230 @@
+@import '../variables.module.scss';
+
+.markdown {
+  line-height: 1.6;
+  color: var(--foreground);
+
+  p {
+    margin: 0.75rem 0;
+    
+    &:first-child {
+      margin-top: 0;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.5rem 0 1rem 0;
+  color: var(--foreground);
+  font-family: var(--font-serif);
+  border-bottom: 0.125rem solid var(--background-alt);
+  padding-bottom: 0.5rem;
+}
+
+.h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem 0;
+  color: var(--foreground);
+  font-family: var(--font-serif);
+}
+
+.h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem 0;
+  color: var(--foreground);
+  font-family: var(--font-serif);
+}
+
+.bold {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.italic {
+  font-style: italic;
+  color: var(--foreground-muted);
+}
+
+.code {
+  background: var(--background-alt);
+  color: var(--foreground);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Consolas', 'Courier New', monospace;
+  font-size: 0.875em;
+}
+
+.list {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+  
+  &:first-child {
+    margin-top: 0;
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.listItem {
+  margin: 0.25rem 0;
+  color: var(--foreground);
+}
+
+.example {
+  background: var(--background-alt);
+  border: 0.125rem solid var(--foreground-muted);
+  border-radius: 0.75rem;
+  padding: 0 1.5rem;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0.25rem;
+    background: linear-gradient(135deg, var(--primary), var(--foreground-muted));
+    border-radius: 0.125rem 0 0 0.125rem;
+    transition: width 0.3s ease;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+  
+  &:hover {
+    transform: translateY(-0.125rem);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-color: var(--foreground-muted);
+    
+    &::before {
+      width: 0.375rem;
+    }
+    
+    &::after {
+      opacity: 1;
+    }
+    
+    .clickHint {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    
+    .exampleIcon {
+      transform: scale(1.1);
+      opacity: 1;
+    }
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  }
+}
+
+.exampleIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  align-self: flex-start;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.exampleContent {
+  flex: 1;
+  font-family: var(--font-kr-serif);
+  font-size: 2rem;
+  font-weight:600;
+  line-height: 1;
+  color: var(--foreground);
+  text-align:center;
+  position: relative;
+  z-index: 1;
+  
+  // Handle translations in examples
+  em {
+    display: block;
+    font-style: italic;
+    color: var(--foreground-muted);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+}
+
+.exampleAction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.clickHint {
+  font-size: 0.875rem;
+  color: var(--foreground-muted);
+  font-weight: 500;
+  opacity: 0.7;
+  transform: translateX(0.5rem);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: var(--font-display);
+  
+  &::before {
+    content: '✨ ';
+    opacity: 0.6;
+  }
+}
+
+// Mobile responsive adjustments
+@media (max-width: 768px) {
+  .example {
+    padding: 1rem;
+    margin: 0.75rem 0;
+    
+    &:hover {
+      transform: translateY(-0.0625rem);
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .exampleContent {
+    font-size: 1rem;
+  }
+  
+  .clickHint {
+    font-size: 0.8rem;
+  }
+  
+  .exampleIcon {
+    font-size: 1.25rem;
+  }
+} 

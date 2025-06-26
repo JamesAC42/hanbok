@@ -35,7 +35,7 @@ const redisStore = new RedisStore({
     prefix: "hanbok:"
 });
 
-const { connectToDatabase, getDb } = require('./database');
+const { connectToDatabase, getDb, initializeCounters } = require('./database');
 const { setRedisClient } = require('./utils/lyricsCache');
 
 const submitSentence = require('./controllers/auth/submitSentence');
@@ -371,6 +371,203 @@ app.get('/api/lyrics/:lyricId/fullAnalysis', async (req, res) => {
 app.delete('/api/lyrics/:lyricId/analysis', isAuthenticated, async (req, res) => {
     const { deleteAnalysis } = require('./controllers/lyrics/lyricsAnalysis');
     deleteAnalysis(req, res);
+});
+
+// Conversation routes
+app.post('/api/conversations', isAuthenticated, async (req, res) => {
+    const { createConversation } = require('./controllers/conversations/conversations');
+    createConversation(req, res);
+});
+
+app.get('/api/conversations', isAuthenticated, async (req, res) => {
+    const { getConversations } = require('./controllers/conversations/conversations');
+    getConversations(req, res);
+});
+
+app.get('/api/conversations/:conversationId', isAuthenticated, async (req, res) => {
+    const { getConversation } = require('./controllers/conversations/conversations');
+    getConversation(req, res);
+});
+
+// New endpoint to get conversation count for a sentence
+app.get('/api/sentences/:sentenceId/conversations/count', isAuthenticated, async (req, res) => {
+    const { getConversationCount } = require('./controllers/conversations/conversations');
+    getConversationCount(req, res);
+});
+
+app.post('/api/conversations/:conversationId/messages', isAuthenticated, async (req, res) => {
+    const { addMessage } = require('./controllers/conversations/conversations');
+    addMessage(req, res);
+});
+
+app.post('/api/conversations/:conversationId/messages/stream', isAuthenticated, async (req, res) => {
+    const { addMessageStream } = require('./controllers/conversations/conversations');
+    addMessageStream(req, res);
+});
+
+app.put('/api/conversations/:conversationId/title', isAuthenticated, async (req, res) => {
+    const { updateConversationTitle } = require('./controllers/conversations/conversations');
+    updateConversationTitle(req, res);
+});
+
+app.delete('/api/conversations/:conversationId', isAuthenticated, async (req, res) => {
+    const { deleteConversation } = require('./controllers/conversations/conversations');
+    deleteConversation(req, res);
+});
+
+// Debug endpoint to initialize counters manually (remove in production)
+app.post('/api/debug/init-counters', async (req, res) => {
+    try {
+        await initializeCounters();
+        res.json({ success: true, message: 'Counters initialized successfully' });
+    } catch (error) {
+        console.error('Error initializing counters:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to migrate conversation index (remove in production)
+app.post('/api/debug/migrate-conversation-index', async (req, res) => {
+    try {
+        const { migrateConversationIndex } = require('./utils/migrateConversationIndex');
+        const result = await migrateConversationIndex();
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(500).json(result);
+        }
+    } catch (error) {
+        console.error('Error migrating conversation index:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to fix counters (remove in production)
+app.post('/api/debug/fix-counters', async (req, res) => {
+    try {
+        const { fixCounters } = require('./utils/fixCounters');
+        const result = await fixCounters();
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(500).json(result);
+        }
+    } catch (error) {
+        console.error('Error fixing counters:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to check database state (remove in production)
+app.get('/api/debug/database-state', async (req, res) => {
+    try {
+        const db = getDb();
+        
+        // Get counters
+        const counters = await db.collection('counters').find({}).toArray();
+        
+        // Get conversations
+        const conversations = await db.collection('conversations').find({}).toArray();
+        
+        // Get messages
+        const messages = await db.collection('conversation_messages').find({}).toArray();
+        
+        res.json({
+            success: true,
+            data: {
+                counters,
+                conversations,
+                messages,
+                stats: {
+                    totalConversations: conversations.length,
+                    activeConversations: conversations.filter(c => !c.isDeleted).length,
+                    deletedConversations: conversations.filter(c => c.isDeleted).length,
+                    totalMessages: messages.length
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error checking database state:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to check conversations only (remove in production)
+app.get('/api/debug/conversations', async (req, res) => {
+    try {
+        const db = getDb();
+        const conversations = await db.collection('conversations').find({}).toArray();
+        res.json({ success: true, conversations });
+    } catch (error) {
+        console.error('Error checking conversations:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to check messages only (remove in production)
+app.get('/api/debug/messages', async (req, res) => {
+    try {
+        const db = getDb();
+        const messages = await db.collection('conversation_messages').find({}).toArray();
+        res.json({ success: true, messages });
+    } catch (error) {
+        console.error('Error checking messages:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to force fix counters (remove in production)
+app.post('/api/debug/force-fix-counters', async (req, res) => {
+    try {
+        const { forceFixCounters } = require('./utils/forceFixCounters');
+        const result = await forceFixCounters();
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(500).json(result);
+        }
+    } catch (error) {
+        console.error('Error force fixing counters:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to cleanup conflicting data (remove in production)
+app.post('/api/debug/cleanup-conflicts', async (req, res) => {
+    try {
+        const { cleanupConflictingData } = require('./utils/cleanupConflictingData');
+        const result = await cleanupConflictingData();
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(500).json(result);
+        }
+    } catch (error) {
+        console.error('Error cleaning up conflicts:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Debug endpoint to delete specific conversation (remove in production)
+app.post('/api/debug/delete-conversation/:id', async (req, res) => {
+    try {
+        const { deleteSpecificConversation } = require('./utils/deleteSpecificConversation');
+        const conversationId = parseInt(req.params.id);
+        const result = await deleteSpecificConversation(conversationId);
+        
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(500).json(result);
+        }
+    } catch (error) {
+        console.error('Error deleting specific conversation:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
 });
 
 // Connect to Redis before starting the server
