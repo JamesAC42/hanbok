@@ -181,6 +181,22 @@ export const it = {
                 description: 'Goditi analisi delle frasi, generazione audio, estrazione immagini, salvataggi e supporto prioritario illimitati!'
             },
             moreDetails: 'Per maggiori dettagli, visita'
+        },
+        signOut: "Esci",
+        settings: "Impostazioni:",
+        themes: {
+            theme: "Tema",
+            light: "Chiaro",
+            dark: "Scuro",
+            sepia: "Seppia",
+            neopolitan: "Napoli",
+            forest: "Foresta",
+            wiiu: "WiiU",
+            edo: "Edo",
+            rocket: "Razzo",
+            miku: "Miku",
+            frutiger: "Frutiger",
+            lizard: "Lucertola"
         }
     },
     login: {
@@ -310,7 +326,10 @@ export const it = {
         translateMode: {
             analysis: 'Analizza frase in {language}',
             translate: 'Come si dice...',
-        }
+        },
+        mode: "Modalità",
+        howDoISay: "Come si dice...?",
+        gotASentence: "Hai una frase? Analizziamola.",
     },
     analysis: {
         pageTitle: 'Hanbok - Frase: ',
@@ -362,7 +381,9 @@ export const it = {
             playSoundEffects: "Riproduci effetti sonori"
         },
         grammar: 'Grammatica',
-        examples: 'Esempi'
+        examples: 'Esempi',
+        askAI: 'Chiedi all\'IA',
+        askAIHelp: "Chiedi al tutor IA su questa frase",
     },
     limitReached: {
         storageTitle: 'Limite di Archiviazione Raggiunto',
@@ -549,7 +570,6 @@ export const it = {
         saveSettings: 'Salva impostazioni',
         saving: 'Salvataggio...',
         cancel: 'Annulla',
-        settings: 'Impostazioni',
         showing: 'Mostrando',
         study: {
             studying: 'Studiando',
@@ -782,5 +802,74 @@ export const it = {
         callToAction: 'Il tuo supporto fa un\'enorme differenza!',
         viewPricing: 'Visualizza Piani o Dona',
         maybeLater: 'Forse più tardi'
+    },
+    history: {
+        pageTitle: 'Hanbok - Storico',
+        title: 'Storico',
+        loading: 'Caricamento...',
+        noSentences: 'Nessuna frase trovata.',
+        generateSentences: 'Genera alcune frasi per vederle qui!',
+        createdOn: 'Creato il',
+        prev: 'Precedente',
+        next: 'Successivo',
+        pageOf: 'Pagina {current} di {total}',
+        fetchError: 'Errore nel recupero delle frasi.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok - Tutor IA',
+        chatHistory: 'Storico chat',
+        newChat: '+ Nuova chat',
+        collapseSidebar: 'Comprimi barra laterale',
+        showSidebar: 'Mostra barra laterale',
+        loadingConversations: 'Caricamento conversazioni...',
+        noConversations: 'Nessuna conversazione ancora',
+        deleteConversation: 'Elimina conversazione',
+        deleteConfirm: 'Sei sicuro di voler eliminare questa conversazione?',
+        deleteFailed: 'Impossibile eliminare la conversazione',
+        linkedTo: 'Collegato a:',
+        sentencePreview: {
+            title: 'Domanda sull\'analisi della frase:',
+            conversationsUsed: 'conversazioni usate',
+            limitWarning: 'Hai raggiunto il limite di conversazioni per questa frase. Aggiorna per crearne altre.',
+            limitReached: 'Hai raggiunto il limite di conversazioni per questa frase ({count}/{maxAllowed}). Aggiorna il tuo piano o usa una conversazione esistente.'
+        },
+        activeSentence: {
+            discussing: 'Discussione sulla frase:',
+            viewAnalysis: 'Vedi analisi completa →'
+        },
+        messages: {
+            aiTutor: 'Tutor IA',
+            writing: 'Scrivendo',
+            aiThinking: 'L\'IA sta pensando',
+            typePlaceholder: 'Scrivi il tuo messaggio...',
+            startPlaceholder: 'Inizia una nuova conversazione...',
+            send: 'Invia'
+        },
+        intro: {
+            title: 'Domande? - Chiedi qualsiasi cosa!',
+            chooseLanguage: 'Scegli la lingua di destinazione:',
+            description: 'Sono qui per aiutarti a imparare! Chiedimi di regole grammaticali, significati delle parole, pronuncia, contesto culturale o qualsiasi altra cosa ti incuriosisca.',
+            tryAsking: 'Prova a chiedere:'
+        },
+        errors: {
+            createFailed: 'Impossibile creare la conversazione',
+            sendFailed: 'Impossibile inviare il messaggio'
+        }
+    },
+    lessons: {
+        comingSoon: "Prossimamente"
+    },
+    sidebar: {
+        myAccount: "Il mio account",
+        analyzeText: "Analizza testo",
+        savedSentences: "Frasi salvate",
+        flashcards: "Flashcard",
+        tutor: "Tutor",
+        history: "Storico",
+        lyrics: "Testi",
+        lessons: "Lezioni",
+        feedback: "Feedback",
+        viewPlans: "Vedi piani",
+        navigation: "Navigazione"
     },
 }; 

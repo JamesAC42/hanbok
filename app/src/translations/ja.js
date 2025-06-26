@@ -181,6 +181,22 @@ export const ja = {
                 description: '無制限の文の分析、音声生成、画像抽出、保存、優先サポートを楽しめます！'
             },
             moreDetails: '詳細はこちらをご覧ください'
+        },
+        signOut: "ログアウト",
+        settings: "設定:",
+        themes: {
+            theme: "テーマ",
+            light: "ライト",
+            dark: "ダーク",
+            sepia: "セピア",
+            neopolitan: "ネオポリタン",
+            forest: "フォレスト",
+            wiiu: "WiiU",
+            edo: "江戸",
+            rocket: "ロケット",
+            miku: "ミク",
+            frutiger: "フルティガー",
+            lizard: "トカゲ"
         }
     },
     login: {
@@ -310,7 +326,11 @@ export const ja = {
         translateMode: {
             analysis: '{language}文章を分析',
             translate: 'どう言えばいいですか...',
-        }
+        },
+        mode: "モード",
+        howDoISay: "どう言えばいいですか...?",
+        gotASentence: "文章がありますか？分析しましょう。",
+        translate: 'どう言えばいいですか...',
     },
     analysis: {
         pageTitle: 'Hanbok文章: ',
@@ -362,7 +382,9 @@ export const ja = {
             playSoundEffects: "効果音を再生"
         },
         grammar: '文法',
-        examples: '例文'
+        examples: '例文',
+        askAI: 'AIに質問',
+        askAIHelp: "この文章についてAIチューターに質問する",
     },
     limitReached: {
         storageTitle: 'ストレージ制限に達しました',
@@ -782,5 +804,74 @@ export const ja = {
         callToAction: '皆様のサポートが大きな力となります！',
         viewPricing: 'プランを表示または寄付する',
         maybeLater: '後で'
+    },
+    history: {
+        pageTitle: 'Hanbok履歴',
+        title: '履歴',
+        loading: '読み込み中...',
+        noSentences: '文章が見つかりません。',
+        generateSentences: 'ここに文章を生成してみましょう！',
+        createdOn: '作成日',
+        prev: '前へ',
+        next: '次へ',
+        pageOf: 'ページ {current}/{total}',
+        fetchError: '文章の取得中にエラーが発生しました。'
+    },
+    tutor: {
+        pageTitle: 'Hanbok AIチューター',
+        chatHistory: 'チャット履歴',
+        newChat: '+ 新しいチャット',
+        collapseSidebar: 'サイドバーを折りたたむ',
+        showSidebar: 'サイドバーを表示',
+        loadingConversations: '会話を読み込み中...',
+        noConversations: 'まだ会話がありません',
+        deleteConversation: '会話を削除',
+        deleteConfirm: 'この会話を削除してもよろしいですか？',
+        deleteFailed: '会話の削除に失敗しました',
+        linkedTo: 'リンク先:',
+        sentencePreview: {
+            title: '文章分析への質問:',
+            conversationsUsed: '使用済み会話',
+            limitWarning: 'この文章の会話上限に達しました。アップグレードして新しい会話を作成できます。',
+            limitReached: 'この文章の会話上限に達しました（{count}/{maxAllowed}）。プランをアップグレードするか、既存の会話を使用してください。'
+        },
+        activeSentence: {
+            discussing: 'この文章について議論中:',
+            viewAnalysis: '全文分析を見る →'
+        },
+        messages: {
+            aiTutor: 'AIチューター',
+            writing: '入力中',
+            aiThinking: 'AIが考えています',
+            typePlaceholder: 'メッセージを入力...',
+            startPlaceholder: '新しい会話を始めましょう...',
+            send: '送信'
+        },
+        intro: {
+            title: '質問がありますか？- 何でも聞いてください！',
+            chooseLanguage: '対象言語を選択:',
+            description: '学習をサポートします！文法ルール、単語の意味、発音、文化的背景など、気になることは何でも質問してください。',
+            tryAsking: 'こんな質問をしてみましょう:'
+        },
+        errors: {
+            createFailed: '会話の作成に失敗しました',
+            sendFailed: 'メッセージの送信に失敗しました'
+        }
+    },
+    lessons: {
+        comingSoon: "近日公開"
+    },
+    sidebar: {
+        myAccount: "マイアカウント",
+        analyzeText: "テキスト分析",
+        savedSentences: "保存した文章",
+        flashcards: "フラッシュカード",
+        tutor: "チューター",
+        history: "履歴",
+        lyrics: "歌詞",
+        lessons: "レッスン",
+        feedback: "フィードバック",
+        viewPlans: "プランを見る",
+        navigation: "ナビゲーション"
     },
 }; 

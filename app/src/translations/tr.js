@@ -181,6 +181,22 @@ export const tr = {
                 description: 'Sınırsız cümle analizi, ses oluşturma, görsel çıkarma, kaydetme ve öncelikli destek özelliklerinin keyfini çıkarın!'
             },
             moreDetails: 'Daha fazla detay için ziyaret edin'
+        },
+        signOut: "Çıkış Yap",
+        settings: "Ayarlar:",
+        themes: {
+            theme: "Tema",
+            light: "Açık",
+            dark: "Koyu",
+            sepia: "Sepya",
+            neopolitan: "Neapolitan",
+            forest: "Orman",
+            wiiu: "WiiU",
+            edo: "Edo",
+            rocket: "Roket",
+            miku: "Miku",
+            frutiger: "Frutiger",
+            lizard: "Kertenkele"
         }
     },
     login: {
@@ -307,10 +323,10 @@ export const tr = {
             empty: 'Lütfen bir cümle girin.',
             file_too_large: 'Görüntü dosyası çok büyük. Maksimum boyut 2MB.'
         },
-        translateMode: {
-            analysis: '{language} cümlesini analiz et',
-            translate: 'Nasıl derim...',
-        }
+        mode: "Mod",
+        howDoISay: "Nasıl derim...?",
+        gotASentence: "Bir cümleniz mi var? Analiz edelim.",
+        translate: 'Nasıl derim...',
     },
     analysis: {
         pageTitle: 'Hanbok - Cümle: ',
@@ -362,7 +378,9 @@ export const tr = {
             playSoundEffects: "Ses efektlerini çal"
         },
         grammar: 'Dilbilgisi',
-        examples: 'Örnekler'
+        examples: 'Örnekler',
+        askAI: 'Yapay Zekaya Sor',
+        askAIHelp: "Bu cümle hakkında Yapay Zeka eğitmenine sor",
     },
     limitReached: {
         storageTitle: 'Depolama Sınırına Ulaşıldı',
@@ -782,5 +800,74 @@ export const tr = {
         callToAction: 'Desteğiniz büyük bir fark yaratıyor!',
         viewPricing: 'Planları Görüntüle veya Bağış Yap',
         maybeLater: 'Belki Sonra'
+    },
+    history: {
+        pageTitle: 'Hanbok - Geçmiş',
+        title: 'Geçmiş',
+        loading: 'Yükleniyor...',
+        noSentences: 'Cümle bulunamadı.',
+        generateSentences: 'Burada görmek için bazı cümleler oluşturun!',
+        createdOn: 'Oluşturulma Tarihi',
+        prev: 'Önceki',
+        next: 'Sonraki',
+        pageOf: 'Sayfa {current} / {total}',
+        fetchError: 'Cümleler alınırken hata oluştu.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok Yapay Zeka Eğitmeni',
+        chatHistory: 'Sohbet Geçmişi',
+        newChat: '+ Yeni sohbet',
+        collapseSidebar: 'Kenar çubuğunu daralt',
+        showSidebar: 'Kenar çubuğunu göster',
+        loadingConversations: 'Sohbetler yükleniyor...',
+        noConversations: 'Henüz sohbet yok',
+        deleteConversation: 'Sohbeti sil',
+        deleteConfirm: 'Bu sohbeti silmek istediğinizden emin misiniz?',
+        deleteFailed: 'Sohbet silinemedi',
+        linkedTo: 'Bağlantılı:',
+        sentencePreview: {
+            title: 'Cümle analizi hakkında soru:',
+            conversationsUsed: 'kullanılan sohbet',
+            limitWarning: 'Bu cümle için sohbet sınırına ulaştınız. Daha fazlası için yükseltin.',
+            limitReached: 'Bu cümle için sohbet sınırına ulaştınız ({count}/{maxAllowed}). Planınızı yükseltin veya mevcut bir sohbeti kullanın.'
+        },
+        activeSentence: {
+            discussing: 'Cümle hakkında tartışılıyor:',
+            viewAnalysis: 'Tüm analizi görüntüle →'
+        },
+        messages: {
+            aiTutor: 'Yapay Zeka Eğitmeni',
+            writing: 'Yazıyor',
+            aiThinking: 'Yapay Zeka düşünüyor',
+            typePlaceholder: 'Mesajınızı yazın...',
+            startPlaceholder: 'Yeni bir sohbet başlatın...',
+            send: 'Gönder'
+        },
+        intro: {
+            title: 'Sorunuz mu var? - Her şeyi sorabilirsiniz!',
+            chooseLanguage: 'Hedef dili seçin:',
+            description: 'Öğrenmenize yardımcı olmak için buradayım! Dilbilgisi kuralları, kelime anlamları, telaffuz, kültürel bağlam veya merak ettiğiniz herhangi bir şey hakkında bana sorabilirsiniz.',
+            tryAsking: 'Şunu sormayı deneyin:'
+        },
+        errors: {
+            createFailed: 'Sohbet oluşturulamadı',
+            sendFailed: 'Mesaj gönderilemedi'
+        }
+    },
+    lessons: {
+        comingSoon: "Çok yakında"
+    },
+    sidebar: {
+        myAccount: "Hesabım",
+        analyzeText: "Metni analiz et",
+        savedSentences: "Kaydedilen cümleler",
+        flashcards: "Kartlar",
+        tutor: "Eğitmen",
+        history: "Geçmiş",
+        lyrics: "Şarkı Sözleri",
+        lessons: "Dersler",
+        feedback: "Geri Bildirim",
+        viewPlans: "Planları Görüntüle",
+        navigation: "Navigasyon"
     },
 }; 

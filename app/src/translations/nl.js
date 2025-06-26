@@ -181,6 +181,22 @@ export const nl = {
                 description: 'Geniet van onbeperkte zinsanalyses, audiogeneratie, afbeeldingsextractie, opslag en prioriteitsondersteuning!'
             },
             moreDetails: 'Voor meer details, bezoek'
+        },
+        signOut: "Uitloggen",
+        settings: "Instellingen:",
+        themes: {
+            theme: "Thema",
+            light: "Licht",
+            dark: "Donker",
+            sepia: "Sepia",
+            neopolitan: "Neapolitan",
+            forest: "Bos",
+            wiiu: "WiiU",
+            edo: "Edo",
+            rocket: "Raket",
+            miku: "Miku",
+            frutiger: "Frutiger",
+            lizard: "Hagedis"
         }
     },
     login: {
@@ -307,10 +323,10 @@ export const nl = {
             empty: 'Voer een zin in.',
             file_too_large: 'Afbeeldingsbestand is te groot. Maximale grootte is 2MB.'
         },
-        translateMode: {
-            analysis: 'Analyseer {language} zin',
-            translate: 'Hoe zeg ik...',
-        }
+        mode: "Modus",
+        howDoISay: "Hoe zeg ik...?",
+        gotASentence: "Heb je een zin? Laten we hem analyseren.",
+        translate: 'Hoe zeg ik...',
     },
     analysis: {
         pageTitle: 'Hanbok - Zin: ',
@@ -362,7 +378,9 @@ export const nl = {
             playSoundEffects: "Geluidseffecten afspelen"
         },
         grammar: 'Grammatica',
-        examples: 'Voorbeelden'
+        examples: 'Voorbeelden',
+        askAI: 'Vraag het aan AI',
+        askAIHelp: "Vraag de AI-tutor over deze zin",
     },
     limitReached: {
         storageTitle: 'Opslaglimiet bereikt',
@@ -549,7 +567,6 @@ export const nl = {
         saveSettings: 'Instellingen opslaan',
         saving: 'Opslaan...',
         cancel: 'Annuleren',
-        settings: 'Instellingen',
         showing: 'Tonen',
         study: {
             studying: 'Studeren',
@@ -782,5 +799,74 @@ export const nl = {
         callToAction: 'Uw steun maakt een enorm verschil!',
         viewPricing: 'Bekijk Plannen of Doneer',
         maybeLater: 'Misschien later'
+    },
+    history: {
+        pageTitle: 'Hanbok - Geschiedenis',
+        title: 'Geschiedenis',
+        loading: 'Laden...',
+        noSentences: 'Geen zinnen gevonden.',
+        generateSentences: 'Genereer enkele zinnen om ze hier te zien!',
+        createdOn: 'Aangemaakt op',
+        prev: 'Vorige',
+        next: 'Volgende',
+        pageOf: 'Pagina {current} van {total}',
+        fetchError: 'Fout bij het ophalen van zinnen.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok AI-tutor',
+        chatHistory: 'Chatgeschiedenis',
+        newChat: '+ Nieuw gesprek',
+        collapseSidebar: 'Zijbalk samenvouwen',
+        showSidebar: 'Zijbalk tonen',
+        loadingConversations: 'Gesprekken laden...',
+        noConversations: 'Nog geen gesprekken',
+        deleteConversation: 'Gesprek verwijderen',
+        deleteConfirm: 'Weet je zeker dat je dit gesprek wilt verwijderen?',
+        deleteFailed: 'Kan gesprek niet verwijderen',
+        linkedTo: 'Gekoppeld aan:',
+        sentencePreview: {
+            title: 'Vraag over zinsanalyse:',
+            conversationsUsed: 'gebruikte gesprekken',
+            limitWarning: 'Je hebt het maximum aantal gesprekken voor deze zin bereikt. Upgrade om meer te maken.',
+            limitReached: 'Je hebt het maximum aantal gesprekken voor deze zin bereikt ({count}/{maxAllowed}). Upgrade je plan of gebruik een bestaand gesprek.'
+        },
+        activeSentence: {
+            discussing: 'Bespreking over de zin:',
+            viewAnalysis: 'Bekijk volledige analyse →'
+        },
+        messages: {
+            aiTutor: 'AI-tutor',
+            writing: 'Schrijft',
+            aiThinking: 'AI denkt',
+            typePlaceholder: 'Typ je bericht...',
+            startPlaceholder: 'Begin een nieuw gesprek...',
+            send: 'Verzenden'
+        },
+        intro: {
+            title: 'Vragen? - Vraag wat je wilt!',
+            chooseLanguage: 'Kies de doeltaal:',
+            description: 'Ik ben hier om je te helpen leren! Vraag me naar grammaticaregels, woordbetekenissen, uitspraak, culturele context of wat je maar wilt weten.',
+            tryAsking: 'Probeer te vragen:'
+        },
+        errors: {
+            createFailed: 'Kan gesprek niet aanmaken',
+            sendFailed: 'Kan bericht niet verzenden'
+        }
+    },
+    lessons: {
+        comingSoon: "Binnenkort beschikbaar"
+    },
+    sidebar: {
+        myAccount: "Mijn account",
+        analyzeText: "Tekst analyseren",
+        savedSentences: "Opgeslagen zinnen",
+        flashcards: "Flashcards",
+        tutor: "Tutor",
+        history: "Geschiedenis",
+        lyrics: "Songteksten",
+        lessons: "Lessen",
+        feedback: "Feedback",
+        viewPlans: "Bekijk plannen",
+        navigation: "Navigatie"
     },
 }; 

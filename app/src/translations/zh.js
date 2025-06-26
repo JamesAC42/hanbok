@@ -181,6 +181,22 @@ export const zh = {
                 description: '享受无限制的句子分析、语音生成、图片提取、保存和优先支持！'
             },
             moreDetails: '更多详情请访问'
+        },
+        signOut: "登出",
+        settings: "设置:",
+        themes: {
+            theme: "主题",
+            light: "浅色",
+            dark: "深色",
+            sepia: "褐色",
+            neopolitan: "那不勒斯",
+            forest: "森林",
+            wiiu: "WiiU",
+            edo: "江户",
+            rocket: "火箭",
+            miku: "初音未来",
+            frutiger: "Frutiger",
+            lizard: "蜥蜴"
         }
     },
     login: {
@@ -310,7 +326,10 @@ export const zh = {
         translateMode: {
             analysis: '分析{language}句子',
             translate: '如何说...',
-        }
+        },
+        mode: "模式",
+        howDoISay: "怎么说...?",
+        gotASentence: "有句子吗？让我们来分析。",
     },
     analysis: {
         pageTitle: 'Hanbok - 句子: ',
@@ -362,7 +381,9 @@ export const zh = {
             playSoundEffects: "播放音效"
         },
         grammar: '语法',
-        examples: '例句'
+        examples: '例句',
+        askAI: '问AI',
+        askAIHelp: "向AI导师提问关于此句子的问题",
     },
     limitReached: {
         storageTitle: '存储限制已达到',
@@ -782,5 +803,74 @@ export const zh = {
         callToAction: '您的支持至关重要！',
         viewPricing: '查看计划或捐赠',
         maybeLater: '以后再说'
+    },
+    history: {
+        pageTitle: 'Hanbok - 历史',
+        title: '历史',
+        loading: '加载中...',
+        noSentences: '未找到句子。',
+        generateSentences: '生成一些句子以在此处查看！',
+        createdOn: '创建于',
+        prev: '上一页',
+        next: '下一页',
+        pageOf: '第 {current} 页，共 {total} 页',
+        fetchError: '获取句子时出错。'
+    },
+    tutor: {
+        pageTitle: 'Hanbok AI导师',
+        chatHistory: '聊天记录',
+        newChat: '+ 新建聊天',
+        collapseSidebar: '收起侧边栏',
+        showSidebar: '显示侧边栏',
+        loadingConversations: '加载对话中...',
+        noConversations: '暂无对话',
+        deleteConversation: '删除对话',
+        deleteConfirm: '确定要删除此对话吗？',
+        deleteFailed: '无法删除对话',
+        linkedTo: '关联到:',
+        sentencePreview: {
+            title: '关于句子分析的问题:',
+            conversationsUsed: '已用对话',
+            limitWarning: '您已达到该句子的对话上限。升级以创建更多对话。',
+            limitReached: '您已达到该句子的对话上限（{count}/{maxAllowed}）。请升级套餐或使用现有对话。'
+        },
+        activeSentence: {
+            discussing: '正在讨论的句子:',
+            viewAnalysis: '查看完整分析 →'
+        },
+        messages: {
+            aiTutor: 'AI导师',
+            writing: '正在输入',
+            aiThinking: 'AI思考中',
+            typePlaceholder: '输入您的消息...',
+            startPlaceholder: '开始新的对话...',
+            send: '发送'
+        },
+        intro: {
+            title: '有问题？- 随便问！',
+            chooseLanguage: '选择目标语言:',
+            description: '我在这里帮助你学习！可以问我语法规则、单词含义、发音、文化背景或任何你感兴趣的内容。',
+            tryAsking: '可以这样问:'
+        },
+        errors: {
+            createFailed: '无法创建对话',
+            sendFailed: '无法发送消息'
+        }
+    },
+    lessons: {
+        comingSoon: "敬请期待"
+    },
+    sidebar: {
+        myAccount: "我的账户",
+        analyzeText: "分析文本",
+        savedSentences: "已保存句子",
+        flashcards: "闪卡",
+        tutor: "导师",
+        history: "历史",
+        lyrics: "歌词",
+        lessons: "课程",
+        feedback: "反馈",
+        viewPlans: "查看套餐",
+        navigation: "导航"
     },
 }; 

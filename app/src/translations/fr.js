@@ -181,6 +181,22 @@ export const fr = {
                 description: 'Profitez d\'analyses de phrases, générations audio, extractions d\'images, sauvegardes et support prioritaire illimités !'
             },
             moreDetails: 'Pour plus de détails, visitez'
+        },
+        signOut: "Déconnexion",
+        settings: "Paramètres :",
+        themes: {
+            theme: "Thème",
+            light: "Clair",
+            dark: "Sombre",
+            sepia: "Sépia",
+            neopolitan: "Napolitain",
+            forest: "Forêt",
+            wiiu: "WiiU",
+            edo: "Edo",
+            rocket: "Fusée",
+            miku: "Miku",
+            frutiger: "Frutiger",
+            lizard: "Lézard"
         }
     },
     login: {
@@ -309,7 +325,10 @@ export const fr = {
         translateMode: {
             analysis: 'Analyser une phrase en {language}',
             translate: 'Comment dit-on...',
-        }
+        },
+        mode: "Mode",
+        howDoISay: "Comment dit-on...?",
+        gotASentence: "Vous avez une phrase ? Analysons-la."
     },
     analysis: {
         pageTitle: 'Hanbok - Phrase: ',
@@ -361,7 +380,9 @@ export const fr = {
             playSoundEffects: "Jouer les effets sonores"
         },
         grammar: 'Grammaire',
-        examples: 'Exemples'
+        examples: 'Exemples',
+        askAI: 'Demander à l\'IA',
+        askAIHelp: "Demandez au tuteur IA à propos de cette phrase"
     },
     limitReached: {
         storageTitle: 'Limite de Stockage Atteinte',
@@ -787,4 +808,73 @@ export const fr = {
         viewPricing: 'Voir les Forfaits ou Faire un Don',
         maybeLater: 'Peut-être plus tard'
     },
+    history: {
+        pageTitle: 'Hanbok - Historique',
+        title: 'Historique',
+        loading: 'Chargement...',
+        noSentences: 'Aucune phrase trouvée.',
+        generateSentences: 'Générez quelques phrases pour les voir ici !',
+        createdOn: 'Créé le',
+        prev: 'Précédent',
+        next: 'Suivant',
+        pageOf: 'Page {current} sur {total}',
+        fetchError: 'Erreur lors de la récupération des phrases.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok - Tuteur IA',
+        chatHistory: 'Historique du chat',
+        newChat: '+ Nouveau chat',
+        collapseSidebar: 'Réduire la barre latérale',
+        showSidebar: 'Afficher la barre latérale',
+        loadingConversations: 'Chargement des conversations...',
+        noConversations: 'Aucune conversation pour le moment',
+        deleteConversation: 'Supprimer la conversation',
+        deleteConfirm: 'Êtes-vous sûr de vouloir supprimer cette conversation ?',
+        deleteFailed: 'Impossible de supprimer la conversation',
+        linkedTo: 'Lié à :',
+        sentencePreview: {
+            title: 'Question sur l\'analyse de la phrase :',
+            conversationsUsed: 'conversations utilisées',
+            limitWarning: 'Vous avez atteint la limite de conversations pour cette phrase. Passez à un forfait supérieur pour plus.',
+            limitReached: 'Vous avez atteint la limite de conversations pour cette phrase ({count}/{maxAllowed}). Veuillez mettre à niveau votre forfait ou utiliser une conversation existante.'
+        },
+        activeSentence: {
+            discussing: 'Discussion sur la phrase :',
+            viewAnalysis: 'Voir l\'analyse complète →'
+        },
+        messages: {
+            aiTutor: 'Tuteur IA',
+            writing: 'Écriture',
+            aiThinking: 'L\'IA réfléchit',
+            typePlaceholder: 'Tapez votre message...',
+            startPlaceholder: 'Commencez une nouvelle conversation...',
+            send: 'Envoyer'
+        },
+        intro: {
+            title: 'Des questions ? – Demandez-moi tout !',
+            chooseLanguage: 'Choisissez votre langue cible :',
+            description: 'Je suis là pour vous aider à apprendre ! Demandez-moi des règles de grammaire, des significations de mots, la prononciation, le contexte culturel ou tout ce qui vous intrigue.',
+            tryAsking: 'Essayez de demander :'
+        },
+        errors: {
+            createFailed: 'Impossible de créer la conversation',
+            sendFailed: 'Impossible d\'envoyer le message'
+        }
+    },
+    lessons: {
+        comingSoon: "Bientôt disponible"
+    },
+    sidebar: {
+        myAccount: "Mon compte",
+        analyzeText: "Analyser un texte",
+        savedSentences: "Phrases enregistrées",
+        flashcards: "Cartes",
+        tutor: "Tuteur",
+        history: "Historique",
+        lyrics: "Paroles",
+        lessons: "Leçons",
+        feedback: "Commentaires",
+        viewPlans: "Voir les forfaits",
+        navigation: "Navigation"
+    }
 }; 

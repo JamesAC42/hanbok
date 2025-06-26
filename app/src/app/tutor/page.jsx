@@ -25,7 +25,7 @@ export default function TutorPage() {
   const messagesEndRef = useRef(null);
   
   // Use the existing language context
-  const { supportedLanguages, getIcon } = useLanguage();
+  const { t, supportedLanguages, getIcon } = useLanguage();
 
   // Example questions for popular languages
   const exampleQuestions = {
@@ -45,7 +45,8 @@ export default function TutorPage() {
     if (!loading && !isAuthenticated) {
       router.replace('/login');
     }
-  }, [isAuthenticated, loading, router]);
+    document.title = t('tutor.pageTitle');
+  }, [isAuthenticated, loading, router, t]);
 
   useEffect(() => {
     scrollToBottom();
@@ -297,7 +298,7 @@ export default function TutorPage() {
       
     } catch (error) {
       //console.error('Error creating conversation:', error);
-      alert(error.message || 'Failed to create conversation');
+      alert(error.message || t('tutor.errors.createFailed'));
       setMessages([]);
       setIsLoading(false);
     }
@@ -310,7 +311,9 @@ export default function TutorPage() {
     
     // Check if user can create new conversations when sentence is linked
     if (!currentConversation && sentenceId && conversationCount && !conversationCount.canCreateMore) {
-      alert(`You've reached the conversation limit for this sentence (${conversationCount.count}/${conversationCount.maxAllowed}). Please upgrade your plan or use an existing conversation.`);
+      alert(t('tutor.sentencePreview.limitReached')
+        .replace('{count}', conversationCount.count)
+        .replace('{maxAllowed}', conversationCount.maxAllowed));
       return;
     }
     
@@ -447,7 +450,7 @@ export default function TutorPage() {
 
     } catch (error) {
       //console.error('Error sending message:', error);
-      alert(error.message || 'Failed to send message');
+      alert(error.message || t('tutor.errors.sendFailed'));
       // Remove the user message we optimistically added
       setMessages(prev => prev.slice(0, -1));
       setIsLoading(false);
@@ -455,7 +458,7 @@ export default function TutorPage() {
   };
 
   const deleteConversation = async (conversationId) => {
-    if (!confirm('Are you sure you want to delete this conversation?')) {
+    if (!confirm(t('tutor.deleteConfirm'))) {
       return;
     }
 
@@ -473,11 +476,11 @@ export default function TutorPage() {
         }
       } else {
         const error = await response.json();
-        alert(error.message || 'Failed to delete conversation');
+        alert(error.message || t('tutor.deleteFailed'));
       }
     } catch (error) {
       //console.error('Error deleting conversation:', error);
-      alert('Failed to delete conversation');
+              alert(t('tutor.deleteFailed'));
     }
   };
 
@@ -513,11 +516,11 @@ export default function TutorPage() {
         {/* Sidebar */}
         <div className={`${styles.sidebar} ${sidebarCollapsed ? styles.collapsed : ''}`}>
           <div className={styles.sidebarHeader}>
-            <h3>Chat History</h3>
+            <h3>{t('tutor.chatHistory')}</h3>
             <button 
               className={styles.toggleButton}
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-              title="Collapse sidebar"
+              title={t('tutor.collapseSidebar')}
             >
               ← 
             </button>
@@ -531,13 +534,13 @@ export default function TutorPage() {
               setSidebarCollapsed(true);
             }}
           >
-            + New Chat
+            {t('tutor.newChat')}
           </button>
           
           <div className={styles.conversationsList}>
             {isLoadingConversations ? (
               <div className={styles.loadingConversations}>
-                Loading conversations...
+                {t('tutor.loadingConversations')}
               </div>
             ) : conversations.length > 0 ? (
               conversations.map(conversation => (
@@ -559,21 +562,21 @@ export default function TutorPage() {
                         e.stopPropagation();
                         deleteConversation(conversation.conversationId);
                       }}
-                      title="Delete conversation"
+                      title={t('tutor.deleteConversation')}
                     >
                       🗑️
                     </button>
                   </div>
                   {conversation.sentence && (
                     <div className={styles.conversationSentence}>
-                      Linked to: "{conversation.sentence.text.substring(0, 50)}..."
+                      {t('tutor.linkedTo')} "{conversation.sentence.text.substring(0, 50)}..."
                     </div>
                   )}
                 </div>
               ))
             ) : (
               <div className={styles.noConversations}>
-                No conversations yet
+                {t('tutor.noConversations')}
               </div>
             )}
           </div>
@@ -585,7 +588,7 @@ export default function TutorPage() {
             <button 
               className={styles.collapsedToggle}
               onClick={() => setSidebarCollapsed(false)}
-              title="Show sidebar"
+              title={t('tutor.showSidebar')}
             >
               →
             </button>
@@ -595,10 +598,10 @@ export default function TutorPage() {
           {linkedSentence && !currentConversation && (
             <div className={styles.sentencePreview}>
               <div className={styles.sentencePreviewHeader}>
-                <h3>Asking about sentence analysis:</h3>
+                <h3>{t('tutor.sentencePreview.title')}</h3>
                 {conversationCount && (
                   <span className={styles.conversationStats}>
-                    {conversationCount.count}/{conversationCount.maxAllowed === Infinity ? '∞' : conversationCount.maxAllowed} conversations used
+                    {conversationCount.count}/{conversationCount.maxAllowed === Infinity ? '∞' : conversationCount.maxAllowed} {t('tutor.sentencePreview.conversationsUsed')}
                   </span>
                 )}
               </div>
@@ -612,7 +615,7 @@ export default function TutorPage() {
               )}
               {conversationCount && !conversationCount.canCreateMore && (
                 <div className={styles.limitWarning}>
-                  You've reached the conversation limit for this sentence. Upgrade to create more conversations.
+                  {t('tutor.sentencePreview.limitWarning')}
                 </div>
               )}
             </div>
@@ -628,12 +631,12 @@ export default function TutorPage() {
               {currentConversation.sentence && (
                 <div className={styles.activeSentenceContext}>
                   <div className={styles.activeSentenceHeader}>
-                    <span className={styles.contextLabel}>Discussing sentence:</span>
+                    <span className={styles.contextLabel}>{t('tutor.activeSentence.discussing')}</span>
                     <Link 
                       href={`/sentence/${currentConversation.sentenceId}`}
                       className={styles.viewAnalysisLink}
                     >
-                      View Full Analysis →
+                      {t('tutor.activeSentence.viewAnalysis')}
                     </Link>
                   </div>
                   <div className={styles.activeSentenceText}>
@@ -654,7 +657,7 @@ export default function TutorPage() {
                       <div className={styles.tutorBubble}>
                         <Image 
                           src="/images/speakers/female.png"
-                          alt="AI Tutor" 
+                          alt={t('tutor.messages.aiTutor')} 
                           width={633}
                           height={784}
                         />
@@ -668,7 +671,7 @@ export default function TutorPage() {
                       )}
                       {message.isStreaming && (
                         <div className={styles.streamingIndicator}>
-                          <span>Writing</span>
+                          <span>{t('tutor.messages.writing')}</span>
                           <div className={styles.loadingDots}>
                             <span></span>
                             <span></span>
@@ -688,14 +691,14 @@ export default function TutorPage() {
                     <div className={styles.tutorBubble}>
                       <Image 
                         src="/images/speakers/female.png"
-                        alt="AI Tutor" 
+                        alt={t('tutor.messages.aiTutor')} 
                         width={633}
                         height={784}
                       />
                     </div>
                     
                     <div className={styles.loadingMessage}>
-                      <span>AI is thinking</span>
+                      <span>{t('tutor.messages.aiThinking')}</span>
                       <div className={styles.loadingDots}>
                         <span></span>
                         <span></span>
@@ -713,17 +716,17 @@ export default function TutorPage() {
                 <div className={styles.tutorCharacter}>
                   <Image 
                     src="/images/speakers/female.png"
-                    alt="AI Tutor" 
+                    alt={t('tutor.messages.aiTutor')} 
                     width={633}
                     height={784}
                     className={styles.tutorCharacter}
                   />
                 </div>
                 <div className={styles.tutorIntroText}>
-                  <h2>Questions? - Ask Anything!</h2>
+                  <h2>{t('tutor.intro.title')}</h2>
                   <div className={styles.languageSwitcher}>
                     <label className={styles.languageLabel}>
-                      Choose your target language:
+                      {t('tutor.intro.chooseLanguage')}
                     </label>
                     <select 
                       value={targetLanguage}
@@ -738,15 +741,14 @@ export default function TutorPage() {
                     </select>
                   </div>
                   <p>
-                    I'm here to help you learn! Ask me about grammar rules, word meanings, 
-                    pronunciation, cultural context, or anything else you're curious about.
+                    {t('tutor.intro.description')}
                   </p>
                   
                   {/* Language Switcher */}
                   
 
                   <div className={styles.exampleQuestions}>
-                    <strong>Try asking:</strong>
+                    <strong>{t('tutor.intro.tryAsking')}</strong>
                     <ul className={styles.exampleList}>
                       {Object.entries(exampleQuestions).map(([lang, question]) => (
                         <li key={lang} className={styles.exampleItem}>
@@ -778,8 +780,8 @@ export default function TutorPage() {
                 onKeyPress={handleKeyPress}
                 placeholder={
                   currentConversation 
-                    ? "Type your message..." 
-                    : "Start a new conversation..."
+                    ? t('tutor.messages.typePlaceholder')
+                    : t('tutor.messages.startPlaceholder')
                 }
                 disabled={isLoading}
                 rows={1}
@@ -789,7 +791,7 @@ export default function TutorPage() {
                 className={styles.sendButton}
                 disabled={!inputValue.trim() || isLoading}
               >
-                Send
+                {t('tutor.messages.send')}
               </button>
             </form>
           </div>

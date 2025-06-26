@@ -181,6 +181,22 @@ export const ko = {
                 description: '무제한 문장 분석, 음성 생성, 이미지 추출, 저장 및 우선 지원을 즐기세요!'
             },
             moreDetails: '자세한 내용은 다음을 참조하세요'
+        },
+        signOut: "로그아웃",
+        settings: "설정:",
+        themes: {
+            theme: "테마",
+            light: "라이트",
+            dark: "다크",
+            sepia: "세피아",
+            neopolitan: "네오폴리탄",
+            forest: "포레스트",
+            wiiu: "WiiU",
+            edo: "에도",
+            rocket: "로켓",
+            miku: "미쿠",
+            frutiger: "프루티거",
+            lizard: "도마뱀"
         }
     },
     login: {
@@ -307,10 +323,10 @@ export const ko = {
             empty: '문장을 입력해 주세요.',
             file_too_large: '이미지 파일이 너무 큽니다. 최대 크기는 2MB입니다.',
         },
-        translateMode: {
-            analysis: '{language} 문장 분석',
-            translate: '이렇게 말하려면...',
-        }
+        translate: '이렇게 말하려면...',
+        mode: "모드",
+        howDoISay: "어떻게 말하나요...?",
+        gotASentence: "문장이 있으신가요? 분석해봅시다.",
     },
     analysis: {
         pageTitle: 'Hanbok - 문장: ',
@@ -362,7 +378,9 @@ export const ko = {
             playSoundEffects: "효과음 재생"
         },
         grammar: '문법',
-        examples: '예시'
+        examples: '예시',
+        askAI: 'AI에게 질문',
+        askAIHelp: "이 문장에 대해 AI 튜터에게 질문하기",
     },
     limitReached: {
         storageTitle: '저장 한도 도달',
@@ -782,5 +800,74 @@ export const ko = {
         callToAction: '여러분의 지원이 큰 힘이 됩니다!',
         viewPricing: '플랜 보기 또는 기부하기',
         maybeLater: '나중에'
+    },
+    history: {
+        pageTitle: 'Hanbok - 기록',
+        title: '기록',
+        loading: '로딩 중...',
+        noSentences: '문장이 없습니다.',
+        generateSentences: '여기에 문장을 생성해보세요!',
+        createdOn: '생성일',
+        prev: '이전',
+        next: '다음',
+        pageOf: '페이지 {current}/{total}',
+        fetchError: '문장을 불러오는 중 오류가 발생했습니다.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok AI 튜터',
+        chatHistory: '채팅 기록',
+        newChat: '+ 새 채팅',
+        collapseSidebar: '사이드바 접기',
+        showSidebar: '사이드바 열기',
+        loadingConversations: '대화 불러오는 중...',
+        noConversations: '아직 대화가 없습니다',
+        deleteConversation: '대화 삭제',
+        deleteConfirm: '이 대화를 삭제하시겠습니까?',
+        deleteFailed: '대화 삭제에 실패했습니다',
+        linkedTo: '연결됨:',
+        sentencePreview: {
+            title: '문장 분석 질문:',
+            conversationsUsed: '사용된 대화',
+            limitWarning: '이 문장의 대화 한도에 도달했습니다. 업그레이드하면 새 대화를 만들 수 있습니다.',
+            limitReached: '이 문장의 대화 한도에 도달했습니다({count}/{maxAllowed}). 플랜을 업그레이드하거나 기존 대화를 사용하세요.'
+        },
+        activeSentence: {
+            discussing: '이 문장에 대해 토론 중:',
+            viewAnalysis: '전체 분석 보기 →'
+        },
+        messages: {
+            aiTutor: 'AI 튜터',
+            writing: '입력 중',
+            aiThinking: 'AI가 생각 중',
+            typePlaceholder: '메시지를 입력하세요...',
+            startPlaceholder: '새 대화를 시작하세요...',
+            send: '보내기'
+        },
+        intro: {
+            title: '질문이 있으신가요? - 무엇이든 물어보세요!',
+            chooseLanguage: '대상 언어 선택:',
+            description: '학습을 도와드릴게요! 문법 규칙, 단어 의미, 발음, 문화적 맥락 등 궁금한 점을 무엇이든 질문하세요.',
+            tryAsking: '이렇게 질문해보세요:'
+        },
+        errors: {
+            createFailed: '대화 생성에 실패했습니다',
+            sendFailed: '메시지 전송에 실패했습니다'
+        }
+    },
+    lessons: {
+        comingSoon: "곧 출시 예정"
+    },
+    sidebar: {
+        myAccount: "내 계정",
+        analyzeText: "텍스트 분석",
+        savedSentences: "저장된 문장",
+        flashcards: "플래시카드",
+        tutor: "튜터",
+        history: "기록",
+        lyrics: "가사",
+        lessons: "레슨",
+        feedback: "피드백",
+        viewPlans: "플랜 보기",
+        navigation: "내비게이션"
     },
 }; 

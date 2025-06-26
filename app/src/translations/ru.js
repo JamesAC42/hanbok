@@ -181,6 +181,22 @@ export const ru = {
                 description: 'Наслаждайтесь неограниченным анализом предложений, генерацией аудио, извлечением изображений, сохранением и приоритетной поддержкой!'
             },
             moreDetails: 'Для более подробной информации посетите'
+        },
+        signOut: "Выйти",
+        settings: "Настройки:",
+        themes: {
+            theme: "Тема",
+            light: "Светлая",
+            dark: "Тёмная",
+            sepia: "Сепия",
+            neopolitan: "Неаполитанская",
+            forest: "Лес",
+            wiiu: "WiiU",
+            edo: "Эдо",
+            rocket: "Ракета",
+            miku: "Мику",
+            frutiger: "Фрутигер",
+            lizard: "Ящерица"
         }
     },
     login: {
@@ -310,7 +326,11 @@ export const ru = {
         translateMode: {
             analysis: 'Анализировать предложение на {language}',
             translate: 'Как сказать...',
-        }
+        },
+        mode: "Режим",
+        howDoISay: "Как сказать...?",
+        gotASentence: "Есть предложение? Давайте проанализируем.",
+        translate: 'Как сказать...',
     },
     analysis: {
         pageTitle: 'Hanbok - Предложение: ',
@@ -362,7 +382,9 @@ export const ru = {
             playSoundEffects: "Воспроизводить звуковые эффекты"
         },
         grammar: 'Грамматика',
-        examples: 'Примеры'
+        examples: 'Примеры',
+        askAI: 'Спросить у ИИ',
+        askAIHelp: "Спросить у ИИ-репетитора об этом предложении",
     },
     limitReached: {
         storageTitle: 'Достигнут предел хранения',
@@ -782,5 +804,74 @@ export const ru = {
         callToAction: 'Ваша поддержка имеет огромное значение!',
         viewPricing: 'Посмотреть планы или пожертвовать',
         maybeLater: 'Может быть, позже'
+    },
+    history: {
+        pageTitle: 'Hanbok - История',
+        title: 'История',
+        loading: 'Загрузка...',
+        noSentences: 'Предложения не найдены.',
+        generateSentences: 'Сгенерируйте несколько предложений, чтобы увидеть их здесь!',
+        createdOn: 'Создано',
+        prev: 'Предыдущая',
+        next: 'Следующая',
+        pageOf: 'Страница {current} из {total}',
+        fetchError: 'Ошибка при загрузке предложений.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok ИИ-репетитор',
+        chatHistory: 'История чата',
+        newChat: '+ Новый чат',
+        collapseSidebar: 'Свернуть боковую панель',
+        showSidebar: 'Показать боковую панель',
+        loadingConversations: 'Загрузка бесед...',
+        noConversations: 'Пока нет бесед',
+        deleteConversation: 'Удалить беседу',
+        deleteConfirm: 'Вы уверены, что хотите удалить эту беседу?',
+        deleteFailed: 'Не удалось удалить беседу',
+        linkedTo: 'Связано с:',
+        sentencePreview: {
+            title: 'Вопрос по анализу предложения:',
+            conversationsUsed: 'использовано бесед',
+            limitWarning: 'Вы достигли лимита бесед для этого предложения. Обновите тариф для создания новых.',
+            limitReached: 'Вы достигли лимита бесед для этого предложения ({count}/{maxAllowed}). Обновите тариф или используйте существующую беседу.'
+        },
+        activeSentence: {
+            discussing: 'Обсуждение предложения:',
+            viewAnalysis: 'Посмотреть полный анализ →'
+        },
+        messages: {
+            aiTutor: 'ИИ-репетитор',
+            writing: 'Печатает',
+            aiThinking: 'ИИ думает',
+            typePlaceholder: 'Введите сообщение...',
+            startPlaceholder: 'Начните новый чат...',
+            send: 'Отправить'
+        },
+        intro: {
+            title: 'Вопросы? — Спросите что угодно!',
+            chooseLanguage: 'Выберите целевой язык:',
+            description: 'Я помогу вам учиться! Спросите меня о грамматике, значениях слов, произношении, культурном контексте или о чём угодно.',
+            tryAsking: 'Попробуйте спросить:'
+        },
+        errors: {
+            createFailed: 'Не удалось создать беседу',
+            sendFailed: 'Не удалось отправить сообщение'
+        }
+    },
+    lessons: {
+        comingSoon: "Скоро будет"
+    },
+    sidebar: {
+        myAccount: "Мой аккаунт",
+        analyzeText: "Анализировать текст",
+        savedSentences: "Сохранённые предложения",
+        flashcards: "Карточки",
+        tutor: "Репетитор",
+        history: "История",
+        lyrics: "Тексты песен",
+        lessons: "Уроки",
+        feedback: "Отзывы",
+        viewPlans: "Посмотреть тарифы",
+        navigation: "Навигация"
     },
 }; 

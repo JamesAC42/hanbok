@@ -181,6 +181,22 @@ export const de = {
                 description: 'Genießen Sie unbegrenzte Satzanalysen, Audiogenerierung, Bildextraktion, Speicherung und priorisierten Support!'
             },
             moreDetails: 'Weitere Details finden Sie unter'
+        },
+        signOut: "Abmelden",
+        settings: "Einstellungen:",
+        themes: {
+            theme: "Thema",
+            light: "Hell",
+            dark: "Dunkel",
+            sepia: "Sepia",
+            neopolitan: "Neapolitanisch",
+            forest: "Wald",
+            wiiu: "WiiU",
+            edo: "Edo",
+            rocket: "Rakete",
+            miku: "Miku",
+            frutiger: "Frutiger",
+            lizard: "Echse"
         }
     },
     login: {
@@ -310,7 +326,12 @@ export const de = {
         translateMode: {
             analysis: '{language} Satz analysieren',
             translate: 'Wie sage ich...',
-        }
+        },
+        mode: "Modus",
+        translate: "Übersetzen",
+        analyze: "Analysieren",
+        howDoISay: "Wie sage ich...?",
+        gotASentence: "Hast du einen Satz? Lass uns ihn analysieren.",
     },
     analysis: {
         pageTitle: 'Hanbok - Satz: ',
@@ -362,7 +383,9 @@ export const de = {
             playSoundEffects: "Soundeffekte abspielen"
         },
         grammar: 'Grammatik',
-        examples: 'Beispiele'
+        examples: 'Beispiele',
+        askAI: 'KI fragen',
+        askAIHelp: "Frage den KI-Tutor zu diesem Satz",
     },
     limitReached: {
         storageTitle: 'Speicherlimit erreicht',
@@ -787,5 +810,74 @@ export const de = {
         callToAction: 'Ihre Unterstützung macht einen großen Unterschied!',
         viewPricing: 'Pläne anzeigen oder spenden',
         maybeLater: 'Vielleicht später'
+    },
+    history: {
+        pageTitle: 'Hanbok - Verlauf',
+        title: 'Verlauf',
+        loading: 'Wird geladen...',
+        noSentences: 'Keine Sätze gefunden.',
+        generateSentences: 'Erzeuge einige Sätze, um sie hier zu sehen!',
+        createdOn: 'Erstellt am',
+        prev: 'Vorherige',
+        next: 'Nächste',
+        pageOf: 'Seite {current} von {total}',
+        fetchError: 'Fehler beim Abrufen der Sätze.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok - KI-Tutor',
+        chatHistory: 'Chatverlauf',
+        newChat: '+ Neuer Chat',
+        collapseSidebar: 'Seitenleiste einklappen',
+        showSidebar: 'Seitenleiste anzeigen',
+        loadingConversations: 'Lade Konversationen...',
+        noConversations: 'Noch keine Konversationen',
+        deleteConversation: 'Konversation löschen',
+        deleteConfirm: 'Möchten Sie diese Konversation wirklich löschen?',
+        deleteFailed: 'Konversation konnte nicht gelöscht werden',
+        linkedTo: 'Verknüpft mit:',
+        sentencePreview: {
+            title: 'Frage zur Satzanalyse:',
+            conversationsUsed: 'verwendete Konversationen',
+            limitWarning: 'Sie haben das Konversationslimit für diesen Satz erreicht. Für mehr upgraden.',
+            limitReached: 'Sie haben das Konversationslimit für diesen Satz erreicht ({count}/{maxAllowed}). Bitte upgraden Sie Ihren Plan oder nutzen Sie eine bestehende Konversation.'
+        },
+        activeSentence: {
+            discussing: 'Diskutiere über den Satz:',
+            viewAnalysis: 'Vollständige Analyse anzeigen →'
+        },
+        messages: {
+            aiTutor: 'KI-Tutor',
+            writing: 'Schreibt',
+            aiThinking: 'KI denkt nach',
+            typePlaceholder: 'Nachricht eingeben...',
+            startPlaceholder: 'Neue Konversation starten...',
+            send: 'Senden'
+        },
+        intro: {
+            title: 'Fragen? – Frag alles!',
+            chooseLanguage: 'Wähle deine Zielsprache:',
+            description: 'Ich bin hier, um dir beim Lernen zu helfen! Frage mich nach Grammatikregeln, Wortbedeutungen, Aussprache, kulturellem Kontext oder allem, was dich interessiert.',
+            tryAsking: 'Versuche zu fragen:'
+        },
+        errors: {
+            createFailed: 'Konversation konnte nicht erstellt werden',
+            sendFailed: 'Nachricht konnte nicht gesendet werden'
+        }
+    },
+    lessons: {
+        comingSoon: "Demnächst verfügbar"
+    },
+    sidebar: {
+        myAccount: "Mein Konto",
+        analyzeText: "Text analysieren",
+        savedSentences: "Gespeicherte Sätze",
+        flashcards: "Karteikarten",
+        tutor: "Tutor",
+        history: "Verlauf",
+        lyrics: "Liedtexte",
+        lessons: "Lektionen",
+        feedback: "Feedback",
+        viewPlans: "Pläne anzeigen",
+        navigation: "Navigation"
     },
 }; 

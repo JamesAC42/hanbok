@@ -186,10 +186,10 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 <Link 
                     href={`/tutor?sentenceId=${propSentenceId || searchParams.get('id')}`}
                     className={styles.floatingChatButton}
-                    title="Ask AI tutor about this sentence"
+                    title={t('sentenceForm.askAIHelp')}
                 >
                     <IcBaselineLiveHelp />
-                    <span>Ask AI</span>
+                    <span>{t('sentenceForm.askAI')}</span>
                 </Link>
             )}
 

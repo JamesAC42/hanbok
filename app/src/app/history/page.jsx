@@ -44,7 +44,7 @@ export default function History() {
         }
       } catch (err) {
         console.error(err);
-        setError(t('history.fetchError') || 'Failed to fetch sentences');
+        setError(t('history.fetchError'));
       } finally {
         setLoadingContent(false);
       }
@@ -65,10 +65,10 @@ export default function History() {
           disabled={page <= 1} 
           onClick={() => setPage(page - 1)}
         >
-          {t('history.prev') || 'Previous'}
+          {t('history.prev')}
         </button>
         <span>
-          {(t('history.pageOf') || 'Page {current} of {total}')
+          {t('history.pageOf')
             .replace('{current}', page)
             .replace('{total}', totalPages)
           }
@@ -77,7 +77,7 @@ export default function History() {
           disabled={page >= totalPages} 
           onClick={() => setPage(page + 1)}
         >
-          {t('history.next') || 'Next'}
+          {t('history.next')}
         </button>
       </div>
     )
@@ -110,7 +110,7 @@ export default function History() {
 
   const renderContent = () => {
     if (loadingContent) {
-      return <p className={styles.loading}>{t('history.loading') || 'Loading...'}</p>;
+      return <p className={styles.loading}>{t('history.loading')}</p>;
     }
 
     if (error) {
@@ -120,8 +120,8 @@ export default function History() {
     if (sentences.length === 0) {
       return (
         <div className={styles.noSentences}>
-          <p>{t('history.noSentences') || 'No sentences found'}</p>
-          <p>{t('history.generateSentences') || 'Generate some sentences to see them here!'}</p>
+          <p>{t('history.noSentences')}</p>
+          <p>{t('history.generateSentences')}</p>
         </div>
       );
     }
@@ -138,7 +138,7 @@ export default function History() {
             <p className={styles.sentenceText}>{sentence.text}</p>
             <p className={styles.sentenceTranslation}>{sentence.analysis?.sentence?.translation}</p>
             <p className={styles.sentenceDate}>
-              {t('history.createdOn') || 'Created on'} {sentence.dateCreated ? new Date(sentence.dateCreated).toLocaleString() : 'Unknown date'}
+              {t('history.createdOn')} {sentence.dateCreated ? new Date(sentence.dateCreated).toLocaleString() : 'Unknown date'}
             </p>
           </div>
         ))}
@@ -154,7 +154,7 @@ export default function History() {
     <Dashboard>
       <div className={styles.historyContainer}>
         {renderLanguageSelector()}
-        <h1 className={styles.pageTitle}>{t('history.title') || 'History'}</h1>
+        <h1 className={styles.pageTitle}>{t('history.title')}</h1>
         
         {renderContent()}
       </div>
