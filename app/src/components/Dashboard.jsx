@@ -1,5 +1,4 @@
 import styles from "@/styles/components/Dashboard.module.scss";
-import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
 const Dashboard = ({children}) => {
