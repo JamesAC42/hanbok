@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SentenceAnalyzer from '@/components/SentenceAnalyzer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/home/page.module.scss';
@@ -36,8 +36,22 @@ function TestimonialCard({quote}) {
 }
 
 export default function Home() {
-  const { supportedLanguages } = useLanguage();
+  const { supportedLanguages, t } = useLanguage();
   const router = useRouter();
+  const [siteStats, setSiteStats] = useState(null);
+
+  const fetchSiteStats = async () => {
+      try {
+          const response = await fetch('/api/stats');
+          const data = await response.json();
+          if (data.success) {
+              setSiteStats(data.stats);
+          }
+      } catch (error) {
+          console.error('Error fetching site stats:', error);
+      }
+  };
+
   // Add structured data for SEO
   useEffect(() => {
     const script = document.createElement('script');
@@ -57,6 +71,10 @@ export default function Home() {
       "availableLanguage": Object.values(supportedLanguages)
     });
     document.head.appendChild(script);
+        
+    if(siteStats === null) {
+        fetchSiteStats();
+    }
     
     return () => {
       document.head.removeChild(script);
@@ -139,6 +157,24 @@ export default function Home() {
 
       <div className={styles.bufferSection}>
       </div>
+      {
+        siteStats && (
+            <div className={`${styles.statsContainer}`}>
+                <div className={styles.statItem}>
+                    <span className={styles.statNumber}>{siteStats.totalSentences.toLocaleString()}</span>
+                    <span className={styles.statLabel}>{t('home.stats.sentencesAnalyzed')}</span>
+                </div>
+                <div className={styles.statItem}>
+                    <span className={styles.statNumber}>{siteStats.totalWords.toLocaleString()}</span>
+                    <span className={styles.statLabel}>{t('home.stats.wordsLearned')}</span>
+                </div>
+                <div className={styles.statItem}>
+                    <span className={styles.statNumber}>{siteStats.totalUsers.toLocaleString()}</span>
+                    <span className={styles.statLabel}>{t('home.stats.activeUsers')}</span>
+                </div>
+            </div>
+        )
+    }
       <div className={`${styles.infoSection} ${styles.infoSection1}`}>
         <div className={styles.infoSectionLeft}>
           <h1>What <span className={styles.underline}>is</span> Hanbok?</h1>

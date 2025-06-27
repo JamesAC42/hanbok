@@ -467,6 +467,44 @@
     }
 }
 
+.statsContainer {
+    @include flex-center;
+    background:none;
+    background:#20204b;
+    padding:0 2rem;
+    padding-bottom:4rem;
+    gap:2rem;
+    .statItem {
+        @include flex-center-column;
+        .statNumber {
+            font-family:var(--font-lilita);
+            font-size:2rem;
+            color:#fff;
+        }
+        .statLabel {
+            font-family:var(--font-serif);
+            font-size:1.5rem;
+            color:#aeaaa8;
+            text-align:center;
+        }
+    }
+
+    @media screen and (max-width: 1200px) {
+        .statItem {
+            .statNumber {
+                font-size:1.5rem;
+            }
+            .statLabel {
+                font-size:1rem;
+            }
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        flex-direction:column;
+    }
+}
+
 .infoSection {
     height:fit-content;
     padding:2rem 0;

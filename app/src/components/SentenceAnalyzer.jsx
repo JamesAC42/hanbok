@@ -46,7 +46,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         setOriginalLanguage(language);
         setTranslationLanguage(nativeLanguage);
     }
-
+    
     useEffect(() => {
         // First check for prop sentenceId (from /sentence/[id] route)
         // Then fall back to query param (from /?id= route)
@@ -75,6 +75,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 return () => clearTimeout(timer);
             }
         }
+
     }, [searchParams, isAuthenticated, propSentenceId]);
     
 
