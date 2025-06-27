@@ -223,23 +223,85 @@ export const de = {
         monthlySubscriptionPlus: 'Monatliches Abonnement - Plus-Stufe',
         bestValue: 'Bester Wert',
         perMonth: '/ Monat',
+        subtitle: 'Wähle den perfekten Plan für deine Koreanisch-Lernreise',
+
+        plans: {
+            free: 'Kostenlos',
+            basic: 'Basis',
+            plus: 'Plus'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: 'für immer',
+            perMonth: 'pro Monat'
+        },
+
         features: {
-            increaseSentences: 'Erhöhen Sie das Limit der gespeicherten Sätze von',
-            to: 'auf',
-            increaseWords: 'Erhöhen Sie das Limit der gespeicherten Wörter von',
-            additionalAudio: 'Zusätzlich',
-            additionalImageExtracts: 'Zusätzlich',
-            audioGenerations: 'Audio-Generierungen',
-            imageExtractions: 'Bildextraktionen',
-            moreSentences: ' zusätzliche Satzanalysen',
-            unlimited: {
+            free: {
+                analyses: '30 Satzanalysen pro Woche',
+                conversations: '5 kostenlose Gespräche pro Monat',
+                messages: '5 Nachrichten pro Gespräch',
+                bookmarks: 'Maximal 30 gespeicherte Sätze',
+                flashcards: 'Maximal 60 Lernkarten',
+                support: 'Community-Support'
+            },
+            basic: {
                 analyses: 'Unbegrenzte Satzanalysen',
-                sentences: 'Unbegrenzt gespeicherte Sätze',
-                words: 'Unbegrenzt gespeicherte Wörter',
-                audio: 'Unbegrenzte Audio-Generierungen',
-                images: 'Unbegrenzte Bildextraktionen',
-                insights: 'Unbegrenzte Einblicke in Wortbeziehungen'
+                conversations: '50 Gespräche pro Monat',
+                messages: '15 Nachrichten pro Gespräch',
+                bookmarks: 'Unbegrenzte gespeicherte Sätze',
+                flashcards: 'Unbegrenzte Lernkarten',
+                support: 'Priorisierter Support'
+            },
+            plus: {
+                everythingInBasic: 'Alles im Basis-Plan enthalten',
+                imageExtraction: 'Unbegrenzte Texterkennung aus Bildern',
+                audioGeneration: 'Unbegrenzte Audio-Generierung',
+                conversations: '200 Gespräche pro Monat',
+                messages: '50 Nachrichten pro Gespräch',
+                support: 'Premium-Support'
             }
+        },
+
+        badges: {
+            mostPopular: 'Am beliebtesten',
+            limitedOffer: 'Begrenztes Angebot'
+        },
+
+        planButtons: {
+            getStartedFree: 'Kostenlos starten'
+        },
+
+        oneTime: {
+            title: 'Erweitere dein Erlebnis',
+            subtitle: 'Benötigst du zusätzliche Credits oder Funktionen? Kaufe sie einmalig hier.',
+            products: {
+                extraSentences: {
+                    name: 'Zusätzliche Sätze',
+                    price: '$1',
+                    description: '100 zusätzliche Satzanalysen'
+                },
+                basicUpgrade: {
+                    name: 'Basis-Upgrade',
+                    price: '$4',
+                    description: 'Tägliche Limits erhöhen: 30→150 Sätze, 60→200 Wörter'
+                },
+                audioPack: {
+                    name: 'Audio-Paket',
+                    price: '$6',
+                    description: '50 zusätzliche Audio-Generierungen zur Ausspracheübung'
+                },
+                imagePack: {
+                    name: 'Bildpaket',
+                    price: '$5',
+                    description: '150 Bild-Text-Extraktionen zum Lernen mit echten Inhalten'
+                }
+            }
+        },
+
+        support: {
+            title: 'Unterstütze das Projekt'
         },
         buttons: {
             buyNow: 'Jetzt kaufen',

@@ -216,6 +216,94 @@ export const en = {
     pricing: {
         pageTitle: 'Hanbok - Pricing',
         title: 'Pricing',
+        subtitle: 'Choose the perfect plan for your Korean learning journey',
+        
+        // Plan names
+        plans: {
+            free: 'Free',
+            basic: 'Basic',
+            plus: 'Plus'
+        },
+        
+        // Plan pricing
+        pricing: {
+            currency: '$',
+            forever: 'forever',
+            perMonth: 'per month'
+        },
+        
+        // Plan features
+        features: {
+            free: {
+                analyses: '30 sentence analyses per week',
+                conversations: '5 free conversations per month',
+                messages: '5 messages per conversation',
+                bookmarks: 'Max 30 bookmarked sentences',
+                flashcards: 'Max 60 flashcards',
+                support: 'Community support'
+            },
+            basic: {
+                analyses: 'Unlimited sentence analyses',
+                conversations: '50 conversations per month',
+                messages: '15 messages per conversation',
+                bookmarks: 'Unlimited bookmarked sentences',
+                flashcards: 'Unlimited flashcards',
+                support: 'Priority support'
+            },
+            plus: {
+                everythingInBasic: 'Everything in Basic',
+                imageExtraction: 'Unlimited image text extraction',
+                audioGeneration: 'Unlimited audio generation',
+                conversations: '200 conversations per month',
+                messages: '50 messages per conversation',
+                support: 'Premium support'
+            }
+        },
+        
+        // Badges and labels
+        badges: {
+            mostPopular: 'Most Popular',
+            limitedOffer: 'Limited Offer'
+        },
+        
+        // Plan buttons
+        planButtons: {
+            getStartedFree: 'Get Started Free'
+        },
+        
+        // One-time purchases section
+        oneTime: {
+            title: 'Boost Your Experience',
+            subtitle: 'Need extra credits or features? Get them with these one-time purchases.',
+            products: {
+                extraSentences: {
+                    name: 'Extra Sentences',
+                    price: '$1',
+                    description: '100 additional sentence analyses'
+                },
+                basicUpgrade: {
+                    name: 'Basic Upgrade',
+                    price: '$4',
+                    description: 'Increase daily limits: 30→150 sentences, 60→200 words'
+                },
+                audioPack: {
+                    name: 'Audio Pack',
+                    price: '$6',
+                    description: '50 additional audio generations for pronunciation practice'
+                },
+                imagePack: {
+                    name: 'Image Pack',
+                    price: '$5',
+                    description: '150 image text extractions for learning from real content'
+                }
+            }
+        },
+        
+        // Support section
+        support: {
+            title: 'Support the Project'
+        },
+        
         upgradeOptions: 'Upgrade Options',
         limitedTimeOffer: 'Limited Time Only - 50% OFF',
         oneTimePurchase: 'One-Time Purchase',
@@ -223,23 +311,6 @@ export const en = {
         monthlySubscriptionPlus: 'Monthly Subscription - Plus Tier',
         bestValue: 'Best Value',
         perMonth: '/ month',
-        features: {
-            increaseSentences: 'Increase saved sentence limit from',
-            to: 'to',
-            increaseWords: 'Increase saved words limit from',
-            additionalAudio: 'An additional',
-            audioGenerations: 'audio generations',
-            imageExtractions: 'image extractions',
-            moreSentences: ' additional sentence analyses',
-            unlimited: {
-                analyses: 'Unlimited sentence analyses',
-                sentences: 'Unlimited sentences saved',
-                images: 'Unlimited image extractions',
-                words: 'Unlimited flashcards',
-                audio: 'Unlimited audio generations',
-                insights: 'Unlimited word relation insights'
-            }
-        },
         buttons: {
             buyNow: 'Buy Now',
             subscribe: 'Subscribe'

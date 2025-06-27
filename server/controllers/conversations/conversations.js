@@ -11,9 +11,9 @@ const getPreviousSunday = require('../../utils/getPreviousSunday');
  */
 
 const TIER_LIMITS = {
-  0: { maxUserMessages: 1, maxConversationsPerSentence: 1, monthlyConversations: 5 }, // Free
-  1: { maxUserMessages: 50, maxConversationsPerSentence: 1, monthlyConversations: 50 }, // Basic
-  2: { maxUserMessages: 200, maxConversationsPerSentence: Infinity, monthlyConversations: 200 } // Plus
+  0: { maxUserMessages: 5, maxConversationsPerSentence: 1, monthlyConversations: 5 }, // Free
+  1: { maxUserMessages: 15, maxConversationsPerSentence: 2, monthlyConversations: 50 }, // Basic
+  2: { maxUserMessages: 50, maxConversationsPerSentence: Infinity, monthlyConversations: 200 } // Plus
 };
 
 // Helper function to get next sequence value

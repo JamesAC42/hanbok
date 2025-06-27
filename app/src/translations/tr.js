@@ -223,23 +223,85 @@ export const tr = {
         monthlySubscriptionPlus: 'Aylık Abonelik - Plus Seviye',
         bestValue: 'En İyi Değer',
         perMonth: '/ ay',
+        subtitle: 'Korece öğrenme yolculuğun için en uygun planı seç',
+
+        plans: {
+            free: 'Ücretsiz',
+            basic: 'Temel',
+            plus: 'Plus'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: 'süresiz',
+            perMonth: 'aylık'
+        },
+
         features: {
-            increaseSentences: 'Kaydedilen cümle sınırını artırın',
-            to: 'şuraya',
-            increaseWords: 'Kaydedilen kelime sınırını artırın',
-            additionalAudio: 'Ek',
-            additionalImageExtracts: 'Ek',
-            audioGenerations: 'ses üretimi',
-            imageExtractions: 'görüntü çıkarımı',
-            moreSentences: ' ek cümle analizi',
-            unlimited: {
+            free: {
+                analyses: 'Haftada 30 cümle analizi',
+                conversations: 'Ayda 5 ücretsiz konuşma',
+                messages: 'Konuşma başına 5 mesaj',
+                bookmarks: 'En fazla 30 yer imi cümlesi',
+                flashcards: 'En fazla 60 flash kartı',
+                support: 'Topluluk desteği'
+            },
+            basic: {
                 analyses: 'Sınırsız cümle analizi',
-                sentences: 'Sınırsız kaydedilen cümleler',
-                words: 'Sınırsız kaydedilen kelimeler',
-                audio: 'Sınırsız ses üretimi',
-                images: 'Sınırsız görüntü çıkarımı',
-                insights: 'Sınırsız kelime ilişkisi içgörüleri'
+                conversations: 'Ayda 50 konuşma',
+                messages: 'Konuşma başına 15 mesaj',
+                bookmarks: 'Sınırsız yer imi cümlesi',
+                flashcards: 'Sınırsız flash kartı',
+                support: 'Öncelikli destek'
+            },
+            plus: {
+                everythingInBasic: 'Temel plandaki her şey',
+                imageExtraction: 'Sınırsız görsel metin çıkarımı',
+                audioGeneration: 'Sınırsız ses üretimi',
+                conversations: 'Ayda 200 konuşma',
+                messages: 'Konuşma başına 50 mesaj',
+                support: 'Premium destek'
             }
+        },
+
+        badges: {
+            mostPopular: 'En Popüler',
+            limitedOffer: 'Sınırlı Teklif'
+        },
+
+        planButtons: {
+            getStartedFree: 'Ücretsiz Başla'
+        },
+
+        oneTime: {
+            title: 'Deneyimini Güçlendir',
+            subtitle: 'Ek kredilere veya özelliklere mi ihtiyacın var? Bunları tek seferlik satın alımlar ile alabilirsin.',
+            products: {
+                extraSentences: {
+                    name: 'Ekstra Cümleler',
+                    price: '$1',
+                    description: '100 ek cümle analizi'
+                },
+                basicUpgrade: {
+                    name: 'Temel Yükseltme',
+                    price: '$4',
+                    description: 'Günlük sınırları artır: 30→150 cümle, 60→200 kelime'
+                },
+                audioPack: {
+                    name: 'Ses Paketi',
+                    price: '$6',
+                    description: 'Telaffuz pratiği için 50 ek ses üretimi'
+                },
+                imagePack: {
+                    name: 'Görsel Paketi',
+                    price: '$5',
+                    description: 'Gerçek içeriklerden öğrenmek için 150 görsel metin çıkarımı'
+                }
+            }
+        },
+
+        support: {
+            title: 'Projeyi Destekle'
         },
         buttons: {
             buyNow: 'Şimdi Satın Al',

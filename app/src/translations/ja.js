@@ -223,23 +223,85 @@ export const ja = {
         monthlySubscriptionPlus: '月額サブスクリプション - プラスティア',
         bestValue: 'ベストバリュー',
         perMonth: '/ 月',
+        subtitle: 'あなたの韓国語学習にぴったりのプランを選びましょう',
+
+        plans: {
+            free: '無料',
+            basic: 'ベーシック',
+            plus: 'プラス'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: '永久に',
+            perMonth: '月ごと'
+        },
+
         features: {
-            increaseSentences: '保存可能な文章数を',
-            to: 'から',
-            increaseWords: '保存可能な単語数を',
-            additionalAudio: '追加',
-            additionalImageExtracts: '追加',
-            audioGenerations: '音声生成',
-            imageExtractions: '画像抽出',
-            moreSentences: ' 追加の文章分析',
-            unlimited: {
-                analyses: '無制限の文章分析',
-                sentences: '無制限の文章保存',
-                words: '無制限の単語保存',
-                audio: '無制限の音声生成',
-                images: '無制限の画像抽出',
-                insights: '無制限の単語関係インサイト'
+            free: {
+                analyses: '週あたり30文の分析',
+                conversations: '月に5回の無料会話',
+                messages: '1会話あたり5メッセージ',
+                bookmarks: '最大30件のブックマーク文',
+                flashcards: '最大60枚のフラッシュカード',
+                support: 'コミュニティサポート'
+            },
+            basic: {
+                analyses: '無制限の文分析',
+                conversations: '月に50回の会話',
+                messages: '1会話あたり15メッセージ',
+                bookmarks: '無制限のブックマーク文',
+                flashcards: '無制限のフラッシュカード',
+                support: '優先サポート'
+            },
+            plus: {
+                everythingInBasic: 'ベーシックプランのすべてを含む',
+                imageExtraction: '無制限の画像テキスト抽出',
+                audioGeneration: '無制限の音声生成',
+                conversations: '月に200回の会話',
+                messages: '1会話あたり50メッセージ',
+                support: 'プレミアムサポート'
             }
+        },
+
+        badges: {
+            mostPopular: '最も人気のプラン',
+            limitedOffer: '期間限定オファー'
+        },
+
+        planButtons: {
+            getStartedFree: '無料で始める'
+        },
+
+        oneTime: {
+            title: '体験を強化しよう',
+            subtitle: '追加のクレジットや機能が必要ですか？一度限りの購入で手に入れましょう。',
+            products: {
+                extraSentences: {
+                    name: '追加文',
+                    price: '$1',
+                    description: '100文の追加分析'
+                },
+                basicUpgrade: {
+                    name: 'ベーシックアップグレード',
+                    price: '$4',
+                    description: '1日あたりの制限を増加：30→150文、60→200語'
+                },
+                audioPack: {
+                    name: '音声パック',
+                    price: '$6',
+                    description: '発音練習用の追加音声生成50回分'
+                },
+                imagePack: {
+                    name: '画像パック',
+                    price: '$5',
+                    description: '実際のコンテンツから学ぶための画像テキスト抽出150回'
+                }
+            }
+        },
+
+        support: {
+            title: 'プロジェクトを支援する'
         },
         buttons: {
             buyNow: '今すぐ購入',

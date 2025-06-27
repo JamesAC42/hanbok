@@ -223,24 +223,87 @@ export const ko = {
         monthlySubscriptionPlus: '월간 구독 - 플러스 티어',
         bestValue: '최고의 가치',
         perMonth: '/ 월',
+        subtitle: '한국어 학습 여정을 위한 완벽한 플랜을 선택하세요',
+
+        plans: {
+            free: '무료',
+            basic: '베이직',
+            plus: '플러스'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: '영구적으로',
+            perMonth: '월별'
+        },
+
         features: {
-            increaseSentences: '저장 가능한 문장 수를',
-            to: '에서',
-            increaseWords: '저장 가능한 단어 수를',
-            additionalAudio: '추가',
-            additionalImageExtracts: '추가',
-            audioGenerations: '음성 생성',
-            imageExtractions: '이미지 추출',
-            moreSentences: ' 추가 문장 분석',
-            unlimited: {
+            free: {
+                analyses: '주당 30문장 분석',
+                conversations: '월 5회 무료 대화',
+                messages: '대화당 5개 메시지',
+                bookmarks: '최대 30개 북마크 문장',
+                flashcards: '최대 60개 플래시카드',
+                support: '커뮤니티 지원'
+            },
+            basic: {
                 analyses: '무제한 문장 분석',
-                sentences: '무제한 문장 저장',
-                words: '무제한 단어 저장',
-                audio: '무제한 음성 생성',
-                images: '무제한 이미지 추출',
-                insights: '무제한 단어 관계 인사이트'
+                conversations: '월 50회 대화',
+                messages: '대화당 15개 메시지',
+                bookmarks: '무제한 북마크 문장',
+                flashcards: '무제한 플래시카드',
+                support: '우선 지원'
+            },
+            plus: {
+                everythingInBasic: '베이직 플랜의 모든 기능 포함',
+                imageExtraction: '무제한 이미지 텍스트 추출',
+                audioGeneration: '무제한 오디오 생성',
+                conversations: '월 200회 대화',
+                messages: '대화당 50개 메시지',
+                support: '프리미엄 지원'
             }
         },
+
+        badges: {
+            mostPopular: '가장 인기 있는 플랜',
+            limitedOffer: '한정 혜택'
+        },
+
+        planButtons: {
+            getStartedFree: '무료로 시작하기'
+        },
+
+        oneTime: {
+            title: '경험 향상하기',
+            subtitle: '크레딧이나 추가 기능이 필요하신가요? 일회성 구매로 이용해보세요.',
+            products: {
+                extraSentences: {
+                    name: '추가 문장',
+                    price: '$1',
+                    description: '추가 100문장 분석'
+                },
+                basicUpgrade: {
+                    name: '베이직 업그레이드',
+                    price: '$4',
+                    description: '일일 한도 증가: 30→150문장, 60→200단어'
+                },
+                audioPack: {
+                    name: '오디오 팩',
+                    price: '$6',
+                    description: '발음 연습용 추가 50개 오디오 생성'
+                },
+                imagePack: {
+                    name: '이미지 팩',
+                    price: '$5',
+                    description: '실제 콘텐츠 학습용 이미지 텍스트 추출 150회'
+                }
+            }
+        },
+
+        support: {
+            title: '프로젝트 후원하기'
+        },
+        
         buttons: {
             buyNow: '지금 구매',
             subscribe: '구독하기'

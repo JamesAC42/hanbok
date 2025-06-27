@@ -223,23 +223,85 @@ export const it = {
         monthlySubscriptionPlus: 'Abbonamento Mensile - Livello Plus',
         bestValue: 'Miglior Valore',
         perMonth: '/ mese',
+        subtitle: 'Scegli il piano perfetto per il tuo percorso di apprendimento del coreano',
+
+        plans: {
+            free: 'Gratis',
+            basic: 'Base',
+            plus: 'Plus'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: 'per sempre',
+            perMonth: 'al mese'
+        },
+
         features: {
-            increaseSentences: 'Aumenta il limite delle frasi salvate da',
-            to: 'a',
-            increaseWords: 'Aumenta il limite delle parole salvate da',
-            additionalAudio: 'Ulteriori',
-            additionalImageExtracts: 'Ulteriori',
-            audioGenerations: 'generazioni audio',
-            imageExtractions: 'estrazioni immagini',
-            moreSentences: ' analisi di frasi aggiuntive',
-            unlimited: {
+            free: {
+                analyses: '30 analisi di frasi a settimana',
+                conversations: '5 conversazioni gratuite al mese',
+                messages: '5 messaggi per conversazione',
+                bookmarks: 'Massimo 30 frasi salvate',
+                flashcards: 'Massimo 60 flashcard',
+                support: 'Supporto della community'
+            },
+            basic: {
                 analyses: 'Analisi di frasi illimitate',
-                sentences: 'Frasi salvate illimitate',
-                words: 'Parole salvate illimitate',
-                audio: 'Generazioni audio illimitate',
-                images: 'Estrazioni immagini illimitate',
-                insights: 'Informazioni illimitate sulle relazioni tra parole'
+                conversations: '50 conversazioni al mese',
+                messages: '15 messaggi per conversazione',
+                bookmarks: 'Frasi salvate illimitate',
+                flashcards: 'Flashcard illimitate',
+                support: 'Supporto prioritario'
+            },
+            plus: {
+                everythingInBasic: 'Tutto incluso nel piano Base',
+                imageExtraction: 'Estrazione di testo da immagini illimitata',
+                audioGeneration: 'Generazione audio illimitata',
+                conversations: '200 conversazioni al mese',
+                messages: '50 messaggi per conversazione',
+                support: 'Supporto premium'
             }
+        },
+
+        badges: {
+            mostPopular: 'Il più Popolare',
+            limitedOffer: 'Offerta Limitata'
+        },
+
+        planButtons: {
+            getStartedFree: 'Inizia Gratis'
+        },
+
+        oneTime: {
+            title: 'Migliora la tua Esperienza',
+            subtitle: 'Hai bisogno di crediti o funzionalità extra? Acquistali una sola volta.',
+            products: {
+                extraSentences: {
+                    name: 'Frasi Extra',
+                    price: '$1',
+                    description: '100 analisi di frasi aggiuntive'
+                },
+                basicUpgrade: {
+                    name: 'Upgrade Base',
+                    price: '$4',
+                    description: 'Aumenta i limiti giornalieri: 30→150 frasi, 60→200 parole'
+                },
+                audioPack: {
+                    name: 'Pacchetto Audio',
+                    price: '$6',
+                    description: '50 generazioni audio aggiuntive per esercizi di pronuncia'
+                },
+                imagePack: {
+                    name: 'Pacchetto Immagini',
+                    price: '$5',
+                    description: '150 estrazioni di testo da immagini per imparare da contenuti reali'
+                }
+            }
+        },
+
+        support: {
+            title: 'Sostieni il Progetto'
         },
         buttons: {
             buyNow: 'Acquista Ora',

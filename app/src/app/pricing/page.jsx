@@ -67,7 +67,7 @@ const Pricing = () => {
             <div className={pricingStyles.pricingPage}>
                 <div className={pricingStyles.pricingHero}>
                     <h1 className={pricingStyles.heroTitle}>{t('pricing.title')}</h1>
-                    <p className={pricingStyles.heroSubtitle}>Choose the perfect plan for your Korean learning journey</p>
+                    <p className={pricingStyles.heroSubtitle}>{t('pricing.subtitle')}</p>
                 </div>
 
                 {/* Main Subscription Plans */}
@@ -77,40 +77,43 @@ const Pricing = () => {
                         {/* Free Plan */}
                         <div className={`${pricingStyles.planCard} ${pricingStyles.freePlan}`}>
                             <div className={pricingStyles.planHeader}>
-                                <h3 className={pricingStyles.planName}>Free</h3>
+                                <h3 className={pricingStyles.planName}>{t('pricing.plans.free')}</h3>
                                 <div className={pricingStyles.planPrice}>
-                                    <span className={pricingStyles.currency}>$</span>
+                                    <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
                                     <span className={pricingStyles.amount}>0</span>
-                                    <span className={pricingStyles.period}>forever</span>
+                                    <span className={pricingStyles.period}>{t('pricing.pricing.forever')}</span>
                                 </div>
                             </div>
                             <ul className={pricingStyles.planFeatures}>
-                                <li>30 sentence analyses per day</li>
-                                <li>60 word lookups per day</li>
-                                <li>Basic grammar insights</li>
-                                <li>Community support</li>
+                                <li>{t('pricing.features.free.analyses')}</li>
+                                <li>{t('pricing.features.free.conversations')}</li>
+                                <li>{t('pricing.features.free.messages')}</li>
+                                <li>{t('pricing.features.free.bookmarks')}</li>
+                                <li>{t('pricing.features.free.flashcards')}</li>
+                                <li>{t('pricing.features.free.support')}</li>
                             </ul>
                             <button className={`${pricingStyles.planButton} ${pricingStyles.freeButton}`} onClick={() => router.push('/analyze')}>
-                                Get Started Free
+                                {t('pricing.planButtons.getStartedFree')}
                             </button>
                         </div>
 
                         {/* Basic Plan */}
                         <div className={`${pricingStyles.planCard} ${pricingStyles.basicPlan}`}>
                             <div className={pricingStyles.planHeader}>
-                                <h3 className={pricingStyles.planName}>Basic</h3>
+                                <h3 className={pricingStyles.planName}>{t('pricing.plans.basic')}</h3>
                                 <div className={pricingStyles.planPrice}>
-                                    <span className={pricingStyles.currency}>$</span>
+                                    <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
                                     <span className={pricingStyles.amount}>4</span>
-                                    <span className={pricingStyles.period}>per month</span>
+                                    <span className={pricingStyles.period}>{t('pricing.pricing.perMonth')}</span>
                                 </div>
                             </div>
                             <ul className={pricingStyles.planFeatures}>
-                                <li>Unlimited sentence analyses</li>
-                                <li>Unlimited word lookups</li>
-                                <li>Advanced grammar insights</li>
-                                <li>Priority support</li>
-                                <li>Progress tracking</li>
+                                <li>{t('pricing.features.basic.analyses')}</li>
+                                <li>{t('pricing.features.basic.conversations')}</li>
+                                <li>{t('pricing.features.basic.messages')}</li>
+                                <li>{t('pricing.features.basic.bookmarks')}</li>
+                                <li>{t('pricing.features.basic.flashcards')}</li>
+                                <li>{t('pricing.features.basic.support')}</li>
                             </ul>
                             <button 
                                 className={`${pricingStyles.planButton} ${pricingStyles.basicButton}`}
@@ -123,22 +126,22 @@ const Pricing = () => {
 
                         {/* Plus Plan */}
                         <div className={`${pricingStyles.planCard} ${pricingStyles.plusPlan}`}>
-                            <div className={pricingStyles.popularBadge}>Most Popular</div>
+                            <div className={pricingStyles.popularBadge}>{t('pricing.badges.mostPopular')}</div>
                             <div className={pricingStyles.planHeader}>
-                                <h3 className={pricingStyles.planName}>Plus</h3>
+                                <h3 className={pricingStyles.planName}>{t('pricing.plans.plus')}</h3>
                                 <div className={pricingStyles.planPrice}>
-                                    <span className={pricingStyles.currency}>$</span>
+                                    <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
                                     <span className={pricingStyles.amount}>10</span>
-                                    <span className={pricingStyles.period}>per month</span>
+                                    <span className={pricingStyles.period}>{t('pricing.pricing.perMonth')}</span>
                                 </div>
                             </div>
                             <ul className={pricingStyles.planFeatures}>
-                                <li>Everything in Basic</li>
-                                <li>Unlimited image text extraction</li>
-                                <li>Unlimited audio generation</li>
-                                <li>Advanced analytics & insights</li>
-                                <li>Premium support</li>
-                                <li>Early access to new features</li>
+                                <li>{t('pricing.features.plus.everythingInBasic')}</li>
+                                <li>{t('pricing.features.plus.imageExtraction')}</li>
+                                <li>{t('pricing.features.plus.audioGeneration')}</li>
+                                <li>{t('pricing.features.plus.conversations')}</li>
+                                <li>{t('pricing.features.plus.messages')}</li>
+                                <li>{t('pricing.features.plus.support')}</li>
                             </ul>
                             <button 
                                 className={`${pricingStyles.planButton} ${pricingStyles.plusButton}`}
@@ -153,14 +156,14 @@ const Pricing = () => {
 
                 {/* One-time Purchases */}
                 <section className={pricingStyles.oneTimeSection}>
-                    <h2 className={pricingStyles.oneTimeTitle}>Boost Your Experience</h2>
-                    <p className={pricingStyles.oneTimeSubtitle}>Need extra credits or features? Get them with these one-time purchases.</p>
+                    <h2 className={pricingStyles.oneTimeTitle}>{t('pricing.oneTime.title')}</h2>
+                    <p className={pricingStyles.oneTimeSubtitle}>{t('pricing.oneTime.subtitle')}</p>
                     
                     <div className={pricingStyles.oneTimeGrid}>
                         <div className={pricingStyles.oneTimeCard}>
-                            <h4>Extra Sentences</h4>
-                            <div className={pricingStyles.oneTimePrice}>$1</div>
-                            <p>100 additional sentence analyses</p>
+                            <h4>{t('pricing.oneTime.products.extraSentences.name')}</h4>
+                            <div className={pricingStyles.oneTimePrice}>{t('pricing.oneTime.products.extraSentences.price')}</div>
+                            <p>{t('pricing.oneTime.products.extraSentences.description')}</p>
                             <button 
                                 className={pricingStyles.oneTimeButton}
                                 onClick={() => handlePurchase(PRICE_IDS.MORE_SENTENCES)}
@@ -171,10 +174,10 @@ const Pricing = () => {
                         </div>
 
                         <div className={pricingStyles.oneTimeCard}>
-                            <div className={pricingStyles.limitedOffer}>Limited Offer</div>
-                            <h4>Basic Upgrade</h4>
-                            <div className={pricingStyles.oneTimePrice}>$4</div>
-                            <p>Increase daily limits: 30→150 sentences, 60→200 words</p>
+                            <div className={pricingStyles.limitedOffer}>{t('pricing.badges.limitedOffer')}</div>
+                            <h4>{t('pricing.oneTime.products.basicUpgrade.name')}</h4>
+                            <div className={pricingStyles.oneTimePrice}>{t('pricing.oneTime.products.basicUpgrade.price')}</div>
+                            <p>{t('pricing.oneTime.products.basicUpgrade.description')}</p>
                             <button 
                                 className={pricingStyles.oneTimeButton}
                                 onClick={() => handlePurchase(PRICE_IDS.BASIC_UPGRADE)}
@@ -185,10 +188,10 @@ const Pricing = () => {
                         </div>
 
                         <div className={pricingStyles.oneTimeCard}>
-                            <div className={pricingStyles.limitedOffer}>Limited Offer</div>
-                            <h4>Audio Pack</h4>
-                            <div className={pricingStyles.oneTimePrice}>$6</div>
-                            <p>50 additional audio generations for pronunciation practice</p>
+                            <div className={pricingStyles.limitedOffer}>{t('pricing.badges.limitedOffer')}</div>
+                            <h4>{t('pricing.oneTime.products.audioPack.name')}</h4>
+                            <div className={pricingStyles.oneTimePrice}>{t('pricing.oneTime.products.audioPack.price')}</div>
+                            <p>{t('pricing.oneTime.products.audioPack.description')}</p>
                             <button 
                                 className={pricingStyles.oneTimeButton}
                                 onClick={() => handlePurchase(PRICE_IDS.AUDIO_PACK)}
@@ -199,10 +202,10 @@ const Pricing = () => {
                         </div>
 
                         <div className={pricingStyles.oneTimeCard}>
-                            <div className={pricingStyles.limitedOffer}>Limited Offer</div>
-                            <h4>Image Pack</h4>
-                            <div className={pricingStyles.oneTimePrice}>$5</div>
-                            <p>150 image text extractions for learning from real content</p>
+                            <div className={pricingStyles.limitedOffer}>{t('pricing.badges.limitedOffer')}</div>
+                            <h4>{t('pricing.oneTime.products.imagePack.name')}</h4>
+                            <div className={pricingStyles.oneTimePrice}>{t('pricing.oneTime.products.imagePack.price')}</div>
+                            <p>{t('pricing.oneTime.products.imagePack.description')}</p>
                             <button 
                                 className={pricingStyles.oneTimeButton}
                                 onClick={() => handlePurchase(PRICE_IDS.IMAGE_PACK)}
@@ -224,7 +227,7 @@ const Pricing = () => {
                         style={{ objectFit: 'cover' }} 
                     />
                     <div className={pricingStyles.supportContent}>
-                        <h2>Support the Project</h2>
+                        <h2>{t('pricing.support.title')}</h2>
                         <p className={pricingStyles.supportText}>
                             {t('pricing.donate.text')}
                         </p>

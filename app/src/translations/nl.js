@@ -223,23 +223,85 @@ export const nl = {
         monthlySubscriptionPlus: 'Maandelijks Abonnement - Plus Niveau',
         bestValue: 'Beste waarde',
         perMonth: '/ maand',
+        subtitle: 'Kies het perfecte plan voor jouw Koreaanse leertraject',
+
+        plans: {
+            free: 'Gratis',
+            basic: 'Basis',
+            plus: 'Plus'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: 'voor altijd',
+            perMonth: 'per maand'
+        },
+
         features: {
-            increaseSentences: 'Verhoog de limiet van opgeslagen zinnen van',
-            to: 'naar',
-            increaseWords: 'Verhoog de limiet van opgeslagen woorden van',
-            additionalAudio: 'Extra',
-            additionalImageExtracts: 'Extra',
-            audioGenerations: 'audio-generaties',
-            imageExtractions: 'beeldextracties',
-            moreSentences: ' extra zinanalyses',
-            unlimited: {
-                analyses: 'Onbeperkte zinanalyses',
-                sentences: 'Onbeperkt opgeslagen zinnen',
-                words: 'Onbeperkt opgeslagen woorden',
-                audio: 'Onbeperkte audio-generaties',
-                images: 'Onbeperkte beeldextracties',
-                insights: 'Onbeperkte woordrelatie-inzichten'
+            free: {
+                analyses: '30 zinsanalyses per week',
+                conversations: '5 gratis gesprekken per maand',
+                messages: '5 berichten per gesprek',
+                bookmarks: 'Maximaal 30 gemarkeerde zinnen',
+                flashcards: 'Maximaal 60 flashcards',
+                support: 'Community-ondersteuning'
+            },
+            basic: {
+                analyses: 'Onbeperkte zinsanalyses',
+                conversations: '50 gesprekken per maand',
+                messages: '15 berichten per gesprek',
+                bookmarks: 'Onbeperkt gemarkeerde zinnen',
+                flashcards: 'Onbeperkte flashcards',
+                support: 'Prioritaire ondersteuning'
+            },
+            plus: {
+                everythingInBasic: 'Alles van het Basis-plan',
+                imageExtraction: 'Onbeperkte tekstextractie uit afbeeldingen',
+                audioGeneration: 'Onbeperkte audiogeneratie',
+                conversations: '200 gesprekken per maand',
+                messages: '50 berichten per gesprek',
+                support: 'Premium ondersteuning'
             }
+        },
+
+        badges: {
+            mostPopular: 'Meest Populair',
+            limitedOffer: 'Beperkt Aanbod'
+        },
+
+        planButtons: {
+            getStartedFree: 'Gratis starten'
+        },
+
+        oneTime: {
+            title: 'Verhoog je Ervaring',
+            subtitle: 'Extra credits of functies nodig? Haal ze met deze eenmalige aankopen.',
+            products: {
+                extraSentences: {
+                    name: 'Extra Zinnen',
+                    price: '$1',
+                    description: '100 extra zinsanalyses'
+                },
+                basicUpgrade: {
+                    name: 'Basis Upgrade',
+                    price: '$4',
+                    description: 'Verhoog dagelijkse limieten: 30→150 zinnen, 60→200 woorden'
+                },
+                audioPack: {
+                    name: 'Audiopakket',
+                    price: '$6',
+                    description: '50 extra audiogeneraties voor uitspraaktraining'
+                },
+                imagePack: {
+                    name: 'Beeldpakket',
+                    price: '$5',
+                    description: '150 tekstextracties uit afbeeldingen voor leren met echte inhoud'
+                }
+            }
+        },
+
+        support: {
+            title: 'Steun het Project'
         },
         buttons: {
             buyNow: 'Koop nu',

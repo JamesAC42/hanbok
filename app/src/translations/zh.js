@@ -223,23 +223,85 @@ export const zh = {
         monthlySubscriptionPlus: '月度订阅 - 增强层',
         bestValue: '最优惠',
         perMonth: '/ 月',
+        subtitle: '为你的韩语学习之旅选择最合适的方案',
+
+        plans: {
+            free: '免费',
+            basic: '基础',
+            plus: '高级'
+        },
+
+        pricing: {
+            currency: '$',
+            forever: '永久有效',
+            perMonth: '每月'
+        },
+
         features: {
-            increaseSentences: '将保存句子限制从',
-            to: '增加到',
-            increaseWords: '将保存单词限制从',
-            additionalAudio: '额外',
-            additionalImageExtracts: '额外',
-            audioGenerations: '音频生成',
-            imageExtractions: '图像提取',
-            moreSentences: ' 额外句子分析',
-            unlimited: {
-                analyses: '无限句子分析',
-                sentences: '无限保存句子',
-                words: '无限保存单词',
-                audio: '无限音频生成',
-                images: '无限图像提取',
-                insights: '无限单词关系洞察'
+            free: {
+                analyses: '每周30个句子分析',
+                conversations: '每月5次免费对话',
+                messages: '每次对话5条消息',
+                bookmarks: '最多收藏30个句子',
+                flashcards: '最多60张闪卡',
+                support: '社区支持'
+            },
+            basic: {
+                analyses: '无限制句子分析',
+                conversations: '每月50次对话',
+                messages: '每次对话15条消息',
+                bookmarks: '无限收藏句子',
+                flashcards: '无限闪卡',
+                support: '优先支持'
+            },
+            plus: {
+                everythingInBasic: '包含基础方案的所有内容',
+                imageExtraction: '无限制图片文字提取',
+                audioGeneration: '无限制语音生成',
+                conversations: '每月200次对话',
+                messages: '每次对话50条消息',
+                support: '高级支持'
             }
+        },
+
+        badges: {
+            mostPopular: '最受欢迎',
+            limitedOffer: '限时优惠'
+        },
+
+        planButtons: {
+            getStartedFree: '免费开始'
+        },
+
+        oneTime: {
+            title: '提升你的体验',
+            subtitle: '需要额外额度或功能？通过以下一次性购买获取。',
+            products: {
+                extraSentences: {
+                    name: '额外句子',
+                    price: '$1',
+                    description: '额外100个句子分析'
+                },
+                basicUpgrade: {
+                    name: '基础升级',
+                    price: '$4',
+                    description: '提高每日限额：30→150句子，60→200单词'
+                },
+                audioPack: {
+                    name: '音频包',
+                    price: '$6',
+                    description: '50次额外语音生成用于发音练习'
+                },
+                imagePack: {
+                    name: '图片包',
+                    price: '$5',
+                    description: '150次图片文字提取，用于真实内容学习'
+                }
+            }
+        },
+
+        support: {
+            title: '支持该项目'
         },
         buttons: {
             buyNow: '立即购买',
