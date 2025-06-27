@@ -44,6 +44,7 @@ const SentenceForm = ({
     const [imagePreview, setImagePreview] = useState(null);
     const [isProcessingImage, setIsProcessingImage] = useState(false);
     const fileInputRef = useRef(null);
+    const textInputRef = useRef(null);
     const router = useRouter();
     const { theme } = useTheme();
 
@@ -94,6 +95,13 @@ const SentenceForm = ({
         return () => {
             delete window.setInputText;
         };
+    }, []);
+
+    // Focus the text input when component mounts
+    useEffect(() => {
+        if (textInputRef.current) {
+            textInputRef.current.focus();
+        }
     }, []);
 
     // Function to play the paste sound
@@ -533,6 +541,7 @@ const SentenceForm = ({
                             maxLength={200}
                             onPaste={handlePaste}
                             disabled={!!imagePreview}
+                            inputRef={textInputRef}
                         />
                         {imagePreview && (
                             <div className={styles.textInputOverlay}>

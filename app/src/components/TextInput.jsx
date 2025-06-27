@@ -14,13 +14,17 @@ const TextInput = ({
   maxLength = 120,
   onPaste,
   language,
+  inputRef,
   ...props
 }) => {
   const textareaRef = useRef(null);
 
+  // Use external ref if provided, otherwise use internal ref
+  const actualRef = inputRef || textareaRef;
+
   // Auto-resize function
   const autoResize = () => {
-    const textarea = textareaRef.current;
+    const textarea = actualRef.current;
     if (textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
@@ -47,7 +51,7 @@ const TextInput = ({
 
   return (
     <textarea
-      ref={textareaRef}
+      ref={actualRef}
       value={value}
       onChange={handleChange}
       placeholder={placeholder}

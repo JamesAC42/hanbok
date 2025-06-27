@@ -247,6 +247,11 @@
 
 .analyzeButton {
     border-radius:1.5rem;
+    border-color:var(--primary) !important;
+    box-shadow: 0.25rem 0.25rem 0 var(--primary) !important;
+    &:hover {
+        box-shadow:0.375rem 0.375rem 0 var(--primary) !important;
+    }
 }
 
 .imagePreviewContainer {
