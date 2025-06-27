@@ -530,7 +530,7 @@ const SentenceForm = ({
                             onChange={(e) => setText(e.target.value)}
                             placeholder={translationMode ? getNativePlaceholder() : getLocalizedPlaceholder()}
                             variant="large"
-                            maxLength={1000}
+                            maxLength={200}
                             onPaste={handlePaste}
                             disabled={!!imagePreview}
                         />
@@ -546,7 +546,7 @@ const SentenceForm = ({
                                 <TextInput
                                     language={nativeLanguage}
                                     value={textContext}
-                                    maxLength={1000}
+                                    maxLength={200}
                                     onChange={(e) => setTextContext(e.target.value)}
                                     placeholder={getContextPlaceholder()}
                                     variant="large"

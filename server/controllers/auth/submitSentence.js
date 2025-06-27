@@ -426,13 +426,13 @@ const submitSentence = async (req, res) => {
 
     } else {
 
-        if (!text || text.length > 120) {
+        if (!text || text.length > 200) {
             return res.json({
                 message: {
                     isValid: false,
                     error: {
                         type: "validation",
-                        message: "Text must be between 1 and 80 characters"
+                        message: "Text must be between 1 and 200 characters"
                     }
                 }
             });
