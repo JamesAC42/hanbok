@@ -22,6 +22,8 @@ export default function TutorPage() {
   const [targetLanguage, setTargetLanguage] = useState('ko');
   const [linkedSentence, setLinkedSentence] = useState(null);
   const [conversationCount, setConversationCount] = useState(null);
+  const [conversationLimits, setConversationLimits] = useState(null);
+  const [isLoadingLimits, setIsLoadingLimits] = useState(true);
   const messagesEndRef = useRef(null);
   
   // Use the existing language context
@@ -52,9 +54,10 @@ export default function TutorPage() {
     scrollToBottom();
   }, [messages]);
 
-  // Load conversations on component mount
+  // Load conversations and limits on component mount
   useEffect(() => {
     loadConversations();
+    loadConversationLimits();
   }, []);
 
   // Handle URL parameters for loading specific conversations and sentences
@@ -113,6 +116,26 @@ export default function TutorPage() {
       //console.error('Error loading conversations:', error);
     } finally {
       setIsLoadingConversations(false);
+    }
+  };
+
+  const loadConversationLimits = async () => {
+    try {
+      setIsLoadingLimits(true);
+      const response = await fetch('/api/conversations/limits', {
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setConversationLimits(data.limits);
+      } else {
+        //console.error('Failed to load conversation limits');
+      } 
+    } catch (error) {
+      //console.error('Error loading conversation limits:', error);
+    } finally {
+      setIsLoadingLimits(false);
     }
   };
 
@@ -279,6 +302,7 @@ export default function TutorPage() {
                     }
                     setIsLoading(false);
                     await loadConversations();
+                    await loadConversationLimits(); // Refresh limits after creating conversation
                     // Update conversation count if sentence is linked
                     if (sentenceId) {
                       loadSentencePreview(sentenceId);
@@ -316,11 +340,33 @@ export default function TutorPage() {
         .replace('{maxAllowed}', conversationCount.maxAllowed));
       return;
     }
+
+    // Check monthly conversation limits for new conversations
+    if (!currentConversation && conversationLimits && !conversationLimits.canCreateConversation) {
+      alert(t('tutor.limits.monthlyLimitReached'));
+      return;
+    }
+
+    // Check if free users are trying to create blank conversations
+    if (!currentConversation && !sentenceId && conversationLimits && !conversationLimits.canCreateBlankConversation) {
+      alert(t('tutor.limits.freeUserRestriction'));
+      return;
+    }
     
     if (!currentConversation) {
       // Create new conversation
       await createNewConversation(content, sentenceId);
       return;
+    }
+
+    // Check if current conversation has reached message limit
+    if (currentConversation && conversationLimits) {
+      const currentUserMessages = messages.filter(msg => msg.role === 'user').length;
+      if (currentUserMessages >= conversationLimits.maxUserMessages) {
+        alert(t('tutor.limits.messageLimitReached')
+          .replace('{limit}', conversationLimits.maxUserMessages));
+        return;
+      }
     }
 
     try {
@@ -435,6 +481,7 @@ export default function TutorPage() {
                     }
                     setIsLoading(false);
                     await loadConversations(); // Refresh to update lastUpdated
+                    await loadConversationLimits(); // Refresh limits after sending message
                     break;
                 }
               } catch (parseError) {
@@ -507,6 +554,71 @@ export default function TutorPage() {
     });
   };
 
+  // Helper functions to determine input state
+  const canCreateNewConversation = () => {
+    if (!conversationLimits) return true;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const sentenceId = urlParams.get('sentenceId');
+    
+    // Check monthly limit
+    if (!conversationLimits.canCreateConversation) return false;
+    
+    // Check if free user trying to create blank conversation
+    if (!sentenceId && !conversationLimits.canCreateBlankConversation) return false;
+    
+    // Check sentence-specific limits if applicable
+    if (sentenceId && conversationCount && !conversationCount.canCreateMore) return false;
+    
+    return true;
+  };
+
+  const canSendMessage = () => {
+    if (!currentConversation) {
+      // For new conversations, check if we can create one
+      return canCreateNewConversation();
+    }
+    
+    // For existing conversations, check message limit
+    if (conversationLimits) {
+      const currentUserMessages = messages.filter(msg => msg.role === 'user').length;
+      return currentUserMessages < conversationLimits.maxUserMessages;
+    }
+    
+    return true;
+  };
+
+  const getInputDisableReason = () => {
+    if (!conversationLimits) return null;
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    const sentenceId = urlParams.get('sentenceId');
+    
+    if (!currentConversation) {
+      // New conversation restrictions
+      if (!conversationLimits.canCreateConversation) {
+        return t('tutor.limits.monthlyLimitReached');
+      }
+      if (!sentenceId && !conversationLimits.canCreateBlankConversation) {
+        return t('tutor.limits.freeUserRestriction');
+      }
+      if (sentenceId && conversationCount && !conversationCount.canCreateMore) {
+        return t('tutor.sentencePreview.limitReached')
+          .replace('{count}', conversationCount.count)
+          .replace('{maxAllowed}', conversationCount.maxAllowed);
+      }
+    } else {
+      // Existing conversation message limit
+      const currentUserMessages = messages.filter(msg => msg.role === 'user').length;
+      if (currentUserMessages >= conversationLimits.maxUserMessages) {
+        return t('tutor.limits.messageLimitReached')
+          .replace('{limit}', conversationLimits.maxUserMessages);
+      }
+    }
+    
+    return null;
+  };
+
   // Don't render while main auth is loading
   if (loading || !isAuthenticated) return null;
 
@@ -529,13 +641,55 @@ export default function TutorPage() {
           <button 
             className={styles.newChatButton}
             onClick={() => {
+              // Clear URL parameters when starting a blank conversation
+              const url = new URL(window.location);
+              url.searchParams.delete('sentenceId');
+              url.searchParams.delete('conversation');
+              window.history.replaceState({}, '', url);
+              
               setCurrentConversation(null);
               setMessages([]);
+              setLinkedSentence(null);
+              setConversationCount(null);
               setSidebarCollapsed(true);
             }}
+            disabled={!canCreateNewConversation()}
+            title={
+              !canCreateNewConversation() && conversationLimits && !conversationLimits.canCreateBlankConversation 
+                ? t('tutor.limits.freeUserRestriction')
+                : !canCreateNewConversation() && conversationLimits && !conversationLimits.canCreateConversation
+                ? t('tutor.limits.monthlyLimitReached')
+                : ''
+            }
           >
             {t('tutor.newChat')}
           </button>
+
+          {/* Rate Limit Status */}
+          {conversationLimits && !isLoadingLimits && (
+            <div className={styles.rateLimitStatus}>
+              <div className={styles.rateLimitInfo}>
+                <span className={styles.rateLimitLabel}>
+                  {t('tutor.limits.monthlyConversations')}
+                </span>
+                <span className={styles.rateLimitUsage}>
+                  {conversationLimits.monthlyConversations.used}/{conversationLimits.monthlyConversations.total}
+                </span>
+              </div>
+              
+              {conversationLimits.tier === 0 && (
+                <div className={styles.tierNotice}>
+                  {t('tutor.limits.freeUserNotice')}
+                </div>
+              )}
+              
+              {!conversationLimits.canCreateConversation && (
+                <div className={styles.limitWarning}>
+                  {t('tutor.limits.monthlyLimitReachedWarning')}
+                </div>
+              )}
+            </div>
+          )}
           
           <div className={styles.conversationsList}>
             {isLoadingConversations ? (
@@ -772,6 +926,13 @@ export default function TutorPage() {
           )}
           
           <div className={styles.chatInput}>
+            {/* Show disable reason if input is disabled */}
+            {getInputDisableReason() && (
+              <div className={styles.inputDisableMessage}>
+                {getInputDisableReason()}
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className={styles.inputContainer}>
               <textarea
                 className={styles.messageInput}
@@ -779,17 +940,19 @@ export default function TutorPage() {
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder={
-                  currentConversation 
+                  !canSendMessage() && getInputDisableReason()
+                    ? t('tutor.messages.inputDisabled')
+                    : currentConversation 
                     ? t('tutor.messages.typePlaceholder')
                     : t('tutor.messages.startPlaceholder')
                 }
-                disabled={isLoading}
+                disabled={isLoading || !canSendMessage()}
                 rows={1}
               />
               <button 
                 type="submit" 
                 className={styles.sendButton}
-                disabled={!inputValue.trim() || isLoading}
+                disabled={!inputValue.trim() || isLoading || !canSendMessage()}
               >
                 {t('tutor.messages.send')}
               </button>

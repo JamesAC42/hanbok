@@ -1,5 +1,6 @@
 export const en = {
     languagePicker: {
+        language: 'Language',
         changeNative: 'Change your native language:',
         changeLearning: 'Change the language you\'re learning:',
         tooltip: 'Tap here to change language'
@@ -154,6 +155,7 @@ export const en = {
             plus: 'Plus',
             unknown: 'Unknown'
         },
+        signOut: "Sign Out",
         remainingAudioGenerations: 'Remaining Audio Generations',
         remainingImageExtracts: 'Remaining Image Extracts',
         remainingSentenceAnalyses: 'Remaining Sentence Analyses',
@@ -181,6 +183,21 @@ export const en = {
                 description: 'Enjoy unlimited sentence analyses, audio generations, image extractions, saves, and priority support!'
             },
             moreDetails: 'For more details, visit our'
+        },
+        settings: "Settings:",
+        themes: {
+            theme: "Theme",
+            light: "Light",
+            dark: "Dark",
+            sepia: "Sepia",
+            neopolitan: "Neopolitan",
+            forest: "Forest",
+            wiiu: "WiiU",
+            edo: "Edo",
+            rocket: "Rocket",
+            miku: "Miku",
+            frutiger: "Frutiger",
+            lizard: "Lizard"
         }
     },
     login: {
@@ -308,7 +325,14 @@ export const en = {
         translateMode: {
             analysis: 'Analyze {language} sentence',
             translate: 'How do I say...',
-        }
+        },
+        mode: "Mode",
+        translate: "Translate",
+        analyze: "Analyze",
+        askAI: "Ask AI",
+        askAIHelp: "Ask AI tutor about this sentence",
+        howDoISay: "How Do I Say...?",
+        gotASentence: "Got a sentence? Let's dissect it.",
     },
     analysis: {
         pageTitle: 'Hanbok - Sentence: ',
@@ -360,7 +384,9 @@ export const en = {
             playSoundEffects: "Play sound effects"
         },
         grammar: 'Grammar',
-        examples: 'Examples'
+        examples: 'Examples',
+        askAI: 'Ask AI',
+        askAIHelp: "Ask AI tutor about this sentence"
     },
     limitReached: {
         storageTitle: 'Storage Limit Reached',
@@ -811,4 +837,82 @@ export const en = {
             back: "Back to Lyrics"
         }
     },
+    history: {
+        pageTitle: 'Hanbok - History',
+        title: 'History',
+        loading: 'Loading...',
+        noSentences: 'No sentences found.',
+        generateSentences: 'Generate some sentences to see them here!',
+        createdOn: 'Created on',
+        prev: 'Previous',
+        next: 'Next',
+        pageOf: 'Page {current} of {total}',
+        fetchError: 'Failed to fetch sentences.'
+    },
+    tutor: {
+        pageTitle: 'Hanbok - AI Tutor',
+        chatHistory: 'Chat History',
+        newChat: '+ New Chat',
+        collapseSidebar: 'Collapse sidebar',
+        showSidebar: 'Show sidebar',
+        loadingConversations: 'Loading conversations...',
+        noConversations: 'No conversations yet',
+        deleteConversation: 'Delete conversation',
+        deleteConfirm: 'Are you sure you want to delete this conversation?',
+        deleteFailed: 'Failed to delete conversation',
+        linkedTo: 'Linked to:',
+        sentencePreview: {
+            title: 'Asking about sentence analysis:',
+            conversationsUsed: 'conversations used',
+            limitWarning: 'You\'ve reached the conversation limit for this sentence. Upgrade to create more conversations.',
+            limitReached: 'You\'ve reached the conversation limit for this sentence ({count}/{maxAllowed}). Please upgrade your plan or use an existing conversation.'
+        },
+        activeSentence: {
+            discussing: 'Discussing sentence:',
+            viewAnalysis: 'View Full Analysis →'
+        },
+        messages: {
+            aiTutor: 'AI Tutor',
+            writing: 'Writing',
+            aiThinking: 'AI is thinking',
+            typePlaceholder: 'Type your message...',
+            startPlaceholder: 'Start a new conversation...',
+            send: 'Send',
+            inputDisabled: 'Input disabled due to limits'
+        },
+        intro: {
+            title: 'Questions? - Ask Anything!',
+            chooseLanguage: 'Choose your target language:',
+            description: 'I\'m here to help you learn! Ask me about grammar rules, word meanings, pronunciation, cultural context, or anything else you\'re curious about.',
+            tryAsking: 'Try asking:'
+        },
+        errors: {
+            createFailed: 'Failed to create conversation',
+            sendFailed: 'Failed to send message'
+        },
+        limits: {
+            monthlyConversations: 'Monthly Conversations',
+            freeUserRestriction: 'Free users can only start conversations from sentence analysis pages. Upgrade to start conversations from scratch.',
+            monthlyLimitReached: 'You\'ve reached your monthly conversation limit.',
+            freeUserNotice: 'Free users can only start conversations from sentences.',
+            monthlyLimitReachedWarning: 'Monthly limit reached. Upgrade for more conversations.',
+            messageLimitReached: 'You\'ve reached the message limit ({limit}) for this conversation. Start a new conversation or upgrade for more messages.',
+        }
+    },
+    lessons: {
+        comingSoon: "Coming Soon"
+    },
+    sidebar: {
+        myAccount: "My Account",
+        analyzeText: "Analyze Text",
+        savedSentences: "Saved Sentences",
+        flashcards: "Flashcards",
+        tutor: "Tutor",
+        history: "History",
+        lyrics: "Lyrics",
+        lessons: "Lessons",
+        feedback: "Feedback",
+        viewPlans: "View Plans",
+        navigation: "Navigation"
+    }
 }; 

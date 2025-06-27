@@ -384,6 +384,12 @@ app.get('/api/conversations', isAuthenticated, async (req, res) => {
     getConversations(req, res);
 });
 
+// Get conversation rate limits (must be before parameterized routes)
+app.get('/api/conversations/limits', async (req, res) => {
+    const { getConversationLimits } = require('./controllers/conversations/conversations');
+    getConversationLimits(req, res);
+});
+
 app.get('/api/conversations/:conversationId', isAuthenticated, async (req, res) => {
     const { getConversation } = require('./controllers/conversations/conversations');
     getConversation(req, res);

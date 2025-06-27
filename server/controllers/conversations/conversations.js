@@ -1,18 +1,19 @@
 const { getDb } = require('../../database');
 const { generateTutorResponse } = require('../../llm/tutorResponse');
 const { generateTutorResponseStream } = require('../../llm/tutorResponseStream');
+const getPreviousSunday = require('../../utils/getPreviousSunday');
 
 /**
  * Tier limitations for conversations:
- * - Tier 0 (Free): 1 user message per conversation, 1 conversation per sentence
- * - Tier 1 (Basic): 200 user messages per conversation, 1 conversation per sentence
- * - Tier 2 (Plus): 200 user messages per conversation, unlimited conversations per sentence
+ * Free: 5 conversations/month, 1 conversation per sentence, and 5 messages per conversation
+ * Basic: 50 conversations/month, 2 conversations per sentence, and 15 messages per conversation
+ * Plus: 200 conversations/month, 5 conversations per sentence, and 50 messages per conversation
  */
 
 const TIER_LIMITS = {
-  0: { maxUserMessages: 1, maxConversationsPerSentence: 1 }, // Free
-  1: { maxUserMessages: 50, maxConversationsPerSentence: 1 }, // Basic
-  2: { maxUserMessages: 200, maxConversationsPerSentence: Infinity } // Plus
+  0: { maxUserMessages: 1, maxConversationsPerSentence: 1, monthlyConversations: 5 }, // Free
+  1: { maxUserMessages: 50, maxConversationsPerSentence: 1, monthlyConversations: 50 }, // Basic
+  2: { maxUserMessages: 200, maxConversationsPerSentence: Infinity, monthlyConversations: 200 } // Plus
 };
 
 // Helper function to get next sequence value
@@ -88,6 +89,137 @@ async function getNextSequence(name) {
   return result.value.seq;
 }
 
+// Helper function to get first day of current month
+function getFirstDayOfMonth() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1);
+}
+
+// Check conversation rate limits 
+const checkConversationRateLimits = async (req, db, requireSentence = false) => {
+  const userId = req.session.user ? req.session.user.userId : null;
+  const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  const monthStartDate = getFirstDayOfMonth();
+  
+  // Skip rate limiting for paid users (Plus tier)
+  if (userId !== null) {
+    const user = await db.collection('users').findOne({ userId });
+    
+    // Plus users (tier 2) have high limits but still need to be tracked
+    if (user && user.tier === 2) {
+      // Still check but with high limits
+    } else if (user && user.tier === 0 && !requireSentence) {
+      // Free users must start conversations from sentences only
+      return { 
+        hasQuota: false,
+        message: {
+          type: 'conversation_limit_exceeded',
+          message: 'Free users can only start conversations from sentence analysis pages. Upgrade to Basic or Plus to start conversations from scratch.',
+          remaining: 0
+        }
+      };
+    }
+  } else if (!requireSentence) {
+    // Non-logged users must start conversations from sentences only
+    return { 
+      hasQuota: false,
+      message: {
+        type: 'conversation_limit_exceeded',
+        message: 'Please log in to start conversations, or start a conversation from a sentence analysis page.',
+        remaining: 0
+      }
+    };
+  }
+  
+  // Determine identifier for rate limiting
+  const identifier = userId !== null ? userId.toString() : ipAddress;
+  const identifierType = userId !== null ? 'userId' : 'ipAddress';
+  
+  // Get or create rate limit record
+  let rateLimitRecord = await db.collection('rate_limits').findOne({ 
+    identifier,
+    identifierType 
+  });
+  
+  if (!rateLimitRecord) {
+    // Create new record
+    rateLimitRecord = {
+      identifier,
+      identifierType,
+      totalSentences: 0,
+      weekSentences: 0,
+      weekStartDate: getPreviousSunday(),
+      monthlyConversations: 0,
+      monthStartDate,
+      totalConversations: 0,
+      lastConversationCreated: null,
+      lastUpdated: new Date()
+    };
+    await db.collection('rate_limits').insertOne(rateLimitRecord);
+  } else {
+    // Check if we need to reset monthly counter
+    if (!rateLimitRecord.monthStartDate || rateLimitRecord.monthStartDate < monthStartDate) {
+      await db.collection('rate_limits').updateOne(
+        { identifier, identifierType },
+        { 
+          $set: { 
+            monthlyConversations: 0, 
+            monthStartDate, 
+            lastUpdated: new Date()
+          }
+        }
+      );
+      rateLimitRecord.monthlyConversations = 0;
+      rateLimitRecord.monthStartDate = monthStartDate;
+    }
+  }
+  
+  // Get user tier to determine limits
+  let tierLimits = TIER_LIMITS[0]; // Default to free tier
+  if (userId) {
+    const user = await db.collection('users').findOne({ userId });
+    if (user) {
+      tierLimits = TIER_LIMITS[user.tier] || TIER_LIMITS[0];
+    }
+  }
+  
+  // Check if user has exceeded the monthly quota
+  const hasQuota = (rateLimitRecord.monthlyConversations || 0) < tierLimits.monthlyConversations;
+  
+  // Create appropriate message for quota exceeded
+  const message = hasQuota ? null : {
+    type: 'conversation_limit_exceeded',
+    message: `You have used all ${tierLimits.monthlyConversations} of your monthly conversation quota. Upgrade for more conversations or wait until next month.`,
+    remaining: 0,
+    monthlyUsed: rateLimitRecord.monthlyConversations || 0,
+    monthlyTotal: tierLimits.monthlyConversations
+  };
+  
+  return {
+    hasQuota,
+    message,
+    rateLimitRecord,
+    tierLimits
+  };
+};
+
+// Increment conversation rate limits after successful creation
+const incrementConversationRateLimits = async (identifier, identifierType, db) => {
+  await db.collection('rate_limits').updateOne(
+    { identifier, identifierType },
+    { 
+      $inc: { 
+        totalConversations: 1,
+        monthlyConversations: 1
+      },
+      $set: { 
+        lastConversationCreated: new Date(),
+        lastUpdated: new Date() 
+      }
+    }
+  );
+};
+
 // Helper function to generate conversation title from first message
 function generateConversationTitle(firstMessage) {
   const maxLength = 50;
@@ -141,16 +273,28 @@ async function getConversationCount(req, res) {
 async function createConversation(req, res) {
   try {
     const { sentenceId, initialMessage, targetLanguage = 'ko', responseLanguage = 'en', model = 'openai', skipAiResponse = false } = req.body;
-    const userId = req.session.user.userId;
+    const userId = req.session.user ? req.session.user.userId : null;
     const db = getDb();
 
-    // Get user tier
-    const user = await db.collection('users').findOne({ userId });
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+    // Check conversation rate limits
+    const rateLimitCheck = await checkConversationRateLimits(req, db, !!sentenceId);
+    if (!rateLimitCheck.hasQuota) {
+      return res.status(403).json({
+        success: false,
+        error: rateLimitCheck.message
+      });
     }
 
-    const tierLimits = TIER_LIMITS[user.tier];
+    // Get user tier if logged in
+    let user = null;
+    let tierLimits = TIER_LIMITS[0]; // Default to free tier
+    if (userId) {
+      user = await db.collection('users').findOne({ userId });
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+      tierLimits = TIER_LIMITS[user.tier] || TIER_LIMITS[0];
+    }
 
     // Check if sentence-based conversation is allowed for this tier
     let sentence = null;
@@ -161,15 +305,17 @@ async function createConversation(req, res) {
         return res.status(404).json({ success: false, message: 'Sentence not found' });
       }
 
-      // Check conversation limits per sentence for this tier
-      const existingConversations = await db.collection('conversations')
-        .countDocuments({ userId, sentenceId, isDeleted: { $ne: true } });
-      
-      if (existingConversations >= tierLimits.maxConversationsPerSentence) {
-        return res.status(403).json({ 
-          success: false, 
-          message: `Your tier allows maximum ${tierLimits.maxConversationsPerSentence} conversation(s) per sentence. Upgrade to Plus for unlimited conversations.` 
-        });
+      // Check conversation limits per sentence for this tier (only for logged in users)
+      if (userId) {
+        const existingConversations = await db.collection('conversations')
+          .countDocuments({ userId, sentenceId, isDeleted: { $ne: true } });
+        
+        if (existingConversations >= tierLimits.maxConversationsPerSentence) {
+          return res.status(403).json({ 
+            success: false, 
+            message: `Your tier allows maximum ${tierLimits.maxConversationsPerSentence} conversation(s) per sentence. Upgrade to Plus for unlimited conversations.` 
+          });
+        }
       }
     }
 
@@ -205,6 +351,11 @@ async function createConversation(req, res) {
     // Insert conversation and initial message
     await db.collection('conversations').insertOne(conversation);
     await db.collection('conversation_messages').insertOne(userMessage);
+
+    // Increment conversation rate limits
+    const identifier = userId !== null ? userId.toString() : (req.headers['x-forwarded-for'] || req.socket.remoteAddress);
+    const identifierType = userId !== null ? 'userId' : 'ipAddress';
+    await incrementConversationRateLimits(identifier, identifierType, db);
 
     // Generate AI response for the initial message (unless skipped)
     let aiResponse = null;
@@ -627,6 +778,78 @@ async function updateConversationTitle(req, res) {
   }
 }
 
+// Get conversation rate limit status
+async function getConversationLimits(req, res) {
+  try {
+    const userId = req.session.user ? req.session.user.userId : null;
+    const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const monthStartDate = getFirstDayOfMonth();
+    const db = getDb();
+
+    // Determine identifier for rate limiting
+    const identifier = userId !== null ? userId.toString() : ipAddress;
+    const identifierType = userId !== null ? 'userId' : 'ipAddress';
+
+    // Get user tier limits
+    let tierLimits = TIER_LIMITS[0]; // Default to free tier
+    let user = null;
+    if (userId) {
+      user = await db.collection('users').findOne({ userId });
+      if (user) {
+        tierLimits = TIER_LIMITS[user.tier] || TIER_LIMITS[0];
+      }
+    }
+
+    // Get rate limit record
+    let rateLimitRecord = await db.collection('rate_limits').findOne({ 
+      identifier,
+      identifierType 
+    });
+
+    if (!rateLimitRecord) {
+      // Create default record structure for response
+      rateLimitRecord = {
+        monthlyConversations: 0,
+        monthStartDate,
+        totalConversations: 0
+      };
+    } else {
+      // Check if we need to reset monthly counter for display purposes
+      if (!rateLimitRecord.monthStartDate || rateLimitRecord.monthStartDate < monthStartDate) {
+        rateLimitRecord.monthlyConversations = 0;
+      }
+    }
+
+    const monthlyUsed = rateLimitRecord.monthlyConversations || 0;
+    const monthlyLimit = tierLimits.monthlyConversations;
+    const monthlyRemaining = Math.max(0, monthlyLimit - monthlyUsed);
+    const canCreateConversation = monthlyRemaining > 0;
+
+    // Check if free users can start conversations without sentence
+    const canCreateBlankConversation = userId ? (user.tier > 0) : false;
+
+    res.json({
+      success: true,
+      limits: {
+        tier: user ? user.tier : 0,
+        monthlyConversations: {
+          used: monthlyUsed,
+          total: monthlyLimit,
+          remaining: monthlyRemaining
+        },
+        canCreateConversation,
+        canCreateBlankConversation,
+        maxUserMessages: tierLimits.maxUserMessages,
+        maxConversationsPerSentence: tierLimits.maxConversationsPerSentence
+      }
+    });
+
+  } catch (error) {
+    console.error('Error getting conversation limits:', error);
+    res.status(500).json({ success: false, message: 'Failed to get conversation limits' });
+  }
+}
+
 // Stream message response (for real-time AI responses)
 async function addMessageStream(req, res) {
   try {
@@ -896,5 +1119,6 @@ module.exports = {
   getConversationCount,
   deleteConversation,
   updateConversationTitle,
+  getConversationLimits,
   TIER_LIMITS
 }; 

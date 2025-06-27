@@ -883,6 +883,22 @@ const collections = {
             bsonType: "date",
             description: "Date of the Sunday that started the current week"
           },
+          monthlyConversations: {
+            bsonType: ["int", "null"],
+            description: "Number of conversations started in the current month"
+          },
+          monthStartDate: {
+            bsonType: ["date", "null"],
+            description: "Date of the first day of the current month"
+          },
+          totalConversations: {
+            bsonType: ["int", "null"],
+            description: "Total number of conversations started by this user/IP"
+          },
+          lastConversationCreated: {
+            bsonType: ["date", "null"],
+            description: "Timestamp of the last conversation creation"
+          },
           lastUpdated: {
             bsonType: "date",
             description: "Timestamp of the last update to this record"
@@ -900,6 +916,9 @@ const collections = {
       },
       {
         key: { weekStartDate: 1 }
+      },
+      {
+        key: { monthStartDate: 1 }
       }
     ]
   },
