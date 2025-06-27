@@ -469,7 +469,7 @@
 
 .infoSection {
     height:fit-content;
-    padding:3rem 0;
+    padding:2rem 0;
     background:linear-gradient(to bottom, #20204b, #0a0a1a);
     background:#0a0a1a;
     
@@ -526,6 +526,205 @@
         p.infoSubHeader {
             max-width:80%;
             font-size:1rem;
+        }
+    }
+
+    // Screenshot container styles
+    .screenshotContainer {
+        margin-top:3rem;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
+        width:100%;
+        gap:2rem;
+
+        @media screen and (max-width: 768px) {
+            margin-top:2rem;
+            gap:1.5rem;
+        }
+    }
+
+    // Single screenshot styling (for wide images)
+    .screenshotSingle {
+        border:2px solid #6af7ca;
+        border-radius:1rem;
+        overflow:hidden;
+        box-shadow:0 0.5rem 2rem rgba(0, 0, 0, 0.15);
+        transition:transform 0.3s ease, box-shadow 0.3s ease;
+        width:100%;
+        max-width:60rem;
+
+        &:last-child {
+            border-color:#ff8965;
+        }
+
+        img {
+            width:100%;
+            height:auto;
+            display:block;
+        }
+
+        &.screenshotSingleMain1 {
+            transform:translateY(0.5rem) rotate(-2deg);
+            &:hover {
+                transform:translateY(-0.5rem) rotate(-3deg);
+            }
+        }
+
+        &.screenshotSingleMain2 {
+            transform:translateY(-2rem) rotate(2deg);
+            &:hover {
+                transform:translateY(-2.5rem) rotate(3deg);
+            }
+        }
+
+        &:hover {
+            box-shadow:0 1rem 3rem rgba(0, 0, 0, 0.25);
+        }
+
+        @media screen and (max-width: 1020px) {
+            max-width:90%;
+        }
+    }
+
+    // Card container for overlapping mobile screenshots
+    .screenshotCards {
+        position:relative;
+        width:45rem;
+        height:50rem;
+        margin:0 auto;
+
+        @media screen and (max-width: 768px) {
+            width:35rem;
+            height:40rem;
+        }
+
+        @media screen and (max-width: 600px) {
+            width:26rem;
+            height:32rem;
+        }
+
+        @media screen and (max-width: 400px) {
+            width:20rem;
+            height:25rem;
+        }
+    }
+
+    // Individual card styling
+    .screenshotCard {
+        position:absolute;
+        border-radius:1rem;
+        overflow:hidden;
+        box-shadow:0 0.8rem 2.5rem rgba(0, 0, 0, 0.2);
+        transition:transform 0.3s ease, box-shadow 0.3s ease;
+        border:2px solid;
+
+        img {
+            width:100%;
+            height:auto;
+            display:block;
+        }
+
+        // First card positioning and styling
+        &.card1 {
+            top:4rem;
+            left:0;
+            width:30rem;
+            transform:rotate(-3deg);
+            border-color:#356cbe;
+            z-index:2;
+
+            @media screen and (max-width: 768px) {
+                width:20rem;
+            }
+
+            @media screen and (max-width: 600px) {
+                width:15rem;
+            }
+            
+
+            &:hover {
+                transform:translate(-1rem, -1rem) scale(1.02) rotate(-4deg);
+                box-shadow:0 1.2rem 3.5rem rgba(0, 0, 0, 0.539);
+                z-index:10;
+            }
+        }
+
+        // Second card positioning and styling
+        &.card2 {
+            top:6rem;
+            right:0;
+            width:30rem;
+            transform:rotate(5deg);
+            border-color:#ff8965;
+            z-index:1;
+
+            @media screen and (max-width: 768px) {
+                width:20rem;
+                top:2.5rem;
+            }
+
+            @media screen and (max-width: 600px) {
+                width:15rem;
+                top:2rem;
+            }
+
+            &:hover {
+                transform:translate(1rem, -1rem) scale(1.02) rotate(4deg);
+                box-shadow:0 1.2rem 3.5rem rgba(0, 0, 0, 0.539);
+                z-index:10;
+            }
+        }
+    }
+
+    // Section-specific border color variations
+    &.infoSection1 .screenshotSingle {
+        &:first-child {
+            border-color:#6af7ca;
+        }
+        &:last-child {
+            border-color:#356cbe;
+        }
+    }
+
+    // Grammar section - blue theme
+    &:nth-child(4) .screenshotCard {
+        &.card1 {
+            border-color:#4a90e2;
+        }
+        &.card2 {
+            border-color:#7b68ee;
+        }
+    }
+
+    // Vocab section - warm theme
+    &:nth-child(5) .screenshotCard {
+        &.card1 {
+            border-color:#ff6b6b;
+        }
+        &.card2 {
+            border-color:#ffa726;
+        }
+    }
+
+    // Image to text section - green theme
+    &:nth-child(6) .screenshotSingle {
+        border-color:#4caf50;
+    }
+
+    // Personal tutor section - purple theme
+    &:nth-child(7) .screenshotSingle {
+        border-color:#9c27b0;
+    }
+
+    // Lyrics section - pink/orange theme
+    &:nth-child(8) .screenshotCard {
+        &.card1 {
+            border-color:#e91e63;
+        }
+        &.card2 {
+            border-color:#ff5722;
         }
     }
 }
