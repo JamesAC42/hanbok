@@ -862,6 +862,14 @@ export const de = {
         errors: {
             createFailed: 'Konversation konnte nicht erstellt werden',
             sendFailed: 'Nachricht konnte nicht gesendet werden'
+        },
+        limits: {
+            monthlyConversations: 'Monatliche Unterhaltungen',
+            freeUserRestriction: 'Kostenlose Nutzer können Gespräche nur von Satzanalyse-Seiten starten. Upgrade erforderlich, um neue Gespräche zu starten.',
+            monthlyLimitReached: 'Du hast dein monatliches Gesprächslimit erreicht.',
+            freeUserNotice: 'Kostenlose Nutzer können Gespräche nur aus Sätzen starten.',
+            monthlyLimitReachedWarning: 'Monatliches Limit erreicht. Upgrade für mehr Gespräche.',
+            messageLimitReached: 'Du hast das Nachrichtenlimit ({limit}) für dieses Gespräch erreicht. Starte ein neues Gespräch oder führe ein Upgrade durch.'
         }
     },
     lessons: {

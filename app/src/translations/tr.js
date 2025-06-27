@@ -852,6 +852,14 @@ export const tr = {
         errors: {
             createFailed: 'Sohbet oluşturulamadı',
             sendFailed: 'Mesaj gönderilemedi'
+        },
+        limits: {
+            monthlyConversations: 'Aylık Konuşmalar',
+            freeUserRestriction: 'Ücretsiz kullanıcılar yalnızca cümle analiz sayfalarından konuşma başlatabilir. Sıfırdan başlamak için yükseltin.',
+            monthlyLimitReached: 'Aylık konuşma sınırına ulaştınız.',
+            freeUserNotice: 'Ücretsiz kullanıcılar yalnızca cümlelerden konuşma başlatabilir.',
+            monthlyLimitReachedWarning: 'Aylık sınır aşıldı. Daha fazla konuşma için yükseltin.',
+            messageLimitReached: 'Bu konuşma için mesaj sınırına ({limit}) ulaştınız. Yeni bir konuşma başlatın veya planınızı yükseltin.'
         }
     },
     lessons: {

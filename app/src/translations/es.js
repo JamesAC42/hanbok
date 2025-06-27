@@ -859,6 +859,14 @@ export const es = {
         errors: {
             createFailed: 'No se pudo crear la conversación',
             sendFailed: 'No se pudo enviar el mensaje'
+        },
+        limits: {
+            monthlyConversations: 'Conversaciones mensuales',
+            freeUserRestriction: 'Los usuarios gratuitos solo pueden iniciar conversaciones desde las páginas de análisis de oraciones. Mejora para iniciar conversaciones desde cero.',
+            monthlyLimitReached: 'Has alcanzado el límite mensual de conversaciones.',
+            freeUserNotice: 'Los usuarios gratuitos solo pueden iniciar conversaciones desde frases.',
+            monthlyLimitReachedWarning: 'Límite mensual alcanzado. Mejora para tener más conversaciones.',
+            messageLimitReached: 'Has alcanzado el límite de mensajes ({limit}) en esta conversación. Inicia una nueva o mejora tu plan.'
         }
     },
     lessons: {

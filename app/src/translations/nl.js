@@ -851,6 +851,14 @@ export const nl = {
         errors: {
             createFailed: 'Kan gesprek niet aanmaken',
             sendFailed: 'Kan bericht niet verzenden'
+        },
+        limits: {
+            monthlyConversations: 'Maandelijkse gesprekken',
+            freeUserRestriction: 'Gratis gebruikers kunnen alleen gesprekken starten vanaf zinsanalysepagina\'s. Upgrade om gesprekken vanaf nul te starten.',
+            monthlyLimitReached: 'Je hebt je maandelijkse gesprekslimiet bereikt.',
+            freeUserNotice: 'Gratis gebruikers kunnen alleen gesprekken starten vanuit zinnen.',
+            monthlyLimitReachedWarning: 'Maandlimiet bereikt. Upgrade voor meer gesprekken.',
+            messageLimitReached: 'Je hebt het berichtenlimiet ({limit}) van dit gesprek bereikt. Start een nieuw gesprek of upgrade je plan.'
         }
     },
     lessons: {

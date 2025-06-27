@@ -855,6 +855,14 @@ export const zh = {
         errors: {
             createFailed: '无法创建对话',
             sendFailed: '无法发送消息'
+        },
+        limits: {
+            monthlyConversations: '每月对话次数',
+            freeUserRestriction: '免费用户只能从句子分析页面开始对话。升级以从头开始对话。',
+            monthlyLimitReached: '您已达到每月对话上限。',
+            freeUserNotice: '免费用户只能从句子开始对话。',
+            monthlyLimitReachedWarning: '已达到每月上限。升级以获得更多对话次数。',
+            messageLimitReached: '您已达到此对话的消息限制（{limit}）。请开始新对话或升级账户。'
         }
     },
     lessons: {

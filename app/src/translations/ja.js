@@ -856,6 +856,14 @@ export const ja = {
         errors: {
             createFailed: '会話の作成に失敗しました',
             sendFailed: 'メッセージの送信に失敗しました'
+        },
+        limits: {
+            monthlyConversations: '月間会話数',
+            freeUserRestriction: '無料ユーザーは文の分析ページからのみ会話を開始できます。新しい会話を始めるにはアップグレードしてください。',
+            monthlyLimitReached: '月間会話の上限に達しました。',
+            freeUserNotice: '無料ユーザーは文からのみ会話を開始できます。',
+            monthlyLimitReachedWarning: '月間上限に達しました。さらに会話するにはアップグレードしてください。',
+            messageLimitReached: 'この会話のメッセージ制限（{limit}）に達しました。新しい会話を始めるか、アップグレードしてください。'
         }
     },
     lessons: {

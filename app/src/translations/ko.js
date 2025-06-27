@@ -855,12 +855,11 @@ export const ko = {
         },
         limits: {
             monthlyConversations: '월간 대화 수',
-            freeUserRestriction: '무료 사용자는 문장 분석 페이지에서만 대화를 시작할 수 있습니다. 업그레이드하여 처음부터 대화를 시작하세요.',
+            freeUserRestriction: '무료 사용자는 문장 분석 페이지에서만 대화를 시작할 수 있습니다. 새 대화를 시작하려면 업그레이드하세요.',
             monthlyLimitReached: '월간 대화 한도에 도달했습니다.',
             freeUserNotice: '무료 사용자는 문장에서만 대화를 시작할 수 있습니다.',
             monthlyLimitReachedWarning: '월간 한도에 도달했습니다. 더 많은 대화를 위해 업그레이드하세요.',
-            messageLimitReached: '이 대화의 메시지 한도({limit})에 도달했습니다. 새 대화를 시작하거나 업그레이드하여 더 많은 메시지를 보내세요.',
-            inputDisabled: '한도로 인해 입력이 비활성화됨'
+            messageLimitReached: '이 대화의 메시지 한도({limit})에 도달했습니다. 새 대화를 시작하거나 업그레이드하세요.'
         }
     },
     lessons: {
