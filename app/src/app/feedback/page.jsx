@@ -211,6 +211,7 @@ const Feedback = () => {
     return (
         <ContentPage>
             <div className={feedbackStyles.feedbackPage}>
+                <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
                 <div className={feedbackStyles.feedbackHero}>
                     <h1 className={feedbackStyles.heroTitle}>{t('feedback.title')}</h1>
                     <p className={feedbackStyles.heroSubtitle}>{t('feedback.description')}</p>

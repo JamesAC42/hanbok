@@ -1,7 +1,7 @@
 const polyfillData = async (user, db) => {
-    // Ensure all required fields are present
+    // Ensure all required fields are present (googleId is now optional)
     if (user.email === undefined || user.userId === undefined || user.name === undefined || 
-        user.googleId === undefined || user.tier === undefined) {
+        user.tier === undefined) {
         console.error("Missing required fields for user:", user.userId);
         // Cannot update user with missing critical fields
         return user;
@@ -32,7 +32,8 @@ const polyfillData = async (user, db) => {
         safeUpdate('maxSavedWords', 60),
         safeUpdate('remainingImageExtracts', 20),
         safeUpdate('remainingSentenceAnalyses', 0),
-        safeUpdate('feedbackAudioCreditRedeemed', false)
+        safeUpdate('feedbackAudioCreditRedeemed', false),
+        safeUpdate('verified', user.googleId ? true : false) // Google users are auto-verified
     ]);
 
     // Ensure dateCreated is a Date object

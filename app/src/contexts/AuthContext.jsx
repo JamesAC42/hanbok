@@ -55,21 +55,27 @@ export function AuthProvider({ children }) {
         }));
     }
     
-    const login = async (response) => {
-        try {
-            const loginResponse = await fetch('/api/login', { 
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ token: response.credential })
-            });
-            const data = await loginResponse.json();
-            if(data.success) {
-                setUser(data.user);
+    const login = async (userDataOrGoogleResponse) => {
+        // If the parameter has a 'credential' property, it's a Google OAuth response
+        if (userDataOrGoogleResponse.credential) {
+            try {
+                const loginResponse = await fetch('/api/login', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ token: userDataOrGoogleResponse.credential })
+                });
+                const data = await loginResponse.json();
+                if(data.success) {
+                    setUser(data.user);
+                }
+            } catch (error) {
+                console.error('Error logging in with Google:', error);
             }
-        } catch (error) {
-            console.error('Error logging in:', error);
+        } else {
+            // Otherwise, it's user data from email/password login
+            setUser(userDataOrGoogleResponse);
         }
     };
 

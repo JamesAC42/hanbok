@@ -25,6 +25,7 @@
     "express-session": "^1.18.1",
     "google-auth-library": "^9.15.1",
     "mongodb": "^6.13.0",
+    "nodemailer": "^7.0.3",
     "openai": "^4.83.0",
     "redis": "^4.7.0",
     "stripe": "^17.6.0",

@@ -3,7 +3,7 @@ const collections = {
     validator: {
       $jsonSchema: {
         bsonType: "object",
-        required: ["email", "userId", "name", "googleId", "tier", "remainingAudioGenerations"],
+        required: ["email", "userId", "name", "tier", "remainingAudioGenerations"],
         properties: {
           userId: {
             bsonType: "int"
@@ -16,7 +16,16 @@ const collections = {
             pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
           },
           googleId: {
-            bsonType: "string"
+            bsonType: ["string", "null"],
+            description: "Google ID for OAuth users, null for email/password users"
+          },
+          password: {
+            bsonType: ["string", "null"],
+            description: "Hashed password for email/password users, null for OAuth users"
+          },
+          verified: {
+            bsonType: ["bool", "null"],
+            description: "Whether email address has been verified for email/password users"
           },
           tier: {
             bsonType: "int",

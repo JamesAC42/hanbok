@@ -5,12 +5,20 @@
     background: linear-gradient(to bottom, #0a0a1a, #154584, rgb(5, 39, 82));
     position: relative;
     overflow-x: hidden;
+    padding-top: 5rem; // Always leave room for navbar
+
+    img {
+        z-index: 1;
+        opacity: 0.3;
+    }
 }
 
 .lyricsHero {
     text-align: center;
     padding: 6rem 2rem 4rem 2rem;
     margin-top: 3rem;
+    position: relative;
+    z-index: 2;
     
     .heroTitle {
         font-family: var(--font-lilita);
@@ -44,6 +52,8 @@
     display: grid;
     grid-template-columns: 1fr 20rem;
     gap: 3rem;
+    position: relative;
+    z-index: 2;
     
     @media screen and (max-width: 1024px) {
         grid-template-columns: 1fr;
@@ -90,6 +100,10 @@
         position: relative;
         height: 12rem;
         overflow: hidden;
+
+        img {
+            opacity:1;
+        }
         
         .categoryOverlay {
             position: absolute;
@@ -135,6 +149,10 @@
         border-radius: 1rem;
         overflow: hidden;
         box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
+
+        img {
+            opacity:1;
+        }
         
         .categoryBannerOverlay {
             position: absolute;
@@ -287,6 +305,8 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    position: relative;
+    z-index: 2;
     
     @media screen and (max-width: 1024px) {
         order: -1;
@@ -383,9 +403,15 @@
     padding: 8rem 2rem 4rem 2rem;
     max-width: 100%;
     margin: 0;
+    position: relative;
 
     display:flex;
     flex-direction: column;
+
+    img {
+        z-index: 1;
+        opacity: 0.3;
+    }
     
     @media screen and (max-width: 1000px) {
         padding: 6rem 2rem 4rem 2rem;
@@ -400,6 +426,8 @@
     padding: 1rem 0;
     border-radius: 0.5rem;
     background: none;
+    position: relative;
+    z-index: 2;
     
     @media screen and (max-width: 750px) {
         margin-bottom: 1rem;
@@ -728,6 +756,7 @@
     margin-bottom: 2rem;
     width: 100%;
     position: relative;
+    z-index: 2;
     box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
     border: 0.125rem solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);

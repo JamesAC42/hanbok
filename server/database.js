@@ -27,7 +27,26 @@ async function connectToDatabase() {
     
     // Create indexes
     await db.collection('users').createIndex({ email: 1 }, { unique: true });
-    await db.collection('users').createIndex({ googleId: 1 }, { unique: true });
+    
+    // Create googleId index with safety check for existing conflicting indexes
+    try {
+      await db.collection('users').createIndex({ googleId: 1 }, { 
+        unique: true, 
+        partialFilterExpression: { googleId: { $type: "string" } } 
+      });
+    } catch (error) {
+      if (error.code === 85) { // Index already exists with different options
+        console.log('Recreating googleId index with new configuration...');
+        await db.collection('users').dropIndex({ googleId: 1 });
+        await db.collection('users').createIndex({ googleId: 1 }, { 
+          unique: true, 
+          partialFilterExpression: { googleId: { $type: "string" } } 
+        });
+        console.log('Successfully recreated googleId index');
+      } else {
+        throw error;
+      }
+    }
     await db.collection('sentences').createIndex({ userId: 1 });
     await db.collection('sentences').createIndex({ sentenceId: 1 }, { unique: true });
     await db.collection('savedSentences').createIndex(

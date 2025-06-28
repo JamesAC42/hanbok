@@ -44,6 +44,10 @@ const generateAudio = require('./controllers/auth/generateAudio');
 const getSentence = require('./controllers/auth/getSentence');
 
 const login = require('./controllers/auth/login');
+const loginEmail = require('./controllers/auth/loginEmail');
+const register = require('./controllers/auth/register');
+const verifyEmail = require('./controllers/auth/verifyEmail');
+const resendVerification = require('./controllers/auth/resendVerification');
 const getSession = require('./controllers/auth/getSession');
 const logout = require('./controllers/auth/logout');
 
@@ -144,6 +148,22 @@ app.get('/api/session', async (req, res) => {
 
 app.post('/api/login', (req, res) => {
     login(req, res, redisClient);
+});
+
+app.post('/api/login-email', (req, res) => {
+    loginEmail(req, res, redisClient);
+});
+
+app.post('/api/register', (req, res) => {
+    register(req, res, redisClient);
+});
+
+app.get('/api/verify/:code', (req, res) => {
+    verifyEmail(req, res, redisClient);
+});
+
+app.post('/api/resend-verification', (req, res) => {
+    resendVerification(req, res, redisClient);
 });
 
 app.post('/api/logout', (req, res) => {

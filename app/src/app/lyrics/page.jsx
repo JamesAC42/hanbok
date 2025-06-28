@@ -141,6 +141,7 @@ const Lyrics = () => {
     return (
         <ContentPage>
             <div className={lyricsStyles.lyricsPage}>
+                <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
                 <div className={lyricsStyles.lyricsHero}>
                     <h1 className={lyricsStyles.heroTitle}>{t('lyrics.title')}</h1>
                     <p className={lyricsStyles.heroSubtitle}>{t('lyrics.description')}</p>
