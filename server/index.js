@@ -170,6 +170,17 @@ app.post('/api/logout', (req, res) => {
     logout(req, res);
 });
 
+// Password reset routes
+app.post('/api/request-password-reset', (req, res) => {
+    const requestPasswordReset = require('./controllers/auth/requestPasswordReset');
+    requestPasswordReset(req, res, redisClient);
+});
+
+app.post('/api/reset-password', (req, res) => {
+    const resetPassword = require('./controllers/auth/resetPassword');
+    resetPassword(req, res, redisClient);
+});
+
 
 app.post('/api/submit', async (req, res) => {
     submitSentence(req, res);

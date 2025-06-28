@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from '@/styles/components/emailauth.module.scss';
 
 const EmailLoginForm = () => {
@@ -125,6 +126,11 @@ const EmailLoginForm = () => {
                         disabled={loading}
                         placeholder="Enter your password"
                     />
+                    <div className={styles.forgotPassword}>
+                        <Link href="/forgot-password">
+                            Forgot your password?
+                        </Link>
+                    </div>
                 </div>
 
                 {error && (

@@ -54,6 +54,29 @@
         font-size: 0.9rem;
       }
     }
+
+    .forgotPassword {
+      margin-top: 0.5rem;
+      text-align: right;
+
+      a {
+        color: #3b82f6;
+        text-decoration: none;
+        font-family: var(--font-display);
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+
+        &:hover {
+          color: #2563eb;
+          text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) {
+          font-size: 0.8rem;
+        }
+      }
+    }
   }
 
   .submitButton {
