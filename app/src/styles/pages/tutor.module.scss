@@ -68,7 +68,7 @@
 
 .toggleButton {
     background: none;
-    border: 1px solid var(--background-alt);
+    border: 0.0625rem solid var(--foreground-muted);
     cursor: pointer;
     padding: 0.5rem;
     border-radius: 0.25rem;
@@ -235,7 +235,7 @@
     z-index: 10;
     background: var(--background-alt);
     color:var(--foreground-muted);
-    border: 0.0625rem solid var(--background-alt);
+    border: 0.0625rem solid var(--foreground-muted);
     border-radius: 0.25rem;
     padding: 0.5rem;
     cursor: pointer;

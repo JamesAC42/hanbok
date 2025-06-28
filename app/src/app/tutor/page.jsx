@@ -70,6 +70,7 @@ export default function TutorPage() {
       loadConversation(parseInt(conversationId));
     } else if (sentenceId) {
       loadSentencePreview(sentenceId);
+      setSidebarCollapsed(true);
     }
   }, [conversations]);
 
