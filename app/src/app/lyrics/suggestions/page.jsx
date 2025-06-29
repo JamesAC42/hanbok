@@ -41,6 +41,7 @@ const Suggestions = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(true);
 
   // Fetch all suggestions
   useEffect(() => {
@@ -313,7 +314,23 @@ const Suggestions = () => {
           
           {/* Suggestions List */}
           <div className={styles.suggestionsSection}>
-            <h2>Community Suggestions</h2>
+            <div className={styles.sectionHeader}>
+              <h2>Community Suggestions</h2>
+              {isAdmin && isAdmin(user?.email) && (
+                <div className={styles.adminToggle}>
+                  <label className={styles.toggleLabel}>
+                    <input
+                      type="checkbox"
+                      checked={showCompleted}
+                      onChange={(e) => setShowCompleted(e.target.checked)}
+                      className={styles.toggleInput}
+                    />
+                    <span className={styles.toggleSlider}></span>
+                    Show completed suggestions
+                  </label>
+                </div>
+              )}
+            </div>
             
             {loading ? (
               <div className={styles.loading}>{t('lyrics.suggestions.status.loading')}</div>
@@ -325,7 +342,9 @@ const Suggestions = () => {
               </div>
             ) : (
               <div className={styles.suggestionsList}>
-                {suggestions.map(suggestion => (
+                {suggestions
+                  .filter(suggestion => showCompleted || suggestion.status !== 'completed')
+                  .map(suggestion => (
                   <div key={suggestion.suggestionId} className={styles.suggestionCard}>
                     <div className={styles.cardHeader}>
                       <h4>{suggestion.songName}</h4>

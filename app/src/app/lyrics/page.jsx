@@ -22,6 +22,8 @@ const Lyrics = () => {
     const [lyricsByArtist, setLyricsByArtist] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [recentLyrics, setRecentLyrics] = useState([]);
+    const [recentLoading, setRecentLoading] = useState(false);
 
     // Category data with images
     const categories = [
@@ -47,7 +49,31 @@ const Lyrics = () => {
     
     useEffect(() => {
         document.title = t('lyrics.pageTitle');
+        fetchRecentLyrics();
     }, [t]);
+
+    // Fetch recent lyrics (last 7 days)
+    const fetchRecentLyrics = async () => {
+        try {
+            setRecentLoading(true);
+            
+            const response = await fetch('/api/lyrics/recent');
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch recent lyrics');
+            }
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                setRecentLyrics(data.lyrics);
+            }
+        } catch (err) {
+            console.error('Error fetching recent lyrics:', err);
+        } finally {
+            setRecentLoading(false);
+        }
+    };
 
     // Fetch lyrics by genre
     const fetchLyricsByGenre = async (genre) => {
@@ -152,6 +178,40 @@ const Lyrics = () => {
                         {viewMode === 'categories' ? (
                             // Categories View
                             <>
+                                {/* New This Week Section */}
+                                {recentLyrics.length > 0 && (
+                                    <div className={lyricsStyles.newThisWeekSection}>
+                                        <h2 className={lyricsStyles.sectionTitle}>
+                                            {t('lyrics.newThisWeek.title', 'New This Week')}
+                                        </h2>
+                                        <div className={lyricsStyles.recentLyricsList}>
+                                            {recentLoading ? (
+                                                <div className={lyricsStyles.loading}>{t('lyrics.status.loading')}</div>
+                                            ) : (
+                                                recentLyrics.slice(0, 6).map((lyric) => (
+                                                    <Link 
+                                                        href={`/lyrics/${lyric.lyricId}`} 
+                                                        key={lyric.lyricId}
+                                                        className={lyricsStyles.recentLyricCard}
+                                                    >
+                                                        <div className={lyricsStyles.recentLyricInfo}>
+                                                            <h4>{lyric.title}</h4>
+                                                            <p>{lyric.anime || lyric.artist}</p>
+                                                            <span className={lyricsStyles.recentLyricGenre}>
+                                                                {lyric.genre}
+                                                            </span>
+                                                        </div>
+                                                        <div className={lyricsStyles.newBadge}>
+                                                            {t('lyrics.newThisWeek.badge', 'NEW')}
+                                                        </div>
+                                                    </Link>
+                                                ))
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                <h2 className={lyricsStyles.sectionTitle}>{t('lyrics.categories.title')}</h2>
                                 <div className={lyricsStyles.categoriesGrid}>
                                     {categories.map((category) => (
                                         <div 

@@ -861,7 +861,12 @@ export const en = {
         categories: {
             kpop: "K-Pop",
             jpop: "J-Pop",
-            anime: "Anime"
+            anime: "Anime",
+            title: "Categories"
+        },
+        newThisWeek: {
+            title: "New This Week",
+            badge: "NEW"
         },
         status: {
             loading: "Loading lyrics...",

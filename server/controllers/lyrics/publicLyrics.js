@@ -223,8 +223,50 @@ async function getFilterOptions(req, res) {
   }
 }
 
+// Get recently published lyrics (last 7 days)
+async function getRecentLyrics(req, res) {
+  try {
+    const db = getDb();
+    
+    // Calculate date 7 days ago
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    
+    // Get all published lyrics from the last 7 days
+    const lyrics = await db.collection('lyrics')
+      .find({ 
+        published: true,
+        dateCreated: { $gte: sevenDaysAgo }
+      })
+      .project({
+        lyricId: 1,
+        title: 1,
+        artist: 1,
+        anime: 1,
+        genre: 1,
+        language: 1,
+        dateCreated: 1
+      })
+      .sort({ dateCreated: -1 })
+      .toArray();
+    
+    return res.status(200).json({
+      success: true,
+      lyrics: lyrics
+    });
+  } catch (error) {
+    console.error('Error getting recent lyrics:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to get recent lyrics',
+      error: error.message
+    });
+  }
+}
+
 module.exports = {
   getPublishedLyrics,
   getPublishedLyric,
-  getFilterOptions
+  getFilterOptions,
+  getRecentLyrics
 }; 

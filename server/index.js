@@ -356,6 +356,22 @@ app.get('/api/lyrics/filters', async (req, res) => {
     getFilterOptions(req, res);
 });
 
+app.get('/api/lyrics/recent', async (req, res) => {
+    const { getRecentLyrics } = require('./controllers/lyrics/publicLyrics');
+    getRecentLyrics(req, res);
+});
+
+// SEO routes
+app.get('/api/sitemap/lyrics', async (req, res) => {
+    const { generateLyricsSitemap } = require('./controllers/seo/sitemap');
+    generateLyricsSitemap(req, res);
+});
+
+app.get('/robots.txt', async (req, res) => {
+    const { generateRobotsTxt } = require('./controllers/seo/sitemap');
+    generateRobotsTxt(req, res);
+});
+
 // Lyric suggestions routes
 app.get('/api/lyrics/suggestions', async (req, res) => {
     const { getSuggestions } = require('./controllers/lyrics/lyricSuggestions');
