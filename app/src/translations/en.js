@@ -910,7 +910,28 @@ export const en = {
                 line: "Line {number}",
                 close: "Close"
             },
-            back: "Back to Lyrics"
+            favorite: "Favorite",
+            back: "Back to Lyrics",
+            backToFavorites: "Back to Favorites",
+            favorited: "Favorited"
+        },
+        favorites: {
+            pageTitle: "Hanbok - My Favorite Lyrics",
+            count: "Favorites",
+            description: "View and manage your favorite lyrics",
+            empty: {
+                title: "No favorite lyrics yet",
+                description: "Add some to your favorites to see them here!",
+                explore: "Explore Lyrics"
+            },
+            backToLyrics: "Back to Lyrics",
+            title: "My Favorite Lyrics",
+            subtitle: "View and manage your favorite lyrics",
+            addToFavorites: "Add to Favorites",
+            removeFromFavorites: "Remove from Favorites",
+            sidebarTitle: "My Favorites",
+            sidebarDescription: "View and manage your favorite lyrics",
+            sidebarButton: "View Favorites"
         }
     },
     history: {

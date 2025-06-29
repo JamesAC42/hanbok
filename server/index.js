@@ -398,6 +398,27 @@ app.delete('/api/admin/lyrics/suggestions/:suggestionId', isAuthenticated, async
     deleteSuggestion(req, res);
 });
 
+// Favorite lyrics routes
+app.get('/api/lyrics/favorites', isAuthenticated, async (req, res) => {
+    const { getFavorites } = require('./controllers/lyrics/favoriteLyrics');
+    getFavorites(req, res);
+});
+
+app.post('/api/lyrics/favorites/:lyricId', isAuthenticated, async (req, res) => {
+    const { addFavorite } = require('./controllers/lyrics/favoriteLyrics');
+    addFavorite(req, res);
+});
+
+app.delete('/api/lyrics/favorites/:lyricId', isAuthenticated, async (req, res) => {
+    const { removeFavorite } = require('./controllers/lyrics/favoriteLyrics');
+    removeFavorite(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/favorited', async (req, res) => {
+    const { checkFavorite } = require('./controllers/lyrics/favoriteLyrics');
+    checkFavorite(req, res);
+});
+
 // Single lyric and analysis routes (must come after specific routes)
 app.get('/api/lyrics/:lyricId', async (req, res) => {
     const { getPublishedLyric } = require('./controllers/lyrics/publicLyrics');

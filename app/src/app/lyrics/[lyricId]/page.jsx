@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import styles from '../../../styles/pages/lyrics.module.scss';
 import Analysis from '@/components/analysis/Analysis';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { supportedLanguages } from '@/translations';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,9 +20,11 @@ import { LineMdEmail } from '@/components/icons/Email';
 import { IcTwotoneDiscord } from '@/components/icons/DiscordIcon';
 import { MaterialSymbolsPublishRounded } from '@/components/icons/Publish';
 import { BasilEyeSolid } from '@/components/icons/Eye';
+import { MaterialSymbolsFavorite, MaterialSymbolsFavoriteOutline } from '@/components/icons/Favorite';
 
 const LyricsPage = () => {
     const { t } = useLanguage();
+    const { user } = useAuth();
     const { lyricId } = useParams();
     const [lyric, setLyric] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -35,6 +38,8 @@ const LyricsPage = () => {
     const [shareTooltipVisible, setShareTooltipVisible] = useState(false);
 
     const [activeView, setActiveView] = useState('original');
+    const [isFavorited, setIsFavorited] = useState(false);
+    const [favoritesLoading, setFavoritesLoading] = useState(false);
 
     useEffect(() => {
         const fetchLyricData = async () => {
@@ -74,6 +79,15 @@ const LyricsPage = () => {
             document.title = t('lyrics.lyricPageTitle').replace('{song}', lyric.artist ? lyric.artist + ' - ' + lyric.title : lyric.title);
         }
     }, [lyric, t]);
+
+    useEffect(() => {
+        // Check if lyric is favorited when user or lyricId changes
+        if (user && lyricId) {
+            checkFavoriteStatus();
+        } else {
+            setIsFavorited(false);
+        }
+    }, [user, lyricId]);
 
     useEffect(() => {
         // Hide share tooltip after 3 seconds
@@ -144,6 +158,52 @@ const LyricsPage = () => {
                 setShareTooltipVisible(true);
             })
             .catch(err => console.error('Could not copy text: ', err));
+    };
+
+    const checkFavoriteStatus = async () => {
+        try {
+            const response = await fetch(`/api/lyrics/${lyricId}/favorited`, {
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    setIsFavorited(data.isFavorited);
+                }
+            }
+        } catch (error) {
+            console.error('Error checking favorite status:', error);
+        }
+    };
+
+    const handleFavoriteToggle = async () => {
+        if (!user) {
+            // Redirect to login if not authenticated
+            window.location.href = '/login';
+            return;
+        }
+
+        try {
+            setFavoritesLoading(true);
+            
+            const method = isFavorited ? 'DELETE' : 'POST';
+            const response = await fetch(`/api/lyrics/favorites/${lyricId}`, {
+                method,
+                credentials: 'include'
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success) {
+                    setIsFavorited(data.isFavorited);
+                }
+            }
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+        } finally {
+            setFavoritesLoading(false);
+        }
     };
 
     // Prepare the lyrics text with line numbers and highlighting
@@ -410,12 +470,29 @@ const LyricsPage = () => {
                                 {lyric.viewCount}
                             </div>
                         )}
+                        <button 
+                            className={`${styles.favoriteButton} ${isFavorited ? styles.favorited : ''}`}
+                            onClick={handleFavoriteToggle}
+                            disabled={favoritesLoading}
+                            title={user ? (isFavorited ? t('lyrics.detail.removeFavorite', 'Remove from favorites') : t('lyrics.detail.addFavorite', 'Add to favorites')) : t('lyrics.detail.loginToFavorite', 'Sign in to add to favorites')}
+                        >
+                            {isFavorited ? <MaterialSymbolsFavorite /> : <MaterialSymbolsFavoriteOutline />}
+                            {favoritesLoading ? '...' : (isFavorited ? t('lyrics.detail.favorited', 'Favorited') : t('lyrics.detail.favorite', 'Favorite'))}
+                        </button>
                     </div>
 
                     <div className={styles.backButton}>
                         <Link href="/lyrics">
                             {t('lyrics.detail.back')}
                         </Link>
+                        {user && (
+                            <>
+                                <span className={styles.buttonSeparator}>|</span>
+                                <Link href="/lyrics/favorites">
+                                    {t('lyrics.detail.backToFavorites', 'Back to Favorites')}
+                                </Link>
+                            </>
+                        )}
                     </div>
 
                     {lyric.youtubeUrl && (

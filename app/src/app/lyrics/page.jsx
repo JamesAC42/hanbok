@@ -296,6 +296,16 @@ const Lyrics = () => {
 
                     {/* Suggestions Sidebar */}
                     <div className={lyricsStyles.sidebarContainer}>
+                        {user && (
+                            <div className={lyricsStyles.favoritesPanel}>
+                                <h3>{t('lyrics.favorites.sidebarTitle', 'My Favorites')}</h3>
+                                <p>{t('lyrics.favorites.sidebarDescription', 'Access your personal collection of favorite songs')}</p>
+                                <Link href="/lyrics/favorites" className={lyricsStyles.favoritesButton}>
+                                    {t('lyrics.favorites.sidebarButton', 'View Favorites')}
+                                </Link>
+                            </div>
+                        )}
+
                         <div className={lyricsStyles.suggestionsPanel}>
                             <h3>{t('lyrics.suggestBox.title')}</h3>
                             <p>{t('lyrics.suggestBox.description')}</p>

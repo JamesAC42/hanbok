@@ -1040,6 +1040,43 @@ const collections = {
         name: "conversation_messages_index"
       }
     ]
+  },
+  user_favorite_lyrics: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "lyricId", "dateFavorited"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who favorited the lyric"
+          },
+          lyricId: {
+            bsonType: "string",
+            description: "ID of the favorited lyric"
+          },
+          dateFavorited: {
+            bsonType: "date",
+            description: "Date when the lyric was favorited"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, lyricId: 1 },
+        unique: true,
+        name: "unique_user_favorite"
+      },
+      {
+        key: { userId: 1, dateFavorited: -1 },
+        name: "user_favorites_by_date"
+      },
+      {
+        key: { lyricId: 1 },
+        name: "lyric_favorites_index"
+      }
+    ]
   }
 };
 
