@@ -933,6 +933,7 @@ export const ko = {
         analyzeText: "텍스트 분석",
         savedSentences: "저장된 문장",
         flashcards: "플래시카드",
+        koreanTyping: "한국어 타이핑",
         tutor: "튜터",
         history: "기록",
         lyrics: "가사",

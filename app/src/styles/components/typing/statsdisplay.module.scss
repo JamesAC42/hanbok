@@ -1,0 +1,230 @@
+@import "../../variables.module.scss";
+
+.statsDisplay {
+    background: var(--background);
+    border: 1px solid var(--foreground-light);
+    border-radius: 0.5rem;
+    padding: 0.8rem;
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    animation: fadeInUp 0.4s ease 0.1s both;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    
+    @media (max-width: 1200px) {
+        height: fit-content;
+        display: block;
+    }
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.6rem;
+    text-align: center;
+    font-family: var(--font-funnel);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+    
+    @media (max-width: 1200px) or (max-height: 900px) {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+    }
+
+    @media (max-width: 1200px) and (max-height: 970px) {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+    }
+    
+    @media (max-width: 870px) {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.4rem;
+    }
+    
+    @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.statItem {
+    background: var(--foreground-lighter);
+    border-radius: 0.4rem;
+    padding: 0.6rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    animation: slideInUp 0.4s ease;
+    
+    &:hover {
+        transform: translateY(-0.1rem);
+        box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 1200px) and (max-height: 970px) {
+        padding:0.3rem;
+    }
+}
+
+.statLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--foreground-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+    margin-bottom: 0.3rem;
+    transition: all 0.3s ease;
+
+    @media (max-width: 1200px) and (max-height: 970px) {
+        font-size: 0.7rem;
+
+        font-weight: 500;
+    }
+}
+
+.statValue {
+    font-size: 1.2rem;
+    font-weight: 700;
+    font-family: var(--font-funnel);
+    transition: all 0.3s ease;
+    color:var(--foreground);
+    
+    &.updating {
+        animation: valueUpdate 0.4s ease;
+    }
+    
+    &.excellent {
+        color: #28a745;
+    }
+    
+    &.good {
+        color: #007bff;
+    }
+    
+    &.okay {
+        color: #ffc107;
+    }
+    
+    &.poor {
+        color: #dc3545;
+    }
+    
+    &.active {
+        color: #17a2b8;
+        animation: pulse 2s infinite;
+    }
+
+    @media (max-width: 1200px) and (max-height: 970px) {
+        font-size:1rem;
+    }
+}
+
+.feedback {
+    border-top: 1px solid var(--foreground-light);
+    padding-top: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.feedbackItem {
+    margin-bottom: 0.4rem;
+    
+    p {
+        margin: 0;
+        font-size: 0.82rem;
+        line-height: 1.2;
+        text-align: center;
+        
+        &.excellent {
+            color: #28a745;
+        }
+        
+        &.good {
+            color: #007bff;
+        }
+        
+        &.okay {
+            color: #856404;
+        }
+        
+        &.poor {
+            color: #dc3545;
+        }
+    }
+}
+
+.tips {
+    border-top: 1px solid var(--foreground-light);
+    padding-top: 0.6rem;
+}
+
+.tip {
+    background: var(--foreground-lighter);
+    border-radius: 0.4rem;
+    padding: 0.6rem;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    color: var(--foreground);
+    
+    strong {
+        color: var(--foreground);
+        font-weight: 600;
+    }
+}
+
+// Keyframe animations for smooth interactions
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes valueUpdate {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+        color: #007bff;
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+} 

@@ -1,0 +1,70 @@
+@import "../../variables.module.scss";
+
+.overlay {
+    min-height: 80vh;
+    @include flex-center;
+    padding: 2rem;
+    width:100%;
+}
+
+.content {
+    text-align: center;
+    max-width: 30rem;
+    
+    @include flex-center-column;
+    gap: 1.5rem;
+}
+
+.icon {
+    font-size: 4rem;
+    color: var(--foreground-muted);
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--foreground);
+    font-family: var(--font-funnel);
+    margin-bottom: 0.5rem;
+}
+
+.message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--foreground-muted);
+    margin-bottom: 1.5rem;
+}
+
+.features {
+    background: var(--foreground-lighter);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-align: left;
+    
+    h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--foreground);
+        margin-bottom: 1rem;
+        font-family: var(--font-funnel);
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        
+        li {
+            padding: 0.5rem 0;
+            color: var(--foreground-muted);
+            
+            &:before {
+                content: "✓";
+                color: #28a745;
+                font-weight: bold;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+} 

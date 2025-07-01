@@ -1,0 +1,325 @@
+@import "../../variables.module.scss";
+
+.typingArea {
+    background: var(--background);
+    border: 1px solid var(--foreground-light);
+    border-radius: 0.6rem;
+    padding: 1.2rem;
+    height: 100%;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    box-sizing: border-box;
+    cursor: text;
+    
+    @include flex-center-column;
+    gap: 1.2rem;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    
+    &:hover {
+        border-color: var(--foreground-muted);
+    }
+    
+    @media (max-width: 1200px) {
+        height: fit-content;
+    }
+}
+
+.textDisplay {
+    @include flex-center;
+    min-height: 3.5rem;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    flex: 1;
+    
+    @media (max-width: 1200px) {
+        flex: 0 0 auto;
+    }
+}
+
+.paragraphText {
+    font-size: 1.43rem;
+    line-height: 1.8;
+    font-family: 'Noto Sans KR', sans-serif;
+    max-width: 100%;
+    text-align: center;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    animation: fadeInUp 0.2s ease;
+    transition: all 0.2s ease;
+
+    @media (max-width: 1500px) {
+        font-size: 1.2rem;
+        line-height: 1.7;
+    }
+    
+    @media (max-width: 1350px) {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+    
+    @media (max-width: 768px) {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    &.completed {
+        opacity: 0.9;
+        background: rgba(40, 167, 69, 0.05);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        border: 1px solid rgba(40, 167, 69, 0.2);
+        animation: completedGlow 0.5s ease;
+    }
+}
+
+.char {
+    transition: all 0.3s ease;
+    padding: 0.1rem;
+    border-radius: 0.25rem;
+    
+    &.correct {
+        background-color: #d4edda;
+        color: #155724;
+        animation: correctPulse 0.2s ease;
+    }
+    
+    &.incorrect {
+        background-color: #f8d7da;
+        color: #721c24;
+        animation: incorrectShake 0.3s ease;
+    }
+    
+    &.inProgress {
+        background-color: #cce7ff;
+        color: #0066cc;
+        animation: inProgressPulse 1.5s infinite;
+        transform: scale(1.02);
+    }
+    
+    &.current {
+        background-color: #fff3cd;
+        color: #856404;
+        animation: currentGlow 2s infinite;
+        transform: scale(1.05);
+    }
+    
+    &.pending {
+        color: var(--foreground-muted);
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+}
+
+.singleChar {
+    @include flex-center-column;
+    gap: 0.8rem;
+    animation: fadeInUp 0.2s ease;
+}
+
+.targetChar {
+    font-size: 3.85rem;
+    font-weight: 700;
+    color: var(--foreground);
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    min-height: 4.2rem;
+    @include flex-center;
+    animation: scaleIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.2s ease;
+}
+
+.userChar {
+    font-size: 1.87rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    animation: slideInLeft 0.15s ease;
+    transition: all 0.15s ease;
+    
+    .correct {
+        color: #28a745;
+    }
+    
+    .incorrect {
+        color: #dc3545;
+    }
+}
+
+.inputSection {
+    width: 100%;
+    @include flex-center-column;
+    gap: 0.8rem;
+    animation: fadeInUp 0.2s ease 0.1s both;
+}
+
+.hiddenInput {
+    position: absolute;
+    left: -9999rem;
+    opacity: 0;
+}
+
+.inputDisplay {
+    width: 100%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.inputLabel {
+    font-size: 0.88rem;
+    color: var(--foreground-muted);
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    @media (max-width: 1350px) {
+        font-size:0.6rem;
+    }
+}
+
+.inputText {
+    font-size: 1.21rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--foreground);
+    min-height: 1.3rem;
+    position: relative;
+    @include flex-center;
+    gap: 0.2rem;
+    transition: all 0.3s ease;
+}
+
+.placeholder {
+    color: var(--foreground-muted);
+    font-style: italic;
+    animation: fadeIn 0.5s ease;
+    @media (max-width: 1350px) {
+        font-size:0.8rem;
+    }
+}
+
+
+.instructions {
+    text-align: center;
+    color: var(--foreground-muted);
+    font-size: 0.88rem;
+    line-height: 1.4;
+    animation: fadeInUp 0.2s ease 0.15s both;
+    transition: all 0.2s ease;
+    
+    p {
+        margin: 0;
+        transition: all 0.3s ease;
+    }
+    @media (max-width: 1350px) {
+        font-size:0.6rem;
+    }
+}
+
+// Keyframe animations for smooth transitions and interactions
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(1.5rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-2rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes correctPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0.5rem rgba(40, 167, 69, 0.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes incorrectShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-0.2rem);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(0.2rem);
+    }
+}
+
+@keyframes inProgressPulse {
+    0%, 100% {
+        background-color: #cce7ff;
+        box-shadow: 0 0 0 rgba(0, 102, 204, 0.3);
+    }
+    50% {
+        background-color: #b3daff;
+        box-shadow: 0 0 0.5rem rgba(0, 102, 204, 0.5);
+    }
+}
+
+@keyframes currentGlow {
+    0%, 100% {
+        background-color: #fff3cd;
+        box-shadow: 0 0 0 rgba(255, 193, 7, 0.4);
+    }
+    50% {
+        background-color: #ffeaa7;
+        box-shadow: 0 0 0.8rem rgba(255, 193, 7, 0.6);
+    }
+}
+
+@keyframes completedGlow {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(40, 167, 69, 0.2);
+    }
+    50% {
+        transform: scale(1.01);
+        box-shadow: 0 0 1rem rgba(40, 167, 69, 0.4);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(40, 167, 69, 0.2);
+    }
+}
+
+ 

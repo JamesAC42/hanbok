@@ -20,6 +20,7 @@ import { MaterialSymbolsLibraryBooksSharp } from "./icons/LibraryBooks";
 import { CuidaSidebarCollapseOutline } from "./icons/Collapse";
 import { IcBaselinePerson } from "./icons/Profile";
 import { MaterialSymbolsHistory } from "./icons/History";
+import { MaterialSymbolsKeyboard } from "./icons/Keyboard";
 
 // Hamburger Menu Icon Component
 function HamburgerMenuIcon() {
@@ -273,6 +274,20 @@ function Sidebar() {
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}
+                                    ${getActiveClass("/typing")}`}
+                                onClick={() => navigateTo("/typing")}>
+                                <div className={styles.sidebarSectionItemIcon}>
+                                    <MaterialSymbolsKeyboard />
+                                </div>
+                                <div className={styles.sidebarSectionItemText}>
+                                    {t('sidebar.koreanTyping')}
+                                </div>
+                            </div>
+                            <div 
+                                onMouseEnter={() => setHoverTransform(1, 3)}
+                                className={`
+                                    ${styles.sidebarSectionItem}
+                                    ${expanding ? styles.expanding : ""}
                                     ${getActiveClass("/tutor")}`}
                                 onClick={() => navigateTo("/tutor")}>
                                 <div className={styles.sidebarSectionItemIcon}>
@@ -283,7 +298,7 @@ function Sidebar() {
                                 </div>
                             </div>
                             <div 
-                                onMouseEnter={() => setHoverTransform(1, 3)}
+                                onMouseEnter={() => setHoverTransform(1, 4)}
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}

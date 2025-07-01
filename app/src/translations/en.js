@@ -1004,6 +1004,7 @@ export const en = {
         analyzeText: "Analyze Text",
         savedSentences: "Saved Sentences",
         flashcards: "Flashcards",
+        koreanTyping: "Korean Typing",
         tutor: "Tutor",
         history: "History",
         lyrics: "Lyrics",

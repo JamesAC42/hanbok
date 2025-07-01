@@ -1,0 +1,204 @@
+@import "../../variables.module.scss";
+
+.modeSelector {
+    width: 100%;
+    background: var(--background);
+    border: 1px solid var(--foreground-light);
+    border-radius: 0.6rem;
+    padding: 1.2rem;
+    height: 100%;
+}
+
+.title {
+    font-size: 1.21rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.8rem;
+    text-align: center;
+    font-family: var(--font-funnel);
+}
+
+.modes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+}
+
+.modeCard {
+    background: var(--foreground-lighter);
+    border: 2px solid transparent;
+    border-radius: 0.4rem;
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &:hover {
+        border-color: var(--foreground-light);
+        transform: translateY(-0.125rem) scale(1.02);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+    }
+    
+    &.active {
+        border-color: #007bff;
+        background: rgba(0, 123, 255, 0.1);
+        transform: scale(1.02);
+        animation: selectedPulse 0.4s ease;
+    }
+}
+
+.modeHeader {
+    @include flex-center-row;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+}
+
+.modeTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin: 0;
+    font-family: var(--font-funnel);
+}
+
+.modeIcon {
+    font-size: 1.21rem;
+    color: var(--foreground-muted);
+    
+    &.active {
+        color: #007bff;
+    }
+}
+
+.modeDescription {
+    font-size: 0.88rem;
+    color: var(--foreground-muted);
+    line-height: 1.3;
+    margin: 0;
+}
+
+.rowSelector {
+    background: var(--foreground-lighter);
+    border-radius: 0.4rem;
+    padding: 1.2rem;
+    margin-bottom: 0.8rem;
+    animation: slideInUp 0.4s ease;
+    transition: all 0.3s ease;
+}
+
+.rowTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--foreground);
+    margin-bottom: 0.8rem;
+    text-align: center;
+    font-family: var(--font-funnel);
+}
+
+.rowButtons {
+    @include flex-center-row;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+.rowButton {
+    background: var(--background);
+    border: 2px solid var(--foreground-light);
+    border-radius: 0.4rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--foreground);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &:hover {
+        border-color: #007bff;
+        background: rgba(0, 123, 255, 0.1);
+        transform: translateY(-0.1rem);
+    }
+    
+    &.active {
+        background: #007bff;
+        border-color: #007bff;
+        color: white;
+        transform: scale(1.05);
+        animation: selectedPulse 0.4s ease;
+    }
+}
+
+.rowInfo {
+    text-align: center;
+    
+    p {
+        font-size: 1.1rem;
+        font-family: 'Noto Sans KR', sans-serif;
+        color: var(--foreground);
+        margin: 0;
+        letter-spacing: 0.08rem;
+    }
+}
+
+.paragraphControls {
+    background: var(--foreground-lighter);
+    border-radius: 0.4rem;
+    padding: 1.2rem;
+    text-align: center;
+    animation: slideInUp 0.4s ease;
+    transition: all 0.3s ease;
+}
+
+.newParagraphButton {
+    background: #28a745;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.6rem 1.6rem;
+    font-size: 0.99rem;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    margin-bottom: 0.6rem;
+    
+    &:hover {
+        background: #218838;
+        transform: translateY(-0.125rem) scale(1.02);
+        box-shadow: 0 0.3rem 0.8rem rgba(40, 167, 69, 0.3);
+    }
+    
+    &:active {
+        transform: translateY(0) scale(0.98);
+    }
+}
+
+.paragraphHint {
+    font-size: 0.88rem;
+    color: var(--foreground-muted);
+    line-height: 1.3;
+    margin: 0;
+}
+
+// Keyframe animations
+@keyframes selectedPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 1rem rgba(0, 123, 255, 0.3);
+    }
+    100% {
+        transform: scale(1.02);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 
