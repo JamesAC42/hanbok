@@ -50,6 +50,14 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                 </div>
                 
                 <div className={styles.content}>
+                    <h3>{t('announcement.dashboardTitle')}</h3>
+                    <p>{t('announcement.dashboardDesc')}</p>
+                    <p>{t('announcement.dashboardFeatures')}</p>
+                    
+                    <h3>{t('announcement.tutorTitle')}</h3>
+                    <p>{t('announcement.tutorDesc')}</p>
+                    <p>{t('announcement.tutorFeatures')}</p>
+                    
                     <h3>{t('announcement.lyricsPageTitle')}</h3>
                     <p>{t('announcement.lyricsPageDesc')}</p>
                     <p>{t('announcement.lyricsPageFeatures')}</p>
@@ -62,6 +70,29 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                         aria-label={t('announcement.viewLyrics')}
                     >
                         <span className={styles.buttonText}>{t('announcement.viewLyrics')}</span>
+                    </button>
+                    
+                    <h3>{t('announcement.practiceToolsTitle')}</h3>
+                    <p>{t('announcement.practiceToolsDesc')}</p>
+                    <div className={styles.practiceToolsList}>
+                        <div className={styles.practiceToolItem}>
+                            <h4>{t('announcement.koreanTypingTitle')}</h4>
+                            <p>{t('announcement.koreanTypingDesc')}</p>
+                        </div>
+                        <div className={styles.practiceToolItem}>
+                            <h4>{t('announcement.hangeulPracticeTitle')}</h4>
+                            <p>{t('announcement.hangeulPracticeDesc')}</p>
+                        </div>
+                    </div>
+                    <button 
+                        className={styles.lyricsButton}
+                        onClick={() => {
+                            router.push('/hangeul');
+                            onClose();
+                        }}
+                        aria-label={t('announcement.tryPracticeTools')}
+                    >
+                        <span className={styles.buttonText}>{t('announcement.tryPracticeTools')}</span>
                     </button>
                     
                     <h3 className={styles.highlight}>{t('announcement.newSubscription')}</h3>
