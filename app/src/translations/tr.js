@@ -932,6 +932,8 @@ export const tr = {
         analyzeText: "Metni analiz et",
         savedSentences: "Kaydedilen cümleler",
         flashcards: "Kartlar",
+        koreanTyping: "Korece Yazım",
+        learnHangeul: "Hangeul Öğren",
         tutor: "Eğitmen",
         history: "Geçmiş",
         lyrics: "Şarkı Sözleri",

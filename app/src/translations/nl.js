@@ -931,6 +931,8 @@ export const nl = {
         analyzeText: "Tekst analyseren",
         savedSentences: "Opgeslagen zinnen",
         flashcards: "Flashcards",
+        koreanTyping: "Koreaans Typen",
+        learnHangeul: "Hangeul Leren",
         tutor: "Tutor",
         history: "Geschiedenis",
         lyrics: "Songteksten",

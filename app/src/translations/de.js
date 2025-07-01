@@ -942,6 +942,8 @@ export const de = {
         analyzeText: "Text analysieren",
         savedSentences: "Gespeicherte Sätze",
         flashcards: "Karteikarten",
+        koreanTyping: "Koreanisch Tippen",
+        learnHangeul: "Hangeul Lernen",
         tutor: "Tutor",
         history: "Verlauf",
         lyrics: "Liedtexte",

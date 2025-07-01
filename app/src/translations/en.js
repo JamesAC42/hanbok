@@ -1005,6 +1005,7 @@ export const en = {
         savedSentences: "Saved Sentences",
         flashcards: "Flashcards",
         koreanTyping: "Korean Typing",
+        learnHangeul: "Learn Hangeul",
         tutor: "Tutor",
         history: "History",
         lyrics: "Lyrics",

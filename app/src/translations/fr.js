@@ -940,6 +940,8 @@ export const fr = {
         analyzeText: "Analyser un texte",
         savedSentences: "Phrases enregistrées",
         flashcards: "Cartes",
+        koreanTyping: "Frappe Coréenne",
+        learnHangeul: "Apprendre le Hangeul",
         tutor: "Tuteur",
         history: "Historique",
         lyrics: "Paroles",

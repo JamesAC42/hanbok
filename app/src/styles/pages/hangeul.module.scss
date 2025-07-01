@@ -1,0 +1,577 @@
+// Using theme variables from theme.scss
+.hangeulContainer {
+    width: 100%;
+    margin: 0;
+    padding: var(--spacing-large);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-medium);
+    font-family: var(--font-kr-sans);
+    position: relative;
+    background-image: url('/images/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    overflow-x: hidden;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: var(--spacing-medium);
+
+    .title {
+        font-size: 3rem;
+        font-weight: 400;
+        color: white;
+        margin-bottom: var(--spacing-small);
+        font-family: var(--font-lilita);
+
+        @media (min-width: 768px) {
+            font-size: 3.5rem;
+        }
+    }
+
+    .subtitle {
+        font-size: var(--text-normal);
+        color: white;
+        margin: 0;
+        font-weight: 400;
+        font-family: var(--font-body);
+    }
+}
+
+.hanbokGirl {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 14rem;
+    height: auto;
+    pointer-events: none;
+    z-index: 1;
+
+    @media (max-width: 768px) {
+        width: 10rem;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-medium);
+    background: rgba(240, 255, 255, 0.322);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: fit-content;
+    min-width: 20rem;
+
+    @media (min-width: 640px) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--spacing-large);
+        min-width: 28rem;
+    }
+}
+
+.modeSelector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+
+    @media (min-width: 640px) {
+        flex-direction: row;
+        align-items: center;
+        gap: var(--spacing-medium);
+    }
+}
+
+.controlLabel {
+    font-weight: 600;
+    font-size: var(--text-small);
+    color: black;
+    white-space: nowrap;
+    font-family: var(--font-display);
+}
+
+.modeButtons {
+    display: flex;
+    gap: var(--spacing-small);
+    background: var(--background);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xsmall);
+    border: 1px solid var(--shadow);
+}
+
+.modeButton {
+    background: none;
+    border: none;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius);
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--foreground);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    text-align: center;
+    font-family: var(--font-display);
+
+    &:hover {
+        color: var(--foreground);
+        background: var(--background-alt);
+    }
+
+    &.active {
+        background: var(--foreground);
+        color: var(--background);
+        box-shadow: 0 2px 4px var(--shadow);
+    }
+}
+
+.audioToggle {
+    display: flex;
+    align-items: center;
+
+    .controlLabel {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-small);
+        cursor: pointer;
+    }
+
+    .checkbox {
+        width: var(--spacing-medium);
+        height: var(--spacing-medium);
+        border-radius: var(--border-radius);
+        border: 2px solid var(--shadow);
+        background: var(--background-alt);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:checked {
+            background: var(--foreground);
+            border-color: var(--foreground);
+        }
+    }
+}
+
+.flashcardContainer {
+    width: 100%;
+    max-width: 28rem;
+    margin: var(--spacing-small) 0;
+    z-index:100;
+}
+
+.flashcard {
+    position: relative;
+    width: 100%;
+    height: fit-content;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    background: rgba(240, 255, 255, 0.674);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--foreground);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+}
+
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--spacing-medium);
+}
+
+.characterSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-small) 0;
+
+    .character {
+        font-size: 6rem;
+        font-weight: 300;
+        margin-bottom: 1rem;
+        line-height: 1;
+        font-family: var(--font-kr-serif);
+        color: black;
+        margin-bottom:1rem;
+
+        @media (min-width: 768px) {
+            font-size: 6rem;
+        }
+
+        .flashcard.expanded & {
+            font-size: 3rem;
+            margin-bottom: var(--spacing-small);
+
+            @media (min-width: 768px) {
+                font-size: 3.5rem;
+            }
+        }
+    }
+
+    .instruction {
+        font-size: var(--text-small);
+        opacity: 0.7;
+        font-weight: 500;
+        font-family: var(--font-body);
+        color:black;
+        transition: opacity 0.2s ease;
+    }
+}
+
+.expandedContent {
+    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    padding-bottom: var(--spacing-medium);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.answerButtons {
+    display: flex;
+    gap: var(--spacing-medium);
+    justify-content: center;
+    margin-top: var(--spacing-medium);
+}
+
+.answerButton {
+    background: rgba(240, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    color: black;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: var(--spacing-small) var(--spacing-large);
+    border-radius: var(--border-radius);
+    font-size: var(--text-normal);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-display);
+    min-width: 6rem;
+    margin-top:2rem;
+
+    svg {
+        transform:translateY(3px);
+        margin-right:0.5rem;
+    }
+
+    &.correct {
+        background: rgba(48, 172, 53, 0.66);
+        border-color: rgba(36, 153, 40, 0.909);
+        color:white;
+        &:hover {
+            transform:translateY(-2px);
+        }
+    }
+
+    &.incorrect {
+        background: rgba(232, 62, 50, 0.669);
+        border-color: rgba(118, 20, 13, 0.74);
+        color:white;
+        &:hover {
+            transform:translateY(-2px);
+        }
+    }
+}
+
+.counter {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-large);
+    margin: var(--spacing-medium) 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+
+    background: rgba(240, 255, 255, 0.491);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .counterItem {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-xsmall);
+        font-size: 1.3rem;
+        color: black;
+
+        .counterIcon {
+            font-size: var(--text-normal);
+        }
+
+        &.correct .counterIcon {
+            color: #1c7a1f;
+            font-size: 1.5rem;
+        }
+
+        &.incorrect .counterIcon {
+            color: #f44336;
+            font-size: 1.5rem;
+        }
+    }
+}
+
+.characterInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+    width: 100%;
+    margin:1rem 0;
+}
+
+.infoRow {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xsmall);
+
+    @media (min-width: 640px) {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .label {
+        font-weight: 600;
+        color:rgb(58, 58, 58);
+        font-size: 1rem;
+        min-width: 6rem;
+        font-family: var(--font-display);
+        margin-right:1rem;
+    }
+
+    .value {
+        color: black;
+        font-size: 1rem;
+        line-height: 1.4;
+        font-family: var(--font-body);
+    }
+}
+
+.audioControls {
+    display: flex;
+    justify-content: center;
+    margin: var(--spacing-small) 0;
+}
+
+.audioButton {
+    background: white;
+    color: black;
+    border: none;
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius);
+    font-size: var(--text-small);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    font-family: var(--font-display);
+
+    &:hover:not(:disabled) {
+        background: #f1f1f1;
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.instruction {
+    font-size: var(--text-xsmall);
+    color: var(--foreground-light);
+    text-align: center;
+    margin-top: auto;
+    font-weight: 500;
+    font-family: var(--font-body);
+
+    .cardFront & {
+        color: rgba(255, 255, 255, 0.9);
+        margin-top: 0;
+    }
+}
+
+.actionButtons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 20rem;
+}
+
+.actionButton {
+    background: var(--foreground);
+    color: var(--background);
+    border: none;
+    padding: var(--spacing-medium) var(--spacing-large);
+    border-radius: var(--border-radius);
+    font-size: var(--text-normal);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px var(--shadow);
+    font-family: var(--font-display);
+
+    z-index:100;
+
+    &:hover {
+        background: var(--background);
+        color:var(--foreground);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px var(--shadow);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.progress {
+    text-align: center;
+    margin-top: auto;
+    padding-top: var(--spacing-medium);
+}
+
+.progressInfo {
+    font-size: var(--text-small);
+    color: white;
+    font-weight: 500;
+    font-family: var(--font-body);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20rem;
+    font-size: var(--text-large);
+    color: var(--foreground-muted);
+    font-family: var(--font-body);
+}
+
+// Mobile optimizations
+@media (max-width: 640px) {
+    .hangeulContainer {
+        padding: var(--spacing-medium);
+        gap:0.5rem;
+    }
+
+    .header {
+        margin-top:0.5rem;
+    }
+
+    .header .title {
+        font-size: 2rem;
+    }
+
+    .header .subtitle {
+        font-size: 1rem;
+        margin-top:1rem;
+    }
+
+    .controls {
+        padding:0.5rem 0.2rem;
+        align-items: center;
+        gap:1rem;
+
+        .controlLabel {
+            text-align:center;
+        }
+    }
+
+    .counter {
+        margin:0;
+        padding:0.5rem 1rem;
+        .counterItem {
+            font-size:0.8rem;
+            svg {
+                font-size:0.8rem !important;
+            }
+        }
+    }
+
+    .flashcard {
+        background:rgba(255, 255, 255, 0.79);
+
+    }
+
+    .cardContent {
+        padding:0rem;
+    }
+
+    .flashcardContainer {
+        height: 18rem;
+        margin: 0;
+        z-index:100;
+    }
+
+    .characterSection .character {
+        font-size: 4rem;
+
+        .flashcard.expanded & {
+            font-size: 2.5rem;
+        }
+    }
+
+    .answerButtons {
+        .answerButton {
+            margin-top: 0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+    }
+
+    .characterInfo {
+        margin:0;
+    }
+
+    .cardContent {
+        padding: var(--spacing-medium);
+    }
+
+    .actionButton {
+        padding: var(--spacing-small) var(--spacing-large);
+        font-size: var(--text-small);
+        z-index:100;
+    }
+
+    .instruction, .spaceKey, .key {
+        display:none;
+    }
+
+    .hanbokGirl {
+        opacity:1;
+    }
+} 

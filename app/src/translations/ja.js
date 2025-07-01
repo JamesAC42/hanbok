@@ -936,6 +936,8 @@ export const ja = {
         analyzeText: "テキスト分析",
         savedSentences: "保存した文章",
         flashcards: "フラッシュカード",
+        koreanTyping: "韓国語タイピング",
+        learnHangeul: "ハングルを学ぶ",
         tutor: "チューター",
         history: "履歴",
         lyrics: "歌詞",

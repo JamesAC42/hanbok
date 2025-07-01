@@ -936,6 +936,8 @@ export const ru = {
         analyzeText: "Анализировать текст",
         savedSentences: "Сохранённые предложения",
         flashcards: "Карточки",
+        koreanTyping: "Корейская печать",
+        learnHangeul: "Изучить хангыль",
         tutor: "Репетитор",
         history: "История",
         lyrics: "Тексты песен",

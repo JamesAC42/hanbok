@@ -935,6 +935,8 @@ export const zh = {
         analyzeText: "分析文本",
         savedSentences: "已保存句子",
         flashcards: "闪卡",
+        koreanTyping: "韩语打字",
+        learnHangeul: "学习韩文字母",
         tutor: "导师",
         history: "历史",
         lyrics: "歌词",
