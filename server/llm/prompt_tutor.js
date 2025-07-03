@@ -13,34 +13,7 @@ This conversation is linked to a specific ${targetLangName} sentence analysis. T
 - Sentence: "${context.sentence?.text || 'N/A'}"
 - Translation: "${context.sentence?.translation || 'N/A'}"`;
 
-        // Include detailed analysis data if available
-        if (context.sentence?.analysis) {
-            const analysis = context.sentence.analysis;
-            contextualInfo += `
-- Detailed sentence analysis is available with information about:`;
-            
-            if (analysis.words) {
-                contextualInfo += `\n  - Individual word breakdowns and meanings`;
-            }
-            if (analysis.grammar) {
-                contextualInfo += `\n  - Grammar patterns and structures used`;
-            }
-            if (analysis.particles) {
-                contextualInfo += `\n  - Particles and their functions`;
-            }
-            if (analysis.wordOrder) {
-                contextualInfo += `\n  - Word order and sentence structure`;
-            }
-            if (analysis.formality) {
-                contextualInfo += `\n  - Formality level and register`;
-            }
-            if (analysis.culturalContext) {
-                contextualInfo += `\n  - Cultural context and usage notes`;
-            }
-        }
-
         contextualInfo += `
-
 When the user asks questions about this sentence, you can reference specific parts of the analysis to provide detailed, targeted explanations. Draw from the word-level breakdowns, grammar explanations, and structural analysis to give comprehensive answers.`;
     }
 
@@ -133,7 +106,7 @@ For Vocabulary Questions:
 - [Similar word 1]: [difference]
 - [Similar word 2]: [difference]"
 
-Remember: Every example sentence must be in <example></example> tags, and your response should be formatted in clean, readable Markdown. Be encouraging and make learning feel approachable and fun!
+Remember: Every example sentence must be in <example></example> tags on a new line (NO BULLETS!), and your response should be formatted in clean, readable Markdown. Be encouraging and make learning feel approachable and fun!
 
 User's question or message: `;
 };

@@ -57,7 +57,7 @@ async function getNextSequence(name) {
   
   // Debug: Check if counter exists before updating
   const existingCounter = await db.collection('counters').findOne({ _id: name });
-  console.log(`Counter ${name} before update:`, existingCounter);
+  // console.log(`Counter ${name} before update:`, existingCounter);
   
   // Now get the next sequence value
   const result = await db.collection('counters').findOneAndUpdate(
@@ -66,7 +66,7 @@ async function getNextSequence(name) {
     { returnDocument: 'after' }
   );
   
-  console.log(`findOneAndUpdate result for ${name}:`, result);
+  // console.log(`findOneAndUpdate result for ${name}:`, result);
   
   if (!result || !result.value || typeof result.value.seq !== 'number') {
     console.error(`Failed to get sequence for ${name}, result:`, result);
@@ -79,7 +79,7 @@ async function getNextSequence(name) {
         { _id: name },
         { $set: { seq: nextSeq } }
       );
-      console.log(`Manual sequence generation for ${name}: ${nextSeq}`);
+      // console.log(`Manual sequence generation for ${name}: ${nextSeq}`);
       return nextSeq;
     }
     
@@ -1000,8 +1000,7 @@ async function addMessageStream(req, res) {
               sentenceId: conversation.sentenceId,
               sentence: {
                 text: sentence.text,
-                translation: sentence.analysis?.translation || 'N/A',
-                analysis: sentence.analysis // Include full analysis data
+                translation: sentence.analysis?.sentence?.translation || 'N/A'
               }
             };
           }
@@ -1028,7 +1027,7 @@ async function addMessageStream(req, res) {
           historyForAI, // Use the prepared history
           // onChunk callback
           (chunk) => {
-            console.log('Chunk received in controller:', chunk.length, 'chars');
+            //console.log('Chunk received in controller:', chunk.length, 'chars');
             aiContent += chunk;
             res.write(`data: ${JSON.stringify({
               type: 'aiChunk',
@@ -1037,7 +1036,7 @@ async function addMessageStream(req, res) {
               content: aiContent
             })}\n\n`);
             res.write(':keep-alive\n\n'); // Send keep-alive comment
-            console.log('Chunk sent to client');
+            //console.log('Chunk sent to client');
           },
           // onComplete callback
           async (fullResponse) => {
