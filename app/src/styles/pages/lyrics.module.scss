@@ -143,6 +143,14 @@
             font-weight: 500;
         }
         
+        .recentLyricMeta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
         .recentLyricGenre {
             font-family: var(--font-display);
             font-size: 0.8rem;
@@ -153,6 +161,20 @@
             border-radius: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.025em;
+        }
+
+        .recentLyricViewCount {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-weight: 500;
+            
+            svg {
+                width: 0.875rem;
+                height: 0.875rem;
+            }
         }
     }
     
@@ -401,9 +423,35 @@
                             border-color: #3b82f6;
                         }
                         
-                        span:first-child {
-                            font-weight: 600;
-                            color: #3b82f6;
+                        .songItemContent {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            gap: 1rem;
+                        }
+                        
+                        .songTitle {
+                            flex: 1;
+                            
+                            span:first-child {
+                                font-weight: 600;
+                                color: #3b82f6;
+                            }
+                        }
+                        
+                        .songViewCount {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.25rem;
+                            color: #6b7280;
+                            font-size: 0.875rem;
+                            font-weight: 500;
+                            flex-shrink: 0;
+                            
+                            svg {
+                                width: 1rem;
+                                height: 1rem;
+                            }
                         }
                     }
                 }

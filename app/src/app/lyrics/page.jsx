@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useAdmin } from '@/contexts/AdminContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
+import { BasilEyeSolid } from '@/components/icons/Eye';
 import ContentPage from '@/components/ContentPage';
 
 import Footer from '@/components/Footer';
@@ -116,7 +117,8 @@ const Lyrics = () => {
                         title: lyric.title,
                         artist: lyric.artist,
                         genre: lyric.genre,
-                        language: lyric.language
+                        language: lyric.language,
+                        viewCount: lyric.viewCount
                     });
                 } else {
                     // Regular grouping by artist for other genres
@@ -132,7 +134,8 @@ const Lyrics = () => {
                         lyricId: lyric.lyricId,
                         title: lyric.title,
                         genre: lyric.genre,
-                        language: lyric.language
+                        language: lyric.language,
+                        viewCount: lyric.viewCount
                     });
                 }
             });
@@ -197,9 +200,17 @@ const Lyrics = () => {
                                                         <div className={lyricsStyles.recentLyricInfo}>
                                                             <h4>{lyric.title}</h4>
                                                             <p>{lyric.anime || lyric.artist}</p>
-                                                            <span className={lyricsStyles.recentLyricGenre}>
-                                                                {lyric.genre}
-                                                            </span>
+                                                            <div className={lyricsStyles.recentLyricMeta}>
+                                                                <span className={lyricsStyles.recentLyricGenre}>
+                                                                    {lyric.genre}
+                                                                </span>
+                                                                {lyric.viewCount && (
+                                                                    <span className={lyricsStyles.recentLyricViewCount}>
+                                                                        <BasilEyeSolid />
+                                                                        {lyric.viewCount}
+                                                                    </span>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                         <div className={lyricsStyles.newBadge}>
                                                             {t('lyrics.newThisWeek.badge', 'NEW')}
@@ -280,7 +291,17 @@ const Lyrics = () => {
                                                         {artistGroup.songs.map((song) => (
                                                             <li key={song.lyricId}>
                                                                 <Link href={`/lyrics/${song.lyricId}`}>
-                                                                    <span>{song.artist || artistGroup.artist}</span> - <span>{song.title}</span>
+                                                                    <div className={lyricsStyles.songItemContent}>
+                                                                        <span className={lyricsStyles.songTitle}>
+                                                                            <span>{song.artist || artistGroup.artist}</span> - <span>{song.title}</span>
+                                                                        </span>
+                                                                        {song.viewCount && (
+                                                                            <span className={lyricsStyles.songViewCount}>
+                                                                                <BasilEyeSolid />
+                                                                                {song.viewCount}
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
                                                                 </Link>
                                                             </li>
                                                         ))}

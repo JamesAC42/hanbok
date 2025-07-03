@@ -33,10 +33,29 @@ async function getPublishedLyrics(req, res) {
       .sort({ dateCreated: -1 })
       .toArray();
     
-    // Return the lyrics without fetching analysis
+    // Get view counts for all lyrics
+    const lyricIds = lyrics.map(lyric => lyric.lyricId);
+    const viewCounts = await db.collection('lyric_views')
+      .find({ lyricId: { $in: lyricIds } })
+      .project({ lyricId: 1, viewCount: 1 })
+      .toArray();
+    
+    // Create a map of lyricId to viewCount for efficient lookup
+    const viewCountMap = {};
+    viewCounts.forEach(view => {
+      viewCountMap[view.lyricId] = view.viewCount;
+    });
+    
+    // Add view counts to lyrics
+    const lyricsWithViews = lyrics.map(lyric => ({
+      ...lyric,
+      viewCount: viewCountMap[lyric.lyricId] || 0
+    }));
+    
+    // Return the lyrics with view counts
     return res.status(200).json({
       success: true,
-      lyrics: lyrics
+      lyrics: lyricsWithViews
     });
   } catch (error) {
     console.error('Error getting published lyrics:', error);
@@ -250,9 +269,28 @@ async function getRecentLyrics(req, res) {
       .sort({ dateCreated: -1 })
       .toArray();
     
+    // Get view counts for all recent lyrics
+    const lyricIds = lyrics.map(lyric => lyric.lyricId);
+    const viewCounts = await db.collection('lyric_views')
+      .find({ lyricId: { $in: lyricIds } })
+      .project({ lyricId: 1, viewCount: 1 })
+      .toArray();
+    
+    // Create a map of lyricId to viewCount for efficient lookup
+    const viewCountMap = {};
+    viewCounts.forEach(view => {
+      viewCountMap[view.lyricId] = view.viewCount;
+    });
+    
+    // Add view counts to lyrics
+    const lyricsWithViews = lyrics.map(lyric => ({
+      ...lyric,
+      viewCount: viewCountMap[lyric.lyricId] || 0
+    }));
+    
     return res.status(200).json({
       success: true,
-      lyrics: lyrics
+      lyrics: lyricsWithViews
     });
   } catch (error) {
     console.error('Error getting recent lyrics:', error);
