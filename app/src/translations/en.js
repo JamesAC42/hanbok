@@ -925,6 +925,21 @@ export const en = {
             sidebarTitle: "My Favorites",
             sidebarDescription: "View and manage your favorite lyrics",
             sidebarButton: "View Favorites"
+        },
+        comments: {
+            title: "Comments",
+            subtitle: "Add your thoughts and feedback",
+            addComment: "Add Comment",
+            loginPrompt: "Please log in to add comments.",
+            login: "Log in",
+            placeholder: "Add a comment...",
+            submit: "Submit Comment",
+            form: {
+                comment: "Comment", 
+            },
+            loginButton: "Log in or Sign up",
+            noComments: "No comments yet. Be the first to add one!",
+            confirmDelete: "Are you sure you want to delete this comment?"
         }
     },
     history: {

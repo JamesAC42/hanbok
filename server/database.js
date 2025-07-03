@@ -123,7 +123,7 @@ async function connectToDatabase() {
     // Initialize counters - use upsert to avoid duplicate key errors
     const counters = [
       'userId', 'sentenceId', 'feedbackId', 'lyricId', 
-      'analysisId', 'suggestionId', 'conversationId', 'messageId'
+      'analysisId', 'suggestionId', 'conversationId', 'messageId', 'commentId'
     ];
     
     for (const counterId of counters) {
@@ -157,7 +157,7 @@ async function initializeCounters() {
   const database = getDb();
   const counters = [
     'userId', 'sentenceId', 'feedbackId', 'lyricId', 
-    'analysisId', 'suggestionId', 'conversationId', 'messageId'
+    'analysisId', 'suggestionId', 'conversationId', 'messageId', 'commentId'
   ];
   
   for (const counterId of counters) {

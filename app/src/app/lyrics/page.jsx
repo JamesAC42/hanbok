@@ -8,6 +8,7 @@ import { useAdmin } from '@/contexts/AdminContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { BasilEyeSolid } from '@/components/icons/Eye';
+import { MaterialSymbolsChatBubbleOutline } from '@/components/icons/ChatBubble';
 import ContentPage from '@/components/ContentPage';
 
 import Footer from '@/components/Footer';
@@ -118,7 +119,8 @@ const Lyrics = () => {
                         artist: lyric.artist,
                         genre: lyric.genre,
                         language: lyric.language,
-                        viewCount: lyric.viewCount
+                        viewCount: lyric.viewCount,
+                        commentCount: lyric.commentCount
                     });
                 } else {
                     // Regular grouping by artist for other genres
@@ -135,7 +137,8 @@ const Lyrics = () => {
                         title: lyric.title,
                         genre: lyric.genre,
                         language: lyric.language,
-                        viewCount: lyric.viewCount
+                        viewCount: lyric.viewCount,
+                        commentCount: lyric.commentCount
                     });
                 }
             });
@@ -210,6 +213,10 @@ const Lyrics = () => {
                                                                         {lyric.viewCount}
                                                                     </span>
                                                                 )}
+                                                                <span className={lyricsStyles.recentLyricCommentCount}>
+                                                                    <MaterialSymbolsChatBubbleOutline />
+                                                                    {lyric.commentCount || 0}
+                                                                </span>
                                                             </div>
                                                         </div>
                                                         <div className={lyricsStyles.newBadge}>
@@ -295,12 +302,16 @@ const Lyrics = () => {
                                                                         <span className={lyricsStyles.songTitle}>
                                                                             <span>{song.artist || artistGroup.artist}</span> - <span>{song.title}</span>
                                                                         </span>
-                                                                        {song.viewCount && (
-                                                                            <span className={lyricsStyles.songViewCount}>
-                                                                                <BasilEyeSolid />
-                                                                                {song.viewCount}
-                                                                            </span>
-                                                                        )}
+                                                                                                                                {song.viewCount && (
+                                                            <span className={lyricsStyles.songViewCount}>
+                                                                <BasilEyeSolid />
+                                                                {song.viewCount}
+                                                            </span>
+                                                        )}
+                                                        <span className={lyricsStyles.songCommentCount}>
+                                                            <MaterialSymbolsChatBubbleOutline />
+                                                            {song.commentCount || 0}
+                                                        </span>
                                                                     </div>
                                                                 </Link>
                                                             </li>

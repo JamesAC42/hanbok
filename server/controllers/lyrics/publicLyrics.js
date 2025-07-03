@@ -40,22 +40,46 @@ async function getPublishedLyrics(req, res) {
       .project({ lyricId: 1, viewCount: 1 })
       .toArray();
     
-    // Create a map of lyricId to viewCount for efficient lookup
+    // Get comment counts for all lyrics
+    const commentCounts = await db.collection('lyric_comments')
+      .aggregate([
+        { 
+          $match: { 
+            lyricId: { $in: lyricIds },
+            isDeleted: { $ne: true }
+          } 
+        },
+        { 
+          $group: { 
+            _id: '$lyricId', 
+            commentCount: { $sum: 1 } 
+          } 
+        }
+      ])
+      .toArray();
+    
+    // Create maps for efficient lookup
     const viewCountMap = {};
     viewCounts.forEach(view => {
       viewCountMap[view.lyricId] = view.viewCount;
     });
     
-    // Add view counts to lyrics
-    const lyricsWithViews = lyrics.map(lyric => ({
+    const commentCountMap = {};
+    commentCounts.forEach(comment => {
+      commentCountMap[comment._id] = comment.commentCount;
+    });
+    
+    // Add view counts and comment counts to lyrics
+    const lyricsWithCounts = lyrics.map(lyric => ({
       ...lyric,
-      viewCount: viewCountMap[lyric.lyricId] || 0
+      viewCount: viewCountMap[lyric.lyricId] || 0,
+      commentCount: commentCountMap[lyric.lyricId] || 0
     }));
     
-    // Return the lyrics with view counts
+    // Return the lyrics with view counts and comment counts
     return res.status(200).json({
       success: true,
-      lyrics: lyricsWithViews
+      lyrics: lyricsWithCounts
     });
   } catch (error) {
     console.error('Error getting published lyrics:', error);
@@ -117,6 +141,12 @@ async function getPublishedLyric(req, res) {
       await db.collection('lyric_views').insertOne(viewData);
     }
     
+    // Get comment count for this lyric
+    const commentCount = await db.collection('lyric_comments').countDocuments({
+      lyricId: lyricId,
+      isDeleted: { $ne: true }
+    });
+    
     const cachedData = await getCachedLyricsData(lyricId, language);
     if (cachedData) {
       return res.status(200).json({
@@ -124,7 +154,8 @@ async function getPublishedLyric(req, res) {
         cached: true,
         lyric: {
           ...cachedData,
-          viewCount: viewData.viewCount
+          viewCount: viewData.viewCount,
+          commentCount: commentCount
         }
       });
     }
@@ -141,14 +172,16 @@ async function getPublishedLyric(req, res) {
         ...lyric,
         analysis: null,
         sentences: [],
-        viewCount: viewData.viewCount
+        viewCount: viewData.viewCount,
+        commentCount: commentCount
       };
       
-      // Cache the result without viewCount (we'll add it later when serving from cache)
+      // Cache the result without viewCount and commentCount (we'll add them later when serving from cache)
       const cacheResult = {
         ...result
       };
       delete cacheResult.viewCount;
+      delete cacheResult.commentCount;
       await cacheLyricsData(lyricId, language, cacheResult);
       
       return res.status(200).json({
@@ -185,14 +218,16 @@ async function getPublishedLyric(req, res) {
         ...analysis,
         analysisData: analysisWithSentences
       },
-      viewCount: viewData.viewCount
+      viewCount: viewData.viewCount,
+      commentCount: commentCount
     };
     
-    // Cache the result without viewCount (we'll add it later when serving from cache)
+    // Cache the result without viewCount and commentCount (we'll add them later when serving from cache)
     const cacheResult = {
       ...result
     };
     delete cacheResult.viewCount;
+    delete cacheResult.commentCount;
     await cacheLyricsData(lyricId, language, cacheResult);
     
     return res.status(200).json({
@@ -276,21 +311,45 @@ async function getRecentLyrics(req, res) {
       .project({ lyricId: 1, viewCount: 1 })
       .toArray();
     
-    // Create a map of lyricId to viewCount for efficient lookup
+    // Get comment counts for all recent lyrics
+    const commentCounts = await db.collection('lyric_comments')
+      .aggregate([
+        { 
+          $match: { 
+            lyricId: { $in: lyricIds },
+            isDeleted: { $ne: true }
+          } 
+        },
+        { 
+          $group: { 
+            _id: '$lyricId', 
+            commentCount: { $sum: 1 } 
+          } 
+        }
+      ])
+      .toArray();
+    
+    // Create maps for efficient lookup
     const viewCountMap = {};
     viewCounts.forEach(view => {
       viewCountMap[view.lyricId] = view.viewCount;
     });
     
-    // Add view counts to lyrics
-    const lyricsWithViews = lyrics.map(lyric => ({
+    const commentCountMap = {};
+    commentCounts.forEach(comment => {
+      commentCountMap[comment._id] = comment.commentCount;
+    });
+    
+    // Add view counts and comment counts to lyrics
+    const lyricsWithCounts = lyrics.map(lyric => ({
       ...lyric,
-      viewCount: viewCountMap[lyric.lyricId] || 0
+      viewCount: viewCountMap[lyric.lyricId] || 0,
+      commentCount: commentCountMap[lyric.lyricId] || 0
     }));
     
     return res.status(200).json({
       success: true,
-      lyrics: lyricsWithViews
+      lyrics: lyricsWithCounts
     });
   } catch (error) {
     console.error('Error getting recent lyrics:', error);

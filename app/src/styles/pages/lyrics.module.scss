@@ -176,6 +176,20 @@
                 height: 0.875rem;
             }
         }
+
+        .recentLyricCommentCount {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-weight: 500;
+            
+            svg {
+                width: 0.875rem;
+                height: 0.875rem;
+            }
+        }
     }
     
     .newBadge {
@@ -440,6 +454,21 @@
                         }
                         
                         .songViewCount {
+                            display: flex;
+                            align-items: center;
+                            gap: 0.25rem;
+                            color: #6b7280;
+                            font-size: 0.875rem;
+                            font-weight: 500;
+                            flex-shrink: 0;
+                            
+                            svg {
+                                width: 1rem;
+                                height: 1rem;
+                            }
+                        }
+
+                        .songCommentCount {
                             display: flex;
                             align-items: center;
                             gap: 0.25rem;
@@ -727,6 +756,17 @@
                 
                 svg {
                     transform: translateY(2px) scale(1.6);
+                    margin-right: 0.5rem;
+                }
+            }
+            
+            &.commentCount {
+                background: #e0e7ff;
+                color: #000000;
+
+                
+                svg {
+                    transform: translateY(3px) scale(1.2);
                     margin-right: 0.5rem;
                 }
             }

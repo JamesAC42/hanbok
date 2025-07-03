@@ -441,6 +441,32 @@ app.delete('/api/lyrics/:lyricId/analysis', isAuthenticated, async (req, res) =>
     deleteAnalysis(req, res);
 });
 
+// Lyric comment routes
+app.get('/api/lyrics/:lyricId/comments', async (req, res) => {
+    const { getComments } = require('./controllers/lyrics/lyricComments');
+    getComments(req, res);
+});
+
+app.get('/api/lyrics/:lyricId/comments/count', async (req, res) => {
+    const { getCommentCount } = require('./controllers/lyrics/lyricComments');
+    getCommentCount(req, res);
+});
+
+app.post('/api/lyrics/:lyricId/comments', isAuthenticated, async (req, res) => {
+    const { addComment } = require('./controllers/lyrics/lyricComments');
+    addComment(req, res);
+});
+
+app.post('/api/lyrics/comments/:commentId/vote', isAuthenticated, async (req, res) => {
+    const { voteComment } = require('./controllers/lyrics/lyricComments');
+    voteComment(req, res);
+});
+
+app.delete('/api/lyrics/comments/:commentId', isAuthenticated, async (req, res) => {
+    const { deleteComment } = require('./controllers/lyrics/lyricComments');
+    deleteComment(req, res);
+});
+
 // Conversation routes
 app.post('/api/conversations', isAuthenticated, async (req, res) => {
     const { createConversation } = require('./controllers/conversations/conversations');

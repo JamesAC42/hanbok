@@ -20,7 +20,9 @@ import { LineMdEmail } from '@/components/icons/Email';
 import { IcTwotoneDiscord } from '@/components/icons/DiscordIcon';
 import { MaterialSymbolsPublishRounded } from '@/components/icons/Publish';
 import { BasilEyeSolid } from '@/components/icons/Eye';
+import { MaterialSymbolsChatBubbleOutline } from '@/components/icons/ChatBubble';
 import { MaterialSymbolsFavorite, MaterialSymbolsFavoriteOutline } from '@/components/icons/Favorite';
+import LyricComments from '@/components/lyrics/LyricComments';
 
 const LyricsPage = () => {
     const { t } = useLanguage();
@@ -88,6 +90,35 @@ const LyricsPage = () => {
             setIsFavorited(false);
         }
     }, [user, lyricId]);
+
+    useEffect(() => {
+        // Listen for comment events to update the comment count
+        const handleCommentAdded = () => {
+            if (lyric) {
+                setLyric(prev => ({
+                    ...prev,
+                    commentCount: (prev.commentCount || 0) + 1
+                }));
+            }
+        };
+
+        const handleCommentDeleted = () => {
+            if (lyric) {
+                setLyric(prev => ({
+                    ...prev,
+                    commentCount: Math.max((prev.commentCount || 0) - 1, 0)
+                }));
+            }
+        };
+
+        window.addEventListener('commentAdded', handleCommentAdded);
+        window.addEventListener('commentDeleted', handleCommentDeleted);
+
+        return () => {
+            window.removeEventListener('commentAdded', handleCommentAdded);
+            window.removeEventListener('commentDeleted', handleCommentDeleted);
+        };
+    }, [lyric]);
 
     useEffect(() => {
         // Hide share tooltip after 3 seconds
@@ -470,6 +501,10 @@ const LyricsPage = () => {
                                 {lyric.viewCount}
                             </div>
                         )}
+                        <div className={`${styles.lyricTag} ${styles.commentCount}`}>
+                            <MaterialSymbolsChatBubbleOutline />
+                            {lyric.commentCount || 0}
+                        </div>
                         <button 
                             className={`${styles.favoriteButton} ${isFavorited ? styles.favorited : ''}`}
                             onClick={handleFavoriteToggle}
@@ -605,6 +640,9 @@ const LyricsPage = () => {
                         ) : null}
                     </div>
                 )}
+
+                {/* Comments Section */}
+                <LyricComments lyricId={lyricId} />
             </div>
             <Footer />
         </ContentPage>

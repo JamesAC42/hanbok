@@ -1077,6 +1077,101 @@ const collections = {
         name: "lyric_favorites_index"
       }
     ]
+  },
+  lyric_comments: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["commentId", "lyricId", "userId", "content", "dateCreated", "upvotes", "downvotes"],
+        properties: {
+          commentId: {
+            bsonType: "int",
+            description: "Unique identifier for the comment"
+          },
+          lyricId: {
+            bsonType: "string",
+            description: "ID of the lyric this comment is for"
+          },
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who made the comment"
+          },
+          content: {
+            bsonType: "string",
+            maxLength: 1000,
+            description: "Content of the comment (max 1000 characters)"
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "Date when the comment was created"
+          },
+          upvotes: {
+            bsonType: "int",
+            description: "Number of upvotes for this comment"
+          },
+          downvotes: {
+            bsonType: "int",
+            description: "Number of downvotes for this comment"
+          },
+          isDeleted: {
+            bsonType: ["bool", "null"],
+            description: "Whether the comment has been soft deleted"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { commentId: 1 },
+        unique: true
+      },
+      {
+        key: { lyricId: 1, dateCreated: -1 },
+        name: "lyric_comments_by_date"
+      },
+      {
+        key: { userId: 1 },
+        name: "user_comments_index"
+      }
+    ]
+  },
+  lyric_comment_votes: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "commentId", "voteType", "dateVoted"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "ID of the user who voted"
+          },
+          commentId: {
+            bsonType: "int",
+            description: "ID of the comment that was voted on"
+          },
+          voteType: {
+            bsonType: "string",
+            enum: ["upvote", "downvote"],
+            description: "Type of vote: 'upvote' or 'downvote'"
+          },
+          dateVoted: {
+            bsonType: "date",
+            description: "Date when the vote was cast"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, commentId: 1 },
+        unique: true,
+        name: "unique_user_comment_vote"
+      },
+      {
+        key: { commentId: 1 },
+        name: "comment_votes_index"
+      }
+    ]
   }
 };
 
