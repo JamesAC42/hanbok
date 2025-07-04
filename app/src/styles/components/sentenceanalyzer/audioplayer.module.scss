@@ -146,6 +146,10 @@
         width:10rem;
         position:relative;
 
+        background:transparent;
+        border:none;
+        outline:none;
+
         &:not(.locked) {
             cursor:pointer;
         }

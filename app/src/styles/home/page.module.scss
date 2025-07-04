@@ -813,19 +813,24 @@
                 font-size:2.1rem;
             }
         }
-        .heroCTA {
-            @include hero-cta;
-            width:fit-content;
-            margin:0 auto;
-            transform:scale(1.7);
-
-            svg {
-                transform:translateY(2px);
-            
-            }
-
-            @media screen and (max-width: 800px) {
-                transform:scale(1);
+        .getStartedButtonContainer {
+            @include flex-center;
+            width:100%;
+            margin-top:3rem;
+            .heroCTA {
+                @include hero-cta;
+                width:fit-content;
+                margin:0 auto;
+                transform:scale(1.7);
+    
+                svg {
+                    transform:translateY(2px);
+                
+                }
+    
+                @media screen and (max-width: 800px) {
+                    transform:scale(1);
+                }
             }
         }
     }

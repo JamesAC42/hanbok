@@ -38,6 +38,9 @@ function Footer() {
                   <Link href="https://x.com/fifltriggi" target="_blank">Twitter</Link>
                   <Link href="https://discord.gg/EQVvphzctc" target="_blank">Discord</Link>
                   <Link href="https://github.com/JamesAC42/hanbok" target="_blank">GitHub</Link>
+                  <Link href="https://www.instagram.com/hanbokstudy" target="_blank">Instagram</Link>
+                  <Link href="https://www.youtube.com/@HanbokStudy" target="_blank">Youtube</Link>
+                  <Link href="https://www.tiktok.com/@hanbokstudy" target="_blank">TikTok</Link>
                   <Link href="mailto:jamescrovo450@gmail.com" target="_blank">Email</Link>
                 </div>
               </div>

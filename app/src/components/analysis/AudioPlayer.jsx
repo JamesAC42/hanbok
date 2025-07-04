@@ -260,7 +260,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
           </div>
           <div className={`${styles.audioPlayerOuter} ${shouldLock() ? styles.locked : ''}`}>
 
-            <div
+            <button
               onClick={handleSpeakerSwitch} 
               className={`${
                 styles.speakersOuter
@@ -293,9 +293,9 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
                   </div>
                 </div>
               </div>
-            </div>
+            </button>
 
-            <div 
+            <button 
               className={`${
                 styles.togglePlaying
               } ${
@@ -305,7 +305,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
               <div className={styles.togglePlayingInner}>
                 {isPlaying ? <MaterialSymbolsPause /> : <MaterialSymbolsPlayArrowRounded />}
               </div>
-            </div>
+            </button>
           </div>
           
           {

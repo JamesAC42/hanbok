@@ -151,6 +151,9 @@
       color:var(--foreground);
       border-radius:0.5rem;
       font-family:var(--font-funnel);
+      outline:none;
+      border:none;
+      background:transparent;
       &:hover {
         outline:1px solid var(--foreground);
       }

@@ -118,13 +118,13 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.heroCTAContainer}>
-              <div 
+              <button 
                 onClick={() => router.push("/analyze")}
                 className={styles.heroCTA}
                 data-cta="hero">
                 GET STARTED FOR FREE <MdiArrowRightBoldCircle />
 
-              </div>
+              </button>
               <Image src="/images/tryit.png" alt="Try it for free" className={styles.tryIt} width={894} height={773} />
             </div>
 
@@ -259,14 +259,15 @@ export default function Home() {
         <Image src="/images/backgrounddark.png" alt="Hero Image" fill priority style={{ objectFit: 'cover' }} />
           <div className={styles.getStartedContent}>
             <h1>Accelerate your learning, now!</h1>
+            <div className={styles.getStartedButtonContainer}>
+              <button 
+                  onClick={() => router.push("/analyze")}
+                  className={styles.heroCTA}
+                  data-cta="footer">
+                  GET STARTED FOR FREE <MdiArrowRightBoldCircle />
 
-            <div 
-                onClick={() => router.push("/analyze")}
-                className={styles.heroCTA}
-                data-cta="footer">
-                GET STARTED FOR FREE <MdiArrowRightBoldCircle />
-
-              </div>          
+                </button>          
+            </div>
           </div>
       </div>
       <Footer />

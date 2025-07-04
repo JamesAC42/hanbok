@@ -56,9 +56,9 @@ function HeaderNav() {
                 </div>
                 <div className={styles.headerNavRight}>
                     <Link href={"/profile"}><IcBaselinePerson className={styles.profileIcon} /></Link>
-                    <div className={styles.getStartedButton} onClick={() => router.push("/analyze")}>
+                    <button className={styles.getStartedButton} onClick={() => router.push("/analyze")}>
                         Get Started
-                    </div>
+                    </button>
                 </div>
             </div>
 
@@ -75,7 +75,7 @@ function HeaderNav() {
                     <Link href="/lyrics" onClick={closeSidebar}>Lyrics</Link>
                     <Link href="/feedback" onClick={closeSidebar}>Feedback</Link>
                     
-                    <div 
+                    <button 
                         className={styles.getStartedButton} 
                         onClick={() => {
                             router.push("/analyze");
@@ -83,7 +83,7 @@ function HeaderNav() {
                         }}
                     >
                         Get Started
-                    </div>
+                    </button>
                 </div>
             </div>
 

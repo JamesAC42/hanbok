@@ -183,7 +183,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             }
 
             {/* Floating Chat Button */}
-            {analysis && isAuthenticated && (propSentenceId || searchParams.get('id')) && (
+            {analysis && (propSentenceId || searchParams.get('id')) && (
                 <Link 
                     href={`/tutor?sentenceId=${propSentenceId || searchParams.get('id')}`}
                     className={styles.floatingChatButton}

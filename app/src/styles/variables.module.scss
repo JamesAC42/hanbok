@@ -178,6 +178,8 @@ $word-types: (
   position: relative;
   overflow: hidden;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+  outline:none;
+  border:none;
 
   &::before {
       content: '';

@@ -112,12 +112,12 @@ const Profile = () => {
                     </div>
                     <div className={profileStyles.themeToggle}>
                         {themes.map((listTheme) => (
-                            <div 
+                            <button 
                                 className={`${profileStyles.themeToggleItem} ${theme === listTheme ? profileStyles.active : ""}`} 
                                 key={listTheme} 
                                 onClick={() => setTheme(listTheme)}>
                                 {t('profile.themes.' + listTheme)}
-                            </div>
+                            </button>
                         ))}
                     </div>
 
