@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/pages/lyricsuggestions.module.scss';
 import Link from 'next/link';
 import { BxsUpvote } from '@/components/icons/Upvote';
-import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
+import { MaterialSymbolsDelete } from '@/components/icons/Delete';
 import ContentPage from '@/components/ContentPage';
 
 import Footer from '@/components/Footer';
@@ -125,6 +125,11 @@ const Suggestions = () => {
         alert("Please log in to upvote a suggestion");
         return;
     }
+
+    if (!suggestionId) {
+        console.error("Cannot upvote: suggestionId is undefined");
+        return;
+    }
     
     try {
       const response = await fetch(`/api/lyrics/suggestions/${suggestionId}/upvote`, {
@@ -147,6 +152,11 @@ const Suggestions = () => {
 
   const handleStatusChange = async (suggestionId, status) => {
     if (!isAdmin || !isAdmin(user?.email)) return;
+
+    if (!suggestionId) {
+        console.error("Cannot change status: suggestionId is undefined");
+        return;
+    }
     
     try {
       const response = await fetch(`/api/admin/lyrics/suggestions/${parseInt(suggestionId)}/status`, {
@@ -171,6 +181,11 @@ const Suggestions = () => {
 
   const handleDelete = async (suggestionId) => {
     if (!isAdmin || !isAdmin(user?.email)) return;
+
+    if (!suggestionId) {
+        console.error("Cannot delete: suggestionId is undefined");
+        return;
+    }
     
     if (!confirm(t('lyrics.suggestions.card.deleteConfirm'))) return;
     
@@ -191,12 +206,23 @@ const Suggestions = () => {
 
   // Format date for display
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+    if (!dateString) return 'Unknown Date';
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid Date';
+      
+      // Use a more consistent formatting approach to avoid hydration mismatches
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        timeZone: 'UTC'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Invalid Date';
+    }
   };
 
   return (
@@ -344,11 +370,12 @@ const Suggestions = () => {
               <div className={styles.suggestionsList}>
                 {suggestions
                   .filter(suggestion => showCompleted || suggestion.status !== 'completed')
-                  .map(suggestion => (
-                  <div key={suggestion.suggestionId} className={styles.suggestionCard}>
+                  .filter(suggestion => suggestion && typeof suggestion === 'object')
+                  .map((suggestion, index) => (
+                  <div key={suggestion.suggestionId || `suggestion-${index}`} className={styles.suggestionCard}>
                     <div className={styles.cardHeader}>
-                      <h4>{suggestion.songName}</h4>
-                      <span className={styles.artist}>{t('lyrics.suggestions.card.by')} {suggestion.artist}</span>
+                      <h4>{suggestion.songName || 'Unknown Song'}</h4>
+                      <span className={styles.artist}>{t('lyrics.suggestions.card.by')} {suggestion.artist || 'Unknown Artist'}</span>
                     </div>
                     
                     <div className={styles.cardDetails}>
@@ -382,26 +409,28 @@ const Suggestions = () => {
                     
                     <div className={styles.cardActions}>
                       <span className={styles.date}>
-                        {formatDate(suggestion.dateCreated)}
+                        {suggestion.dateCreated ? formatDate(suggestion.dateCreated) : 'Unknown Date'}
                       </span>
                       
                       <div className={styles.actionButtons}>
                         <button 
                           className={`${styles.upvoteButton} ${suggestion.userHasUpvoted ? styles.active : ''}`}
-                          onClick={() => handleUpvote(suggestion.suggestionId)}
+                          onClick={() => suggestion.suggestionId && handleUpvote(suggestion.suggestionId)}
                           title={isAuthenticated ? t('lyrics.suggestions.status.upvoteTitle.loggedIn') : t('lyrics.suggestions.status.upvoteTitle.loggedOut')}
+                          disabled={!suggestion.suggestionId}
                         >
                           <BxsUpvote />
-                          <span>{suggestion.upvotes}</span>
+                          <span>{suggestion.upvotes || 0}</span>
                         </button>
                         
                         {isAdmin && isAdmin(user?.email) && (
                           <button 
                             className={styles.deleteButton}
-                            onClick={() => handleDelete(suggestion.suggestionId)}
+                            onClick={() => suggestion.suggestionId && handleDelete(suggestion.suggestionId)}
                             title={t('lyrics.suggestions.status.deleteTitle')}
+                            disabled={!suggestion.suggestionId}
                           >
-                            <MaterialSymbolsDeleteOutlineSharp />
+                            <MaterialSymbolsDelete />
                           </button>
                         )}
                       </div>
@@ -411,8 +440,9 @@ const Suggestions = () => {
                       <div className={styles.adminActions}>
                         <select 
                           value={suggestion.status || 'pending'}
-                          onChange={(e) => handleStatusChange(suggestion.suggestionId, e.target.value)}
+                          onChange={(e) => suggestion.suggestionId && handleStatusChange(suggestion.suggestionId, e.target.value)}
                           className={styles.statusSelect}
+                          disabled={!suggestion.suggestionId}
                         >
                           <option value="pending">{t('lyrics.suggestions.status.pending')}</option>
                           <option value="approved">{t('lyrics.suggestions.status.approved')}</option>
