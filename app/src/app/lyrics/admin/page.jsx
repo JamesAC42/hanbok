@@ -9,7 +9,7 @@ import { MaterialSymbolsCheckCircleOutlineRounded } from '@/components/icons/Che
 import { MaterialSymbolsPublishRounded } from '@/components/icons/Publish';
 import { MaterialSymbolsBackspace } from '@/components/icons/Exit';
 import { IcSharpPreview } from '@/components/icons/Preview';
-import { MaterialSymbolsDeleteOutlineSharp } from '@/components/icons/Delete';
+import { MaterialSymbolsDelete } from '@/components/icons/Delete';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -107,17 +107,22 @@ const AdminLyrics = () => {
 
     // Handle song selection
     const handleSelectSong = (lyric) => {
+        if (!lyric || typeof lyric !== 'object') {
+            console.error('Invalid lyric object provided to handleSelectSong');
+            return;
+        }
+        
         setSelectedLyric(lyric);
         setIsCreating(false);
         setFormData({
-            title: lyric.title,
+            title: lyric.title || '',
             artist: lyric.artist || '',
             anime: lyric.anime || '',
-            genre: lyric.genre,
+            genre: lyric.genre || '',
             youtubeUrl: lyric.youtubeUrl || '',
-            lyricsText: lyric.lyricsText,
-            language: lyric.language,
-            published: lyric.published
+            lyricsText: lyric.lyricsText || '',
+            language: lyric.language || 'ko',
+            published: lyric.published || false
         });
     };
 
@@ -201,7 +206,12 @@ const AdminLyrics = () => {
 
     // Handle delete song
     const handleDelete = async () => {
-        if (!selectedLyric || !confirm('Are you sure you want to delete this song?')) {
+        if (!selectedLyric || !selectedLyric._id) {
+            console.error('Cannot delete song: selectedLyric or _id is undefined');
+            return;
+        }
+        
+        if (!confirm('Are you sure you want to delete this song?')) {
             return;
         }
         
@@ -238,6 +248,7 @@ const AdminLyrics = () => {
 
     const handleGenerateAnalysis = async () => {
         if (!selectedLyric || !selectedLyric._id) {
+            console.error('Cannot generate analysis: selectedLyric or _id is undefined');
             return;
         }
         
@@ -434,6 +445,7 @@ const AdminLyrics = () => {
     // Handle delete analysis
     const handleDeleteAnalysis = async () => {
         if (!selectedLyric || !selectedLyric._id) {
+            console.error('Cannot delete analysis: selectedLyric or _id is undefined');
             return;
         }
         
@@ -514,13 +526,15 @@ const AdminLyrics = () => {
                     ) : lyrics.length === 0 ? (
                         <div className={adminLyricsStyles.loading}>No songs found</div>
                     ) : (
-                        lyrics.map(lyric => (
+                        lyrics
+                            .filter(lyric => lyric && typeof lyric === 'object' && lyric._id)
+                            .map((lyric, index) => (
                             <div 
-                                key={lyric._id}
+                                key={lyric._id || `lyric-${index}`}
                                 className={`${adminLyricsStyles.songItem} ${selectedLyric?._id === lyric._id ? adminLyricsStyles.active : ''}`}
                                 onClick={() => handleSelectSong(lyric)}
                             >
-                                <div className={adminLyricsStyles.songTitle}>{lyric.title}</div>
+                                <div className={adminLyricsStyles.songTitle}>{lyric.title || 'Unknown Title'}</div>
                                 <div className={adminLyricsStyles.songArtist}>{lyric.artist || 'Unknown Artist'}</div>
                                 <div className={adminLyricsStyles.indicators}>
                                     {lyric.hasAnalysis && (
@@ -719,26 +733,28 @@ const AdminLyrics = () => {
                                                 ref={terminalContentRef} 
                                                 className={adminLyricsStyles.terminalContent}
                                             >
-                                                {analysisLog.map((log, index) => (
+                                                {analysisLog
+                                                    .filter(log => log && typeof log === 'object')
+                                                    .map((log, index) => (
                                                     <div 
                                                         key={index} 
-                                                        className={`${adminLyricsStyles.logEntry} ${adminLyricsStyles[log.type]}`}
+                                                        className={`${adminLyricsStyles.logEntry} ${log.type ? adminLyricsStyles[log.type] : ''}`}
                                                     >
                                                         <span className={adminLyricsStyles.timestamp}>
-                                                            {log.timestamp.toLocaleTimeString()}
+                                                            {log.timestamp ? log.timestamp.toLocaleTimeString() : 'Unknown Time'}
                                                         </span>
                                                         <span className={adminLyricsStyles.message}>
-                                                            {log.message}
+                                                            {log.message || 'Unknown message'}
                                                         </span>
                                                     </div>
                                                 ))}
                                             </div>
-                                            {analysisLog.some(log => log.type === 'progress') && (
+                                            {analysisLog.some(log => log && log.type === 'progress') && (
                                                 <div className={adminLyricsStyles.progressBar}>
                                                     <div 
                                                         className={adminLyricsStyles.progressFill}
                                                         style={{ 
-                                                            width: `${analysisLog.find(log => log.type === 'progress')?.progress || 0}%` 
+                                                            width: `${Math.max(0, Math.min(100, analysisLog.find(log => log && log.type === 'progress')?.progress || 0))}%` 
                                                         }}
                                                     />
                                                 </div>
@@ -759,7 +775,7 @@ const AdminLyrics = () => {
                                                     opacity: isDeleting ? 0.7 : 1
                                                 }}
                                             >
-                                                <MaterialSymbolsDeleteOutlineSharp /> Delete Analysis
+                                                <MaterialSymbolsDelete /> Delete Analysis
                                             </div>
                                         </div>
                                     ) : (
