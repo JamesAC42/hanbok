@@ -5,13 +5,13 @@ import { useState, useEffect, useRef } from 'react';
 
 const LanguageSwitcher = ({ analysis }) => { 
 
-    const { language, setLanguage, supportedLanguages, getIcon } = useLanguage();
+    const { language, setLanguage, supportedLanguages, supportedAnalysisLanguages, getIcon } = useLanguage();
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const languageSwitcherRef = useRef(null);
 
     const getTransformFromLanguage = (l) => {
-        let languages = Object.keys(supportedLanguages);
+        let languages = Object.keys(supportedAnalysisLanguages);
         let index = languages.indexOf(l);
         let transform = `translate(0, -${index * 3}rem)`;
         return transform;
@@ -46,13 +46,13 @@ const LanguageSwitcher = ({ analysis }) => {
     }
 
     const generateDropdown = () => {
-        let languageAmount = Object.keys(supportedLanguages).length;
-        let languageKeys = Object.keys(supportedLanguages);
+        let languageAmount = Object.keys(supportedAnalysisLanguages).length;
+        let languageKeys = Object.keys(supportedAnalysisLanguages);
         let languageItems = [];
 
         for(let i = 0; i < languageAmount; i++) {
             let languageKey = languageKeys[i];
-            let languageName = supportedLanguages[languageKey];
+            let languageName = supportedAnalysisLanguages[languageKey];
 
             languageItems.push(
                 <div 
@@ -76,14 +76,14 @@ const LanguageSwitcher = ({ analysis }) => {
     }
 
     const generateLanguageItems = () => {
-        let languageAmount = Object.keys(supportedLanguages).length;
-        let languageKeys = Object.keys(supportedLanguages);
+        let languageAmount = Object.keys(supportedAnalysisLanguages).length;
+        let languageKeys = Object.keys(supportedAnalysisLanguages);
 
         let languageItems = [];
         for(let i = 0; i < languageAmount * 50; i++) {
             
             let language = languageKeys[i % languageAmount];
-            let languageName = supportedLanguages[language];
+            let languageName = supportedAnalysisLanguages[language];
 
             languageItems.push(
                 <div key={i} className={styles.languageItem}>

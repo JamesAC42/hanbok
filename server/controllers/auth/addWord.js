@@ -99,7 +99,10 @@ const addWord = async (req, res) => {
                 'de': 'German',
                 'nl': 'Dutch',
                 'ru': 'Russian',
-                'tr': 'Turkish'
+                'tr': 'Turkish',
+                'id': 'Indonesian',
+                'vi': 'Vietnamese',
+                'hi': 'Hindi'
             };
             
             const languageName = languageNames[originalLanguage] || 

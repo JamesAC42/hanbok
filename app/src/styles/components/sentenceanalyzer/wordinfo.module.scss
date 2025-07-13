@@ -180,6 +180,192 @@
 					}
 				}
 
+				// Vietnamese-specific aspect styles
+				.aspectInfo {
+					.aspectMarker,
+					.aspectTense,
+					.aspectMood {
+						font-weight:400;
+						line-height:2rem;
+						text-align:center;
+						margin-bottom:1rem;
+						
+						span.wordAspectMarker,
+						span.wordAspectTense,
+						span.wordAspectMood {
+							background:var(--background-alt);
+							color:var(--foreground);
+							margin-left:0.5rem;
+							overflow:hidden;
+							max-width:50%;
+							padding:0.2rem 0.5rem;
+							border-radius:0.2rem;
+							transform:translateY(-5px);
+						}
+					}
+
+					.aspectExplanation {
+						margin-top:1rem;
+						display:flex;
+						flex-direction:column;
+						gap:0.5rem;
+						
+						.aspectExplanationItem {
+							padding:1rem;
+							border:1px solid var(--foreground-light);
+							border-radius:0.5rem;
+							background:var(--background-alt);
+							
+							.aspectExplanationLabel {
+								font-weight:600;
+								color:var(--foreground);
+								margin-bottom:0.5rem;
+							}
+
+							.aspectExplanationText {
+								font-size:0.9rem;
+								color:var(--foreground-light);
+								font-style:italic;
+								line-height:1.4;
+							}
+						}
+					}
+				}
+
+				// Indonesian-specific affixation styles
+				.affixationInfo {
+					.affixationStructure,
+					.affixationVoice,
+					.affixationPoliteness {
+						font-weight:400;
+						line-height:2rem;
+						text-align:center;
+						margin-bottom:1rem;
+						
+						span.wordAffixationStructure,
+						span.wordAffixationVoice,
+						span.wordAffixationPoliteness {
+							background:var(--background-alt);
+							color:var(--foreground);
+							margin-left:0.5rem;
+							overflow:hidden;
+							max-width:50%;
+							padding:0.2rem 0.5rem;
+							border-radius:0.2rem;
+							transform:translateY(-5px);
+						}
+					}
+
+					.affixationSteps {
+						margin-top:1rem;
+						
+						.affixationStepsHeader {
+							font-size:1.4rem;
+							font-weight:800;
+							text-align:center;
+							margin-bottom:1rem;
+							padding-bottom:0.5rem;
+							border-bottom:1px solid var(--foreground);
+						}
+
+						.affixationStepsContent {
+							display:flex;
+							flex-direction:column;
+							gap:1rem;
+							
+							.affixationStep {
+								display:flex;
+								align-items:flex-start;
+								gap:1rem;
+								padding:1rem;
+								border:1px solid var(--foreground-light);
+								border-radius:0.5rem;
+								background:var(--background-alt);
+								
+								.affixationStepNumber {
+									background:var(--foreground-light);
+									color:var(--background);
+									padding:0.3rem 0.6rem;
+									border-radius:50%;
+									font-weight:bold;
+									font-size:0.9rem;
+									min-width:2rem;
+									text-align:center;
+								}
+
+								.affixationStepContent {
+									flex:1;
+									display:flex;
+									flex-direction:column;
+									gap:0.5rem;
+									
+									.affixationStepText {
+										font-weight:600;
+										color:var(--foreground);
+									}
+
+									.affixationStepExplanation {
+										font-size:0.9rem;
+										color:var(--foreground-light);
+										font-style:italic;
+										line-height:1.4;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				// Hindi-specific postpositions styles
+				.postpositionsInfo {
+					.postpositionsHeader {
+						font-size:1.4rem;
+						font-weight:800;
+						text-align:center;
+						margin-bottom:1rem;
+						padding-bottom:0.5rem;
+						border-bottom:1px solid var(--foreground);
+					}
+
+					.postpositionsContent {
+						display:flex;
+						flex-direction:row;
+						gap:1rem;
+						justify-content:center;
+						flex-wrap:wrap;
+						
+						.postpositionItem {
+							display:flex;
+							border:1px solid var(--foreground-light);
+							border-radius:0.5rem;
+							overflow:hidden;
+							background:var(--background-alt);
+							
+							.postpositionText {
+								background:var(--foreground-light);
+								color:var(--background);
+								padding:0.5rem 1rem;
+								font-weight:600;
+								font-size:1.1rem;
+							}
+							
+							.postpositionFunction {
+								background:var(--background-alt);
+								color:var(--foreground);
+								padding:0.5rem 1rem;
+								font-size:0.9rem;
+							}
+						}
+					}
+					
+					@media screen and (max-width:725px) {
+						.postpositionsContent {
+							flex-direction:column;
+							gap:0.5rem;
+						}
+					}
+				}
+
 				.politenessInfo {
 					margin-top:0.5rem;
 					font-style:italic;

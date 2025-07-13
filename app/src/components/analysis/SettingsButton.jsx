@@ -59,10 +59,6 @@ const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) =
         };
     }, []);
 
-    if(!['ko', 'ja', 'zh', 'ru'].includes(language)) {
-        return null;
-    }
-
     return (
         <div className={styles.settingsContainer}>
             <button 
@@ -76,19 +72,22 @@ const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) =
 
             {isMenuOpen && (
                 <div ref={menuRef} className={styles.settingsMenu}>
-                    <div className={styles.settingsMenuItem}>
-                        <label className={styles.settingsToggle}>
-                            <input 
-                                type="checkbox" 
-                                checked={showPronunciation} 
-                                onChange={togglePronunciation}
-                            />
-                            <span className={styles.toggleSlider}></span>
-                        </label>
-                        <span className={styles.settingsLabel}>
-                            {t('analysis.settingsButton.showPronunciations', 'Show pronunciations')}
-                        </span>
-                    </div>
+                    {
+                        ['ko', 'ja', 'zh', 'ru'].includes(language) ?
+                        <div className={styles.settingsMenuItem}>
+                            <label className={styles.settingsToggle}>
+                                <input 
+                                    type="checkbox" 
+                                    checked={showPronunciation} 
+                                    onChange={togglePronunciation}
+                                />
+                                <span className={styles.toggleSlider}></span>
+                            </label>
+                            <span className={styles.settingsLabel}>
+                                {t('analysis.settingsButton.showPronunciations', 'Show pronunciations')}
+                            </span>
+                        </div> : null
+                    }
                     <div className={styles.settingsMenuItem}>
                         <label className={styles.settingsToggle}>
                             <input 

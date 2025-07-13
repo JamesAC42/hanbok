@@ -156,6 +156,125 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                         </div>
                     }
 
+                    {/* Vietnamese-specific aspect information */}
+                    {
+                        language === 'vi' && wordInfo.grammar?.aspect &&
+                        <div className={styles.aspectInfo}>
+                            {/* Aspect marker */}
+                            {wordInfo.grammar.aspect.marker && (
+                                <div className={styles.aspectMarker}>
+                                    {t('analysis.wordInfo.aspectMarker')} <span className={styles.wordAspectMarker}>{wordInfo.grammar.aspect.marker}</span>
+                                </div>
+                            )}
+                            
+                            {/* Tense */}
+                            {wordInfo.grammar.aspect.tense && (
+                                <div className={styles.aspectTense}>
+                                    {t('analysis.wordInfo.tense')} <span className={styles.wordAspectTense}>{wordInfo.grammar.aspect.tense}</span>
+                                </div>
+                            )}
+                            
+                            {/* Mood */}
+                            {wordInfo.grammar.aspect.mood && (
+                                <div className={styles.aspectMood}>
+                                    {t('analysis.wordInfo.mood')} <span className={styles.wordAspectMood}>{wordInfo.grammar.aspect.mood}</span>
+                                </div>
+                            )}
+                            
+                            {/* Aspect explanation */}
+                            {wordInfo.grammar.aspect.steps && wordInfo.grammar.aspect.steps.length > 0 && (
+                                <div className={styles.aspectExplanation}>
+                                    {wordInfo.grammar.aspect.steps.map((step, index) => (
+                                        <div key={index} className={styles.aspectExplanationItem}>
+                                            <div className={styles.aspectExplanationLabel}>
+                                                {step.step}:
+                                            </div>
+                                            <div className={styles.aspectExplanationText}>
+                                                {step.explanation}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    }
+
+                    {/* Indonesian-specific affixation information */}
+                    {
+                        language === 'id' && wordInfo.grammar?.affixation &&
+                        <div className={styles.affixationInfo}>
+                            {/* Affixation structure */}
+                            {wordInfo.grammar.affixation.structure && (
+                                <div className={styles.affixationStructure}>
+                                    {t('analysis.wordInfo.affixationStructure')} <span className={styles.wordAffixationStructure}>{wordInfo.grammar.affixation.structure}</span>
+                                </div>
+                            )}
+                            
+                            {/* Voice */}
+                            {wordInfo.grammar.affixation.voice && (
+                                <div className={styles.affixationVoice}>
+                                    {t('analysis.wordInfo.voice')} <span className={styles.wordAffixationVoice}>{wordInfo.grammar.affixation.voice}</span>
+                                </div>
+                            )}
+                            
+                            {/* Politeness */}
+                            {wordInfo.grammar.affixation.politeness && (
+                                <div className={styles.affixationPoliteness}>
+                                    {t('analysis.wordInfo.politeness')} <span className={styles.wordAffixationPoliteness}>{wordInfo.grammar.affixation.politeness}</span>
+                                </div>
+                            )}
+                            
+                            {/* Affixation steps */}
+                            {wordInfo.grammar.affixation.steps && wordInfo.grammar.affixation.steps.length > 0 && (
+                                <div className={styles.affixationSteps}>
+                                    <div className={styles.affixationStepsHeader}>
+                                        {t('analysis.wordInfo.affixationSteps')}
+                                    </div>
+                                    <div className={styles.affixationStepsContent}>
+                                        {wordInfo.grammar.affixation.steps.map((step, index) => (
+                                            <div key={index} className={styles.affixationStep}>
+                                                <div className={styles.affixationStepNumber}>
+                                                    {index + 1}
+                                                </div>
+                                                <div className={styles.affixationStepContent}>
+                                                    <div className={styles.affixationStepText}>
+                                                        {step.step}
+                                                    </div>
+                                                    <div className={styles.affixationStepExplanation}>
+                                                        {step.explanation}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    }
+
+                    {/* Hindi-specific postpositions information */}
+                    {
+                        language === 'hi' && wordInfo.grammar?.postpositions && wordInfo.grammar.postpositions.length > 0 && (
+                        <div className={styles.postpositionsInfo}>
+                            <div className={styles.postpositionsHeader}>
+                                {t('analysis.wordInfo.postpositions')}
+                            </div>
+                            <div className={styles.postpositionsContent}>
+                                {wordInfo.grammar.postpositions.map((postposition, index) => (
+                                    <div key={index} className={styles.postpositionItem}>
+                                        <span className={styles.postpositionText}>
+                                            {postposition.postposition}
+                                        </span>
+                                        <span className={styles.postpositionFunction}>
+                                            {postposition.function?.replaceAll('_', ' ')}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        )
+                    }
+
                     {
                         wordInfo.grammar?.structure &&
                         <div className={styles.structureInfo}>

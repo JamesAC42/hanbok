@@ -9,7 +9,10 @@ import { ru } from './ru';
 import { nl } from './nl';
 import { de } from './de';
 import { tr } from './tr';
-import { supportedLanguages } from './supportedLanguages';
+import { id } from './id';
+import { vi } from './vi';
+import { hi } from './hi';
+import { supportedLanguages, supportedAnalysisLanguages } from './supportedLanguages';
 
 export const resources = {
     en,
@@ -22,7 +25,10 @@ export const resources = {
     ru,
     nl,
     de,
-    tr
+    tr,
+    id,
+    vi,
+    hi
 };
 
-export { supportedLanguages }; 
+export { supportedLanguages, supportedAnalysisLanguages }; 

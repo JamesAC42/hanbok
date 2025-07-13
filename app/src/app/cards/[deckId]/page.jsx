@@ -31,7 +31,7 @@ const DeckView = ({ params }) => {
     const [error, setError] = useState(null);
     const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'table'
     const [showSettings, setShowSettings] = useState(false);
-    const { t, getIcon, supportedLanguages } = useLanguage();
+    const { t, getIcon, supportedAnalysisLanguages } = useLanguage();
     
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
@@ -52,12 +52,12 @@ const DeckView = ({ params }) => {
     }, [isAuthenticated, loading, router]);
 
     const capitalize = (str) => {   
-        return str.charAt(0).toUpperCase() + str.slice(1);
+        return str.charAt(0).toUpperCase() + str.slice(1);  
     }
 
     useEffect(() => {
         if(!!deck) {
-            document.title = t('cards.deckPageTitle').replace('{language}', capitalize(supportedLanguages[deck.language]) || 'Unknown');
+            document.title = t('cards.deckPageTitle').replace('{language}', capitalize(supportedAnalysisLanguages[deck.language]) || 'Unknown');
         }
     }, [deck, t]);
 

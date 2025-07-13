@@ -10,5 +10,8 @@ const SupportedLanguages = {
     'nl': 'dutch',
     'ru': 'russian',
     'tr': 'turkish',
+    'id': 'indonesian',
+    'vi': 'vietnamese',
+    'hi': 'hindi',
 }
 module.exports = SupportedLanguages;

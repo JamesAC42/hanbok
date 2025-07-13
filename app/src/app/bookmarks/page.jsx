@@ -19,7 +19,7 @@ const Bookmarks = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
-    const { t, language, getIcon, supportedLanguages } = useLanguage();
+    const { t, language, getIcon, supportedAnalysisLanguages } = useLanguage();
     const [selectedLanguage, setSelectedLanguage] = useState(language);
     const [showLanguageOptions, setShowLanguageOptions] = useState(false);
 
@@ -90,7 +90,7 @@ const Bookmarks = () => {
                     onClick={() => setShowLanguageOptions(!showLanguageOptions)}>
                     {getIcon(selectedLanguage)}
                 </button>
-                {Object.keys(supportedLanguages).map(code => (
+                {Object.keys(supportedAnalysisLanguages).map(code => (
                     <button
                         key={code}
                         className={`${bookmarksStyles.languageOption} ${selectedLanguage === code ? bookmarksStyles.selected : ''}`}

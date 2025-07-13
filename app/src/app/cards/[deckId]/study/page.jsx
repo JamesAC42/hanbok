@@ -26,7 +26,7 @@ const StudyView = ({ params }) => {
     const [deckSettings, setDeckSettings] = useState(null);
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
-    const { t, supportedLanguages } = useLanguage();
+    const { t, supportedAnalysisLanguages } = useLanguage();
     const [studySession, setStudySession] = useState(null);
 
     const [currentCard, setCurrentCard] = useState(null);
@@ -71,7 +71,7 @@ const StudyView = ({ params }) => {
 
     useEffect(() => {
         if(!!deck) {
-            document.title = t('cards.studyPageTitle').replace('{language}', capitalize(supportedLanguages[deck.language]) || 'Unknown');
+            document.title = t('cards.studyPageTitle').replace('{language}', capitalize(supportedAnalysisLanguages[deck.language]) || 'Unknown');
         }
     }, [deck, t]);
 

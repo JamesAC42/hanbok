@@ -16,7 +16,10 @@ export const en = {
         german: 'German',
         dutch: 'Dutch',
         russian: 'Russian',
-        turkish: 'Turkish'
+        turkish: 'Turkish',
+        indonesian: 'Indonesian',
+        vietnamese: 'Vietnamese',
+        hindi: 'Hindi'
     },
     about: {
         pageTitle: 'Hanbok - About',
@@ -424,7 +427,15 @@ export const en = {
             form: 'The form of this word is ',
             politeness: 'Politeness level',
             case: 'The case of this word is ',
-            poeticMeaning: 'Poetic meaning'
+            poeticMeaning: 'Poetic meaning',
+            aspectMarker: 'Aspect marker',
+            tense: 'Tense',
+            mood: 'Mood',
+            aspectSteps: 'Aspect steps',
+            affixationStructure: 'Affixation structure',
+            voice: 'Voice',
+            affixationSteps: 'Affixation steps',
+            postpositions: 'Postpositions',
         },
         conjugation: {
             tense: 'Tense',

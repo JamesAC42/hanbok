@@ -33,7 +33,7 @@ const SentenceForm = ({
     translationMode,
     setTranslationMode
 }) => {
-    const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
+    const { t, language, nativeLanguage, supportedAnalysisLanguages } = useLanguage();
     const { isAuthenticated, user, decrementRemainingImageExtracts, decrementRemainingSentenceAnalyses, updateWeeklySentenceQuota } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const [text, setText] = useState('');
@@ -58,13 +58,13 @@ const SentenceForm = ({
     ];
 
     const getLocalizedPlaceholder = () => {
-        const languageKey = supportedLanguages[language];
+        const languageKey = supportedAnalysisLanguages[language];
         const languageName = t(`languages.${languageKey}`);
         return t('sentenceForm.placeholder').replace('{language}', languageName);
     };
 
     const getNativePlaceholder = () => {
-        const languageKey = supportedLanguages[nativeLanguage];
+        const languageKey = supportedAnalysisLanguages[nativeLanguage];
         const languageName = t(`languages.${languageKey}`);
         return t('sentenceForm.placeholderNative').replace('{language}', languageName);
     };

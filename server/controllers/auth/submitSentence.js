@@ -3,6 +3,9 @@ const basicPrompt = require('../../llm/prompt');
 const chinesePrompt = require('../../llm/prompt_chinese');
 const japanesePrompt = require('../../llm/prompt_japanese');
 const russianPrompt = require('../../llm/prompt_russian');
+const indonesianPrompt = require('../../llm/prompt_indonesian');
+const vietnamesePrompt = require('../../llm/prompt_vietnamese');
+const hindiPrompt = require('../../llm/prompt_hindi');
 const { translateText } = require('../../llm/translate');
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
@@ -485,6 +488,12 @@ const submitSentence = async (req, res) => {
                 prompt = japanesePrompt.ANALYSIS_PROMPT;
             } else if(originalLanguage === 'ru') {
                 prompt = russianPrompt.ANALYSIS_PROMPT;
+            } else if(originalLanguage === 'id') {
+                prompt = indonesianPrompt.ANALYSIS_PROMPT;
+            } else if(originalLanguage === 'vi') {
+                prompt = vietnamesePrompt.ANALYSIS_PROMPT;
+            } else if(originalLanguage === 'hi') {
+                prompt = hindiPrompt.ANALYSIS_PROMPT;
             }
 
             // Generate new analysis

@@ -15,7 +15,7 @@ const Cards = () => {
     const [decks, setDecks] = useState([]);
     const [loadingContent, setLoadingContent] = useState(true);
     const [error, setError] = useState(null);
-    const { t, getIcon, supportedLanguages } = useLanguage();
+    const { t, getIcon, supportedAnalysisLanguages } = useLanguage();
     
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -37,7 +37,7 @@ const Cards = () => {
                 if (data.success) {
                     setDecks(data.decks.map(deck => ({
                         id: deck.deckId,
-                        name: supportedLanguages[deck.language] || deck.name,
+                        name: supportedAnalysisLanguages[deck.language] || deck.name,
                         language: deck.language,
                         cardCount: deck.cardCount || 0,
                         stats: {
@@ -61,7 +61,7 @@ const Cards = () => {
         if (isAuthenticated && !loading) {
             fetchDecks();
         }
-    }, [isAuthenticated, loading, supportedLanguages, t]);
+    }, [isAuthenticated, loading, supportedAnalysisLanguages, t]);
 
     const handleDeckClick = (deckId) => {
         router.push(`/cards/${deckId}`);
@@ -83,6 +83,8 @@ const Cards = () => {
                 </div>
             );
         }
+
+        console.log(decks);
 
         return (
             <div className={cardsStyles.deckList}>

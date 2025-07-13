@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
-import { resources, supportedLanguages } from '../translations';
+import { resources, supportedLanguages, supportedAnalysisLanguages } from '../translations';
 
 const LanguageContext = createContext();
 
@@ -15,6 +15,9 @@ import { EmojioneFlagForGermany } from '../components/icons/GermanCircle';
 import { EmojioneFlagForNetherlands } from '../components/icons/DutchCircle';
 import { EmojioneFlagForRussia } from '../components/icons/RussianCircle';
 import { EmojioneFlagForTurkey } from '../components/icons/TurkishCircle';
+import { EmojioneFlagForIndonesia } from '../components/icons/IndonesianCircle';
+import { EmojioneFlagForVietnam } from '../components/icons/VietnameseCircle';
+import { EmojioneFlagForIndia } from '../components/icons/HindiCircle';
 
 export function LanguageProvider({ children }) {
     const [language, setLanguage] = useState('ko');
@@ -75,6 +78,12 @@ export function LanguageProvider({ children }) {
                 return <EmojioneFlagForRussia />;
             case 'tr':
                 return <EmojioneFlagForTurkey />;
+            case 'id':
+                return <EmojioneFlagForIndonesia />;
+            case 'vi':
+                return <EmojioneFlagForVietnam />;
+            case 'hi':
+                return <EmojioneFlagForIndia />;
         }
     }
 
@@ -84,6 +93,7 @@ export function LanguageProvider({ children }) {
         nativeLanguage,
         setNativeLanguage,
         supportedLanguages,
+        supportedAnalysisLanguages,
         getIcon,
         t
     };
