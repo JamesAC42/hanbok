@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import LimitReachedPopup from '@/components/LimitReachedPopup';
 import LoginRequiredPopup from '@/components/LoginRequiredPopup';
 import AnnouncementPopup from '@/components/AnnouncementPopup';
+import PromoPopup from '@/components/PromoPopup';
 
 const PopupContext = createContext();
 
@@ -65,6 +66,27 @@ export function PopupProvider({ children }) {
         });
     };
 
+    const showPromoPopup = () => {
+        // Check if we should show the promo popup today
+        const lastShownDate = localStorage.getItem('promoPopupLastShown');
+        const today = new Date().toDateString();
+        
+        if (lastShownDate === today) {
+            return false; // Already shown today
+        }
+        
+        localStorage.setItem('promoPopupLastShown', today);
+        
+        setPopupState({
+            show: true,
+            type: null,
+            variant: 'promo',
+            announcementId: null
+        });
+        
+        return true;
+    };
+
     const hidePopup = () => {
         // If hiding an announcement, mark it as seen
         if (popupState.variant === 'announcement' && popupState.announcementId) {
@@ -82,7 +104,7 @@ export function PopupProvider({ children }) {
     };
 
     return (
-        <PopupContext.Provider value={{ showLimitReachedPopup, showLoginRequiredPopup, hidePopup }}>
+        <PopupContext.Provider value={{ showLimitReachedPopup, showLoginRequiredPopup, showPromoPopup, hidePopup }}>
             {children}
             {popupState.show && popupState.variant === 'limit' && (
                 <LimitReachedPopup 
@@ -101,6 +123,11 @@ export function PopupProvider({ children }) {
                     onClose={hidePopup}
                     announcementId={popupState.announcementId}
                     content={CURRENT_ANNOUNCEMENT.content}
+                />
+            )}
+            {popupState.show && popupState.variant === 'promo' && (
+                <PromoPopup 
+                    onClose={hidePopup}
                 />
             )}
         </PopupContext.Provider>
