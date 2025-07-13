@@ -13,10 +13,12 @@ import Footer from '@/components/Footer';
 const PRICE_IDS = {
     BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
     AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
-    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
     IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj',
     MORE_SENTENCES: 'price_1R5e8hDv6kE7Gata5CKPAu0Z',
-    BASIC_SUBSCRIPTION: 'price_1R94kODv6kE7Gata9Zwzvvom'
+    BASIC_SUBSCRIPTION: 'price_1R94kODv6kE7Gata9Zwzvvom',
+    PLUS_SUBSCRIPTION: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
+    BASIC_SUBSCRIPTION_YEARLY: 'price_1Rjh9EDv6kE7GataEdXl4ICx',
+    PLUS_SUBSCRIPTION_YEARLY: 'price_1RjhBODv6kE7GatajkAfu5cB',
 };
 
 //test
@@ -26,10 +28,22 @@ const PRICE_IDS = {
 //     MONTHLY_SUB: 'price_1QtEcWDv6kE7Gata4QDYmETm'
 // };
 
+const PRICING = {
+    basic: {
+        monthly: 4,
+        yearly: 40, // $3/month billed yearly - 25% discount
+    },
+    plus: {
+        monthly: 10,
+        yearly: 99, // $8/month billed yearly - 20% discount
+    }
+};
+
 const Pricing = () => {
     const { user } = useAuth();
     const router = useRouter();
     const [loading, setLoading] = useState(false);
+    const [isYearly, setIsYearly] = useState(true); // Default to yearly for better conversions
     const { t } = useLanguage();
 
     useEffect(() => {
@@ -62,12 +76,56 @@ const Pricing = () => {
         }
     };
 
+    const getPriceInfo = (plan) => {
+        const pricing = PRICING[plan];
+        if (!pricing) return null;
+
+        const currentPrice = isYearly ? pricing.yearly : pricing.monthly;
+        const monthlyEquivalent = isYearly ? pricing.yearly / 12 : pricing.monthly;
+        const savings = isYearly ? (pricing.monthly * 12) - pricing.yearly : 0;
+        const discountPercentage = isYearly ? Math.round((savings / (pricing.monthly * 12)) * 100) : 0;
+
+        return {
+            price: currentPrice,
+            monthlyEquivalent,
+            savings,
+            discountPercentage
+        };
+    };
+
+    const getPriceId = (plan) => {
+        if (plan === 'basic') {
+            return isYearly ? PRICE_IDS.BASIC_SUBSCRIPTION_YEARLY : PRICE_IDS.BASIC_SUBSCRIPTION;
+        } else if (plan === 'plus') {
+            return isYearly ? PRICE_IDS.PLUS_SUBSCRIPTION_YEARLY : PRICE_IDS.PLUS_SUBSCRIPTION;
+        }
+        return null;
+    };
+
     return (
         <ContentPage>
             <div className={pricingStyles.pricingPage}>
                 <div className={pricingStyles.pricingHero}>
                     <h1 className={pricingStyles.heroTitle}>{t('pricing.title')}</h1>
                     <p className={pricingStyles.heroSubtitle}>{t('pricing.subtitle')}</p>
+                </div>
+
+                {/* Billing Toggle */}
+                <div className={pricingStyles.billingToggle}>
+                    <div className={pricingStyles.toggleContainer}>
+                        <span className={`${pricingStyles.toggleLabel} ${!isYearly ? pricingStyles.active : ''}`}>
+                            {t('pricing.billing.monthly')}
+                        </span>
+                        <div className={pricingStyles.toggleSwitch} onClick={() => setIsYearly(!isYearly)}>
+                            <div className={`${pricingStyles.toggleSlider} ${isYearly ? pricingStyles.yearly : ''}`}>
+                                <div className={pricingStyles.toggleButton}></div>
+                            </div>
+                        </div>
+                        <span className={`${pricingStyles.toggleLabel} ${isYearly ? pricingStyles.active : ''}`}>
+                            {t('pricing.billing.yearly')}
+                            <span className={pricingStyles.saveBadge}>{t('pricing.billing.saveUp')}</span>
+                        </span>
+                    </div>
                 </div>
 
                 {/* Main Subscription Plans */}
@@ -99,13 +157,27 @@ const Pricing = () => {
 
                         {/* Basic Plan */}
                         <div className={`${pricingStyles.planCard} ${pricingStyles.basicPlan}`}>
+                            {isYearly && (
+                                <div className={pricingStyles.discountBadge}>
+                                    {t('pricing.badges.save')} {getPriceInfo('basic')?.discountPercentage}%
+                                </div>
+                            )}
                             <div className={pricingStyles.planHeader}>
                                 <h3 className={pricingStyles.planName}>{t('pricing.plans.basic')}</h3>
                                 <div className={pricingStyles.planPrice}>
                                     <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
-                                    <span className={pricingStyles.amount}>4</span>
-                                    <span className={pricingStyles.period}>{t('pricing.pricing.perMonth')}</span>
+                                    <span className={pricingStyles.amount}>
+                                        {isYearly ? (getPriceInfo('basic')?.monthlyEquivalent.toFixed(2)) : getPriceInfo('basic')?.price.toFixed(2)}
+                                    </span>
+                                    <span className={pricingStyles.period}>
+                                        {isYearly ? t('pricing.pricing.perMonthBilled') : t('pricing.pricing.perMonth')}
+                                    </span>
                                 </div>
+                                {isYearly && (
+                                    <div className={pricingStyles.billingInfo}>
+                                        {t('pricing.billing.billedAs')} {t('pricing.pricing.currency')}{getPriceInfo('basic')?.price} {t('pricing.billing.annually')}
+                                    </div>
+                                )}
                             </div>
                             <ul className={pricingStyles.planFeatures}>
                                 <li>{t('pricing.features.basic.analyses')}</li>
@@ -117,7 +189,7 @@ const Pricing = () => {
                             </ul>
                             <button 
                                 className={`${pricingStyles.planButton} ${pricingStyles.basicButton}`}
-                                onClick={() => handlePurchase(PRICE_IDS.BASIC_SUBSCRIPTION)}
+                                onClick={() => handlePurchase(getPriceId('basic'))}
                                 disabled={loading}
                             >
                                 {t('pricing.buttons.subscribe')}
@@ -127,13 +199,27 @@ const Pricing = () => {
                         {/* Plus Plan */}
                         <div className={`${pricingStyles.planCard} ${pricingStyles.plusPlan}`}>
                             <div className={pricingStyles.popularBadge}>{t('pricing.badges.mostPopular')}</div>
+                            {isYearly && (
+                                <div className={pricingStyles.discountBadge}>
+                                    {t('pricing.badges.save')} {getPriceInfo('plus')?.discountPercentage}%
+                                </div>
+                            )}
                             <div className={pricingStyles.planHeader}>
                                 <h3 className={pricingStyles.planName}>{t('pricing.plans.plus')}</h3>
                                 <div className={pricingStyles.planPrice}>
                                     <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
-                                    <span className={pricingStyles.amount}>10</span>
-                                    <span className={pricingStyles.period}>{t('pricing.pricing.perMonth')}</span>
+                                    <span className={pricingStyles.amount}>
+                                        {isYearly ? (getPriceInfo('plus')?.monthlyEquivalent.toFixed(2)) : getPriceInfo('plus')?.price.toFixed(2)}
+                                    </span>
+                                    <span className={pricingStyles.period}>
+                                        {isYearly ? t('pricing.pricing.perMonthBilled') : t('pricing.pricing.perMonth')}
+                                    </span>
                                 </div>
+                                {isYearly && (
+                                    <div className={pricingStyles.billingInfo}>
+                                        {t('pricing.billing.billedAs')} {t('pricing.pricing.currency')}{getPriceInfo('plus')?.price} {t('pricing.billing.annually')}
+                                    </div>
+                                )}
                             </div>
                             <ul className={pricingStyles.planFeatures}>
                                 <li>{t('pricing.features.plus.everythingInBasic')}</li>
@@ -145,7 +231,7 @@ const Pricing = () => {
                             </ul>
                             <button 
                                 className={`${pricingStyles.planButton} ${pricingStyles.plusButton}`}
-                                onClick={() => handlePurchase(PRICE_IDS.MONTHLY_SUB)}
+                                onClick={() => handlePurchase(getPriceId('plus'))}
                                 disabled={loading}
                             >
                                 {t('pricing.buttons.subscribe')}

@@ -234,7 +234,16 @@ export const zh = {
         pricing: {
             currency: '$',
             forever: '永久有效',
-            perMonth: '每月'
+            perMonth: '每月',
+            perMonthBilled: '每月，按年计费'
+        },
+        
+        billing: {
+            monthly: '月付',
+            yearly: '年付',
+            saveUp: '节省高达18%',
+            billedAs: '按',
+            annually: '年收费'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const zh = {
 
         badges: {
             mostPopular: '最受欢迎',
-            limitedOffer: '限时优惠'
+            limitedOffer: '限时优惠',
+            save: '节省'
         },
 
         planButtons: {

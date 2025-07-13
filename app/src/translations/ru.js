@@ -234,7 +234,16 @@ export const ru = {
         pricing: {
             currency: '$',
             forever: 'навсегда',
-            perMonth: 'в месяц'
+            perMonth: 'в месяц',
+            perMonthBilled: 'в месяц, оплачивается ежегодно'
+        },
+        
+        billing: {
+            monthly: 'Ежемесячно',
+            yearly: 'Ежегодно',
+            saveUp: 'Сэкономьте до 18%',
+            billedAs: 'Списывается как',
+            annually: 'ежегодно'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const ru = {
 
         badges: {
             mostPopular: 'Самый популярный',
-            limitedOffer: 'Ограниченное предложение'
+            limitedOffer: 'Ограниченное предложение',
+            save: 'Сэкономьте'
         },
 
         planButtons: {

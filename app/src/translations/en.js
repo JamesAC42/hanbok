@@ -232,7 +232,17 @@ export const en = {
         pricing: {
             currency: '$',
             forever: 'forever',
-            perMonth: 'per month'
+            perMonth: 'per month',
+            perMonthBilled: 'per month, billed annually'
+        },
+        
+        // Billing options
+        billing: {
+            monthly: 'Monthly',
+            yearly: 'Yearly',
+            saveUp: 'Save up to 18%',
+            billedAs: 'Billed as',
+            annually: 'annually'
         },
         
         // Plan features
@@ -259,14 +269,15 @@ export const en = {
                 audioGeneration: 'Unlimited audio generation',
                 conversations: '200 conversations per month',
                 messages: '50 messages per conversation',
-                support: 'Premium support'
+                support: 'Premium support + upcoming plus features'
             }
         },
         
         // Badges and labels
         badges: {
             mostPopular: 'Most Popular',
-            limitedOffer: 'Limited Offer'
+            limitedOffer: 'Limited Offer',
+            save: 'Save'
         },
         
         // Plan buttons

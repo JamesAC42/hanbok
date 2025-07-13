@@ -234,7 +234,16 @@ export const tr = {
         pricing: {
             currency: '$',
             forever: 'süresiz',
-            perMonth: 'aylık'
+            perMonth: 'aylık',
+            perMonthBilled: 'aylık, yıllık faturalandırılır'
+        },
+        
+        billing: {
+            monthly: 'Aylık',
+            yearly: 'Yıllık',
+            saveUp: '%18\'e kadar tasarruf',
+            billedAs: 'Faturalandırma',
+            annually: 'yıllık'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const tr = {
 
         badges: {
             mostPopular: 'En Popüler',
-            limitedOffer: 'Sınırlı Teklif'
+            limitedOffer: 'Sınırlı Teklif',
+            save: 'Tasarruf'
         },
 
         planButtons: {

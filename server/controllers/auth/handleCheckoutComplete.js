@@ -5,10 +5,12 @@ const { getDb } = require('../../database');
 const PRICE_IDS = {
     BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
     AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
-    MONTHLY_SUB: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
     IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj',
     MORE_SENTENCES: 'price_1R5e8hDv6kE7Gata5CKPAu0Z',
-    BASIC_SUBSCRIPTION: 'price_1R94kODv6kE7Gata9Zwzvvom'
+    BASIC_SUBSCRIPTION: 'price_1R94kODv6kE7Gata9Zwzvvom',
+    PLUS_SUBSCRIPTION: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
+    BASIC_SUBSCRIPTION_YEARLY: 'price_1Rjh9EDv6kE7GataEdXl4ICx',
+    PLUS_SUBSCRIPTION_YEARLY: 'price_1RjhBODv6kE7GatajkAfu5cB',
 };
 
 //test
@@ -76,7 +78,8 @@ const handleCheckoutComplete = async (session) => {
                 );
                 break;
 
-            case PRICE_IDS.MONTHLY_SUB: // Monthly Sub
+            case PRICE_IDS.PLUS_SUBSCRIPTION: // Monthly Sub
+            case PRICE_IDS.PLUS_SUBSCRIPTION_YEARLY: // Monthly Sub
                 subscriptionUpdate = {
                     tier: 2,
                     'subscription.status': 'active',
@@ -92,6 +95,7 @@ const handleCheckoutComplete = async (session) => {
                 break;
 
             case PRICE_IDS.BASIC_SUBSCRIPTION: // Basic Subscription
+            case PRICE_IDS.BASIC_SUBSCRIPTION_YEARLY: // Basic Subscription
                 subscriptionUpdate = {
                     tier: 1,
                     'subscription.status': 'active',

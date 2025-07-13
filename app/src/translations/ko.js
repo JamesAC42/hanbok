@@ -234,7 +234,16 @@ export const ko = {
         pricing: {
             currency: '$',
             forever: '영구적으로',
-            perMonth: '월별'
+            perMonth: '월별',
+            perMonthBilled: '월별, 연간 청구'
+        },
+        
+        billing: {
+            monthly: '월간',
+            yearly: '연간',
+            saveUp: '최대 18% 절약',
+            billedAs: '청구 방식',
+            annually: '연간'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const ko = {
 
         badges: {
             mostPopular: '가장 인기 있는 플랜',
-            limitedOffer: '한정 혜택'
+            limitedOffer: '한정 혜택',
+            save: '절약'
         },
 
         planButtons: {

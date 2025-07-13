@@ -234,7 +234,16 @@ export const es = {
         pricing: {
             currency: '$',
             forever: 'para siempre',
-            perMonth: 'por mes'
+            perMonth: 'por mes',
+            perMonthBilled: 'por mes, facturado anualmente'
+        },
+        
+        billing: {
+            monthly: 'Mensual',
+            yearly: 'Anual',
+            saveUp: 'Ahorra hasta 18%',
+            billedAs: 'Facturado como',
+            annually: 'anualmente'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const es = {
 
         badges: {
             mostPopular: 'Más Popular',
-            limitedOffer: 'Oferta Limitada'
+            limitedOffer: 'Oferta Limitada',
+            save: 'Ahorra'
         },
 
         planButtons: {

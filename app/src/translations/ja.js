@@ -234,7 +234,16 @@ export const ja = {
         pricing: {
             currency: '$',
             forever: '永久に',
-            perMonth: '月ごと'
+            perMonth: '月ごと',
+            perMonthBilled: '月ごと、年間請求'
+        },
+        
+        billing: {
+            monthly: '月間',
+            yearly: '年間',
+            saveUp: '最大18%節約',
+            billedAs: '請求形式',
+            annually: '年間'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const ja = {
 
         badges: {
             mostPopular: '最も人気のプラン',
-            limitedOffer: '期間限定オファー'
+            limitedOffer: '期間限定オファー',
+            save: '節約'
         },
 
         planButtons: {

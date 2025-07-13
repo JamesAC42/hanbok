@@ -234,7 +234,16 @@ export const nl = {
         pricing: {
             currency: '$',
             forever: 'voor altijd',
-            perMonth: 'per maand'
+            perMonth: 'per maand',
+            perMonthBilled: 'per maand, jaarlijks gefactureerd'
+        },
+        
+        billing: {
+            monthly: 'Maandelijks',
+            yearly: 'Jaarlijks',
+            saveUp: 'Bespaar tot 18%',
+            billedAs: 'Gefactureerd als',
+            annually: 'jaarlijks'
         },
 
         features: {
@@ -266,7 +275,8 @@ export const nl = {
 
         badges: {
             mostPopular: 'Meest Populair',
-            limitedOffer: 'Beperkt Aanbod'
+            limitedOffer: 'Beperkt Aanbod',
+            save: 'Bespaar'
         },
 
         planButtons: {
