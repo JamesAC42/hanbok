@@ -248,7 +248,7 @@ export const es = {
 
         features: {
             free: {
-                analyses: '30 análisis de oraciones por semana',
+                analyses: '10 análisis de oraciones por semana',
                 conversations: '5 conversaciones gratuitas por mes',
                 messages: '5 mensajes por conversación',
                 bookmarks: 'Máximo 30 oraciones marcadas',
@@ -467,9 +467,9 @@ export const es = {
         viewPricing: 'Ver Precios',
         maybeLater: 'Quizás Después',
         sentenceAnalysesTitle: 'Límite semanal de análisis de oraciones alcanzado',
-        sentenceAnalysesMessage: 'Has usado tus 30 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
+        sentenceAnalysesMessage: 'Has usado tus 10 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         firstFiveUsedTitle: 'Uso de análisis de oraciones semanal',
-        firstFiveUsedMessage: 'Has usado 5 de tus 30 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
+        firstFiveUsedMessage: 'Has usado 5 de tus 10 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         fifteenRemainingTitle: 'Actualización de análisis de oraciones semanal',
         fifteenRemainingMessage: 'Te quedan 15 análisis de oraciones esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         fiveRemainingTitle: 'Alerta de análisis de oraciones semanal',

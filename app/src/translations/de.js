@@ -248,7 +248,7 @@ export const de = {
 
         features: {
             free: {
-                analyses: '30 Satzanalysen pro Woche',
+                analyses: '10 Satzanalysen pro Woche',
                 conversations: '5 kostenlose Gespräche pro Monat',
                 messages: '5 Nachrichten pro Gespräch',
                 bookmarks: 'Maximal 30 gespeicherte Sätze',
@@ -469,9 +469,9 @@ export const de = {
         viewPricing: 'Preise anzeigen',
         maybeLater: 'Vielleicht später',
         sentenceAnalysesTitle: 'Wöchentliches Limit für Satzanalysen erreicht',
-        sentenceAnalysesMessage: 'Sie haben Ihre 30 kostenlosen Satzanalysen für diese Woche aufgebraucht. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        sentenceAnalysesMessage: 'Sie haben Ihre 10 kostenlosen Satzanalysen für diese Woche aufgebraucht. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
         firstFiveUsedTitle: 'Wöchentliche Nutzung der Satzanalysen',
-        firstFiveUsedMessage: 'Sie haben 5 Ihrer 30 kostenlosen Satzanalysen für diese Woche verwendet. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
+        firstFiveUsedMessage: 'Sie haben 5 Ihrer 10 kostenlosen Satzanalysen für diese Woche verwendet. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
         fifteenRemainingTitle: 'Wöchentliches Update der Satzanalysen',
         fifteenRemainingMessage: 'Sie haben noch 15 Satzanalysen für diese Woche übrig. Erhalten Sie unbegrenzte Analysen für 4$/Monat oder kaufen Sie 100 zusätzliche Analysen für nur 1$.',
         fiveRemainingTitle: 'Wöchentliche Warnung für Satzanalysen',

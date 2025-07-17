@@ -248,7 +248,7 @@ export const ja = {
 
         features: {
             free: {
-                analyses: '週あたり30文の分析',
+                analyses: '週あたり10文の分析',
                 conversations: '月に5回の無料会話',
                 messages: '1会話あたり5メッセージ',
                 bookmarks: '最大30件のブックマーク文',
@@ -468,9 +468,9 @@ export const ja = {
         viewPricing: '料金を見る',
         maybeLater: '後で',
         sentenceAnalysesTitle: '週間の文分析制限に達しました',
-        sentenceAnalysesMessage: '今週の無料文の分析30回分をすべて使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
+        sentenceAnalysesMessage: '今週の無料文の分析10回分をすべて使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         firstFiveUsedTitle: '週間の文分析使用状況',
-        firstFiveUsedMessage: '今週の無料文の分析30回分のうち5回分を使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
+        firstFiveUsedMessage: '今週の無料文の分析10回分のうち5回分を使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         fifteenRemainingTitle: '週間の文分析更新',
         fifteenRemainingMessage: '今週の残り文の分析回数は15回です。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         fiveRemainingTitle: '週間の文分析アラート',

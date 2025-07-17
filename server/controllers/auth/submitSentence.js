@@ -128,13 +128,13 @@ const checkRateLimits = async (req, db) => {
     }
     
     // Check if user has exceeded the weekly quota
-    const WEEKLY_QUOTA = 30;
+    const WEEKLY_QUOTA = 10;
     const hasQuota = rateLimitRecord.weekSentences < WEEKLY_QUOTA;
     
     // Create appropriate message for quota exceeded
     const message = hasQuota ? null : {
         type: 'rate_limit_exceeded',
-        message: 'You have used all 30 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses or purchase 100 additional analyses for $1.',
+        message: 'You have used all 10 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses for $4/month or purchase 100 additional analyses for $1.',
         remaining: 0
     };
     
@@ -169,7 +169,7 @@ const incrementRateLimitsAndCheckNotifications = async (identifier, identifierTy
     if (!updatedRecord) return null;
     
     // Check if we've hit any notification thresholds
-    const WEEKLY_QUOTA = 30;
+    const WEEKLY_QUOTA = 10;
     const remaining = WEEKLY_QUOTA - updatedRecord.weekSentences;
     let notification = null;
     
@@ -177,7 +177,7 @@ const incrementRateLimitsAndCheckNotifications = async (identifier, identifierTy
     if (updatedRecord.weekSentences === 5) {
         notification = {
             type: 'firstFiveUsed',
-            message: 'You have used 5 out of your 30 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses.',
+            message: 'You have used 5 out of your 10 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses.',
             remaining: remaining,
             weekSentencesUsed: updatedRecord.weekSentences,
             weekSentencesTotal: WEEKLY_QUOTA,
@@ -582,7 +582,7 @@ const submitSentence = async (req, res) => {
             const currentRecord = await db.collection('rate_limits').findOne({ identifier, identifierType });
             
             if (currentRecord) {
-                const WEEKLY_QUOTA = 30;
+                const WEEKLY_QUOTA = 10;
                 const remaining = WEEKLY_QUOTA - currentRecord.weekSentences;
                 
                 weeklyQuotaInfo = {

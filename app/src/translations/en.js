@@ -219,7 +219,7 @@ export const en = {
     pricing: {
         pageTitle: 'Hanbok - Pricing',
         title: 'Pricing',
-        subtitle: 'Choose the perfect plan for your Korean learning journey',
+        subtitle: 'Choose the perfect plan for your language learning journey',
         
         // Plan names
         plans: {
@@ -248,7 +248,7 @@ export const en = {
         // Plan features
         features: {
             free: {
-                analyses: '30 sentence analyses per week',
+                analyses: '10 sentence analyses per week',
                 conversations: '5 free conversations per month',
                 messages: '5 messages per conversation',
                 bookmarks: 'Max 30 bookmarked sentences',
@@ -491,9 +491,9 @@ export const en = {
         viewPricing: 'View Pricing',
         maybeLater: 'Maybe Later',
         sentenceAnalysesTitle: 'Weekly Sentence Analysis Limit Reached',
-        sentenceAnalysesMessage: 'You have used all 30 of your free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
+        sentenceAnalysesMessage: 'You have used all 10 of your free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         firstFiveUsedTitle: 'Weekly Sentence Analysis Usage',
-        firstFiveUsedMessage: 'You have used 5 out of your 30 free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
+        firstFiveUsedMessage: 'You have used 5 out of your 10 free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         fifteenRemainingTitle: 'Weekly Sentence Analysis Update',
         fifteenRemainingMessage: 'You have 15 sentence analyses remaining for this week. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         fiveRemainingTitle: 'Weekly Sentence Analysis Alert',

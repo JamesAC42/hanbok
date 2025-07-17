@@ -248,7 +248,7 @@ export const nl = {
 
         features: {
             free: {
-                analyses: '30 zinsanalyses per week',
+                analyses: '10 zinsanalyses per week',
                 conversations: '5 gratis gesprekken per maand',
                 messages: '5 berichten per gesprek',
                 bookmarks: 'Maximaal 30 gemarkeerde zinnen',
@@ -464,9 +464,9 @@ export const nl = {
         viewPricing: 'Bekijk prijzen',
         maybeLater: 'Misschien later',
         sentenceAnalysesTitle: 'Wekelijkse limiet voor zinsanalyses bereikt',
-        sentenceAnalysesMessage: 'U heeft uw 30 gratis zinsanalyses voor deze week opgebruikt. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
+        sentenceAnalysesMessage: 'U heeft uw 10 gratis zinsanalyses voor deze week opgebruikt. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
         firstFiveUsedTitle: 'Gebruik van wekelijkse zinsanalyses',
-        firstFiveUsedMessage: 'U heeft 5 van uw 30 gratis zinsanalyses voor deze week gebruikt. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
+        firstFiveUsedMessage: 'U heeft 5 van uw 10 gratis zinsanalyses voor deze week gebruikt. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
         fifteenRemainingTitle: 'Update wekelijkse zinsanalyse',
         fifteenRemainingMessage: 'U heeft nog 15 zinsanalyses over voor deze week. Krijg onbeperkte analyses voor €4/maand, of koop 100 extra analyses voor slechts €1.',
         fiveRemainingTitle: 'Waarschuwing wekelijkse zinsanalyse',

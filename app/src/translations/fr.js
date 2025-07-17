@@ -248,7 +248,7 @@ export const fr = {
 
         features: {
             free: {
-                analyses: '30 analyses de phrases par semaine',
+                analyses: '10 analyses de phrases par semaine',
                 conversations: '5 conversations gratuites par mois',
                 messages: '5 messages par conversation',
                 bookmarks: '30 phrases enregistrées max',
@@ -467,9 +467,9 @@ export const fr = {
         viewPricing: 'Voir les Prix',
         maybeLater: 'Plus Tard',
         sentenceAnalysesTitle: 'Limite hebdomadaire d\'analyses de phrases atteinte',
-        sentenceAnalysesMessage: 'Vous avez utilisé vos 30 analyses gratuites de phrases de cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        sentenceAnalysesMessage: 'Vous avez utilisé vos 10 analyses gratuites de phrases de cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
         firstFiveUsedTitle: 'Utilisation hebdomadaire d\'analyses de phrases',
-        firstFiveUsedMessage: 'Vous avez utilisé 5 de vos 30 analyses gratuites de phrases de cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
+        firstFiveUsedMessage: 'Vous avez utilisé 5 de vos 10 analyses gratuites de phrases de cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
         fifteenRemainingTitle: 'Mise à jour des analyses de phrases hebdomadaires',
         fifteenRemainingMessage: 'Il vous reste 15 analyses de phrases cette semaine. Obtenez des analyses illimitées pour 4$/mois, ou achetez 100 analyses supplémentaires pour seulement 1$.',
         fiveRemainingTitle: 'Alerte d\'analyses de phrases hebdomadaires',

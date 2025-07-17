@@ -248,7 +248,7 @@ export const tr = {
 
         features: {
             free: {
-                analyses: 'Haftada 30 cümle analizi',
+                analyses: 'Haftada 10 cümle analizi',
                 conversations: 'Ayda 5 ücretsiz konuşma',
                 messages: 'Konuşma başına 5 mesaj',
                 bookmarks: 'En fazla 30 yer imi cümlesi',
@@ -464,9 +464,9 @@ export const tr = {
         viewPricing: 'Fiyatları Görüntüle',
         maybeLater: 'Belki Daha Sonra',
         sentenceAnalysesTitle: 'Haftalık Cümle Analizi Sınırına Ulaşıldı',
-        sentenceAnalysesMessage: 'Bu haftaki 30 ücretsiz cümle analizinizi kullandınız. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        sentenceAnalysesMessage: 'Bu haftaki 10 ücretsiz cümle analizinizi kullandınız. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
         firstFiveUsedTitle: 'Haftalık Cümle Analizi Kullanımı',
-        firstFiveUsedMessage: 'Bu haftaki 30 ücretsiz cümle analizinizden 5\'ini kullandınız. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
+        firstFiveUsedMessage: 'Bu haftaki 10 ücretsiz cümle analizinizden 5\'ini kullandınız. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
         fifteenRemainingTitle: 'Haftalık Cümle Analizi Güncellemesi',
         fifteenRemainingMessage: 'Bu hafta için 15 cümle analiziniz kaldı. Aylık 4$ karşılığında sınırsız analiz alın veya sadece 1$ karşılığında 100 ek analiz satın alın.',
         fiveRemainingTitle: 'Haftalık Cümle Analizi Uyarısı',

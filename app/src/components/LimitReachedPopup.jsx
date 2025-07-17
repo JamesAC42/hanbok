@@ -21,12 +21,12 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
             case 'sentence-analyses':
                 return {
                     title: t('limitReached.sentenceAnalysesTitle') || 'Weekly Sentence Analysis Limit Reached',
-                    message: t('limitReached.sentenceAnalysesMessage') || 'You have used all 30 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.'
+                    message: t('limitReached.sentenceAnalysesMessage') || 'You have used all 10 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.'
                 };
             case 'first-five-used':
                 return {
                     title: t('limitReached.firstFiveUsedTitle') || 'Weekly Sentence Analysis Usage',
-                    message: t('limitReached.firstFiveUsedMessage') || 'You have used 5 out of your 30 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses.'
+                    message: t('limitReached.firstFiveUsedMessage') || 'You have used 5 out of your 10 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses.'
                 };
             case 'fifteen-remaining':
                 return {

@@ -64,8 +64,8 @@ const Profile = () => {
                         <p>
                             <strong>{t('profile.weekSentencesRemaining')}:</strong> {
                                 user.weekSentencesRemaining !== undefined ? 
-                                `${user.weekSentencesRemaining}/${user.weekSentencesTotal || 30}` : 
-                                `0/30`
+                                `${user.weekSentencesRemaining}/${user.weekSentencesTotal || 10}` : 
+                                `0/10`
                             }
                         </p>
                     )}

@@ -29,7 +29,7 @@ const getSession = async (req, res) => {
 
         // For free users, get their rate limit information
         let weekSentencesUsed = 0;
-        let weekSentencesTotal = 30; // Default weekly quota
+        let weekSentencesTotal = 10; // Default weekly quota
         let weekSentencesRemaining = weekSentencesTotal;
         
         if (user.tier === 0) {
