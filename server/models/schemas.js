@@ -47,6 +47,10 @@ const collections = {
             bsonType: ["bool", "null"],
             description: "Whether user has redeemed their feedback audio credit bonus"
           },
+          hasUsedFreeTrial: {
+            bsonType: ["bool", "null"],
+            description: "Whether user has already used their 7-day free trial"
+          },
           maxSavedSentences: {
             bsonType: ["int", "null"],
             description: "Maximum number of sentences user can save (for tier 0)"

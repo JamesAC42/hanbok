@@ -13,6 +13,14 @@ const PRICE_IDS = {
     PLUS_SUBSCRIPTION_YEARLY: 'price_1RjhBODv6kE7GatajkAfu5cB',
 };
 
+// Tier mapping for subscriptions
+const TIER_MAPPING = {
+    [PRICE_IDS.BASIC_SUBSCRIPTION]: 1,
+    [PRICE_IDS.BASIC_SUBSCRIPTION_YEARLY]: 1,
+    [PRICE_IDS.PLUS_SUBSCRIPTION]: 2,
+    [PRICE_IDS.PLUS_SUBSCRIPTION_YEARLY]: 2,
+};
+
 //test
 // const PRICE_IDS = {
 //     BASIC_UPGRADE: 'price_1QtEdrDv6kE7GatabIZ21Odt',
@@ -78,31 +86,31 @@ const handleCheckoutComplete = async (session) => {
                 );
                 break;
 
-            case PRICE_IDS.PLUS_SUBSCRIPTION: // Monthly Sub
-            case PRICE_IDS.PLUS_SUBSCRIPTION_YEARLY: // Monthly Sub
-                subscriptionUpdate = {
-                    tier: 2,
-                    'subscription.status': 'active',
-                    'subscription.startDate': new Date(),
-                    'subscription.stripeSubscriptionId': session.subscription,
-                    'subscription.customerId': session.customer
-                };
-
-                await db.collection('users').updateOne(
-                    { userId },
-                    { $set: subscriptionUpdate }
-                );
-                break;
-
+            case PRICE_IDS.PLUS_SUBSCRIPTION: // Plus Subscription
+            case PRICE_IDS.PLUS_SUBSCRIPTION_YEARLY: // Plus Subscription Yearly
             case PRICE_IDS.BASIC_SUBSCRIPTION: // Basic Subscription
-            case PRICE_IDS.BASIC_SUBSCRIPTION_YEARLY: // Basic Subscription
+            case PRICE_IDS.BASIC_SUBSCRIPTION_YEARLY: // Basic Subscription Yearly
+                const tier = TIER_MAPPING[priceId];
+                if (!tier) {
+                    throw new Error(`Unknown subscription tier for price ID: ${priceId}`);
+                }
+
                 subscriptionUpdate = {
-                    tier: 1,
+                    tier: tier,
                     'subscription.status': 'active',
                     'subscription.startDate': new Date(),
                     'subscription.stripeSubscriptionId': session.subscription,
                     'subscription.customerId': session.customer
                 };
+
+                // Check if this subscription has a trial and mark it as used
+                if (session.subscription) {
+                    const stripeSubscription = await stripe.subscriptions.retrieve(session.subscription);
+                    if (stripeSubscription.trial_end && stripeSubscription.trial_end > Date.now() / 1000) {
+                        subscriptionUpdate.hasUsedFreeTrial = true;
+                        console.log(`Marking user as having used free trial (Tier ${tier})`);
+                    }
+                }
 
                 await db.collection('users').updateOne(
                     { userId },

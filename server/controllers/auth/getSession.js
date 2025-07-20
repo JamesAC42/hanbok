@@ -78,6 +78,7 @@ const getSession = async (req, res) => {
             feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
             remainingImageExtracts: user.remainingImageExtracts ? user.remainingImageExtracts : 0,
             remainingSentenceAnalyses: user.remainingSentenceAnalyses ? user.remainingSentenceAnalyses : 0,
+            hasUsedFreeTrial: user.hasUsedFreeTrial || false,
             weekSentencesUsed,
             weekSentencesTotal,
             weekSentencesRemaining

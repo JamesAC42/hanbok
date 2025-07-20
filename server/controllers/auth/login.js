@@ -144,6 +144,7 @@ const login = async (req, res, redisClient) => {
                 feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
                 remainingImageExtracts: user.remainingImageExtracts,
                 remainingSentenceAnalyses: user.remainingSentenceAnalyses || 0,
+                hasUsedFreeTrial: user.hasUsedFreeTrial || false,
                 weekSentencesUsed,
                 weekSentencesTotal,
                 weekSentencesRemaining

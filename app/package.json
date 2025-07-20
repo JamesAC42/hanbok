@@ -11,10 +11,13 @@
   "dependencies": {
     "@romanize/korean": "^0.1.1",
     "chart.js": "^4.4.8",
-    "next": "15.1.6",
+    "next": "^15.4.2",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
     "sass": "^1.84.0"
+  },
+  "devDependencies": {
+    "case-sensitive-paths-webpack-plugin": "^2.4.0"
   }
 }
