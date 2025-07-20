@@ -89,6 +89,8 @@ const getRateLimits = require('./controllers/auth/getRateLimits');
 
 const getEmailList = require('./controllers/admin/getEmailList');
 const getAdmins = require('./controllers/admin/getAdmins');
+const { getUsersAdmin } = require('./controllers/admin/getUsersAdmin');
+const { updateUser } = require('./controllers/admin/updateUser');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -331,6 +333,14 @@ app.get('/api/admin/email-list', isAuthenticated, async (req, res) => {
 
 app.get('/api/admin/admins', isAuthenticated, async (req, res) => {
     getAdmins(req, res);
+});
+
+app.get('/api/admin/users', isAuthenticated, async (req, res) => {
+    getUsersAdmin(req, res);
+});
+
+app.put('/api/admin/users/:userId', isAuthenticated, async (req, res) => {
+    updateUser(req, res);
 });
 
 // Admin lyrics routes

@@ -3,15 +3,23 @@
   max-width: 90rem;
   padding: 2rem;
   margin: 0 auto;
+
+  background: #171717;
+  border-radius:1rem;
   
   h1 {
     margin-bottom: 2rem;
+    color: #ffffff;
   }
   
-  h2 {
+  h2, h3 {
     margin: 2rem 0 1rem;
     font-size: 1.5rem;
     color: #ffffff;
+  }
+
+  h3 {
+    font-size: 1.2rem;
   }
 }
 
@@ -42,6 +50,12 @@
   font-style: italic;
 }
 
+.limitContainer {
+  label {
+    color: #ffffff;
+  }
+}
+
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -58,6 +72,7 @@
     
     label {
       font-weight: 500;
+      color: #000;
     }
     
     select {
@@ -335,5 +350,273 @@
   .chartWrapper {
     flex: 1 1 calc(50% - 1rem);
     min-width: 25rem;
+  }
+}
+
+/* User Management Styles */
+.searchInput {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ccc;
+  background-color: white;
+  min-width: 15rem;
+  
+  &::placeholder {
+    color: #999;
+  }
+}
+
+.tierBadge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.tierFree {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.tierBasic {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.tierPlus {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.verified {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.unverified {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.editButton {
+  background-color: #6366f1;
+  color: white;
+  border: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #4f46e5;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.emailCell {
+  max-width: 15rem;
+  word-break: break-all;
+  font-size: 0.875rem;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: 0.5rem;
+  max-width: 50rem;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #111827;
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6b7280;
+  padding: 0.25rem;
+  
+  &:hover {
+    color: #374151;
+  }
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.userInfo {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+}
+
+.userInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.75rem;
+}
+
+.userInfoItem {
+  font-size: 0.875rem;
+  
+  strong {
+    color: #374151;
+  }
+}
+
+.editForm {
+  .formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    label {
+      font-weight: 500;
+      color: #374151;
+      font-size: 0.875rem;
+    }
+    
+    input, select {
+      padding: 0.5rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      
+      &:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+    }
+    
+    .checkbox {
+      width: auto;
+      margin-top: 0.5rem;
+    }
+    
+    input::placeholder {
+      color: #9ca3af;
+    }
+  }
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.cancelButton {
+  padding: 0.5rem 1rem;
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+  
+  &:hover:not(:disabled) {
+    background-color: #e5e7eb;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.saveButton {
+  padding: 0.5rem 1rem;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+  
+  &:hover:not(:disabled) {
+    background-color: #059669;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    margin: 1rem;
+    max-height: calc(100vh - 2rem);
+  }
+  
+  .modalHeader, .modalBody {
+    padding: 1rem;
+  }
+  
+  .userInfoGrid, 
+  .editForm .formGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .formActions {
+    flex-direction: column;
   }
 } 

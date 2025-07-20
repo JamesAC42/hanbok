@@ -6,6 +6,7 @@ import styles from '@/styles/components/pagelayout.module.scss';
 import adminStyles from '@/styles/components/admin.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import UserManagement from '@/components/admin/UserManagement';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -432,7 +433,7 @@ const Admin = () => {
     };
     
     return (
-        <div className={styles.pageContainer}>
+        <div className={`${styles.pageContainer} ${styles.dark}`}>
             <div className={styles.pageContent}>
                 <div className={adminStyles.adminContent}>
                     <h1 className={styles.pageTitle}>Admin Dashboard</h1>
@@ -464,6 +465,9 @@ const Admin = () => {
                             </div>
                         </div>
                     </section>
+                    
+                    {/* User Management Section */}
+                    <UserManagement />
                     
                     {/* New User Analytics Section */}
                     <section className={adminStyles.detailedSection}>
