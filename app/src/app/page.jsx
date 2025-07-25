@@ -93,7 +93,7 @@ export default function Home() {
               Start reading your favorite Korean content in 90 days.
             </div>
             <div className={styles.heroSubHeader}>
-              Hanbok is the AI-powered toolkit that turns any sentence into a grammar and vocab lesson—so you can read real Korean, fast.
+              Hanbok is the all-in-one toolkit that turns any sentence into a grammar and vocab lesson—so you can read real Korean, fast.
             </div>
             <div className={styles.heroMainFeatures}>
               <div className={styles.heroMainFeature}>
@@ -178,7 +178,7 @@ export default function Home() {
       <div className={`${styles.infoSection} ${styles.infoSection1}`}>
         <div className={styles.infoSectionLeft}>
           <h1>What <span className={styles.underline}>is</span> Hanbok?</h1>
-          <p className={styles.infoSubHeader}>Hanbok is your AI-powered language lab. Paste any text—song lyric, YouTube subtitle, homework prompt—and get a clear breakdown, native-quality translation, and flash-card-ready vocab in seconds.</p>
+          <p className={styles.infoSubHeader}>Hanbok is your all-in-one language lab. Paste any text—song lyric, YouTube subtitle, homework prompt—and get a clear breakdown, native-quality translation, and flash-card-ready vocab in seconds.</p>
           <div className={styles.screenshotContainer}>
             <div className={`${styles.screenshotSingle} ${styles.screenshotSingleMain1}`}>
               <Image src="/images/screenshots/home/main.png" alt="Hanbok main interface" width={1200} height={800} />
