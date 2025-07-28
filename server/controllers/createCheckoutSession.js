@@ -39,6 +39,7 @@ const createCheckoutSession = async (req, res) => {
             metadata: {
                 priceId: priceId
             },
+            allow_promotion_codes: true,
             success_url: 'https://hanbokstudy.com/success?session_id={CHECKOUT_SESSION_ID}',
             cancel_url: 'https://hanbokstudy.com/pricing',
             client_reference_id: userId.toString(),
