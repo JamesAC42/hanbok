@@ -1,0 +1,33 @@
+<svg width="520" height="360" viewBox="0 0 520 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="32" y="44" width="456" height="272" rx="32" fill="url(#paint0_linear)"/>
+  <rect x="80" y="92" width="168" height="18" rx="9" fill="white" fill-opacity="0.85"/>
+  <rect x="80" y="128" width="328" height="16" rx="8" fill="white" fill-opacity="0.6"/>
+  <rect x="80" y="160" width="292" height="16" rx="8" fill="white" fill-opacity="0.45"/>
+  <rect x="80" y="192" width="248" height="16" rx="8" fill="white" fill-opacity="0.35"/>
+  <g filter="url(#filter0_d)">
+    <rect x="116" y="224" width="288" height="88" rx="20" fill="#FFFCF9"/>
+  </g>
+  <rect x="140" y="248" width="144" height="12" rx="6" fill="#5440FF" fill-opacity="0.85"/>
+  <rect x="140" y="270" width="216" height="10" rx="5" fill="#50E1EB" fill-opacity="0.6"/>
+  <path d="M384 246C394 258 410 264 426 264" stroke="#FF6289" stroke-width="10" stroke-linecap="round"/>
+  <path d="M384 270C394 282 410 288 426 288" stroke="#4FE18D" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="424" cy="112" r="18" fill="#FF6289" fill-opacity="0.85"/>
+  <circle cx="132" cy="272" r="8" fill="#5440FF" fill-opacity="0.6"/>
+  <circle cx="116" cy="78" r="10" fill="#50E1EB" fill-opacity="0.6"/>
+  <defs>
+    <filter id="filter0_d" x="76" y="204" width="368" height="168" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="10"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0 0.35 0 0 0 0.14 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+    <linearGradient id="paint0_linear" x1="32" y1="44" x2="488" y2="316" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5440FF" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#50E1EB" stop-opacity="0.88"/>
+    </linearGradient>
+  </defs>
+</svg>

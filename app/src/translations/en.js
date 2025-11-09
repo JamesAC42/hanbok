@@ -21,6 +21,14 @@ export const en = {
         vietnamese: 'Vietnamese',
         hindi: 'Hindi'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - About',
         title: 'About',
@@ -162,6 +170,7 @@ export const en = {
         remainingAudioGenerations: 'Remaining Audio Generations',
         remainingImageExtracts: 'Remaining Image Extracts',
         remainingSentenceAnalyses: 'Remaining Sentence Analyses',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: 'Weekly Sentence Analyses Remaining',
         unlimited: 'Unlimited',
         maxSavedSentences: 'Max Saved Sentences',
@@ -188,6 +197,7 @@ export const en = {
             moreDetails: 'For more details, visit our'
         },
         settings: "Settings:",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "Theme",
             light: "Light",
@@ -249,6 +259,7 @@ export const en = {
         features: {
             free: {
                 analyses: '10 sentence analyses per week',
+                extendedText: '2 extended text analyses per week (up to 500 characters)',
                 conversations: '5 free conversations per month',
                 messages: '5 messages per conversation',
                 bookmarks: 'Max 30 bookmarked sentences',
@@ -257,6 +268,7 @@ export const en = {
             },
             basic: {
                 analyses: 'Unlimited sentence analyses',
+                extendedText: 'Unlimited extended text analyses (up to 2,000 characters)',
                 conversations: '50 conversations per month',
                 messages: '15 messages per conversation',
                 bookmarks: 'Unlimited bookmarked sentences',
@@ -265,6 +277,7 @@ export const en = {
             },
             plus: {
                 everythingInBasic: 'Everything in Basic',
+                extendedText: 'Unlimited extended text analyses (up to 5,000 characters)',
                 imageExtraction: 'Unlimited image text extraction',
                 audioGeneration: 'Unlimited audio generation',
                 conversations: '200 conversations per month',
@@ -1032,6 +1045,7 @@ export const en = {
     sidebar: {
         myAccount: "My Account",
         analyzeText: "Analyze Text",
+        extendedText: "Extended Text",
         savedSentences: "Saved Sentences",
         flashcards: "Flashcards",
         koreanTyping: "Korean Typing",
@@ -1043,5 +1057,74 @@ export const en = {
         feedback: "Feedback",
         viewPlans: "View Plans",
         navigation: "Navigation"
+    },
+    extended_text: {
+        title: "Extended Text Analysis",
+        description: "Analyze multiple sentences at once and see how they work together. Click on any sentence to see its detailed breakdown.",
+        title_label: "Title",
+        title_placeholder: "Give your text a title...",
+        optional: "optional",
+        text_label: "Text to Analyze",
+        text_placeholder: "Enter your text here (multiple sentences)...",
+        text_required: "Text is required",
+        analyze_button: "Analyze Text",
+        analyzing: "Analyzing...",
+        login_required: "Please log in to use extended text analysis",
+        analysis_failed: "Failed to analyze text",
+        submission_error: "An error occurred. Please try again.",
+        char_limit_label: "Character limit",
+        characters: "characters",
+        weekly_usage_label: "Weekly extended analyses",
+        weekly_usage_unlimited: "Unlimited",
+        weekly_usage_login: "Log in to view usage",
+        weekly_usage_meta: "Extended analyses remaining: {remaining}/{total}",
+        language_selector_label: "Analyze text in",
+        translation_language_label: "Explanations shown in {language}",
+        language_meta: "Analyzing {language} text",
+        translation_meta: "Explaining in {language}",
+        login_gate_message: "Log in to unlock extended text analysis.",
+        limit_reached: "You've reached your extended analysis limit for this week. Upgrade to enjoy unlimited analyses.",
+        char_limit_error: "Text must be {limit} characters or less for your current plan.",
+        login_cta: "Log in to analyze",
+        close_tutorial: "Close tutorial",
+        open_walkthrough: "View Tutorial",
+        onboarding_next: "Next",
+        onboarding_finish: "Got it",
+        info_title: "What is Extended Text Analysis?",
+        info_1: "Analyze longer passages with multiple sentences",
+        info_2: "Get overall analysis of themes, tone, and structure",
+        info_3: "Click individual sentences to see detailed breakdowns",
+        loading: "Loading...",
+        fetch_error: "Failed to load text",
+        not_found: "Text not found",
+        sentences_count: "{count} sentences",
+        full_text: "Full Text",
+        overall_analysis: "Overall Analysis",
+        summary: "Summary",
+        themes: "Themes",
+        tone: "Tone",
+        structure: "Structure",
+        key_grammar_patterns: "Key Grammar Patterns",
+        cultural_context: "Cultural Context",
+        sentence_analysis: "Sentence Analysis",
+        select_sentence_prompt: "Click on a sentence in the text to view its detailed analysis",
+        close: "Close",
+        full_translation: "Full Translation",
+        progress_title: "Analyzing your text",
+        progress_subtitle: "Breaking down {count} sentences...",
+        progress_subtitle_generic: "Breaking down each sentence...",
+        progress_status: {
+            processing: "Preparing your extended analysis...",
+            analyzing_sentence: "Analyzing sentence {current} of {total}",
+            overall_analysis: "Synthesizing the big-picture insights...",
+            saving_results: "Saving your analysis..."
+        },
+        progress_completed: "Analysis complete!",
+        progress_redirect: "Sending you to the full results...",
+        progress_count: "{processed} of {total} sentences analyzed",
+        progress_quota: "{remaining} of {total} weekly extended analyses remaining",
+        progress_tip: "Hang tight—feel free to review other content while we finish up.",
+        progress_error: "Something went wrong while analyzing this text. Please try again.",
+        progress_connection_lost: "We lost the connection. Refresh to try again."
     }
-}; 
+};

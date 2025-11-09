@@ -4,20 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import profileStyles from '@/styles/components/profile.module.scss';
-import ChangeLanguageButton from '@/components/ChangeLanguageButton';
-import Image from 'next/image';
 import Link from 'next/link';
 import Dashboard from '@/components/Dashboard';
 
-import { SiSunFill } from "@/components/icons/Sun";
-import { TablerMoonFilled } from "@/components/icons/Moon";
-
-import { useTheme } from '@/contexts/ThemeContext';
-import themes from '@/lib/themes';
-
 const Profile = () => {
 
-    const { theme, setTheme } = useTheme();
     const router = useRouter();
     const { user, isAuthenticated, loading, logout } = useAuth();
     const { t } = useLanguage();
@@ -104,26 +95,22 @@ const Profile = () => {
                             user.remainingSentenceAnalyses
                         }
                     </p>
+                    <p>
+                        <strong>{t('profile.extendedTextAnalyses')}:</strong> {
+                            user.tier === 0
+                                ? `${Math.max(user.weekExtendedTextRemaining ?? 0, 0)}/${user.weekExtendedTextTotal ?? 0}`
+                                : t('profile.unlimited')
+                        }
+                    </p>
                 </div>
 
                 <div className={profileStyles.settingsContainer}>
                     <div className={profileStyles.settingsHeader}>
                         <h2>{t('profile.settings')}</h2>
                     </div>
-                    <div className={profileStyles.themeToggle}>
-                        {themes.map((listTheme) => (
-                            <button 
-                                className={`${profileStyles.themeToggleItem} ${theme === listTheme ? profileStyles.active : ""}`} 
-                                key={listTheme} 
-                                onClick={() => setTheme(listTheme)}>
-                                {t('profile.themes.' + listTheme)}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className={profileStyles.changeNativeLanguageOuter}>
-                        <ChangeLanguageButton native={true} />
-                    </div>
+                    <p className={profileStyles.settingsMessage}>
+                        {t('profile.settingsMoved')}
+                    </p>
                 </div>
 
                 {

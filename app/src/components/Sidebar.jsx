@@ -3,7 +3,7 @@
 import styles from "@/styles/components/sidebar.module.scss";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 import { MaterialSymbolsVariableAddRounded } from "./icons/AddSentence";
@@ -44,12 +44,12 @@ function Sidebar() {
     const [sectionOneTransform, setSectionOneTransform] = useState(0);
     const [sectionTwoTransform, setSectionTwoTransform] = useState(0);
 
-    const [activePath, setActivePath] = useState(null);
     const [expanding, setExpanding] = useState(false);
     const [collapsing, setCollapsing] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
     const router = useRouter();
+    const pathname = usePathname();
 
     function setHoverTransform(section, i) {
         if (section === 1) {
@@ -63,8 +63,6 @@ function Sidebar() {
 
     useEffect(() => {
         
-        setActivePath(window.location.pathname);
-
         if (typeof window !== 'undefined') {
             let saved = localStorage.getItem('sidebarCollapsed');
             saved = saved ? JSON.parse(saved) : false;
@@ -104,13 +102,13 @@ function Sidebar() {
     function getActiveClass(page) {
         let onPath = false;
         if (typeof page === "string") {    
-            if (page === activePath) {
+            if (pathname === page) {
                 return styles.active;
             }
             return "";
         } else if(Array.isArray(page)) {
             page.forEach(p => {
-                if (activePath?.startsWith(p)) {
+                if (pathname?.startsWith(p)) {
                     onPath = true;
                 }
             });
@@ -206,13 +204,27 @@ function Sidebar() {
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}
-                                    ${styles.newAnalysisSection}`}
+                                    ${styles.newAnalysisSection}
+                                    ${getActiveClass("/analyze")}`}
                                 onClick={() => navigateTo("/analyze")}>
                                 <div className={styles.sidebarSectionItemIcon}>
                                     <MaterialSymbolsVariableAddRounded />
                                 </div>
                                 <div className={styles.sidebarSectionItemText}>
                                     {t('sidebar.analyzeText')}
+                                </div>
+                            </div>
+                            <div
+                                className={`
+                                    ${styles.sidebarSectionItem}
+                                    ${expanding ? styles.expanding : ""}
+                                    ${getActiveClass(["/extended-text"])}`}
+                                onClick={() => navigateTo("/extended-text")}>
+                                <div className={styles.sidebarSectionItemIcon}>
+                                    <Fa6SolidParagraph />
+                                </div>
+                                <div className={styles.sidebarSectionItemText}>
+                                    {t('sidebar.extendedText')}
                                 </div>
                             </div>
                         </div>

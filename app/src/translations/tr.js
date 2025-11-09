@@ -17,6 +17,14 @@ export const tr = {
         russian: 'Rusça',
         turkish: 'Türkçe'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - Hakkında',
         title: 'Hakkında',
@@ -157,6 +165,7 @@ export const tr = {
         remainingAudioGenerations: 'Kalan Ses Üretimleri',
         remainingImageExtracts: 'Kalan Görüntü Çıkarımları',
         remainingSentenceAnalyses: 'Kalan Cümle Analizleri',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: 'Kalan Haftalık Cümle Analizleri',
         unlimited: 'Sınırsız',
         maxSavedSentences: 'Maksimum Kaydedilen Cümleler',
@@ -184,6 +193,7 @@ export const tr = {
         },
         signOut: "Çıkış Yap",
         settings: "Ayarlar:",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "Tema",
             light: "Açık",
@@ -249,6 +259,7 @@ export const tr = {
         features: {
             free: {
                 analyses: 'Haftada 10 cümle analizi',
+                extendedText: 'Haftada 2 genişletilmiş metin analizi (500 karaktere kadar)',
                 conversations: 'Ayda 5 ücretsiz konuşma',
                 messages: 'Konuşma başına 5 mesaj',
                 bookmarks: 'En fazla 30 yer imi cümlesi',
@@ -257,6 +268,7 @@ export const tr = {
             },
             basic: {
                 analyses: 'Sınırsız cümle analizi',
+                extendedText: 'Sınırsız genişletilmiş metin analizi (2.000 karaktere kadar)',
                 conversations: 'Ayda 50 konuşma',
                 messages: 'Konuşma başına 15 mesaj',
                 bookmarks: 'Sınırsız yer imi cümlesi',
@@ -265,6 +277,7 @@ export const tr = {
             },
             plus: {
                 everythingInBasic: 'Temel plandaki her şey',
+                extendedText: 'Sınırsız genişletilmiş metin analizi (5.000 karaktere kadar)',
                 imageExtraction: 'Sınırsız görsel metin çıkarımı',
                 audioGeneration: 'Sınırsız ses üretimi',
                 conversations: 'Ayda 200 konuşma',
@@ -951,5 +964,8 @@ export const tr = {
         feedback: "Geri Bildirim",
         viewPlans: "Planları Görüntüle",
         navigation: "Navigasyon"
+    },
+    extended_text: {
+        open_walkthrough: "Eğitimi Görüntüle"
     },
 }; 

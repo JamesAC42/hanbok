@@ -42,7 +42,7 @@ export function LanguageProvider({ children }) {
     }, [nativeLanguage]);
 
     // Get translation string based on current native language
-    const t = (path) => {
+    const t = (path, replacements = {}) => {
         const keys = path.split('.');
         let result = resources[nativeLanguage];
         
@@ -50,7 +50,15 @@ export function LanguageProvider({ children }) {
             if (result === undefined) return path; // Return path if translation not found
             result = result[key];
         }
-        
+
+        if (typeof result === 'string') {
+            return Object.keys(replacements).reduce((acc, key) => {
+                const value = replacements[key];
+                const pattern = new RegExp(`\\{${key}\\}`, 'g');
+                return acc.replace(pattern, value !== undefined ? String(value) : '');
+            }, result);
+        }
+
         return result || path; // Return path if translation not found
     };
 

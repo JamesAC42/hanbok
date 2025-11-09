@@ -1,0 +1,34 @@
+<svg width="560" height="420" viewBox="0 0 560 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="32" y="48" width="496" height="324" rx="32" fill="url(#paint0_linear)" />
+  <rect x="72" y="90" width="240" height="22" rx="11" fill="white" fill-opacity="0.85" />
+  <rect x="72" y="132" width="416" height="18" rx="9" fill="white" fill-opacity="0.7" />
+  <rect x="72" y="170" width="336" height="18" rx="9" fill="white" fill-opacity="0.55" />
+  <rect x="72" y="208" width="292" height="18" rx="9" fill="white" fill-opacity="0.45" />
+  <rect x="72" y="246" width="220" height="18" rx="9" fill="white" fill-opacity="0.4" />
+  <g filter="url(#filter0_d)">
+    <rect x="116" y="286" width="328" height="72" rx="20" fill="#FDF9FF"/>
+  </g>
+  <rect x="136" y="306" width="180" height="16" rx="8" fill="#5440FF" fill-opacity="0.8" />
+  <rect x="136" y="332" width="236" height="12" rx="6" fill="#50E1EB" fill-opacity="0.5" />
+  <path d="M410 306L446 342" stroke="#FF6289" stroke-width="10" stroke-linecap="round"/>
+  <path d="M446 306L410 342" stroke="#50E1EB" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="470" cy="118" r="20" fill="#FF6289" fill-opacity="0.9" />
+  <circle cx="162" cy="74" r="10" fill="#50E1EB" fill-opacity="0.6" />
+  <circle cx="112" cy="320" r="6" fill="#5440FF" fill-opacity="0.6" />
+  <defs>
+    <filter id="filter0_d" x="76" y="266" width="408" height="132" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="10"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="out"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.16 0 0 0 0 0.12 0 0 0 0 0.35 0 0 0 0.15 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+    </filter>
+    <linearGradient id="paint0_linear" x1="32" y1="48" x2="528" y2="372" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5440FF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#50E1EB" stop-opacity="0.85"/>
+    </linearGradient>
+  </defs>
+</svg>

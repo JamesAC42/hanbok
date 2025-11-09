@@ -42,6 +42,9 @@ const submitSentence = require('./controllers/auth/submitSentence');
 const getAudioURL = require('./controllers/auth/getAudioURL');
 const generateAudio = require('./controllers/auth/generateAudio');
 const getSentence = require('./controllers/auth/getSentence');
+const submitExtendedText = require('./controllers/auth/submitExtendedText');
+const getExtendedText = require('./controllers/auth/getExtendedText');
+const streamExtendedTextProgress = require('./controllers/auth/streamExtendedTextProgress');
 
 const login = require('./controllers/auth/login');
 const loginEmail = require('./controllers/auth/loginEmail');
@@ -203,6 +206,19 @@ app.get('/api/word-audio', isAuthenticated, async (req, res) => {
 
 app.get('/api/sentences/:sentenceId', async (req, res) => {
     getSentence(req, res);
+});
+
+// Extended text routes
+app.post('/api/extended-text/submit', isAuthenticated, async (req, res) => {
+    submitExtendedText(req, res);
+});
+
+app.get('/api/extended-text/:textId', isAuthenticated, async (req, res) => {
+    getExtendedText(req, res);
+});
+
+app.get('/api/extended-text/progress/:jobId', isAuthenticated, async (req, res) => {
+    streamExtendedTextProgress(req, res);
 });
 
 app.get('/api/user/sentences', isAuthenticated, async (req, res) => {

@@ -140,6 +140,10 @@ const collections = {
           isLyric: {
             bsonType: ["bool", "null"],
             description: "Whether the sentence is part of a song."
+          },
+          extendedTextId: {
+            bsonType: ["int", "null"],
+            description: "ID of the extended text this sentence is associated with, if any."
           }
         }
       }
@@ -912,6 +916,14 @@ const collections = {
             bsonType: ["date", "null"],
             description: "Timestamp of the last conversation creation"
           },
+          weekExtendedTextAnalyses: {
+            bsonType: ["int", "null"],
+            description: "Number of extended analyses completed in the current week"
+          },
+          totalExtendedTextAnalyses: {
+            bsonType: ["int", "null"],
+            description: "Total number of extended analyses completed"
+          },
           lastUpdated: {
             bsonType: "date",
             description: "Timestamp of the last update to this record"
@@ -1174,6 +1186,268 @@ const collections = {
       {
         key: { commentId: 1 },
         name: "comment_votes_index"
+      }
+    ]
+  },
+  extended_texts: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["textId", "userId", "text", "sentenceCount", "sentenceGroupId", "overallAnalysis", "dateCreated", "originalLanguage", "translationLanguage"],
+        properties: {
+          textId: {
+            bsonType: "int",
+            description: "Unique identifier for the extended text"
+          },
+          userId: {
+            bsonType: "int",
+            description: "User ID who submitted this text"
+          },
+          text: {
+            bsonType: "string",
+            description: "Full text submitted by user (multiple sentences)"
+          },
+          sentenceCount: {
+            bsonType: "int",
+            description: "Number of sentences in the text"
+          },
+          sentenceGroupId: {
+            bsonType: "int",
+            description: "Identifier for the bundled set of sentences in this extended text"
+          },
+          overallAnalysis: {
+            bsonType: "object",
+            description: "Analysis of the text as a whole",
+            properties: {
+              summary: {
+                bsonType: ["string", "null"],
+                description: "Summary of the entire text"
+              },
+              themes: {
+                bsonType: ["array", "null"],
+                items: {
+                  bsonType: "string"
+                },
+                description: "Main themes in the text"
+              },
+              tone: {
+                bsonType: ["string", "null"],
+                description: "Overall tone/mood of the text"
+              },
+              structure: {
+                bsonType: ["string", "null"],
+                description: "How the text is structured"
+              },
+              keyGrammarPatterns: {
+                bsonType: ["array", "null"],
+                items: {
+                  bsonType: "object",
+                  properties: {
+                    pattern: {
+                      bsonType: "string"
+                    },
+                    description: {
+                      bsonType: "string"
+                    },
+                    examples: {
+                      bsonType: "array",
+                      items: {
+                        bsonType: "string"
+                      }
+                    }
+                  }
+                },
+                description: "Key grammar patterns across the text"
+              },
+              culturalContext: {
+                bsonType: ["string", "null"],
+                description: "Cultural context for the entire text"
+              }
+            }
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "Date when the text was created"
+          },
+          originalLanguage: {
+            bsonType: "string",
+            description: "Language code for the original text (e.g. 'ko', 'ja')"
+          },
+          translationLanguage: {
+            bsonType: "string",
+            description: "Language code for the translation (e.g. 'en')"
+          },
+          title: {
+            bsonType: ["string", "null"],
+            description: "Optional user-provided title for the text"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { textId: 1 },
+        unique: true,
+        name: "textId_index"
+      },
+      {
+        key: { userId: 1, dateCreated: -1 },
+        name: "user_texts_by_date"
+      }
+    ]
+  },
+  extended_text_sentence_groups: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["textId", "userId", "sentences", "dateCreated", "originalLanguage", "translationLanguage"],
+        properties: {
+          textId: {
+            bsonType: "int",
+            description: "Identifier of the extended text this sentence group belongs to"
+          },
+          userId: {
+            bsonType: "int",
+            description: "User ID who owns this extended text"
+          },
+          originalLanguage: {
+            bsonType: "string",
+            description: "Language code for the original text"
+          },
+          translationLanguage: {
+            bsonType: "string",
+            description: "Language code for the translation"
+          },
+          sentences: {
+            bsonType: "array",
+            description: "Ordered list of sentences associated with the extended text",
+            items: {
+              bsonType: "object",
+              required: ["sentenceId", "order"],
+              properties: {
+                sentenceId: {
+                  bsonType: "int",
+                  description: "Reference to the sentenceId in the sentences collection"
+                },
+                order: {
+                  bsonType: "int",
+                  description: "Zero-based order of the sentence within the extended text"
+                }
+              }
+            }
+          },
+          dateCreated: {
+            bsonType: "date",
+            description: "Date when this sentence group was created"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { textId: 1 },
+        unique: true,
+        name: "extended_text_sentence_group_textId"
+      },
+      {
+        key: { userId: 1, dateCreated: -1 },
+        name: "extended_text_sentence_group_user"
+      }
+    ]
+  },
+  extended_text_jobs: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["jobId", "textId", "userId", "text", "sentences", "sentenceCount", "originalLanguage", "translationLanguage", "status", "processedSentences", "createdAt", "updatedAt"],
+        properties: {
+          jobId: {
+            bsonType: "int",
+            description: "Unique identifier for the extended text job"
+          },
+          textId: {
+            bsonType: "int",
+            description: "Reserved text ID that will be used once processing completes"
+          },
+          userId: {
+            bsonType: "int",
+            description: "User ID who submitted this job"
+          },
+          text: {
+            bsonType: "string",
+            description: "Full text to analyze"
+          },
+          sentences: {
+            bsonType: "array",
+            description: "Sentences extracted from the text",
+            items: {
+              bsonType: "string"
+            }
+          },
+          sentenceCount: {
+            bsonType: "int",
+            description: "Number of sentences to analyze"
+          },
+          originalLanguage: {
+            bsonType: "string",
+            description: "Language code for the original text"
+          },
+          translationLanguage: {
+            bsonType: "string",
+            description: "Language code for the translation output"
+          },
+          title: {
+            bsonType: ["string", "null"],
+            description: "Optional title provided by the user"
+          },
+          status: {
+            bsonType: "string",
+            description: "Job status: pending, processing, completed, or failed"
+          },
+          processedSentences: {
+            bsonType: "int",
+            description: "Number of sentences processed so far"
+          },
+          error: {
+            bsonType: ["string", "null"],
+            description: "Error message if the job failed"
+          },
+          createdAt: {
+            bsonType: "date",
+            description: "Job creation timestamp"
+          },
+          updatedAt: {
+            bsonType: "date",
+            description: "Timestamp of the last update"
+          },
+          requiresRateLimitUpdate: {
+            bsonType: ["bool", "null"],
+            description: "Whether the job should update rate limits once completed"
+          },
+          weeklyQuota: {
+            bsonType: ["object", "null"],
+            description: "Cached weekly quota information after completion"
+          },
+          resultTextId: {
+            bsonType: ["int", "null"],
+            description: "Final textId once job has completed"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { jobId: 1 },
+        unique: true,
+        name: "extended_text_jobId"
+      },
+      {
+        key: { userId: 1, createdAt: -1 },
+        name: "extended_text_jobs_user"
+      },
+      {
+        key: { status: 1, updatedAt: -1 },
+        name: "extended_text_jobs_status"
       }
     ]
   }

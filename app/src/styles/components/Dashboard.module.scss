@@ -12,3 +12,19 @@
         position: relative;
     }
 }
+
+.main {
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+    height:100dvh;
+}
+
+.content {
+    flex:1;
+    min-height:0;
+    overflow-y:auto;
+    position:relative;
+    background:var(--background);
+}

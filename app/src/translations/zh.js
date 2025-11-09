@@ -17,6 +17,14 @@ export const zh = {
         russian: '俄语',
         turkish: '土耳其语'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - 关于',
         title: '关于',
@@ -157,6 +165,7 @@ export const zh = {
         remainingAudioGenerations: '剩余音频生成次数',
         remainingImageExtracts: '剩余图像提取次数',
         remainingSentenceAnalyses: '剩余句子分析',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: '剩余每周句子分析',
         unlimited: '无限制',
         maxSavedSentences: '最大保存句子数',
@@ -184,6 +193,7 @@ export const zh = {
         },
         signOut: "登出",
         settings: "设置:",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "主题",
             light: "浅色",
@@ -249,6 +259,7 @@ export const zh = {
         features: {
             free: {
                 analyses: '每周10个句子分析',
+                extendedText: '每周2次扩展文本分析（最多500字符）',
                 conversations: '每月5次免费对话',
                 messages: '每次对话5条消息',
                 bookmarks: '最多收藏30个句子',
@@ -257,6 +268,7 @@ export const zh = {
             },
             basic: {
                 analyses: '无限制句子分析',
+                extendedText: '无限制扩展文本分析（最多2,000字符）',
                 conversations: '每月50次对话',
                 messages: '每次对话15条消息',
                 bookmarks: '无限收藏句子',
@@ -265,6 +277,7 @@ export const zh = {
             },
             plus: {
                 everythingInBasic: '包含基础方案的所有内容',
+                extendedText: '无限制扩展文本分析（最多5,000字符）',
                 imageExtraction: '无限制图片文字提取',
                 audioGeneration: '无限制语音生成',
                 conversations: '每月200次对话',
@@ -953,5 +966,8 @@ export const zh = {
         feedback: "反馈",
         viewPlans: "查看套餐",
         navigation: "导航"
+    },
+    extended_text: {
+        open_walkthrough: "查看教程"
     },
 }; 

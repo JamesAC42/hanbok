@@ -163,6 +163,17 @@
       }
     }
   }
+
+  .settingsMessage {
+    background:var(--background-alt);
+    border:1px solid var(--foreground-light);
+    border-radius:0.5rem;
+    padding:1rem;
+    font-family:var(--font-funnel);
+    font-size:0.95rem;
+    color:var(--foreground);
+    max-width:32rem;
+  }
 }
 
 .manageSubscription {

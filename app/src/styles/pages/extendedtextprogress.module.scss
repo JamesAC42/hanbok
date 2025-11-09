@@ -1,0 +1,201 @@
+.wrapper {
+    position: relative;
+    min-height: calc(100vh - 120px);
+    padding: 3rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: url('/images/backgrounddusk.png') center / cover no-repeat;
+    color: #ffffff;
+}
+
+.wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(8, 15, 35, 0.78), rgba(12, 24, 52, 0.88));
+    backdrop-filter: blur(2px);
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    width: 100%;
+    text-align: center;
+}
+
+.heading {
+    font-size: 2.25rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.01em;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: rgba(226, 232, 240, 0.75);
+    margin-bottom: 2.5rem;
+}
+
+.progressPanel {
+    display: flex;
+    gap: 2.25rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 23, 42, 0.65);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    border-radius: 28px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 28px 60px rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(12px);
+}
+
+.progressVisualizer {
+    position: relative;
+    width: 220px;
+    height: 220px;
+}
+
+.pulseOverlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(94, 234, 212, 0.2), transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+}
+
+.progressCircle {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progressCircle svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.progressCircle circle {
+    fill: none;
+    stroke-width: 12;
+    stroke-linecap: round;
+}
+
+.progressCircle .bg {
+    stroke: rgba(148, 163, 184, 0.2);
+}
+
+.progressCircle .fg {
+    stroke-dasharray: 339.292;
+    stroke-dashoffset: 339.292;
+    transition: stroke-dashoffset 0.6s ease;
+    stroke: #22d3ee;
+}
+
+.progressValue {
+    position: relative;
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #22d3ee;
+    text-shadow: 0 6px 24px rgba(34, 211, 238, 0.35);
+}
+
+.details {
+    flex: 1;
+    min-width: 240px;
+    text-align: left;
+}
+
+.status {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    color: rgba(226, 232, 240, 0.9);
+}
+
+.bar {
+    width: 100%;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+}
+
+.barFill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(135deg, #6366f1, #22d3ee);
+    border-radius: inherit;
+    transition: width 0.5s ease;
+}
+
+.count {
+    font-size: 0.95rem;
+    color: rgba(148, 163, 184, 0.95);
+    margin-bottom: 0.75rem;
+}
+
+.redirect {
+    font-size: 0.95rem;
+    color: #a5b4fc;
+    margin-top: 0.5rem;
+}
+
+.quota {
+    font-size: 0.9rem;
+    color: rgba(59, 130, 246, 0.8);
+    margin-top: 0.75rem;
+}
+
+.tip {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: rgba(148, 163, 184, 0.85);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        opacity: 0.55;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.85;
+    }
+    100% {
+        transform: scale(0.95);
+        opacity: 0.55;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        padding: 2rem 1rem;
+    }
+
+    .progressPanel {
+        padding: 2rem 1.5rem;
+        gap: 1.75rem;
+    }
+
+    .progressVisualizer {
+        width: 180px;
+        height: 180px;
+    }
+
+    .heading {
+        font-size: 1.75rem;
+    }
+
+    .subtitle {
+        font-size: 0.95rem;
+    }
+}

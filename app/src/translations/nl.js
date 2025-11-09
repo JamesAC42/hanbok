@@ -17,6 +17,14 @@ export const nl = {
         russian: 'Russisch',
         turkish: 'Turks'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - Over',
         title: 'Over',
@@ -156,7 +164,8 @@ export const nl = {
         },
         remainingAudioGenerations: 'Resterende audio-generaties',
         remainingImageExtracts: 'Resterende beeldextracties',
-        remainingSentenceAnalyses: 'Resterende Zinanalyses',
+        remainingSentenceAnalyses: 'Resterende zinanalyses',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: 'Resterende Wekelijkse Zinanalyses',
         unlimited: 'Onbeperkt',
         maxSavedSentences: 'Maximaal opgeslagen zinnen',
@@ -184,6 +193,7 @@ export const nl = {
         },
         signOut: "Uitloggen",
         settings: "Instellingen:",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "Thema",
             light: "Licht",
@@ -249,6 +259,7 @@ export const nl = {
         features: {
             free: {
                 analyses: '10 zinsanalyses per week',
+                extendedText: '2 uitgebreide tekstanalyses per week (tot 500 tekens)',
                 conversations: '5 gratis gesprekken per maand',
                 messages: '5 berichten per gesprek',
                 bookmarks: 'Maximaal 30 gemarkeerde zinnen',
@@ -257,6 +268,7 @@ export const nl = {
             },
             basic: {
                 analyses: 'Onbeperkte zinsanalyses',
+                extendedText: 'Onbeperkte uitgebreide tekstanalyses (tot 2.000 tekens)',
                 conversations: '50 gesprekken per maand',
                 messages: '15 berichten per gesprek',
                 bookmarks: 'Onbeperkt gemarkeerde zinnen',
@@ -265,6 +277,7 @@ export const nl = {
             },
             plus: {
                 everythingInBasic: 'Alles van het Basis-plan',
+                extendedText: 'Onbeperkte uitgebreide tekstanalyses (tot 5.000 tekens)',
                 imageExtraction: 'Onbeperkte tekstextractie uit afbeeldingen',
                 audioGeneration: 'Onbeperkte audiogeneratie',
                 conversations: '200 gesprekken per maand',
@@ -950,5 +963,8 @@ export const nl = {
         feedback: "Feedback",
         viewPlans: "Bekijk plannen",
         navigation: "Navigatie"
+    },
+    extended_text: {
+        open_walkthrough: "Bekijk Tutorial"
     },
 }; 

@@ -54,6 +54,18 @@ export function AuthProvider({ children }) {
             weekSentencesRemaining
         }));
     }
+
+    const updateExtendedTextQuota = (weekExtendedTextUsed, weekExtendedTextTotal, weekExtendedTextRemaining) => {
+        setUser(prevUser => {
+            if (!prevUser) return prevUser;
+            return {
+                ...prevUser,
+                weekExtendedTextUsed,
+                weekExtendedTextTotal,
+                weekExtendedTextRemaining
+            };
+        });
+    }
     
     const login = async (userDataOrGoogleResponse) => {
         // If the parameter has a 'credential' property, it's a Google OAuth response
@@ -124,6 +136,7 @@ export function AuthProvider({ children }) {
         decrementRemainingImageExtracts,
         decrementRemainingSentenceAnalyses,
         updateWeeklySentenceQuota,
+        updateExtendedTextQuota,
         isAuthenticated: !!user
     };
 

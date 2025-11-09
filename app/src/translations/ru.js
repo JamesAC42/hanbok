@@ -17,6 +17,14 @@ export const ru = {
         russian: 'Русский',
         turkish: 'Турецкий'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - О нас',
         title: 'О нас',
@@ -157,6 +165,7 @@ export const ru = {
         remainingAudioGenerations: 'Оставшиеся генерации аудио',
         remainingImageExtracts: 'Оставшиеся извлечения изображений',
         remainingSentenceAnalyses: 'Оставшиеся анализы предложений',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: 'Оставшиеся еженедельные анализы предложений',
         unlimited: 'Неограниченно',
         maxSavedSentences: 'Максимум сохраненных предложений',
@@ -184,6 +193,7 @@ export const ru = {
         },
         signOut: "Выйти",
         settings: "Настройки:",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "Тема",
             light: "Светлая",
@@ -249,6 +259,7 @@ export const ru = {
         features: {
             free: {
                 analyses: '10 анализов предложений в неделю',
+                extendedText: '2 расширенных текстовых анализа в неделю (до 500 символов)',
                 conversations: '5 бесплатных разговоров в месяц',
                 messages: '5 сообщений на разговор',
                 bookmarks: 'До 30 сохранённых предложений',
@@ -257,6 +268,7 @@ export const ru = {
             },
             basic: {
                 analyses: 'Неограниченный анализ предложений',
+                extendedText: 'Неограниченные расширенные текстовые анализы (до 2 000 символов)',
                 conversations: '50 разговоров в месяц',
                 messages: '15 сообщений на разговор',
                 bookmarks: 'Неограниченное количество сохранённых предложений',
@@ -265,6 +277,7 @@ export const ru = {
             },
             plus: {
                 everythingInBasic: 'Всё из базового плана',
+                extendedText: 'Неограниченные расширенные текстовые анализы (до 5 000 символов)',
                 imageExtraction: 'Неограниченное извлечение текста из изображений',
                 audioGeneration: 'Неограниченная генерация аудио',
                 conversations: '200 разговоров в месяц',
@@ -955,5 +968,8 @@ export const ru = {
         feedback: "Отзывы",
         viewPlans: "Посмотреть тарифы",
         navigation: "Навигация"
+    },
+    extended_text: {
+        open_walkthrough: "Посмотреть руководство"
     },
 }; 

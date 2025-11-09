@@ -15,6 +15,7 @@ const TextInput = ({
   onPaste,
   language,
   inputRef,
+  style: styleProp,
   ...props
 }) => {
   const textareaRef = useRef(null);
@@ -64,7 +65,8 @@ const TextInput = ({
         resize: 'none',
         overflow: 'hidden',
         minHeight: '1.2rem',
-        lineHeight: '1.4'
+        lineHeight: '1.4',
+        ...styleProp
       }}
       {...props}
     />

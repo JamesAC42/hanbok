@@ -210,7 +210,10 @@
                             background:var(--foreground-lighter);
                         }
                     }
-    
+                    &.newAnalysisSection.active {
+                        background:var(--foreground-lighter);
+                    }
+
                     .sidebarSectionItemIcon {
                         width:2rem;
                         height:2rem;

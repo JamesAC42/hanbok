@@ -1,6 +1,7 @@
 const { getDb } = require('../../database');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
+const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
 
 const getSession = async (req, res) => {
     
@@ -31,17 +32,20 @@ const getSession = async (req, res) => {
         let weekSentencesUsed = 0;
         let weekSentencesTotal = 10; // Default weekly quota
         let weekSentencesRemaining = weekSentencesTotal;
-        
+        let weekExtendedTextUsed = 0;
+        let weekExtendedTextTotal = user.tier === 0 ? FREE_TIER_WEEKLY_ANALYSIS_LIMIT : null;
+        let weekExtendedTextRemaining = weekExtendedTextTotal;
+
         if (user.tier === 0) {
             const userId = user.userId.toString();
             const weekStartDate = getPreviousSunday();
-            
+
             // Get user's rate limit record
             let rateLimitRecord = await db.collection('rate_limits').findOne({ 
                 identifier: userId,
                 identifierType: 'userId'
             });
-            
+
             if (rateLimitRecord) {
                 // Check if we need to reset the weekly counter for a new week
                 if (rateLimitRecord.weekStartDate < weekStartDate) {
@@ -50,19 +54,45 @@ const getSession = async (req, res) => {
                         { identifier: userId },
                         { 
                             $set: { 
-                                weekSentences: 0, 
+                                weekSentences: 0,
+                                weekExtendedTextAnalyses: 0,
                                 weekStartDate, 
                                 lastUpdated: new Date()
                             }
                         }
                     );
                     weekSentencesUsed = 0;
+                    weekExtendedTextUsed = 0;
+                    rateLimitRecord.weekExtendedTextAnalyses = 0;
                 } else {
                     weekSentencesUsed = rateLimitRecord.weekSentences;
+                    if (rateLimitRecord.weekExtendedTextAnalyses === undefined) {
+                        weekExtendedTextUsed = 0;
+                    } else {
+                        weekExtendedTextUsed = rateLimitRecord.weekExtendedTextAnalyses;
+                    }
                 }
+            } else {
+                // Ensure we have a baseline record for future tracking
+                await db.collection('rate_limits').insertOne({
+                    identifier: userId,
+                    identifierType: 'userId',
+                    totalSentences: 0,
+                    weekSentences: 0,
+                    weekStartDate,
+                    weekExtendedTextAnalyses: 0,
+                    totalExtendedTextAnalyses: 0,
+                    lastUpdated: new Date()
+                });
+                weekSentencesUsed = 0;
+                weekExtendedTextUsed = 0;
             }
-            
+
             weekSentencesRemaining = weekSentencesTotal - weekSentencesUsed;
+            weekExtendedTextRemaining = Math.max((weekExtendedTextTotal || 0) - weekExtendedTextUsed, 0);
+        } else {
+            weekExtendedTextTotal = null;
+            weekExtendedTextRemaining = null;
         }
 
         let userData = {
@@ -81,7 +111,10 @@ const getSession = async (req, res) => {
             hasUsedFreeTrial: user.hasUsedFreeTrial || false,
             weekSentencesUsed,
             weekSentencesTotal,
-            weekSentencesRemaining
+            weekSentencesRemaining,
+            weekExtendedTextUsed,
+            weekExtendedTextTotal,
+            weekExtendedTextRemaining
         };
 
         res.json({

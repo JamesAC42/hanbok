@@ -219,6 +219,7 @@ const Pricing = () => {
                             </div>
                             <ul className={pricingStyles.planFeatures}>
                                 <li>{t('pricing.features.free.analyses')}</li>
+                                <li>{t('pricing.features.free.extendedText')}</li>
                                 <li>{t('pricing.features.free.conversations')}</li>
                                 <li>{t('pricing.features.free.messages')}</li>
                                 <li>{t('pricing.features.free.bookmarks')}</li>
@@ -279,6 +280,7 @@ const Pricing = () => {
                             </div>
                             <ul className={pricingStyles.planFeatures}>
                                 <li>{t('pricing.features.basic.analyses')}</li>
+                                <li>{t('pricing.features.basic.extendedText')}</li>
                                 <li>{t('pricing.features.basic.conversations')}</li>
                                 <li>{t('pricing.features.basic.messages')}</li>
                                 <li>{t('pricing.features.basic.bookmarks')}</li>
@@ -345,6 +347,7 @@ const Pricing = () => {
                             </div>
                             <ul className={pricingStyles.planFeatures}>
                                 <li>{t('pricing.features.plus.everythingInBasic')}</li>
+                                <li>{t('pricing.features.plus.extendedText')}</li>
                                 <li>{t('pricing.features.plus.imageExtraction')}</li>
                                 <li>{t('pricing.features.plus.audioGeneration')}</li>
                                 <li>{t('pricing.features.plus.conversations')}</li>

@@ -17,6 +17,14 @@ export const ko = {
         russian: '러시아어',
         turkish: '터키어'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - 소개',
         title: '소개',
@@ -157,6 +165,7 @@ export const ko = {
         remainingAudioGenerations: '남은 음성 생성 횟수',
         remainingImageExtracts: '남은 이미지 추출 횟수',
         remainingSentenceAnalyses: '남은 문장 분석',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: '남은 주간 문장 분석',
         unlimited: '무제한',
         maxSavedSentences: '최대 저장 문장 수',
@@ -184,6 +193,7 @@ export const ko = {
         },
         signOut: "로그아웃",
         settings: "설정:",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "테마",
             light: "라이트",
@@ -249,6 +259,7 @@ export const ko = {
         features: {
             free: {
                 analyses: '주당 10문장 분석',
+                extendedText: '주당 2회 확장 텍스트 분석 (최대 500자)',
                 conversations: '월 5회 무료 대화',
                 messages: '대화당 5개 메시지',
                 bookmarks: '최대 30개 북마크 문장',
@@ -257,6 +268,7 @@ export const ko = {
             },
             basic: {
                 analyses: '무제한 문장 분석',
+                extendedText: '무제한 확장 텍스트 분석 (최대 2,000자)',
                 conversations: '월 50회 대화',
                 messages: '대화당 15개 메시지',
                 bookmarks: '무제한 북마크 문장',
@@ -265,6 +277,7 @@ export const ko = {
             },
             plus: {
                 everythingInBasic: '베이직 플랜의 모든 기능 포함',
+                extendedText: '무제한 확장 텍스트 분석 (최대 5,000자)',
                 imageExtraction: '무제한 이미지 텍스트 추출',
                 audioGeneration: '무제한 오디오 생성',
                 conversations: '월 200회 대화',
@@ -951,5 +964,8 @@ export const ko = {
         feedback: "피드백",
         viewPlans: "플랜 보기",
         navigation: "내비게이션"
+    },
+    extended_text: {
+        open_walkthrough: "튜토리얼 보기"
     },
 }; 

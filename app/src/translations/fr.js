@@ -17,6 +17,14 @@ export const fr = {
         russian: 'Russe',
         turkish: 'Turc'
     },
+    dashboard: {
+        searchPlaceholder: 'Search (coming soon)',
+        openSettings: 'Open settings',
+        settingsTitle: 'Settings',
+        closeSettings: 'Close settings',
+        themeHeading: 'Theme',
+        languageHeading: 'Language'
+    },
     about: {
         pageTitle: 'Hanbok - À propos',
         title: 'À propos',
@@ -156,7 +164,7 @@ export const fr = {
         },
         remainingAudioGenerations: 'Générations Audio Restantes',
         remainingImageExtracts: 'Extractions d\'Images Restantes',
-        remainingSentenceAnalyses: 'Analyses de Phrases Restantes',
+        extendedTextAnalyses: 'Extended Text Analyses This Week',
         weekSentencesRemaining: 'Analyses de Phrases Hebdomadaires Restantes',
         unlimited: 'Illimité',
         maxSavedSentences: 'Maximum de Phrases Sauvegardées',
@@ -184,6 +192,7 @@ export const fr = {
         },
         signOut: "Déconnexion",
         settings: "Paramètres :",
+        settingsMoved: "Theme and language settings now live under the settings icon at the top right of the dashboard.",
         themes: {
             theme: "Thème",
             light: "Clair",
@@ -249,6 +258,7 @@ export const fr = {
         features: {
             free: {
                 analyses: '10 analyses de phrases par semaine',
+                extendedText: '2 analyses de texte étendu par semaine (jusqu’à 500 caractères)',
                 conversations: '5 conversations gratuites par mois',
                 messages: '5 messages par conversation',
                 bookmarks: '30 phrases enregistrées max',
@@ -257,6 +267,7 @@ export const fr = {
             },
             basic: {
                 analyses: 'Analyses de phrases illimitées',
+                extendedText: 'Analyses de texte étendu illimitées (jusqu’à 2 000 caractères)',
                 conversations: '50 conversations par mois',
                 messages: '15 messages par conversation',
                 bookmarks: 'Phrases enregistrées illimitées',
@@ -265,6 +276,7 @@ export const fr = {
             },
             plus: {
                 everythingInBasic: 'Tout ce qui est inclus dans le plan Basique',
+                extendedText: 'Analyses de texte étendu illimitées (jusqu’à 5 000 caractères)',
                 imageExtraction: 'Extraction de texte d’image illimitée',
                 audioGeneration: 'Génération audio illimitée',
                 conversations: '200 conversations par mois',
@@ -958,5 +970,8 @@ export const fr = {
         feedback: "Commentaires",
         viewPlans: "Voir les forfaits",
         navigation: "Navigation"
-    }
+    },
+    extended_text: {
+        open_walkthrough: "Voir le tutoriel"
+    },
 }; 
