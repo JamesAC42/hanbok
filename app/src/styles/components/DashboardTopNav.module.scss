@@ -2,8 +2,8 @@
     position: sticky;
     top: 0;
     z-index: 200;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1rem;
     padding: 0.75rem 1.5rem;
@@ -20,29 +20,6 @@
     text-decoration: none;
     letter-spacing: 0.04em;
     text-transform: lowercase;
-}
-
-.searchContainer {
-    display: flex;
-    justify-content: center;
-}
-
-.searchInput {
-    width: 100%;
-    max-width: 24rem;
-    padding: 0.5rem 0.85rem;
-    border: 1px solid var(--foreground-light);
-    border-radius: 999px;
-    background: var(--background-alt);
-    color: var(--foreground);
-    font-size: 0.95rem;
-    outline: none;
-    cursor: default;
-    pointer-events: none;
-}
-
-.searchInput::placeholder {
-    color: var(--foreground-muted);
 }
 
 .settingsButton {
@@ -81,6 +58,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     width: min(32rem, calc(100vw - 2rem));
+    max-height: calc(100vh - 2rem);
     background: var(--background);
     border-radius: 0.75rem;
     border: 1px solid var(--foreground-light);
@@ -96,6 +74,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding: 1.25rem 1.5rem 0 1.5rem;
+    flex-shrink: 0;
 }
 
 .modalHeader h2 {
@@ -125,6 +104,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    overflow-y: auto;
 }
 
 .section h3 {
@@ -233,23 +213,6 @@
 
 @media (max-width: 1000px) {
     .topNav {
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto auto;
-        gap: 0.75rem;
         padding-left: 5rem; /* Account for mobile sidebar toggle button */
-    }
-
-    .brand {
-        grid-column: 1 / 2;
-        align-self: center;
-    }
-
-    .searchContainer {
-        grid-column: 1 / -1;
-        justify-content: stretch;
-    }
-    
-    .searchInput {
-        max-width: 100%;
     }
 }

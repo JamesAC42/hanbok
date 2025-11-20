@@ -194,14 +194,6 @@ const DashboardTopNav = () => {
                 <Link href="/" className={styles.brand}>
                     hanbok
                 </Link>
-                <div className={styles.searchContainer}>
-                    <input
-                        type="text"
-                        placeholder={t('dashboard.searchPlaceholder')}
-                        className={styles.searchInput}
-                        readOnly
-                    />
-                </div>
                 <button
                     type="button"
                     className={styles.settingsButton}
