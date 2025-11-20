@@ -206,7 +206,17 @@ export const it = {
             rocket: "Razzo",
             miku: "Miku",
             frutiger: "Frutiger",
-            lizard: "Lucertola"
+            lizard: "Lucertola",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {

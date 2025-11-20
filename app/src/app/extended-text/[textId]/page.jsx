@@ -8,6 +8,16 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Analysis from '@/components/analysis/Analysis';
 import styles from '@/styles/pages/extendedtextanalysis.module.scss';
 
+// Icons
+import { MynauiSparklesSolid as Sparkles } from '@/components/icons/Sparkles';
+import { Fa6SolidParagraph as Paragraph } from '@/components/icons/Paragraph';
+import { RiBrain2Fill as Brain } from '@/components/icons/Brain';
+import { MaterialSymbolsLibraryBooksSharp as Book } from '@/components/icons/LibraryBooks';
+import { MajesticonsLightbulbShine as Lightbulb } from '@/components/icons/Lightbulb';
+import { IcSharpQueueMusic as MusicLyrics } from '@/components/icons/MusicLyrics';
+import { MakiInformation11 as Info } from '@/components/icons/Info';
+import { MingcuteDownFill as DownArrow } from '@/components/icons/DownCarat';
+
 export default function ExtendedTextAnalysisPage() {
     const params = useParams();
     const textId = params.textId;
@@ -133,7 +143,8 @@ export default function ExtendedTextAnalysisPage() {
         return (
             <Dashboard>
                 <div className={styles.loading}>
-                    {t('extended_text.loading')}
+                    <div className={styles.loadingSpinner} />
+                    <p>{t('extended_text.loading')}</p>
                 </div>
             </Dashboard>
         );
@@ -143,7 +154,7 @@ export default function ExtendedTextAnalysisPage() {
         return (
             <Dashboard>
                 <div className={styles.error}>
-                    {error}
+                    <p>{error}</p>
                 </div>
             </Dashboard>
         );
@@ -153,7 +164,7 @@ export default function ExtendedTextAnalysisPage() {
         return (
             <Dashboard>
                 <div className={styles.error}>
-                    {t('extended_text.not_found')}
+                    <p>{t('extended_text.not_found')}</p>
                 </div>
             </Dashboard>
         );
@@ -162,53 +173,73 @@ export default function ExtendedTextAnalysisPage() {
     return (
         <Dashboard>
             <div className={styles.page}>
-                <section className={styles.hero}>
-                    <div className={styles.heroCopy}>
-                        <span className={styles.badge}>{t('extended_text.overall_analysis')}</span>
-                        <h1>{headingTitle}</h1>
-                        <p className={styles.heroDescription}>{t('extended_text.description')}</p>
-                        <div className={styles.meta}>
-                            <span>{t('extended_text.sentences_count', { count: extendedText.sentenceCount || sentenceCount })}</span>
-                            {formattedDate && <span>{formattedDate}</span>}
+                <header className={styles.hero}>
+                    <div className={styles.heroContent}>
+                        <div className={styles.heroTop}>
+                            <span className={styles.badge}>
+                                <Sparkles />
+                                {t('extended_text.overall_analysis')}
+                            </span>
+                            <span className={styles.date}>{formattedDate}</span>
+                        </div>
+                        
+                        <h1 className={styles.title}>{headingTitle}</h1>
+                        <p className={styles.description}>{t('extended_text.description')}</p>
+                        
+                        <div className={styles.metaTags}>
+                            <div className={styles.metaTag}>
+                                <Paragraph />
+                                <span>{t('extended_text.sentences_count', { count: extendedText.sentenceCount || sentenceCount })}</span>
+                            </div>
                             {analysisLanguageName && (
-                                <span>{t('extended_text.language_meta', { language: analysisLanguageName })}</span>
+                                <div className={styles.metaTag}>
+                                    <span>{analysisLanguageName}</span>
+                                    {translationLanguageName && (
+                                        <>
+                                            <span className={styles.arrow}>→</span>
+                                            <span>{translationLanguageName}</span>
+                                        </>
+                                    )}
+                                </div>
                             )}
-                            {translationLanguageName && (
-                                <span>{t('extended_text.translation_meta', { language: translationLanguageName })}</span>
-                            )}
-                            {overall.tone && <span>{overall.tone}</span>}
-                            {user && (
-                                <span>
-                                    {user.tier === 0 && user.weekExtendedTextTotal !== null
-                                        ? t('extended_text.weekly_usage_meta', {
-                                              remaining: Math.max(user.weekExtendedTextRemaining ?? 0, 0),
-                                              total: user.weekExtendedTextTotal ?? 0
-                                          })
-                                        : t('extended_text.weekly_usage_unlimited')}
-                                </span>
+                            {overall.tone && (
+                                <div className={styles.metaTag}>
+                                    <MusicLyrics />
+                                    <span>{overall.tone}</span>
+                                </div>
                             )}
                         </div>
                     </div>
-                    <figure className={styles.heroArt}>
-                        <Image
+                    <div className={styles.heroIllustration}>
+                         <Image
                             src="/images/extended-text-overview.svg"
-                            alt="Stylized dashboard showing extended text analytics"
-                            width={420}
-                            height={320}
+                            alt=""
+                            width={300}
+                            height={220}
                             priority
                         />
-                    </figure>
-                </section>
+                    </div>
+                </header>
 
-                <div className={styles.layout}>
-                    <div className={styles.leftColumn}>
-                        <section className={`${styles.card} ${styles.sentencesCard}`}>
-                            <header className={styles.cardHeader}>
-                                <div>
-                                    <h2>{t('extended_text.full_text')}</h2>
-                                    <p>{t('extended_text.select_sentence_prompt')}</p>
+                <div className={styles.mainLayout}>
+                    <div className={styles.topGrid}>
+                         {combinedTranslation && (
+                            <div className={`${styles.widget} ${styles.translationWidget}`}>
+                                <div className={styles.widgetHeader}>
+                                    <div className={styles.widgetIcon}>
+                                        <span className={styles.langIcon}>{extendedText.translationLanguage?.toUpperCase().slice(0,2) || 'TR'}</span>
+                                    </div>
+                                    <h3>{t('extended_text.full_translation')}</h3>
                                 </div>
-                            </header>
+                                <p className={styles.fullTranslation}>{combinedTranslation}</p>
+                            </div>
+                        )}
+
+                        <div className={styles.textSection}>
+                            <div className={styles.sectionHeader}>
+                                <Paragraph className={styles.sectionIcon} />
+                                <h2>{t('extended_text.full_text')}</h2>
+                            </div>
                             <div className={styles.sentencesList}>
                                 {sentences.map((sentence, index) => {
                                     const translation = sentence?.analysis?.sentence?.translation;
@@ -218,97 +249,92 @@ export default function ExtendedTextAnalysisPage() {
                                         <button
                                             type="button"
                                             key={index}
-                                            className={`${styles.sentenceButton} ${isSelected ? styles.sentenceButtonActive : ''}`}
+                                            className={`${styles.sentenceBlock} ${isSelected ? styles.active : ''}`}
                                             onClick={() => handleSentenceClick(index)}
                                             aria-pressed={isSelected}
                                         >
-                                            <span className={styles.sentenceBadge}>{index + 1}</span>
-                                            <div className={styles.sentenceContent}>
-                                                <p className={styles.sentenceText}>{sentence.text}</p>
+                                            <div className={styles.sentenceIndex}>{index + 1}</div>
+                                            <div className={styles.sentenceBody}>
+                                                <p className={styles.originalText}>{sentence.text}</p>
                                                 {translation && (
-                                                    <span className={styles.sentenceSubtext}>{translation}</span>
+                                                    <p className={styles.translationText}>{translation}</p>
                                                 )}
+                                            </div>
+                                            <div className={styles.tapHint}>
+                                                <Lightbulb />
+                                                <span>{t('extended_text.analyze')}</span>
                                             </div>
                                         </button>
                                     );
                                 })}
                             </div>
-                        </section>
+                        </div>
+                    </div>
 
-                        {combinedTranslation && (
-                            <section className={`${styles.card} ${styles.translationCard}`}>
-                                <header className={styles.cardHeader}>
-                                    <h2>{t('extended_text.full_translation')}</h2>
-                                </header>
-                                <p className={styles.translationText}>{combinedTranslation}</p>
-                            </section>
-                        )}
-
-                        <section className={`${styles.card} ${styles.overallCard}`}>
-                            <header className={styles.cardHeader}>
-                                <h2>{t('extended_text.overall_analysis')}</h2>
-                            </header>
-                            <div className={styles.overallGrid}>
+                    <div className={styles.bottomGrid}>
+                        <div className={`${styles.widget} ${styles.analysisWidget}`}>
+                            <div className={styles.widgetHeader}>
+                                <Brain className={styles.widgetIcon} />
+                                <h3>{t('extended_text.overall_analysis')}</h3>
+                            </div>
+                            
+                            <div className={styles.analysisGrid}>
                                 {overall.summary && (
-                                    <div className={styles.overallBlock}>
-                                        <span className={styles.overallLabel}>{t('extended_text.summary')}</span>
-                                        <p className={styles.overallBody}>{overall.summary}</p>
-                                    </div>
-                                )}
-                                {overall.structure && (
-                                    <div className={styles.overallBlock}>
-                                        <span className={styles.overallLabel}>{t('extended_text.structure')}</span>
-                                        <p className={styles.overallBody}>{overall.structure}</p>
+                                    <div className={styles.analysisItem}>
+                                        <h4>{t('extended_text.summary')}</h4>
+                                        <p>{overall.summary}</p>
                                     </div>
                                 )}
                                 {overall.culturalContext && (
-                                    <div className={styles.overallBlock}>
-                                        <span className={styles.overallLabel}>{t('extended_text.cultural_context')}</span>
-                                        <p className={styles.overallBody}>{overall.culturalContext}</p>
+                                    <div className={styles.analysisItem}>
+                                        <h4>
+                                            <Info />
+                                            {t('extended_text.cultural_context')}
+                                        </h4>
+                                        <p>{overall.culturalContext}</p>
                                     </div>
                                 )}
-                                {overall.tone && (
-                                    <div className={styles.overallBlock}>
-                                        <span className={styles.overallLabel}>{t('extended_text.tone')}</span>
-                                        <p className={styles.overallBody}>{overall.tone}</p>
+                                {overall.structure && (
+                                    <div className={styles.analysisItem}>
+                                        <h4>{t('extended_text.structure')}</h4>
+                                        <p>{overall.structure}</p>
                                     </div>
                                 )}
                             </div>
 
                             {overall.themes && overall.themes.length > 0 && (
-                                <div className={styles.themesSection}>
-                                    <h3>{t('extended_text.themes')}</h3>
-                                    <ul className={styles.themesList}>
-                                        {overall.themes.map((theme, index) => (
-                                            <li key={index}>{theme}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )}
-
-                            {overall.keyGrammarPatterns && overall.keyGrammarPatterns.length > 0 && (
-                                <div className={styles.grammarSection}>
-                                    <h3>{t('extended_text.key_grammar_patterns')}</h3>
-                                    <div className={styles.grammarList}>
-                                        {overall.keyGrammarPatterns.map((pattern, index) => (
-                                            <div key={index} className={styles.grammarItem}>
-                                                <div className={styles.grammarHeading}>{pattern.pattern}</div>
-                                                {pattern.description && (
-                                                    <p>{pattern.description}</p>
-                                                )}
-                                                {pattern.examples && pattern.examples.length > 0 && (
-                                                    <ul>
-                                                        {pattern.examples.map((example, exIndex) => (
-                                                            <li key={exIndex}>{example}</li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </div>
+                                <div className={styles.tagsSection}>
+                                    <h4>{t('extended_text.themes')}</h4>
+                                    <div className={styles.tags}>
+                                        {overall.themes.map((theme, i) => (
+                                            <span key={i} className={styles.themeTag}>{theme}</span>
                                         ))}
                                     </div>
                                 </div>
                             )}
-                        </section>
+                        </div>
+
+                        {overall.keyGrammarPatterns && overall.keyGrammarPatterns.length > 0 && (
+                            <div className={`${styles.widget} ${styles.grammarWidget}`}>
+                                <div className={styles.widgetHeader}>
+                                    <Book className={styles.widgetIcon} />
+                                    <h3>{t('extended_text.key_grammar_patterns')}</h3>
+                                </div>
+                                <div className={styles.grammarList}>
+                                    {overall.keyGrammarPatterns.map((pattern, index) => (
+                                        <div key={index} className={styles.grammarItem}>
+                                            <div className={styles.grammarHeader}>
+                                                <span className={styles.grammarBullet} />
+                                                <span className={styles.grammarPattern}>{pattern.pattern}</span>
+                                            </div>
+                                            {pattern.description && (
+                                                <p className={styles.grammarDesc}>{pattern.description}</p>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -323,34 +349,34 @@ export default function ExtendedTextAnalysisPage() {
                     aria-modal={isFlyoutOpen}
                     aria-hidden={!isFlyoutOpen}
                 >
-                    <div className={`${styles.card} ${styles.analysisCard}`}>
-                        <div className={styles.analysisHeader}>
+                    <div className={styles.flyoutMobileDragBar} onClick={closeFlyout}>
+                        <div className={styles.dragHandle} />
+                    </div>
+                    <div className={styles.flyoutHeader}>
+                        <div className={styles.flyoutHeaderContent}>
                             <h2>
                                 {selectedSentenceNumber
                                     ? `${t('extended_text.sentence_analysis')} ${selectedSentenceNumber}`
                                     : t('extended_text.sentence_analysis')}
                             </h2>
-                            <button
+                             <button
                                 type="button"
+                                className={styles.closeButton}
                                 onClick={closeFlyout}
                                 aria-label={t('extended_text.close')}
                             >
-                                ✕
+                                <DownArrow />
                             </button>
                         </div>
-                        <div className={styles.analysisBody}>
-                            {currentSentence ? (
-                                <Analysis
-                                    analysis={currentSentence.analysis}
-                                    originalLanguage={extendedText.originalLanguage}
-                                    translationLanguage={extendedText.translationLanguage}
-                                />
-                            ) : (
-                                <div className={styles.placeholder}>
-                                    <p>{t('extended_text.select_sentence_prompt')}</p>
-                                </div>
-                            )}
-                        </div>
+                    </div>
+                    <div className={styles.flyoutBody}>
+                        {currentSentence ? (
+                            <Analysis
+                                analysis={currentSentence.analysis}
+                                originalLanguage={extendedText.originalLanguage}
+                                translationLanguage={extendedText.translationLanguage}
+                            />
+                        ) : null}
                     </div>
                 </aside>
             </div>

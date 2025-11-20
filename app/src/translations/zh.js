@@ -206,7 +206,17 @@ export const zh = {
             rocket: "火箭",
             miku: "初音未来",
             frutiger: "Frutiger",
-            lizard: "蜥蜴"
+            lizard: "蜥蜴",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {

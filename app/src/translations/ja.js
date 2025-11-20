@@ -206,7 +206,17 @@ export const ja = {
             rocket: "ロケット",
             miku: "ミク",
             frutiger: "フルティガー",
-            lizard: "トカゲ"
+            lizard: "トカゲ",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {

@@ -206,7 +206,17 @@ export const ko = {
             rocket: "로켓",
             miku: "미쿠",
             frutiger: "프루티거",
-            lizard: "도마뱀"
+            lizard: "도마뱀",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {

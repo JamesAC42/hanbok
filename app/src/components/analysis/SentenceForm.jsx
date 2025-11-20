@@ -476,7 +476,8 @@ const SentenceForm = ({
     };
 
     function isDark(theme) {
-        return theme === 'dark' || theme === "miku" || theme === "lizard" || theme === 'forest' || theme === 'edo';
+        const darkThemes = ['dark', 'miku', 'lizard', 'forest', 'edo', 'midnight', 'ocean', 'matrix', 'aurora'];
+        return darkThemes.includes(theme);
     }
 
     return (

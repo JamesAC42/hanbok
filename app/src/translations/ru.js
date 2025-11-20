@@ -206,7 +206,17 @@ export const ru = {
             rocket: "Ракета",
             miku: "Мику",
             frutiger: "Фрутигер",
-            lizard: "Ящерица"
+            lizard: "Ящерица",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {

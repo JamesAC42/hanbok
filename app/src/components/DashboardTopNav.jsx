@@ -75,6 +75,66 @@ const themePreviewStyles = {
         border: '#d7d4ec',
         accent: '#ff4141'
     },
+    sunrise: {
+        background: 'linear-gradient(135deg, #fff7e6, #ffe7c7)',
+        color: '#5a3b2e',
+        border: '#ffd9aa',
+        accent: '#ff8a3d'
+    },
+    midnight: {
+        background: 'linear-gradient(135deg, #0c1021, #050814)',
+        color: '#cdd7ff',
+        border: '#132246',
+        accent: '#6ab3ff'
+    },
+    ocean: {
+        background: 'linear-gradient(135deg, #0f262f, #0a1d24)',
+        color: '#c9f0ff',
+        border: '#144056',
+        accent: '#2cc5e0'
+    },
+    lavender: {
+        background: 'linear-gradient(135deg, #f7f4ff, #ece6ff)',
+        color: '#3d2f4a',
+        border: '#dcd4ff',
+        accent: '#9b86f4'
+    },
+    candy: {
+        background: 'linear-gradient(135deg, #fff5fb, #ffe1f1)',
+        color: '#5c284b',
+        border: '#ffd1e8',
+        accent: '#ff4fa2'
+    },
+    citrus: {
+        background: 'linear-gradient(135deg, #f9ffe5, #f1f7d0)',
+        color: '#494d2b',
+        border: '#e7efb5',
+        accent: '#d7a22a'
+    },
+    slate: {
+        background: 'linear-gradient(135deg, #f1f3f5, #e5e8ed)',
+        color: '#293845',
+        border: '#d3d8e0',
+        accent: '#4a6fa1'
+    },
+    matrix: {
+        background: 'linear-gradient(135deg, #050f0a, #03150c)',
+        color: '#8bffa8',
+        border: '#0b2919',
+        accent: '#00e36a'
+    },
+    sand: {
+        background: 'linear-gradient(135deg, #f8f1eb, #f0e4d9)',
+        color: '#3d2c23',
+        border: '#e3d2c0',
+        accent: '#c5915f'
+    },
+    aurora: {
+        background: 'linear-gradient(135deg, #0b1224, #08101c)',
+        color: '#d5e7ff',
+        border: '#122440',
+        accent: '#7ce7ff'
+    },
 };
 
 const DashboardTopNav = () => {

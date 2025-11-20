@@ -210,7 +210,17 @@ export const en = {
             rocket: "Rocket",
             miku: "Miku",
             frutiger: "Frutiger",
-            lizard: "Lizard"
+            lizard: "Lizard",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {
@@ -1110,6 +1120,7 @@ export const en = {
         select_sentence_prompt: "Click on a sentence in the text to view its detailed analysis",
         close: "Close",
         full_translation: "Full Translation",
+        analyze: "Tap to Analyze",
         progress_title: "Analyzing your text",
         progress_subtitle: "Breaking down {count} sentences...",
         progress_subtitle_generic: "Breaking down each sentence...",

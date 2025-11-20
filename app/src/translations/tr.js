@@ -206,7 +206,17 @@ export const tr = {
             rocket: "Roket",
             miku: "Miku",
             frutiger: "Frutiger",
-            lizard: "Kertenkele"
+            lizard: "Kertenkele",
+            sunrise: "Sunrise",
+            midnight: "Midnight",
+            ocean: "Ocean",
+            lavender: "Lavender",
+            candy: "Candy",
+            citrus: "Citrus",
+            slate: "Slate",
+            matrix: "Matrix",
+            sand: "Sand",
+            aurora: "Aurora"
         }
     },
     login: {

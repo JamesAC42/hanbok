@@ -20,15 +20,75 @@ const login = async (req, res, redisClient) => {
 
         const payload = ticket.getPayload();
         
-        const googleId = payload['sub'];
+        const googleId = payload['sub'] ? String(payload['sub']) : null;
         const email = payload['email'].toLowerCase();
         const name = payload['name'];
 
         const db = getDb();
         const usersCollection = db.collection('users');
 
-        // Find existing user
-        let user = await usersCollection.findOne({ email });
+        // Find existing user by googleId (primary) or email (fallback)
+        let user = await usersCollection.findOne({
+            $expr: { $eq: [{ $toString: "$googleId" }, googleId] }
+        });
+
+        if (!user) {
+            user = await usersCollection.findOne({ email });
+
+            if (user) {
+                // Attach googleId to existing account (e.g., first-time Google login)
+                const existingGoogleId = user.googleId ? String(user.googleId) : null;
+                if (existingGoogleId && existingGoogleId !== googleId) {
+                    return res.status(409).json({
+                        success: false,
+                        message: 'This email is already linked to a different Google account.'
+                    });
+                }
+
+                const updates = {};
+                if (!existingGoogleId) updates.googleId = googleId;
+                if (user.name !== name) updates.name = name;
+
+                if (Object.keys(updates).length > 0) {
+                    const updatedUser = await usersCollection.findOneAndUpdate(
+                        { _id: user._id },
+                        { $set: updates },
+                        { returnDocument: 'after' }
+                    );
+                    user = updatedUser.value || user;
+                }
+            }
+        } else {
+            // Existing Google user logging in with an updated email/name
+            const updates = {};
+
+            if (user.email !== email) {
+                // Ensure the new email isn't already taken by another account
+                const emailOwner = await usersCollection.findOne({ email, _id: { $ne: user._id } });
+                if (!emailOwner) {
+                    updates.email = email;
+                } else {
+                    console.warn(`Google login email conflict for googleId ${googleId}; keeping current email ${user.email}`);
+                }
+            }
+
+            if (String(user.googleId) !== googleId) {
+                updates.googleId = googleId;
+            }
+
+            if (user.name !== name) {
+                updates.name = name;
+            }
+
+            if (Object.keys(updates).length > 0) {
+                const updatedUser = await usersCollection.findOneAndUpdate(
+                    { _id: user._id },
+                    { $set: updates },
+                    { returnDocument: 'after' }
+                );
+                user = updatedUser.value || user;
+            }
+        }
 
         if (!user) {
             // Get the next user ID
@@ -78,14 +138,14 @@ const login = async (req, res, redisClient) => {
                 
                 await db.collection('rate_limits').insertOne(userRateLimit);
             }
-        } else {
-            try {
-                user = await polyfillData(user, db);
-            } catch (polyfillError) {
-                console.error('Error during user data polyfill:', polyfillError);
-                // Continue with the login process even if polyfill fails
-                // This ensures users can still log in even if there's a schema validation issue
-            }
+        }
+
+        try {
+            user = await polyfillData(user, db);
+        } catch (polyfillError) {
+            console.error('Error during user data polyfill:', polyfillError);
+            // Continue with the login process even if polyfill fails
+            // This ensures users can still log in even if there's a schema validation issue
         }
 
         req.session.user = { userId: user.userId };
