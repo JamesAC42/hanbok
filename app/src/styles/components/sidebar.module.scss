@@ -202,13 +202,16 @@
                         background:var(--foreground-lighter);
                     }
 
-                    &.profileSection,
-                    &.newAnalysisSection {
+                    &.profileSection {
                         transition:background 0.2s ease-in-out;
 
                         &:hover {
                             background:var(--foreground-lighter);
                         }
+                    }
+                    
+                    &.newAnalysisSection {
+                         transition:background 0.2s ease-in-out;
                     }
                     &.newAnalysisSection.active {
                         background:var(--foreground-lighter);

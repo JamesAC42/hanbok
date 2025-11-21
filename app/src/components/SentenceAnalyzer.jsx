@@ -1,23 +1,17 @@
 'use client';
 import {useState, useEffect} from 'react';
 import {useSearchParams} from 'next/navigation';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import Link from 'next/link';
 import styles from '@/styles/sentenceanalyzer.module.scss';
 import SentenceForm from '@/components/analysis/SentenceForm';
 import Analysis from '@/components/analysis/Analysis';
-import ChangeLanguageButton from '@/components/ChangeLanguageButton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
 import { resources } from '@/translations';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
 
-import {FluentHatGraduation32Filled} from '@/components/icons/GradCap';
-import {IcSharpQueueMusic} from '@/components/icons/MusicLyrics';
 import {IcBaselineLiveHelp} from '@/components/icons/QuestionBubble';
-
-import AboutHome from '@/components/AboutHome';
 
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    

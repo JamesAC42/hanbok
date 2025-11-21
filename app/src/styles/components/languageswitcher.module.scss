@@ -122,6 +122,27 @@
 
     }
 
+    @media screen and (max-width: 1150px) {
+        .languageSwitcherContainer {
+            width: 9rem;
+            height: 2.5rem;
+        }
+        .languageItem {
+            font-size: 0.9rem;
+            width: 9rem;
+            height: 2.5rem;
+            
+            .languageItemInner {
+                .languageItemIcon {
+                    font-size: 1.2rem;
+                }
+                .languageItemText {
+                    font-size: 0.9rem;
+                }
+            }
+        }
+    }
+
     @media screen and (max-width: 500px) {
         .languageSwitcherContainer {
             width:8rem;

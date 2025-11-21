@@ -174,6 +174,39 @@ const collections = {
       }
     ]
   },
+  savedExtendedTexts: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "textId", "dateSaved"],
+        properties: {
+          userId: {
+            bsonType: "int",
+            description: "User who saved the extended text"
+          },
+          textId: {
+            bsonType: "int",
+            description: "Identifier of the extended text"
+          },
+          dateSaved: {
+            bsonType: "date",
+            description: "When the extended text was saved"
+          }
+        }
+      }
+    },
+    indexes: [
+      {
+        key: { userId: 1, textId: 1 },
+        unique: true,
+        name: "unique_saved_extended_text"
+      },
+      {
+        key: { dateSaved: -1 },
+        name: "saved_extended_text_date"
+      }
+    ]
+  },
   words: {
     validator: {
       $jsonSchema: {

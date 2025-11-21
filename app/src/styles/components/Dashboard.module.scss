@@ -27,4 +27,7 @@
     overflow-y:auto;
     position:relative;
     background:var(--background);
+    &.noScroll {
+        overflow-y:hidden;
+    }
 }

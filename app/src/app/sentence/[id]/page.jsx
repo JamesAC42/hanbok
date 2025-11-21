@@ -22,7 +22,7 @@ const SentencePage = ({ params }) => {
     // Don't render anything while loading or if not authenticated
     if (loading) return null;
 
-    return <Dashboard>
+    return <Dashboard noScroll={true}>
         <div className={styles.analysisContainer}>
             <SentenceAnalyzer sentenceId={resolvedParams.id} />
         </div>

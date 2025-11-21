@@ -1,24 +1,145 @@
 @import '../variables.module.scss';
 
 .bookmarksContent {
-  
   @include dashboard-page;
+  display: grid;
+  grid-template-columns: 1.1fr 2fr;
+  gap: 1.5rem;
+  padding:2.5rem;
+
+  @media screen and (max-width: 900px) {
+      grid-template-columns: 1fr;
+  }
 
   @media screen and (max-width: 725px) {
-    padding: 1.5rem;
+      padding: 1.5rem;
   }
 
   @media screen and (max-width: 500px) {
-    max-width: 100dvw;
-    width: 100dvw;
-    margin: 0;
-    padding: 1rem;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    transform:translateY(-1rem);
-    min-height: 100dvh;
-    justify-content: center;
+      max-width: calc(100dvw);
+      width: 100dvw;
+      margin: 0;
+      margin-top:1rem;
+      padding: 1rem;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      transform: translateY(-1rem);
+      max-height: calc(100dvh - 5.2rem);
+      justify-content: center;
+  }
+
+  h1.pageTitle {
+      margin-top:0;
+  }
+}
+
+.pageTitle {
+  margin-bottom: 0.5rem;
+  grid-column: 1 / -1;
+}
+
+.leftPanel {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+
+  @media screen and (max-width: 900px) {
+    position: static;
+  }
+}
+
+.imageCard {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 8%, transparent);
+  min-height: 600px;
+  max-height: 600px;
+
+  img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      display: block;
+      filter: saturate(0.9);
+  }
+
+    @media screen and (max-width: 900px) {
+        min-height: 180px;
+        max-height: 180px;
+
+        img {
+            object-position: 50% 60% !important;
+        }
+    }
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 20%, rgba(0,0,0,0.6) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.25rem;
+
+  p {
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+}
+
+.rightPanel {
+  position: relative;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.searchFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 20%, transparent);
+  background: var(--background-alt);
+  color: var(--foreground);
+}
+
+.typeFilters {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1.5rem;
+  flex-wrap: wrap;
+}
+
+.typeButton {
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--foreground-muted);
+  background: none;
+  color: var(--foreground);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+
+  &.active {
+      background: var(--foreground);
+      color: var(--background);
   }
 }
 
@@ -36,8 +157,8 @@
 .sentenceItem {
   background-color: var(--background-alt);
   padding: 1rem;
-  padding-bottom: 0rem;
-  margin-bottom: 0rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
   border-radius: 0.5rem;
   border: 0.0625rem solid var(--background-alt);
   cursor: pointer;
@@ -48,6 +169,10 @@
   &:hover {
       outline: 2px solid var(--foreground-muted);
   }
+}
+
+.extendedItem {
+  border-color: color-mix(in srgb, var(--primary) 25%, var(--background-alt));
 }
 
 .sentenceText {
@@ -69,39 +194,75 @@
   margin: 1rem 0;
 }
 
+.extendedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.extendedTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.extendedBadge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 18%, var(--background));
+  color: var(--foreground);
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.extendedMeta {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
+  margin-top: 0.5rem;
+}
+
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   margin-top: 2rem;
   gap: 1rem;
   width: 100%;
 
-  button {
-    padding: 0.5rem 1rem;
-    margin: 0 0.5rem;
-    font-size: 1rem;
-    border: 0.0625rem solid #0070f3;
-    border-radius: 0.25rem;
-    color: #0070f3;
-    background-color: transparent;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  span {
+    font-size: 0.95rem;
+    color: var(--foreground);
+  }
+}
 
-    &:hover:not(:disabled) {
-      background-color: #0070f3;
-      color: #ffffff;
-    }
+.pagerButtons {
+  display: flex;
+  gap: 0.5rem;
+}
 
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+.pagerButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+  background: color-mix(in srgb, var(--primary) 12%, var(--background));
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: var(--primary);
+    color: var(--background);
   }
 
-  span {
-    font-size: 1rem;
-    color: #333333;
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
@@ -141,57 +302,6 @@
     max-height: 100rem;
   }
 }
-
-.languageSelector {
-  position: absolute;
-  top: 0;
-  right: 1rem;
-  display: flex;
-  align-items: center;
-  z-index: 10000;
-
-  .languageList {
-    margin: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    background: var(--background-alt);
-    border-radius: 0.5rem;
-    overflow: hidden;
-    max-height: 3rem;
-    padding: 0.5rem;
-
-    button {
-      background: none;
-      border: none;
-      height: 2rem;
-      width: 2rem;
-      padding: 0;
-      margin: 0;
-      cursor: pointer;
-
-      svg {
-        font-size: 2rem;
-      }
-
-      &.languageButton {
-        cursor: pointer;
-      }
-    }
-  }
-
-  &.show {
-    .languageList {
-      max-height: 100rem;
-      animation: expand 0.5s ease-in-out;
-    }
-  }
-
-  @media screen and (max-width: 500px) {
-    top:1rem;
-    right:0rem;
-  }
-} 
 
 .girl {
   @include bottom-girl;

@@ -75,12 +75,7 @@
     z-index: 10;
 
     @media (max-width: 960px) {
-        right: 50%;
-        transform: translateX(50%);
-    }
-
-    @media (min-width: 961px) {
-        animation: pulse 2s ease-in-out infinite;
+        display:none;
     }
 }
 
@@ -148,7 +143,7 @@
     }
 
     @media (max-width: 960px) {
-        justify-self: center;
+        display:none;
     }
 }
 
@@ -556,6 +551,12 @@
         &.watercolor {
             border-radius:0.8rem;
         }
+    }
+}
+
+figure.sidebarArt {
+    @media (max-width: 960px) {
+        display:none;
     }
 }
 

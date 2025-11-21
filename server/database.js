@@ -54,6 +54,27 @@ async function connectToDatabase() {
       { unique: true }
     );
     await db.collection('savedSentences').createIndex({ dateSaved: -1 });
+    try {
+      await db.collection('savedExtendedTexts').createIndex(
+        { userId: 1, textId: 1 },
+        { unique: true }
+      );
+    } catch (error) {
+      if (error.code !== 85 && error.code !== 11000) {
+        throw error;
+      } else {
+        console.log('savedExtendedTexts userId/textId index already exists with different name, continuing...');
+      }
+    }
+    try {
+      await db.collection('savedExtendedTexts').createIndex({ dateSaved: -1 });
+    } catch (error) {
+      if (error.code !== 85 && error.code !== 11000) {
+        throw error;
+      } else {
+        console.log('savedExtendedTexts dateSaved index already exists, continuing...');
+      }
+    }
 
     // Add indexes for feedback collection
     await db.collection('feedback').createIndex({ dateCreated: -1 });

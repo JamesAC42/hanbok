@@ -7,6 +7,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/pages/extendedtextprogress.module.scss';
 
+import { languageFunFacts } from '@/lib/funFacts';
+
 const STATUS_MESSAGES = {
     processing: 'extended_text.progress_status.processing',
     analyzing_sentence: 'extended_text.progress_status.analyzing_sentence',
@@ -31,11 +33,23 @@ export default function ExtendedTextProgressPage() {
     const [error, setError] = useState(null);
     const [completed, setCompleted] = useState(false);
     const [weeklyQuota, setWeeklyQuota] = useState(null);
+    const [funFactIndex, setFunFactIndex] = useState(0);
 
     const redirectTimeoutRef = useRef(null);
 
     const title = searchParams.get('title');
     const countHint = searchParams.get('count');
+
+    useEffect(() => {
+        // Randomize start index
+        setFunFactIndex(Math.floor(Math.random() * languageFunFacts.length));
+
+        const interval = setInterval(() => {
+            setFunFactIndex((prev) => (prev + 1) % languageFunFacts.length);
+        }, 7000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         if (countHint && !Number.isNaN(Number(countHint))) {
@@ -214,6 +228,7 @@ export default function ExtendedTextProgressPage() {
 
                     <div className={styles.progressPanel}>
                         <div className={styles.progressVisualizer}>
+                            <div className={styles.spinnerRing} />
                             <div className={styles.pulseOverlay} />
                             <div className={styles.progressCircle}>
                                 <svg viewBox="0 0 120 120">
@@ -256,9 +271,21 @@ export default function ExtendedTextProgressPage() {
                             )}
                         </div>
                     </div>
+                    {!completed && !error && (
+                        <div className={styles.waitMessage}>
+                            <p>
+                                {t('extended_text.progress_wait_message', 'Please wait, this may take a moment. We are analyzing every sentence individually to provide a context-aware, comprehensive breakdown.')}
+                            </p>
+                        </div>
+                    )}
 
                     {!completed && !error && (
-                        <p className={styles.tip}>{t('extended_text.progress_tip')}</p>
+                        <div className={styles.funFactContainer}>
+                            <span className={styles.funFactLabel}>{t('extended_text.did_you_know', 'Did you know:')}</span>
+                            <p key={funFactIndex} className={styles.funFactText}>
+                                {languageFunFacts[funFactIndex]}
+                            </p>
+                        </div>
                     )}
                 </div>
             </div>

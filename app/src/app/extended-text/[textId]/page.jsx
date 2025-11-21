@@ -6,6 +6,7 @@ import Dashboard from '@/components/Dashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Analysis from '@/components/analysis/Analysis';
+import ExtendedTextSaveButton from '@/components/ExtendedTextSaveButton';
 import styles from '@/styles/pages/extendedtextanalysis.module.scss';
 
 // Icons
@@ -90,6 +91,7 @@ export default function ExtendedTextAnalysisPage() {
         selectedSentenceIndex !== null && analysis?.sentences
             ? analysis.sentences[selectedSentenceIndex]
             : null;
+    const currentSentenceId = currentSentence?.sentenceId || currentSentence?.analysis?.sentenceId;
 
     const sentences = analysis?.sentences || [];
     const sentenceCount = sentences.length;
@@ -176,11 +178,14 @@ export default function ExtendedTextAnalysisPage() {
                 <header className={styles.hero}>
                     <div className={styles.heroContent}>
                         <div className={styles.heroTop}>
-                            <span className={styles.badge}>
-                                <Sparkles />
-                                {t('extended_text.overall_analysis')}
-                            </span>
-                            <span className={styles.date}>{formattedDate}</span>
+                            <div className={styles.heroChips}>
+                                <span className={styles.badge}>
+                                    <Sparkles />
+                                    {t('extended_text.overall_analysis')}
+                                </span>
+                                <span className={styles.date}>{formattedDate}</span>
+                            </div>
+                            <ExtendedTextSaveButton textId={extendedText?.textId} />
                         </div>
                         
                         <h1 className={styles.title}>{headingTitle}</h1>
@@ -375,6 +380,7 @@ export default function ExtendedTextAnalysisPage() {
                                 analysis={currentSentence.analysis}
                                 originalLanguage={extendedText.originalLanguage}
                                 translationLanguage={extendedText.translationLanguage}
+                                sentenceId={currentSentenceId}
                             />
                         ) : null}
                     </div>

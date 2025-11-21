@@ -565,6 +565,15 @@ export const en = {
     bookmarks: {
         pageTitle: 'Hanbok - Bookmarks',
         title: 'Bookmarks',
+        libraryBlurb: 'Save your favorite breakdowns and return to them anytime.',
+        searchPlaceholder: 'Search bookmarks',
+        showAll: 'All items',
+        showSentences: 'Sentences',
+        showExtended: 'Extended texts',
+        extendedBadge: 'Extended text',
+        extendedNoSummary: 'Open to view the full breakdown',
+        untitledExtendedText: 'Untitled extended text',
+        sentencesCount: '{count} sentences',
         sentences: 'Sentences',
         loading: 'Loading...',
         noSentences: 'No saved sentences found.',
@@ -579,6 +588,15 @@ export const en = {
     history: {
         pageTitle: 'Hanbok - History',
         title: 'History',
+        libraryBlurb: 'Revisit every analysis and keep track of what you’ve explored.',
+        searchPlaceholder: 'Search history',
+        showAll: 'All items',
+        showSentences: 'Sentences',
+        showExtended: 'Extended texts',
+        extendedBadge: 'Extended text',
+        extendedNoSummary: 'Open to view the full breakdown',
+        untitledExtendedText: 'Untitled extended text',
+        sentencesCount: '{count} sentences',
         loading: 'Loading...',
         noSentences: 'No sentences found.',
         generateSentences: 'Generate some sentences to see them here!',
@@ -1054,6 +1072,7 @@ export const en = {
     },
     sidebar: {
         myAccount: "My Account",
+        signIn: "Sign In",
         analyzeText: "Analyze Text",
         extendedText: "Extended Text",
         savedSentences: "Saved Sentences",
@@ -1079,6 +1098,8 @@ export const en = {
         text_required: "Text is required",
         analyze_button: "Analyze Text",
         analyzing: "Analyzing...",
+        saveButtonSave: "Save extended text",
+        saveButtonRemove: "Remove from bookmarks",
         login_required: "Please log in to use extended text analysis",
         analysis_failed: "Failed to analyze text",
         submission_error: "An error occurred. Please try again.",
@@ -1136,6 +1157,8 @@ export const en = {
         progress_quota: "{remaining} of {total} weekly extended analyses remaining",
         progress_tip: "Hang tight—feel free to review other content while we finish up.",
         progress_error: "Something went wrong while analyzing this text. Please try again.",
-        progress_connection_lost: "We lost the connection. Refresh to try again."
+        progress_connection_lost: "We lost the connection. Refresh to try again.",
+        progress_wait_message: "Please wait, this may take a moment. We are analyzing every sentence individually to provide a context-aware, comprehensive breakdown.",
+        did_you_know: "Did you know:"
     }
 };

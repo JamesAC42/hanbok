@@ -144,7 +144,7 @@ $word-types: (
 @mixin dashboard-page {
   padding:4rem 6rem;
 
-  max-height:100dvh;
+  max-height:calc(100dvh - 4.3rem);
   flex-grow:1;
   overflow-y:auto;
 

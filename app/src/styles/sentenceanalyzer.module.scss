@@ -31,10 +31,12 @@
 	align-items: center;
 	justify-content: flex-end;
 	min-height: 100dvh;
+	max-height:calc(100dvh - 12rem);
 
 	width:100%;
 
 	padding:0;
+	padding-bottom:8rem;
 
 	position:relative;
 
@@ -52,6 +54,9 @@
 	font-family:var(--font-funnel);
 	margin-bottom:1rem;
 	color:var(--foreground);
+    @media screen and (max-width: 750px) {
+        margin-bottom: 0.5rem;
+    }
 }
 
 .testSentences {
@@ -94,28 +99,38 @@
 			color:var(--background);
 		}
 	}
+    @media screen and (max-width: 1450px) {
+        max-width:90dvw;
+	}
+    @media screen and (max-width: 1170px) {
+        gap:0.3rem;
+        
+        .exampleSentence {
+            font-size:0.8rem;
+            padding:0.4rem 0.8rem;
+        }
+    }
+
     @media screen and (max-width: 750px) {
-		max-width:95dvw;
-		gap:0.2rem;
-		margin-bottom:0rem;
-		max-height:11rem;
-		overflow:hidden;
-		.exampleSentence {
-			font-size:0.8rem;
-		}
+        max-width:95dvw;
+        gap:0.2rem;
+        margin-bottom:0.5rem;
+        
+        .exampleSentence {
+            font-size:0.8rem;
+        }
     }
     @media screen and (max-height: 650px) {
 		max-width:70dvw;
 		gap:0.2rem;
 		margin-bottom:0rem;
-		max-height:11rem;
-		overflow:hidden;
+		
 		.exampleSentence {
 			font-size:0.8rem;
 		}
     }
     @media screen and (max-height: 600px) {
-		max-height:8rem;
+		
     }
 }
 

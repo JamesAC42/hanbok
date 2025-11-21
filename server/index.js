@@ -45,6 +45,9 @@ const getSentence = require('./controllers/auth/getSentence');
 const submitExtendedText = require('./controllers/auth/submitExtendedText');
 const getExtendedText = require('./controllers/auth/getExtendedText');
 const streamExtendedTextProgress = require('./controllers/auth/streamExtendedTextProgress');
+const saveExtendedText = require('./controllers/auth/saveExtendedText');
+const unsaveExtendedText = require('./controllers/auth/unsaveExtendedText');
+const checkSavedExtendedText = require('./controllers/auth/checkSavedExtendedText');
 
 const login = require('./controllers/auth/login');
 const loginEmail = require('./controllers/auth/loginEmail');
@@ -57,7 +60,8 @@ const logout = require('./controllers/auth/logout');
 const saveSentence = require('./controllers/auth/saveSentence');
 const unsaveSentence = require('./controllers/auth/unsaveSentence');
 const checkSavedSentence = require('./controllers/auth/checkSavedSentence');
-const getSavedSentences = require('./controllers/auth/getSavedSentences');
+const getSavedItems = require('./controllers/auth/getSavedItems');
+const getUserHistory = require('./controllers/auth/getUserHistory');
 
 const addWord = require('./controllers/auth/addWord');
 const removeWord = require('./controllers/auth/removeWord');
@@ -221,14 +225,25 @@ app.get('/api/extended-text/progress/:jobId', isAuthenticated, async (req, res) 
     streamExtendedTextProgress(req, res);
 });
 
+app.post('/api/extended-text/:textId/save', isAuthenticated, async (req, res) => {
+    saveExtendedText(req, res);
+});
+
+app.delete('/api/extended-text/:textId/save', isAuthenticated, async (req, res) => {
+    unsaveExtendedText(req, res);
+});
+
+app.get('/api/extended-text/:textId/saved', isAuthenticated, async (req, res) => {
+    checkSavedExtendedText(req, res);
+});
+
 app.get('/api/user/sentences', isAuthenticated, async (req, res) => {
     const getUserSentences = require('./controllers/auth/getUserSentences');
     getUserSentences(req, res);
 });
 
 app.get('/api/user/history', isAuthenticated, async (req, res) => {
-    const getUserSentences = require('./controllers/auth/getUserSentences');
-    getUserSentences(req, res);
+    getUserHistory(req, res);
 });
 
 app.post('/api/sentences/:sentenceId/save', isAuthenticated, async (req, res) => {
@@ -244,7 +259,11 @@ app.get('/api/sentences/:sentenceId/saved', isAuthenticated, async (req, res) =>
 });
 
 app.get('/api/saved-sentences', isAuthenticated, async (req, res) => {
-    getSavedSentences(req, res);
+    getSavedItems(req, res);
+});
+
+app.get('/api/saved-items', isAuthenticated, async (req, res) => {
+    getSavedItems(req, res);
 });
 
 // Word routes
