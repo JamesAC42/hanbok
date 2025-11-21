@@ -23,7 +23,7 @@
 
 .hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 0.9fr);
+    grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 20rem);
     align-items: center;
     gap: 3rem;
     margin-bottom: 3rem;
@@ -124,7 +124,7 @@
 
 .heroArt {
     width: 100%;
-    max-width: 26rem;
+    max-width: 18rem;
     margin: 0;
     justify-self: end;
     background: linear-gradient(

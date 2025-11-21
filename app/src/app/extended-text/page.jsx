@@ -188,12 +188,10 @@ export default function ExtendedTextPage() {
                         </div>
                     </div>
                     <figure className={styles.heroArt}>
-                        <Image
-                            src="/images/extended-text-writing.svg"
-                            alt="Illustration of a learner highlighting key phrases in a passage"
-                            width={420}
-                            height={320}
-                            priority
+                        <img
+                            src="/images/magnifying glass crop.png"
+                            alt="Magnifying glass"
+                            style={{ width: '100%', height: 'auto', borderRadius: '0.8rem' }}
                         />
                     </figure>
                 </section>
@@ -337,12 +335,6 @@ export default function ExtendedTextPage() {
                         >
                             {t('extended_text.open_walkthrough') || 'View Tutorial'}
                         </Button>
-                        <div className={styles.sidebarArt}>
-                            <img 
-                                src="/images/magnifying glass crop.png" 
-                                alt="Magnifying glass"
-                                className={styles.watercolor}/>
-                        </div>
                         <figure className={styles.sidebarArt}>
                             <Image
                                 src="/images/extended-text-celebration.svg"

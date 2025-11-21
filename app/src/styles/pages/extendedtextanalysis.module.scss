@@ -36,6 +36,10 @@
     @media (max-width: 1024px) {
         padding: 1.5rem;
     }
+
+    @media (max-width: 725px) {
+        padding: 0.5rem;
+    }
 }
 
 /* Hero Section */
@@ -181,6 +185,10 @@
         height: auto;
         max-height: 280px;
     }
+
+    @media (max-width: 900px) {
+        display: none;
+    }
 }
 
 
@@ -243,6 +251,10 @@
         padding: 0.5rem;
         border-radius: 0.75rem;
         box-sizing: content-box;
+    }
+
+    @media (max-width: 725px) {
+        padding:0 1.5rem;
     }
 }
 

@@ -237,33 +237,35 @@ const Bookmarks = () => {
         <Dashboard>
             <div className={bookmarksStyles.bookmarksContent}>
                 <h1 className={bookmarksStyles.pageTitle}>{t('bookmarks.title')}</h1>
-                <div className={bookmarksStyles.leftPanel}>
-                    <div className={bookmarksStyles.imageCard}>
-                        <img src="/images/bookshelf.jpg" alt={safeLabel('bookmarks.title', 'Bookmarks')} />
-                        <div className={bookmarksStyles.imageOverlay}>
-                            <p>{safeLabel('bookmarks.libraryBlurb', 'Save your favorite breakdowns and return to them anytime.')}</p>
+                <div className={bookmarksStyles.bookmarksContentInner}>
+                    <div className={bookmarksStyles.leftPanel}>
+                        <div className={bookmarksStyles.imageCard}>
+                            <img src="/images/bookshelf.jpg" alt={safeLabel('bookmarks.title', 'Bookmarks')} />
+                            <div className={bookmarksStyles.imageOverlay}>
+                                <p>{safeLabel('bookmarks.libraryBlurb', 'Save your favorite breakdowns and return to them anytime.')}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className={bookmarksStyles.rightPanel}>
-                    <div className={bookmarksStyles.headerRow}>
-                        <LanguageFilter 
-                            selectedLanguage={selectedLanguage}
-                            onSelectLanguage={handleLanguageChange}
-                        />
+                    <div className={bookmarksStyles.rightPanel}>
+                        <div className={bookmarksStyles.searchFilters}>
+                            <div className={bookmarksStyles.searchRow}>
+                                <input
+                                    type="search"
+                                    placeholder={safeLabel('bookmarks.searchPlaceholder', 'Search bookmarks')}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className={bookmarksStyles.searchInput}
+                                />
+                                <LanguageFilter 
+                                    selectedLanguage={selectedLanguage}
+                                    onSelectLanguage={handleLanguageChange}
+                                />
+                            </div>
+                            {renderTypeSelector()}
+                        </div>
+                        
+                        {renderContent()}
                     </div>
-                    <div className={bookmarksStyles.searchFilters}>
-                        <input
-                            type="search"
-                            placeholder={safeLabel('bookmarks.searchPlaceholder', 'Search bookmarks')}
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className={bookmarksStyles.searchInput}
-                        />
-                        {renderTypeSelector()}
-                    </div>
-                    
-                    {renderContent()}
                 </div>
             </div>
         </Dashboard>
