@@ -50,54 +50,40 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                 </div>
                 
                 <div className={styles.content}>
-                    <h3>{t('announcement.dashboardTitle')}</h3>
-                    <p>{t('announcement.dashboardDesc')}</p>
-                    <p>{t('announcement.dashboardFeatures')}</p>
-                    
-                    <h3>{t('announcement.tutorTitle')}</h3>
-                    <p>{t('announcement.tutorDesc')}</p>
-                    <p>{t('announcement.tutorFeatures')}</p>
-                    
-                    <h3>{t('announcement.lyricsPageTitle')}</h3>
-                    <p>{t('announcement.lyricsPageDesc')}</p>
-                    <p>{t('announcement.lyricsPageFeatures')}</p>
+                    <h3 className={styles.highlight}>{t('announcement.extendedTextTitle')}</h3>
+                    <p>{t('announcement.extendedTextDesc')}</p>
+                    <p>{t('announcement.extendedTextFeatures')}</p>
                     <button 
                         className={styles.lyricsButton}
                         onClick={() => {
-                            router.push('/lyrics');
+                            router.push('/extended-text');
                             onClose();
                         }}
-                        aria-label={t('announcement.viewLyrics')}
+                        aria-label={t('announcement.tryExtendedText')}
                     >
-                        <span className={styles.buttonText}>{t('announcement.viewLyrics')}</span>
+                        <span className={styles.buttonText}>{t('announcement.tryExtendedText')}</span>
                     </button>
-                    
-                    <h3>{t('announcement.practiceToolsTitle')}</h3>
-                    <p>{t('announcement.practiceToolsDesc')}</p>
-                    <div className={styles.practiceToolsList}>
-                        <div className={styles.practiceToolItem}>
-                            <h4>{t('announcement.koreanTypingTitle')}</h4>
-                            <p>{t('announcement.koreanTypingDesc')}</p>
-                        </div>
-                        <div className={styles.practiceToolItem}>
-                            <h4>{t('announcement.hangeulPracticeTitle')}</h4>
-                            <p>{t('announcement.hangeulPracticeDesc')}</p>
-                        </div>
-                    </div>
+
+                    <h3>{t('announcement.themesTitle')}</h3>
+                    <p>{t('announcement.themesDesc')}</p>
+                    <p>{t('announcement.themesHint')}</p>
                     <button 
                         className={styles.lyricsButton}
                         onClick={() => {
-                            router.push('/hangeul');
+                            router.push('/');
                             onClose();
                         }}
-                        aria-label={t('announcement.tryPracticeTools')}
+                        aria-label={t('announcement.pickTheme')}
                     >
-                        <span className={styles.buttonText}>{t('announcement.tryPracticeTools')}</span>
+                        <span className={styles.buttonText}>{t('announcement.pickTheme')}</span>
                     </button>
-                    
-                    <h3 className={styles.highlight}>{t('announcement.newSubscription')}</h3>
-                    <p className={styles.highlight}>{t('announcement.newSubscriptionDesc')}</p>
-                    
+
+                    <h3>{t('announcement.upcomingTitle')}</h3>
+                    <ul className={styles.featureList}>
+                        <li>{t('announcement.upcomingGrammar')}</li>
+                        <li>{t('announcement.upcomingQuizzes')}</li>
+                    </ul>
+
                     <div className={styles.communitySection}>
                         <h3>{t('announcement.communityTitle')}</h3>
                         <p>{t('announcement.communityDesc')}</p>
