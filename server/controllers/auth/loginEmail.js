@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const { getDb } = require('../../database');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
+const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
 
 const loginEmail = async (req, res, redisClient) => {
     const { email, password } = req.body;
@@ -73,6 +74,9 @@ const loginEmail = async (req, res, redisClient) => {
         let weekSentencesUsed = 0;
         let weekSentencesTotal = 10; // Default weekly quota
         let weekSentencesRemaining = weekSentencesTotal;
+        let weekExtendedTextUsed = 0;
+        let weekExtendedTextTotal = user.tier === 0 ? FREE_TIER_WEEKLY_ANALYSIS_LIMIT : null;
+        let weekExtendedTextRemaining = weekExtendedTextTotal;
         
         if (user.tier === 0) {
             const userId = user.userId.toString();
@@ -93,18 +97,44 @@ const loginEmail = async (req, res, redisClient) => {
                         { 
                             $set: { 
                                 weekSentences: 0, 
+                                weekExtendedTextAnalyses: 0,
                                 weekStartDate, 
                                 lastUpdated: new Date()
                             }
                         }
                     );
                     weekSentencesUsed = 0;
+                    weekExtendedTextUsed = 0;
+                    rateLimitRecord.weekExtendedTextAnalyses = 0;
                 } else {
                     weekSentencesUsed = rateLimitRecord.weekSentences;
+                    if (rateLimitRecord.weekExtendedTextAnalyses === undefined) {
+                        weekExtendedTextUsed = 0;
+                    } else {
+                        weekExtendedTextUsed = rateLimitRecord.weekExtendedTextAnalyses;
+                    }
                 }
+            } else {
+                // Ensure we have a baseline record for future tracking
+                await db.collection('rate_limits').insertOne({
+                    identifier: userId,
+                    identifierType: 'userId',
+                    totalSentences: 0,
+                    weekSentences: 0,
+                    weekStartDate,
+                    weekExtendedTextAnalyses: 0,
+                    totalExtendedTextAnalyses: 0,
+                    lastUpdated: new Date()
+                });
+                weekSentencesUsed = 0;
+                weekExtendedTextUsed = 0;
             }
             
             weekSentencesRemaining = weekSentencesTotal - weekSentencesUsed;
+            weekExtendedTextRemaining = Math.max((weekExtendedTextTotal || 0) - weekExtendedTextUsed, 0);
+        } else {
+            weekExtendedTextTotal = null;
+            weekExtendedTextRemaining = null;
         }
 
         res.status(200).json({
@@ -125,7 +155,10 @@ const loginEmail = async (req, res, redisClient) => {
                 hasUsedFreeTrial: user.hasUsedFreeTrial || false,
                 weekSentencesUsed,
                 weekSentencesTotal,
-                weekSentencesRemaining
+                weekSentencesRemaining,
+                weekExtendedTextUsed,
+                weekExtendedTextTotal,
+                weekExtendedTextRemaining
             }
         });
 

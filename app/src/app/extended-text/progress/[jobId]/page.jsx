@@ -155,16 +155,22 @@ export default function ExtendedTextProgressPage() {
             setMessageKey(null);
             setMessageVariables({});
             setMessageText('');
+            console.log("Completed event received:", data);
             if (redirectTimeoutRef.current) {
+                console.log("Clearing redirect timeout");
                 clearTimeout(redirectTimeoutRef.current);
             }
+
             redirectTimeoutRef.current = setTimeout(() => {
+                console.log("Redirecting to text ID:", data.textId);
                 router.push(`/extended-text/${data.textId}`);
             }, 2000);
+            console.log("Closing source");
             source.close();
         });
 
         source.addEventListener('jobError', (event) => {
+            console.log("Job error event received:", data);
             const data = parseData(event);
             setError(data?.message || t('extended_text.progress_error'));
             setStatus('failed');

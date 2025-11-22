@@ -1,5 +1,5 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const AuthContext = createContext();
 
@@ -13,49 +13,50 @@ export function AuthProvider({ children }) {
         fetchSession();
     }, []);
 
-    const fetchSession = async () => {
+    const fetchSession = useCallback(async () => {
         try {
             const res = await fetch('/api/session');
             const data = await res.json();
+            console.log("Session response:", data);
             setUser(data.user);
         } catch (error) {
             console.error('Error fetching session:', error);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const decrementRemainingAudioGenerations = () => {
+    const decrementRemainingAudioGenerations = useCallback(() => {
         setUser(prevUser => ({
             ...prevUser,
             remainingAudioGenerations: prevUser.remainingAudioGenerations - 1
         }));
-    }
+    }, []);
     
-    const decrementRemainingImageExtracts = () => {
+    const decrementRemainingImageExtracts = useCallback(() => {
         setUser(prevUser => ({
             ...prevUser,
             remainingImageExtracts: prevUser.remainingImageExtracts - 1
         }));
-    }
+    }, []);
     
-    const decrementRemainingSentenceAnalyses = () => {
+    const decrementRemainingSentenceAnalyses = useCallback(() => {
         setUser(prevUser => ({
             ...prevUser,
             remainingSentenceAnalyses: Math.max((prevUser.remainingSentenceAnalyses || 0) - 1, 0)
         }));
-    }
+    }, []);
     
-    const updateWeeklySentenceQuota = (weekSentencesUsed, weekSentencesTotal, weekSentencesRemaining) => {
+    const updateWeeklySentenceQuota = useCallback((weekSentencesUsed, weekSentencesTotal, weekSentencesRemaining) => {
         setUser(prevUser => ({
             ...prevUser,
             weekSentencesUsed,
             weekSentencesTotal,
             weekSentencesRemaining
         }));
-    }
+    }, []);
 
-    const updateExtendedTextQuota = (weekExtendedTextUsed, weekExtendedTextTotal, weekExtendedTextRemaining) => {
+    const updateExtendedTextQuota = useCallback((weekExtendedTextUsed, weekExtendedTextTotal, weekExtendedTextRemaining) => {
         setUser(prevUser => {
             if (!prevUser) return prevUser;
             return {
@@ -65,9 +66,9 @@ export function AuthProvider({ children }) {
                 weekExtendedTextRemaining
             };
         });
-    }
+    }, []);
     
-    const login = async (userDataOrGoogleResponse) => {
+    const login = useCallback(async (userDataOrGoogleResponse) => {
         // If the parameter has a 'credential' property, it's a Google OAuth response
         if (userDataOrGoogleResponse.credential) {
             try {
@@ -79,6 +80,7 @@ export function AuthProvider({ children }) {
                     body: JSON.stringify({ token: userDataOrGoogleResponse.credential })
                 });
                 const data = await loginResponse.json();
+                console.log("Login response:", data);
                 if(data.success) {
                     setUser(data.user);
                 }
@@ -89,18 +91,18 @@ export function AuthProvider({ children }) {
             // Otherwise, it's user data from email/password login
             setUser(userDataOrGoogleResponse);
         }
-    };
+    }, []);
 
-    const logout = async () => {
+    const logout = useCallback(async () => {
         try {
             await fetch('/api/logout', { method: 'POST' });
             setUser(null);
         } catch (error) {
             console.error('Error logging out:', error);
         }
-    };
+    }, []);
 
-    const loadSentence = async (sentenceId) => {
+    const loadSentence = useCallback(async (sentenceId) => {
         try {
             const response = await fetch(`/api/sentences/${sentenceId}`);
             const data = await response.json();
@@ -123,7 +125,7 @@ export function AuthProvider({ children }) {
                 error: 'Failed to load sentence'
             };
         }
-    };
+    }, []);
 
     const value = {
         user,
