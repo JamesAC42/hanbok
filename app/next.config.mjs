@@ -1,5 +1,3 @@
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
@@ -11,7 +9,6 @@ const nextConfig = {
     ];
   },
   webpack(config) {
-    config.plugins.push(new CaseSensitivePathsPlugin());
     config.module.rules.push({
       test: /\.(woff|woff2|eot|ttf|otf)$/i,
       type: 'asset/resource',
