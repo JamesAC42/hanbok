@@ -28,6 +28,7 @@ export default function ExtendedTextPage() {
     const [error, setError] = useState(null);
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [onboardingSlide, setOnboardingSlide] = useState(0);
+    const [demoVariant, setDemoVariant] = useState('desktop');
 
     const tierCharLimits = useMemo(() => ({
         0: 500,
@@ -92,6 +93,20 @@ export default function ExtendedTextPage() {
             console.warn('Unable to read onboarding state:', err);
         }
     }, [isAuthenticated, loading]);
+
+    useEffect(() => {
+        const updateVariant = () => {
+            if (typeof window === 'undefined') return;
+            const { innerWidth, innerHeight } = window;
+            if (!innerWidth || !innerHeight) return;
+            const aspectRatio = innerWidth / innerHeight;
+            setDemoVariant(aspectRatio < 1 ? 'mobile' : 'desktop');
+        };
+
+        updateVariant();
+        window.addEventListener('resize', updateVariant);
+        return () => window.removeEventListener('resize', updateVariant);
+    }, []);
 
     const closeOnboarding = () => {
         try {
@@ -202,9 +217,6 @@ export default function ExtendedTextPage() {
                         <div className={styles.languageSwitcherWrap}>
                             <LanguageSwitcher />
                         </div>
-                        {analysisLanguageName && (
-                            <span className={styles.languageValue}>{analysisLanguageName}</span>
-                        )}
                     </div>
                     <div className={styles.languageCard}>
                         <span className={styles.languageLabel}>
@@ -353,6 +365,26 @@ export default function ExtendedTextPage() {
                                 ✕
                             </button>
                             <div className={styles.onboardingContent}>
+                                {onboardingSlide === 0 && (
+                                    <div className={styles.onboardingMedia}>
+                                        <video
+                                            key={demoVariant}
+                                            className={styles.onboardingVideo}
+                                            src={
+                                                demoVariant === 'mobile'
+                                                    ? 'https://fukuin-hanbok.s3.us-east-2.amazonaws.com/site-assets/mobile+extended+text+recording.mp4'
+                                                    : 'https://fukuin-hanbok.s3.us-east-2.amazonaws.com/site-assets/desktop+extended+text.mp4'
+                                            }
+                                            controls
+                                            playsInline
+                                            loop
+                                            muted
+                                            autoPlay
+                                        >
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                )}
                                 <h2>{onboardingSlides[onboardingSlide].title}</h2>
                                 <p>{onboardingSlides[onboardingSlide].description}</p>
                                 <ul>

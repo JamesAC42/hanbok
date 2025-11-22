@@ -1085,7 +1085,9 @@ export const en = {
         lessons: "Lessons",
         feedback: "Feedback",
         viewPlans: "View Plans",
-        navigation: "Navigation"
+        navigation: "Navigation",
+        activity: "Activity",
+        tools: "Tools"
     },
     extended_text: {
         title: "Extended Text Analysis",

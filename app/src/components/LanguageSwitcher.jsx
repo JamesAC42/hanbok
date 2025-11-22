@@ -1,62 +1,54 @@
 import styles from '@/styles/components/languageswitcher.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useState, useEffect, useRef } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
-const LanguageSwitcher = ({ analysis }) => { 
-
-    const { language, setLanguage, supportedLanguages, supportedAnalysisLanguages, getIcon } = useLanguage();
+const LanguageSwitcher = ({ analysis }) => {
+    const { language, setLanguage, supportedAnalysisLanguages, getIcon } = useLanguage();
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const languageSwitcherRef = useRef(null);
 
+    const languageKeys = useMemo(
+        () => Object.keys(supportedAnalysisLanguages || {}),
+        [supportedAnalysisLanguages]
+    );
+
     const getTransformFromLanguage = (l) => {
-        let languages = Object.keys(supportedAnalysisLanguages);
-        let index = languages.indexOf(l);
-        let transform = `translate(0, -${index * 3}rem)`;
-        return transform;
-    }
+        const index = Math.max(languageKeys.indexOf(l), 0);
+        return `translate(0, -${index * 3}rem)`;
+    };
 
     useEffect(() => {
-        // Function to handle clicks outside the dropdown
         const handleClickOutside = (event) => {
             if (languageSwitcherRef.current && !languageSwitcherRef.current.contains(event.target)) {
                 setDropdownOpen(false);
             }
         };
 
-        // Add event listener when dropdown is open
         if (dropdownOpen) {
             document.addEventListener('mousedown', handleClickOutside);
         }
 
-        // Cleanup function to remove event listener
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [dropdownOpen]);
 
-    const capitalize = (str) => {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
+    const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
     const handleLanguageChange = (languageKey) => {
         setLanguage(languageKey);
         setDropdownOpen(false);
-    }
+    };
 
-    const generateDropdown = () => {
-        let languageAmount = Object.keys(supportedAnalysisLanguages).length;
-        let languageKeys = Object.keys(supportedAnalysisLanguages);
-        let languageItems = [];
+    const dropdownItems = useMemo(
+        () => languageKeys.map((languageKey) => {
+            const languageName = supportedAnalysisLanguages[languageKey];
 
-        for(let i = 0; i < languageAmount; i++) {
-            let languageKey = languageKeys[i];
-            let languageName = supportedAnalysisLanguages[languageKey];
-
-            languageItems.push(
-                <div 
-                    key={languageKey} 
+            return (
+                <div
+                    key={languageKey}
                     className={styles.languageItem}
                     onClick={() => handleLanguageChange(languageKey)}
                 >
@@ -70,53 +62,46 @@ const LanguageSwitcher = ({ analysis }) => {
                     </div>
                 </div>
             );
-        }
+        }),
+        [getIcon, languageKeys, supportedAnalysisLanguages]
+    );
 
-        return languageItems;
-    }
+    const switcherItems = useMemo(
+        () => languageKeys.map((languageKey) => {
+            const languageName = supportedAnalysisLanguages[languageKey];
 
-    const generateLanguageItems = () => {
-        let languageAmount = Object.keys(supportedAnalysisLanguages).length;
-        let languageKeys = Object.keys(supportedAnalysisLanguages);
-
-        let languageItems = [];
-        for(let i = 0; i < languageAmount * 50; i++) {
-            
-            let language = languageKeys[i % languageAmount];
-            let languageName = supportedAnalysisLanguages[language];
-
-            languageItems.push(
-                <div key={i} className={styles.languageItem}>
-                    <div className={styles.languageItemInner}>  
+            return (
+                <div key={languageKey} className={styles.languageItem}>
+                    <div className={styles.languageItemInner}>
                         <div className={styles.languageItemIcon}>
-                            {getIcon(language)}
+                            {getIcon(languageKey)}
                         </div>
                         <div className={styles.languageItemText}>
                             {capitalize(languageName)}
                         </div>
                     </div>
                 </div>
-            )
-        }
-
-        return languageItems;
-    }
+            );
+        }),
+        [getIcon, languageKeys, supportedAnalysisLanguages]
+    );
 
     return (
         <div className={styles.languageSwitcherOuter} ref={languageSwitcherRef}>
-
             <div
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className={styles.languageSwitcherContainer}>
+                className={styles.languageSwitcherContainer}
+            >
                 <div
-                    style={{transform: getTransformFromLanguage(language)}}
-                    className={styles.languageSwitcherInner}>
-                    {generateLanguageItems()}
+                    style={{ transform: getTransformFromLanguage(language) }}
+                    className={styles.languageSwitcherInner}
+                >
+                    {switcherItems}
                 </div>
             </div>
             {dropdownOpen && (
                 <div className={styles.dropdown}>
-                    {generateDropdown()}
+                    {dropdownItems}
                 </div>
             )}
 
@@ -128,7 +113,7 @@ const LanguageSwitcher = ({ analysis }) => {
                 )
             }
         </div>
-    )
-}
+    );
+};
 
-export default LanguageSwitcher;
+export default memo(LanguageSwitcher);

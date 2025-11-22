@@ -579,6 +579,8 @@ figure.sidebarArt {
     border-radius: 1.75rem;
     padding: 2.5rem;
     box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.18);
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
 
     @media (max-width: 600px) {
         padding: 2rem 1.5rem;
@@ -600,6 +602,27 @@ figure.sidebarArt {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
+    .onboardingMedia {
+        width: 100%;
+        max-height: min(52vh, 24rem);
+        border-radius: 1.1rem;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+        background: color-mix(in srgb, var(--background) 92%, var(--primary) 8%);
+        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .onboardingVideo {
+        display: block;
+        width: 100%;
+        max-height: inherit;
+        height: 100%;
+        object-fit: contain;
+    }
 
     h2 {
         font-family: var(--font-display);

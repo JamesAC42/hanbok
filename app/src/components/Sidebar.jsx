@@ -275,6 +275,11 @@ function Sidebar() {
                     <div className={styles.sidebarSection}
                         onMouseEnter={() => setShowSavedHover(true)}
                         onMouseLeave={() => setShowSavedHover(false)}>
+                        <div 
+                            onMouseEnter={() => setShowNavHover(false)}
+                            className={styles.sidebarSectionHeader}>
+                            {t('sidebar.activity')}
+                        </div>
                         <div className={styles.sidebarSectionItems}>
                             <div 
                                 onMouseEnter={() => setHoverTransform('saved', 0)}
@@ -317,6 +322,11 @@ function Sidebar() {
                         className={styles.sidebarSection}
                         onMouseEnter={() => setShowLearnHover(true)}
                         onMouseLeave={() => setShowLearnHover(false)}>
+                        <div 
+                            onMouseEnter={() => setShowNavHover(false)}
+                            className={styles.sidebarSectionHeader}>
+                            {t('sidebar.tools')}
+                        </div>
                         <div className={styles.sidebarSectionItems}>
 
                             {
