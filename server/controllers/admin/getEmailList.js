@@ -1,7 +1,7 @@
 const { getDb } = require('../../database');
 
 // List of admin emails with access to email list download
-const ADMIN_EMAILS = ['jamescrovo450@gmail.com'];
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 /**
  * Get a list of all user email addresses for admin use

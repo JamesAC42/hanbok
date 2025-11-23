@@ -1,7 +1,7 @@
 const { getDb } = require('../../database');
 
 // List of admin emails with access to admin data
-const ADMIN_EMAILS = ['jamescrovo450@gmail.com'];
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 const getRateLimits = async (req, res) => {
     try {

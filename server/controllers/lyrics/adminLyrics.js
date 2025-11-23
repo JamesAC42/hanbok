@@ -2,7 +2,7 @@ const { getDb } = require('../../database');
 const { ObjectId } = require('mongodb');
 
 // Admin email with permission to manage lyrics
-const ADMIN_EMAIL = 'jamescrovo450@gmail.com';
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 // Helper function to generate URL-friendly lyricId
 function generateLyricId(artist, title) {
@@ -37,7 +37,7 @@ async function isAdmin(req) {
     }
     
     // Check if the user's email matches the admin email
-    return user.email === ADMIN_EMAIL;
+    return ADMIN_EMAILS.includes(user.email.toLowerCase());
   } catch (error) {
     console.error('Error checking admin status:', error);
     return false;

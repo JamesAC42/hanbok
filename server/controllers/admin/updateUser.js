@@ -1,7 +1,7 @@
 const { getDb } = require('../../database');
 
 // List of admin emails with access to user management
-const ADMIN_EMAILS = ['jamescrovo450@gmail.com'];
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 const updateUser = async (req, res) => {
     try {

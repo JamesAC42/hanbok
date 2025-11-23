@@ -1,7 +1,7 @@
 const { getDb } = require('../../database');
 
 // List of admin emails with access to feature usage data
-const ADMIN_EMAILS = ['jamescrovo450@gmail.com'];
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 const getFeatureUsage = async (req, res) => {
     try {

@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 const { analysisQueue } = require('../../jobs/queue');
 const { createClient } = require('redis');
 
-const ADMIN_EMAIL = 'jamescrovo450@gmail.com';
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 // Redis connection options
 const redisOptions = {
@@ -121,7 +121,7 @@ const generateLyricAnalysis = async (req, res) => {
         const user = await db.collection('users').findOne({ 
             userId: req.session.user.userId 
         });
-        if (!user || user.email !== ADMIN_EMAIL) {
+        if (!user || !ADMIN_EMAILS.includes(user.email.toLowerCase())) {
             return handleError('Unauthorized: Admin access required', 403);
         }
         

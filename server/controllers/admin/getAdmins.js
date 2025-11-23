@@ -1,5 +1,6 @@
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 const getAdmins = async (req, res) => {
-    res.status(200).json({admins: ["james@jamescrovo.com", "jamescrovo450@gmail.com"]});
+    res.status(200).json({admins: ADMIN_EMAILS});
 }
 
 module.exports = getAdmins;
