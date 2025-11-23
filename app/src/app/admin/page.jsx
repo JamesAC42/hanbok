@@ -71,6 +71,7 @@ const Admin = () => {
     
     // New state for user analytics
     const [analyticsTimeRange, setAnalyticsTimeRange] = useState('30days');
+    const [topUsersFeature, setTopUsersFeature] = useState('sentence_submission');
     const [analyticsData, setAnalyticsData] = useState(null);
     const [signupData, setSignupData] = useState([]);
     const [activityData, setActivityData] = useState([]);
@@ -214,7 +215,7 @@ const Admin = () => {
                 }
                 
                 // Fetch activity data
-                const activityResponse = await fetch(`/api/admin/feature-usage?analyticsType=activity&timeRange=${analyticsTimeRange}`);
+                const activityResponse = await fetch(`/api/admin/feature-usage?analyticsType=activity&timeRange=${analyticsTimeRange}&topUsersFeature=${topUsersFeature}`);
                 if (!activityResponse.ok) {
                     throw new Error('Failed to fetch activity analytics data');
                 }
@@ -235,7 +236,7 @@ const Admin = () => {
         };
         
         fetchAnalyticsData();
-    }, [user, isAdmin, analyticsTimeRange]);
+    }, [user, isAdmin, analyticsTimeRange, topUsersFeature]);
     
     // Function to handle time range changes
     const handleTimeRangeChange = (range) => {
@@ -351,38 +352,43 @@ const Admin = () => {
         if (!activityData || activityData.length === 0) {
             return {
                 labels: [],
-                datasets: [
-                    {
-                        label: 'Active Users',
-                        data: [],
-                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    },
-                    {
-                        label: 'Sentences Generated',
-                        data: [],
-                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                    }
-                ]
+                datasets: []
             };
         }
         
-        // Format dates for display and prepare data
+        // Get unique dates and sort them
+        const uniqueDates = [...new Set(activityData.map(item => item.date))].sort();
+        
+        // Prepare data series
+        const sentenceData = uniqueDates.map(date => {
+            const item = activityData.find(d => d.date === date && d.feature === 'sentence_submission');
+            return item ? item.totalUsage : 0;
+        });
+        
+        const extendedData = uniqueDates.map(date => {
+            const item = activityData.find(d => d.date === date && d.feature === 'extended_text_analysis');
+            return item ? item.totalUsage : 0;
+        });
+        
+        // Format dates for display
+        const labels = uniqueDates.map(dateString => {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+        
         return {
-            labels: activityData.map(day => {
-                const date = new Date(day.date);
-                return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            }),
+            labels,
             datasets: [
                 {
-                    label: 'Active Users',
-                    data: activityData.map(day => day.uniqueUsers),
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    label: 'Sentences Generated',
+                    data: sentenceData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
                     yAxisID: 'y',
                 },
                 {
-                    label: 'Sentences Generated',
-                    data: activityData.map(day => day.totalUsage),
-                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    label: 'Extended Texts',
+                    data: extendedData,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
                     yAxisID: 'y1',
                 }
             ]
@@ -414,7 +420,7 @@ const Admin = () => {
                 position: 'left',
                 title: {
                     display: true,
-                    text: 'Users'
+                    text: 'Sentences'
                 }
             },
             y1: {
@@ -426,7 +432,7 @@ const Admin = () => {
                 },
                 title: {
                     display: true,
-                    text: 'Sentences'
+                    text: 'Extended Texts'
                 }
             },
         }
@@ -569,7 +575,19 @@ const Admin = () => {
                         
                         {/* Top users by sentence generation */}
                         <div className={adminStyles.topUsersSection}>
-                            <h3>Top Users by Sentence Generation</h3>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                <h3>Top Users</h3>
+                                <div className={adminStyles.filterContainer}>
+                                    <select 
+                                        value={topUsersFeature}
+                                        onChange={(e) => setTopUsersFeature(e.target.value)}
+                                        style={{ padding: '0.5rem', borderRadius: '4px' }}
+                                    >
+                                        <option value="sentence_submission">Sentence Generation</option>
+                                        <option value="extended_text_analysis">Extended Text</option>
+                                    </select>
+                                </div>
+                            </div>
                             {loadingAnalytics ? (
                                 <div className={adminStyles.loading}>Loading top users data...</div>
                             ) : topUsers.length === 0 ? (
@@ -582,7 +600,7 @@ const Admin = () => {
                                                 <th>User</th>
                                                 <th>Email</th>
                                                 <th>Tier</th>
-                                                <th>Sentences Generated</th>
+                                                <th>{topUsersFeature === 'sentence_submission' ? 'Sentences' : 'Texts'}</th>
                                                 <th>Last Used</th>
                                             </tr>
                                         </thead>

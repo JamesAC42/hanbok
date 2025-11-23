@@ -35,6 +35,7 @@ const getFeatureUsage = async (req, res) => {
         // New parameter for user analytics
         const analyticsType = req.query.analyticsType || null; // null, 'signups', 'activity'
         const timeRange = req.query.timeRange || '30days'; // '7days', '30days', '90days', 'all'
+        const topUsersFeature = req.query.topUsersFeature || 'sentence_submission';
         
         // Build query
         const query = {};
@@ -156,7 +157,7 @@ const getFeatureUsage = async (req, res) => {
                 startDate = new Date(0); // Beginning of time
             }
             
-            // Get active users (used sentence generation in last week)
+            // Get active users (used sentence generation or extended text in last week)
             const weekAgo = new Date();
             weekAgo.setDate(weekAgo.getDate() - 7);
             
@@ -164,7 +165,7 @@ const getFeatureUsage = async (req, res) => {
                 .aggregate([
                     { 
                         $match: { 
-                            feature: 'sentence_submission',
+                            feature: { $in: ['sentence_submission', 'extended_text_analysis'] },
                             lastUsed: { $gte: weekAgo }
                         }
                     },
@@ -178,12 +179,12 @@ const getFeatureUsage = async (req, res) => {
             
             activeUsers = activeUsersData.length;
             
-            // Get top users by sentence generation
+            // Get top users by feature
             topUsers = await db.collection('feature_usage')
                 .aggregate([
                     { 
                         $match: { 
-                            feature: 'sentence_submission'
+                            feature: topUsersFeature
                         }
                     },
                     { $sort: { count: -1 } },
@@ -247,12 +248,12 @@ const getFeatureUsage = async (req, res) => {
                     ])
                     .toArray();
             } else if (analyticsType === 'activity') {
-                // Get daily sentence generation activity
+                // Get daily activity for multiple features
                 analyticsData = await db.collection('feature_usage')
                     .aggregate([
                         {
                             $match: {
-                                feature: 'sentence_submission',
+                                feature: { $in: ['sentence_submission', 'extended_text_analysis'] },
                                 lastUsed: { $gte: startDate, $lte: endDate }
                             }
                         },
@@ -261,7 +262,8 @@ const getFeatureUsage = async (req, res) => {
                                 _id: {
                                     year: { $year: '$lastUsed' },
                                     month: { $month: '$lastUsed' },
-                                    day: { $dayOfMonth: '$lastUsed' }
+                                    day: { $dayOfMonth: '$lastUsed' },
+                                    feature: '$feature'
                                 },
                                 uniqueUsers: { $addToSet: '$userId' },
                                 totalUsage: { $sum: '$count' }
@@ -277,6 +279,7 @@ const getFeatureUsage = async (req, res) => {
                                         day: '$_id.day'
                                     }
                                 },
+                                feature: '$_id.feature',
                                 uniqueUsers: { $size: '$uniqueUsers' },
                                 totalUsage: 1
                             }
