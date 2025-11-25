@@ -39,6 +39,7 @@ const { connectToDatabase, getDb, initializeCounters } = require('./database');
 const { setRedisClient } = require('./utils/lyricsCache');
 
 const submitSentence = require('./controllers/auth/submitSentence');
+const getQuota = require('./controllers/auth/getQuota');
 const getAudioURL = require('./controllers/auth/getAudioURL');
 const generateAudio = require('./controllers/auth/generateAudio');
 const getSentence = require('./controllers/auth/getSentence');
@@ -193,6 +194,10 @@ app.post('/api/reset-password', (req, res) => {
 
 app.post('/api/submit', async (req, res) => {
     submitSentence(req, res);
+});
+
+app.get('/api/quota', async (req, res) => {
+    getQuota(req, res);
 });
 
 app.get('/api/audio-url/:sentenceId', async (req, res) => {

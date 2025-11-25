@@ -1,0 +1,58 @@
+@import '../variables.module.scss';
+
+.quotaContainer {
+    background-color: var(--info-background);
+    border: 1px solid var(--info-foreground);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem auto;
+    text-align: center;
+    color: var(--info-foreground); // Use info-foreground to ensure text is visible on info-background
+    max-width: 600px;
+    width: 90%;
+
+    margin-top: 2rem;
+
+    strong {
+        font-weight: bold;
+        color: inherit; // Inherit form parent to maintain visibility
+        // brightness filter can add pop if needed, but color safety is priority
+    }
+
+    p {
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+        font-family: var(--font-serif);
+        
+        &:last-child {
+             margin-bottom: 0;
+        }
+    }
+    
+    .subtext {
+        font-size: 0.875rem;
+        opacity: 0.8;
+        margin-top: 0.5rem;
+        color: inherit; // Inherit to ensure visibility
+    }
+}
+
+.upgradeButton {
+    display: inline-block;
+    background-color: var(--primary); // Use primary color for action button
+    color: var(--background); // Use background color for text to ensure contrast
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0.5rem 0;
+    transition: all 0.2s ease;
+    font-family: var(--font-display);
+    box-shadow: 0 2px 4px var(--shadow); // Use theme shadow
+
+    &:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px var(--shadow);
+    }
+}

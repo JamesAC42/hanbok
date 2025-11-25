@@ -29,14 +29,6 @@ const PromoPopup = ({ onClose }) => {
                         <div className={styles.startingPrice}>
                             Starting at <span className={styles.price}>$4/month</span>
                         </div>
-                        
-                        <div className={styles.dealBadge}>
-                            <div className={styles.dealIcon}>🎉</div>
-                            <div className={styles.dealText}>
-                                <strong>Special Yearly Deal:</strong><br />
-                                Get 2 months of premium for FREE!
-                            </div>
-                        </div>
                     </div>
 
                     <div className={styles.benefits}>

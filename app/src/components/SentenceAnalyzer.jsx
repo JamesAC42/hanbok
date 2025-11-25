@@ -10,6 +10,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
 import { resources } from '@/translations';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
+import QuotaDisplay from '@/components/QuotaDisplay';
 
 import {IcBaselineLiveHelp} from '@/components/icons/QuestionBubble';
 
@@ -165,15 +166,19 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             }
         
             {
-            analysis && 
-            <Analysis 
-                analysis={analysis} 
-                voice1={voice1} 
-                voice2={voice2}
-                originalLanguage={originalLanguage}
-                translationLanguage={translationLanguage}
-                showTransition={showTransition}
-                sentenceId={propSentenceId || searchParams.get('id')} />
+            analysis && (
+                <>
+                <QuotaDisplay />
+                <Analysis 
+                    analysis={analysis} 
+                    voice1={voice1} 
+                    voice2={voice2}
+                    originalLanguage={originalLanguage}
+                    translationLanguage={translationLanguage}
+                    showTransition={showTransition}
+                    sentenceId={propSentenceId || searchParams.get('id')} />
+                </>
+            )
             }
 
             {/* Floating Chat Button */}
