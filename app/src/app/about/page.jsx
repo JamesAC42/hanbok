@@ -40,7 +40,7 @@ const About = () => {
         {
             icon: <LineMdEmail />,
             label: t('about.email.label'),
-            url: 'mailto:jamescrovo450@gmail.com',
+            url: 'mailto:admin@hanbokstudy.com',
             text: t('about.email.text')
         }
     ];

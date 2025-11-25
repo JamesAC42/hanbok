@@ -47,16 +47,16 @@ const createCheckoutSession = async (req, res) => {
 
         // Add trial settings for monthly subscriptions (only if user hasn't used trial yet)
         if (isSubscription && isMonthlySubscription && !userHasUsedTrial) {
-            sessionConfig.subscription_data = {
-                trial_period_days: 7,
-                trial_settings: {
-                    end_behavior: {
-                        missing_payment_method: 'cancel',
-                    },
-                },
-            };
-            sessionConfig.payment_method_collection = 'if_required';
-            console.log('Applying 7-day free trial to checkout session');
+            // sessionConfig.subscription_data = {
+            //     trial_period_days: 7,
+            //     trial_settings: {
+            //         end_behavior: {
+            //             missing_payment_method: 'cancel',
+            //         },
+            //     },
+            // };
+            // sessionConfig.payment_method_collection = 'if_required';
+            // console.log('Applying 7-day free trial to checkout session');
         } else if (isSubscription && isMonthlySubscription && userHasUsedTrial) {
             console.log('User has already used free trial, no trial applied');
         }

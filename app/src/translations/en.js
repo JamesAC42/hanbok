@@ -238,12 +238,12 @@ export const en = {
     },
     pricing: {
         pageTitle: 'Hanbok - Pricing',
-        title: 'Pricing',
-        subtitle: 'Choose the perfect plan for your language learning journey',
+        title: 'Become Fluent Faster. Choose the Perfect Plan.',
+        subtitle: 'Join thousands of language learners. Upgrade your fluency today with a 30-day money-back guarantee.',
         
         // Plan names
         plans: {
-            free: 'Free',
+            free: 'Starter',
             basic: 'Basic',
             plus: 'Plus'
         },
@@ -260,7 +260,7 @@ export const en = {
         billing: {
             monthly: 'Monthly',
             yearly: 'Yearly',
-            saveUp: 'Save up to 18%',
+            saveUp: 'SAVE 18%',
             billedAs: 'Billed as',
             annually: 'annually'
         },
@@ -268,31 +268,24 @@ export const en = {
         // Plan features
         features: {
             free: {
-                analyses: '10 sentence analyses per week',
-                extendedText: '2 extended text analyses per week (up to 500 characters)',
-                conversations: '5 free conversations per month',
-                messages: '5 messages per conversation',
-                bookmarks: 'Max 30 bookmarked sentences',
-                flashcards: 'Max 60 flashcards',
+                analyses: '10 sentence analyses/week',
+                conversations: 'Limited AI conversations',
+                limitations: 'Limited dictionary access',
                 support: 'Community support'
             },
             basic: {
                 analyses: 'Unlimited sentence analyses',
-                extendedText: 'Unlimited extended text analyses (up to 2,000 characters)',
+                extendedText: 'Unlimited extended text',
                 conversations: '50 conversations per month',
-                messages: '15 messages per conversation',
-                bookmarks: 'Unlimited bookmarked sentences',
-                flashcards: 'Unlimited flashcards',
+                saves: 'Unlimited saves',
                 support: 'Priority support'
             },
             plus: {
-                everythingInBasic: 'Everything in Basic',
-                extendedText: 'Unlimited extended text analyses (up to 5,000 characters)',
-                imageExtraction: 'Unlimited image text extraction',
-                audioGeneration: 'Unlimited audio generation',
-                conversations: '200 conversations per month',
-                messages: '50 messages per conversation',
-                support: 'Premium support + upcoming plus features'
+                unlimited: 'UNLIMITED everything',
+                audio: 'Instant Audio Generation',
+                image: 'Image Text Extraction',
+                support: 'Priority Support',
+                subtext: 'Total immersion & unlimited power.'
             }
         },
         
@@ -300,45 +293,38 @@ export const en = {
         badges: {
             mostPopular: 'Most Popular',
             limitedOffer: 'Limited Offer',
-            save: 'Save'
+            save: 'Save',
+            guarantee: '30-day money-back guarantee'
         },
         
         // Plan buttons
         planButtons: {
-            getStartedFree: 'Get Started Free'
+            stayFree: 'Stay on Free',
+            getPlus: 'Get Plus Access',
+            getBasic: 'Subscribe to Basic'
         },
         
-        // One-time purchases section
-        oneTime: {
-            title: 'Boost Your Experience',
-            subtitle: 'Need extra credits or features? Get them with these one-time purchases.',
-            products: {
-                extraSentences: {
-                    name: 'Extra Sentences',
-                    price: '$1',
-                    description: '100 additional sentence analyses'
-                },
-                basicUpgrade: {
-                    name: 'Basic Upgrade',
-                    price: '$4',
-                    description: 'Increase daily limits: 30→150 sentences, 60→200 words'
-                },
-                audioPack: {
-                    name: 'Audio Pack',
-                    price: '$6',
-                    description: '50 additional audio generations for pronunciation practice'
-                },
-                imagePack: {
-                    name: 'Image Pack',
-                    price: '$5',
-                    description: '150 image text extractions for learning from real content'
-                }
+        // Why Upgrade section
+        whyUpgrade: {
+            title: 'Why Upgrade?',
+            aiAnalysis: {
+                title: 'Why AI Analysis?',
+                desc: 'Understand grammar nuances instantly instead of guessing.'
+            },
+            audio: {
+                title: 'Why AI Audio?',
+                desc: 'Hear native-level pronunciation for every single sentence.'
+            },
+            image: {
+                title: 'Why Image Extraction?',
+                desc: 'Learn directly from your favorite manga, manhwa, and screenshots.'
             }
         },
         
-        // Support section
-        support: {
-            title: 'Support the Project'
+        // Support section (Footer CTA)
+        finalCta: {
+            title: 'Ready to accelerate your learning?',
+            button: 'Get Started Now'
         },
         
         upgradeOptions: 'Upgrade Options',
@@ -351,9 +337,6 @@ export const en = {
         buttons: {
             buyNow: 'Buy Now',
             subscribe: 'Subscribe'
-        },
-        donate: {
-            text: '— OR DONATE TO SUPPORT THE SITE! —'
         }
     },
     success: {

@@ -2,22 +2,22 @@
 
 .pricingPage {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #0a0a1a, #154584, rgb(5, 39, 82));
+    background: #0f172a; /* Deep blue */
     position: relative;
     overflow-x: hidden;
+    font-family: var(--font-serif); /* Default sans-serif for features */
 }
 
 .pricingHero {
     text-align: center;
-    padding: 4rem 2rem 2rem 2rem;
-
-    margin-top:5rem;
+    padding: 6rem 2rem 3rem 2rem;
+    margin-top: 3rem;
     
     .heroTitle {
-        font-family: var(--font-lilita);
-        font-size: 4rem;
+        font-family: var(--font-lilita); /* Bold serif/display */
+        font-size: 3.5rem;
         color: #fff;
-        margin-bottom: 1rem;
+        margin-bottom: 1.5rem;
         text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
         
         @media screen and (max-width: 768px) {
@@ -27,13 +27,14 @@
     
     .heroSubtitle {
         font-family: var(--font-serif);
-        font-size: 1.5rem;
-        color: #b8c5d6;
+        font-size: 1.25rem;
+        color: #cbd5e1; /* Lighter gray/blue */
         max-width: 40rem;
         margin: 0 auto;
+        line-height: 1.6;
         
         @media screen and (max-width: 768px) {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
     }
 }
@@ -42,46 +43,44 @@
 .billingToggle {
     display: flex;
     justify-content: center;
-    padding: 0 2rem 3rem 2rem;
+    padding: 0 2rem 4rem 2rem;
     
     .toggleContainer {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        background: rgba(255, 255, 255, 0.95);
+        gap: 1.5rem;
+        background: rgba(255, 255, 255, 0.05);
         border-radius: 3rem;
-        padding: 0.5rem 1.5rem;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+        padding: 0.75rem 2rem;
+        border: 0.0625rem solid rgba(255, 255, 255, 0.1);
         
         .toggleLabel {
             font-family: var(--font-display);
             font-weight: 600;
             font-size: 1rem;
-            color: #6b7280;
+            color: #94a3b8;
             transition: all 0.2s ease;
             position: relative;
             
             &.active {
-                color: #181a29;
+                color: #fff;
                 font-weight: 700;
             }
             
             .saveBadge {
                 position: absolute;
-                top: -1.9rem;
+                top: -1.5rem;
                 left: 50%;
                 transform: translateX(-50%);
-                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                background: #10b981; /* Emerald Green */
                 color: #fff;
                 font-size: 0.75rem;
                 font-weight: 700;
                 padding: 0.25rem 0.75rem;
                 border-radius: 1rem;
                 text-transform: uppercase;
-                letter-spacing: 0.05em;
-                box-shadow: 0 0.125rem 0.25rem rgba(16, 185, 129, 0.3);
                 white-space: nowrap;
+                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
             }
         }
         
@@ -97,12 +96,12 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: #e5e7eb;
+                background: #334155;
                 border-radius: 1rem;
                 transition: all 0.3s ease;
                 
                 &.yearly {
-                    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                    background: #10b981;
                 }
                 
                 .toggleButton {
@@ -123,31 +122,6 @@
             }
         }
     }
-    
-    @media screen and (max-width: 768px) {
-        .toggleContainer {
-            padding: 0.375rem 1rem;
-            gap: 0.75rem;
-            
-            .toggleLabel {
-                font-size: 0.875rem;
-            }
-            
-            .toggleSwitch {
-                width: 3rem;
-                height: 1.5rem;
-                
-                .toggleSlider .toggleButton {
-                    width: 1.25rem;
-                    height: 1.25rem;
-                }
-            }
-            
-            .toggleSlider.yearly .toggleButton {
-                transform: translateX(1.5rem);
-            }
-        }
-    }
 }
 
 .mainPlansSection {
@@ -157,35 +131,28 @@
         max-width: 75rem;
         margin: 0 auto;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: 1fr 1.1fr 1fr; /* Middle column slightly wider */
+        align-items: center;
         gap: 2rem;
         
         @media screen and (max-width: 1024px) {
             grid-template-columns: 1fr;
             max-width: 30rem;
-            gap: 1.5rem;
+            gap: 3rem;
         }
     }
 }
 
 .planCard {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(30, 41, 59, 0.7); /* Slate 800 with opacity */
     border-radius: 1rem;
-    padding: 2.5rem;
+    padding: 2rem;
     position: relative;
-    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.3);
-    border: 0.125rem solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
-    
-    &:hover {
-        transform: translateY(-0.5rem);
-        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.4);
-    }
-    
-    @media screen and (max-width: 768px) {
-        padding: 2rem;
-    }
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     
     .planHeader {
         text-align: center;
@@ -193,9 +160,9 @@
         
         .planName {
             font-family: var(--font-lilita);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            color: #181a29;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
         }
         
         .planPrice {
@@ -203,37 +170,31 @@
             align-items: baseline;
             justify-content: center;
             gap: 0.25rem;
-            margin-bottom: 1rem;
+            color: #fff;
             
             .currency {
-                font-size: 1.5rem;
+                font-size: 1.25rem;
                 font-weight: 600;
-                color: #6b7280;
+                opacity: 0.8;
             }
             
             .amount {
-                font-size: 3.5rem;
+                font-size: 2.5rem;
                 font-weight: 900;
                 font-family: var(--font-lilita);
-                color: #181a29;
             }
             
             .period {
                 font-size: 1rem;
-                color: #6b7280;
-                font-weight: 500;
+                opacity: 0.6;
             }
         }
         
-        .billingInfo {
-            font-size: 0.875rem;
-            color: #6b7280;
-            font-weight: 500;
+        .subText {
+            font-size: 0.9rem;
+            color: #64748b; /* Slate 500 */
             margin-top: 0.5rem;
-            
-            @media screen and (max-width: 768px) {
-                font-size: 0.8rem;
-            }
+            font-style: italic;
         }
     }
     
@@ -241,41 +202,46 @@
         list-style: none;
         padding: 0;
         margin: 0 0 2rem 0;
+        flex-grow: 1;
         
         li {
             padding: 0.75rem 0;
-            border-bottom: 0.0625rem solid #e5e7eb;
+            border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
             font-size: 1rem;
-            color: #374151;
+            color: #cbd5e1; /* Slate 300 */
             position: relative;
-            padding-left: 1.5rem;
+            padding-left: 1.75rem;
+            text-align: left;
             
             &:before {
                 content: '✓';
                 position: absolute;
                 left: 0;
-                color: #10b981;
+                color: #94a3b8; /* Slate 400 */
                 font-weight: bold;
             }
             
             &:last-child {
                 border-bottom: none;
             }
+            
+            strong {
+                color: #fff;
+                font-weight: 700;
+            }
         }
     }
     
     .planButton {
         width: 100%;
-        padding: 1rem 2rem;
+        padding: 0.875rem 1.5rem;
         border: none;
-        border-radius: 0.75rem;
+        border-radius: 0.5rem;
         font-family: var(--font-display);
         font-weight: 700;
-        font-size: 1.1rem;
+        font-size: 1rem;
         cursor: pointer;
         transition: all 0.2s ease;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
         
         &:hover {
             transform: translateY(-0.125rem);
@@ -286,133 +252,113 @@
             cursor: not-allowed;
         }
     }
-}
-
-// Discount Badge Styles
-.discountBadge {
-    position: absolute;
-    top: -0.75rem;
-    right: -0.8rem;
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #fff;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: 0 0.25rem 0.5rem rgba(220, 38, 38, 0.3);
-    z-index: 2;
     
-    @media screen and (max-width: 768px) {
+    .guaranteeText {
         font-size: 0.75rem;
-        padding: 0.375rem 0.75rem;
-        right: 0.75rem;
+        color: #64748b;
+        text-align: center;
+        margin-top: 0.75rem;
     }
 }
 
-// Trial Badge Styles
-.trialBadge {
-    position: absolute;
-    top: -0.75rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    color: #fff;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.875rem;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: 0 0.25rem 0.5rem rgba(245, 158, 11, 0.3);
-    z-index: 2;
-    
-    @media screen and (max-width: 768px) {
-        font-size: 0.75rem;
-        padding: 0.375rem 0.75rem;
-    }
-}
-
-// Trial Info Styles
-.trialInfo {
-    text-align: center;
-    margin-top: 0.5rem;
-    
-    .trialNote {
-        font-size: 0.875rem;
-        color: #374151;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-    }
-    
-    .trialSubnote {
-        font-size: 0.75rem;
-        color: #6b7280;
-        font-weight: 500;
-    }
-}
-
+/* Free Plan (Anchor) */
 .freePlan {
-    .planButton {
-        background: #6b7280;
-        color: #fff;
-        box-shadow: 0 0.25rem 0.5rem rgba(107, 114, 128, 0.3);
-        
-        &:hover {
-            background: #4b5563;
-            box-shadow: 0 0.375rem 0.75rem rgba(107, 114, 128, 0.4);
-        }
+    background: rgba(15, 23, 42, 0.5); /* Darker */
+    border: 0.0625rem solid rgba(255, 255, 255, 0.05);
+    
+    .planName {
+        color: #94a3b8;
     }
-    @media screen and (max-width: 768px) {
-        display:none;
-    }
-}
-
-.basicPlan {
-    border: 0.125rem solid #3b82f6;
     
     .planPrice .amount {
-        color: #3b82f6;
+        color: #94a3b8;
     }
     
-    .planButton {
-        background: #3b82f6;
-        color: #fff;
-        box-shadow: 0 0.25rem 0.5rem rgba(59, 130, 246, 0.3);
+    .freeButton {
+        background: transparent;
+        border: 0.125rem solid #475569;
+        color: #94a3b8;
         
         &:hover {
-            background: #2563eb;
-            box-shadow: 0 0.375rem 0.75rem rgba(59, 130, 246, 0.4);
+            border-color: #94a3b8;
+            color: #fff;
         }
+    }
+    
+    .planFeatures li:before {
+        color: #64748b; /* Dim checkmark */
     }
 }
 
+/* Plus Plan (Hero) */
 .plusPlan {
-    border: 0.125rem solid #10b981;
-    background: linear-gradient(135deg, rgba(185, 253, 230, 0.986) 0%, rgba(255, 255, 255, 0.95) 100%);
+    background: #fff; /* Light background for high contrast */
+    color: #0f172a;
     transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 0 4rem rgba(249, 115, 22, 0.15); /* Orange glow */
+    border: 0.125rem solid #f97316; /* Orange border */
+    padding: 2.5rem;
     
     @media screen and (max-width: 1024px) {
         transform: scale(1);
     }
-    
-    .planPrice .amount {
-        color: #10b981;
+
+    .planHeader {
+        .planName {
+            color: #0f172a;
+            font-size: 2rem;
+        }
+        
+        .planPrice {
+            color: #0f172a;
+            
+            .currency, .period {
+                color: #64748b;
+            }
+            
+            .amount {
+                font-size: 3.5rem;
+                color: #0f172a;
+            }
+        }
+        
+        .subText {
+            color: #475569;
+            font-weight: 500;
+        }
     }
     
-    .planButton {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    .planFeatures li {
+        color: #334155;
+        border-bottom-color: #e2e8f0;
+        
+        &:before {
+            color: #10b981; /* Green checkmark */
+            font-size: 1.2rem;
+        }
+        
+        strong {
+            color: #0f172a;
+        }
+    }
+    
+    .plusButton {
+        background: #f97316; /* Vibrant Orange */
         color: #fff;
-        box-shadow: 0 0.25rem 0.5rem rgba(16, 185, 129, 0.3);
+        font-size: 1.125rem;
+        padding: 1rem;
+        box-shadow: 0 0.25rem 1rem rgba(249, 115, 22, 0.3);
         
         &:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            box-shadow: 0 0.375rem 0.75rem rgba(16, 185, 129, 0.4);
+            background: #ea580c;
+            box-shadow: 0 0.5rem 1.5rem rgba(249, 115, 22, 0.4);
         }
+    }
+    
+    .guaranteeText {
+        color: #10b981; /* Green text */
+        font-weight: 600;
     }
 }
 
@@ -421,355 +367,148 @@
     top: -0.75rem;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    background: #f97316;
     color: #fff;
     font-family: var(--font-display);
     font-weight: 700;
     font-size: 0.875rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     border-radius: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    box-shadow: 0 0.25rem 0.5rem rgba(245, 158, 11, 0.3);
+    box-shadow: 0 0.25rem 0.5rem rgba(249, 115, 22, 0.3);
 }
 
-.oneTimeSection {
-    background: rgba(0, 0, 0, 0);
-    padding: 4rem 2rem;
+/* Basic Plan */
+.basicPlan {
+    border: 0.0625rem solid #3b82f6; /* Blue border */
     
-    .oneTimeTitle {
+    .planName {
+        color: #3b82f6;
+    }
+    
+    .planPrice .amount {
+        color: #3b82f6;
+    }
+    
+    .basicButton {
+        background: #3b82f6;
+        color: #fff;
+        
+        &:hover {
+            background: #2563eb;
+        }
+    }
+    
+    .planFeatures li:before {
+        color: #3b82f6;
+    }
+}
+
+/* Why Upgrade Section */
+.whyUpgradeSection {
+    padding: 4rem 2rem;
+    max-width: 75rem;
+    margin: 0 auto;
+    
+    .whyUpgradeTitle {
+        text-align: center;
         font-family: var(--font-lilita);
         font-size: 2.5rem;
         color: #fff;
-        text-align: center;
-        margin-bottom: 1rem;
-        
-        @media screen and (max-width: 768px) {
-            font-size: 2rem;
-        }
+        margin-bottom: 3rem;
     }
     
-    .oneTimeSubtitle {
-        font-family: var(--font-serif);
-        font-size: 1.2rem;
-        color: #b8c5d6;
-        text-align: center;
-        max-width: 40rem;
-        margin: 0 auto 3rem auto;
-        
-        @media screen and (max-width: 768px) {
-            font-size: 1rem;
-        }
-    }
-    
-    .oneTimeGrid {
-        max-width: 60rem;
-        margin: 0 auto;
+    .whyUpgradeGrid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
         
         @media screen and (max-width: 768px) {
             grid-template-columns: 1fr;
-            max-width: 20rem;
         }
     }
     
-    .oneTimeCard {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 0.75rem;
-        padding: 1.5rem;
+    .whyUpgradeCard {
         text-align: center;
-        position: relative;
-        border: 0.0625rem solid rgba(255, 255, 255, 0.2);
-        transition: all 0.2s ease;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 2rem;
+        border-radius: 1rem;
+        border: 0.0625rem solid rgba(255, 255, 255, 0.05);
+        transition: transform 0.3s ease;
         
         &:hover {
             transform: translateY(-0.25rem);
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.05);
         }
         
-        h4 {
+        .whyUpgradeIcon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        h3 {
+            color: #fff;
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
             font-family: var(--font-display);
-            font-size: 1.2rem;
-            color: #181a29;
-            margin-bottom: 0.5rem;
         }
         
         p {
-            font-size: 0.9rem;
-            color: #6b7280;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-        
-        .oneTimePrice {
-            font-size: 1.8rem;
-            font-weight: 900;
-            font-family: var(--font-lilita);
-            color: #dc2626;
-            margin-bottom: 0.5rem;
-        }
-        
-        .oneTimeButton {
-            background: #dc2626;
-            color: #fff;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            width: 100%;
-            
-            &:hover {
-                background: #b91c1c;
-                transform: translateY(-0.125rem);
-            }
-            
-            &:disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-            }
-        }
-        
-        .limitedOffer {
-            position: absolute;
-            top: -0.5rem;
-            right: -0.5rem;
-            background: #f59e0b;
-            color: #fff;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            color: #94a3b8;
+            line-height: 1.6;
         }
     }
 }
 
-.supportSection {
-    padding: 12rem 2rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    
-    img {
-        -webkit-mask-image: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 1) 87%,
-            rgba(0, 0, 0, 0) 100%
-        );
-        mask-image: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 1) 87%,
-            rgba(0, 0, 0, 0) 100%
-        );
-    }
-    
-    .supportContent {
-        position: relative;
-        z-index: 2;
-    }
-    
-    h2 {
-        font-family: var(--font-lilita);
-        font-size: 2.5rem;
-        color: #fff;
-        margin-bottom: 1rem;
-        text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.5);
-        
-        @media screen and (max-width: 768px) {
-            font-size: 2rem;
-        }
-    }
-    
-    .supportText {
-        font-family: var(--font-serif);
-        font-size: 1.2rem;
-        color: #b8c5d6;
-        max-width: 40rem;
-        margin: 0 auto 2rem auto;
-        text-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.5);
-        
-        @media screen and (max-width: 768px) {
-            font-size: 1rem;
-        }
-    }
-    
-    .kofiLink {
-        display: inline-block;
-        transition: all 0.2s ease;
-        
-        &:hover {
-            transform: translateY(-0.125rem);
-            filter: brightness(110%);
-        }
-        
-        img {
-            border-radius: 0.5rem;
-            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-        }
-    }
+/* Reviews Section */
+.reviewsSection {
+    padding: 4rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
 }
 
-// Money Back Guarantee Ribbon
-.guaranteeRibbon {
-    position: fixed;
-    top: 5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
-    padding: 0.5rem 2rem;
-    font-weight: 600;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    animation: guaranteePulse 3s ease-in-out infinite;
-    
-    @keyframes guaranteePulse {
-        0%, 100% { transform: translateX(-50%) scale(1); }
-        50% { transform: translateX(-50%) scale(1.05); }
-    }
-    
-    @media screen and (max-width: 768px) {
-        padding: 0.4rem 1rem;
-        font-size: 0.8rem;
-    }
-}
-
-// Hero CTA Section
-.heroCta {
-    margin: 3rem 0 2rem 0;
-    
-    .heroCtaButton {
-        background: linear-gradient(135deg, #ff6b35, #f7931e);
-        color: white;
-        border: none;
-        padding: 1rem 2rem;
-        font-size: 1.2rem;
-        font-weight: 600;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        
-        &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
-        }
-        
-        @media screen and (max-width: 768px) {
-            padding: 0.8rem 1.5rem;
-            font-size: 1rem;
-        }
-    }
-    
-    .ctaSubtext {
-        margin-top: 0.5rem;
-        color: #b8c5d6;
-        font-style: italic;
-        font-size: 0.9rem;
-    }
-}
-
-// Review Bubbles
 .reviewBubbles {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    margin-top: 3rem;
-    margin-bottom: 2rem;
     flex-wrap: wrap;
-    
-    @media screen and (max-width: 1024px) {
-        gap: 1rem;
-    }
-    
-    @media screen and (max-width: 768px) {
-        flex-direction: column;
-        align-items: center;
-    }
+    max-width: 75rem;
+    margin: 0 auto;
 }
 
 .reviewBubble {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 15px;
-    padding: 1.5rem;
-    max-width: 300px;
-    text-align: center;
-    transition: transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 22rem;
+    flex: 1 1 18rem;
     
-    &:hover {
-        transform: translateY(-5px);
+    .reviewStars {
+        margin-bottom: 1rem;
+        color: #fbbf24; /* Amber/Gold */
+        font-size: 1.25rem;
     }
     
-    @media screen and (max-width: 768px) {
-        max-width: 280px;
-        padding: 1.2rem;
+    .reviewText {
+        color: #e2e8f0;
+        font-size: 1.1rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        font-style: italic;
     }
-}
-
-.reviewStars {
-    margin-bottom: 1rem;
-}
-
-.star {
-    color: #ffd700;
-    font-size: 1.2rem;
-    margin: 0 2px;
     
-    &.filled {
-        color: #ffd700;
-    }
-}
-
-.reviewText {
-    color: #fff;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-bottom: 1rem;
-    font-style: italic;
-}
-
-.reviewAuthor {
-    color: #b8c5d6;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-// Updated Yearly Deal Styling
-.yearlyDeal {
-    margin-top: 0.5rem;
-    
-    .billingInfo {
+    .reviewAuthor {
+        color: #94a3b8;
         font-size: 0.9rem;
-        color: #b8c5d6;
-        margin-bottom: 0.25rem;
-    }
-    
-    .savingsHighlight {
-        font-size: 1rem;
-        color: #28a745;
-        font-weight: 700;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        font-weight: 600;
     }
 }
 
-// FAQ Section
+/* FAQ Section */
 .faqSection {
-    padding: 4rem 2rem;
-    max-width: 800px;
+    padding: 6rem 2rem;
+    max-width: 50rem;
     margin: 0 auto;
 }
 
@@ -779,12 +518,6 @@
     color: #fff;
     text-align: center;
     margin-bottom: 3rem;
-    text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
-    
-    @media screen and (max-width: 768px) {
-        font-size: 2rem;
-        margin-bottom: 2rem;
-    }
 }
 
 .faqContainer {
@@ -794,77 +527,91 @@
 }
 
 .faqItem {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
     overflow: hidden;
-    transition: all 0.3s ease;
     
-    &:hover {
-        background: rgba(255, 255, 255, 0.08);
-    }
-}
-
-.faqQuestion {
-    width: 100%;
-    background: none;
-    border: none;
-    padding: 1.5rem;
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-align: left;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: all 0.3s ease;
-    font-family: var(--font-display);
-    
-    &:hover {
-        background: rgba(255, 255, 255, 0.05);
-    }
-    
-    &.active {
-        background: rgba(255, 255, 255, 0.1);
-    }
-    
-    @media screen and (max-width: 768px) {
-        padding: 1.2rem;
-        font-size: 1rem;
-    }
-}
-
-.faqToggle {
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: #b8c5d6;
-    transition: transform 0.3s ease;
-}
-
-.faqAnswer {
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    color: #b8c5d6;
-    line-height: 1.6;
-    animation: fadeIn 0.3s ease;
-    padding-top:1.5rem;
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    p {
-        margin: 0;
-        font-size: 1rem;
+    .faqQuestion {
+        width: 100%;
+        background: none;
+        border: none;
+        padding: 1.5rem;
+        color: #fff;
+        font-size: 1.125rem;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-display);
+        transition: background 0.2s ease;
         
-        @media screen and (max-width: 768px) {
-            font-size: 0.9rem;
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        &.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f97316; /* Highlight active question */
         }
     }
     
-    @media screen and (max-width: 768px) {
-        padding: 0 1.2rem 1.2rem 1.2rem;
+    .faqToggle {
+        font-size: 1.5rem;
+        color: #94a3b8;
+    }
+    
+    .faqAnswer {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+        color: #cbd5e1;
+        margin-top:1.5rem;
+        line-height: 1.6;
+        
+        p {
+            margin: 0;
+        }
     }
 }
 
+/* Final CTA Section */
+.finalCtaSection {
+    padding: 6rem 2rem;
+    text-align: center;
+    background: linear-gradient(to top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0));
+    
+    .finalCtaContent {
+        max-width: 40rem;
+        margin: 0 auto;
+        
+        h2 {
+            font-family: var(--font-lilita);
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 2rem;
+            text-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.3);
+        }
+        
+        .finalCtaButton {
+            background: #f97316;
+            color: #fff;
+            border: none;
+            padding: 1.25rem 3rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border-radius: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0.5rem 1.5rem rgba(249, 115, 22, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            
+            &:hover {
+                transform: translateY(-0.25rem);
+                box-shadow: 0 1rem 2rem rgba(249, 115, 22, 0.5);
+                background: #ea580c;
+            }
+        }
+    }
+}

@@ -41,7 +41,7 @@ function Footer() {
                   <Link href="https://www.instagram.com/hanbokstudy" target="_blank">Instagram</Link>
                   <Link href="https://www.youtube.com/@HanbokStudy" target="_blank">Youtube</Link>
                   <Link href="https://www.tiktok.com/@hanbokstudy" target="_blank">TikTok</Link>
-                  <Link href="mailto:jamescrovo450@gmail.com" target="_blank">Email</Link>
+                  <Link href="mailto:admin@hanbokstudy.com" target="_blank">Email</Link>
                 </div>
               </div>
               <div className={styles.footerLinkColumn}>

@@ -169,12 +169,14 @@ $word-types: (
   font-family: var(--font-display);
   background: linear-gradient(135deg, #7091ff, #26a579);
   color: #fff;
-  padding: 0.5rem 1.5rem;
-  border-radius: 2rem;
+  padding: 1rem 2rem;
+  border-radius: 999px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 800;
-  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
   position: relative;
   overflow: hidden;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
@@ -203,7 +205,8 @@ $word-types: (
 
   &:hover {
       opacity: 0.9;
-      transform:scale(1.05);
+      transform:translateY(-1px) scale(1.05);
+      box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
       
       &::before {
           transform: translateX(100%) rotate(45deg);
