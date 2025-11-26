@@ -469,12 +469,16 @@ const submitSentence = async (req, res) => {
         let parsedResponse;
         let voice1Key = null;
         let voice2Key = null;
+        let voice1SlowKey = null;
+        let voice2SlowKey = null;
 
         if (existingSentence) {
             // Reuse existing analysis and voice keys (if they exist)
             analysis = existingSentence.analysis;
             voice1Key = existingSentence.voice1Key || null;
             voice2Key = existingSentence.voice2Key || null;
+            voice1SlowKey = existingSentence.voice1SlowKey || null;
+            voice2SlowKey = existingSentence.voice2SlowKey || null;
             parsedResponse = {
                 isValid: true,
                 analysis: analysis
@@ -531,6 +535,8 @@ const submitSentence = async (req, res) => {
             analysis: analysis,
             voice1Key,
             voice2Key,
+            voice1SlowKey,
+            voice2SlowKey,
             originalLanguage,
             translationLanguage,
             dateCreated: new Date(),

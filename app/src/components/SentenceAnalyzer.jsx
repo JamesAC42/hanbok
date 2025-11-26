@@ -25,6 +25,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [translationLanguage, setTranslationLanguage] = useState(null);
     const [voice1, setVoice1] = useState(null);
     const [voice2, setVoice2] = useState(null);  
+    const [voice1Slow, setVoice1Slow] = useState(null);
+    const [voice2Slow, setVoice2Slow] = useState(null);
     const [showTransition, setShowTransition] = useState(false);
     const [error, setError] = useState(null);
 
@@ -40,6 +42,10 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         setAnalysis(a);
         setOriginalLanguage(language);
         setTranslationLanguage(nativeLanguage);
+        setVoice1(null);
+        setVoice2(null);
+        setVoice1Slow(null);
+        setVoice2Slow(null);
     }
     
     useEffect(() => {
@@ -95,6 +101,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             setTranslationLanguage(result.sentence.translationLanguage);
             setVoice1(result.sentence.voice1Key);
             setVoice2(result.sentence.voice2Key);
+            setVoice1Slow(result.sentence.voice1SlowKey);
+            setVoice2Slow(result.sentence.voice2SlowKey);
             setShowTransition(false); // Reset transition when loading saved sentence
         } else {
             setError(result.error);
@@ -143,6 +151,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                         setAnalysis={handleNewAnalysis}
                         setVoice1={setVoice1}
                         setVoice2={setVoice2}
+                        setVoice1Slow={setVoice1Slow}
+                        setVoice2Slow={setVoice2Slow}
                         setTransition={setShowTransition}
                         translationMode={translationMode}
                         setTranslationMode={setTranslationMode}
@@ -173,6 +183,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                     analysis={analysis} 
                     voice1={voice1} 
                     voice2={voice2}
+                    voice1Slow={voice1Slow}
+                    voice2Slow={voice2Slow}
                     originalLanguage={originalLanguage}
                     translationLanguage={translationLanguage}
                     showTransition={showTransition}

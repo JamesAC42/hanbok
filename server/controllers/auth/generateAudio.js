@@ -77,25 +77,36 @@ const generateAudio = async (req, res) => {
         } else {
             textToRead = sentence.text;
         }
-        const { voice1, voice2 } = await generateSpeech(textToRead);
+        const [normalAudio, slowAudio] = await Promise.all([
+            generateSpeech(textToRead),
+            generateSpeech(textToRead, { speed: 0.7 })
+        ]);
 
         // Update sentence with audio URLs
         await db.collection('sentences').updateOne(
             { sentenceId: parseInt(sentenceId) },
             { 
                 $set: { 
-                    voice1Key: voice1,
-                    voice2Key: voice2,
+                    voice1Key: normalAudio.voice1,
+                    voice2Key: normalAudio.voice2,
+                    voice1SlowKey: slowAudio.voice1,
+                    voice2SlowKey: slowAudio.voice2,
                     dateAudioGenerated: new Date()
                 }
             }
         );
 
+        const remainingGenerations = (user.tier === 0 || user.tier === 1)
+            ? Math.max((user.remainingAudioGenerations || 0) - 1, 0)
+            : user.remainingAudioGenerations;
+
         res.json({ 
             success: true,
-            voice1: voice1,
-            voice2: voice2,
-            remainingGenerations: user.remainingAudioGenerations - 1
+            voice1: normalAudio.voice1,
+            voice2: normalAudio.voice2,
+            voice1Slow: slowAudio.voice1,
+            voice2Slow: slowAudio.voice2,
+            remainingGenerations
         });
 
     } catch (error) {

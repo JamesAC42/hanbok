@@ -29,6 +29,8 @@ const SentenceForm = ({
     setAnalysis,
     setVoice1,
     setVoice2,
+    setVoice1Slow,
+    setVoice2Slow,
     setTransition,
     translationMode,
     setTranslationMode
@@ -378,8 +380,10 @@ const SentenceForm = ({
                 //setAnalysis(data.message.analysis);
                 
                 // Clear voice keys
-                setVoice1(null);
-                setVoice2(null);
+                setVoice1?.(null);
+                setVoice2?.(null);
+                setVoice1Slow?.(null);
+                setVoice2Slow?.(null);
                 
                 // Show transition animation
                 setTransition(true);

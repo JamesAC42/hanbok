@@ -22,65 +22,67 @@ const streamToBuffer = async (stream) => {
   return Buffer.concat(chunks);
 };
 
-const generateSpeech = async (text) => {
-  try {
-    console.log("Text being sent to ElevenLabs:", text);
+const DEFAULT_VOICE_IDS = ["uyVNoMrnUku1dZyVEXwD", "PDoCXqBQFGsvfO0hNkEs"];
 
-    const [response1, response2] = await Promise.all([
-      client.textToSpeech.convert("uyVNoMrnUku1dZyVEXwD", {
-        output_format: "mp3_44100_128",
-        text: text,
-        model_id: "eleven_multilingual_v2"
-      }),
-      client.textToSpeech.convert("PDoCXqBQFGsvfO0hNkEs", {
-        output_format: "mp3_44100_128", 
-        text: text,
-        model_id: "eleven_multilingual_v2"
-      })
-    ]);
+const generateSpeech = async (text, options = {}) => {
+  const {
+    speed = 1,
+    voiceIds = DEFAULT_VOICE_IDS
+  } = options;
+
+  try {
+    console.log("Text being sent to ElevenLabs:", text, "speed:", speed);
 
     const timestamp = Date.now();
-    const key1 = `audio/uyVNoMrnUku1dZyVEXwD/speech1_${timestamp}.mp3`;
-    const key2 = `audio/PDoCXqBQFGsvfO0hNkEs/speech2_${timestamp}.mp3`;
-
-    // Convert streams to buffers
-    const [buffer1, buffer2] = await Promise.all([
-      streamToBuffer(response1),
-      streamToBuffer(response2)
-    ]);
-
-    // Upload both files to S3
-    await Promise.all([
-      s3Client.send(new PutObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: key1,
-        Body: buffer1,
-        ContentType: 'audio/mpeg'
-      })),
-      s3Client.send(new PutObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: key2,
-        Body: buffer2,
-        ContentType: 'audio/mpeg'
-      }))
-    ]);
-
-    // Generate presigned URLs that expire in 7 days
-    const [url1, url2] = await Promise.all([
-      getSignedUrl(s3Client, 
-        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: key1 }), 
-        { expiresIn: 604800 }
-      ),
-      getSignedUrl(s3Client, 
-        new GetObjectCommand({ Bucket: BUCKET_NAME, Key: key2 }), 
-        { expiresIn: 604800 }
+    const audioResponses = await Promise.all(
+      voiceIds.map((voiceId) =>
+        client.textToSpeech.convert(voiceId, {
+          output_format: "mp3_44100_128",
+          text,
+          model_id: "eleven_multilingual_v2",
+          voice_settings: { speed }
+        })
       )
-    ]);
+    );
 
-    return {
-      voice1: url1,
-      voice2: url2
+    const audioBuffers = await Promise.all(audioResponses.map(streamToBuffer));
+
+    const audioKeys = voiceIds.map((voiceId, index) => ({
+      key: `audio/${voiceId}/speech${index + 1}_${timestamp}_s${speed}.mp3`,
+      voiceId
+    }));
+
+    await Promise.all(
+      audioBuffers.map((buffer, index) =>
+        s3Client.send(new PutObjectCommand({
+          Bucket: BUCKET_NAME,
+          Key: audioKeys[index].key,
+          Body: buffer,
+          ContentType: 'audio/mpeg'
+        }))
+      )
+    );
+
+    const signedUrls = await Promise.all(
+      audioKeys.map(({ key }) =>
+        getSignedUrl(
+          s3Client,
+          new GetObjectCommand({ Bucket: BUCKET_NAME, Key: key }),
+          { expiresIn: 604800 }
+        )
+      )
+    );
+
+    const result = {
+      voice1: signedUrls[0],
+      voice2: signedUrls[1],
+      keys: {
+        voice1: audioKeys[0].key,
+        voice2: audioKeys[1].key
+      }
     };
+
+    return result;
 
   } catch (error) {
     console.error("Error:", error);

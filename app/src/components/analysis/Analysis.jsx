@@ -23,6 +23,8 @@ const Analysis = ({
     translationLanguage,
     voice1,
     voice2,
+    voice1Slow,
+    voice2Slow,
     showTransition,
     sentenceId,
     isLyric
@@ -126,7 +128,9 @@ const Analysis = ({
                 sentenceId={sentenceId}
                 isLyric={isLyric}
                 voice1={voice1}
-                voice2={voice2} />
+                voice2={voice2}
+                voice1Slow={voice1Slow}
+                voice2Slow={voice2Slow} />
 
             <Breakdown 
                 analysis={analysis} 

@@ -126,6 +126,14 @@ const collections = {
             bsonType: ["string", "null"],
             description: "S3 presigned URL for voice 2 audio"
           },
+          voice1SlowKey: {
+            bsonType: ["string", "null"],
+            description: "S3 presigned URL for slowed voice 1 audio"
+          },
+          voice2SlowKey: {
+            bsonType: ["string", "null"],
+            description: "S3 presigned URL for slowed voice 2 audio"
+          },
           dateCreated: {
             bsonType: "date"
           },

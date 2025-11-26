@@ -10,22 +10,26 @@ import { TdesignUserTalk1Filled } from '@/components/icons/Talk';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import Image from 'next/image';
 import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
+import { MaterialSymbolsTurtle } from '@/components/icons/Turtle';
+import { LucideRabbit } from '@/components/icons/Rabbit';
 
 import styles from '@/styles/components/sentenceanalyzer/audioplayer.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
 
-const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) => {
+const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, voice2Slow, isLyric }) => {
 
     const { t } = useLanguage();
     const [activeSpeaker, setActiveSpeaker] = useState(1);
     const [isPlaying, setIsPlaying] = useState(false);
 
     const [loadingAudio, setLoadingAudio] = useState(false);
+    const [loadingSlowAudio, setLoadingSlowAudio] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [voices, setVoices] = useState({});
+    const [playbackMode, setPlaybackMode] = useState('normal');
     const searchParams = useSearchParams();
 
     const { user, decrementRemainingAudioGenerations } = useAuth();
@@ -38,18 +42,40 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
     });
 
     useEffect(() => {
-      if(voice1 || voice2) {
-        setVoices({voice1: voice1, voice2: voice2});
-      }
-    }, [voice1, voice2]);
+      setVoices(prev => ({
+        ...prev,
+        ...(voice1 !== undefined ? { voice1 } : {}),
+        ...(voice2 !== undefined ? { voice2 } : {}),
+        ...(voice1Slow !== undefined ? { voice1Slow } : {}),
+        ...(voice2Slow !== undefined ? { voice2Slow } : {})
+      }));
+    }, [voice1, voice2, voice1Slow, voice2Slow]);
 
     const getSentenceId = () => {
         // First check prop sentenceId, then fall back to query param
         return propSentenceId || searchParams.get('id');
     };
 
+    const isSlowMode = playbackMode === 'slow';
+    const hasNormalAudio = !!(voices?.voice1 && voices?.voice2);
+    const hasSlowAudio = !!(voices?.voice1Slow && voices?.voice2Slow);
+    const hasActiveAudio = isSlowMode ? hasSlowAudio : hasNormalAudio;
+
+    const getActiveVoices = () => isSlowMode
+      ? { voice1: voices.voice1Slow, voice2: voices.voice2Slow }
+      : { voice1: voices.voice1, voice2: voices.voice2 };
+
     const handlePlayPause = () => {
-      if (noAudio()) {
+      if (isSlowMode && loadingSlowAudio) {
+        return;
+      }
+
+      if (isSlowMode && !hasSlowAudio) {
+        refreshAudioUrls('slow');
+        return;
+      }
+
+      if (!hasActiveAudio) {
         return;
       }
 
@@ -67,7 +93,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
               
               // Check if the error is due to an expired URL (NotSupportedError or network error)
               if (error.name === 'NotSupportedError' || error.name === 'NetworkError') {
-                refreshAudioUrls();
+                refreshAudioUrls(playbackMode);
               }
             });
           setIsPlaying(true);
@@ -75,16 +101,21 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
       }
     };
 
-    const refreshAudioUrls = () => {
+    const refreshAudioUrls = (variant = playbackMode) => {
       const id = getSentenceId();
-      if (!id || isRefreshing || loadingAudio) return;
+      const isSlowRequest = variant === 'slow';
+      if (!id || isRefreshing || loadingAudio || loadingSlowAudio) return;
       
       setIsRefreshing(true);
-      setLoadingAudio(true);
+      if (isSlowRequest) {
+        setLoadingSlowAudio(true);
+      } else {
+        setLoadingAudio(true);
+      }
       
-      console.log('Refreshing audio URLs for sentence:', id);
+      console.log('Refreshing audio URLs for sentence:', id, 'variant:', variant);
       
-      fetch(`/api/audio-url/${id}`, {
+      fetch(`/api/audio-url/${id}${isSlowRequest ? '?variant=slow' : ''}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -95,11 +126,16 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
         if (data.voice1 && data.voice2) {
           // We got fresh URLs, update them
           console.log('Received fresh audio URLs');
-          setVoices({voice1: data.voice1, voice2: data.voice2});
-          
-          // Update audio sources
-          if (audioRefs.voice1) audioRefs.voice1.src = data.voice1;
-          if (audioRefs.voice2) audioRefs.voice2.src = data.voice2;
+          setVoices(prev => ({
+            ...prev,
+            ...(isSlowRequest ? {
+              voice1Slow: data.voice1,
+              voice2Slow: data.voice2
+            } : {
+              voice1: data.voice1,
+              voice2: data.voice2
+            })
+          }));
           
           // Don't automatically play after refreshing URLs
           setIsPlaying(false);
@@ -109,19 +145,21 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
           setIsPlaying(false);
         }
       })
-      .catch(error => {
+      .catch(() => {
         setIsPlaying(false);
       })
       .finally(() => {
-        setLoadingAudio(false);
+        if (isSlowRequest) {
+          setLoadingSlowAudio(false);
+        } else {
+          setLoadingAudio(false);
+        }
         // Reset the refreshing flag after a delay to prevent rapid consecutive calls
         setTimeout(() => {
           setIsRefreshing(false);
         }, 2000);
       });
     };
-
-    const noAudio = () => (voices?.voice1 == null || voices?.voice2 == null);
   
     const hasRemainingAudioGenerations = () => {
       if(!user) {
@@ -135,11 +173,18 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
     }
 
     const shouldLock = () => {
-      return (!loggedIn() && !isLyric) || noAudio()
+      return (!loggedIn() && !isLyric) || !hasNormalAudio;
     }
 
     const handleSpeakerSwitch = () => {
-      if (noAudio()) {
+      if (isSlowMode && loadingSlowAudio) {
+        return;
+      }
+
+      if (!hasActiveAudio) {
+        if (isSlowMode && hasNormalAudio && !hasSlowAudio) {
+          refreshAudioUrls('slow');
+        }
         return;
       }
       audioRefs.voice1?.pause();
@@ -170,12 +215,16 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
       .then(response => response.json())
       .then(data => {
         if (data.success) {
-          setVoices({voice1: data.voice1, voice2: data.voice2});
-          decrementRemainingAudioGenerations();
-        } else {
+          setVoices({
+            voice1: data.voice1, 
+            voice2: data.voice2,
+            voice1Slow: data.voice1Slow,
+            voice2Slow: data.voice2Slow
+          });
+          if(user.tier === 0 || user.tier === 1) {
+            decrementRemainingAudioGenerations();
+          }
         }
-      })
-      .catch(error => {
       })
       .finally(() => {
         setLoadingAudio(false);
@@ -183,7 +232,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
     }
     
     const handleAudioLock = () => {
-      if(loadingAudio) {
+      if(loadingAudio || loadingSlowAudio) {
         return;
       }
 
@@ -191,7 +240,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
         setShowPopup(true);
         return;
       } else {
-        if(user.tier === 0 && !hasRemainingAudioGenerations()) {
+        if((user.tier === 0 || user.tier === 1) && !hasRemainingAudioGenerations()) {
           setShowPopup(true);
           return;
         } else {
@@ -205,28 +254,55 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
       setShowPopup(false);
     }
 
+    const togglePlaybackMode = () => {
+      if (shouldLock()) {
+        handleAudioLock();
+        return;
+      }
+
+      audioRefs.voice1?.pause();
+      audioRefs.voice2?.pause();
+      setIsPlaying(false);
+
+      if (isSlowMode) {
+        setPlaybackMode('normal');
+      } else {
+        setPlaybackMode('slow');
+        if (hasNormalAudio && !hasSlowAudio) {
+          refreshAudioUrls('slow');
+        }
+      }
+    };
+
     useEffect(() => {
-      if (voices.voice1) {
-        audioRefs.voice1.src = `${voices.voice1}`;
+      audioRefs.voice1?.pause();
+      audioRefs.voice2?.pause();
+      setIsPlaying(false);
+    }, [playbackMode]);
+
+    useEffect(() => {
+      const activeVoices = getActiveVoices();
+      if (activeVoices.voice1) {
+        audioRefs.voice1.src = `${activeVoices.voice1}`;
         
         // Add error event listener to detect expired URLs when loading
         audioRefs.voice1.onerror = () => {
-          if (!isRefreshing && !loadingAudio) {
-            refreshAudioUrls();
+          if (!isRefreshing && !loadingAudio && !loadingSlowAudio) {
+            refreshAudioUrls(playbackMode);
           }
         };
       }
-      if (voices.voice2) {
-        audioRefs.voice2.src = `${voices.voice2}`;
+      if (activeVoices.voice2) {
+        audioRefs.voice2.src = `${activeVoices.voice2}`;
         
         // Add error event listener to detect expired URLs when loading
         audioRefs.voice2.onerror = () => {
-          if (!isRefreshing && !loadingAudio) {
-            refreshAudioUrls();
+          if (!isRefreshing && !loadingAudio && !loadingSlowAudio) {
+            refreshAudioUrls(playbackMode);
           }
         };
       }
-    }, [voices, loadingAudio, isRefreshing]);
+    }, [voices, playbackMode, loadingAudio, loadingSlowAudio, isRefreshing]);
   
     useEffect(() => {
       const handleAudioEnded = () => {
@@ -246,15 +322,21 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
       };
     }, []);
 
+    const previewVoices = getActiveVoices();
+
     return (
         <div className={styles.audioPlayerWrapper}>
           <div className={styles.audioPlayers}>
             <audio controls>
-              <source src={`${voices?.voice1}`} type="audio/mpeg" />
+              {previewVoices?.voice1 && (
+                <source src={previewVoices.voice1} type="audio/mpeg" />
+              )}
               Your browser does not support the audio element.
             </audio>
             <audio controls>
-              <source src={`${voices?.voice2}`} type="audio/mpeg" />
+              {previewVoices?.voice2 && (
+                <source src={previewVoices.voice2} type="audio/mpeg" />
+              )}
               Your browser does not support the audio element.
             </audio>
           </div>
@@ -295,17 +377,39 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, isLyric }) =>
               </div>
             </button>
 
-            <button 
-              className={`${
-                styles.togglePlaying
-              } ${
-                shouldLock() ? styles.locked : ''
-              }`}
-              onClick={handlePlayPause}>
-              <div className={styles.togglePlayingInner}>
-                {isPlaying ? <MaterialSymbolsPause /> : <MaterialSymbolsPlayArrowRounded />}
-              </div>
-            </button>
+            <div className={styles.playbackColumn}>
+              <button 
+                className={`${
+                  styles.togglePlaying
+                } ${
+                  shouldLock() ? styles.locked : ''
+                }`}
+                onClick={handlePlayPause}
+                disabled={(shouldLock() && !isSlowMode) || (isSlowMode && loadingSlowAudio)}
+              >
+                <div className={styles.togglePlayingInner}>
+                  {isPlaying ? <MaterialSymbolsPause /> : <MaterialSymbolsPlayArrowRounded />}
+                </div>
+              </button>
+              <button
+                className={`${
+                  styles.speedToggle
+                } ${
+                  isSlowMode ? styles.active : ''
+                } ${
+                  shouldLock() ? styles.locked : ''
+                }`}
+                onClick={togglePlaybackMode}
+                disabled={shouldLock() || loadingSlowAudio}
+              >
+                <div className={styles.speedToggleInner}>
+                  {isSlowMode
+                    ? (loadingSlowAudio ? <SvgSpinnersRingResize /> : <MaterialSymbolsTurtle />)
+                    : <LucideRabbit />}
+                  <span>{isSlowMode ? '0.7x' : '1x'}</span>
+                </div>
+              </button>
+            </div>
           </div>
           
           {

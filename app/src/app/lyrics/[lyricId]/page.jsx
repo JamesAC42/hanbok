@@ -629,6 +629,8 @@ const LyricsPage = () => {
                                         analysis={activeAnalysis.sentence.analysis} 
                                         voice1={activeAnalysis.sentence.voice1Key} 
                                         voice2={activeAnalysis.sentence.voice2Key}
+                                        voice1Slow={activeAnalysis.sentence.voice1SlowKey}
+                                        voice2Slow={activeAnalysis.sentence.voice2SlowKey}
                                         originalLanguage={lyric.language}
                                         translationLanguage={lyric.analysis.language}
                                         showTransition={false}
