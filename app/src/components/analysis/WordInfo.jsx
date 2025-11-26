@@ -1,5 +1,8 @@
 'use client';
+import { useEffect, useRef, useState } from 'react';
 import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
+import { MaterialSymbolsVolumeUp } from '@/components/icons/VolumeOn';
+import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import styles from '@/styles/components/sentenceanalyzer/wordinfo.module.scss';
 import Conjugation from './Conjugation';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -9,6 +12,42 @@ import getFontClass from '@/lib/fontClass';
 
 const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
     const { t } = useLanguage();
+    const [audioUrl, setAudioUrl] = useState(null);
+    const [isAudioLoading, setIsAudioLoading] = useState(false);
+    const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+    const [audioError, setAudioError] = useState(null);
+    const audioRef = useRef(null);
+
+    const getDictionaryWord = () => {
+      if (!wordInfo) return '';
+      return wordInfo.isParticle ? wordInfo.particle : wordInfo.dictionary_form;
+    };
+
+    const getWordTranslation = () => {
+      if (!wordInfo) return '';
+      // Prefer a clear meaning/translation, fall back to the dictionary form so Japanese requests don't fail
+      return wordInfo.meaning?.description || wordInfo.translation || wordInfo.dictionary_form || '';
+    };
+
+    useEffect(() => {
+      // Reset audio state when switching words or languages
+      setAudioUrl(null);
+      setIsAudioPlaying(false);
+      setAudioError(null);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    }, [wordInfo, language]);
+
+    useEffect(() => {
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
+    }, []);
     
     const getCleanedType = (wordType) => {
       if (!wordType) {
@@ -54,6 +93,93 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
         return null;
     }
 
+    const prepareAudioElement = (url) => {
+        if (!url) return null;
+
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.src = url;
+        } else if (typeof Audio !== 'undefined') {
+            audioRef.current = new Audio(url);
+        }
+
+        if (!audioRef.current) return null;
+
+        audioRef.current.onended = () => setIsAudioPlaying(false);
+        audioRef.current.onpause = () => setIsAudioPlaying(false);
+        audioRef.current.onplay = () => setIsAudioPlaying(true);
+
+        return audioRef.current;
+    };
+
+    const fetchAudioUrl = async () => {
+        const dictionaryWord = getDictionaryWord();
+        if (!dictionaryWord || isAudioLoading) return null;
+
+        setIsAudioLoading(true);
+        setAudioError(null);
+
+        try {
+            const params = new URLSearchParams({
+                word: dictionaryWord,
+                language
+            });
+
+            const translation = getWordTranslation();
+            if (language === 'ja' && translation) {
+                params.append('translation', translation);
+            }
+
+            const response = await fetch(`/api/word-audio?${params.toString()}`, {
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success || !data.audioUrl) {
+                const message = data?.message || 'Unable to load audio';
+                throw new Error(message);
+            }
+
+            setAudioUrl(data.audioUrl);
+            prepareAudioElement(data.audioUrl);
+            return data.audioUrl;
+        } catch (error) {
+            console.error('Error fetching word audio:', error);
+            setAudioError(error.message);
+            return null;
+        } finally {
+            setIsAudioLoading(false);
+        }
+    };
+
+    const handlePlayAudio = async () => {
+        const dictionaryWord = getDictionaryWord();
+        if (!dictionaryWord) return;
+
+        if (isAudioPlaying && audioRef.current) {
+            audioRef.current.pause();
+            return;
+        }
+
+        let url = audioUrl;
+        if (!url) {
+            url = await fetchAudioUrl();
+        } else if (!audioRef.current) {
+            prepareAudioElement(url);
+        }
+
+        if (!url || !audioRef.current) return;
+
+        try {
+            await audioRef.current.play();
+            setIsAudioPlaying(true);
+        } catch (error) {
+            console.error('Error playing word audio:', error);
+            setAudioError('Unable to play audio');
+        }
+    };
+
     return(
         <>
         {wordInfo && (
@@ -77,10 +203,26 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                 }
                 
                 <div className={`${styles.dictionaryForm} ${getFontClass(language)}`}>
-                    <span className={styles.dictionaryFormInner}>
-                        {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
-                        {language === 'ru' ? transliteration() : pronunciation()}
-                    </span>
+                    <div className={styles.dictionaryFormRow}>
+                        <span className={styles.dictionaryFormInner}>
+                            {wordInfo.isParticle? wordInfo.particle : wordInfo.dictionary_form}
+                            {language === 'ru' ? transliteration() : pronunciation()}
+                        </span>
+                        <button
+                            type="button"
+                            className={`${styles.audioButton} ${isAudioPlaying ? styles.audioButtonActive : ''}`}
+                            onClick={handlePlayAudio}
+                            disabled={!wordInfo || isAudioLoading}
+                            aria-label={`Play audio for ${getDictionaryWord()}`}
+                        >
+                            {
+                                isAudioLoading ? <SvgSpinnersRingResize /> : <MaterialSymbolsVolumeUp />
+                            }
+                        </button>
+                    </div>
+                    {audioError && (
+                        <div className={styles.audioStatus}>{audioError}</div>
+                    )}
                 </div>
 
                 <div className={styles.wordInfoContent}>

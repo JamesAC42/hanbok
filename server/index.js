@@ -94,6 +94,7 @@ const editDeckCard = require('./controllers/auth/editDeckCard');
 const addDeckCard = require('./controllers/auth/addDeckCard');
 
 const getRateLimits = require('./controllers/auth/getRateLimits');
+const { searchWordAudio, regenerateWordAudio } = require('./controllers/admin/wordAudioAdmin');
 
 const getEmailList = require('./controllers/admin/getEmailList');
 const getAdmins = require('./controllers/admin/getAdmins');
@@ -208,7 +209,7 @@ app.post('/api/sentences/:sentenceId/generate-audio', isAuthenticated, async (re
     generateAudio(req, res);
 });
 
-app.get('/api/word-audio', isAuthenticated, async (req, res) => {
+app.get('/api/word-audio', async (req, res) => {
     const getWordAudioController = require('./controllers/words/getWordAudio');
     getWordAudioController(req, res);
 });
@@ -381,6 +382,14 @@ app.get('/api/admin/users', isAuthenticated, async (req, res) => {
 
 app.put('/api/admin/users/:userId', isAuthenticated, async (req, res) => {
     updateUser(req, res);
+});
+
+app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
+    searchWordAudio(req, res);
+});
+
+app.post('/api/admin/word-audio/regenerate', isAuthenticated, async (req, res) => {
+    regenerateWordAudio(req, res);
 });
 
 // Admin lyrics routes

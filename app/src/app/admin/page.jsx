@@ -7,6 +7,7 @@ import adminStyles from '@/styles/components/admin.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import UserManagement from '@/components/admin/UserManagement';
+import Link from 'next/link';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -89,6 +90,18 @@ const Admin = () => {
             router.replace('/login');
         }
     }, [isAuthenticated, loading, router]);
+
+    // Set a black background for the admin area
+    useEffect(() => {
+        const previousBg = document.body.style.backgroundColor;
+        const previousColor = document.body.style.color;
+        document.body.style.backgroundColor = '#000';
+        document.body.style.color = '#f7f7f7';
+        return () => {
+            document.body.style.backgroundColor = previousBg;
+            document.body.style.color = previousColor;
+        };
+    }, []);
     
     // Fetch feature usage data and check admin status
     useEffect(() => {
@@ -468,6 +481,13 @@ const Admin = () => {
                                 >
                                     {downloadingEmails ? 'Downloading...' : 'Download CSV'}
                                 </button>
+                            </div>
+                            <div className={adminStyles.toolCard}>
+                                <h3>Word Audio Editor</h3>
+                                <p>Search, preview, and regenerate stored per-word audio entries.</p>
+                                <Link href="/admin/wordaudioedit" className={adminStyles.adminButton}>
+                                    Open Word Audio Admin
+                                </Link>
                             </div>
                         </div>
                     </section>
