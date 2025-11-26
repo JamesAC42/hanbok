@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsPause } from '@/components/icons/Pause';
 import {useSearchParams} from 'next/navigation';
-import { MaterialSymbolsLockOpenCircle } from '@/components/icons/Lock';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
 import { TdesignUserTalk1Filled } from '@/components/icons/Talk';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
@@ -30,6 +29,8 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
 
     const [voices, setVoices] = useState({});
     const [playbackMode, setPlaybackMode] = useState('normal');
+    const [audioErrorCode, setAudioErrorCode] = useState(null);
+    const [autoRequested, setAutoRequested] = useState(false);
     const searchParams = useSearchParams();
 
     const { user, decrementRemainingAudioGenerations } = useAuth();
@@ -40,6 +41,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
       voice1: typeof Audio !== 'undefined' ? new Audio() : null,
       voice2: typeof Audio !== 'undefined' ? new Audio() : null
     });
+    const sentenceId = propSentenceId || searchParams.get('id');
 
     useEffect(() => {
       setVoices(prev => ({
@@ -51,15 +53,17 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
       }));
     }, [voice1, voice2, voice1Slow, voice2Slow]);
 
-    const getSentenceId = () => {
-        // First check prop sentenceId, then fall back to query param
-        return propSentenceId || searchParams.get('id');
-    };
+    useEffect(() => {
+      setAudioErrorCode(null);
+      setShowPopup(false);
+      setAutoRequested(false);
+    }, [sentenceId]);
 
     const isSlowMode = playbackMode === 'slow';
     const hasNormalAudio = !!(voices?.voice1 && voices?.voice2);
     const hasSlowAudio = !!(voices?.voice1Slow && voices?.voice2Slow);
     const hasActiveAudio = isSlowMode ? hasSlowAudio : hasNormalAudio;
+    const isQuotaBlocked = audioErrorCode === 'AUDIO_QUOTA_EXCEEDED';
 
     const getActiveVoices = () => isSlowMode
       ? { voice1: voices.voice1Slow, voice2: voices.voice2Slow }
@@ -102,7 +106,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     };
 
     const refreshAudioUrls = (variant = playbackMode) => {
-      const id = getSentenceId();
+      const id = sentenceId;
       const isSlowRequest = variant === 'slow';
       if (!id || isRefreshing || loadingAudio || loadingSlowAudio) return;
       
@@ -161,19 +165,8 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
       });
     };
   
-    const hasRemainingAudioGenerations = () => {
-      if(!user) {
-        return false;
-      }
-      return user.remainingAudioGenerations > 0;
-    }
-
-    const loggedIn = () => {
-      return !!user;
-    }
-
     const shouldLock = () => {
-      return (!loggedIn() && !isLyric) || !hasNormalAudio;
+      return !hasNormalAudio || isQuotaBlocked || loadingAudio;
     }
 
     const handleSpeakerSwitch = () => {
@@ -193,61 +186,73 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
       setActiveSpeaker(activeSpeaker === 1 ? 2 : 1);
     };
 
-    const generateAudio = () => {
-      if(!loggedIn()) {
-        setShowPopup(true);
+    const generateAudio = async () => {
+      if (!sentenceId || loadingAudio) {
         return;
       }
 
-      if((user.tier === 0 || user.tier === 1) && !hasRemainingAudioGenerations()) {
-        setShowPopup(true);
-        return;
-      }
-
-      const id = getSentenceId();
+      setAudioErrorCode(null);
+      setShowPopup(false);
       setLoadingAudio(true);  
-      fetch(`/api/sentences/${id}/generate-audio`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
+      try {
+        const response = await fetch(`/api/sentences/${sentenceId}/generate-audio`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
           setVoices({
             voice1: data.voice1, 
             voice2: data.voice2,
             voice1Slow: data.voice1Slow,
             voice2Slow: data.voice2Slow
           });
-          if(user.tier === 0 || user.tier === 1) {
+
+          if(user && (user.tier === 0 || user.tier === 1)) {
             decrementRemainingAudioGenerations();
           }
+          return true;
         }
-      })
-      .finally(() => {
+
+        if (data.code === 'AUDIO_QUOTA_EXCEEDED') {
+          setAudioErrorCode(data.code);
+          setShowPopup(true);
+        } else {
+          setAudioErrorCode('GENERATION_FAILED');
+        }
+        return false;
+      } catch (error) {
+        console.error('Error generating audio', error);
+        setAudioErrorCode('GENERATION_FAILED');
+        return false;
+      } finally {
         setLoadingAudio(false);
-      });
+      }
     }
+
+    useEffect(() => {
+      if (!sentenceId || hasNormalAudio || loadingAudio || autoRequested || (voice1 && voice2)) {
+        return;
+      }
+      setAutoRequested(true);
+      generateAudio();
+    }, [sentenceId, hasNormalAudio, loadingAudio, autoRequested, voice1, voice2]);
     
     const handleAudioLock = () => {
       if(loadingAudio || loadingSlowAudio) {
         return;
       }
 
-      if(!loggedIn()) {
+      if (isQuotaBlocked) {
         setShowPopup(true);
         return;
-      } else {
-        if((user.tier === 0 || user.tier === 1) && !hasRemainingAudioGenerations()) {
-          setShowPopup(true);
-          return;
-        } else {
-          setShowPopup(false);
-          generateAudio();
-        }
       }
+
+      generateAudio();
     }
 
     const hidePopup = () => {
@@ -417,52 +422,22 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
               <div
                 onClick={() => handleAudioLock()}
                 className={styles.audioPlayerLocked}>
-                  {
-                    user ? (
-                      <>
+                  <div className={styles.generateAudioButton}>
+                    {loadingAudio ? <SvgSpinnersRingResize /> : <TdesignUserTalk1Filled />}
+                    <div className={styles.generateAudioButtonText}>
                       {
-                        !loadingAudio ? (
-                          <div className={styles.generateAudioButton}>
-                            <TdesignUserTalk1Filled />
-                            <div className={styles.generateAudioButtonText}>
-                              {t('audioPlayer.playAudio')}
-                            </div>
-                          </div>
-                        ) : (
-                          <div className={styles.generateAudioButton}>
-                            <SvgSpinnersRingResize />
-                            <div className={styles.generateAudioButtonText}>
-                              {t('audioPlayer.generating')}
-                            </div>
-                          </div>
-                        )
+                        isQuotaBlocked
+                          ? t('audioPlayer.noCredits.title')
+                          : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))
                       }
-                      </>
-                    ) : (
-                      <MaterialSymbolsLockOpenCircle />
-                    )
-                  }
+                    </div>
+                  </div>
               </div>
             )
           }
 
           {
-            (showPopup && !loggedIn()) && (
-              <div className={styles.audioPlayerLockedPopup}>
-                <p>{t('audioPlayer.loginRequired.title')}</p>
-                <Link href="/login">
-                  {t('audioPlayer.loginRequired.cta')} <MaterialSymbolsArrowCircleRightRounded />
-                </Link>
-
-                <div className={styles.closePopup} onClick={hidePopup}>
-                  <MaterialSymbolsCancel />
-                </div>
-              </div>
-            )
-          }
-
-          {
-            (showPopup && loggedIn()) && (
+            showPopup && (
               <div className={styles.audioPlayerLockedPopup}>
                 <p>{t('audioPlayer.noCredits.title')}</p>
                 <Link href="/pricing">

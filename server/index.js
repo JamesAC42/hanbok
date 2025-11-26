@@ -205,7 +205,7 @@ app.get('/api/audio-url/:sentenceId', async (req, res) => {
     getAudioURL(req, res);
 });
 
-app.post('/api/sentences/:sentenceId/generate-audio', isAuthenticated, async (req, res) => {
+app.post('/api/sentences/:sentenceId/generate-audio', async (req, res) => {
     generateAudio(req, res);
 });
 
