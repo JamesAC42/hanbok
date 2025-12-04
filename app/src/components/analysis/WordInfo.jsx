@@ -10,7 +10,7 @@ import renderPronunciation from '@/lib/pronunciation';
 import { romanize } from '@romanize/korean';
 import getFontClass from '@/lib/fontClass';
 
-const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
+const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose}) => {
     const { t } = useLanguage();
     const [audioUrl, setAudioUrl] = useState(null);
     const [isAudioLoading, setIsAudioLoading] = useState(false);
@@ -187,6 +187,9 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation}) => {
                 className={`${styles.wordInfoContainer} ${shouldAnimate ? styles.animate : ''} ${getFontClass(language)}`}
                 data-role={wordInfo.isParticle ? 'particle' : getCleanedType(wordInfo.type)}
             >
+                <div className={styles.mobileHandle} onClick={onClose}>
+                    <div className={styles.handleBar}></div>
+                </div>
                 <div className={styles.wordInfoBackground}></div>
                 <div className={styles.wordInfoContainerInner}>
 

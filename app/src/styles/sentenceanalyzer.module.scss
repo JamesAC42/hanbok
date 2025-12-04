@@ -30,13 +30,14 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-end;
-	min-height: 100dvh;
-	max-height:calc(100dvh - 12rem);
+	min-height:calc(100dvh - 4.5rem);
+	max-height:calc(100dvh - 4.5rem);
 
 	width:100%;
 
-	padding:0;
-	padding-bottom:8rem;
+	padding:0 1rem;
+
+	padding-bottom:2rem;
 
 	position:relative;
 

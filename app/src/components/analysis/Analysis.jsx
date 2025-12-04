@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Breakdown from '@/components/analysis/Breakdown';
 import AudioPlayer from '@/components/analysis/AudioPlayer';
 import WordsList from '@/components/analysis/WordsList';
@@ -16,6 +16,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 import getFontClass from '@/lib/fontClass';
+import QuotaDisplay from '@/components/QuotaDisplay';
+import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
+import RecentlyAnalyzed from '@/components/analysis/RecentlyAnalyzed';
 
 const Analysis = ({
     analysis,
@@ -36,6 +39,26 @@ const Analysis = ({
     const [wordInfo, setWordInfo] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const [showPronunciation, setShowPronunciation] = useState(true);
+    const [activeSection, setActiveSection] = useState('breakdown');
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isClosing, setIsClosing] = useState(false);
+
+    const sectionRefs = {
+        breakdown: useRef(null),
+        notes: useRef(null),
+        words: useRef(null),
+        grammar: useRef(null),
+        lyrical: useRef(null),
+    };
+
+    const scrollToSection = (section) => {
+        if (sectionRefs[section]?.current) {
+            sectionRefs[section].current.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start'
+            });
+        }
+    };
 
     const capitalize = (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1);
@@ -52,7 +75,6 @@ const Analysis = ({
     // Check if we should show the promo popup
     useEffect(() => {
         const shouldShowPromo = () => {
-
             const attemptCount = localStorage.getItem('promoAttemptCount');
             if (attemptCount !== null) {
                 const countInt = parseInt(attemptCount);
@@ -67,7 +89,6 @@ const Analysis = ({
 
             // Only show for non-logged-in users or free tier users
             if (!user || user.tier === 0) {
-                // Add a small delay to ensure the analysis is fully rendered
                 setTimeout(() => {
                     showPromoPopup();
                 }, 1500);
@@ -97,80 +118,158 @@ const Analysis = ({
           setWordInfo(null);
         }
     }, [showTransition]);
+
+    // Handle scroll state
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Intersection Observer for active section tracking
+    useEffect(() => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '-20% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const sectionId = Object.keys(sectionRefs).find(key => sectionRefs[key].current === entry.target);
+                    if (sectionId) {
+                        setActiveSection(sectionId);
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        Object.values(sectionRefs).forEach(ref => {
+            if (ref.current) observer.observe(ref.current);
+        });
+
+        return () => observer.disconnect();
+    }, [analysis]);
+    
+    const handleCloseWordInfo = () => {
+        setIsClosing(true);
+        setTimeout(() => {
+            setWordInfo(null);
+            setIsClosing(false);
+        }, 200);
+    }
     
     return(
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
             
-            <div className={styles.analysisControls}>
-                <SaveButton sentenceId={sentenceId} />
-                <SettingsButton 
-                    showPronunciation={showPronunciation} 
-                    setShowPronunciation={setShowPronunciation} 
-                    language={originalLanguage}
-                />
-            </div>
-
-            <div className={styles.breadcrumbs}>
-                Sentence Breakdown {'>'} {capitalize(originalLanguage)} {'>'} {capitalize(translationLanguage)} 
-            </div>
-            
-            <div className={styles.sentenceHeader}>{t('analysis.original')}:</div>
-            <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>
-                {analysis.sentence.original}
-            </div>
-
-            <div className={styles.translationHeader}>{t('analysis.translation')}:</div>
-            <div className={styles.translation}>
-                {analysis.sentence.translation}
-            </div>
-
-            <AudioPlayer
-                sentenceId={sentenceId}
-                isLyric={isLyric}
-                voice1={voice1}
-                voice2={voice2}
-                voice1Slow={voice1Slow}
-                voice2Slow={voice2Slow} />
-
-            <Breakdown 
-                analysis={analysis} 
-                language={originalLanguage}
-                setWordInfo={setWordInfo}
-                resetLockedWord={showTransition}
-                shouldAnimate={shouldAnimate}
-                showPronunciation={showPronunciation} />
-
-            <WordInfo 
-                wordInfo={wordInfo}
-                language={originalLanguage}
-                shouldAnimate={shouldAnimate}
-                showPronunciation={showPronunciation} />
-
-            <SentenceNotes analysis={analysis} />
-
-            {true && (
-                <LyricalDevices 
-                    analysis={analysis}/>
+            {/* Navigation */}
+            {!isLyric && (
+            <nav className={`${styles.navigation} ${isScrolled ? styles.scrolled : ''}`}>
+                <button onClick={() => scrollToSection('breakdown')} className={activeSection === 'breakdown' ? styles.active : ''}>Breakdown</button>
+                {analysis.sentence.context && <button onClick={() => scrollToSection('notes')} className={activeSection === 'notes' ? styles.active : ''}>Notes</button>}
+                <button onClick={() => scrollToSection('words')} className={activeSection === 'words' ? styles.active : ''}>Words</button>
+                <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
+                
+                <div className={styles.embeddedControls}>
+                    <SaveButton sentenceId={sentenceId} />
+                    <SettingsButton 
+                        showPronunciation={showPronunciation} 
+                        setShowPronunciation={setShowPronunciation} 
+                        language={originalLanguage}
+                    />
+                </div>
+            </nav>
             )}
 
-            <CulturalNotes analysis={analysis} />
+            {!isLyric && <QuotaDisplay />}
 
-            <Variants 
-                analysis={analysis} 
-                language={originalLanguage}
-                showPronunciation={showPronunciation} />
+            <div className={styles.mainGrid}>
+                <div className={styles.contentColumn}>
+                    
+                    {/* Header Card */}
+                    <div ref={sectionRefs.breakdown} className={`${styles.card} ${styles.headerSection}`}>
+                        <div className={styles.breadcrumbs}>
+                            {capitalize(originalLanguage)} • {capitalize(translationLanguage)} 
+                        </div>
+                        
+                        <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>
+                            {analysis.sentence.original}
+                        </div>
 
-            <WordsList 
-                analysis={analysis} 
-                originalLanguage={originalLanguage} 
-                translationLanguage={translationLanguage}
-                showPronunciation={showPronunciation} />
+                        <div className={styles.translation}>
+                            {analysis.sentence.translation}
+                        </div>
 
-            <GrammarPoints 
-                analysis={analysis} 
-                language={originalLanguage}
-                showPronunciation={showPronunciation} />
-        
+                        <div className={styles.controls}>
+                            <AudioPlayer
+                                sentenceId={sentenceId}
+                                isLyric={isLyric}
+                                voice1={voice1}
+                                voice2={voice2}
+                                voice1Slow={voice1Slow}
+                                voice2Slow={voice2Slow} />
+                        </div>
+                        <Breakdown 
+                            analysis={analysis} 
+                            language={originalLanguage}
+                            setWordInfo={setWordInfo}
+                            resetLockedWord={showTransition}
+                            shouldAnimate={shouldAnimate}
+                            showPronunciation={showPronunciation} />
+                    </div>
+                    
+                    {/* Recently Analyzed Section */}
+                    {/*<RecentlyAnalyzed />*/}
+
+                    {/* Sentence Notes */}
+                    {analysis.sentence.context || analysis.sentence.formality ? (
+                        <div ref={sectionRefs.notes} className={styles.card}>
+                            <SentenceNotes
+                                analysis={analysis}
+                                originalLanguage={originalLanguage}
+                                showPronunciation={showPronunciation} />
+                        </div>
+                    ) : null}
+
+                    {/* Word List */}
+                    <div ref={sectionRefs.words} className={styles.card}>
+                         <WordsList 
+                            analysis={analysis} 
+                            originalLanguage={originalLanguage} 
+                            translationLanguage={translationLanguage}
+                            showPronunciation={showPronunciation} />
+                    </div>
+
+                    {/* Grammar Points */}
+                    <div ref={sectionRefs.grammar} className={styles.card}>
+                        <GrammarPoints 
+                            analysis={analysis} 
+                            language={originalLanguage}
+                            showPronunciation={showPronunciation} />
+                    </div>
+                </div>
+
+                {/* Sidebar / Bottom Sheet for Word Info */}
+                <div className={`${styles.sidebarColumn} ${wordInfo ? styles.active : ''} ${isClosing ? styles.closing : ''}`}>
+                    {wordInfo ? (
+                         <WordInfo 
+                            wordInfo={wordInfo}
+                            language={originalLanguage}
+                            shouldAnimate={shouldAnimate}
+                            showPronunciation={showPronunciation}
+                            onClose={handleCloseWordInfo} />
+                    ) : (
+                        <div className={styles.placeholderState}>
+                            <FluentCursorHover32Filled />
+                            <p>{t('analysis.hoverExplanation', 'Select a word to see details')}</p>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }

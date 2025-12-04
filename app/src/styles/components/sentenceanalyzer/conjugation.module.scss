@@ -1,135 +1,115 @@
+@import '@/styles/variables.module.scss';
+
 .conjugation {
-    font-weight:normal;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
 
-    display:flex;
-    flex-direction:row;
-    align-items:stretch;
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
 
-    &.fillSteps {
-        justify-content:center;
-        align-items:center;
+        .tag {
+            background: var(--primary);
+            color: var(--background);
+            padding: 0.2rem 0.8rem;
+            padding-bottom:0.4rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
     }
-    //padding-left:2rem;
-    gap:2rem;
-    @media screen and (max-width:725px) {
-        flex-direction:column;
-        align-items:center;
-        gap:0.5rem;
-    }
 
-    .additionalInfo {
-        display:flex;
-        flex-direction:column;
-        justify-content:center;
-        align-items:stretch;
-        gap:1rem;
-        max-width:15rem;
+    .formulaContainer {
+        .header {
+            color: var(--foreground);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
 
-        .tense, .formality, .person, .number, .gender, .mood {
-            font-weight:normal;
-            font-size:1.1rem;
-            border:1px solid var(--foreground-light);
-            border-radius:0.5rem;
-            width:fit-content;
-            overflow:hidden;
+        .stepsList {
             display: flex;
-            flex-direction: row;
-            
-            .tenseLabel, .formalityLabel, .personLabel, .numberLabel, .genderLabel, .moodLabel {
-                width: 100%;
-                font-weight: 800;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stepItem {
+            width: 100%;
+            background: var(--background-alt);
+            color: var(--foreground);
+            border-radius: 0.8rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border: 1px solid var(--border-light);
+
+            &.finalResult {
+                background: var(--primary);
+                border-color: var(--primary);
+
+                color: var(--background);
+
+                .stepText {
+                    color: var(--background);
+                    font-weight: 800;
+                    font-size: 1.5rem;
+                }
+
+                .stepExplanation {
+                    color: var(--background-alt);
+                }
+            }
+
+            .stepContent {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .stepNumber {
                 background: var(--foreground-light);
                 color: var(--background);
-                padding: 0.5rem 0.8rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.8rem;
+                font-weight: bold;
+                transform:translateY(0.1rem);
+
+                .stepNumberText {
+                    transform:translateY(-2px);
+                }
             }
-            
-            .tenseValue, .formalityValue, .personValue, .numberValue, .genderValue, .moodValue {
-                width: 100%;
-                background: var(--background-alt);
+
+            .stepText {
+                font-size: 1.2rem;
+                font-weight: 600;
                 color: var(--foreground);
-                padding: 0.5rem 0.8rem;
             }
-        }
-        @media screen and (max-width:725px) {
-            flex-direction:row;
-            flex-wrap:wrap;
-            max-width:100%;
-            margin-bottom:0.5rem;
-            .tense, .formality, .person, .number, .gender, .mood {
-                font-size:0.9rem;
-                & * {
-                    padding:0.1rem 0.3rem;
-                }
-            }
-        }
-    }
 
+            .stepExplanation {
+                font-size: 0.9rem;
+                font-style: italic;
+                color: var(--foreground);
+            }
+        }
 
-    .steps {
-        flex:1;
-        .stepsHeader {
-            font-weight:800;
-            text-align:center;
-            padding-bottom:0.5rem;
-            font-size:1.4rem;
-            border-bottom:1px solid var(--foreground);
-            font-weight:300;
+        .arrow {
+            margin-top:0.5rem;
+            color: var(--foreground-light);
+            font-size: 1.2rem;
+            font-weight: bold;
         }
-        .stepsContent {
-            margin-top:1rem;
-            
-            .stepsTable {
-                width:100%;
-                border-collapse:collapse;
-                
-                td {
-                    padding:0.5rem 1rem;
-                    text-align:left;
-                    border-bottom:1px solid var(--foreground-light);
-                }
-                
-                .stepNumber {
-                    width:2.5rem;
-                    color:var(--foreground-light);
-                    font-weight:normal;
-                }
-                
-                .stepText {
-                    font-weight:bold;
-                    min-width:8rem;
-                }
-                
-                .explanation {
-                    color:var(--foreground);
-                }
-                
-                .stringStep {
-                    text-align:center;
-                    font-size:1.6rem;
-                    font-weight:bold;
-                }
-            }
-        }
-        @media screen and (max-width:725px) {
-            .stepsHeader {
-                font-size:1.2rem;
-            }
-            .stepsContent {
-                .stepsTable {
-                    font-size:1rem;
-                    
-                    td {
-                        padding:0.25rem 0.5rem;
-                    }
-                    
-                    .stringStep {
-                        font-size:1.2rem;
-                    }
-                }
-            }
-        }
-    }
-    @media screen and (max-width:725px) {
-        margin-bottom:0.5rem;
     }
 }

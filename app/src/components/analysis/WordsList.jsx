@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
-import { MaterialSymbolsCheckBoxRounded } from '@/components/icons/Checkbox';
-import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
+// import { MaterialSymbolsCheckBoxRounded } from '@/components/icons/Checkbox';
+// import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
 import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
@@ -75,11 +75,15 @@ const WordItem = ({
 }) => {
     const { t } = useLanguage();
     const isSaved = savedWords.has(word.originalWord);
+    const [isHovered, setIsHovered] = useState(false);
+
     return (
         <div className={`${styles.wordListItem} ${getFontClass(language)}`} data-role={type ? getCleanedType(type) : null}>
             <div className={styles.wordListItemActions}>
-                <div 
+                <button 
                     className={`${styles.wordListItemAction} ${isSaved ? styles.wordInLibrary : styles.wordNotInLibrary}`}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
                     onClick={(e) => {
                         if (setShowTooltip) {
                             setShowTooltip(false);
@@ -87,51 +91,54 @@ const WordItem = ({
                         toggleWordInLibrary(word, e)
                     }}>
                     {isSaved ? 
-                        <MaterialSymbolsCheckBoxRounded /> : 
-                        <MaterialSymbolsLibraryAddRounded />
-                    }
-                    {showTooltip && (
-                        <div
-                            onClick={() => {
-                                if (setShowTooltip) {
-                                    setShowTooltip(false);
-                                }
-                            }}
-                            className={styles.addWordTooltip}>
-                            <div className={styles.addWordTooltipInner}>
-                                Click to save this word to your library
-                                <MaterialSymbolsCancel />
-                                <div className={styles.addWordTooltipIcon}> 
-                                    <MaterialSymbolsArrowsMoreDownRounded />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-            <span className={styles.wordDictionary}>{word.originalWord}</span>
-            {
-                getDisplayReading(word, language, showPronunciation)
-            }
-            <span className={styles.wordListItemTranslation}>
-                {word.translatedWord && ` ${word.translatedWord}`}
-            </span>
-            {type && (
-                <span className={styles.wordListItemType}>
-                    ({getDisplayType(type)})
-                </span>
-            )}
-            {showRelated && handleShowRelated && (
-                <button 
-                    className={styles.showRelatedButton}
-                    onClick={() => handleShowRelated(word)}
-                >
-                    {expandedWord === word.originalWord ? 
-                        t('analysis.hideRelatedWords') : 
-                        t('analysis.showRelatedWords')
+                        (isHovered ? "Remove" : "In library") : 
+                        "Add to library"
                     }
                 </button>
-            )}
+                {showTooltip && (
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (setShowTooltip) {
+                                setShowTooltip(false);
+                            }
+                        }}
+                        className={styles.addWordTooltip}>
+                        <div className={styles.addWordTooltipInner}>
+                            Click to save this word to your library
+                            <MaterialSymbolsCancel />
+                            <div className={styles.addWordTooltipIcon}> 
+                                <MaterialSymbolsArrowsMoreDownRounded />
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className={styles.wordInfo}>
+                <span className={styles.wordDictionary}>{word.originalWord}</span>
+                {
+                    getDisplayReading(word, language, showPronunciation)
+                }
+                <span className={styles.wordListItemTranslation}>
+                    {word.translatedWord && ` ${word.translatedWord}`}
+                </span>
+                {type && (
+                    <span className={styles.wordListItemType}>
+                        ({getDisplayType(type)})
+                    </span>
+                )}
+                {showRelated && handleShowRelated && (
+                    <button 
+                        className={styles.showRelatedButton}
+                        onClick={() => handleShowRelated(word)}
+                    >
+                        {expandedWord === word.originalWord ? 
+                            t('analysis.hideRelatedWords') : 
+                            t('analysis.showRelatedWords')
+                        }
+                    </button>
+                )}
+            </div>
         </div>
     );
 };

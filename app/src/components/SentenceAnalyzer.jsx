@@ -178,7 +178,6 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             {
             analysis && (
                 <>
-                <QuotaDisplay />
                 <Analysis 
                     analysis={analysis} 
                     voice1={voice1} 

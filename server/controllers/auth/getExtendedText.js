@@ -95,7 +95,11 @@ const getExtendedText = async (req, res) => {
                     return {
                         sentenceId: sentenceDoc.sentenceId,
                         text: sentenceDoc.text,
-                        analysis: sentenceDoc.analysis
+                        analysis: sentenceDoc.analysis,
+                        voice1Key: sentenceDoc.voice1Key || null,
+                        voice2Key: sentenceDoc.voice2Key || null,
+                        voice1SlowKey: sentenceDoc.voice1SlowKey || null,
+                        voice2SlowKey: sentenceDoc.voice2SlowKey || null
                     };
                 })
                 .filter(Boolean);

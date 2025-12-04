@@ -1399,7 +1399,7 @@
     top: 0rem;
     right: 0;
     height: calc(100dvh);
-    width: 65dvw;
+    width: 80dvw;
     z-index: 1000;
     overflow-y: auto;
     scrollbar-width: none;
@@ -1498,8 +1498,47 @@
         padding: 0 0.5rem;
     }
 
+    .lineNumbers {
+        font-size: 0.875rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        padding: 0 0.5rem;
+        color:var(--foreground);  
+    }
+    
+    .originalText {
+        font-size: 1.125rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px dashed var(--foreground-light);
+        padding: 0.5rem;
+        color:var(--foreground);  
+        
+        .lineTranslation {
+            font-size: 1rem;
+            color: #555;
+            font-style: italic;
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dotted #eee;
+        }
+    }
+
     @media screen and (max-width: 1000px) {
-        padding-left: 1.6rem;
+        padding:1.5rem 0.5rem;
+        h3 {
+            padding: 0 1rem;
+        }
+
+        .lineNumbers {
+            padding: 0 1rem;
+        }
+
+        .originalText {
+            padding: 0.5rem 1rem;
+            margin-bottom: 1rem;
+        }
     }
 }
 
@@ -1510,33 +1549,6 @@
     border-radius: 0.5rem;
     color: #666;
     font-style: italic;
-}
-
-.lineNumbers {
-    font-size: 0.875rem;
-    color: #666;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    padding: 0 0.5rem;
-    color:var(--foreground);  
-}
-
-.originalText {
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px dashed var(--foreground-light);
-    padding: 0.5rem;
-    color:var(--foreground);  
-    
-    .lineTranslation {
-        font-size: 1rem;
-        color: #555;
-        font-style: italic;
-        margin-top: 0.5rem;
-        padding-top: 0.5rem;
-        border-top: 1px dotted #eee;
-    }
 }
 
 .sentenceAnalysis {

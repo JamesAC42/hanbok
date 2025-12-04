@@ -28,6 +28,10 @@ const Breakdown = ({
 	};
 
 	const handleWordInfoEnter = (item, isParticle = false) => {
+		// Check if window exists and width is greater than mobile breakpoint (1400px)
+		if (typeof window !== 'undefined' && window.innerWidth <= 1400) {
+			return;
+		}
 		if (!lockedWord || (lockedWord && lockedWord.dictionary_form === item.dictionary_form)) {
 			setWordInfo({...item, type: isParticle ? 'particle' : item.type, isParticle});
 		}

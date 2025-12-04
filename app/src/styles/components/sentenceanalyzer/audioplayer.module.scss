@@ -4,6 +4,7 @@
 
 .audioPlayerWrapper {
     position:relative;
+    isolation: isolate; // Creates a new stacking context to fix negative z-index issues
 }
 
 .audioPlayerLocked {

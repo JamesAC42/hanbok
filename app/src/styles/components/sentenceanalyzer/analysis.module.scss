@@ -1,82 +1,288 @@
-@keyframes update-blur {
-    0% {
-        filter:none;
-    }
-    50% {
-        filter:blur(8px);
-    }
-    100% {
-        filter:none;
-    }
-}
+@import '@/styles/variables.module.scss';
 
 .analysis {
     position: relative;
-    backdrop-filter:blur(20px);
-    background:var(--background-alt);
-    background:none;
-    box-shadow:0 0 10px 0 var(--shadow);
-    box-shadow:none;
-    border-radius:0.5rem;
-    padding:2rem;
-    position:relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
 
     &.transition {
-        animation:update-blur 0.3s ease-in-out;
+        animation: update-blur 0.3s ease-in-out;
+    }
+}
+
+.navigation {
+    position: sticky;
+    top: 1rem;
+    z-index: 100;
+    background: var(--background);
+    padding: 0.5rem 0.5rem;
+    margin: 0 auto 2rem auto;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 3rem;
+    gap: 0.5rem;
+    width: fit-content;
+    max-width: 90%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px var(--shadow);
+    overflow-x: auto;
+
+    // Hide scrollbar
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
     }
 
-    @media screen and (max-width:725px) {
-        padding:1rem;
-    }
+    &.scrolled {
+        padding: 0.5rem 1rem;
+        background: var(--background);
+        box-shadow: 0 8px 32px var(--shadow);
+        
+        > button:not(.active) {
+            max-width: 0;
+            padding: 0;
+            margin: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
 
-    .analysisControls {
-        position:absolute;
-        top:0;
-        right:0;
-        padding:1rem;
-        display:flex;
-        gap:0.5rem;
-
-        @media screen and (max-width:725px) {
-            padding:0.5rem;
+        &:hover {
+            padding: 0.5rem 1rem;
+            
+            > button {
+                max-width: 150px;
+                opacity: 1;
+                pointer-events: auto;
+                padding: 0.5rem 1rem;
+                margin: 0;
+            }
         }
     }
 
+    button {
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--foreground-light);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 0.9rem;
+        white-space: nowrap;
+        overflow: hidden;
+        max-width: 200px;
+        opacity: 1;
+
+        font-family: var(--font-display);
+
+        &:hover {
+            background: var(--background-alt);
+            color: var(--foreground);
+        }
+
+        &.active {
+            background: var(--primary);
+            color: var(--background);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+        }
+    }
+
+    // Embed controls in nav for better layout
+    .embeddedControls {
+        margin-left: 0.5rem;
+        padding-left: 0.5rem;
+        border-left: 1px solid var(--border-light);
+        display: flex;
+        gap: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    @media screen and (max-width: 850px) {
+        // Force compact styles regardless of scroll
+        padding: 0.5rem -.5rem;
+        top: 1rem;
+        gap:0;
+        
+        > button:not(.active) {
+            max-width: 0;
+            padding: 0;
+            margin: 0;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        // Enable hover/active expansion on mobile too
+        &:hover, &:active, &:focus-within {
+        }
+    }
+}
+
+.mainGrid {
+    display: grid;
+    grid-template-columns: 1fr 550px;
+    gap: 2rem;
+    align-items: start;
+    padding-top:0.5rem;
+
+    @media screen and (max-width: 1400px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contentColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 0; // Fix grid overflow
+}
+
+.sidebarColumn {
+    position: sticky;
+    top: calc(5.5rem + 4px);
+    min-width: 0; // Fix grid overflow
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (max-width: 1400px) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        z-index: 1000;
+        background: var(--background);
+        border-top: 1px solid var(--border);
+        border-top-left-radius: 1.5rem;
+        border-top-right-radius: 1.5rem;
+        padding: 0;
+        box-shadow: 0 -8px 30px var(--shadow);
+        max-height: 80vh;
+        overflow: hidden;
+        display: none; // Hidden by default on mobile until word selected
+        
+        &.active {
+            display: flex;
+            animation: slideUp 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+        }
+        
+        &.closing {
+            display: flex !important;
+            animation: slideDown 0.2s cubic-bezier(0.075, 0.82, 0.165, 1) forwards;
+        }
+    }
+}
+
+.card {
+    background: var(--background);
+    border-radius: 1rem;
+    padding: 0 2rem;
+    box-shadow: 0 0 20px -5px var(--shadow); // Stronger base shadow
+    border: 1px solid var(--border-light);
+    transition: transform 0.2s ease;
+    position: relative;
+    scroll-margin-top: 8rem;
+
+    border-left: 1px solid var(--primary);
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+
+    @media screen and (max-width: 725px) {
+        margin:0 0.5rem;
+        padding: 0 1rem;
+    }
+}
+
+// Header Section Specifics
+.headerSection {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--background-alt), var(--background));
+    
     .breadcrumbs {
-        font-size:1rem;
-        font-family:var(--font-display);
-        font-variation-settings:'wght' 600;
-        text-align:left;
-        margin-bottom:1rem;
-        color:var(--foreground);
-        max-width:50%;
-
-        @media screen and (max-width:1000px) {
-            margin-left:4rem;
-        }
-    }
-
-    .translationHeader,
-    .sentenceHeader {
-        font-size:0.9rem;
-        font-weight:light;
-        text-align:center;
-        margin-bottom:0.5rem;
-        color:var(--foreground);
-    }
-
-    .translation,
-    .sentence {
-        font-size:1.7rem;
-        font-weight:bold;
-        text-align:center;
-        color:var(--foreground);
-        @media screen and (max-width:725px) {
-            font-size:1.2rem;
-        }
+        font-size: 0.9rem;
+        color: var(--foreground-light);
+        margin-bottom: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 600;
     }
 
     .sentence {
-        margin-bottom:1rem;
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+        color: var(--foreground);
+
+        @media screen and (max-width: 725px) {
+            font-size: 1.8rem;
+        }
     }
-} 
+
+    .translation {
+        font-size: 1.2rem;
+        color: var(--foreground-light);
+        font-weight: 500;
+        margin-bottom: 2rem;
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+}
+
+// Removed legacy analysisControls absolute positioning
+.analysisControlsLegacy {
+    display: none;
+}
+
+// Placeholder state for sidebar
+.placeholderState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--foreground-light);
+    background: var(--background-alt);
+    border-radius: 1rem;
+    border: 2px dashed var(--border);
+
+    svg {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    p {
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { transform: translateY(0); }
+    to { transform: translateY(100%); }
+}
+
+@keyframes update-blur {
+    0% { filter: none; }
+    50% { filter: blur(8px); }
+    100% { filter: none; }
+}

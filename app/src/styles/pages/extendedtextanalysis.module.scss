@@ -545,7 +545,7 @@
     top: 0;
     right: 0;
     height: 100vh;
-    width: 70vw; /* Default to 60% width on desktop */
+    width: 85vw; /* Default to 60% width on desktop */
     min-width: 600px;
     max-width: 1400px;
     background: var(--background);
@@ -561,7 +561,7 @@
     }
 
     @media (max-width: 1400px) {
-        width: 80vw;
+        width: 90vw;
         min-width: auto;
     }
 
@@ -666,6 +666,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 2rem;
+    padding-top: 0;
     
     @media (max-width: 1000px) {
         padding: 0.5rem;

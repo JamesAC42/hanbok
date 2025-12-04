@@ -50,28 +50,34 @@ const Variants = ({analysis, language, showPronunciation}) => {
 
     return (
         <div className={styles.variants}>
-            <div className={styles.variantsHeader}>
+            <h3 className={styles.variantsHeader}>
                 {t('analysis.variants.title')}
-            </div>
+            </h3>
             <div className={styles.variantsContainer}>
                 {
                     Object.keys(variants).map((variant) => (
                         <div
-                            data-formality={variant}
-                            className={styles.variant} 
+                            data-formality={variant.toLowerCase()}
+                            className={styles.variantCard} 
                             key={variant}
                         >
-                            <div className={styles.variantContent}>
-                                <div className={styles.variantType}>
+                            <div className={styles.cardHeader}>
+                                <span className={styles.variantType}>
                                     {variant}
-                                </div>
+                                </span>
+                            </div>
+                            
+                            <div className={styles.cardBody}>
                                 <div className={`${styles.variantText} ${getFontClass(language)}`}>
                                     {variants[variant].text}
                                 </div>
                                 {renderReading(variants[variant])}
                             </div>
-                            <div className={styles.variantWhenToUse}>
-                                {variants[variant].when_to_use}
+
+                            <div className={styles.cardFooter}>
+                                <div className={styles.variantWhenToUse}>
+                                    {variants[variant].when_to_use}
+                                </div>
                             </div>
                         </div>
                     ))

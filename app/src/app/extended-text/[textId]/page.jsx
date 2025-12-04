@@ -92,6 +92,10 @@ export default function ExtendedTextAnalysisPage() {
             ? analysis.sentences[selectedSentenceIndex]
             : null;
     const currentSentenceId = currentSentence?.sentenceId || currentSentence?.analysis?.sentenceId;
+    const currentSentenceVoice1 = currentSentence?.voice1Key ?? currentSentence?.voice1 ?? null;
+    const currentSentenceVoice2 = currentSentence?.voice2Key ?? currentSentence?.voice2 ?? null;
+    const currentSentenceVoice1Slow = currentSentence?.voice1SlowKey ?? currentSentence?.voice1Slow ?? null;
+    const currentSentenceVoice2Slow = currentSentence?.voice2SlowKey ?? currentSentence?.voice2Slow ?? null;
 
     const sentences = analysis?.sentences || [];
     const sentenceCount = sentences.length;
@@ -381,6 +385,10 @@ export default function ExtendedTextAnalysisPage() {
                                 originalLanguage={extendedText.originalLanguage}
                                 translationLanguage={extendedText.translationLanguage}
                                 sentenceId={currentSentenceId}
+                                voice1={currentSentenceVoice1}
+                                voice2={currentSentenceVoice2}
+                                voice1Slow={currentSentenceVoice1Slow}
+                                voice2Slow={currentSentenceVoice2Slow}
                             />
                         ) : null}
                     </div>

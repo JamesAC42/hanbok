@@ -113,14 +113,25 @@
 			}
 		}
 
-		@include word-type-colors;
+    @include word-type-colors;
 
-		&:hover:not(.locked):not([data-role="punctuation"]) {
-			transform: none;
-			@include word-type-color-hover;
-		}
+    // Base generic hover (default gray) for ANY item that isn't locked or punctuation
+    &:hover:not(.locked):not([data-role="punctuation"]) {
+        &::after {
+            display: block;
+            background-color: var(--background-alt); // Default light gray bg
+            border: 2px solid var(--foreground-light); // Default dark gray border
+            animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+    }
 
-		&[data-role="punctuation"] {
+    // Specific colors override the base styles if they exist
+    &:hover:not(.locked):not([data-role="punctuation"]) {
+        transform: none;
+        @include word-type-color-hover;
+    }
+
+    &[data-role="punctuation"] {
 			cursor:default;
 		}
 
