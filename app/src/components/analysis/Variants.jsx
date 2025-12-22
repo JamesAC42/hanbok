@@ -1,6 +1,6 @@
 import styles from '@/styles/components/sentenceanalyzer/variants.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { romanize } from '@romanize/korean';
+import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
 
 const Variants = ({analysis, language, showPronunciation}) => {
@@ -11,7 +11,7 @@ const Variants = ({analysis, language, showPronunciation}) => {
         let reading = variant.reading;
         if(language === 'ko') {
             try {
-                reading = romanize(variant.text);
+                reading = kpop.romanize(variant.text);
             } catch(err) {
                 console.log(err);
             }

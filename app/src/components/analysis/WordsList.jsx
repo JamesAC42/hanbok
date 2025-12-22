@@ -7,8 +7,7 @@ import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import { MaterialSymbolsArrowsMoreDownRounded } from '@/components/icons/DownLeft';
 import Link from 'next/link';
-import { romanize } from '@romanize/korean';
-
+import kpop from 'kpop';
 import styles from '@/styles/components/sentenceanalyzer/wordslist.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
@@ -35,7 +34,7 @@ const getDisplayReading = (word, language, showPronunciation) => {
     try {
         if(language === 'ko') {
             try {
-                reading = romanize(word.originalWord);
+                reading = kpop.romanize(word.originalWord);
             } catch(err) {
                 reading = word.originalWord;
             }

@@ -1,5 +1,4 @@
-import { romanize } from '@romanize/korean';
-
+import kpop from 'kpop';
 const renderPronunciation = (item, language) => {
     if(!item.reading && language !== 'ko' && language !== 'ru') return null;
     try {
@@ -9,7 +8,7 @@ const renderPronunciation = (item, language) => {
             case 'ja':
                 return item.reading;
             case 'ko':
-                return romanize(item.text);
+                return kpop.romanize(item.text);
             case 'ru':
                 return item.transliteration;
             default:

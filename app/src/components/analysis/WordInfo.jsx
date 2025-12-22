@@ -7,7 +7,7 @@ import styles from '@/styles/components/sentenceanalyzer/wordinfo.module.scss';
 import Conjugation from './Conjugation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import renderPronunciation from '@/lib/pronunciation';
-import { romanize } from '@romanize/korean';
+import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
 
 const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose}) => {
@@ -70,7 +70,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose
         let p = null;
         if(language === 'ko') {
             try {
-                p = romanize(text);
+                p = kpop.romanize(text);
             } catch(err) {
                 p = text;
             }

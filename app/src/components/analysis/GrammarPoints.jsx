@@ -3,7 +3,7 @@ import styles from "@/styles/components/sentenceanalyzer/grammarpoints.module.sc
 import { MaterialSymbolsLightKidStar } from '@/components/icons/StarFilled';
 import { MaterialSymbolsLightKidStarOutline } from '@/components/icons/StarOutline';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { romanize } from '@romanize/korean';
+import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
 
 const GrammarPoints = ({analysis, language, showPronunciation}) => {
@@ -38,7 +38,7 @@ const GrammarPoints = ({analysis, language, showPronunciation}) => {
         let p = example.reading;
         if(language === "ko") {
             try {
-                p = romanize(example.original);
+                p = kpop.romanize(example.original);
             } catch(err) {
                 p = example.original;
             }
