@@ -1,7 +1,6 @@
 import styles from '@/styles/components/sentenceanalyzer/conjugation.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
-import { CarbonArrowRight } from '@/components/icons/ArrowRight'; // I'll need to check if this icon exists or use a unicode arrow
 
 const Conjugation = ({
     wordInfo,
@@ -12,6 +11,7 @@ const Conjugation = ({
     if (!wordInfo || !wordInfo.grammar?.conjugation) return null;
 
     const { conjugation } = wordInfo.grammar;
+    const finalForm = wordInfo.text || wordInfo.dictionary_form;
 
     return (
         <div className={`${styles.conjugation} ${getFontClass(language)}`}>
@@ -62,7 +62,7 @@ const Conjugation = ({
                          <div className={styles.arrow}>↓</div>
                          <div className={`${styles.stepItem} ${styles.finalResult}`}>
                             <div className={styles.stepContent}>
-                                <div className={styles.stepText}>{wordInfo.dictionary_form}</div>
+                                <div className={styles.stepText}>{finalForm}</div>
                             </div>
                             <div className={styles.stepExplanation}>Final Form</div>
                         </div>
