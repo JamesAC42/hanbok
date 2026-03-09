@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/components/adminWordAudio.module.scss';
+import adminStyles from '@/styles/components/admin.module.scss';
+import Dashboard from '@/components/Dashboard';
 
 const languageOptions = [
   { code: '', label: 'All languages' },
@@ -34,6 +36,12 @@ const WordAudioAdminPage = () => {
   const [status, setStatus] = useState('');
   const [regenerating, setRegenerating] = useState({});
   const [translationInputs, setTranslationInputs] = useState({});
+  
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(24);
+  const [totalResults, setTotalResults] = useState(0);
+  const totalPages = Math.ceil(totalResults / limit);
 
   useEffect(() => {
     if (loading) return;
@@ -42,31 +50,22 @@ const WordAudioAdminPage = () => {
     }
   }, [loading, isAuthenticated, router]);
 
-  // Apply a black background while on this page
-  useEffect(() => {
-    const previousBg = document.body.style.backgroundColor;
-    const previousColor = document.body.style.color;
-    document.body.style.backgroundColor = '#000';
-    document.body.style.color = '#f7f7f7';
-    return () => {
-      document.body.style.backgroundColor = previousBg;
-      document.body.style.color = previousColor;
-    };
-  }, []);
-
   const keyForItem = (item) =>
     item._id || `${item.word}-${item.language}-${item.hiraganaReading || 'base'}`;
 
-  const handleSearch = async (e) => {
-    e?.preventDefault();
+  const handleSearch = async (e, targetPage = 1) => {
+    if (e) e.preventDefault();
     setError(null);
     setStatus('');
     setLoadingSearch(true);
+    setPage(targetPage);
 
     try {
       const params = new URLSearchParams();
       if (queryWord) params.append('word', queryWord);
       if (language) params.append('language', language);
+      params.append('page', targetPage);
+      params.append('limit', limit);
 
       const response = await fetch(`/api/admin/word-audio?${params.toString()}`, {
         credentials: 'include'
@@ -87,6 +86,7 @@ const WordAudioAdminPage = () => {
       }
 
       setResults(data.items || []);
+      setTotalResults(data.total || 0);
       setStatus(`Showing ${data.items?.length || 0} of ${data.total || 0} result(s).`);
     } catch (err) {
       setError(err.message || 'Unexpected error');
@@ -159,34 +159,91 @@ const WordAudioAdminPage = () => {
   );
 
   return (
-    <div className={styles.page}>
-      <div className={styles.panel}>
+    <Dashboard>
+      <div className={adminStyles.adminContent}>
         <div className={styles.header}>
-          <h1>Word Audio Admin</h1>
-          <p>Search, preview, and regenerate stored word audio entries.</p>
+          <h1 className={adminStyles.adminTitle}>Word Audio Admin</h1>
+          <p className={adminStyles.summaryStatMini}>Search, preview, and regenerate stored word audio entries.</p>
         </div>
 
-        <form className={styles.searchBar} onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="Search by word (regex supported)"
-            value={queryWord}
-            onChange={(e) => setQueryWord(e.target.value)}
-          />
-          <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-            {languageOptions.map((opt) => (
-              <option key={opt.code || 'all'} value={opt.code}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <button type="submit" disabled={loadingSearch}>
-            {loadingSearch ? 'Searching…' : 'Search'}
-          </button>
-        </form>
+        <section className={adminStyles.dashboardCard}>
+          <form className={styles.searchBar} onSubmit={handleSearch}>
+            <div className={adminStyles.filterContainer}>
+              <label>Word Search</label>
+              <input
+                type="text"
+                placeholder="Search by word (regex supported)"
+                value={queryWord}
+                onChange={(e) => setQueryWord(e.target.value)}
+                className={adminStyles.adminSelect}
+                style={{ paddingRight: '0.75rem', backgroundImage: 'none' }}
+              />
+            </div>
+            <div className={adminStyles.filterContainer}>
+              <label>Language</label>
+              <select 
+                value={language} 
+                onChange={(e) => setLanguage(e.target.value)}
+                className={adminStyles.adminSelect}
+              >
+                {languageOptions.map((opt) => (
+                  <option key={opt.code || 'all'} value={opt.code}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button 
+              type="submit" 
+              disabled={loadingSearch}
+              className={adminStyles.adminButton}
+              style={{ marginTop: 'auto', height: 'fit-content' }}
+            >
+              {loadingSearch ? 'Searching…' : 'Search'}
+            </button>
+          </form>
 
-        {status && <div className={styles.status}>{status}</div>}
-        {error && <div className={styles.error}>{error}</div>}
+          {status && <div className={styles.status}>{status}</div>}
+          {error && <div className={adminStyles.error}>{error}</div>}
+        </section>
+
+        {totalPages > 1 && (
+          <div className={adminStyles.tableFooter} style={{ marginBottom: '1rem' }}>
+            <div className={adminStyles.pagination}>
+              <button 
+                onClick={() => handleSearch(null, page - 1)}
+                disabled={page === 1 || loadingSearch}
+              >
+                Previous
+              </button>
+              <span>
+                Page {page} of {totalPages}
+              </span>
+              <button 
+                onClick={() => handleSearch(null, page + 1)}
+                disabled={page === totalPages || loadingSearch}
+              >
+                Next
+              </button>
+            </div>
+            <div className={adminStyles.limitContainer}>
+              <label>Items per page</label>
+              <select 
+                value={limit} 
+                onChange={(e) => {
+                  const newLimit = Number(e.target.value);
+                  setLimit(newLimit);
+                  handleSearch(null, 1);
+                }}
+                className={adminStyles.adminSelect}
+              >
+                <option value={24}>24</option>
+                <option value={48}>48</option>
+                <option value={96}>96</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         <div className={styles.results}>
           {sortedResults.map((item) => {
@@ -197,48 +254,55 @@ const WordAudioAdminPage = () => {
 
             return (
               <div className={styles.card} key={key}>
-                <div className={styles.row}>
-                  <span className={styles.label}>Word:</span>
-                  <span className={styles.value}>{item.word}</span>
+                <div className={styles.cardHeader}>
+                  <span className={adminStyles.tierBadge} style={{ background: 'var(--background-alt)' }}>{item.language}</span>
+                  <span className={styles.wordValue}>{item.word}</span>
                 </div>
-                <div className={styles.row}>
-                  <span className={styles.label}>Language:</span>
-                  <span className={styles.value}>{item.language}</span>
-                </div>
+                
                 {item.hiraganaReading && (
                   <div className={styles.row}>
                     <span className={styles.label}>Reading:</span>
                     <span className={styles.value}>{item.hiraganaReading}</span>
                   </div>
                 )}
-                <div className={styles.meta}>Last generated: {dateLabel}</div>
+                
+                <div className={styles.meta}>Generated: {dateLabel}</div>
+                
                 <div className={styles.audio}>
                   {item.audioUrl ? (
-                    <audio controls src={item.audioUrl} />
+                    <audio key={item.audioUrl} controls>
+                      <source src={item.audioUrl} type="audio/mpeg" />
+                      Your browser does not support the audio element.
+                    </audio>
                   ) : (
                     <span className={styles.hint}>No audio URL stored.</span>
                   )}
                 </div>
-                <div className={styles.regenRow}>
+
+                <div className={styles.regenSection}>
                   <input
                     type="text"
-                    placeholder="Translation (required for Japanese)"
+                    placeholder="Translation (required for JA)"
                     value={translationInputs[key] || ''}
                     onChange={(e) =>
                       setTranslationInputs((prev) => ({ ...prev, [key]: e.target.value }))
                     }
+                    className={adminStyles.adminSelect}
+                    style={{ paddingRight: '0.75rem', backgroundImage: 'none', fontSize: '0.8rem' }}
                   />
                   <button
                     type="button"
                     onClick={() => handleRegenerate(item)}
                     disabled={!!regenerating[key]}
+                    className={adminStyles.adminButton}
+                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}
                   >
                     {regenerating[key] ? 'Regenerating…' : 'Regenerate'}
                   </button>
                 </div>
                 {item.language === 'ja' && (
                   <div className={styles.hint}>
-                    Japanese requires a translation to derive the hiragana reading.
+                    Japanese requires a translation to derive the reading.
                   </div>
                 )}
               </div>
@@ -246,11 +310,33 @@ const WordAudioAdminPage = () => {
           })}
         </div>
 
+        {totalPages > 1 && (
+          <div className={adminStyles.tableFooter} style={{ marginTop: '2rem' }}>
+            <div className={adminStyles.pagination}>
+              <button 
+                onClick={() => handleSearch(null, page - 1)}
+                disabled={page === 1 || loadingSearch}
+              >
+                Previous
+              </button>
+              <span>
+                Page {page} of {totalPages}
+              </span>
+              <button 
+                onClick={() => handleSearch(null, page + 1)}
+                disabled={page === totalPages || loadingSearch}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
         {!loadingSearch && sortedResults.length === 0 && (
-          <div className={styles.empty}>No results yet. Run a search to see entries.</div>
+          <div className={adminStyles.noData}>No results yet. Run a search to see entries.</div>
         )}
       </div>
-    </div>
+    </Dashboard>
   );
 };
 

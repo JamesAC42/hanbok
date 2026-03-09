@@ -142,7 +142,16 @@ const UserManagement = () => {
     
     return (
         <section className={styles.detailedSection}>
-            <h2>User Management</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h2>User Management</h2>
+                {summaryStats.length > 0 && (
+                    <div className={styles.summaryStatMini}>
+                        {summaryStats.map(stat => (
+                            <span key={stat._id}>{stat.tierName}: <strong>{stat.count.toLocaleString()}</strong></span>
+                        ))}
+                    </div>
+                )}
+            </div>
             
             {error && (
                 <div className={styles.error}>
@@ -150,66 +159,33 @@ const UserManagement = () => {
                 </div>
             )}
             
-            {/* Summary statistics */}
-            {summaryStats.length > 0 && (
-                <div className={styles.summarySection}>
-                    <h3>User Summary</h3>
-                    <div className={styles.summaryGrid}>
-                        {summaryStats.map(stat => (
-                            <div key={stat._id} className={styles.summaryCard}>
-                                <h4>{stat.tierName}</h4>
-                                <div className={styles.statItem}>
-                                    <span>Users:</span>
-                                    <strong>{stat.count.toLocaleString()}</strong>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-            
             {/* Search and filters */}
             <div className={styles.controls}>
                 <div className={styles.filterContainer}>
-                    <label htmlFor="user-search">Search:</label>
+                    <label htmlFor="user-search">Search</label>
                     <input
                         id="user-search"
                         type="text"
-                        placeholder="Search by email or name..."
+                        placeholder="Email or name..."
                         value={search}
                         onChange={(e) => handleSearchChange(e.target.value)}
-                        className={styles.searchInput}
+                        className={styles.adminSelect}
+                        style={{ paddingRight: '0.75rem', backgroundImage: 'none', minWidth: '15rem' }}
                     />
                 </div>
                 
                 <div className={styles.filterContainer}>
-                    <label htmlFor="tier-filter">Filter by tier:</label>
+                    <label htmlFor="tier-filter">Tier</label>
                     <select 
                         id="tier-filter"
                         value={tierFilter}
                         onChange={(e) => handleTierFilterChange(e.target.value)}
+                        className={styles.adminSelect}
                     >
                         <option value="">All Tiers</option>
                         <option value="0">Free</option>
                         <option value="1">Basic</option>
                         <option value="2">Plus</option>
-                    </select>
-                </div>
-                
-                <div className={styles.limitContainer}>
-                    <label htmlFor="limit-select">Items per page:</label>
-                    <select
-                        id="limit-select"
-                        value={limit}
-                        onChange={(e) => {
-                            setLimit(Number(e.target.value));
-                            setPage(1);
-                        }}
-                    >
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
                     </select>
                 </div>
             </div>
@@ -225,7 +201,6 @@ const UserManagement = () => {
                         <table className={styles.usageTable}>
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th 
                                         className={styles.sortable}
                                         onClick={() => handleSortChange('name')}
@@ -263,21 +238,20 @@ const UserManagement = () => {
                                         className={styles.sortable}
                                         onClick={() => handleSortChange('dateCreated')}
                                     >
-                                        Date Created
+                                        Joined
                                         {sortBy === 'dateCreated' && (
                                             <span className={styles.sortIcon}>
                                                 {sortOrder === 'asc' ? '↑' : '↓'}
                                             </span>
                                         )}
                                     </th>
-                                    <th>Verified</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {users.map((user) => (
                                     <tr key={user.userId}>
-                                        <td>{user.userId}</td>
                                         <td>{user.name}</td>
                                         <td className={styles.emailCell}>{user.email}</td>
                                         <td>
@@ -288,12 +262,13 @@ const UserManagement = () => {
                                         <td>{formatDate(user.dateCreated)}</td>
                                         <td>
                                             <span className={user.verified ? styles.verified : styles.unverified}>
-                                                {user.verified ? '✓' : '✗'}
+                                                {user.verified ? 'Verified' : 'Unverified'}
                                             </span>
                                         </td>
                                         <td>
                                             <button 
-                                                className={styles.editButton}
+                                                className={styles.adminButton}
+                                                style={{ padding: '0.3rem 0.7rem', fontSize: '0.8rem' }}
                                                 onClick={() => handleEditUser(user)}
                                             >
                                                 Edit
@@ -305,26 +280,46 @@ const UserManagement = () => {
                         </table>
                     </div>
                     
-                    {/* Pagination */}
-                    {totalPages > 1 && (
-                        <div className={styles.pagination}>
-                            <button 
-                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                disabled={page === 1}
+                    <div className={styles.tableFooter}>
+                        {/* Pagination */}
+                        {totalPages > 1 && (
+                            <div className={styles.pagination}>
+                                <button 
+                                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                                    disabled={page === 1}
+                                >
+                                    Previous
+                                </button>
+                                <span>
+                                    Page {page} of {totalPages}
+                                </span>
+                                <button 
+                                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={page === totalPages}
+                                >
+                                    Next
+                                </button>
+                            </div>
+                        )}
+
+                        <div className={styles.limitContainer}>
+                            <label htmlFor="limit-select">Show</label>
+                            <select
+                                id="limit-select"
+                                value={limit}
+                                onChange={(e) => {
+                                    setLimit(Number(e.target.value));
+                                    setPage(1);
+                                }}
+                                className={styles.adminSelect}
                             >
-                                Previous
-                            </button>
-                            <span>
-                                Page {page} of {totalPages}
-                            </span>
-                            <button 
-                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                disabled={page === totalPages}
-                            >
-                                Next
-                            </button>
+                                <option value={10}>10</option>
+                                <option value={20}>20</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                            </select>
                         </div>
-                    )}
+                    </div>
                 </>
             )}
             

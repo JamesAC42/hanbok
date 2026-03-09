@@ -1,6 +1,7 @@
 const { getDb } = require('../../database');
 const ADMIN_EMAILS = require('../../lib/adminEmails');
 const { getWordAudio } = require('../../utils/wordAudio');
+const { getPresignedUrl } = require('../../elevenlabs/generateSpeech');
 
 // Shared helper to enforce admin access
 async function assertAdmin(req, res) {
@@ -61,7 +62,31 @@ async function searchWordAudio(req, res) {
       .limit(limit)
       .toArray();
 
-    const sanitized = results.map((item) => ({
+    // Refresh expired presigned URLs (older than 6 days)
+    const now = Date.now();
+    const sixDaysInMs = 6 * 24 * 60 * 60 * 1000;
+    
+    const updatedResults = await Promise.all(results.map(async (item) => {
+      const audioAge = item.dateGenerated ? (now - new Date(item.dateGenerated).getTime()) : Infinity;
+      
+      if (item.audioUrl && audioAge > sixDaysInMs) {
+        try {
+          const newUrl = await getPresignedUrl(item.audioUrl);
+          // Update in DB
+          await wordAudioCollection.updateOne(
+            { _id: item._id },
+            { $set: { audioUrl: newUrl, dateGenerated: new Date() } }
+          );
+          return { ...item, audioUrl: newUrl, dateGenerated: new Date() };
+        } catch (err) {
+          console.error(`Failed to refresh URL for ${item.word}:`, err);
+          return item;
+        }
+      }
+      return item;
+    }));
+
+    const sanitized = updatedResults.map((item) => ({
       _id: item._id?.toString(),
       word: item.word,
       language: item.language,

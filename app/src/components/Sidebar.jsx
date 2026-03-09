@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAdmin } from "@/contexts/AdminContext";
 
 import { MaterialSymbolsVariableAddRounded } from "./icons/AddSentence";
 import { MaterialSymbolsBookmarkSharp } from "./icons/Bookmark";
@@ -23,6 +24,7 @@ import { IcBaselinePerson } from "./icons/Profile";
 import { MaterialSymbolsHistory } from "./icons/History";
 import { MaterialSymbolsKeyboard } from "./icons/Keyboard";
 import { TablerAlphabetKorean } from "./icons/Korean";
+import { MaterialSymbolsSettingsRounded } from "./icons/Settings";
 
 // Hamburger Menu Icon Component
 function HamburgerMenuIcon() {
@@ -36,7 +38,8 @@ function HamburgerMenuIcon() {
 function Sidebar() {
 
     const { t } = useLanguage();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, user } = useAuth();
+    const { isAdmin } = useAdmin();
 
     const [collapsed, setCollapsed] = useState(false);
 
@@ -399,6 +402,27 @@ function Sidebar() {
                             </div>
                         </div>
                     </div>
+                    <div className={styles.sidebarSection}>
+                        
+                        <div className={styles.sidebarSectionItems}>
+                            {user && isAdmin(user.email) && (
+                                <div 
+                                    onMouseEnter={() => setHoverTransform('admin', 0)}
+                                    className={`
+                                        ${styles.sidebarSectionItem}
+                                        ${expanding ? styles.expanding : ""}
+                                        ${getActiveClass(["/admin"])}`} 
+                                    onClick={() => navigateTo("/admin")}>
+                                    <div className={styles.sidebarSectionItemIcon}>
+                                        <MaterialSymbolsSettingsRounded />
+                                    </div>
+                                    <div className={styles.sidebarSectionItemText}>
+                                        Admin
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     <div className={styles.sidebarSection}
                         onMouseEnter={() => setShowNavHover(true)}
                         onMouseLeave={() => setShowNavHover(false)}>
@@ -455,7 +479,8 @@ function Sidebar() {
                                 className={`
                                     ${styles.sidebarSectionItem}
                                     ${expanding ? styles.expanding : ""}
-                                    ${styles.sidebarSectionItemPricing}`} 
+                                    ${styles.sidebarSectionItemPricing} 
+                                    ${getActiveClass("/pricing")}`} 
                                 onClick={() => navigateTo("/pricing")}>
                                 <div className={styles.sidebarSectionItemIcon}>
                                     <MynauiSparklesSolid />

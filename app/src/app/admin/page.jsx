@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import UserManagement from '@/components/admin/UserManagement';
 import Link from 'next/link';
+import Dashboard from '@/components/Dashboard';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -90,18 +91,6 @@ const Admin = () => {
             router.replace('/login');
         }
     }, [isAuthenticated, loading, router]);
-
-    // Set a black background for the admin area
-    useEffect(() => {
-        const previousBg = document.body.style.backgroundColor;
-        const previousColor = document.body.style.color;
-        document.body.style.backgroundColor = '#000';
-        document.body.style.color = '#f7f7f7';
-        return () => {
-            document.body.style.backgroundColor = previousBg;
-            document.body.style.color = previousColor;
-        };
-    }, []);
     
     // Fetch feature usage data and check admin status
     useEffect(() => {
@@ -452,19 +441,19 @@ const Admin = () => {
     };
     
     return (
-        <div className={`${styles.pageContainer} ${styles.dark}`}>
-            <div className={styles.pageContent}>
-                <div className={adminStyles.adminContent}>
-                    <h1 className={styles.pageTitle}>Admin Dashboard</h1>
-                    
-                    {error && (
-                        <div className={adminStyles.error}>
-                            Error: {error}
-                        </div>
-                    )}
-                    
-                    {/* New Admin Tools Section */}
-                    <section className={adminStyles.detailedSection}>
+        <Dashboard>
+            <div className={adminStyles.adminContent}>
+                <h1 className={adminStyles.adminTitle}>Admin Dashboard</h1>
+                
+                {error && (
+                    <div className={adminStyles.error}>
+                        Error: {error}
+                    </div>
+                )}
+                
+                <div className={adminStyles.dashboardGrid}>
+                    {/* Admin Tools Section */}
+                    <section className={adminStyles.dashboardCard}>
                         <h2>Admin Tools</h2>
                         <div className={adminStyles.adminTools}>
                             <div className={adminStyles.toolCard}>
@@ -491,261 +480,247 @@ const Admin = () => {
                             </div>
                         </div>
                     </section>
-                    
-                    {/* User Management Section */}
-                    <UserManagement />
-                    
-                    {/* New User Analytics Section */}
-                    <section className={adminStyles.detailedSection}>
-                        <h2>User Analytics Dashboard</h2>
-                        
-                        {analyticsError && (
-                            <div className={adminStyles.error}>
-                                Error: {analyticsError}
+
+                    {/* Summary statistics for users */}
+                    <section className={adminStyles.dashboardCard}>
+                        <h2>User Quick Stats</h2>
+                        <div className={adminStyles.summaryGrid}>
+                            <div className={adminStyles.summaryStat}>
+                                <span className={adminStyles.statLabel}>Total Users</span>
+                                <span className={adminStyles.statValue}>{totalUsers.toLocaleString()}</span>
                             </div>
-                        )}
-                        
-                        {/* Time range controls */}
-                        <div className={adminStyles.controls}>
-                            <div className={adminStyles.timeRangeButtons}>
-                                <button 
-                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === '7days' ? adminStyles.active : ''}`} 
-                                    onClick={() => handleTimeRangeChange('7days')}
-                                >
-                                    Last 7 Days
-                                </button>
-                                <button 
-                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === '30days' ? adminStyles.active : ''}`} 
-                                    onClick={() => handleTimeRangeChange('30days')}
-                                >
-                                    Last 30 Days
-                                </button>
-                                <button 
-                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === '90days' ? adminStyles.active : ''}`} 
-                                    onClick={() => handleTimeRangeChange('90days')}
-                                >
-                                    Last 90 Days
-                                </button>
-                                <button 
-                                    className={`${adminStyles.timeButton} ${analyticsTimeRange === 'all' ? adminStyles.active : ''}`} 
-                                    onClick={() => handleTimeRangeChange('all')}
-                                >
-                                    All Time
-                                </button>
+                            <div className={adminStyles.summaryStat}>
+                                <span className={adminStyles.statLabel}>Active (7d)</span>
+                                <span className={adminStyles.statValue}>{activeUsers.toLocaleString()}</span>
                             </div>
-                        </div>
-                        
-                        {/* Summary statistics for users */}
-                        <div className={adminStyles.summarySection}>
-                            <div className={adminStyles.summaryGrid}>
-                                <div className={adminStyles.summaryCard}>
-                                    <h3>User Statistics</h3>
-                                    <div className={adminStyles.statItem}>
-                                        <span>Total Users:</span>
-                                        <strong>{totalUsers.toLocaleString()}</strong>
-                                    </div>
-                                    <div className={adminStyles.statItem}>
-                                        <span>Active Users (Last 7 Days):</span>
-                                        <strong>{activeUsers.toLocaleString()}</strong>
-                                    </div>
-                                    <div className={adminStyles.statItem}>
-                                        <span>Active User Percentage:</span>
-                                        <strong>
-                                            {totalUsers > 0 
-                                                ? (activeUsers / totalUsers * 100).toFixed(1) + '%'
-                                                : '0.0%'}
-                                        </strong>
-                                    </div>
-                                </div>
+                            <div className={adminStyles.summaryStat}>
+                                <span className={adminStyles.statLabel}>Active %</span>
+                                <span className={adminStyles.statValue}>
+                                    {totalUsers > 0 
+                                        ? (activeUsers / totalUsers * 100).toFixed(1) + '%'
+                                        : '0.0%'}
+                                </span>
                             </div>
-                        </div>
-                        
-                        {/* Charts Section */}
-                        <div className={adminStyles.chartsContainer}>
-                            {loadingAnalytics ? (
-                                <div className={adminStyles.loading}>Loading analytics data...</div>
-                            ) : (
-                                <>
-                                    {/* Signups Chart */}
-                                    <div className={adminStyles.chartWrapper}>
-                                        <h3>New User Signups</h3>
-                                        <div className={adminStyles.chart}>
-                                            <Bar 
-                                                data={prepareSignupChartData()} 
-                                                options={chartOptions} 
-                                                height={300}
-                                            />
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Activity Chart */}
-                                    <div className={adminStyles.chartWrapper}>
-                                        <h3>Daily User Activity</h3>
-                                        <div className={adminStyles.chart}>
-                                            <Bar 
-                                                data={prepareActivityChartData()} 
-                                                options={activityChartOptions} 
-                                                height={300}
-                                            />
-                                        </div>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                        
-                        {/* Top users by sentence generation */}
-                        <div className={adminStyles.topUsersSection}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                <h3>Top Users</h3>
-                                <div className={adminStyles.filterContainer}>
-                                    <select 
-                                        value={topUsersFeature}
-                                        onChange={(e) => setTopUsersFeature(e.target.value)}
-                                        style={{ padding: '0.5rem', borderRadius: '4px' }}
-                                    >
-                                        <option value="sentence_submission">Sentence Generation</option>
-                                        <option value="extended_text_analysis">Extended Text</option>
-                                    </select>
-                                </div>
-                            </div>
-                            {loadingAnalytics ? (
-                                <div className={adminStyles.loading}>Loading top users data...</div>
-                            ) : topUsers.length === 0 ? (
-                                <div className={adminStyles.noData}>No top users data available</div>
-                            ) : (
-                                <div className={adminStyles.tableContainer}>
-                                    <table className={adminStyles.usageTable}>
-                                        <thead>
-                                            <tr>
-                                                <th>User</th>
-                                                <th>Email</th>
-                                                <th>Tier</th>
-                                                <th>{topUsersFeature === 'sentence_submission' ? 'Sentences' : 'Texts'}</th>
-                                                <th>Last Used</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {topUsers.map((user, index) => (
-                                                <tr key={`${user.userId}-${index}`}>
-                                                    <td>{user.userName}</td>
-                                                    <td>{user.userEmail}</td>
-                                                    <td>{user.userTier === 0 ? 'Free' : 'Plus'}</td>
-                                                    <td>{user.count.toLocaleString()}</td>
-                                                    <td>{formatDate(user.lastUsed)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            )}
                         </div>
                     </section>
+                </div>
+                
+                {/* User Management Section */}
+                <UserManagement />
+                
+                {/* New User Analytics Section */}
+                <section className={adminStyles.detailedSection}>
+                    <h2>User Analytics</h2>
                     
-                    {/* Anonymous Users Rate Limit Section */}
-                    <section className={adminStyles.detailedSection}>
-                        <h2>Anonymous Users Sentence Generation</h2>
-                        
-                        {rateLimitError && (
-                            <div className={adminStyles.error}>
-                                Error: {rateLimitError}
-                            </div>
-                        )}
-                        
-                        <div className={adminStyles.summarySection}>
-                            <div className={adminStyles.summaryGrid}>
-                                <div className={adminStyles.summaryCard}>
-                                    <h3>Anonymous Users</h3>
-                                    <div className={adminStyles.statItem}>
-                                        <span>Total IPs:</span>
-                                        <strong>{totalAnonymousUsers.toLocaleString()}</strong>
-                                    </div>
-                                    <div className={adminStyles.statItem}>
-                                        <span>Total Sentences:</span>
-                                        <strong>{totalAnonymousSentences.toLocaleString()}</strong>
-                                    </div>
-                                    <div className={adminStyles.statItem}>
-                                        <span>Avg Per IP:</span>
-                                        <strong>
-                                            {totalAnonymousUsers > 0 
-                                                ? (totalAnonymousSentences / totalAnonymousUsers).toFixed(1) 
-                                                : '0.0'}
-                                        </strong>
-                                    </div>
-                                </div>
-                            </div>
+                    {analyticsError && (
+                        <div className={adminStyles.error}>
+                            Error: {analyticsError}
                         </div>
-                        
-                        {loadingRateLimits ? (
-                            <div className={adminStyles.loading}>Loading rate limit data...</div>
-                        ) : rateLimitData.length === 0 ? (
-                            <div className={adminStyles.noData}>No anonymous user data available</div>
+                    )}
+                    
+                    {/* Time range controls */}
+                    <div className={adminStyles.controls}>
+                        <div className={adminStyles.timeRangeButtons}>
+                            <button 
+                                className={`${adminStyles.timeButton} ${analyticsTimeRange === '7days' ? adminStyles.active : ''}`} 
+                                onClick={() => handleTimeRangeChange('7days')}
+                            >
+                                7 Days
+                            </button>
+                            <button 
+                                className={`${adminStyles.timeButton} ${analyticsTimeRange === '30days' ? adminStyles.active : ''}`} 
+                                onClick={() => handleTimeRangeChange('30days')}
+                            >
+                                30 Days
+                            </button>
+                            <button 
+                                className={`${adminStyles.timeButton} ${analyticsTimeRange === '90days' ? adminStyles.active : ''}`} 
+                                onClick={() => handleTimeRangeChange('90days')}
+                            >
+                                90 Days
+                            </button>
+                            <button 
+                                className={`${adminStyles.timeButton} ${analyticsTimeRange === 'all' ? adminStyles.active : ''}`} 
+                                onClick={() => handleTimeRangeChange('all')}
+                            >
+                                All Time
+                            </button>
+                        </div>
+                    </div>
+                    
+                    {/* Charts Section */}
+                    <div className={adminStyles.chartsContainer}>
+                        {loadingAnalytics ? (
+                            <div className={adminStyles.loading}>Loading analytics data...</div>
                         ) : (
                             <>
-                                <div className={adminStyles.tableContainer}>
-                                    <table className={adminStyles.usageTable}>
-                                        <thead>
-                                            <tr>
-                                                <th>IP Address</th>
-                                                <th 
-                                                    className={adminStyles.sortable}
-                                                    onClick={() => handleRateLimitSortChange('totalSentences')}
-                                                >
-                                                    Total Sentences
-                                                    {rateLimitSortBy === 'totalSentences' && (
-                                                        <span className={adminStyles.sortIcon}>
-                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
-                                                        </span>
-                                                    )}
-                                                </th>
-                                                <th 
-                                                    className={adminStyles.sortable}
-                                                    onClick={() => handleRateLimitSortChange('weekSentences')}
-                                                >
-                                                    Weekly Sentences
-                                                    {rateLimitSortBy === 'weekSentences' && (
-                                                        <span className={adminStyles.sortIcon}>
-                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
-                                                        </span>
-                                                    )}
-                                                </th>
-                                                <th 
-                                                    className={adminStyles.sortable}
-                                                    onClick={() => handleRateLimitSortChange('weekStartDate')}
-                                                >
-                                                    Week Start Date
-                                                    {rateLimitSortBy === 'weekStartDate' && (
-                                                        <span className={adminStyles.sortIcon}>
-                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
-                                                        </span>
-                                                    )}
-                                                </th>
-                                                <th 
-                                                    className={adminStyles.sortable}
-                                                    onClick={() => handleRateLimitSortChange('lastUpdated')}
-                                                >
-                                                    Last Updated
-                                                    {rateLimitSortBy === 'lastUpdated' && (
-                                                        <span className={adminStyles.sortIcon}>
-                                                            {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
-                                                        </span>
-                                                    )}
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {rateLimitData.map((item, index) => (
-                                                <tr key={`${item.identifier}-${index}`}>
-                                                    <td>{item.identifier}</td>
-                                                    <td>{item.totalSentences.toLocaleString()}</td>
-                                                    <td>{item.weekSentences.toLocaleString()}</td>
-                                                    <td>{formatDate(item.weekStartDate)}</td>
-                                                    <td>{formatDate(item.lastUpdated)}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                {/* Signups Chart */}
+                                <div className={adminStyles.chartWrapper}>
+                                    <h3>New User Signups</h3>
+                                    <div className={adminStyles.chart}>
+                                        <Bar 
+                                            data={prepareSignupChartData()} 
+                                            options={chartOptions} 
+                                            height={300}
+                                        />
+                                    </div>
                                 </div>
                                 
+                                {/* Activity Chart */}
+                                <div className={adminStyles.chartWrapper}>
+                                    <h3>Daily User Activity</h3>
+                                    <div className={adminStyles.chart}>
+                                        <Bar 
+                                            data={prepareActivityChartData()} 
+                                            options={activityChartOptions} 
+                                            height={300}
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    
+                    {/* Top users by sentence generation */}
+                    <div className={adminStyles.topUsersSection}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h3>Top Users</h3>
+                            <div className={adminStyles.filterContainer}>
+                                <select 
+                                    value={topUsersFeature}
+                                    onChange={(e) => setTopUsersFeature(e.target.value)}
+                                    className={adminStyles.adminSelect}
+                                >
+                                    <option value="sentence_submission">Sentence Generation</option>
+                                    <option value="extended_text_analysis">Extended Text</option>
+                                </select>
+                            </div>
+                        </div>
+                        {loadingAnalytics ? (
+                            <div className={adminStyles.loading}>Loading top users data...</div>
+                        ) : topUsers.length === 0 ? (
+                            <div className={adminStyles.noData}>No top users data available</div>
+                        ) : (
+                            <div className={adminStyles.tableContainer}>
+                                <table className={adminStyles.usageTable}>
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Email</th>
+                                            <th>Tier</th>
+                                            <th>{topUsersFeature === 'sentence_submission' ? 'Sentences' : 'Texts'}</th>
+                                            <th>Last Used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {topUsers.map((user, index) => (
+                                            <tr key={`${user.userId}-${index}`}>
+                                                <td>{user.userName}</td>
+                                                <td>{user.userEmail}</td>
+                                                <td>
+                                                    <span className={`${adminStyles.tierBadge} ${user.userTier === 0 ? adminStyles.tierFree : user.userTier === 2 ? adminStyles.tierPlus : adminStyles.tierBasic}`}>
+                                                        {user.userTier === 0 ? 'Free' : 'Plus'}
+                                                    </span>
+                                                </td>
+                                                <td>{user.count.toLocaleString()}</td>
+                                                <td>{formatDate(user.lastUsed)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                </section>
+                
+                {/* Anonymous Users Rate Limit Section */}
+                <section className={adminStyles.detailedSection}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <h2>Anonymous Traffic</h2>
+                        <div className={adminStyles.summaryStatMini}>
+                            <span>Total IPs: <strong>{totalAnonymousUsers.toLocaleString()}</strong></span>
+                            <span>Total Sentences: <strong>{totalAnonymousSentences.toLocaleString()}</strong></span>
+                        </div>
+                    </div>
+                    
+                    {rateLimitError && (
+                        <div className={adminStyles.error}>
+                            Error: {rateLimitError}
+                        </div>
+                    )}
+                    
+                    {loadingRateLimits ? (
+                        <div className={adminStyles.loading}>Loading rate limit data...</div>
+                    ) : rateLimitData.length === 0 ? (
+                        <div className={adminStyles.noData}>No anonymous user data available</div>
+                    ) : (
+                        <>
+                            <div className={adminStyles.tableContainer}>
+                                <table className={adminStyles.usageTable}>
+                                    <thead>
+                                        <tr>
+                                            <th>IP Address</th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleRateLimitSortChange('totalSentences')}
+                                            >
+                                                Total Sentences
+                                                {rateLimitSortBy === 'totalSentences' && (
+                                                    <span className={adminStyles.sortIcon}>
+                                                        {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                                )}
+                                            </th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleRateLimitSortChange('weekSentences')}
+                                            >
+                                                Weekly Sentences
+                                                {rateLimitSortBy === 'weekSentences' && (
+                                                    <span className={adminStyles.sortIcon}>
+                                                        {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                                )}
+                                            </th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleRateLimitSortChange('weekStartDate')}
+                                            >
+                                                Week Start Date
+                                                {rateLimitSortBy === 'weekStartDate' && (
+                                                    <span className={adminStyles.sortIcon}>
+                                                        {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                                )}
+                                            </th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleRateLimitSortChange('lastUpdated')}
+                                            >
+                                                Last Updated
+                                                {rateLimitSortBy === 'lastUpdated' && (
+                                                    <span className={adminStyles.sortIcon}>
+                                                        {rateLimitSortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                                )}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {rateLimitData.map((item, index) => (
+                                            <tr key={`${item.identifier}-${index}`}>
+                                                <td>{item.identifier}</td>
+                                                <td>{item.totalSentences.toLocaleString()}</td>
+                                                <td>{item.weekSentences.toLocaleString()}</td>
+                                                <td>{formatDate(item.weekStartDate)}</td>
+                                                <td>{formatDate(item.lastUpdated)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div className={adminStyles.tableFooter}>
                                 {/* Pagination for rate limit data */}
                                 {rateLimitTotalPages > 1 && (
                                     <div className={adminStyles.pagination}>
@@ -776,217 +751,187 @@ const Admin = () => {
                                             setRateLimitLimit(Number(e.target.value));
                                             setRateLimitPage(1); // Reset to first page when changing limit
                                         }}
+                                        className={adminStyles.adminSelect}
                                     >
-                                        <option value={1}>1</option>
                                         <option value={20}>20</option>
                                         <option value={50}>50</option>
                                         <option value={100}>100</option>
                                     </select>
                                 </div>
-                            </>
-                        )}
-                    </section>
+                            </div>
+                        </>
+                    )}
+                </section>
+                
+                {/* Feature Usage Section */}
+                <section className={adminStyles.detailedSection}>
+                    <h2>Feature Usage Details</h2>
                     
-                    {/* Feature Usage Section */}
-                    <section className={adminStyles.detailedSection}>
-                        <h2>Feature Usage Dashboard</h2>
-                        
-                        {/* Feature filter and controls */}
-                        <div className={adminStyles.controls}>
-                            <div className={adminStyles.filterContainer}>
-                                <label htmlFor="feature-filter">Filter by feature:</label>
-                                <select 
-                                    id="feature-filter"
-                                    value={selectedFeature}
-                                    onChange={(e) => {
-                                        setSelectedFeature(e.target.value);
-                                        setPage(1); // Reset to first page when changing filter
-                                    }}
-                                >
-                                    <option value="">All Features</option>
-                                    {features.map(feature => (
-                                        <option key={feature} value={feature}>
-                                            {feature.replace('_', ' ')}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            
-                            <div className={adminStyles.filterContainer}>
-                                <label htmlFor="user-filter">Filter by user:</label>
-                                <select 
-                                    id="user-filter"
-                                    value={selectedUser}
-                                    onChange={(e) => {
-                                        setSelectedUser(e.target.value);
-                                        setPage(1); // Reset to first page when changing filter
-                                    }}
-                                >
-                                    <option value="">All Users</option>
-                                    {users.map(userItem => (
-                                        <option key={userItem.userId} value={userItem.userId}>
-                                            {userItem.name} ({userItem.email})
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                            
-                            <div className={adminStyles.limitContainer}>
-                                <label htmlFor="limit-select">Items per page:</label>
-                                <select
-                                    id="limit-select"
-                                    value={limit}
-                                    onChange={(e) => {
-                                        setLimit(Number(e.target.value));
-                                        setPage(1); // Reset to first page when changing limit
-                                    }}
-                                >
-                                    <option value={1}>1</option>
-                                    <option value={20}>20</option>
-                                    <option value={50}>50</option>
-                                    <option value={100}>100</option>
-                                </select>
-                            </div>
+                    {/* Feature filter and controls */}
+                    <div className={adminStyles.controls}>
+                        <div className={adminStyles.filterContainer}>
+                            <label htmlFor="feature-filter">Feature:</label>
+                            <select 
+                                id="feature-filter"
+                                value={selectedFeature}
+                                onChange={(e) => {
+                                    setSelectedFeature(e.target.value);
+                                    setPage(1); // Reset to first page when changing filter
+                                }}
+                                className={adminStyles.adminSelect}
+                            >
+                                <option value="">All Features</option>
+                                {features.map(feature => (
+                                    <option key={feature} value={feature}>
+                                        {feature.replace('_', ' ')}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         
-                        {/* Summary statistics */}
-                        <section className={adminStyles.summarySection}>
-                            <h2>Summary Statistics</h2>
-                            {loadingData ? (
-                                <div className={adminStyles.loading}>Loading statistics...</div>
-                            ) : summaryStats.length === 0 ? (
-                                <div className={adminStyles.noData}>No data available</div>
-                            ) : (
-                                <div className={adminStyles.summaryGrid}>
-                                    {summaryStats.map(stat => (
-                                        <div key={stat._id} className={adminStyles.summaryCard}>
-                                            <h3>{stat._id.replace('_', ' ')}</h3>
-                                            <div className={adminStyles.statItem}>
-                                                <span>Total Usage:</span>
-                                                <strong>{stat.totalUsage.toLocaleString()}</strong>
-                                            </div>
-                                            <div className={adminStyles.statItem}>
-                                                <span>Users:</span>
-                                                <strong>{stat.userCount.toLocaleString()}</strong>
-                                            </div>
-                                            <div className={adminStyles.statItem}>
-                                                <span>Avg Per User:</span>
-                                                <strong>{stat.avgUsagePerUser.toFixed(1)}</strong>
-                                            </div>
-                                            <div className={adminStyles.statItem}>
-                                                <span>Max By User:</span>
-                                                <strong>{stat.maxUsageByUser.toLocaleString()}</strong>
-                                            </div>
-                                        </div>
-                                    ))}
+                        <div className={adminStyles.filterContainer}>
+                            <label htmlFor="user-filter">User:</label>
+                            <select 
+                                id="user-filter"
+                                value={selectedUser}
+                                onChange={(e) => {
+                                    setSelectedUser(e.target.value);
+                                    setPage(1); // Reset to first page when changing filter
+                                }}
+                                className={adminStyles.adminSelect}
+                            >
+                                <option value="">All Users</option>
+                                {users.map(userItem => (
+                                    <option key={userItem.userId} value={userItem.userId}>
+                                        {userItem.name} ({userItem.email})
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    {/* Summary statistics */}
+                    <div className={adminStyles.summaryGrid}>
+                        {summaryStats.map(stat => (
+                            <div key={stat._id} className={adminStyles.summaryCard}>
+                                <h3>{stat._id.replace('_', ' ')}</h3>
+                                <div className={adminStyles.statItem}>
+                                    <span>Total Usage:</span>
+                                    <strong>{stat.totalUsage.toLocaleString()}</strong>
                                 </div>
-                            )}
-                        </section>
-                        
-                        {/* Detailed usage data */}
-                        <section className={adminStyles.detailedSection}>
-                            {loadingData ? (
-                                <div className={adminStyles.loading}>Loading data...</div>
-                            ) : usageData.length === 0 ? (
-                                <div className={adminStyles.noData}>No data available</div>
-                            ) : (
-                                <>
-                                    <div className={adminStyles.tableContainer}>
-                                        <table className={adminStyles.usageTable}>
-                                            <thead>
-                                                <tr>
-                                                    <th>User</th>
-                                                    <th>Email</th>
-                                                    <th>Tier</th>
-                                                    <th 
-                                                        className={adminStyles.sortable}
-                                                        onClick={() => handleSortChange('feature')}
-                                                    >
-                                                        Feature
-                                                        {sortBy === 'feature' && (
-                                                            <span className={adminStyles.sortIcon}>
-                                                                {sortOrder === 'asc' ? '↑' : '↓'}
-                                                            </span>
-                                                        )}
-                                                    </th>
-                                                    <th 
-                                                        className={adminStyles.sortable}
-                                                        onClick={() => handleSortChange('count')}
-                                                    >
-                                                        Count
-                                                        {sortBy === 'count' && (
-                                                            <span className={adminStyles.sortIcon}>
-                                                                {sortOrder === 'asc' ? '↑' : '↓'}
-                                                            </span>
-                                                        )}
-                                                    </th>
-                                                    <th 
-                                                        className={adminStyles.sortable}
-                                                        onClick={() => handleSortChange('firstUsed')}
-                                                    >
-                                                        First Used
-                                                        {sortBy === 'firstUsed' && (
-                                                            <span className={adminStyles.sortIcon}>
-                                                                {sortOrder === 'asc' ? '↑' : '↓'}
-                                                            </span>
-                                                        )}
-                                                    </th>
-                                                    <th 
-                                                        className={adminStyles.sortable}
-                                                        onClick={() => handleSortChange('lastUsed')}
-                                                    >
-                                                        Last Used
-                                                        {sortBy === 'lastUsed' && (
-                                                            <span className={adminStyles.sortIcon}>
-                                                                {sortOrder === 'asc' ? '↑' : '↓'}
-                                                            </span>
-                                                        )}
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {usageData.map((item, index) => (
-                                                    <tr key={`${item.userId}-${item.feature}-${index}`}>
-                                                        <td>{item.userName}</td>
-                                                        <td>{item.userEmail}</td>
-                                                        <td>{item.userTier === 0 ? 'Free' : 'Plus'}</td>
-                                                        <td>{item.feature.replace('_', ' ')}</td>
-                                                        <td>{item.count.toLocaleString()}</td>
-                                                        <td>{formatDate(item.firstUsed)}</td>
-                                                        <td>{formatDate(item.lastUsed)}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                <div className={adminStyles.statItem}>
+                                    <span>Users:</span>
+                                    <strong>{stat.userCount.toLocaleString()}</strong>
+                                </div>
+                                <div className={adminStyles.statItem}>
+                                    <span>Avg Per User:</span>
+                                    <strong>{stat.avgUsagePerUser.toFixed(1)}</strong>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                    
+                    {/* Detailed usage data */}
+                    {loadingData ? (
+                        <div className={adminStyles.loading}>Loading data...</div>
+                    ) : usageData.length === 0 ? (
+                        <div className={adminStyles.noData}>No data available</div>
+                    ) : (
+                        <>
+                            <div className={adminStyles.tableContainer}>
+                                <table className={adminStyles.usageTable}>
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Email</th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleSortChange('feature')}
+                                            >
+                                                Feature
+                                            </th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleSortChange('count')}
+                                            >
+                                                Count
+                                                {sortBy === 'count' && (
+                                                    <span className={adminStyles.sortIcon}>
+                                                        {sortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                                )}
+                                            </th>
+                                            <th 
+                                                className={adminStyles.sortable}
+                                                onClick={() => handleSortChange('lastUsed')}
+                                            >
+                                                Last Used
+                                                {sortBy === 'lastUsed' && (
+                                                    <span className={adminStyles.sortIcon}>
+                                                        {sortOrder === 'asc' ? '↑' : '↓'}
+                                                    </span>
+                                                )}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {usageData.map((item, index) => (
+                                            <tr key={`${item.userId}-${item.feature}-${index}`}>
+                                                <td>{item.userName}</td>
+                                                <td>{item.userEmail}</td>
+                                                <td>{item.feature.replace('_', ' ')}</td>
+                                                <td>{item.count.toLocaleString()}</td>
+                                                <td>{formatDate(item.lastUsed)}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div className={adminStyles.tableFooter}>
+                                {/* Pagination */}
+                                {totalPages > 1 && (
+                                    <div className={adminStyles.pagination}>
+                                        <button 
+                                            onClick={() => setPage(p => Math.max(1, p - 1))}
+                                            disabled={page === 1}
+                                        >
+                                            Previous
+                                        </button>
+                                        <span>
+                                            Page {page} of {totalPages}
+                                        </span>
+                                        <button 
+                                            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                                            disabled={page === totalPages}
+                                        >
+                                            Next
+                                        </button>
                                     </div>
-                                    
-                                    {/* Pagination */}
-                                    {totalPages > 1 && (
-                                        <div className={adminStyles.pagination}>
-                                            <button 
-                                                onClick={() => setPage(p => Math.max(1, p - 1))}
-                                                disabled={page === 1}
-                                            >
-                                                Previous
-                                            </button>
-                                            <span>
-                                                Page {page} of {totalPages}
-                                            </span>
-                                            <button 
-                                                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                                                disabled={page === totalPages}
-                                            >
-                                                Next
-                                            </button>
-                                        </div>
-                                    )}
-                                </>
-                            )}
-                        </section>
-                    </section>
-                </div>
+                                )}
+                                
+                                <div className={adminStyles.limitContainer}>
+                                    <label htmlFor="limit-select">Items per page:</label>
+                                    <select
+                                        id="limit-select"
+                                        value={limit}
+                                        onChange={(e) => {
+                                            setLimit(Number(e.target.value));
+                                            setPage(1); // Reset to first page when changing limit
+                                        }}
+                                        className={adminStyles.adminSelect}
+                                    >
+                                        <option value={20}>20</option>
+                                        <option value={50}>50</option>
+                                        <option value={100}>100</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </>
+                    )}
+                </section>
             </div>
-        </div>
+        </Dashboard>
     );
 };
 
