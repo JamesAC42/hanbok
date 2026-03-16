@@ -332,65 +332,67 @@ export default function TypingPractice() {
     return (
         <>
             <Dashboard>
-                <div className={styles.typingContainer}>
-                    <div className={styles.header}>
-                        <h1 className={styles.title}>Korean Typing Practice</h1>
-                        <p className={styles.subtitle}>
-                            {currentMode === PRACTICE_MODES.PARAGRAPH 
-                                ? "Practice typing Korean paragraphs with your Korean IME enabled!" 
-                                : "Practice Korean characters using your English keyboard - no Korean IME required!"
-                            }
-                        </p>
-                    </div>
-                
-                <div className={styles.mainLayout}>
-                    <div className={styles.leftPanel}>
-                        <ModeSelector
-                            currentMode={currentMode}
-                            onModeChange={handleModeChange}
-                            currentRow={currentRow}
-                            onRowChange={handleRowChange}
-                            onNewParagraph={handleNewParagraph}
-                            modes={PRACTICE_MODES}
-                            onShowIMEModal={handleShowIMEModal}
-                        />
-                    </div>
-                    
-                    <div className={styles.rightPanel}>
-                        <div className={styles.practiceArea}>
-                            <TypingArea
-                                currentText={currentText}
-                                userInput={userInput}
-                                onInputChange={handleInputChange}
-                                currentCharIndex={currentCharIndex}
-                                isActive={isActive}
-                                mode={currentMode}
-                                inputRef={inputRef}
-                                onSkipCharacter={handleSkipCharacter}
-                                isCompleted={isCompleted}
-                            />
-                            
-                            <StatsDisplay
-                                wpm={calculateWPM()}
-                                accuracy={calculateAccuracy()}
-                                errors={errors}
-                                isActive={isActive}
-                                startTime={startTime}
-                                mode={currentMode}
-                                isCompleted={isCompleted}
-                                endTime={endTime}
-                            />
+                <div className={styles.typingViewport}>
+                    <div className={styles.typingContainer}>
+                        <div className={styles.header}>
+                            <h1 className={styles.title}>Korean Typing Practice</h1>
+                            <p className={styles.subtitle}>
+                                {currentMode === PRACTICE_MODES.PARAGRAPH 
+                                    ? "Practice typing Korean paragraphs with your Korean IME enabled!" 
+                                    : "Practice Korean characters using your English keyboard - no Korean IME required!"
+                                }
+                            </p>
                         </div>
                         
-                        <div className={styles.keyboardSection}>
-                            <KoreanKeyboard
-                                currentChar={currentMode !== PRACTICE_MODES.PARAGRAPH ? currentText : currentText[currentCharIndex]}
-                                pressedKeys={[]}
-                            />
+                        <div className={styles.mainLayout}>
+                            <div className={styles.leftPanel}>
+                                <ModeSelector
+                                    currentMode={currentMode}
+                                    onModeChange={handleModeChange}
+                                    currentRow={currentRow}
+                                    onRowChange={handleRowChange}
+                                    onNewParagraph={handleNewParagraph}
+                                    modes={PRACTICE_MODES}
+                                    onShowIMEModal={handleShowIMEModal}
+                                />
+                            </div>
+                            
+                            <div className={styles.rightPanel}>
+                                <div className={styles.practiceArea}>
+                                    <TypingArea
+                                        currentText={currentText}
+                                        userInput={userInput}
+                                        onInputChange={handleInputChange}
+                                        currentCharIndex={currentCharIndex}
+                                        isActive={isActive}
+                                        mode={currentMode}
+                                        inputRef={inputRef}
+                                        onSkipCharacter={handleSkipCharacter}
+                                        isCompleted={isCompleted}
+                                    />
+                                    
+                                    <StatsDisplay
+                                        wpm={calculateWPM()}
+                                        accuracy={calculateAccuracy()}
+                                        errors={errors}
+                                        isActive={isActive}
+                                        startTime={startTime}
+                                        mode={currentMode}
+                                        isCompleted={isCompleted}
+                                        endTime={endTime}
+                                    />
+                                </div>
+                                
+                                <div className={styles.keyboardSection}>
+                                    <KoreanKeyboard
+                                        currentChar={currentMode !== PRACTICE_MODES.PARAGRAPH ? currentText : currentText[currentCharIndex]}
+                                        pressedKeys={[]}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </Dashboard>
             
             <IMEModal

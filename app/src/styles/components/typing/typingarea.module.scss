@@ -45,11 +45,14 @@
     font-size: 1.43rem;
     line-height: 1.8;
     font-family: 'Noto Sans KR', sans-serif;
+    max-height: 100%;
     max-width: 100%;
     text-align: center;
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: break-word;
+    overflow-y: auto;
+    padding-right: 0.25rem;
     animation: fadeInUp 0.2s ease;
     transition: all 0.2s ease;
 
@@ -166,6 +169,26 @@
     width: 100%;
     text-align: center;
     transition: all 0.3s ease;
+}
+
+@media (min-width: 769px) and (max-height: 900px) {
+    .inputDisplay {
+        display: none;
+    }
+
+    .instructions {
+        display: none;
+    }
+}
+
+@media (min-width: 769px) and (max-height: 900px) {
+    .textDisplay {
+        align-items: flex-start;
+    }
+
+    .paragraphText {
+        min-height: calc(1.8em + 0.5rem);
+    }
 }
 
 .inputLabel {

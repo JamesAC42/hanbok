@@ -13,11 +13,6 @@
         padding: 1rem;
         border-radius: 0.5rem;
     }
-
-    
-    @media (max-width: 1200px) and (max-height: 970px) {
-        padding:0.5rem;
-    }
 }
 
 .keyboardHeader {
@@ -78,11 +73,6 @@
     @media (max-width: 1200px) {
         gap: 0.3rem;
         margin-bottom: 0.7rem;
-    }
-
-    @media (max-width: 1200px) and (max-height: 970px) {
-        gap:0;
-        margin-bottom:0.5rem;
     }
 }
 
@@ -302,4 +292,10 @@
         background: #28a745;
         border-color: #28a745;
     }
-} 
+}
+
+@media (min-width: 769px) and (max-height: 600px) {
+    .keyboard {
+        zoom: 0.6;
+    }
+}

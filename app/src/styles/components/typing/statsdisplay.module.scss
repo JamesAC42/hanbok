@@ -38,13 +38,8 @@
     gap: 0.6rem;
     margin-bottom: 0.8rem;
     
-    @media (max-width: 1200px) or (max-height: 900px) {
+    @media (max-width: 1200px) {
         grid-template-columns: repeat(4, 1fr);
-        gap: 0.5rem;
-    }
-
-    @media (max-width: 1200px) and (max-height: 970px) {
-        grid-template-columns: repeat(5, 1fr);
         gap: 0.5rem;
     }
     
@@ -70,10 +65,6 @@
         transform: translateY(-0.1rem);
         box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
     }
-
-    @media (max-width: 1200px) and (max-height: 970px) {
-        padding:0.3rem;
-    }
 }
 
 .statLabel {
@@ -84,12 +75,6 @@
     letter-spacing: 0.05rem;
     margin-bottom: 0.3rem;
     transition: all 0.3s ease;
-
-    @media (max-width: 1200px) and (max-height: 970px) {
-        font-size: 0.7rem;
-
-        font-weight: 500;
-    }
 }
 
 .statValue {
@@ -122,10 +107,6 @@
     &.active {
         color: #17a2b8;
         animation: pulse 2s infinite;
-    }
-
-    @media (max-width: 1200px) and (max-height: 970px) {
-        font-size:1rem;
     }
 }
 
@@ -178,6 +159,58 @@
     strong {
         color: var(--foreground);
         font-weight: 600;
+    }
+}
+
+@media (min-width: 769px) and (max-height: 800px) {
+    .statsDisplay {
+        padding: 0.55rem;
+    }
+
+    .title {
+        font-size: 0.9rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .statsGrid {
+        gap: 0.4rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .statItem {
+        padding: 0.4rem;
+    }
+
+    .statLabel {
+        font-size: 0.62rem;
+        margin-bottom: 0.2rem;
+        letter-spacing: 0.03rem;
+    }
+
+    .statValue {
+        font-size: 1rem;
+    }
+
+    .feedback {
+        padding-top: 0.45rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .feedbackItem {
+        margin-bottom: 0.25rem;
+    }
+
+    .feedbackItem p {
+        font-size: 0.72rem;
+    }
+
+    .tips {
+        padding-top: 0.45rem;
+    }
+
+    .tip {
+        padding: 0.45rem;
+        font-size: 0.72rem;
     }
 }
 
