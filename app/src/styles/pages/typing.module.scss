@@ -138,12 +138,6 @@
     min-height: 0;
     box-sizing: border-box;
     align-items: start;
-    
-    @media (max-width: 1200px) {
-        grid-template-columns: 1fr;
-        gap: 0.7rem;
-        flex: 0 0 auto;
-    }
 } 
 
 .keyboardSection {
