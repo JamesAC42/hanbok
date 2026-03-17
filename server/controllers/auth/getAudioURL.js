@@ -1,10 +1,19 @@
 const { getDb } = require('../../database');
-const { getPresignedUrl, generateSpeech } = require('../../elevenlabs/generateSpeech');
+const { generateSpeech } = require('../../elevenlabs/generateSpeech');
+const { buildAudioLengthError, isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
+const {
+    clearSentenceAudioVariant,
+    getSentenceTextToRead,
+    hasAudioForVariant,
+    resolveSentenceAudio
+} = require('../../utils/sentenceAudio');
 
 const getAudioURL = async (req, res) => {
     try {
         const db = getDb();
         const variant = req.query.variant === 'slow' ? 'slow' : 'normal';
+        const userId = req.session?.user?.userId || null;
+        const isSignedIn = !!userId;
         const parsedSentenceId = parseInt(req.params.sentenceId);
         const sentence = await db.collection('sentences').findOne({ 
             sentenceId: parsedSentenceId,
@@ -15,12 +24,30 @@ const getAudioURL = async (req, res) => {
             return res.status(404).json({ error: 'Sentence not found' });
         }
 
-        const voiceKeys = variant === 'slow' 
-            ? { voice1Key: sentence.voice1SlowKey, voice2Key: sentence.voice2SlowKey }
-            : { voice1Key: sentence.voice1Key, voice2Key: sentence.voice2Key };
+        let user = null;
+        if (userId !== null) {
+            user = await db.collection('users').findOne({ userId });
+        }
 
-        const hasNormalAudio = !!(sentence.voice1Key && sentence.voice2Key);
-        const shouldGenerateSlow = variant === 'slow' && (!voiceKeys.voice1Key || !voiceKeys.voice2Key) && hasNormalAudio;
+        if (isLongSentenceAudioRestricted(sentence.text, user)) {
+            return res.status(403).json(buildAudioLengthError());
+        }
+
+        if (variant === 'slow' && !isSignedIn) {
+            return res.status(403).json({
+                code: 'SLOW_AUDIO_LOGIN_REQUIRED',
+                error: 'Sign in to access slow audio'
+            });
+        }
+
+        let currentSentence = sentence;
+
+        if (variant === 'slow' && !hasAudioForVariant(currentSentence, 'normal')) {
+            await resolveSentenceAudio(db, currentSentence, 'normal');
+            currentSentence = await db.collection('sentences').findOne({ sentenceId: parsedSentenceId });
+        }
+
+        const hasNormalAudio = hasAudioForVariant(currentSentence, 'normal');
 
         if (variant === 'slow' && !hasNormalAudio) {
             return res.json({
@@ -31,12 +58,18 @@ const getAudioURL = async (req, res) => {
             });
         }
 
-        // Generate slowed audio on demand for older sentences with existing normal audio
-        if (shouldGenerateSlow) {
+        const existingAudio = await resolveSentenceAudio(db, currentSentence, variant);
+        if (existingAudio) {
+            return res.json({
+                voice1: existingAudio.voice1,
+                voice2: existingAudio.voice2,
+                variant
+            });
+        }
+
+        if (variant === 'slow') {
             try {
-                const textToRead = sentence.originalLanguage === 'ja'
-                    ? sentence?.analysis?.sentence?.reading ?? sentence.text
-                    : sentence.text;
+                const textToRead = getSentenceTextToRead(currentSentence);
                 const slowAudio = await generateSpeech(textToRead, { speed: 0.7 });
 
                 await db.collection('sentences').updateOne(
@@ -62,76 +95,13 @@ const getAudioURL = async (req, res) => {
             }
         }
 
-        // Check if voice keys exist
-        if (!voiceKeys.voice1Key || !voiceKeys.voice2Key) {
-            return res.json({ 
-                voice1: null, 
-                voice2: null,
-                variant,
-                error: 'Voice keys not found'
-            });
-        }
-
-        try {
-            // Try to get presigned URLs for the existing S3 objects
-            const [url1, url2] = await Promise.all([
-                getPresignedUrl(voiceKeys.voice1Key),
-                getPresignedUrl(voiceKeys.voice2Key)
-            ]);
-
-            // Update the sentence with the new URLs
-            await db.collection('sentences').updateOne(
-                { sentenceId: parsedSentenceId },
-                { 
-                    $set: { 
-                        ...(variant === 'slow' ? {
-                            voice1SlowKey: url1,
-                            voice2SlowKey: url2
-                        } : {
-                            voice1Key: url1,
-                            voice2Key: url2,
-                            dateAudioGenerated: new Date()
-                        })
-                    }
-                }
-            );
-
-            console.log('Updated sentence with fresh audio URLs');
-
-            res.json({ voice1: url1, voice2: url2, variant });
-        } catch (s3Error) {
-            console.error('Error generating presigned URLs:', s3Error);
-            
-            // If there's an S3 error (like object not found), clear the voice keys
-            try {
-                await db.collection('sentences').updateOne(
-                    { sentenceId: parsedSentenceId },
-                    { 
-                        $set: { 
-                            ...(variant === 'slow' ? {
-                                voice1SlowKey: null,
-                                voice2SlowKey: null
-                            } : {
-                                voice1Key: null,
-                                voice2Key: null,
-                                dateAudioGenerated: null
-                            })
-                        }
-                    }
-                );
-                console.log('Cleared invalid voice keys from database');
-            } catch (clearError) {
-                console.error('Error clearing voice keys:', clearError);
-            }
-            
-            // Return null URLs to trigger regeneration
-            return res.json({ 
-                voice1: null, 
-                voice2: null,
-                variant,
-                error: 'S3 objects not found or inaccessible'
-            });
-        }
+        await clearSentenceAudioVariant(db, parsedSentenceId, variant);
+        return res.json({
+            voice1: null,
+            voice2: null,
+            variant,
+            error: 'Voice keys not found'
+        });
     } catch (error) {
         console.error('Error generating audio URLs:', error);
         res.status(500).json({ error: 'Failed to generate audio URLs' });

@@ -68,24 +68,35 @@
     z-index:1001;
     background:var(--background);
     border:2px solid var(--foreground-light);
-    height:100%;
-    width:70%;
+    width:min(28rem, calc(100% - 2rem));
+    min-height:12rem;
+    max-width:calc(100% - 2rem);
     border-radius:1rem;
     display:flex;
     justify-content:center;
     flex-direction:column;
-    padding:0 2rem;
-    gap:1rem;
+    padding:2rem 2rem 1.5rem;
+    gap:1.25rem;
     align-items:center;
     animation: slideInFromBottom 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.18);
     p {
         text-align:center;
         color:var(--foreground);
+        margin:0;
+        max-width:22rem;
+        line-height:1.4;
+        text-wrap:balance;
     }
 
     a { 
-        display:block;
-        padding:1rem 2rem;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        gap:0.75rem;
+        min-width:12rem;
+        max-width:100%;
+        padding:0.9rem 1.4rem;
         background:var(--background);
         border: 1px solid var(--foreground-light);
         border-radius:0.5rem;
@@ -93,10 +104,10 @@
         text-decoration:none;
         color:var(--foreground);
         transition:all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        overflow:hidden;
+        white-space:nowrap;
 
         svg {
-            margin-left:1rem;
+            flex-shrink:0;
             transform:scale(1.5) translateY(1px);
         }
         &:hover {
@@ -104,22 +115,18 @@
             box-shadow: 0.25rem 0.25rem 0 var(--shadow);
         }
     }   
-
-    .closePopup {
-        position:absolute;
-        top:1rem;
-        right:2rem;
-        cursor:pointer;   
-        svg {
-            color:var(--foreground);
-            transform:scale(1.5);
-        }
-    }
     @media screen and (max-width:800px) {
-        width:90%;
+        width:min(24rem, calc(100% - 1.5rem));
     }
     @media screen and (max-width: 500px) {
-        width:100%;
+        width:calc(100% - 1rem);
+        padding:1.75rem 1rem 1.25rem;
+        min-height:11rem;
+
+        a {
+            width:100%;
+            min-width:0;
+        }
     }
 }
 

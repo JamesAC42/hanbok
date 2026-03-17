@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
 
 const getSentence = async (req, res) => {
     const { sentenceId } = req.params;
@@ -6,6 +7,7 @@ const getSentence = async (req, res) => {
 
     try {
         const db = getDb();
+        const userId = req.session?.user?.userId || null;
         const sentence = await db.collection('sentences').findOne({ 
             sentenceId: parseInt(sentenceId),
             //userId: userId
@@ -18,9 +20,24 @@ const getSentence = async (req, res) => {
             });
         }
 
+        let user = null;
+        if (userId !== null) {
+            user = await db.collection('users').findOne({ userId });
+        }
+
+        const responseSentence = isLongSentenceAudioRestricted(sentence.text, user)
+            ? {
+                ...sentence,
+                voice1Key: null,
+                voice2Key: null,
+                voice1SlowKey: null,
+                voice2SlowKey: null
+            }
+            : sentence;
+
         res.json({
             success: true,
-            sentence: sentence
+            sentence: responseSentence
         });
 
     } catch (error) {

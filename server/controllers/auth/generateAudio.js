@@ -1,8 +1,10 @@
 const { getDb } = require('../../database');
 const { generateSpeech } = require('../../elevenlabs/generateSpeech');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
+const { buildAudioLengthError, isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
+const { getSentenceTextToRead, resolveSentenceAudio } = require('../../utils/sentenceAudio');
 
-const AUDIO_WEEKLY_QUOTA = 10;
+const AUDIO_WEEKLY_QUOTA = 5;
 
 const ensureRateLimitRecord = async (db, identifier, identifierType, weekStartDate) => {
     let rateLimitRecord = await db.collection('rate_limits').findOne({ identifier, identifierType });
@@ -95,15 +97,35 @@ const generateAudio = async (req, res) => {
         }
 
         let user = null;
-        let remainingGenerations = null;
-        let rateLimitRecord = null;
-
         if (userId !== null) {
             user = await db.collection('users').findOne({ userId });
             if (!user) {
                 return res.status(403).json(buildQuotaError());
             }
+        }
 
+        if (isLongSentenceAudioRestricted(sentence.text, user)) {
+            return res.status(403).json(buildAudioLengthError());
+        }
+
+        let remainingGenerations = null;
+
+        const existingAudio = await resolveSentenceAudio(db, sentence, 'normal');
+        if (existingAudio) {
+            return res.json({
+                success: true,
+                generated: false,
+                voice1: existingAudio.voice1,
+                voice2: existingAudio.voice2,
+                voice1Slow: sentence.voice1SlowKey || null,
+                voice2Slow: sentence.voice2SlowKey || null,
+                remainingGenerations
+            });
+        }
+
+        let rateLimitRecord = null;
+
+        if (userId !== null) {
             if (user.tier === 0 || user.tier === 1) {
                 const saved = user.remainingAudioGenerations ?? 0;
                 if (saved <= 0) {
@@ -120,17 +142,8 @@ const generateAudio = async (req, res) => {
             }
         }
 
-        // Generate speech audio
-        let textToRead;
-        if (sentence.originalLanguage === 'ja') {
-            textToRead = sentence?.analysis?.sentence?.reading ?? sentence.text;
-        } else {
-            textToRead = sentence.text;
-        }
-        const [normalAudio, slowAudio] = await Promise.all([
-            generateSpeech(textToRead),
-            generateSpeech(textToRead, { speed: 0.7 })
-        ]);
+        const textToRead = getSentenceTextToRead(sentence);
+        const normalAudio = await generateSpeech(textToRead);
 
         await db.collection('sentences').updateOne(
             { sentenceId: parseInt(sentenceId) },
@@ -138,8 +151,6 @@ const generateAudio = async (req, res) => {
                 $set: { 
                     voice1Key: normalAudio.voice1,
                     voice2Key: normalAudio.voice2,
-                    voice1SlowKey: slowAudio.voice1,
-                    voice2SlowKey: slowAudio.voice2,
                     dateAudioGenerated: new Date()
                 }
             }
@@ -192,10 +203,11 @@ const generateAudio = async (req, res) => {
 
         res.json({ 
             success: true,
+            generated: true,
             voice1: normalAudio.voice1,
             voice2: normalAudio.voice2,
-            voice1Slow: slowAudio.voice1,
-            voice2Slow: slowAudio.voice2,
+            voice1Slow: sentence.voice1SlowKey || null,
+            voice2Slow: sentence.voice2SlowKey || null,
             remainingGenerations: remainingAfterGeneration
         });
 

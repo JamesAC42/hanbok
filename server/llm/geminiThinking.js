@@ -2,7 +2,7 @@ require('dotenv').config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const gemini = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+const gemini = genAI.getGenerativeModel({ model: "gemini-3.1-flash-lite-preview" });
 
 const prompt_geminiThinking = async (text) => {
     const result = await gemini.generateContent(text);

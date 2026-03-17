@@ -8,6 +8,7 @@ const vietnamesePrompt = require('../../llm/prompt_vietnamese');
 const hindiPrompt = require('../../llm/prompt_hindi');
 const { translateText } = require('../../llm/translate');
 const { getDb } = require('../../database');
+const { isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
 const SupportedLanguages = require('../../supported_languages');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 
@@ -518,6 +519,13 @@ const submitSentence = async (req, res) => {
             }
             
             analysis = parsedResponse.analysis;
+        }
+
+        if (isLongSentenceAudioRestricted(text, user)) {
+            voice1Key = null;
+            voice2Key = null;
+            voice1SlowKey = null;
+            voice2SlowKey = null;
         }
 
         // Get next sentence ID

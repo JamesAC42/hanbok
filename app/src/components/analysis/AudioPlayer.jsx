@@ -6,7 +6,6 @@ import { MaterialSymbolsPause } from '@/components/icons/Pause';
 import {useSearchParams} from 'next/navigation';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
 import { TdesignUserTalk1Filled } from '@/components/icons/Talk';
-import { MaterialSymbolsCancel } from '@/components/icons/Close';
 import Image from 'next/image';
 import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsTurtle } from '@/components/icons/Turtle';
@@ -31,6 +30,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     const [playbackMode, setPlaybackMode] = useState('normal');
     const [audioErrorCode, setAudioErrorCode] = useState(null);
     const [autoRequested, setAutoRequested] = useState(false);
+    const [popupType, setPopupType] = useState(null);
     const searchParams = useSearchParams();
 
     const { user, decrementRemainingAudioGenerations } = useAuth();
@@ -56,6 +56,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     useEffect(() => {
       setAudioErrorCode(null);
       setShowPopup(false);
+      setPopupType(null);
       setAutoRequested(false);
     }, [sentenceId]);
 
@@ -64,6 +65,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     const hasSlowAudio = !!(voices?.voice1Slow && voices?.voice2Slow);
     const hasActiveAudio = isSlowMode ? hasSlowAudio : hasNormalAudio;
     const isQuotaBlocked = audioErrorCode === 'AUDIO_QUOTA_EXCEEDED';
+    const isLengthBlocked = audioErrorCode === 'AUDIO_PREMIUM_LENGTH_REQUIRED';
 
     const getActiveVoices = () => isSlowMode
       ? { voice1: voices.voice1Slow, voice2: voices.voice2Slow }
@@ -125,8 +127,37 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json())
-      .then(data => {
+      .then(async response => ({
+        ok: response.ok,
+        status: response.status,
+        data: await response.json()
+      }))
+      .then(({ ok, data }) => {
+        if (!ok && data?.code === 'SLOW_AUDIO_LOGIN_REQUIRED') {
+          setAudioErrorCode(data.code);
+          setPopupType('slow-login');
+          setShowPopup(true);
+          setPlaybackMode('normal');
+          setIsPlaying(false);
+          return;
+        }
+
+        if (!ok && data?.code === 'AUDIO_PREMIUM_LENGTH_REQUIRED') {
+          setAudioErrorCode(data.code);
+          setPopupType('length-limit');
+          setShowPopup(true);
+          setPlaybackMode('normal');
+          setVoices(prev => ({
+            ...prev,
+            voice1: null,
+            voice2: null,
+            voice1Slow: null,
+            voice2Slow: null
+          }));
+          setIsPlaying(false);
+          return;
+        }
+
         if (data.voice1 && data.voice2) {
           // We got fresh URLs, update them
           console.log('Received fresh audio URLs');
@@ -146,6 +177,16 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
         } else {
           // If we didn't get valid URLs, the S3 objects might be missing
           console.log('No valid URLs returned, keys have been cleared on the server');
+          setVoices(prev => ({
+            ...prev,
+            ...(isSlowRequest ? {
+              voice1Slow: null,
+              voice2Slow: null
+            } : {
+              voice1: null,
+              voice2: null
+            })
+          }));
           setIsPlaying(false);
         }
       })
@@ -193,6 +234,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
 
       setAudioErrorCode(null);
       setShowPopup(false);
+      setPopupType(null);
       setLoadingAudio(true);  
       try {
         const response = await fetch(`/api/sentences/${sentenceId}/generate-audio`, {
@@ -212,7 +254,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
             voice2Slow: data.voice2Slow
           });
 
-          if(user && (user.tier === 0 || user.tier === 1)) {
+          if(data.generated && user && (user.tier === 0 || user.tier === 1)) {
             decrementRemainingAudioGenerations();
           }
           return true;
@@ -220,6 +262,11 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
 
         if (data.code === 'AUDIO_QUOTA_EXCEEDED') {
           setAudioErrorCode(data.code);
+          setPopupType('quota');
+          setShowPopup(true);
+        } else if (data.code === 'AUDIO_PREMIUM_LENGTH_REQUIRED') {
+          setAudioErrorCode(data.code);
+          setPopupType('length-limit');
           setShowPopup(true);
         } else {
           setAudioErrorCode('GENERATION_FAILED');
@@ -252,16 +299,25 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
         return;
       }
 
-      generateAudio();
-    }
+      if (isLengthBlocked) {
+        setPopupType('length-limit');
+        setShowPopup(true);
+        return;
+      }
 
-    const hidePopup = () => {
-      setShowPopup(false);
+      generateAudio();
     }
 
     const togglePlaybackMode = () => {
       if (shouldLock()) {
         handleAudioLock();
+        return;
+      }
+
+      if (!user && !isSlowMode) {
+        setAudioErrorCode('SLOW_AUDIO_LOGIN_REQUIRED');
+        setPopupType('slow-login');
+        setShowPopup(true);
         return;
       }
 
@@ -328,6 +384,29 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     }, []);
 
     const previewVoices = getActiveVoices();
+    const slowLoginTitle = t('audioPlayer.slowLoginRequired.title') === 'audioPlayer.slowLoginRequired.title'
+      ? 'Sign in to listen to slow audio.'
+      : t('audioPlayer.slowLoginRequired.title');
+    const slowLoginCta = t('audioPlayer.slowLoginRequired.cta') === 'audioPlayer.slowLoginRequired.cta'
+      ? 'Sign In'
+      : t('audioPlayer.slowLoginRequired.cta');
+    const lengthLimitTitle = t('audioPlayer.lengthLimit.title') === 'audioPlayer.lengthLimit.title'
+      ? 'Audio for sentences over 50 characters is a paid feature.'
+      : t('audioPlayer.lengthLimit.title');
+    const lengthLimitCta = t('audioPlayer.lengthLimit.cta') === 'audioPlayer.lengthLimit.cta'
+      ? 'View Plans'
+      : t('audioPlayer.lengthLimit.cta');
+    const popupTitle = popupType === 'slow-login'
+      ? slowLoginTitle
+      : popupType === 'length-limit'
+        ? lengthLimitTitle
+        : t('audioPlayer.noCredits.title');
+    const popupCta = popupType === 'slow-login'
+      ? slowLoginCta
+      : popupType === 'length-limit'
+        ? lengthLimitCta
+        : t('audioPlayer.noCredits.cta');
+    const popupHref = popupType === 'slow-login' ? '/login' : '/pricing';
 
     return (
         <div className={styles.audioPlayerWrapper}>
@@ -418,7 +497,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
           </div>
           
           {
-            (shouldLock()) && (
+            (shouldLock() && !showPopup) && (
               <div
                 onClick={() => handleAudioLock()}
                 className={styles.audioPlayerLocked}>
@@ -428,6 +507,8 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
                       {
                         isQuotaBlocked
                           ? t('audioPlayer.noCredits.title')
+                          : isLengthBlocked
+                            ? lengthLimitTitle
                           : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))
                       }
                     </div>
@@ -439,14 +520,11 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
           {
             showPopup && (
               <div className={styles.audioPlayerLockedPopup}>
-                <p>{t('audioPlayer.noCredits.title')}</p>
-                <Link href="/pricing">
-                  {t('audioPlayer.noCredits.cta')} <MaterialSymbolsArrowCircleRightRounded />
+                <p>{popupTitle}</p>
+                <Link href={popupHref}>
+                  <span>{popupCta}</span>
+                  <MaterialSymbolsArrowCircleRightRounded />
                 </Link>
-
-                <div className={styles.closePopup} onClick={hidePopup}>
-                  <MaterialSymbolsCancel />
-                </div>
               </div>
             )
           }

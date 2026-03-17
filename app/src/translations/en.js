@@ -540,6 +540,14 @@ export const en = {
             title: 'Sign in to generate audio samples and hear the sentence spoken by lifelike speakers.',
             cta: 'Make a free account',
         },
+        slowLoginRequired: {
+            title: 'Sign in to listen to slow audio.',
+            cta: 'Sign In',
+        },
+        lengthLimit: {
+            title: 'Audio for sentences over 50 characters is a paid feature.',
+            cta: 'View Plans',
+        },
         noCredits: {
             title: 'You have no remaining audio credits.',
             cta: 'Get More',
