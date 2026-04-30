@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
                       src="https://accounts.google.com/gsi/client"
                       strategy="afterInteractive"
                     />
-                    <script defer src="https://umami.ovel.sh/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
+                    <script defer src="https://umami.fukuin.dev/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
                     <RedditPixel />                    
                     <Suspense fallback={<div>Loading...</div>}>
                       {children}
