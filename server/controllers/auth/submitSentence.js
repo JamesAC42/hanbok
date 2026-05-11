@@ -451,6 +451,7 @@ const submitSentence = async (req, res) => {
             text: text,
             originalLanguage: originalLanguage,
             translationLanguage: translationLanguage,
+            doNotCache: { $ne: true },
             $or: [
                 { voice1Key: { $ne: null } },
                 { voice2Key: { $ne: null } }
@@ -462,7 +463,8 @@ const submitSentence = async (req, res) => {
             existingSentence = await db.collection('sentences').findOne({
                 text: text,
                 originalLanguage: originalLanguage,
-                translationLanguage: translationLanguage
+                translationLanguage: translationLanguage,
+                doNotCache: { $ne: true }
             });
         }
 
@@ -548,7 +550,8 @@ const submitSentence = async (req, res) => {
             originalLanguage,
             translationLanguage,
             dateCreated: new Date(),
-            fromImage: isImageSubmission
+            fromImage: isImageSubmission,
+            doNotCache: false
         };
 
         // Store in database

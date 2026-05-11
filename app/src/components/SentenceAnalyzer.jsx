@@ -27,6 +27,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [voice2, setVoice2] = useState(null);  
     const [voice1Slow, setVoice1Slow] = useState(null);
     const [voice2Slow, setVoice2Slow] = useState(null);
+    const [doNotCache, setDoNotCache] = useState(false);
     const [showTransition, setShowTransition] = useState(false);
     const [error, setError] = useState(null);
 
@@ -46,6 +47,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         setVoice2(null);
         setVoice1Slow(null);
         setVoice2Slow(null);
+        setDoNotCache(false);
     }
     
     useEffect(() => {
@@ -103,6 +105,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             setVoice2(result.sentence.voice2Key);
             setVoice1Slow(result.sentence.voice1SlowKey);
             setVoice2Slow(result.sentence.voice2SlowKey);
+            setDoNotCache(result.sentence.doNotCache === true);
             setShowTransition(false); // Reset transition when loading saved sentence
         } else {
             setError(result.error);
@@ -187,7 +190,9 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                     originalLanguage={originalLanguage}
                     translationLanguage={translationLanguage}
                     showTransition={showTransition}
-                    sentenceId={propSentenceId || searchParams.get('id')} />
+                    sentenceId={propSentenceId || searchParams.get('id')}
+                    doNotCache={doNotCache}
+                    onCacheStatusChange={setDoNotCache} />
                 </>
             )
             }

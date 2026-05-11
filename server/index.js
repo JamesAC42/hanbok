@@ -95,6 +95,7 @@ const addDeckCard = require('./controllers/auth/addDeckCard');
 
 const getRateLimits = require('./controllers/auth/getRateLimits');
 const { searchWordAudio, regenerateWordAudio } = require('./controllers/admin/wordAudioAdmin');
+const { markSentenceDoNotCache } = require('./controllers/admin/sentenceCache');
 
 const getEmailList = require('./controllers/admin/getEmailList');
 const getAdmins = require('./controllers/admin/getAdmins');
@@ -390,6 +391,10 @@ app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
 
 app.post('/api/admin/word-audio/regenerate', isAuthenticated, async (req, res) => {
     regenerateWordAudio(req, res);
+});
+
+app.patch('/api/admin/sentences/:sentenceId/do-not-cache', isAuthenticated, async (req, res) => {
+    markSentenceDoNotCache(req, res);
 });
 
 // Admin lyrics routes

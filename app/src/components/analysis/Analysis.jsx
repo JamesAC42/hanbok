@@ -13,6 +13,7 @@ import SettingsButton from '@/components/analysis/SettingsButton';
 import LyricalDevices from '@/components/analysis/LyricalDevices';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAdmin } from '@/contexts/AdminContext';
 import { usePopup } from '@/contexts/PopupContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 import getFontClass from '@/lib/fontClass';
@@ -30,10 +31,13 @@ const Analysis = ({
     voice2Slow,
     showTransition,
     sentenceId,
+    doNotCache,
+    onCacheStatusChange,
     isLyric
 }) => {
     const { t, language } = useLanguage();
     const { user } = useAuth();
+    const { isAdmin } = useAdmin();
     const { showPromoPopup } = usePopup();
     const [prevWord, setPrevWord] = useState(null);
     const [wordInfo, setWordInfo] = useState(false);
@@ -42,6 +46,9 @@ const Analysis = ({
     const [activeSection, setActiveSection] = useState('breakdown');
     const [isScrolled, setIsScrolled] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
+    const [cacheUpdating, setCacheUpdating] = useState(false);
+    const [cacheMessage, setCacheMessage] = useState('');
+    const [cacheError, setCacheError] = useState('');
 
     const sectionRefs = {
         breakdown: useRef(null),
@@ -162,6 +169,34 @@ const Analysis = ({
             setIsClosing(false);
         }, 200);
     }
+
+    const handleMarkDoNotCache = async () => {
+        if (!sentenceId || cacheUpdating || doNotCache) {
+            return;
+        }
+
+        setCacheUpdating(true);
+        setCacheMessage('');
+        setCacheError('');
+
+        try {
+            const response = await fetch(`/api/admin/sentences/${sentenceId}/do-not-cache`, {
+                method: 'PATCH'
+            });
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.error || 'Failed to update sentence cache status');
+            }
+
+            onCacheStatusChange?.(true);
+            setCacheMessage('This sentence will be regenerated on future submissions.');
+        } catch (error) {
+            setCacheError(error.message);
+        } finally {
+            setCacheUpdating(false);
+        }
+    };
     
     return(
         <div className={`${styles.analysis} ${showTransition ? styles.transition : ''}`}>
@@ -203,6 +238,25 @@ const Analysis = ({
                         <div className={styles.translation}>
                             {analysis.sentence.translation}
                         </div>
+
+                        {isAdmin?.(user?.email) && sentenceId && !isLyric && (
+                            <div className={styles.adminCacheControls}>
+                                <button
+                                    type="button"
+                                    onClick={handleMarkDoNotCache}
+                                    disabled={cacheUpdating || doNotCache}
+                                >
+                                    {doNotCache ? 'Marked do not cache' : cacheUpdating ? 'Marking...' : 'Do not cache'}
+                                </button>
+                                <span>
+                                    {doNotCache
+                                        ? 'Future matching submissions will regenerate this analysis.'
+                                        : 'Exclude this analysis from duplicate reuse.'}
+                                </span>
+                                {cacheMessage && <p className={styles.cacheMessage}>{cacheMessage}</p>}
+                                {cacheError && <p className={styles.cacheError}>{cacheError}</p>}
+                            </div>
+                        )}
 
                         <div className={styles.controls}>
                             <AudioPlayer

@@ -152,6 +152,18 @@ const collections = {
           extendedTextId: {
             bsonType: ["int", "null"],
             description: "ID of the extended text this sentence is associated with, if any."
+          },
+          doNotCache: {
+            bsonType: ["bool", "null"],
+            description: "Whether this sentence analysis should be excluded from future duplicate-analysis reuse."
+          },
+          cacheDisabledAt: {
+            bsonType: ["date", "null"],
+            description: "When this sentence was marked as excluded from duplicate-analysis reuse."
+          },
+          cacheDisabledBy: {
+            bsonType: ["int", "null"],
+            description: "Admin user ID that marked this sentence as excluded from duplicate-analysis reuse."
           }
         }
       }
