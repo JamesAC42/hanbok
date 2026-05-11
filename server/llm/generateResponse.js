@@ -1,12 +1,13 @@
 const {prompt_anthropic} = require('./anthropic');
 const {prompt_gemini} = require('./gemini');
-const {prompt_openai} = require('./openai');
+const {prompt_openai, prompt_openaiNano} = require('./openai');
 const {prompt_geminiThinking} = require('./geminiThinking');
 
 const models = {
     anthropic: prompt_anthropic,
     gemini: prompt_gemini,
     openai: prompt_openai,
+    openaiNano: prompt_openaiNano,
     geminiThinking: prompt_geminiThinking
 }
 

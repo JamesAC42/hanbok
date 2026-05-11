@@ -504,7 +504,7 @@ const submitSentence = async (req, res) => {
             // Generate new analysis
             parsedResponse = await generateResponse(
                 prompt(originalLanguage, translationLanguage) + text, 
-                'gemini'
+                'openaiNano'
             );
 
             if(!parsedResponse.isValid) {

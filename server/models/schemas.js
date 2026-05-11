@@ -734,7 +734,7 @@ const collections = {
     },
     indexes: [
       {
-        key: { _id: 1 },
+        key: { lyricId: 1 },
         unique: true
       },
       {
