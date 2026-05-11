@@ -3,9 +3,9 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-const createChatCompletionPrompt = (model) => async (text) => {
+const prompt_openai = async (text) => {
     const response = await openai.chat.completions.create({
-        model,
+        model: "gpt-4.1",
         messages: [
             {role: "user", content: text}
         ]
@@ -14,7 +14,4 @@ const createChatCompletionPrompt = (model) => async (text) => {
     return response.choices[0].message.content;
 }
 
-const prompt_openai = createChatCompletionPrompt("gpt-4.1");
-const prompt_openaiNano = createChatCompletionPrompt("gpt-5.4-nano");
-
-module.exports = {openai, prompt_openai, prompt_openaiNano};
+module.exports = {openai, prompt_openai};

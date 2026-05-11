@@ -102,7 +102,7 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
             const promptWithContext = buildContextualPrompt(sentencePromptFactory, job, sentenceText);
             const sentenceResponse = await generateResponse(
                 promptWithContext,
-                'openaiNano'
+                'gemini'
             );
 
             if (!sentenceResponse.isValid) {
@@ -142,7 +142,7 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
 
         const overallResponse = await generateResponse(
             EXTENDED_TEXT_ANALYSIS_PROMPT(job.originalLanguage, job.translationLanguage) + job.text,
-            'openaiNano'
+            'gemini'
         );
 
         if (!overallResponse.isValid) {

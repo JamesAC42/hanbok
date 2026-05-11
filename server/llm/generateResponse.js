@@ -1,14 +1,20 @@
 const {prompt_anthropic} = require('./anthropic');
 const {prompt_gemini} = require('./gemini');
-const {prompt_openai, prompt_openaiNano} = require('./openai');
+const {prompt_openai} = require('./openai');
 const {prompt_geminiThinking} = require('./geminiThinking');
 
 const models = {
     anthropic: prompt_anthropic,
     gemini: prompt_gemini,
     openai: prompt_openai,
-    openaiNano: prompt_openaiNano,
     geminiThinking: prompt_geminiThinking
+}
+
+const modelLabels = {
+    anthropic: 'anthropic/claude-sonnet-4-5',
+    gemini: 'gemini/gemini-flash-lite-latest',
+    openai: 'openai/gpt-4.1',
+    geminiThinking: 'gemini/gemini-3.1-flash-lite-preview'
 }
 
 const generateResponse = async (text, model) => {
@@ -17,7 +23,7 @@ const generateResponse = async (text, model) => {
     let parsedResponse = null;
     while(!parsedResponse && attempts < maxAttempts) {
         try {
-            console.log("Generating response...");
+            console.log(`Generating response with ${modelLabels[model] || model}...`);
             console.log(`Attempt ${attempts + 1} of ${maxAttempts}`);
             let response = await models[model](text);
 
