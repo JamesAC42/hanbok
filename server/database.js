@@ -8,7 +8,7 @@ let db;
 
 async function connectToDatabase() {
   try {
-    console.log(mongoUrl);
+    console.log('Connecting to MongoDB database:', process.env.MONGODB_DB);
     const client = await MongoClient.connect(mongoUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -76,23 +76,29 @@ async function connectToDatabase() {
       }
     }
 
+    // Helper to ignore index conflicts (error 85: IndexOptionsConflict, 11000: DuplicateKey)
+    // when setupCollections() already created an index with a different name on the same keys.
+    const safeCreateIndex = async (collection, keys, options = {}) => {
+      try {
+        await db.collection(collection).createIndex(keys, options);
+      } catch (error) {
+        if (error.code !== 85 && error.code !== 11000) {
+          throw error;
+        }
+      }
+    };
+
     // Add indexes for feedback collection
-    await db.collection('feedback').createIndex({ dateCreated: -1 });
-    await db.collection('feedback').createIndex({ parentId: 1 });
-    await db.collection('feedback').createIndex({ feedbackId: 1 }, { unique: true });
-    await db.collection('feedback').createIndex({ userId: 1 });
+    await safeCreateIndex('feedback', { dateCreated: -1 });
+    await safeCreateIndex('feedback', { parentId: 1 });
+    await safeCreateIndex('feedback', { feedbackId: 1 }, { unique: true });
+    await safeCreateIndex('feedback', { userId: 1 });
 
     // Add index for feature_usage collection
-    await db.collection('feature_usage').createIndex(
-      { userId: 1, feature: 1 }, 
-      { unique: true }
-    );
+    await safeCreateIndex('feature_usage', { userId: 1, feature: 1 }, { unique: true });
 
     // Add index for word_audio collection
-    await db.collection('word_audio').createIndex(
-      { language: 1, word: 1, hiraganaReading: 1 }, 
-      { unique: true }
-    );
+    await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });
 
     // Add indexes for lyrics collections
     try {
