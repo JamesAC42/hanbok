@@ -32,7 +32,7 @@ redisClient.on('connect', () => console.log('Redis Client Connected'));
 // Initialize Redis store
 const redisStore = new RedisStore({ 
     client: redisClient,
-    prefix: "hanbok:"
+    prefix: process.env.REDIS_SESSION_PREFIX || "hanbok:"
 });
 
 const { connectToDatabase, getDb, initializeCounters } = require('./database');
@@ -106,10 +106,10 @@ const { updateUser } = require('./controllers/admin/updateUser');
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
 const { generateLyricAnalysis } = require('./controllers/lyrics/generateLyricAnalysis');
 
-const PORT = 5666;
+const PORT = process.env.PORT || 5666;
 
 app.use(cors({
-  origin: process.env.LOCAL === 'true' ? 'http://localhost:3000' : 'https://hanbokstudy.com',
+  origin: process.env.FRONTEND_URL || (process.env.LOCAL === 'true' ? 'http://localhost:3000' : 'https://hanbokstudy.com'),
   credentials: true
 }));
 
@@ -129,11 +129,11 @@ app.use(
     store: redisStore,
     secret: 'domoarigato',
     resave: false,
-    name: 'hanbok-session',
+    name: process.env.SESSION_COOKIE_NAME || 'hanbok-session',
     saveUninitialized: false,
     cookie: {
       secure: process.env.SECURE_SESSION === 'true',
-      domain: process.env.LOCAL === 'true' ? 'localhost' : 'hanbokstudy.com',
+      domain: process.env.COOKIE_DOMAIN || (process.env.LOCAL === 'true' ? 'localhost' : 'hanbokstudy.com'),
       path: '/',
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
