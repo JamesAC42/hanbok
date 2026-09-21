@@ -17,7 +17,7 @@ const redisOptions = {
 // Create the analysis queue
 const analysisQueue = new Queue('lyrics-analysis', {
   redis: redisOptions,
-  prefix: 'bull:lyrics:',
+  prefix: process.env.BULL_QUEUE_PREFIX || 'bull:lyrics:',
   defaultJobOptions: {
     attempts: 3,
     backoff: {
