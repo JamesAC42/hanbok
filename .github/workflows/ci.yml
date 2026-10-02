@@ -30,6 +30,9 @@ jobs:
       - name: Syntax check entry point
         run: node --check index.js
 
+      - name: Run tests
+        run: npm test
+
   app-build:
     name: App Build
     runs-on: ubuntu-latest
