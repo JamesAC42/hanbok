@@ -1,4 +1,4 @@
-/* Kankoku Language Assistant - Popup Styles */
+/* Hanbok Study extension - popup styles */
 
 * {
   margin: 0;
@@ -41,7 +41,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
   color: white;
   border-bottom: 0.0625rem solid #e5e7eb;
 }
@@ -144,7 +144,7 @@ body {
 
 .setting-select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #b91c1c;
   box-shadow: 0 0 0 0.1875rem rgba(59, 130, 246, 0.1);
 }
 
@@ -190,7 +190,7 @@ body {
 }
 
 .toggle-input:checked + .toggle-label .toggle-slider {
-  background: #3b82f6;
+  background: #b91c1c;
 }
 
 .toggle-input:checked + .toggle-label .toggle-slider::before {
@@ -220,7 +220,7 @@ body {
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #3b82f6;
+  color: #b91c1c;
   margin-bottom: 0.25rem;
 }
 
@@ -267,12 +267,12 @@ body {
 }
 
 .btn-primary {
-  background: #3b82f6;
+  background: #b91c1c;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #2563eb;
+  background: #991b1b;
 }
 
 .btn-secondary {
@@ -353,7 +353,7 @@ body {
 }
 
 .footer-link {
-  color: #3b82f6;
+  color: #b91c1c;
   text-decoration: none;
   font-size: 0.75rem;
   font-weight: 500;
@@ -361,7 +361,7 @@ body {
 }
 
 .footer-link:hover {
-  color: #2563eb;
+  color: #991b1b;
   text-decoration: underline;
 }
 
@@ -415,7 +415,7 @@ body {
   margin-top: -0.625rem;
   margin-left: -0.625rem;
   border: 0.125rem solid #e5e7eb;
-  border-top-color: #3b82f6;
+  border-top-color: #b91c1c;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -453,7 +453,7 @@ body {
 .btn:focus,
 .setting-select:focus,
 .footer-link:focus {
-  outline: 0.125rem solid #3b82f6;
+  outline: 0.125rem solid #b91c1c;
   outline-offset: 0.125rem;
 }
 
@@ -490,3 +490,8 @@ body {
     animation: none;
   }
 } 
+.setting-hint {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}

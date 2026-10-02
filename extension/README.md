@@ -1,264 +1,42 @@
-# Kankoku Language Assistant - Chrome Extension
+# Hanbok Study Chrome extension
 
-A Chrome extension that enhances your language learning experience by integrating with the Kankoku language learning platform. This extension provides real-time vocabulary highlighting, sentence analysis, and native audio generation directly on any webpage.
+Brings Hanbok to any web page:
 
-## 🚀 Features
+- **Analyze**: select text and click **Analyze with Hanbok** (or right-click → *Analyze with Hanbok*). You get the translation, a word-by-word breakdown, grammar points, audio, and a link to the full analysis on hanbokstudy.com. Analyses count toward the same weekly quota as the site.
+- **Save words**: add any word from an analysis to your deck, and save the sentence to your library.
+- **See your words**: words you've saved for your learning language are highlighted as you browse. Click one to analyze it.
 
-### 1. **Vocabulary Highlighting**
-- Automatically highlights your vocabulary words from your Kankoku deck on any website
-- Customizable highlighting with hover effects and click interactions
-- Real-time highlighting that adapts to dynamic content
+The extension uses your hanbokstudy.com login. Log in on the site, then open the extension popup to pick your languages.
 
-### 2. **Sentence Analysis**
-- Right-click on selected text to analyze sentences with AI-powered grammar breakdown
-- Detailed word-by-word analysis with meanings and parts of speech
-- Grammar notes and contextual explanations
-- Support for Korean, Japanese, Chinese, and Russian
+## Install for development
 
-### 3. **Quick Word Addition**
-- Double-click any word to quickly add it to your vocabulary deck
-- Right-click context menu for adding selected words
-- Instant feedback and deck synchronization
+1. Go to `chrome://extensions`, turn on **Developer mode**, click **Load unpacked**, and pick this `extension/` folder.
+2. To use a local stack, run the server (`server/`, port 5666) and the app (`app/`, port 3000), log in at http://localhost:3000, then turn on **Use local development server** in the popup.
+3. After editing files, click the reload icon on the extension's card and refresh the page you're testing on.
 
-### 4. **Native Audio Generation**
-- Generate high-quality native pronunciation for any selected text
-- Automatic text-to-speech using ElevenLabs integration
-- Audio playback controls with visual feedback
+Highlighting tests run without a browser:
 
-### 5. **Smart UI Integration**
-- Non-intrusive popup interfaces that don't interfere with website functionality
-- Responsive design that works on all screen sizes
-- Accessibility features including keyboard navigation and high contrast support
-
-## 📁 File Structure
-
-```
-extension/
-├── manifest.json          # Extension configuration and permissions
-├── background.js          # Service worker for API communication
-├── content.js            # Content script for webpage interaction
-├── content.css           # Styles for content script elements
-├── popup.html            # Extension popup interface
-├── popup.css             # Popup styling
-├── popup.js              # Popup functionality
-├── icons/                # Extension icons (16, 32, 48, 128px)
-│   └── README.md         # Icon requirements documentation
-└── README.md             # This file
+```sh
+node --test extension/test/highlight.test.js
 ```
 
-## 🛠 Installation
+## How it fits together
 
-### For Development:
+| File | Role |
+|---|---|
+| `manifest.json` | MV3 manifest. Content scripts run on all http(s) pages except Hanbok itself. |
+| `background.js` | Service worker. Owns the context menu and every API call, so requests carry the site's session cookie. |
+| `content.js` | Selection button, analysis modal, toasts, and vocabulary highlighting. UI lives in a closed shadow root; page text is only written with `textContent`. |
+| `highlight.js` | Builds the vocabulary regex per language (Korean stem/particle handling, no word boundaries for ja/zh, Unicode boundaries elsewhere). |
+| `ui-styles.js` | Styles for the shadow-root UI, kept in JS so page CSP can't block them. |
+| `content.css` | The only styles injected into the page: the highlight itself. |
+| `popup.*` | Toolbar popup: login status, languages, toggles. |
+| `shared.js` | Language list (mirror of `server/supported_languages.js`), site URLs, default settings. |
 
-1. **Clone the repository** (if not already done):
-   ```bash
-   git clone <repository-url>
-   cd kankoku/extension
-   ```
+API endpoints used: `GET /api/session`, `GET /api/words`, `POST /api/words`, `POST /api/submit`, `POST /api/sentences/:id/save`, `GET /api/audio-url/:id`. All go to the site origin, which proxies `/api` to the server.
 
-2. **Open Chrome Extensions page**:
-   - Navigate to `chrome://extensions/`
-   - Enable "Developer mode" (toggle in top right)
+## Known limits
 
-3. **Load the extension**:
-   - Click "Load unpacked"
-   - Select the `extension` folder from this project
-
-4. **Configure the extension**:
-   - Click the extension icon in the toolbar
-   - Set your preferred learning and native languages
-   - Toggle "Use Local Development Server" if testing locally
-
-### For Production:
-
-1. **Package the extension**:
-   ```bash
-   # Create a ZIP file of the extension folder
-   zip -r kankoku-extension.zip extension/
-   ```
-
-2. **Upload to Chrome Web Store**:
-   - Go to [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole/)
-   - Upload the ZIP file and fill out store listing details
-
-## ⚙️ Configuration
-
-### Language Settings
-- **Learning Language**: The language you're studying (Korean, Japanese, Chinese, Russian)
-- **Native Language**: Your native language for translations (English, Spanish, French, German, Portuguese)
-
-### API Configuration
-- **Production**: Uses `https://hanbokstudy.com` API endpoints
-- **Development**: Can be configured to use `http://localhost:5666` for local testing
-
-### Authentication
-- Extension automatically detects authentication status with the Kankoku platform
-- Login through the extension popup or directly on the website
-- Vocabulary and analysis features require authentication
-
-## 🧪 Testing
-
-### Manual Testing
-
-1. **Vocabulary Highlighting**:
-   - Log in to Kankoku and add some vocabulary words to your deck
-   - Visit any website with text in your learning language
-   - Verify that your vocabulary words are highlighted with yellow background
-   - Test hover effects and click interactions
-
-2. **Sentence Analysis**:
-   - Select any sentence in your learning language
-   - Right-click and choose "Analyze with Kankoku"
-   - Verify the analysis popup appears with correct breakdown
-   - Test the save functionality
-
-3. **Word Addition**:
-   - Double-click on any word in your learning language
-   - Verify notification appears confirming addition to deck
-   - Check that highlighting updates immediately
-
-4. **Audio Generation**:
-   - Select text and right-click "Generate Native Audio"
-   - Verify audio plays correctly
-   - Test with different text lengths and languages
-
-5. **Popup Interface**:
-   - Click extension icon to open popup
-   - Test all settings changes
-   - Verify statistics update correctly
-   - Test quick action buttons
-
-### Automated Testing
-
-The extension can be tested using Chrome's built-in extension testing tools:
-
-```javascript
-// Example test script for console
-chrome.runtime.sendMessage({type: 'GET_VOCABULARY'}, (response) => {
-  console.log('Vocabulary count:', response?.length || 0);
-});
-```
-
-### Test Websites
-
-Good websites for testing the extension:
-- **Korean**: naver.com, joins.com, koreatimes.co.kr
-- **Japanese**: nhk.or.jp, asahi.com, mainichi.jp
-- **Chinese**: xinhuanet.com, people.com.cn
-- **Russian**: rbc.ru, lenta.ru, ria.ru
-
-## 🔧 Development
-
-### Key Components
-
-1. **Background Script (`background.js`)**:
-   - Handles API communication with Kankoku servers
-   - Manages authentication state
-   - Processes context menu interactions
-
-2. **Content Script (`content.js`)**:
-   - Injects vocabulary highlighting into webpages
-   - Handles text selection and user interactions
-   - Manages popup interfaces for analysis
-
-3. **Popup Interface (`popup.html/js/css`)**:
-   - Extension settings and configuration
-   - User statistics and progress tracking
-   - Quick actions and status indicators
-
-### API Integration
-
-The extension integrates with the following Kankoku API endpoints:
-
-- `GET /api/session` - Check authentication status
-- `GET /api/words` - Fetch user vocabulary
-- `POST /api/submit` - Analyze sentences
-- `POST /api/words` - Add words to deck
-- `POST /api/sentences/:id/generate-audio` - Generate audio
-- `GET /api/audio-url/:id` - Get audio file URLs
-
-### Message Passing
-
-The extension uses Chrome's message passing for communication:
-
-```javascript
-// Background to Content
-chrome.tabs.sendMessage(tabId, {
-  type: 'SHOW_ANALYSIS',
-  data: analysisResult
-});
-
-// Content to Background
-chrome.runtime.sendMessage({
-  type: 'ANALYZE_TEXT',
-  text: selectedText
-});
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **Extension not loading**:
-   - Check console for errors in `chrome://extensions/`
-   - Verify all files are present and properly formatted
-   - Try reloading the extension
-
-2. **Highlighting not working**:
-   - Ensure you're logged in to Kankoku
-   - Check that you have vocabulary words in your deck
-   - Verify the correct language is selected in settings
-
-3. **Analysis popup not appearing**:
-   - Check internet connection
-   - Verify API endpoints are accessible
-   - Look for error messages in browser console
-
-4. **Audio not playing**:
-   - Check browser audio permissions
-   - Verify site allows autoplay audio
-   - Test with different browsers
-
-### Debug Mode
-
-Enable debug logging by opening browser console and setting:
-
-```javascript
-localStorage.setItem('kankoku-debug', 'true');
-```
-
-## 🔒 Privacy & Security
-
-- Extension only accesses content on websites you visit (required for highlighting)
-- No data is stored locally except user preferences
-- All API communication uses HTTPS encryption
-- Authentication tokens are handled securely through Chrome's storage API
-
-## 📋 Requirements
-
-- Chrome browser version 88+ (Manifest V3 support)
-- Active internet connection for API features
-- Kankoku account for full functionality (highlighting works without login)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly across different websites and languages
-5. Submit a pull request with detailed description
-
-## 📄 License
-
-This extension is part of the Kankoku language learning platform. See the main project license for details.
-
-## 🆘 Support
-
-For issues or questions:
-- Open an issue in the main repository
-- Contact support through the Kankoku website
-- Check the troubleshooting section above
-
----
-
-**Happy language learning! 🌟** 
+- Korean highlighting matches the start of a word, so `공부하다` finds `공부해요`, but contracted forms like `기다려요` for `기다리다` are missed. Japanese verb conjugations aren't matched either.
+- Audio plays in the page, so sites with a strict media Content-Security-Policy block it; the full-analysis link still works.
+- Not yet published to the Chrome Web Store.

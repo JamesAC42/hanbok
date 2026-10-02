@@ -1,267 +1,229 @@
-// Extension configuration
-const API_BASE_URL = 'https://hanbokstudy.com'; // Use localhost:5666 for development
-const LOCAL_API_BASE_URL = 'http://localhost:5666';
+// Background service worker for the Hanbok extension.
+// All requests to the Hanbok API go through here: the worker has host
+// permissions for the site, so its fetches carry the user's session cookie
+// and aren't subject to the page's CORS or CSP.
+importScripts('shared.js');
 
-// Initialize extension
+const { SITE_URLS, DEFAULT_SETTINGS } = self.HANBOK;
+const VOCAB_CACHE_MS = 5 * 60 * 1000;
+const VOCAB_PAGE_SIZE = 200;
+
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('Kankoku Language Assistant installed');
-  
-  // Create context menu for sentence analysis
-  chrome.contextMenus.create({
-    id: 'analyzeSentence',
-    title: 'Analyze with Kankoku',
-    contexts: ['selection']
-  });
-  
-  // Create context menu for adding words to deck
-  chrome.contextMenus.create({
-    id: 'addToDeck',
-    title: 'Add to Vocabulary Deck',
-    contexts: ['selection']
-  });
-  
-  // Create context menu for generating audio
-  chrome.contextMenus.create({
-    id: 'generateAudio',
-    title: 'Generate Native Audio',
-    contexts: ['selection']
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: 'hanbokAnalyze',
+      title: 'Analyze "%s" with Hanbok',
+      contexts: ['selection']
+    });
   });
 });
 
-// Handle context menu clicks
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  const selectedText = info.selectionText?.trim();
-  if (!selectedText) return;
-  
-  switch (info.menuItemId) {
-    case 'analyzeSentence':
-      await analyzeSentence(selectedText, tab);
-      break;
-    case 'addToDeck':
-      await addWordToDeck(selectedText, tab);
-      break;
-    case 'generateAudio':
-      await generateAudio(selectedText, tab);
-      break;
-  }
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  const text = info.selectionText?.trim();
+  if (info.menuItemId !== 'hanbokAnalyze' || !text || !tab?.id) return;
+
+  // The content script runs the analysis so it can show progress and the
+  // result in the page. It isn't present on chrome:// or store pages.
+  chrome.tabs.sendMessage(tab.id, { type: 'ANALYZE_SELECTION', text }).catch(() => {});
 });
 
-// API helper functions
-async function getApiUrl() {
-  const result = await chrome.storage.sync.get(['useLocalApi']);
-  return result.useLocalApi ? LOCAL_API_BASE_URL : API_BASE_URL;
+async function getSettings() {
+  const stored = await chrome.storage.sync.get(Object.keys(DEFAULT_SETTINGS));
+  return { ...DEFAULT_SETTINGS, ...stored };
 }
 
-async function makeApiRequest(endpoint, options = {}) {
-  const baseUrl = await getApiUrl();
-  const url = `${baseUrl}${endpoint}`;
-  
+async function getSiteUrl() {
+  const { useLocalApi } = await getSettings();
+  return useLocalApi ? SITE_URLS.local : SITE_URLS.production;
+}
+
+// Returns { ok, status, data }. Never throws, so callers can show the
+// server's own error message.
+async function api(path, options = {}) {
+  const baseUrl = await getSiteUrl();
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`${baseUrl}${path}`, {
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-      },
-      ...options
+      ...options,
+      headers: { 'Content-Type': 'application/json', ...options.headers }
     });
-    
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`);
+    let data = null;
+    try {
+      data = await response.json();
+    } catch {
+      // Non-JSON body (e.g. a proxy error page)
     }
-    
-    return await response.json();
+    return { ok: response.ok, status: response.status, data };
   } catch (error) {
-    console.error('API request error:', error);
-    throw error;
+    console.error(`Hanbok API request to ${path} failed:`, error);
+    return { ok: false, status: 0, data: null };
   }
 }
 
-// Check authentication status
-async function checkAuth() {
-  try {
-    const data = await makeApiRequest('/api/session');
-    return data.isAuthenticated;
-  } catch (error) {
-    console.error('Auth check failed:', error);
-    return false;
-  }
+function errorMessage(result, fallback) {
+  if (result.status === 0) return 'Could not reach Hanbok. Check your connection.';
+  if (result.status === 401) return 'Please log in to Hanbok first.';
+  return result.data?.error?.message || result.data?.error || result.data?.message || fallback;
 }
 
-// Get user's vocabulary words
-async function getUserVocabulary() {
-  try {
-    if (!(await checkAuth())) {
-      return [];
-    }
-    
-    const data = await makeApiRequest('/api/words');
-    return data.words || [];
-  } catch (error) {
-    console.error('Failed to fetch vocabulary:', error);
-    return [];
-  }
+async function getSession() {
+  const result = await api('/api/session');
+  if (!result.ok || !result.data?.success) return { loggedIn: false };
+  // Drop any cached logged-out state now that we know better.
+  const { sourceLanguage } = await getSettings();
+  const cacheKey = vocabCacheKey(await getSiteUrl(), sourceLanguage);
+  const cached = (await chrome.storage.local.get(cacheKey))[cacheKey];
+  if (cached?.loggedIn === false) await chrome.storage.local.remove(cacheKey);
+
+  const { user } = result.data;
+  return { loggedIn: true, name: user?.name || user?.email || '' };
 }
 
-// Analyze selected sentence
-async function analyzeSentence(text, tab) {
-  try {
-    const settings = await chrome.storage.sync.get(['sourceLanguage', 'targetLanguage']);
-    const sourceLanguage = settings.sourceLanguage || 'ko';
-    const targetLanguage = settings.targetLanguage || 'en';
-    
-    const response = await makeApiRequest('/api/submit', {
-      method: 'POST',
-      body: JSON.stringify({
-        text: text,
-        originalLanguage: sourceLanguage,
-        translationLanguage: targetLanguage
-      })
-    });
-    
-    if (response.message?.isValid) {
-      // Send result to content script for display
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'SHOW_ANALYSIS',
-        data: {
-          analysis: response.message.analysis,
-          sentenceId: response.sentenceId,
-          originalLanguage: sourceLanguage,
-          translationLanguage: targetLanguage
-        }
-      });
-    } else {
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'SHOW_ERROR',
-        message: 'Failed to analyze sentence'
-      });
-    }
-  } catch (error) {
-    console.error('Sentence analysis failed:', error);
-    chrome.tabs.sendMessage(tab.id, {
-      type: 'SHOW_ERROR',
-      message: 'Failed to analyze sentence'
-    });
-  }
+function vocabCacheKey(siteUrl, language) {
+  return `vocab:${siteUrl}:${language}`;
 }
 
-// Add word to vocabulary deck
-async function addWordToDeck(text, tab) {
-  try {
-    if (!(await checkAuth())) {
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'SHOW_ERROR',
-        message: 'Please log in to add words to your deck'
-      });
-      return;
-    }
-    
-    const settings = await chrome.storage.sync.get(['sourceLanguage']);
-    const language = settings.sourceLanguage || 'ko';
-    
-    const response = await makeApiRequest('/api/words', {
-      method: 'POST',
-      body: JSON.stringify({
-        word: text,
-        language: language
-      })
-    });
-    
-    if (response.success) {
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'SHOW_SUCCESS',
-        message: `Added "${text}" to your vocabulary deck`
-      });
-      
-      // Refresh vocabulary highlighting
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'REFRESH_HIGHLIGHTING'
-      });
-    } else {
-      chrome.tabs.sendMessage(tab.id, {
-        type: 'SHOW_ERROR',
-        message: 'Failed to add word to deck'
-      });
-    }
-  } catch (error) {
-    console.error('Failed to add word:', error);
-    chrome.tabs.sendMessage(tab.id, {
-      type: 'SHOW_ERROR',
-      message: 'Failed to add word to deck'
-    });
-  }
+async function clearVocabularyCache() {
+  const all = await chrome.storage.local.get(null);
+  const keys = Object.keys(all).filter((key) => key.startsWith('vocab:'));
+  if (keys.length) await chrome.storage.local.remove(keys);
 }
 
-// Generate native audio for text
-async function generateAudio(text, tab) {
-  try {
-    const settings = await chrome.storage.sync.get(['sourceLanguage']);
-    const language = settings.sourceLanguage || 'ko';
-    
-    // First analyze the sentence to get sentence ID
-    const analysisResponse = await makeApiRequest('/api/submit', {
-      method: 'POST',
-      body: JSON.stringify({
-        text: text,
-        originalLanguage: language,
-        translationLanguage: 'en'
-      })
-    });
-    
-    if (!analysisResponse.message?.isValid) {
-      throw new Error('Failed to analyze text for audio generation');
+// Saved words for the learning language, as a list of strings to highlight.
+async function getVocabulary({ force = false } = {}) {
+  const { sourceLanguage } = await getSettings();
+  const siteUrl = await getSiteUrl();
+  const cacheKey = vocabCacheKey(siteUrl, sourceLanguage);
+
+  if (!force) {
+    const cached = (await chrome.storage.local.get(cacheKey))[cacheKey];
+    if (cached && Date.now() - cached.fetchedAt < VOCAB_CACHE_MS) {
+      return { loggedIn: cached.loggedIn !== false, words: cached.words };
     }
-    
-    const sentenceId = analysisResponse.sentenceId;
-    
-    // Generate audio for the sentence
-    const audioResponse = await makeApiRequest(`/api/sentences/${sentenceId}/generate-audio`, {
-      method: 'POST'
-    });
-    
-    if (audioResponse.success) {
-      // Get audio URL
-      const audioUrlResponse = await makeApiRequest(`/api/audio-url/${sentenceId}`);
-      
-      if (audioUrlResponse.success) {
-        chrome.tabs.sendMessage(tab.id, {
-          type: 'PLAY_AUDIO',
-          audioUrl: audioUrlResponse.audioUrl
-        });
-      }
-    } else {
-      throw new Error('Failed to generate audio');
-    }
-  } catch (error) {
-    console.error('Audio generation failed:', error);
-    chrome.tabs.sendMessage(tab.id, {
-      type: 'SHOW_ERROR',
-      message: 'Failed to generate audio'
-    });
   }
+
+  const words = new Set();
+  let page = 1;
+  let totalPages = 1;
+  do {
+    const query = new URLSearchParams({
+      page: String(page),
+      limit: String(VOCAB_PAGE_SIZE),
+      originalLanguage: sourceLanguage
+    });
+    const result = await api(`/api/words?${query}`);
+    if (result.status === 401) {
+      // Cache the logged-out state too, so browsing while logged out
+      // doesn't send a request per page. getSession clears it once the
+      // user is logged in (e.g. when they open the popup).
+      await chrome.storage.local.set({ [cacheKey]: { fetchedAt: Date.now(), loggedIn: false, words: [] } });
+      return { loggedIn: false, words: [] };
+    }
+    if (!result.ok || !result.data?.success) {
+      return { loggedIn: true, words: [], error: errorMessage(result, 'Failed to load your words') };
+    }
+    for (const word of result.data.words || []) {
+      if (word.originalWord) words.add(word.originalWord.trim());
+    }
+    totalPages = result.data.totalPages || 1;
+    page += 1;
+  } while (page <= totalPages);
+
+  const list = [...words].filter(Boolean);
+  await chrome.storage.local.set({ [cacheKey]: { fetchedAt: Date.now(), words: list } });
+  return { loggedIn: true, words: list };
 }
 
-// Handle messages from content script and popup
+async function analyze(text) {
+  const { sourceLanguage, targetLanguage } = await getSettings();
+  const result = await api('/api/submit', {
+    method: 'POST',
+    body: JSON.stringify({
+      text,
+      originalLanguage: sourceLanguage,
+      translationLanguage: targetLanguage
+    })
+  });
+
+  const message = result.data?.message;
+  if (!message?.isValid) {
+    return {
+      success: false,
+      error: message?.error?.message || errorMessage(result, 'Failed to analyze the text')
+    };
+  }
+
+  return {
+    success: true,
+    analysis: message.analysis,
+    sentenceId: result.data.sentenceId,
+    originalLanguage: result.data.originalLanguage,
+    translationLanguage: result.data.translationLanguage,
+    weeklyQuota: result.data.weeklyQuota || null,
+    siteUrl: await getSiteUrl()
+  };
+}
+
+async function addWord(word) {
+  const result = await api('/api/words', {
+    method: 'POST',
+    body: JSON.stringify(word)
+  });
+  if (!result.ok || !result.data?.success) {
+    if (result.data?.reachedLimit) {
+      return { success: false, error: 'You have reached your saved words limit.' };
+    }
+    return { success: false, error: errorMessage(result, 'Failed to add the word') };
+  }
+  await clearVocabularyCache();
+  return { success: true };
+}
+
+async function saveSentence(sentenceId) {
+  const result = await api(`/api/sentences/${encodeURIComponent(sentenceId)}/save`, { method: 'POST' });
+  if (!result.ok || !result.data?.success) {
+    if (result.data?.reachedLimit) {
+      return { success: false, error: 'You have reached your saved sentences limit.' };
+    }
+    return { success: false, error: errorMessage(result, 'Failed to save the sentence') };
+  }
+  return { success: true };
+}
+
+async function getAudio(sentenceId) {
+  const result = await api(`/api/audio-url/${encodeURIComponent(sentenceId)}`);
+  const url = result.data?.voice1 || result.data?.voice2;
+  if (!result.ok || !url) {
+    return { success: false, error: errorMessage(result, 'Audio is not available for this text') };
+  }
+  return { success: true, url };
+}
+
+const handlers = {
+  GET_SESSION: () => getSession(),
+  GET_VOCABULARY: (message) => getVocabulary({ force: message.force }),
+  ANALYZE: (message) => analyze(message.text),
+  ADD_WORD: (message) => addWord(message.word),
+  SAVE_SENTENCE: (message) => saveSentence(message.sentenceId),
+  GET_AUDIO: (message) => getAudio(message.sentenceId),
+  GET_SITE_URL: () => getSiteUrl()
+};
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  switch (message.type) {
-    case 'GET_VOCABULARY':
-      getUserVocabulary().then(sendResponse);
-      return true; // Keep message channel open for async response
-      
-    case 'CHECK_AUTH':
-      checkAuth().then(sendResponse);
-      return true;
-      
-    case 'ANALYZE_TEXT':
-      analyzeSentence(message.text, sender.tab).then(() => sendResponse({ success: true }));
-      return true;
-      
-    case 'ADD_WORD':
-      addWordToDeck(message.word, sender.tab).then(() => sendResponse({ success: true }));
-      return true;
-      
-    case 'GENERATE_AUDIO':
-      generateAudio(message.text, sender.tab).then(() => sendResponse({ success: true }));
-      return true;
+  const handler = handlers[message?.type];
+  if (!handler) return false;
+  handler(message)
+    .then(sendResponse)
+    .catch((error) => {
+      console.error(`Hanbok ${message.type} failed:`, error);
+      sendResponse({ success: false, error: 'Something went wrong' });
+    });
+  return true; // Keep the channel open for the async response
+});
+
+// Changing language or server invalidates which words apply.
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'sync' && (changes.sourceLanguage || changes.useLocalApi)) {
+    clearVocabularyCache();
   }
-}); 
+});

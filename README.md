@@ -28,22 +28,9 @@ Originally a Korean language learning app, Hanbok is now a general purpose langu
 
 ## Chrome Extension
 
-🚀 **New!** The Kankoku Language Assistant Chrome extension brings your language learning directly to any webpage you visit.
+The `extension/` folder holds a Chrome extension that brings Hanbok to any web page: select text to analyze it, save words from the analysis to your deck, and see the words you've saved highlighted as you browse. It uses your hanbokstudy.com login.
 
-### Key Features:
-- **Vocabulary Highlighting**: Automatically highlights your vocabulary words from your deck on any website
-- **Sentence Analysis**: Right-click on text to get AI-powered grammar breakdowns and translations
-- **Quick Word Addition**: Double-click words to instantly add them to your vocabulary deck
-- **Native Audio Generation**: Generate high-quality pronunciation for any selected text
-- **Smart Integration**: Non-intrusive popups that work seamlessly with any website
-
-### Installation:
-1. Navigate to `chrome://extensions/` in Chrome
-2. Enable "Developer mode"
-3. Click "Load unpacked" and select the `/extension` folder
-4. Configure your language settings and start learning!
-
-📖 **[Full Extension Documentation](./extension/README.md)**
+To try it, open `chrome://extensions`, turn on Developer mode, click **Load unpacked**, and choose the `extension/` folder. See [extension/README.md](./extension/README.md) for details.
 
 ## Demo
 
