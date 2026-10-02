@@ -7,7 +7,8 @@ export const fr = {
     languages: {
         korean: 'Coréen',
         english: 'Anglais',
-        chinese: 'Chinois',
+        chinese: 'Chinois (simplifié)',
+        chineseTraditional: 'Chinois (traditionnel)',
         japanese: 'Japonais',
         spanish: 'Espagnol',
         italian: 'Italien',

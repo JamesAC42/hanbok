@@ -1,6 +1,7 @@
 export const supportedLanguages = {
     'ko': 'korean',
     'zh': 'chinese',
+    'zh-TW': 'chineseTraditional',
     'ja': 'japanese',
     'es': 'spanish',
     'it': 'italian',
@@ -15,6 +16,7 @@ export const supportedLanguages = {
 export const supportedAnalysisLanguages = {
     'ko': 'korean',
     'zh': 'chinese',
+    'zh-TW': 'chineseTraditional',
     'ja': 'japanese',
     'es': 'spanish',
     'it': 'italian',

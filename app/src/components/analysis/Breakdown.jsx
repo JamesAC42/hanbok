@@ -51,7 +51,7 @@ const Breakdown = ({
 	}
   
 	const renderParticles = (item) => {
-		if(language === "zh" || language === "ja" || language === "ko") return null;
+		if(language === "zh" || language === "zh-TW" || language === "ja" || language === "ko") return null;
 		return item.grammar?.particles?.map((particle, index) => (
 			<div 
 				key={index}
@@ -75,7 +75,7 @@ const Breakdown = ({
 	}
 
 	const hasPronunciation = () => {
-		if(language === "zh" || language === "ja" || language === "ko" || language === "ru") return styles.hasPronunciation;
+		if(language === "zh" || language === "zh-TW" || language === "ja" || language === "ko" || language === "ru") return styles.hasPronunciation;
 		return "";
 	}
 

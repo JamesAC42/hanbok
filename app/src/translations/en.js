@@ -8,7 +8,8 @@ export const en = {
     languages: {
         korean: 'Korean',
         english: 'English',
-        chinese: 'Chinese',
+        chinese: 'Chinese (Simplified)',
+        chineseTraditional: 'Chinese (Traditional)',
         japanese: 'Japanese',
         spanish: 'Spanish',
         italian: 'Italian',

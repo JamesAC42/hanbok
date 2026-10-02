@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const ANALYSIS_PROMPT = (originalLanguage = 'vi', translationLanguage = 'en') => `
+const ANALYSIS_PROMPT = (originalLanguage = 'vi', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}
 You are a Vietnamese language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is either a proper Vietnamese sentence or a valid Vietnamese word. Then analyze the input and return a JSON response.
 
 Rules for validation:

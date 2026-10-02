@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule, isChinese } = require('./chineseScript');
 
-const SYNONYMS_PROMPT = (originalLanguage = 'ko', translationLanguage = 'en') => `You are a ${SupportedLanguages[originalLanguage]} language thesaurus that provides explanations in ${SupportedLanguages[translationLanguage]}. Analyze the given ${SupportedLanguages[originalLanguage]} word and return a JSON response containing its synonyms and antonyms. Each word should include both ${SupportedLanguages[originalLanguage]} and ${SupportedLanguages[translationLanguage]} translations.
+const SYNONYMS_PROMPT = (originalLanguage = 'ko', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}You are a ${SupportedLanguages[originalLanguage]} language thesaurus that provides explanations in ${SupportedLanguages[translationLanguage]}. Analyze the given ${SupportedLanguages[originalLanguage]} word and return a JSON response containing its synonyms and antonyms. Each word should include both ${SupportedLanguages[originalLanguage]} and ${SupportedLanguages[translationLanguage]} translations.
 
 IMPORTANT: Return ONLY a pure JSON object. Do not include any markdown formatting, backticks, or explanatory text. The response must be valid JSON that can be parsed directly.
 
@@ -24,7 +25,7 @@ Response format must be exactly this structure:
       "original": "${SupportedLanguages[originalLanguage]} synonym",
       "translation": "${SupportedLanguages[translationLanguage]} translation"
       ${originalLanguage === 'ja' ? '"reading": "hiragana/katakana reading showing on/kunyomi pronunciation"' 
-        : originalLanguage === 'zh' ? '"reading": "pinyin with tone marks"' : ''}
+        : isChinese(originalLanguage) ? '"reading": "pinyin with tone marks"' : ''}
     }
   ],
   "antonyms": [
@@ -32,7 +33,7 @@ Response format must be exactly this structure:
       "original": "${SupportedLanguages[originalLanguage]} antonym",
       "translation": "${SupportedLanguages[translationLanguage]} translation"
       ${originalLanguage === 'ja' ? '"reading": "hiragana/katakana reading showing on/kunyomi pronunciation"' 
-        : originalLanguage === 'zh' ? '"reading": "pinyin with tone marks"' : ''}
+        : isChinese(originalLanguage) ? '"reading": "pinyin with tone marks"' : ''}
     }
   ]
 }
@@ -45,7 +46,7 @@ REMEMBER:
 5. Must be valid JSON that can be parsed with JSON.parse()
 6. Include error object only if isValid is false
 7. Include synonyms and antonyms arrays only if isValid is true
-${originalLanguage === 'ja' ? '\n8. For Japanese words, always include the reading field with the proper hiragana/katakana on/kunyomi reading based on context' : originalLanguage === 'zh' ? '\n8. For Chinese words, always include the reading field with the correct pinyin including proper tone marks' : ''}
+${originalLanguage === 'ja' ? '\n8. For Japanese words, always include the reading field with the proper hiragana/katakana on/kunyomi reading based on context' : isChinese(originalLanguage) ? '\n8. For Chinese words, always include the reading field with the correct pinyin including proper tone marks' : ''}
 
 ${SupportedLanguages[originalLanguage]} word to analyze: `;
 

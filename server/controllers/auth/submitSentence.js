@@ -1,6 +1,7 @@
 const generateResponse = require('../../llm/generateResponse');
 const basicPrompt = require('../../llm/prompt');
 const chinesePrompt = require('../../llm/prompt_chinese');
+const { isChinese } = require('../../llm/chineseScript');
 const japanesePrompt = require('../../llm/prompt_japanese');
 const russianPrompt = require('../../llm/prompt_russian');
 const indonesianPrompt = require('../../llm/prompt_indonesian');
@@ -489,7 +490,7 @@ const submitSentence = async (req, res) => {
         } else {
 
             let prompt = basicPrompt.ANALYSIS_PROMPT;
-            if(originalLanguage === 'zh') {
+            if(isChinese(originalLanguage)) {
                 prompt = chinesePrompt.ANALYSIS_PROMPT;
             } else if(originalLanguage === 'ja') {
                 prompt = japanesePrompt.ANALYSIS_PROMPT;

@@ -7,7 +7,8 @@ export const tr = {
     languages: {
         korean: 'Korece',
         english: 'İngilizce',
-        chinese: 'Çince',
+        chinese: 'Çince (Basitleştirilmiş)',
+        chineseTraditional: 'Çince (Geleneksel)',
         japanese: 'Japonca',
         spanish: 'İspanyolca',
         italian: 'İtalyanca',

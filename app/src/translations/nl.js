@@ -7,7 +7,8 @@ export const nl = {
     languages: {
         korean: 'Koreaans',
         english: 'Engels',
-        chinese: 'Chinees',
+        chinese: 'Chinees (vereenvoudigd)',
+        chineseTraditional: 'Chinees (traditioneel)',
         japanese: 'Japans',
         spanish: 'Spaans',
         italian: 'Italiaans',

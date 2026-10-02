@@ -2,6 +2,7 @@ import { en } from './en';
 import { ko } from './ko';
 import { ja } from './ja';
 import { zh } from './zh';
+import { zhTW } from './zh-TW';
 import { es } from './es';
 import { it } from './it';
 import { fr } from './fr';
@@ -19,6 +20,7 @@ export const resources = {
     ko,
     ja,
     zh,
+    'zh-TW': zhTW,
     es,
     it,
     fr,
