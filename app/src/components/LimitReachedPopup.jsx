@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
+import { track } from '@/lib/analytics';
 
 const LimitReachedPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
@@ -46,7 +48,12 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
         }
     };
 
+    useEffect(() => {
+        track('limit_hit', { type });
+    }, [type]);
+
     const handleUpgradeClick = () => {
+        track('limit_upgrade_click', { type });
         router.push('/pricing');
         onClose();
     };

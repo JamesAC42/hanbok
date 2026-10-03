@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { track } from '@/lib/analytics';
 import ContentPage from '@/components/ContentPage';
 import Footer from '@/components/Footer';
 
@@ -27,6 +28,10 @@ const PRICE_IDS = {
 //     AUDIO_PACK: 'price_1QtEdODv6kE7GataOemGLYiK',
 //     MONTHLY_SUB: 'price_1QtEcWDv6kE7Gata4QDYmETm'
 // };
+
+const PLAN_BY_PRICE_ID = Object.fromEntries(
+    Object.entries(PRICE_IDS).map(([plan, id]) => [id, plan])
+);
 
 const PRICING = {
     basic: {
@@ -84,7 +89,12 @@ const Pricing = () => {
         document.title = t('pricing.pageTitle');
     }, [t]);
 
+    useEffect(() => {
+        track('pricing_view');
+    }, []);
+
     const handlePurchase = async (priceId) => {
+        track('checkout_start', { plan: PLAN_BY_PRICE_ID[priceId] || 'unknown', loggedIn: !!user });
         if (!user) {
             router.push('/login');
             return;

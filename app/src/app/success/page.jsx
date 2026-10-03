@@ -8,6 +8,7 @@ import successStyles from '@/styles/components/success.module.scss';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MaterialSymbolsCheckCircleOutlineRounded } from '@/components/icons/CheckCircle';
+import { track } from '@/lib/analytics';
 
 const SuccessContent = () => {
     const router = useRouter();
@@ -34,6 +35,18 @@ const SuccessContent = () => {
             const timer = setTimeout(async () => {
                 await fetchSession();
                 setProcessingPayment(false);
+
+                // Fire once per checkout session so refreshes don't double count
+                const sessionId = searchParams.get('session_id');
+                const trackedKey = `purchaseTracked:${sessionId}`;
+                try {
+                    if (sessionId && !sessionStorage.getItem(trackedKey)) {
+                        sessionStorage.setItem(trackedKey, '1');
+                        track('purchase');
+                    }
+                } catch (e) {
+                    // sessionStorage unavailable; skip tracking
+                }
             }, 2000);
             return () => clearTimeout(timer);
         }
