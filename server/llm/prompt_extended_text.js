@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const EXTENDED_TEXT_ANALYSIS_PROMPT = (originalLanguage = 'ko', translationLanguage = 'en') => `You are a ${SupportedLanguages[originalLanguage]} language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. You will analyze an extended text containing multiple sentences and provide:
+const EXTENDED_TEXT_ANALYSIS_PROMPT = (originalLanguage = 'ko', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}You are a ${SupportedLanguages[originalLanguage]} language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. You will analyze an extended text containing multiple sentences and provide:
 Overall analysis of the text as a whole
 
 Return a JSON response in this format:

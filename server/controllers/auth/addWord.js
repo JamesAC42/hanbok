@@ -91,7 +91,8 @@ const addWord = async (req, res) => {
             const languageNames = {
                 'ko': 'Korean',
                 'en': 'English',
-                'zh': 'Chinese',
+                'zh': 'Chinese (Simplified)',
+                'zh-TW': 'Chinese (Traditional)',
                 'ja': 'Japanese',
                 'es': 'Spanish',
                 'it': 'Italian',

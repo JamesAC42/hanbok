@@ -104,3 +104,5 @@ const generateResponse = async (text, model) => {
 }
 
 module.exports = generateResponse;
+module.exports.extractJsonText = extractJsonText;
+module.exports.isRetryableApiError = isRetryableApiError;

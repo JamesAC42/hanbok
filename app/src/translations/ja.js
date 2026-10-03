@@ -7,7 +7,8 @@ export const ja = {
     languages: {
         korean: '韓国語',
         english: '英語',
-        chinese: '中国語',
+        chinese: '中国語（簡体字）',
+        chineseTraditional: '中国語（繁体字）',
         japanese: '日本語',
         spanish: 'スペイン語',
         italian: 'イタリア語',

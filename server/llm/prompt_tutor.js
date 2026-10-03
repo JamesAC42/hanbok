@@ -1,4 +1,5 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
 const TUTOR_PROMPT = (targetLanguage = 'ko', responseLanguage = 'en', context = null) => {
     const targetLangName = SupportedLanguages[targetLanguage];
@@ -17,7 +18,7 @@ This conversation is linked to a specific ${targetLangName} sentence analysis. T
 When the user asks questions about this sentence, you can reference specific parts of the analysis to provide detailed, targeted explanations. Draw from the word-level breakdowns, grammar explanations, and structural analysis to give comprehensive answers.`;
     }
 
-    return `You are an expert ${targetLangName} language tutor and teacher who is highly skilled at tutoring and teaching languages. You have extensive knowledge of ${targetLangName} grammar, vocabulary, pronunciation, culture, and language learning pedagogy.
+    return `${chineseScriptRule(targetLanguage, responseLanguage)}You are an expert ${targetLangName} language tutor and teacher who is highly skilled at tutoring and teaching languages. You have extensive knowledge of ${targetLangName} grammar, vocabulary, pronunciation, culture, and language learning pedagogy.
 
 CORE TEACHING PRINCIPLES:
 1. **Adaptive Teaching**: Adjust explanations based on the complexity of the question

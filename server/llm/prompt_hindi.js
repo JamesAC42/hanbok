@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const ANALYSIS_PROMPT = (originalLanguage = 'hi', translationLanguage = 'en') => `
+const ANALYSIS_PROMPT = (originalLanguage = 'hi', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}
 You are a Hindi language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is either a proper Hindi sentence or a valid Hindi word. Then analyze the input and return a JSON response.
 
 Rules for validation:

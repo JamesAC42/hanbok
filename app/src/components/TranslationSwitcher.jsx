@@ -16,6 +16,12 @@ const TranslationSwitcher = ({
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    const languageKey = supportedLanguages[language] || '';
+    const localizedLanguageName = t(`languages.${languageKey}`);
+    const languageName = localizedLanguageName === `languages.${languageKey}`
+        ? capitalize(languageKey)
+        : localizedLanguageName;
+
     return (
         <div className={styles.translationSwitcherOuter}>
 
@@ -35,7 +41,7 @@ const TranslationSwitcher = ({
                         onClick={() => setTranslationMode(false)} 
                         className={`${styles.translateSwitcherItem} ${!translationMode ? styles.active : ''}`}>
                         <div className={styles.itemText}>
-                            {t('sentenceForm.translateMode.analysis').replace('{language}', capitalize(supportedLanguages[language]))}
+                            {t('sentenceForm.translateMode.analysis').replace('{language}', languageName)}
                         </div>
                     </div>
                     <div 

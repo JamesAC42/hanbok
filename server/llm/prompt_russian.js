@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const ANALYSIS_PROMPT = (originalLanguage = 'ru', translationLanguage = 'en') => `You are a ${SupportedLanguages[originalLanguage]} language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is either a proper ${SupportedLanguages[originalLanguage]} sentence or a valid ${SupportedLanguages[originalLanguage]} word. Then analyze the input and return a JSON response.
+const ANALYSIS_PROMPT = (originalLanguage = 'ru', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}You are a ${SupportedLanguages[originalLanguage]} language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is either a proper ${SupportedLanguages[originalLanguage]} sentence or a valid ${SupportedLanguages[originalLanguage]} word. Then analyze the input and return a JSON response.
 
 Rules for validation:
 1. The input should contain ${SupportedLanguages[originalLanguage]} characters (Cyrillic)

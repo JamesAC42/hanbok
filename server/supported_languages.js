@@ -1,7 +1,8 @@
 const SupportedLanguages = {
     'ko': 'korean',
     'en': 'english',
-    'zh': 'chinese',
+    'zh': 'simplified chinese',
+    'zh-TW': 'traditional chinese',
     'ja': 'japanese',
     'es': 'spanish',
     'it': 'italian',

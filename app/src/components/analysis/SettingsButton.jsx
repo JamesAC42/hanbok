@@ -116,7 +116,7 @@ const SettingsButton = ({ showPronunciation, setShowPronunciation, language }) =
                     }}
                 >
                     {
-                        ['ko', 'ja', 'zh', 'ru'].includes(language) ?
+                        ['ko', 'ja', 'zh', 'zh-TW', 'ru'].includes(language) ?
                         <div className={styles.settingsMenuItem}>
                             <label className={styles.settingsToggle}>
                                 <input 

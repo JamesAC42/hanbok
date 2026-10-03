@@ -13,6 +13,7 @@ const SupportedLanguages = require('../supported_languages');
 const getSentenceAnalysisPrompt = (originalLanguage) => {
     switch (originalLanguage) {
         case 'zh':
+        case 'zh-TW':
             return chinesePrompt.ANALYSIS_PROMPT;
         case 'ja':
             return japanesePrompt.ANALYSIS_PROMPT;

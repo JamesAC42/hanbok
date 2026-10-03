@@ -3,6 +3,7 @@ const {prompt_gemini} = require('./gemini');
 const {prompt_openai} = require('./openai');
 const {prompt_geminiThinking} = require('./geminiThinking');
 const { TUTOR_PROMPT } = require('./prompt_tutor');
+const { isChinese } = require('./chineseScript');
 
 const models = {
     anthropic: prompt_anthropic,
@@ -100,7 +101,7 @@ const generateTutorResponse = async (
         // Return a helpful fallback response
         return `## I'm here to help!
 
-I apologize, but I'm experiencing some technical difficulties right now. However, I'm still here to help you learn ${targetLanguage === 'ko' ? 'Korean' : targetLanguage === 'ja' ? 'Japanese' : targetLanguage === 'zh' ? 'Chinese' : 'this language'}!
+I apologize, but I'm experiencing some technical difficulties right now. However, I'm still here to help you learn ${targetLanguage === 'ko' ? 'Korean' : targetLanguage === 'ja' ? 'Japanese' : isChinese(targetLanguage) ? 'Chinese' : 'this language'}!
 
 Could you please try rephrasing your question? I'm ready to help with:
 

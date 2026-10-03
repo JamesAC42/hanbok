@@ -4,6 +4,7 @@ const renderPronunciation = (item, language) => {
     try {
         switch (language) {
             case 'zh':
+            case 'zh-TW':
                 return item.reading;
             case 'ja':
                 return item.reading;

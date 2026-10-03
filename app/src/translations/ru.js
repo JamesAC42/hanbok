@@ -7,7 +7,8 @@ export const ru = {
     languages: {
         korean: 'Корейский',
         english: 'Английский',
-        chinese: 'Китайский',
+        chinese: 'Китайский (упрощённый)',
+        chineseTraditional: 'Китайский (традиционный)',
         japanese: 'Японский',
         spanish: 'Испанский',
         italian: 'Итальянский',
