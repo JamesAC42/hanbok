@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { track, getAttribution } from '@/lib/analytics';
 
 const AuthContext = createContext();
 
@@ -77,11 +78,17 @@ export function AuthProvider({ children }) {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ token: userDataOrGoogleResponse.credential })
+                    body: JSON.stringify({
+                        token: userDataOrGoogleResponse.credential,
+                        attribution: getAttribution()
+                    })
                 });
                 const data = await loginResponse.json();
                 console.log("Login response:", data);
                 if(data.success) {
+                    if (data.isNewUser) {
+                        track('signup', { method: 'google' });
+                    }
                     setUser(data.user);
                 }
             } catch (error) {

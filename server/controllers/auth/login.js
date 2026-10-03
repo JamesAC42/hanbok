@@ -4,11 +4,12 @@ const { getDb } = require('../../database');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
+const { sanitizeAttribution } = require('../../utils/attribution');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const login = async (req, res, redisClient) => {
-    const { token } = req.body;
+    const { token, attribution } = req.body;
     if (!token) {
         return res.status(500).send({ success: false, message: "Invalid token" });
     }
@@ -27,6 +28,8 @@ const login = async (req, res, redisClient) => {
 
         const db = getDb();
         const usersCollection = db.collection('users');
+
+        let isNewUser = false;
 
         // Find existing user by googleId (primary) or email (fallback)
         let user = await usersCollection.findOne({
@@ -115,7 +118,13 @@ const login = async (req, res, redisClient) => {
                 remainingSentenceAnalyses: 0
             };
 
+            const cleanAttribution = sanitizeAttribution(attribution);
+            if (cleanAttribution) {
+                user.attribution = cleanAttribution;
+            }
+
             await usersCollection.insertOne(user);
+            isNewUser = true;
             
             // Check if we have rate limit data for this IP and migrate it to the new user account
             const ipAddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
@@ -219,6 +228,7 @@ const login = async (req, res, redisClient) => {
 
         res.status(200).json({
             success: true,
+            isNewUser,
             user: {
                 userId: user.userId,
                 name: user.name,
