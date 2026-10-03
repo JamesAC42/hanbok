@@ -21,7 +21,7 @@
     z-index: 2;
     
     .heroTitle {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 4rem;
         color: #fff;
         margin-bottom: 1rem;
@@ -33,7 +33,7 @@
     }
     
     .heroSubtitle {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.5rem;
         color: #b8c5d6;
         max-width: 40rem;
@@ -79,7 +79,7 @@
 }
 
 .sectionTitle {
-    font-family: var(--font-lilita);
+    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
     font-size: 2.5rem;
     color: #fff;
     text-align: center;
@@ -128,7 +128,7 @@
         flex: 1;
         
         h4 {
-            font-family: var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size: 1.25rem;
             color: #181a29;
             margin-bottom: 0.5rem;
@@ -272,7 +272,7 @@
         text-align: center;
         
         h3 {
-            font-family: var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size: 1.5rem;
             color: #181a29;
             margin-bottom: 0.5rem;
@@ -350,7 +350,7 @@
             }
             
             h2 {
-                font-family: var(--font-lilita);
+                font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
                 font-size: 2.5rem;
                 color: #fff;
                 margin: 0;
@@ -403,7 +403,7 @@
             }
             
             h3 {
-                font-family: var(--font-lilita);
+                font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
                 font-size: 1.5rem;
                 color: #181a29;
                 margin-bottom: 1rem;
@@ -524,7 +524,7 @@
     }
     
     h3 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 1.5rem;
         color: #be185d;
         margin-bottom: 1rem;
@@ -580,7 +580,7 @@
     text-align: center;
     
     h3 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 1.5rem;
         color: #181a29;
         margin-bottom: 1rem;
@@ -626,7 +626,7 @@
     text-align: center;
     
     h3 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 1.25rem;
         color: #181a29;
         margin-bottom: 1rem;
@@ -1039,7 +1039,7 @@
         }
         
         p {
-            font-family: var(--font-serif);
+            font-family: var(--font-ui);
             color: #3730a3;
             margin: 0;
             font-size: 0.9rem;
@@ -1663,14 +1663,14 @@
     }
     
     h3 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 1.5rem;
         color: #fff;
         margin-bottom: 1rem;
     }
     
     p {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.1rem;
         margin-bottom: 2rem;
         opacity: 0.8;
@@ -1711,14 +1711,14 @@
     }
     
     h2 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 1.8rem;
         color: #fff;
         margin-bottom: 1rem;
     }
     
     p {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.1rem;
         color: #b8c5d6;
         margin-bottom: 2rem;
@@ -1751,7 +1751,7 @@
         margin-bottom: 3rem;
         
         .genreTitle {
-            font-family: var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size: 2rem;
             color: #fff;
             text-align: center;

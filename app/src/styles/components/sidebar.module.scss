@@ -239,15 +239,15 @@
                     }
 
                     &.sidebarSectionItemPricing {
-                        background:#7125c3;
-                        transition:background 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                        background:var(--accent);
+                        transition:background var(--duration-base) var(--ease-out);
 
                         .sidebarSectionItemIcon,
                         .sidebarSectionItemText {
-                            color:#fff;
+                            color:var(--on-accent);
                         }
                         &:hover {
-                            background:rgb(145, 128, 223);
+                            background:var(--accent-hover);
                         }
                     }
                 }

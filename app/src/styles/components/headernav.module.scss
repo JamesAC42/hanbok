@@ -65,7 +65,7 @@
     gap: 1.5rem;
 
     a {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-weight: 800;
         color: #f3f3f3;
         text-decoration: none;
@@ -103,7 +103,7 @@
         text-align: center;
         border: none;
         cursor: pointer;
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-weight: 800;
         transition: all 0.2s ease;
         
@@ -145,7 +145,7 @@
     z-index:1001;
 
     a {
-        font-family:var(--font-serif);
+        font-family:var(--font-ui);
         font-weight:800;
         color:#f3f3f3;
         text-decoration:none;
@@ -201,7 +201,7 @@
             font-weight:700;
             font-size:1.8rem;
             color:#fff;
-            font-family:var(--font-lilita);
+            line-height: var(--leading-tight); font-family: var(--font-heading);
         }
     }
 

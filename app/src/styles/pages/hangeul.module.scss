@@ -27,7 +27,7 @@
         font-weight: 400;
         color: white;
         margin-bottom: var(--spacing-small);
-        font-family: var(--font-lilita);
+        line-height: var(--leading-tight); font-family: var(--font-heading);
 
         @media (min-width: 768px) {
             font-size: 3.5rem;

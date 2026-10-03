@@ -32,7 +32,7 @@
   font-weight:800;
   h1 {
     color:var(--foreground);
-    font-family:var(--font-lilita) !important;
+    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading) !important;
     margin-top:0 !important;
     font-size:3rem;
   }

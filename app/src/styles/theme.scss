@@ -1,23 +1,24 @@
 :root, div.theme-light {
     --background: #ffffff;
-    --background-alt: #f5f5f5;
-    --foreground: #171717;
-    --foreground-muted: #6a6a6a;
-    --foreground-light: #a4a4a4;
-    --foreground-lighter: #ededed;
-    --primary: #3d64e8;
-    --primary-dark: #2a4cc2;
-    --secondary: #000000;
-    --shadow: #7b7b7b;
+    --background-alt: #f3f5f9;
+    --foreground: #161a26;
+    --foreground-muted: #5a6273;
+    --foreground-light: #8b93a3;
+    --foreground-lighter: #e8ebf1;
+    --primary: #2c4fa3;
+    --primary-dark: #1f3a7e;
+    --secondary: #161a26;
+    --shadow: #3a4566;
+    --on-accent: #ffffff;
   
-    --error-background: rgba(252, 207, 207, 0.877);
-    --error-foreground: #b81f1f;
-    --warning-background: #ffefd5;
-    --warning-foreground: #d67e17;
-    --success-background: #d4ffda;
-    --success-foreground: #0d903c;
-    --info-background: #d4e6ff;
-    --info-foreground: #2c64e9;
+    --error-background: #fdecea;
+    --error-foreground: #b3261e;
+    --warning-background: #fff4dc;
+    --warning-foreground: #9a5b00;
+    --success-background: #e3f6ea;
+    --success-foreground: #18794e;
+    --info-background: #e6ecfa;
+    --info-foreground: #2c4fa3;
   
     --text-xsmall: 0.7rem;
     --text-small: 0.8rem;
@@ -31,40 +32,44 @@
     --spacing-large: 2rem;
     --spacing-xlarge: 3rem;
   
-    --border-radius: 0.3rem;
+    --border-radius: 0.375rem;
   
-    --font-body: 'Merriweather', serif;
-    --font-display: 'Montserrat', sans-serif;
-    --font-kr-sans: 'Noto Sans KR', sans-serif;
-    --font-serif: 'Noto Serif', serif;
-    --font-kr-serif: 'Noto Serif KR', serif;
-    --font-sc-serif: 'Noto Serif SC', serif;
-    --font-tc-serif: 'Noto Serif TC', 'Noto Serif SC', serif;
-    --font-jp-serif: 'Noto Serif JP', serif;
-    --font-lilita: 'Lilita One', sans-serif;
-    --font-funnel: 'FunnelSans', sans-serif;
+    // Legacy font roles now point at the token fonts (see tokens.scss):
+    // body and UI text use one sans, headings use Hahmlet, and text in the
+    // language being learned keeps its serif.
+    --font-body: var(--font-ui);
+    --font-display: var(--font-ui);
+    --font-lilita: var(--font-heading);
+    --font-funnel: var(--font-ui);
+    --font-kr-sans: 'Noto Sans KR Variable', 'Noto Sans KR', sans-serif;
+    --font-serif: 'Noto Serif Variable', 'Noto Serif', Georgia, serif;
+    --font-kr-serif: 'Noto Serif KR Variable', 'Noto Serif KR', serif;
+    --font-sc-serif: 'Noto Serif SC Variable', 'Noto Serif SC', serif;
+    --font-tc-serif: 'Noto Serif TC Variable', 'Noto Serif TC', 'Noto Serif SC Variable', serif;
+    --font-jp-serif: 'Noto Serif JP Variable', 'Noto Serif JP', serif;
 }
 
 div.theme-dark {
-    --background: #1a1a1a;
-    --background-alt: #121212;
-    --foreground: #ffffff;
-    --foreground-muted: #646464;
-    --foreground-light: #686868;
-    --foreground-lighter: #060606;
-    --primary: #c2d0ff;
-    --primary-dark: #6d88eb;
-    --secondary: #f8f8f8;
+    --background: #12162a;
+    --background-alt: #0c1020;
+    --foreground: #e9ecf5;
+    --foreground-muted: #9aa3ba;
+    --foreground-light: #6f7891;
+    --foreground-lighter: #1d2340;
+    --primary: #8fa8ec;
+    --primary-dark: #6f8ce0;
+    --secondary: #e9ecf5;
     --shadow: #000000;
+    --on-accent: #0c1020;
   
-    --error-background: rgba(252, 207, 207, 0.877);
-    --error-foreground: #b81f1f;
-    --warning-background: #ffefd5;
-    --warning-foreground: #d67e17;
-    --success-background: #d4ffda;
-    --success-foreground: #0d903c;
-    --info-background: #d4e6ff;
-    --info-foreground: #2c64e9;
+    --error-background: rgba(255, 120, 108, 0.14);
+    --error-foreground: #ff9a90;
+    --warning-background: rgba(243, 194, 90, 0.14);
+    --warning-foreground: #f3c25a;
+    --success-background: rgba(103, 212, 176, 0.14);
+    --success-foreground: #67d4b0;
+    --info-background: rgba(143, 168, 236, 0.14);
+    --info-foreground: #8fa8ec;
 }
 
 div.theme-sepia {
@@ -112,6 +117,7 @@ div.theme-neopolitan {
 }
 
 div.theme-forest {
+    --on-accent: #0b0c10;
     --background: #0B0C10;
     --background-alt: #000403;
     --foreground: #4EBA6F;
@@ -156,6 +162,7 @@ div.theme-wiiu {
 }
 
 div.theme-edo {
+    --on-accent: #0b0c10;
     --background: #0f0e17;
     --background-alt: #050507;
     --foreground: #ff4c4c;
@@ -178,6 +185,7 @@ div.theme-edo {
 }
 
 div.theme-lizard {
+    --on-accent: #0b0c10;
     --background: #202c3a;
     --background-alt: #132534;
     --foreground: #d7e855;

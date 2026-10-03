@@ -44,7 +44,7 @@
 .paragraphText {
     font-size: 1.43rem;
     line-height: 1.8;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: var(--font-kr-sans);
     max-height: 100%;
     max-width: 100%;
     text-align: center;
@@ -129,7 +129,7 @@
     font-size: 3.85rem;
     font-weight: 700;
     color: var(--foreground);
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: var(--font-kr-sans);
     text-align: center;
     min-height: 4.2rem;
     @include flex-center;
@@ -139,7 +139,7 @@
 
 .userChar {
     font-size: 1.87rem;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: var(--font-kr-sans);
     animation: slideInLeft 0.15s ease;
     transition: all 0.15s ease;
     
@@ -204,7 +204,7 @@
 
 .inputText {
     font-size: 1.21rem;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: var(--font-kr-sans);
     color: var(--foreground);
     min-height: 1.3rem;
     position: relative;

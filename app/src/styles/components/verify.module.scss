@@ -36,7 +36,7 @@
   text-align: center;
 
   h1 {
-    font-family: var(--font-lilita);
+    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
     font-size: 2.5rem;
     color: #181a29;
     margin: 0;

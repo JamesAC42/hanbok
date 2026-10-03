@@ -51,7 +51,7 @@
     text-align: center;
     margin-bottom: 0.4rem;
     margin-top: 1rem;
-    font-family: var(--font-lilita);
+    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
 }
 
 .title {
@@ -59,7 +59,7 @@
     font-weight: 700;
     color: var(--foreground);
     margin-bottom: 0.2rem;
-    font-family: var(--font-lilita);
+    line-height: var(--leading-tight); font-family: var(--font-heading);
 }
 
 .subtitle {

@@ -28,7 +28,7 @@
         padding:2rem 4rem;
         width:70dvw;
         border-radius:1rem;
-        font-family:var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size:1.8rem;
 
         a {
@@ -43,7 +43,7 @@
             background:#5952ea;
             color:#fff;
             border:2px solid #d1cfff;
-            font-family:var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             transition:all 0.2s ease;
             svg  {
                 transform:translateY(0px);
@@ -101,7 +101,7 @@
                 justify-content:flex-start;
                 align-items:stretch;
                 .footerLinkColumnHeader {
-                    font-family:var(--font-lilita);
+                    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
                     font-size:1.3rem;
                     color:#5c85c7;
                     margin-bottom:1rem;
@@ -116,7 +116,7 @@
                     a {
                         text-decoration: none;
                         color:#fff;
-                        font-family:var(--font-lilita);
+                        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
                         font-size:1.2rem;
                         margin-bottom:0.5rem;
                         transition:all 0.2s ease;
@@ -130,7 +130,7 @@
         }
 
         .footerCopyright {
-            font-family:var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size:1.2rem;
             color:#6761bfae;
 

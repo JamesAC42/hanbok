@@ -9,17 +9,16 @@
     padding: 0 1.5rem;
     height:4.2rem;
     background: var(--background);
-    border-bottom: 1px solid var(--foreground-light);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid var(--border);
 }
 
 .brand {
-    font-family: 'Merriweather', serif;
-    font-weight: 600;
-    font-size: 1.2rem;
+    font-family: var(--font-heading);
+    font-weight: var(--weight-heavy);
+    font-size: 1.3rem;
     color: var(--foreground);
     text-decoration: none;
-    letter-spacing: 0.04em;
+    letter-spacing: -0.01em;
     text-transform: lowercase;
 }
 

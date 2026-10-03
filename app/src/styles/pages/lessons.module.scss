@@ -70,7 +70,7 @@
 }
 
 .pageTitle {
-  font-family: var(--font-lilita);
+  font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
   font-size: 4rem;
   color: #181a29;
   text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);

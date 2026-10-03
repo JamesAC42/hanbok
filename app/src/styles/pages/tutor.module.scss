@@ -58,7 +58,7 @@
         margin-top:0.5rem;
         font-size: 1rem;
         color: var(--foreground);
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
 
         @media screen and (max-width:1000px) {
             margin-top:5rem;
@@ -263,7 +263,7 @@
         margin: 0;
         font-size: 1.25rem;
         color: var(--foreground);
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         margin-left:3rem;
     }
 }
@@ -459,7 +459,7 @@
     h2 {
         margin: 0 0 1rem 0;
         color: var(--foreground);
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
     }
     
     p {
@@ -497,7 +497,7 @@
         margin: 0;
         font-size: 1rem;
         color: var(--foreground);
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
     }
     
     @media (max-width: 1000px) {

@@ -73,7 +73,7 @@
         box-shadow:0 0 20px 20px var(--background);
         transform:translate(-50%, calc(-100% - 0rem));
         text-align:center;
-        font-family:var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size:3rem;
         color:var(--foreground);
         z-index:2;

@@ -115,7 +115,7 @@
                             background:var(--background-alt);
                             border-radius:3rem;
                             padding:0.2rem 1rem;
-                            font-family:var(--font-serif);
+                            font-family:var(--font-ui);
                             font-weight:100;
                             max-width:80%;
                         }
@@ -124,7 +124,7 @@
                         position:absolute;
                         top:80%;
                         right:0;
-                        font-family:var(--font-serif);
+                        font-family:var(--font-ui);
                         font-size:1.3rem;
                         border:1px solid var(--foreground-light);
                         transform:translate(0, -5%);

@@ -46,7 +46,7 @@
         color: var(--foreground);
         letter-spacing: -0.03em;
 
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: clamp(2.25rem, 3vw + 1rem, 4rem);
     }
 }

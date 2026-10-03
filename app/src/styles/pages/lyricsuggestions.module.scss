@@ -13,7 +13,7 @@
     margin-top: 3rem;
     
     .heroTitle {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 4rem;
         color: #fff;
         margin-bottom: 1rem;
@@ -25,7 +25,7 @@
     }
     
     .heroSubtitle {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.5rem;
         color: #b8c5d6;
         max-width: 40rem;
@@ -65,7 +65,7 @@
     }
     
     h2 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 2rem;
         color: #181a29;
         margin-bottom: 2rem;
@@ -235,7 +235,7 @@
     }
     
     h2 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 2rem;
         color: #fff;
         text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
@@ -352,7 +352,7 @@
         margin-bottom: 1rem;
         
         h4 {
-            font-family: var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size: 1.5rem;
             color: #181a29;
             margin-bottom: 0.25rem;

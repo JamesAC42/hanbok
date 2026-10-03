@@ -1,0 +1,117 @@
+// Hanbok design tokens ("Jjok" direction).
+//
+// Three layers:
+//   1. Brand + scale tokens (color primitives, type, spacing, radius, motion).
+//      Theme-independent.
+//   2. Theme palettes live in theme.scss and set the legacy variables
+//      (--background, --foreground, --primary, ...) per theme.
+//   3. Semantic tokens below (--surface, --text, --accent, --border, ...)
+//      are derived from those legacy variables. They are re-declared on every
+//      theme wrapper so each user theme gets matching values automatically.
+//
+// New styles should use the semantic and scale tokens. The Chrome extension
+// copies this file's values; see docs/design-system.md.
+
+:root {
+  // Brand primitives, taken from the hanbok illustration.
+  --brand-indigo: #2c4fa3;      // 쪽빛 skirt
+  --brand-indigo-deep: #1f3a7e;
+  --brand-indigo-soft: #e6ecfa;
+  --brand-ink: #161a26;
+  --brand-jeogori: #fbe7a6;     // pale yellow jacket, used for highlights
+  --brand-saffron: #e3b33a;
+  --brand-red: #d4483b;         // ribbon accent, used sparingly
+  --brand-mist: #e9ecf3;
+
+  // Fonts
+  --font-ui: 'Noto Sans KR Variable', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Hahmlet Variable', 'Noto Serif KR Variable', Georgia, serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  // Type scale (1.2 ratio around a 16px base)
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3rem;
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.55;
+  --leading-target: 1.75;      // sentences in the language being learned
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-heavy: 800;
+
+  // Spacing (4px grid)
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  // Radius
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  // Motion
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  // Layers
+  --z-sticky: 10;
+  --z-overlay: 100;
+  --z-modal: 200;
+  --z-toast: 300;
+}
+
+// Semantic tokens. Declared on :root and on every theme wrapper, because a
+// custom property that references another is resolved where it is declared.
+:root,
+[class^="theme-"],
+[class*=" theme-"] {
+  --surface: var(--background);
+  --surface-sunken: var(--background-alt);
+  --surface-raised: var(--background);
+  --surface-overlay: color-mix(in srgb, var(--foreground) 45%, transparent);
+
+  --text: var(--foreground);
+  --text-muted: var(--foreground-muted);
+  --text-subtle: var(--foreground-light);
+
+  --border: color-mix(in srgb, var(--foreground) 12%, var(--background));
+  --border-strong: color-mix(in srgb, var(--foreground) 24%, var(--background));
+
+  --accent: var(--primary);
+  --accent-hover: var(--primary-dark);
+  --accent-soft: color-mix(in srgb, var(--primary) 12%, var(--background));
+  --accent-text: var(--primary);
+
+  --highlight: color-mix(in srgb, var(--brand-jeogori) 85%, var(--background));
+  --highlight-line: var(--brand-saffron);
+
+  --focus-ring: 0 0 0 3px color-mix(in srgb, var(--primary) 40%, transparent);
+
+  --shadow-sm: 0 1px 2px color-mix(in srgb, var(--shadow) 18%, transparent);
+  --shadow-md: 0 1px 2px color-mix(in srgb, var(--shadow) 12%, transparent),
+    0 8px 24px -10px color-mix(in srgb, var(--shadow) 35%, transparent);
+  --shadow-lg: 0 2px 4px color-mix(in srgb, var(--shadow) 10%, transparent),
+    0 24px 48px -16px color-mix(in srgb, var(--shadow) 45%, transparent);
+}

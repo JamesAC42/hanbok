@@ -21,7 +21,7 @@
     z-index: 2;
     
     .heroTitle {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 4rem;
         color: #fff;
         margin-bottom: 1rem;
@@ -33,7 +33,7 @@
     }
     
     .heroSubtitle {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.5rem;
         color: #b8c5d6;
         max-width: 40rem;
@@ -438,7 +438,7 @@
     }
     
     h2 {
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 2.5rem;
         color: #fff;
         margin-bottom: 1rem;
@@ -450,7 +450,7 @@
     }
     
     p {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.2rem;
         color: #b8c5d6;
         max-width: 40rem;

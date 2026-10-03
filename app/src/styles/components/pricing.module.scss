@@ -5,7 +5,7 @@
     background: #0f172a; /* Deep blue */
     position: relative;
     overflow-x: hidden;
-    font-family: var(--font-serif); /* Default sans-serif for features */
+    font-family: var(--font-ui);
 }
 
 .pricingHero {
@@ -14,7 +14,7 @@
     margin-top: 3rem;
     
     .heroTitle {
-        font-family: var(--font-lilita); /* Bold serif/display */
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading); /* Bold serif/display */
         font-size: 3.5rem;
         color: #fff;
         margin-bottom: 1.5rem;
@@ -26,7 +26,7 @@
     }
     
     .heroSubtitle {
-        font-family: var(--font-serif);
+        font-family: var(--font-ui);
         font-size: 1.25rem;
         color: #cbd5e1; /* Lighter gray/blue */
         max-width: 40rem;
@@ -159,7 +159,7 @@
         margin-bottom: 2rem;
         
         .planName {
-            font-family: var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size: 1.5rem;
             margin-bottom: 0.5rem;
             color: #fff;
@@ -181,7 +181,7 @@
             .amount {
                 font-size: 2.5rem;
                 font-weight: 900;
-                font-family: var(--font-lilita);
+                line-height: var(--leading-tight); font-family: var(--font-heading);
             }
             
             .period {
@@ -413,7 +413,7 @@
     
     .whyUpgradeTitle {
         text-align: center;
-        font-family: var(--font-lilita);
+        font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
         font-size: 2.5rem;
         color: #fff;
         margin-bottom: 3rem;
@@ -513,7 +513,7 @@
 }
 
 .faqTitle {
-    font-family: var(--font-lilita);
+    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
     font-size: 2.5rem;
     color: #fff;
     text-align: center;
@@ -586,7 +586,7 @@
         margin: 0 auto;
         
         h2 {
-            font-family: var(--font-lilita);
+            font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
             font-size: 3rem;
             color: #fff;
             margin-bottom: 2rem;

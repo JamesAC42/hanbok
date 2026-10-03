@@ -151,7 +151,7 @@ $word-types: (
   .pageTitle {
     font-size:3rem;
     color:var(--foreground);
-    font-family:var(--font-lilita);
+    font-weight: var(--weight-heavy); line-height: var(--leading-tight); font-family: var(--font-heading);
 
     @media screen and (max-width: 725px) {
       margin-top:4rem;
@@ -166,50 +166,28 @@ $word-types: (
 }
 
 @mixin hero-cta {
-  font-family: var(--font-display);
-  background: linear-gradient(135deg, #7091ff, #26a579);
+  font-family: var(--font-ui);
+  background: var(--brand-indigo);
   color: #fff;
   padding: 1rem 2rem;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   font-size: 1rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
-  outline:none;
-  border:none;
-
-  &::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-          45deg,
-          transparent,
-          transparent 40%,
-          rgba(255, 255, 255, 0.2) 40%,
-          rgba(255, 255, 255, 0.2) 60%,
-          transparent 60%,
-          transparent
-      );
-      transform: translateX(-100%) rotate(45deg);
-      transition: transform 0.5s ease;
-  }
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.01em;
+  transition: transform var(--duration-base) var(--ease-out), box-shadow var(--duration-base) var(--ease-out), background var(--duration-base) var(--ease-out);
+  box-shadow: 0 6px 20px -8px rgba(31, 58, 126, 0.6);
+  outline: none;
+  border: none;
 
   &:hover {
-      opacity: 0.9;
-      transform:translateY(-1px) scale(1.05);
-      box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.25);
-      
-      &::before {
-          transform: translateX(100%) rotate(45deg);
-      }
+      background: var(--brand-indigo-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px -10px rgba(31, 58, 126, 0.7);
+  }
+
+  &:focus-visible {
+      box-shadow: 0 0 0 3px rgba(44, 79, 163, 0.4);
   }
 }
+
