@@ -53,3 +53,9 @@ package-lock.json
 /audio/*
 
 /docs/images/*
+
+# deploy (scripts/deploy.sh)
+.next-*/
+.deploy-log
+.deploy-prev-sha
+.deploy.lock
