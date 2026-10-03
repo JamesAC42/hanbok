@@ -7,7 +7,8 @@ export const zh = {
     languages: {
         korean: '韩语',
         english: '英语',
-        chinese: '中文',
+        chinese: '简体中文',
+        chineseTraditional: '繁体中文',
         japanese: '日语',
         spanish: '西班牙语',
         italian: '意大利语',

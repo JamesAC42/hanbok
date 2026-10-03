@@ -5,6 +5,7 @@ import { resources, supportedLanguages, supportedAnalysisLanguages } from '../tr
 const LanguageContext = createContext();
 
 import { EmojioneFlagForChina } from '../components/icons/ChineseCircle';
+import { TraditionalChineseCircle } from '../components/icons/TraditionalChineseCircle';
 import { EmojioneFlagForJapan } from '../components/icons/JapanCircle';
 import { EmojioneFlagForSpain } from '../components/icons/SpanishCircle';
 import { EmojioneFlagForItaly } from '../components/icons/ItalianCircle';
@@ -70,6 +71,8 @@ export function LanguageProvider({ children }) {
                 return <EmojioneFlagForUnitedKingdom />;
             case 'zh':
                 return <EmojioneFlagForChina />;
+            case 'zh-TW':
+                return <TraditionalChineseCircle />;
             case 'ja':
                 return <EmojioneFlagForJapan />;
             case 'es':

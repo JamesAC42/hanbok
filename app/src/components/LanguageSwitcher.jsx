@@ -1,6 +1,7 @@
 import styles from '@/styles/components/languageswitcher.module.scss';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { resources } from '@/translations';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 
 const LanguageSwitcher = ({ analysis }) => {
@@ -44,7 +45,8 @@ const LanguageSwitcher = ({ analysis }) => {
 
     const dropdownItems = useMemo(
         () => languageKeys.map((languageKey) => {
-            const languageName = supportedAnalysisLanguages[languageKey];
+            const languageName = resources.en.languages[supportedAnalysisLanguages[languageKey]]
+                || capitalize(supportedAnalysisLanguages[languageKey]);
 
             return (
                 <div
@@ -57,7 +59,7 @@ const LanguageSwitcher = ({ analysis }) => {
                             {getIcon(languageKey)}
                         </div>
                         <div className={styles.languageItemText}>
-                            {capitalize(languageName)}
+                            {languageName}
                         </div>
                     </div>
                 </div>
@@ -68,7 +70,8 @@ const LanguageSwitcher = ({ analysis }) => {
 
     const switcherItems = useMemo(
         () => languageKeys.map((languageKey) => {
-            const languageName = supportedAnalysisLanguages[languageKey];
+            const languageName = resources.en.languages[supportedAnalysisLanguages[languageKey]]
+                || capitalize(supportedAnalysisLanguages[languageKey]);
 
             return (
                 <div key={languageKey} className={styles.languageItem}>
@@ -77,7 +80,7 @@ const LanguageSwitcher = ({ analysis }) => {
                             {getIcon(languageKey)}
                         </div>
                         <div className={styles.languageItemText}>
-                            {capitalize(languageName)}
+                            {languageName}
                         </div>
                     </div>
                 </div>

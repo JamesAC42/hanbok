@@ -15,7 +15,8 @@ import Footer from '@/components/Footer';
 const languageOptions = [
   { value: 'ko', label: 'Korean' },
   { value: 'ja', label: 'Japanese' },
-  { value: 'zh', label: 'Chinese' },
+  { value: 'zh', label: 'Chinese (Simplified)' },
+  { value: 'zh-TW', label: 'Chinese (Traditional)' },
 ];
 
 const genreOptions = [

@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const ANALYSIS_PROMPT = (originalLanguage = 'id', translationLanguage = 'en') => `
+const ANALYSIS_PROMPT = (originalLanguage = 'id', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}
 You are an Indonesian language analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is either a proper Indonesian sentence or a valid Indonesian word. Then analyze the input and return a JSON response.
 
 Rules for validation:

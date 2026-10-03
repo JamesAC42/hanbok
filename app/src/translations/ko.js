@@ -7,7 +7,8 @@ export const ko = {
     languages: {
         korean: '한국어',
         english: '영어',
-        chinese: '중국어',
+        chinese: '중국어 (간체)',
+        chineseTraditional: '중국어 (번체)',
         japanese: '일본어',
         spanish: '스페인어',
         italian: '이탈리아어',

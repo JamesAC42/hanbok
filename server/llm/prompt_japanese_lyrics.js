@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const JAPANESE_LYRICS_ANALYSIS_PROMPT = (originalLanguage = 'ja', translationLanguage = 'en') => `You are a ${SupportedLanguages[originalLanguage]} song lyrics analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is a proper ${SupportedLanguages[originalLanguage]} song lyric segment or line. Then analyze the input in the context of the full lyrics and return a JSON response.
+const JAPANESE_LYRICS_ANALYSIS_PROMPT = (originalLanguage = 'ja', translationLanguage = 'en') => `${chineseScriptRule(originalLanguage, translationLanguage)}You are a ${SupportedLanguages[originalLanguage]} song lyrics analysis tool that provides explanations in ${SupportedLanguages[translationLanguage]}. First, validate if the input is a proper ${SupportedLanguages[originalLanguage]} song lyric segment or line. Then analyze the input in the context of the full lyrics and return a JSON response.
 
 Rules for validation:
 1. The input should contain at least some ${SupportedLanguages[originalLanguage]} characters (hiragana, katakana, kanji)

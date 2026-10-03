@@ -1,6 +1,7 @@
 const SupportedLanguages = require('../supported_languages');
+const { chineseScriptRule } = require('./chineseScript');
 
-const TRANSLATE_TEXT_PROMPT = (originalLanguage, targetLanguage) => `You are a professional translator specializing in translating from ${SupportedLanguages[originalLanguage]} to ${SupportedLanguages[targetLanguage]}. Your task is to translate the provided text accurately while considering the given context.
+const TRANSLATE_TEXT_PROMPT = (originalLanguage, targetLanguage) => `${chineseScriptRule(originalLanguage, targetLanguage)}You are a professional translator specializing in translating from ${SupportedLanguages[originalLanguage]} to ${SupportedLanguages[targetLanguage]}. Your task is to translate the provided text accurately while considering the given context.
 
 IMPORTANT INSTRUCTIONS:
 1. First validate that the input text is indeed in ${SupportedLanguages[originalLanguage]}.
