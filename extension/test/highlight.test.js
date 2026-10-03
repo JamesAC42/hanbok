@@ -50,3 +50,12 @@ test('looksLikeLanguage checks the script for non-Latin languages', () => {
   assert.strictEqual(looksLikeLanguage('hola', 'es'), true);
   assert.strictEqual(looksLikeLanguage('123', 'es'), false);
 });
+
+test('findVocabularyWord maps highlighted text back to the saved word', () => {
+  const { findVocabularyWord } = require('../highlight.js');
+  assert.strictEqual(findVocabularyWord('사람들은', ['사람', '공부하다'], 'ko'), '사람');
+  assert.strictEqual(findVocabularyWord('공부해요', ['사람', '공부하다'], 'ko'), '공부하다');
+  assert.strictEqual(findVocabularyWord('日本語', ['日本', '日本語'], 'ja'), '日本語');
+  assert.strictEqual(findVocabularyWord('Casa', ['casa'], 'es'), 'casa');
+  assert.strictEqual(findVocabularyWord('책상', ['책'], 'ko'), null);
+});

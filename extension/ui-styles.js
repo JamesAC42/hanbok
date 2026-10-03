@@ -65,8 +65,16 @@ self.HANBOK_UI_CSS = `
   max-width: 280px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
 }
-.word-card .word { font-weight: 600; font-size: 16px; }
-.word-card .actions { margin-top: 10px; }
+.word-card { width: 300px; max-width: calc(100vw - 16px); max-height: 60vh; overflow-y: auto; }
+.word-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.word-card .word { font-weight: 700; font-size: 20px; }
+.word-card .meaning { font-size: 15px; margin-top: 6px; }
+.word-card .actions { margin-top: 12px; gap: 6px; }
+.relations { margin-top: 4px; }
+.relation-group h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; margin: 12px 0 4px; }
+.relation-group ul { list-style: none; margin: 0; padding: 0; }
+.relation-group li { padding: 3px 0; }
+.toast-action { display: block; margin-top: 6px; color: #fff; font-weight: 600; text-decoration: underline; }
 
 /* Analysis modal */
 .backdrop {
@@ -165,6 +173,6 @@ p { margin: 0; }
   .button:hover:not(:disabled) { background: #1f2937; }
   .button-primary { background: #b91c1c; border-color: #b91c1c; }
   .grammar p { color: #d1d5db; }
-  .meta, .reading, .dictionary, .quota, .modal-body h3 { color: #9ca3af; }
+  .meta, .reading, .dictionary, .quota, .modal-body h3, .relation-group h4 { color: #9ca3af; }
 }
 `;

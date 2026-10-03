@@ -4,7 +4,7 @@ Brings Hanbok to any web page:
 
 - **Analyze**: select text and click **Analyze with Hanbok** (or right-click → *Analyze with Hanbok*). You get the translation, a word-by-word breakdown, grammar points, audio, and a link to the full analysis on hanbokstudy.com. Analyses count toward the same weekly quota as the site.
 - **Save words**: add any word from an analysis to your deck, and save the sentence to your library.
-- **See your words**: words you've saved for your learning language are highlighted as you browse. Click one to analyze it.
+- **See your words**: words you've saved for your learning language are highlighted as you browse. Click one to see its meaning, hear it, analyze the sentence it's in, or (with Plus) see synonyms and antonyms.
 
 The extension uses your hanbokstudy.com login. Log in on the site, then open the extension popup to pick your languages.
 
@@ -33,7 +33,7 @@ node --test extension/test/highlight.test.js
 | `popup.*` | Toolbar popup: login status, languages, toggles. |
 | `shared.js` | Language list (mirror of `server/supported_languages.js`), site URLs, default settings. |
 
-API endpoints used: `GET /api/session`, `GET /api/words`, `POST /api/words`, `POST /api/submit`, `POST /api/sentences/:id/save`, `GET /api/audio-url/:id`. All go to the site origin, which proxies `/api` to the server.
+API endpoints used: `GET /api/session`, `GET /api/words`, `POST /api/words`, `POST /api/submit`, `POST /api/sentences/:id/save`, `POST /api/sentences/:id/generate-audio`, `GET /api/word-audio`, `GET /api/word-relations`. All go to the site origin, which proxies `/api` to the server.
 
 ## Known limits
 

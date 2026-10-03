@@ -7,15 +7,16 @@
   window.__hanbokLoaded = true;
 
   const { DEFAULT_SETTINGS } = self.HANBOK;
-  const { buildVocabularyPattern, looksLikeLanguage } = self.HANBOK_HIGHLIGHT;
+  const { buildVocabularyPattern, looksLikeLanguage, findVocabularyWord } = self.HANBOK_HIGHLIGHT;
 
   const HIGHLIGHT_CLASS = 'hanbok-highlight';
   const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA', 'INPUT', 'SELECT', 'OPTION', 'CODE', 'PRE', 'SVG', 'MATH']);
   const MAX_SELECTION = 300;
+  const BLOCK_SELECTOR = 'p, li, td, th, dd, dt, blockquote, figcaption, h1, h2, h3, h4, h5, h6, article, section, div';
 
   let settings = { ...DEFAULT_SETTINGS };
-  let vocabulary = [];
-  let savedWords = new Set();
+  let vocabulary = []; // [{ word, meaning }]
+  let savedWords = new Map(); // word -> { word, meaning }
   let pattern = null;
   let highlightCount = 0;
 
@@ -53,12 +54,28 @@
     return node;
   }
 
-  function toast(message, type = 'info') {
+  // `action` is an optional { label, path } link to the Hanbok site.
+  function toast(message, type = 'info', action = null) {
     mountHost();
-    const node = el('div', { className: `toast toast-${type}`, role: 'status', textContent: message });
+    const node = el('div', { className: `toast toast-${type}`, role: 'status' }, [message]);
+    if (action) {
+      const link = el('a', { className: 'toast-action', target: '_blank', rel: 'noopener', textContent: action.label });
+      siteUrl().then((url) => link.setAttribute('href', `${url}${action.path}`));
+      node.appendChild(link);
+    }
     toastStack.appendChild(node);
-    setTimeout(() => node.classList.add('toast-out'), 3000);
-    setTimeout(() => node.remove(), 3300);
+    const duration = action ? 6000 : 3000;
+    setTimeout(() => node.classList.add('toast-out'), duration);
+    setTimeout(() => node.remove(), duration + 300);
+  }
+
+  function siteUrl() {
+    return send({ type: 'GET_SITE_URL' }).then((url) => (typeof url === 'string' ? url : 'https://hanbokstudy.com'));
+  }
+
+  function errorToast(result, fallback) {
+    if (result?.upgrade) toast(result.error, 'info', { label: 'See Hanbok Plus', path: '/pricing' });
+    else toast(result?.error || fallback, 'error');
   }
 
   function send(message) {
@@ -229,7 +246,7 @@
       });
       if (result?.success) {
         addButton.textContent = 'Saved';
-        savedWords.add(dictionaryForm);
+        savedWords.set(dictionaryForm, { word: dictionaryForm, meaning });
         toast(`Added “${dictionaryForm}” to your words`, 'success');
         loadVocabulary({ force: true });
       } else {
@@ -259,15 +276,19 @@
     button.textContent = original;
     button.disabled = false;
     if (!result?.success) {
-      toast(result?.error || 'Audio is not available', 'error');
+      errorToast(result, 'Audio is not available');
       return;
     }
+    playUrl(result.url, "Couldn't play audio on this page. Open the full analysis to listen.");
+  }
+
+  async function playUrl(url, blockedMessage) {
     try {
-      await new Audio(result.url).play();
+      await new Audio(url).play();
     } catch (error) {
       // Some sites' Content-Security-Policy blocks media from other origins.
       console.warn('Hanbok: audio playback failed', error);
-      toast("Couldn't play audio on this page. Open the full analysis to listen.", 'error');
+      toast(blockedMessage, 'error');
     }
   }
 
@@ -311,19 +332,103 @@
     }
   }
 
+  // The sentence a highlighted word sits in, cut from its block's text at
+  // sentence punctuation, for "Analyze sentence".
+  function sentenceAround(mark) {
+    const block = mark.closest(BLOCK_SELECTOR) || mark.parentElement;
+    const range = document.createRange();
+    range.setStart(block, 0);
+    range.setEndBefore(mark);
+    const before = range.toString();
+    const text = block.textContent;
+    const start = before.length;
+    const end = start + mark.textContent.length;
+
+    const terminators = /[.!?。！？\n]/;
+    let from = start;
+    while (from > 0 && !terminators.test(text[from - 1])) from -= 1;
+    let to = end;
+    while (to < text.length && !terminators.test(text[to])) to += 1;
+    if (to < text.length && text[to] !== '\n') to += 1; // keep the punctuation
+
+    let sentence = text.slice(from, to).replace(/\s+/g, ' ').trim();
+    if (sentence.length > MAX_SELECTION) {
+      // Very long run without punctuation: take a window around the word.
+      const offset = Math.max(0, start - from - MAX_SELECTION / 2);
+      sentence = text.slice(from + offset, from + offset + MAX_SELECTION).replace(/\s+/g, ' ').trim();
+    }
+    return sentence;
+  }
+
   function onPageClick(event) {
     const target = event.target;
     if (!(target instanceof Element) || !target.classList.contains(HIGHLIGHT_CLASS)) return;
-    const word = target.textContent;
-    const card = el('div', { className: 'floating word-card' }, [
-      el('div', { className: 'word', textContent: word }),
-      el('div', { className: 'meta', textContent: 'In your Hanbok words' }),
-      el('div', { className: 'actions' }, [
-        el('button', { className: 'button button-primary button-small', textContent: 'Analyze', onclick: () => analyze(word) }),
-        el('button', { className: 'button button-small', textContent: 'Close', onclick: hideFloating })
-      ])
+    const surface = target.textContent;
+    const savedWord = findVocabularyWord(surface, [...savedWords.keys()], settings.sourceLanguage) || surface;
+    const entry = savedWords.get(savedWord) || { word: savedWord, meaning: '' };
+    const sentence = sentenceAround(target);
+    setTimeout(() => placeFloating(renderWordCard(surface, entry, sentence), target.getBoundingClientRect()), 0);
+  }
+
+  function renderWordCard(surface, entry, sentence) {
+    const listenButton = el('button', { className: 'icon-button listen', title: 'Pronounce', 'aria-label': 'Pronounce', textContent: '🔊' });
+    listenButton.addEventListener('click', async () => {
+      listenButton.disabled = true;
+      const result = await send({ type: 'GET_WORD_AUDIO', word: entry.word, translation: entry.meaning });
+      listenButton.disabled = false;
+      if (!result?.success) errorToast(result, 'Pronunciation is not available');
+      else playUrl(result.url, "Couldn't play audio on this page.");
+    });
+
+    const relations = el('div', { className: 'relations' });
+    const relationsButton = el('button', { className: 'button button-small', textContent: 'Synonyms & antonyms' });
+    relationsButton.addEventListener('click', async () => {
+      relationsButton.disabled = true;
+      relationsButton.textContent = 'Loading…';
+      const result = await send({ type: 'GET_WORD_RELATIONS', word: entry.word });
+      if (!result?.success) {
+        relationsButton.disabled = false;
+        relationsButton.textContent = 'Synonyms & antonyms';
+        errorToast(result, 'Could not load related words');
+        return;
+      }
+      relationsButton.remove();
+      const groups = [
+        renderRelationList('Synonyms', result.synonyms),
+        renderRelationList('Antonyms', result.antonyms)
+      ].filter(Boolean);
+      relations.replaceChildren(...(groups.length ? groups : [el('p', { className: 'meta', textContent: 'No related words found.' })]));
+    });
+
+    const sentenceButton = sentence && sentence !== surface
+      ? el('button', { className: 'button button-primary button-small', textContent: 'Analyze sentence', title: sentence, onclick: () => analyze(sentence) })
+      : el('button', { className: 'button button-primary button-small', textContent: 'Analyze', onclick: () => analyze(surface) });
+
+    const deckLink = el('a', { className: 'button button-small', target: '_blank', rel: 'noopener', textContent: 'Study deck ↗' });
+    siteUrl().then((url) => deckLink.setAttribute('href', `${url}/cards`));
+
+    return el('div', { className: 'floating word-card' }, [
+      el('div', { className: 'word-header' }, [
+        el('span', { className: 'word', textContent: entry.word }),
+        listenButton
+      ]),
+      surface !== entry.word ? el('div', { className: 'meta', textContent: `Seen here as ${surface}` }) : null,
+      el('p', { className: 'meaning', textContent: entry.meaning || 'Saved in your Hanbok words' }),
+      el('div', { className: 'actions' }, [sentenceButton, relationsButton, deckLink]),
+      relations
     ]);
-    setTimeout(() => placeFloating(card, target.getBoundingClientRect()), 0);
+  }
+
+  function renderRelationList(title, items) {
+    if (!items?.length) return null;
+    return el('div', { className: 'relation-group' }, [
+      el('h4', { textContent: title }),
+      el('ul', {}, items.map((item) => el('li', {}, [
+        el('span', { className: 'component-text', textContent: item.originalWord || '' }),
+        item.reading ? el('span', { className: 'reading', textContent: item.reading }) : null,
+        el('span', { textContent: item.translatedWord || '' })
+      ])))
+    ]);
   }
 
   // ---------------------------------------------------------------------
@@ -384,14 +489,17 @@
 
   function refreshHighlights() {
     clearHighlights();
-    pattern = settings.highlightEnabled ? buildVocabularyPattern(vocabulary, settings.sourceLanguage) : null;
+    pattern = settings.highlightEnabled
+      ? buildVocabularyPattern(vocabulary.map((entry) => entry.word), settings.sourceLanguage)
+      : null;
     if (pattern) highlightIn(document.body);
   }
 
   async function loadVocabulary({ force = false } = {}) {
     const result = await send({ type: 'GET_VOCABULARY', force });
-    vocabulary = result?.words || [];
-    savedWords = new Set(vocabulary);
+    // Older cached responses were plain strings.
+    vocabulary = (result?.words || []).map((entry) => (typeof entry === 'string' ? { word: entry, meaning: '' } : entry));
+    savedWords = new Map(vocabulary.map((entry) => [entry.word, entry]));
     refreshHighlights();
   }
 

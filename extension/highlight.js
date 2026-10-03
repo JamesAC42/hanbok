@@ -45,7 +45,7 @@
     let source;
     if (language === 'ko') {
       source = koreanPattern(unique);
-    } else if (language === 'ja' || language === 'zh') {
+    } else if (language === 'ja' || language === 'zh' || language === 'zh-TW') {
       // No spaces between words, so match anywhere; longest first so 日本語
       // wins over 日本.
       source = `(?:${unique.map(escapeRegExp).sort(byLengthDesc).join('|')})`;
@@ -63,6 +63,7 @@
     ko: /\p{Script=Hangul}/u,
     ja: /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u,
     zh: /\p{Script=Han}/u,
+    'zh-TW': /\p{Script=Han}/u,
     ru: /\p{Script=Cyrillic}/u,
     hi: /\p{Script=Devanagari}/u
   };
@@ -72,7 +73,24 @@
     return test ? test.test(text) : /\p{L}/u.test(text);
   }
 
-  const api = { buildVocabularyPattern, looksLikeLanguage };
+  // Which saved word a highlighted piece of text came from (사람들은 ->
+  // 사람). Uses the same rules as the page-wide pattern, one word at a
+  // time; the longest matching word wins.
+  function findVocabularyWord(text, words, language) {
+    let best = null;
+    for (const word of words) {
+      const pattern = buildVocabularyPattern([word], language);
+      if (!pattern) continue;
+      const match = pattern.exec(text);
+      if (match && match.index === 0 && match[0].length === text.length
+          && (!best || word.length > best.length)) {
+        best = word;
+      }
+    }
+    return best;
+  }
+
+  const api = { buildVocabularyPattern, looksLikeLanguage, findVocabularyWord };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.HANBOK_HIGHLIGHT = api;
 })(typeof self !== 'undefined' ? self : globalThis);

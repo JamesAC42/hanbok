@@ -80,16 +80,16 @@ async function getSession() {
 }
 
 function vocabCacheKey(siteUrl, language) {
-  return `vocab:${siteUrl}:${language}`;
+  return `vocab2:${siteUrl}:${language}`;
 }
 
 async function clearVocabularyCache() {
   const all = await chrome.storage.local.get(null);
-  const keys = Object.keys(all).filter((key) => key.startsWith('vocab:'));
+  const keys = Object.keys(all).filter((key) => key.startsWith('vocab'));
   if (keys.length) await chrome.storage.local.remove(keys);
 }
 
-// Saved words for the learning language, as a list of strings to highlight.
+// Saved words for the learning language, as [{ word, meaning }].
 async function getVocabulary({ force = false } = {}) {
   const { sourceLanguage } = await getSettings();
   const siteUrl = await getSiteUrl();
@@ -102,7 +102,7 @@ async function getVocabulary({ force = false } = {}) {
     }
   }
 
-  const words = new Set();
+  const words = new Map();
   let page = 1;
   let totalPages = 1;
   do {
@@ -123,13 +123,14 @@ async function getVocabulary({ force = false } = {}) {
       return { loggedIn: true, words: [], error: errorMessage(result, 'Failed to load your words') };
     }
     for (const word of result.data.words || []) {
-      if (word.originalWord) words.add(word.originalWord.trim());
+      const text = word.originalWord?.trim();
+      if (text && !words.has(text)) words.set(text, { word: text, meaning: word.translatedWord || '' });
     }
     totalPages = result.data.totalPages || 1;
     page += 1;
   } while (page <= totalPages);
 
-  const list = [...words].filter(Boolean);
+  const list = [...words.values()];
   await chrome.storage.local.set({ [cacheKey]: { fetchedAt: Date.now(), words: list } });
   return { loggedIn: true, words: list };
 }
@@ -190,13 +191,47 @@ async function saveSentence(sentenceId) {
   return { success: true };
 }
 
+// Audio is only created up front for sentences someone analyzed before, so
+// ask the server to generate it; it returns the existing audio when there
+// is some. Free accounts have a limited number of generations, as on the site.
 async function getAudio(sentenceId) {
-  const result = await api(`/api/audio-url/${encodeURIComponent(sentenceId)}`);
+  const result = await api(`/api/sentences/${encodeURIComponent(sentenceId)}/generate-audio`, { method: 'POST' });
   const url = result.data?.voice1 || result.data?.voice2;
-  if (!result.ok || !url) {
-    return { success: false, error: errorMessage(result, 'Audio is not available for this text') };
+  if (result.ok && result.data?.success && url) return { success: true, url };
+
+  const code = result.data?.code;
+  if (code === 'AUDIO_QUOTA_EXCEEDED') {
+    return { success: false, upgrade: true, error: "You're out of free audio generations. Upgrade on Hanbok for unlimited audio." };
   }
-  return { success: true, url };
+  if (code === 'AUDIO_PREMIUM_LENGTH_REQUIRED') {
+    return { success: false, upgrade: true, error: 'Audio for longer sentences is part of Hanbok Plus.' };
+  }
+  return { success: false, error: errorMessage(result, 'Audio is not available for this text') };
+}
+
+async function getWordAudio(word, translation) {
+  const { sourceLanguage } = await getSettings();
+  const query = new URLSearchParams({ word, language: sourceLanguage });
+  if (sourceLanguage === 'ja' && translation) query.set('translation', translation);
+  const result = await api(`/api/word-audio?${query}`);
+  if (!result.ok || !result.data?.audioUrl) {
+    return { success: false, error: errorMessage(result, 'Pronunciation is not available for this word') };
+  }
+  return { success: true, url: result.data.audioUrl };
+}
+
+// Synonyms and antonyms; the server limits this to Plus subscribers.
+async function getWordRelations(word) {
+  const { sourceLanguage, targetLanguage } = await getSettings();
+  const query = new URLSearchParams({ word, originalLanguage: sourceLanguage, translationLanguage: targetLanguage });
+  const result = await api(`/api/word-relations?${query}`);
+  if (result.status === 403 && result.data?.error?.type === 'subscription') {
+    return { success: false, upgrade: true, error: 'Synonyms and antonyms are part of Hanbok Plus.' };
+  }
+  if (!result.ok || !result.data?.success) {
+    return { success: false, error: errorMessage(result, 'Could not load related words') };
+  }
+  return { success: true, synonyms: result.data.synonyms || [], antonyms: result.data.antonyms || [] };
 }
 
 const handlers = {
@@ -206,6 +241,8 @@ const handlers = {
   ADD_WORD: (message) => addWord(message.word),
   SAVE_SENTENCE: (message) => saveSentence(message.sentenceId),
   GET_AUDIO: (message) => getAudio(message.sentenceId),
+  GET_WORD_AUDIO: (message) => getWordAudio(message.word, message.translation),
+  GET_WORD_RELATIONS: (message) => getWordRelations(message.word),
   GET_SITE_URL: () => getSiteUrl()
 };
 

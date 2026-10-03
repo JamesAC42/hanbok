@@ -4,7 +4,8 @@
   const LANGUAGES = {
     ko: 'Korean (한국어)',
     ja: 'Japanese (日本語)',
-    zh: 'Chinese (中文)',
+    zh: 'Chinese, Simplified (简体中文)',
+    'zh-TW': 'Chinese, Traditional (繁體中文)',
     en: 'English',
     es: 'Spanish (Español)',
     it: 'Italian (Italiano)',
