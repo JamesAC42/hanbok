@@ -169,7 +169,7 @@ async function processLyricAnalysis(job) {
             type: 'status',
             message: `Analysis generated. Generating audio...`
           });
-          const { voice1, voice2 } = await generateSpeech(textToRead);
+          const { voice1, voice2 } = await generateSpeech(textToRead, { language: lyric.language });
           console.log('voice1', voice1);
           console.log('voice2', voice2);
         

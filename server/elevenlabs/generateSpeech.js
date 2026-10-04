@@ -1,4 +1,5 @@
 const client = require('./client');
+const { isChinese } = require('../llm/chineseScript');
 const { S3Client, PutObjectCommand, GetObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { Readable } = require('stream');
@@ -24,14 +25,28 @@ const streamToBuffer = async (stream) => {
 
 const DEFAULT_VOICE_IDS = ["uyVNoMrnUku1dZyVEXwD", "PDoCXqBQFGsvfO0hNkEs"];
 
+const DEFAULT_MODEL_ID = "eleven_multilingual_v2";
+// multilingual_v2 can't be told which language it's reading, so short Chinese
+// text (e.g. a single word) often comes out with the wrong tones. Turbo v2.5
+// accepts language_code, so Chinese is pinned to Mandarin with it.
+const CHINESE_MODEL_ID = "eleven_turbo_v2_5";
+
+const getTtsModel = (language) => (
+  isChinese(language)
+    ? { model_id: CHINESE_MODEL_ID, language_code: "zh" }
+    : { model_id: DEFAULT_MODEL_ID }
+);
+
 const generateSpeech = async (text, options = {}) => {
   const {
     speed = 1,
-    voiceIds = DEFAULT_VOICE_IDS
+    voiceIds = DEFAULT_VOICE_IDS,
+    language = null
   } = options;
+  const model = getTtsModel(language);
 
   try {
-    console.log("Text being sent to ElevenLabs:", text, "speed:", speed);
+    console.log("Text being sent to ElevenLabs:", text, "speed:", speed, "model:", model.model_id);
 
     const timestamp = Date.now();
     const audioResponses = await Promise.all(
@@ -39,7 +54,7 @@ const generateSpeech = async (text, options = {}) => {
         client.textToSpeech.convert(voiceId, {
           output_format: "mp3_44100_128",
           text,
-          model_id: "eleven_multilingual_v2",
+          ...model,
           voice_settings: { speed }
         })
       )
@@ -165,6 +180,7 @@ const getPresignedUrl = async (key) => {
 };
 
 module.exports = {
+  CHINESE_MODEL_ID,
   generateSpeech,
   getPresignedUrl
 };

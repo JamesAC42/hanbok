@@ -70,7 +70,7 @@ const getAudioURL = async (req, res) => {
         if (variant === 'slow') {
             try {
                 const textToRead = getSentenceTextToRead(currentSentence);
-                const slowAudio = await generateSpeech(textToRead, { speed: 0.7 });
+                const slowAudio = await generateSpeech(textToRead, { speed: 0.7, language: currentSentence.originalLanguage });
 
                 await db.collection('sentences').updateOne(
                     { sentenceId: parsedSentenceId },
