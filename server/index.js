@@ -89,6 +89,7 @@ const updateDeckSettings = require('./controllers/auth/updateDeckSettings');
 const initiateStudySession = require('./controllers/auth/initiateStudySession');
 const updateCardProgress = require('./controllers/auth/updateCardProgress');
 const getStudyStats = require('./controllers/auth/getStudyStats');
+const getProgress = require('./controllers/auth/getProgress');
 const exportDeck = require('./controllers/auth/exportDeck');
 const editDeckCard = require('./controllers/auth/editDeckCard');
 const addDeckCard = require('./controllers/auth/addDeckCard');
@@ -333,6 +334,11 @@ app.post('/api/decks/:deckId/cards', isAuthenticated, async (req, res) => {
 // New route for study statistics
 app.get('/api/study/stats', isAuthenticated, async (req, res) => {
     getStudyStats(req, res);
+});
+
+// Activity over time for the signed-in Home page
+app.get('/api/progress', isAuthenticated, async (req, res) => {
+    getProgress(req, res);
 });
 
 // Stripe endpoints

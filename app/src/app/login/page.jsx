@@ -25,7 +25,7 @@ const Login = () => {
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            router.push('/profile');
+            router.push('/home');
         }
         document.title = t('login.pageTitle');
     }, [isAuthenticated, loading, router, t]);

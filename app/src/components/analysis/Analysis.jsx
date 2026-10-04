@@ -238,7 +238,7 @@ const Analysis = ({
             </nav>
             )}
 
-            {!isLyric && <QuotaDisplay />}
+            {!isLyric && <QuotaDisplay smallScreensOnly />}
 
             <div className={styles.mainGrid}>
                 <div className={styles.contentColumn}>

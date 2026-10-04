@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from '@/styles/components/QuotaDisplay.module.scss';
 
-const QuotaDisplay = () => {
+// compact: the stacked version that sits at the bottom of the sidebar.
+// smallScreensOnly: hide on desktop, where the sidebar already shows the meter.
+const QuotaDisplay = ({ compact = false, smallScreensOnly = false }) => {
     const [quota, setQuota] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -35,7 +37,7 @@ const QuotaDisplay = () => {
     const used = total - remaining;
 
     return (
-        <div className={styles.meter}>
+        <div className={`${styles.meter} ${compact ? styles.compact : ''} ${smallScreensOnly ? styles.smallScreensOnly : ''}`}>
             <div className={styles.meterText}>
                 <strong>{remaining} of {total}</strong> free analyses left this week
             </div>

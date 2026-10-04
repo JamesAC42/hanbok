@@ -6,6 +6,7 @@ import styles from '@/styles/home/page.module.scss';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 import {MaterialSymbolsCheckCircleOutlineRounded} from '@/components/icons/CheckCircle';
 import {MdiArrowRightBoldCircle} from '@/components/icons/ArrowRight';
@@ -46,7 +47,13 @@ function TestimonialCard({quote, name}) {
 export default function Home() {
   const { supportedLanguages, t } = useLanguage();
   const router = useRouter();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [siteStats, setSiteStats] = useState(null);
+
+  // Signed-in learners start on their Home dashboard instead of the landing page.
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) router.replace('/home');
+  }, [authLoading, isAuthenticated, router]);
   const learnerCount = siteStats?.totalUsers ? siteStats.totalUsers.toLocaleString() : null;
   const testimonials = [
     { quote: "I was amazed when I discovered this site. I have no words, really great site", name: "Mina" },

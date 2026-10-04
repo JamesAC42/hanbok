@@ -1,0 +1,572 @@
+.home {
+    --chart-analyzed: #3d64e8;
+    --chart-words: #0f9f8f;
+    --chart-reviews: #f0a020;
+
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    color: var(--foreground);
+
+    @media screen and (max-width: 725px) {
+        padding: 1rem 1rem 3rem;
+        gap: 1.1rem;
+    }
+}
+
+// Greeting
+
+.greeting {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.greetingMascot {
+    flex-shrink: 0;
+}
+
+.greetingText {
+    flex: 1;
+    min-width: 14rem;
+
+    h1 {
+        margin: 0;
+        font-family: var(--font-body);
+        font-size: 2.1rem;
+        line-height: 1.2;
+
+        @media screen and (max-width: 725px) {
+            font-size: 1.6rem;
+        }
+    }
+
+    p {
+        margin: 0.35rem 0 0;
+        font-family: var(--font-display);
+        font-size: 1rem;
+        color: var(--foreground-muted);
+    }
+}
+
+.weekStrip {
+    display: flex;
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.weekDay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.weekDayMark {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    border: 2px dashed var(--foreground-lighter);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.weekDayActive .weekDayMark {
+    border: none;
+    background: #e5484d;
+}
+
+.weekDayLabel {
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--foreground-muted);
+}
+
+.weekDayToday .weekDayLabel {
+    color: var(--foreground);
+}
+
+// Quick input
+
+.quickInput {
+    border: 1px solid var(--foreground-lighter);
+    border-radius: 1rem;
+    background: var(--background);
+    padding: 1rem 1rem 0.75rem;
+    box-shadow: 0 10px 30px -24px var(--shadow);
+
+    &:focus-within {
+        border-color: var(--primary);
+    }
+
+    textarea {
+        width: 100%;
+        border: none;
+        outline: none;
+        resize: none;
+        background: transparent;
+        color: var(--foreground);
+        font-family: var(--font-body);
+        font-size: 1.15rem;
+        line-height: 1.5;
+    }
+}
+
+.quickInputBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 0.5rem;
+
+    button {
+        cursor: pointer;
+        border: none;
+        border-radius: 0.6rem;
+        padding: 0.55rem 1.3rem;
+        background: var(--primary);
+        color: var(--background);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 0.95rem;
+
+        &:disabled {
+            opacity: 0.45;
+            cursor: default;
+        }
+    }
+}
+
+.quickInputLinks {
+    display: flex;
+    gap: 0.5rem;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.35rem 0.7rem;
+        border-radius: 2rem;
+        border: 1px solid var(--foreground-lighter);
+        font-family: var(--font-display);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--foreground-muted);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--foreground);
+            border-color: var(--foreground-light);
+        }
+
+        svg {
+            width: 0.8rem;
+            height: 0.8rem;
+        }
+    }
+}
+
+// Shortcut circles
+
+.shortcuts {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 0.25rem 0;
+
+    @media screen and (max-width: 725px) {
+        gap: 0.25rem;
+
+        .shortcut {
+            min-width: 0;
+        }
+
+        .shortcutCircle {
+            width: 3.1rem;
+            height: 3.1rem;
+        }
+
+        .shortcutLabel {
+            font-size: 0.75rem;
+        }
+    }
+}
+
+.shortcut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--foreground);
+    min-width: 4.5rem;
+
+    &:hover .shortcutCircle {
+        transform: translateY(-2px) scale(1.04);
+        box-shadow: 0 10px 20px -12px var(--shortcut-color);
+    }
+}
+
+.shortcutCircle {
+    position: relative;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--shortcut-color);
+    color: #fff;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    svg {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+.shortcutBadge {
+    position: absolute;
+    top: -0.25rem;
+    right: -0.35rem;
+    min-width: 1.4rem;
+    height: 1.4rem;
+    padding: 0 0.35rem;
+    border-radius: 1rem;
+    background: var(--background);
+    color: #e5484d;
+    border: 2px solid #e5484d;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 800;
+    line-height: 1.1rem;
+    text-align: center;
+}
+
+.shortcutLabel {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+// Layout
+
+.columns {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: 1.5rem;
+    align-items: start;
+
+    @media screen and (max-width: 1100px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+}
+
+.card {
+    border: 1px solid var(--foreground-lighter);
+    border-radius: 1rem;
+    background: var(--background);
+    padding: 1.25rem 1.4rem;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.cardTitle {
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1.3rem;
+}
+
+.cardLink {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.eyebrow {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+}
+
+.muted {
+    color: var(--foreground-muted);
+    font-size: 0.9rem;
+}
+
+.primaryButton {
+    display: inline-block;
+    padding: 0.65rem 1.2rem;
+    border-radius: 0.7rem;
+    background: var(--primary);
+    color: var(--background);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+// Up next
+
+.upNext {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem 1rem;
+    align-items: center;
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 6%, var(--background));
+
+    .primaryButton {
+        grid-column: 2;
+        justify-self: start;
+        margin-top: 0.4rem;
+    }
+}
+
+.upNextTitle {
+    margin-top: 0.2rem;
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.upNextDetail {
+    margin: 0.3rem 0 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--foreground-muted);
+}
+
+// Recent work
+
+.recentList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.recentItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.7rem 0.85rem;
+    border-radius: 0.7rem;
+    border: 1px solid transparent;
+    background: var(--background-alt);
+    text-decoration: none;
+    color: var(--foreground);
+
+    &:hover {
+        border-color: var(--primary);
+    }
+}
+
+.recentText {
+    font-size: 1.05rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recentMeta {
+    font-size: 0.82rem;
+    color: var(--foreground-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.emptyState {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-size: 0.92rem;
+    color: var(--foreground-muted);
+}
+
+// Progress
+
+.statGrid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.75rem;
+
+    @media screen and (max-width: 725px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.statTile {
+    --tile-color: var(--primary);
+    padding: 0.8rem 0.9rem;
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--tile-color) 8%, var(--background));
+    border: 1px solid color-mix(in srgb, var(--tile-color) 25%, transparent);
+}
+
+.statValue {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--tile-color);
+    line-height: 1.1;
+}
+
+.statLabel {
+    margin-top: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.statDetail {
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--foreground-muted);
+}
+
+.chartTitle {
+    margin: 1.5rem 0 0.6rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--foreground-muted);
+}
+
+.chartCaption {
+    margin-top: 0.5rem;
+    min-height: 1.2rem;
+    font-size: 0.82rem;
+    color: var(--foreground-muted);
+
+    strong {
+        color: var(--foreground);
+    }
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1rem;
+    margin: 0 0 0.6rem;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: var(--foreground-muted);
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+
+    strong {
+        color: var(--foreground);
+    }
+}
+
+.legendSwatch {
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 0.2rem;
+}
+
+.trendSvg {
+    display: block;
+    width: 100%;
+    height: 9rem;
+}
+
+.trendEmpty {
+    fill: var(--foreground-lighter);
+}
+
+.trendAxis {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    color: var(--foreground-muted);
+}
+
+.heatmapWrap {
+    overflow-x: auto;
+}
+
+.heatmap {
+    display: flex;
+    gap: 4px;
+}
+
+.heatmapWeek {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.heatmapCell,
+.heatmapPad {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+}
+
+.heatmapCell {
+    background: var(--foreground-lighter);
+}
+
+.level1 { background: color-mix(in srgb, var(--chart-analyzed) 30%, var(--background)); }
+.level2 { background: color-mix(in srgb, var(--chart-analyzed) 55%, var(--background)); }
+.level3 { background: color-mix(in srgb, var(--chart-analyzed) 78%, var(--background)); }
+.level4 { background: var(--chart-analyzed); }
+
+.progressEmpty {
+    margin-top: 1.25rem;
+    padding: 1rem;
+    border-radius: 0.8rem;
+    background: var(--background-alt);
+}

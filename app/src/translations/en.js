@@ -1070,7 +1070,14 @@ export const en = {
         viewPlans: "View Plans",
         navigation: "Navigation",
         activity: "Activity",
-        tools: "Tools"
+        tools: "Tools",
+        home: "Home",
+        analyze: "Analyze",
+        paragraphs: "Paragraphs",
+        library: "Library",
+        review: "Review",
+        practice: "Practice",
+        discover: "Discover"
     },
     extended_text: {
         title: "Extended Text Analysis",

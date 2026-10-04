@@ -53,7 +53,7 @@ const EmailLoginForm = () => {
             if (data.success) {
                 // Update auth context with user data
                 await login(data.user);
-                router.push('/profile');
+                router.push('/home');
             } else {
                 setError(data.message);
                 if (data.requiresVerification) {

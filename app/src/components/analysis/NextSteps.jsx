@@ -1,33 +1,11 @@
 'use client';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import useCardsToday from '@/hooks/useCardsToday';
 import { PhCardsFill } from '@/components/icons/CardsFill';
 import { MaterialSymbolsChatBubbleOutline } from '@/components/icons/ChatBubble';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import styles from '@/styles/components/sentenceanalyzer/nextsteps.module.scss';
-
-// Cards the user can study today across all decks (new + learning + due).
-const useCardsToday = (enabled) => {
-    const [count, setCount] = useState(null);
-    useEffect(() => {
-        if (!enabled) return;
-        let cancelled = false;
-        fetch('/api/decks')
-            .then(res => (res.ok ? res.json() : null))
-            .then(data => {
-                if (cancelled || !data?.decks) return;
-                const total = data.decks.reduce((sum, deck) => {
-                    const stats = deck.stats || {};
-                    return sum + (stats.new || 0) + (stats.learning || 0) + (stats.due || 0);
-                }, 0);
-                setCount(total);
-            })
-            .catch(() => {});
-        return () => { cancelled = true; };
-    }, [enabled]);
-    return count;
-};
 
 const Step = ({ icon, title, children, href, onClick, disabled, highlight }) => {
     const body = (
@@ -53,7 +31,8 @@ const Step = ({ icon, title, children, href, onClick, disabled, highlight }) => 
 const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, saveAll, className = '' }) => {
     const { user } = useAuth();
     const savedCount = words.length - unsavedWords.length;
-    const cardsToday = useCardsToday(!!user && !addingAll);
+    // Refetch after saving words, since new cards change today's count.
+    const cardsToday = useCardsToday(!!user && !addingAll, savedCount);
 
     let flashcardStep;
     if (!user) {
