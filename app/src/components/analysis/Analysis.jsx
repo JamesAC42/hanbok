@@ -20,6 +20,8 @@ import getFontClass from '@/lib/fontClass';
 import QuotaDisplay from '@/components/QuotaDisplay';
 import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
 import RecentlyAnalyzed from '@/components/analysis/RecentlyAnalyzed';
+import NextSteps from '@/components/analysis/NextSteps';
+import useSavedWords from '@/hooks/useSavedWords';
 
 const Analysis = ({
     analysis,
@@ -49,6 +51,22 @@ const Analysis = ({
     const [cacheUpdating, setCacheUpdating] = useState(false);
     const [cacheMessage, setCacheMessage] = useState('');
     const [cacheError, setCacheError] = useState('');
+
+    const savedWordsState = useSavedWords({
+        analysis,
+        originalLanguage,
+        translationLanguage,
+        sentenceId,
+    });
+
+    const nextStepsProps = {
+        sentenceId: isLyric ? null : sentenceId,
+        words: savedWordsState.words,
+        unsavedWords: savedWordsState.unsavedWords,
+        savedLoading: savedWordsState.loading,
+        addingAll: savedWordsState.addingAll,
+        saveAll: savedWordsState.saveAll,
+    };
 
     const sectionRefs = {
         breakdown: useRef(null),
@@ -276,6 +294,11 @@ const Analysis = ({
                             showPronunciation={showPronunciation} />
                     </div>
                     
+                    {/* Next steps (shown here when the side column is a bottom sheet) */}
+                    <div className={styles.inlineNextSteps}>
+                        <NextSteps {...nextStepsProps} />
+                    </div>
+
                     {/* Recently Analyzed Section */}
                     {/*<RecentlyAnalyzed />*/}
 
@@ -295,7 +318,15 @@ const Analysis = ({
                             analysis={analysis} 
                             originalLanguage={originalLanguage} 
                             translationLanguage={translationLanguage}
-                            showPronunciation={showPronunciation} />
+                            showPronunciation={showPronunciation}
+                            words={savedWordsState.words}
+                            savedWords={savedWordsState.savedWords}
+                            setSavedWords={savedWordsState.setSavedWords}
+                            unsavedWords={savedWordsState.unsavedWords}
+                            isSavedWordsLoading={savedWordsState.loading}
+                            toggleWordInLibrary={savedWordsState.toggleWord}
+                            saveAll={savedWordsState.saveAll}
+                            addingAll={savedWordsState.addingAll} />
                     </div>
 
                     {/* Grammar Points */}
@@ -317,9 +348,12 @@ const Analysis = ({
                             showPronunciation={showPronunciation}
                             onClose={handleCloseWordInfo} />
                     ) : (
-                        <div className={styles.placeholderState}>
-                            <FluentCursorHover32Filled />
-                            <p>{t('analysis.hoverExplanation', 'Select a word to see details')}</p>
+                        <div className={styles.sidebarIdle}>
+                            <div className={styles.placeholderState}>
+                                <FluentCursorHover32Filled />
+                                <p>{t('analysis.hoverExplanation', 'Select a word to see details')}</p>
+                            </div>
+                            <NextSteps {...nextStepsProps} />
                         </div>
                     )}
                 </div>

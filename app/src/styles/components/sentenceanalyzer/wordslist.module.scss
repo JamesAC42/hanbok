@@ -353,3 +353,69 @@
     }
 
 }
+.wordsListTop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+
+    .wordsListHeader {
+        margin-bottom: 0;
+    }
+}
+
+.deckStatus {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+
+    button {
+        cursor: pointer;
+        padding: 0.45rem 0.9rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--primary);
+        background: var(--primary);
+        color: var(--background);
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: 0.85rem;
+        transition: opacity 0.15s ease;
+
+        &:hover:not(:disabled) {
+            opacity: 0.85;
+        }
+
+        &:disabled {
+            cursor: progress;
+            opacity: 0.6;
+        }
+    }
+}
+
+.check {
+    display: inline-grid;
+    place-items: center;
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    line-height: 1;
+    border: 1px solid currentColor;
+    flex-shrink: 0;
+}
+
+.wordInLibrary .check {
+    background: var(--foreground-muted);
+    border-color: var(--foreground-muted);
+    color: var(--background);
+}
+
+.actionLabel {
+    white-space: nowrap;
+}

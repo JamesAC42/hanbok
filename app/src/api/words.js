@@ -19,7 +19,7 @@ export async function fetchWordRelations(word, originalLanguage, translationLang
   }
 }
 
-export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage, reading }) {
+export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage, reading, sentenceId }) {
   try {
     const response = await fetch('/api/words', {
       method: 'POST',
@@ -30,7 +30,8 @@ export async function addWord({ originalWord, translatedWord, originalLanguage, 
         translatedWord,
         originalLanguage,
         translationLanguage,
-        reading
+        reading,
+        sentenceId
       })
     });
     const data = await response.json();

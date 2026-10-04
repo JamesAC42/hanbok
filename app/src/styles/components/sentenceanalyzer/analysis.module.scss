@@ -331,3 +331,27 @@
     50% { filter: blur(8px); }
     100% { filter: none; }
 }
+
+.sidebarIdle {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .placeholderState {
+        padding: 2rem 1.5rem;
+    }
+}
+
+// The side column is a bottom sheet below 1400px, so next steps move inline.
+.inlineNextSteps {
+    display: none;
+
+    @media screen and (max-width: 1400px) {
+        display: block;
+        padding: 0 0.25rem;
+
+        @media screen and (max-width: 725px) {
+            padding: 0 0.5rem;
+        }
+    }
+}

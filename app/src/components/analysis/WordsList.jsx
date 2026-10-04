@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 // import { MaterialSymbolsCheckBoxRounded } from '@/components/icons/Checkbox';
 // import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
@@ -15,7 +15,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
 
 // Import our helper API functions
-import { fetchWordRelations, addWord, removeWord, checkSavedWords } from '@/api/words';
+import { fetchWordRelations, checkSavedWords } from '@/api/words';
 
 // Utility functions
 const getDisplayType = (wordType) => {
@@ -83,16 +83,21 @@ const WordItem = ({
                     className={`${styles.wordListItemAction} ${isSaved ? styles.wordInLibrary : styles.wordNotInLibrary}`}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
+                    aria-pressed={isSaved}
+                    title={isSaved ? 'Remove from flashcards' : 'Add to flashcards'}
                     onClick={(e) => {
                         if (setShowTooltip) {
                             setShowTooltip(false);
                         }
                         toggleWordInLibrary(word, e)
                     }}>
-                    {isSaved ? 
-                        (isHovered ? "Remove" : "In library") : 
-                        "Add to library"
-                    }
+                    <span className={styles.check} aria-hidden="true">{isSaved ? '✓' : '+'}</span>
+                    <span className={styles.actionLabel}>
+                        {isSaved ? 
+                            (isHovered ? 'Remove' : 'In flashcards') : 
+                            'Add'
+                        }
+                    </span>
                 </button>
                 {showTooltip && (
                     <div
@@ -104,7 +109,7 @@ const WordItem = ({
                         }}
                         className={styles.addWordTooltip}>
                         <div className={styles.addWordTooltipInner}>
-                            Click to save this word to your library
+                            Save words to study them in Flashcards
                             <MaterialSymbolsCancel />
                             <div className={styles.addWordTooltipIcon}> 
                                 <MaterialSymbolsArrowsMoreDownRounded />
@@ -142,57 +147,28 @@ const WordItem = ({
     );
 };
 
-const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronunciation }) => {
+const WordsList = ({
+    analysis,
+    originalLanguage,
+    translationLanguage,
+    showPronunciation,
+    words,
+    savedWords,
+    setSavedWords,
+    unsavedWords,
+    isSavedWordsLoading,
+    toggleWordInLibrary,
+    saveAll,
+    addingAll
+}) => {
     const { user, isLoading, isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const { t } = useLanguage();
-    const [savedWords, setSavedWords] = useState(new Set());
-    const [isSavedWordsLoading, setIsSavedWordsLoading] = useState(true);
     const [expandedWord, setExpandedWord] = useState(null);
     const [relatedWords, setRelatedWords] = useState(null);
     const [loadingRelated, setLoadingRelated] = useState(false);
     const [relatedWordsCache, setRelatedWordsCache] = useState({});
     const [showTooltip, setShowTooltip] = useState(false);
-    
-    // Add this ref to track initialization
-    const initialized = useRef(false);
-    
-    useEffect(() => {
-        const populateSavedWords = async () => {
-            const uniqueWords = [...new Set(
-                analysis.components
-                    .filter(word => word.dictionary_form)
-                    .map(word => word.dictionary_form)
-            )];
-
-            if (uniqueWords.length === 0) return;
-
-            try {
-                setIsSavedWordsLoading(true);
-                const data = await checkSavedWords(uniqueWords, originalLanguage);
-                if (data.success) {
-                    setSavedWords(new Set(data.savedWords));
-                }
-            } catch (error) {
-                console.error('Error checking saved words:', error);
-            } finally {
-                setIsSavedWordsLoading(false);
-            }
-        };
-
-        // Add initialization check
-        if (initialized.current) return;
-        if (!analysis) return;
-        if (savedWords.size > 0) return;
-        if (!user) {
-            setSavedWords(new Set());
-            return;
-        }
-
-        initialized.current = true;
-        populateSavedWords();
-
-    }, [analysis, user]);
 
     useEffect(() => {
 
@@ -202,47 +178,6 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
             localStorage.setItem(TOOLTIP_SHOWN_KEY, 'true');
         }
     }, [isLoading, isAuthenticated]);
-
-    const toggleWordInLibrary = async (word, event) => {
-        console.log('toggleWordInLibrary', word);
-        if (!user) {
-            showLoginRequiredPopup('words');
-            return;
-        }
-        const alreadySaved = savedWords.has(word.originalWord);
-        try {
-            if (alreadySaved) {
-                await removeWord({
-                    originalWord: word.originalWord,
-                    originalLanguage: originalLanguage,
-                    reading: word.reading
-                });
-                setSavedWords(prev => {
-                    const updated = new Set(prev);
-                    updated.delete(word.originalWord);
-                    return updated;
-                });
-            } else {
-                const addResult = await addWord({
-                    originalWord: word.originalWord,
-                    translatedWord: word.translatedWord,
-                    originalLanguage: originalLanguage,
-                    translationLanguage: translationLanguage,
-                    reading: word.reading
-                });
-                if (addResult.reachedLimit) {
-                    showLimitReachedPopup('words', {
-                        x: event.clientX,
-                        y: event.pageY + 20
-                    });
-                    return;
-                }
-                setSavedWords(prev => new Set([...prev, word.originalWord]));
-            }
-        } catch (error) {
-            console.error('Error toggling word in library:', error);
-        }
-    };
 
     const handleShowRelated = async (word) => {
         if (!user) {
@@ -376,54 +311,44 @@ const WordsList = ({ analysis, originalLanguage, translationLanguage, showPronun
             return <div className={styles.loading}>{t('sentenceForm.loading.elements')}</div>;
         }
 
-        let wordList = [];
-        const seenWords = new Set();
-
-        analysis.components.forEach((word, index) => {
-            if (!word.dictionary_form || seenWords.has(word.dictionary_form)) {
-                return;
-            }
-            if (word.type === "punctuation") {
-                return;
-            }
-            seenWords.add(word.dictionary_form);
-            const formattedWord = {
-                originalWord: word.dictionary_form,
-                translatedWord: word.meaning?.description || '',
-                originalLanguage: originalLanguage,
-                translationLanguage: translationLanguage,
-                reading: word.reading || '',
-                transliteration: word.transliteration || ''
-            };
-
-            wordList.push(
-                <div key={word.text + index}>
-                    <WordItem 
-                        word={formattedWord}
-                        language={originalLanguage}
-                        savedWords={savedWords}
-                        toggleWordInLibrary={toggleWordInLibrary}
-                        showRelated={true}
-                        type={word.type_translated || word.type}
-                        handleShowRelated={handleShowRelated}
-                        expandedWord={expandedWord}
-                        showTooltip={showTooltip && index === 0}
-                        setShowTooltip={setShowTooltip}
-                        showPronunciation={showPronunciation}
-                    />
-                    {renderRelatedWords(formattedWord)}
-                </div>
-            );
-        });
-        return wordList;
+        return words.map((formattedWord, index) => (
+            <div key={formattedWord.key}>
+                <WordItem 
+                    word={formattedWord}
+                    language={originalLanguage}
+                    savedWords={savedWords}
+                    toggleWordInLibrary={toggleWordInLibrary}
+                    showRelated={true}
+                    type={formattedWord.type}
+                    handleShowRelated={handleShowRelated}
+                    expandedWord={expandedWord}
+                    showTooltip={showTooltip && index === 0}
+                    setShowTooltip={setShowTooltip}
+                    showPronunciation={showPronunciation}
+                />
+                {renderRelatedWords(formattedWord)}
+            </div>
+        ));
     };
 
     if (!analysis) return null;
 
     return (
         <div className={styles.wordsList}>
-            <div className={styles.wordsListHeader}>
-                {t('analysis.words')}
+            <div className={styles.wordsListTop}>
+                <div className={styles.wordsListHeader}>
+                    {t('analysis.words')}
+                </div>
+                {user && words.length > 0 && (
+                    <div className={styles.deckStatus}>
+                        <span>{words.length - unsavedWords.length} of {words.length} in your flashcards</span>
+                        {unsavedWords.length > 0 && (
+                            <button onClick={saveAll} disabled={addingAll || isSavedWordsLoading}>
+                                {addingAll ? 'Adding…' : `Add all ${unsavedWords.length}`}
+                            </button>
+                        )}
+                    </div>
+                )}
             </div>
             <div className={styles.wordsListContainer}>
                 {renderWordsList()}

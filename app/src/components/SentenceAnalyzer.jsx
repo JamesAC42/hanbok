@@ -10,7 +10,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
 import { resources } from '@/translations';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
-import QuotaDisplay from '@/components/QuotaDisplay';
 
 import {IcBaselineLiveHelp} from '@/components/icons/QuestionBubble';
 
