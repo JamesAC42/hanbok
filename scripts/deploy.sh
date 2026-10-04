@@ -54,8 +54,10 @@ install_deps() { # install_deps <dir> <from> <to>
 
 reload() {
   log "reloading pm2: $PM2_APPS"
-  # shellcheck disable=SC2086
-  pm2 reload $PM2_APPS --update-env
+  # pm2 reload only acts on its first name argument, so reload one at a time.
+  for app in $PM2_APPS; do
+    pm2 reload "$app" --update-env
+  done
   # Give the old processes time to exit so the health check hits the new ones.
   sleep "${RELOAD_GRACE:-5}"
 }
