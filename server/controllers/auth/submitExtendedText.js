@@ -2,23 +2,27 @@ const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
 const { checkExtendedTextRateLimits } = require('./extendedTextRateLimits');
 
-// Split text into sentences (simple approach - can be improved)
-const splitIntoSentences = (text) => {
-    // Simple sentence splitting by common delimiters
-    // This handles periods, question marks, exclamation marks
-    // Can be made more sophisticated if needed
-    const sentences = text
-        .split(/([.!?。！？]+[\s\n]+)/)
-        .reduce((acc, part, idx, arr) => {
-            if (idx % 2 === 0 && part.trim()) {
-                const delimiter = arr[idx + 1] || '';
-                acc.push((part + delimiter).trim());
-            }
-            return acc;
-        }, [])
-        .filter((s) => s.length > 0);
+// Split text into sentences.
+// - Line breaks always end a sentence (pasted paragraphs, dialogue, lyrics often
+//   have no terminal punctuation on each line).
+// - Full-width CJK terminators (。！？) end a sentence even with no following space,
+//   since Japanese/Chinese text is normally written without spaces — unless the
+//   terminator is followed by a closing quote/bracket (e.g. 「行こう。」と言った).
+// - ASCII terminators (.!?) end a sentence only when followed by whitespace, so
+//   decimals, abbreviations and URLs are left intact.
+// Previously only "terminator + whitespace" split, so newline-separated or CJK text
+// collapsed into one huge "sentence" that the per-sentence analyzer then only
+// partially broke down.
+const CJK_BOUNDARY = /(?<=[。！？])(?![。！？」』）)"'”’\s])/;
+const ASCII_BOUNDARY = /(?<=[.!?。！？])\s+/;
 
-    return sentences;
+const splitIntoSentences = (text) => {
+    return text
+        .split(/\r?\n+/)
+        .flatMap((line) => line.split(ASCII_BOUNDARY))
+        .flatMap((part) => part.split(CJK_BOUNDARY))
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
 };
 
 const submitExtendedText = async (req, res) => {
