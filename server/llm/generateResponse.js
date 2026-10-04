@@ -14,7 +14,7 @@ const modelLabels = {
     anthropic: 'anthropic/claude-sonnet-4-5',
     gemini: 'gemini/gemini-flash-lite-latest',
     openai: 'openai/gpt-4.1',
-    geminiThinking: 'gemini/gemini-3.1-flash-lite-preview'
+    geminiThinking: 'gemini/gemini-3.1-flash-lite'
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
