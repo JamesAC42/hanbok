@@ -71,10 +71,13 @@ function quote(text) {
         .join('\n');
 }
 
+// Some display names are email addresses; keep those out of public issues.
+const name = (n) => String(n || 'someone').replace(/[^\s@]+@[^\s@]+\.[^\s@]+/g, '[email hidden]');
+
 const day = (d) => new Date(d).toISOString().slice(0, 10);
 
 function renderReply(reply, rootUserId) {
-    const who = reply.userId === rootUserId ? `${reply.userName} (original poster)` : reply.userName;
+    const who = reply.userId === rootUserId ? `${name(reply.userName)} (original poster)` : name(reply.userName);
     const indent = reply.depth > 0 ? ` (reply to a reply)` : '';
     return `**${who}** · ${day(reply.dateCreated)}${indent}\n\n${quote(reply.text)}`;
 }
@@ -87,7 +90,7 @@ function renderBody(item, replies) {
     ];
     if (deleted) lines.push(DELETED_MARKER);
     lines.push(
-        `Posted on the [feedback page](${SITE_FEEDBACK_PAGE}) by **${item.userName}** on ${day(item.dateCreated)} (feedback #${item.feedbackId}).`,
+        `Posted on the [feedback page](${SITE_FEEDBACK_PAGE}) by **${name(item.userName)}** on ${day(item.dateCreated)} (feedback #${item.feedbackId}).`,
         '',
         deleted ? '_The author deleted this post._' : quote(item.text),
     );
@@ -173,9 +176,9 @@ async function main() {
     if (DRY_RUN && !TOKEN) {
         for (const item of feedback) {
             const replies = flattenReplies(item);
-            console.log(`\n=== #${item.feedbackId} ${day(item.dateCreated)} ${item.userName}${item.isDeleted ? ' [deleted]' : ''} (${replies.length} replies)`);
+            console.log(`\n=== #${item.feedbackId} ${day(item.dateCreated)} ${name(item.userName)}${item.isDeleted ? ' [deleted]' : ''} (${replies.length} replies)`);
             console.log(item.text);
-            for (const r of replies) console.log(`  -> ${r.userName} ${day(r.dateCreated)}: ${String(r.text).replace(/\n/g, ' ')}`);
+            for (const r of replies) console.log(`  -> ${name(r.userName)} ${day(r.dateCreated)}: ${String(r.text).replace(/\n/g, ' ')}`);
         }
         return;
     }
