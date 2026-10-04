@@ -1,0 +1,73 @@
+name: Deploy
+
+on:
+  # Every push to main deploys once CI has passed on it.
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  # Manual runs: redeploy, deploy an older commit, or flip back to the previous build.
+  workflow_dispatch:
+    inputs:
+      action:
+        description: deploy builds the ref below; rollback swaps back to the previous build without rebuilding
+        type: choice
+        options: [deploy, rollback]
+        default: deploy
+      ref:
+        description: Branch, tag or commit SHA to deploy
+        default: main
+
+# Deploys run one at a time, in order; a newer push waits for the current one.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 20
+    steps:
+      - name: Resolve commit
+        id: commit
+        if: github.event_name == 'workflow_dispatch' && inputs.action == 'deploy'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Pick command
+        id: cmd
+        env:
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+          DISPATCH_ACTION: ${{ inputs.action }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = workflow_run ]; then
+            echo "command=deploy $RUN_SHA" >> "$GITHUB_OUTPUT"
+          elif [ "$DISPATCH_ACTION" = rollback ]; then
+            echo "command=rollback" >> "$GITHUB_OUTPUT"
+          else
+            echo "command=deploy $(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          COMMAND: ${{ steps.cmd.outputs.command }}
+        # The server's authorized_keys pins this key to scripts/deploy-entry.sh,
+        # which reads the command below and runs scripts/deploy.sh.
+        run: ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" "$COMMAND"
