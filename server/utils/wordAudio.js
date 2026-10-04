@@ -1,6 +1,7 @@
 const { getDb } = require('../database');
 const { generateSpeech, getPresignedUrl } = require('../elevenlabs/generateSpeech');
 const { getJapaneseReading } = require('../llm/prompt_japanese_reading');
+const { toSpokenJapaneseParticle } = require('./sentenceAudio');
 
 /**
  * Get or generate audio for a word
@@ -19,6 +20,12 @@ async function getWordAudio(word, language, translation = null, forceRefresh = f
   if (language === 'ja' && translation) {
     hiraganaReading = await getJapaneseReading(word, translation);
     console.log(`Generated hiragana reading for "${word}": "${hiraganaReading}"`);
+  }
+  // A lone は / へ saved as a word is the particle; TTS reads the kana
+  // literally ("ha" / "he"), so speak it as わ / え. Using the spoken form as
+  // the reading also bypasses any previously cached "ha" audio.
+  if (language === 'ja' && (word === 'は' || word === 'へ')) {
+    hiraganaReading = toSpokenJapaneseParticle(word);
   }
   
   // Check if we already have audio for this word (and reading for Japanese)

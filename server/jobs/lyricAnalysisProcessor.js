@@ -6,6 +6,7 @@ const SupportedLanguages = require('../supported_languages');
 const { getLyricsAnalysisPrompt } = require('../llm/lyrics_prompts');
 const { createClient } = require('redis');
 const { generateSpeech } = require('../elevenlabs/generateSpeech');
+const { getJapaneseTextToRead } = require('../utils/sentenceAudio');
 
 // Redis connection options
 const redisOptions = {
@@ -156,7 +157,7 @@ async function processLyricAnalysis(job) {
   
           let textToRead;
           if(lyric.language === 'ja') {
-              textToRead = analysis.sentence.reading ?? sentence;
+              textToRead = getJapaneseTextToRead(analysis, sentence);
           } else {
               textToRead = sentence;
           }
