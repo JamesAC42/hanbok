@@ -12,9 +12,80 @@ const hasAudioForVariant = (sentence, variant = 'normal') => {
   return !!(sentence[fields.voice1] && sentence[fields.voice2]);
 };
 
+// Particles whose kana spelling differs from their pronunciation.
+// TTS reads the kana literally (は -> "ha", へ -> "he"), so swap in the
+// spoken form when the analysis marks the component as a particle.
+const toSpokenJapaneseParticle = (text) => {
+  if (text === 'へ') return 'え';
+  if (typeof text === 'string' && text.endsWith('は')) {
+    // は, では, には, とは, からは, ... -> わ
+    return `${text.slice(0, -1)}わ`;
+  }
+  return text;
+};
+
+const isParticleComponent = (component) => (
+  /particle/i.test(component?.type || '') || component?.isParticle === true
+);
+
+/**
+ * Build the text sent to TTS for a Japanese sentence from its component
+ * readings, keeping punctuation/spacing from the original text and speaking
+ * particles like は/へ as わ/え. Returns null when the components can't be
+ * aligned with the original text, so callers can fall back.
+ */
+const buildJapaneseTtsText = (analysis, originalText) => {
+  const components = analysis?.components;
+  if (!Array.isArray(components) || components.length === 0 || typeof originalText !== 'string') {
+    return null;
+  }
+
+  let cursor = 0;
+  let output = '';
+  let changed = false;
+
+  for (const component of components) {
+    const text = component?.text;
+    if (typeof text !== 'string' || text.length === 0) {
+      return null;
+    }
+    const index = originalText.indexOf(text, cursor);
+    if (index === -1) {
+      return null;
+    }
+    // Keep whatever sits between components (punctuation, spaces).
+    output += originalText.slice(cursor, index);
+
+    let spoken = component.reading || text;
+    if (isParticleComponent(component)) {
+      const particleSpoken = toSpokenJapaneseParticle(spoken);
+      if (particleSpoken !== spoken) {
+        changed = true;
+        spoken = particleSpoken;
+      }
+    }
+    output += spoken;
+    cursor = index + text.length;
+  }
+
+  // Only override the existing reading when we actually fixed a particle;
+  // otherwise keep the previous behaviour exactly.
+  if (!changed) {
+    return null;
+  }
+
+  return output + originalText.slice(cursor);
+};
+
+const getJapaneseTextToRead = (analysis, originalText) => (
+  buildJapaneseTtsText(analysis, originalText)
+    ?? analysis?.sentence?.reading
+    ?? originalText
+);
+
 const getSentenceTextToRead = (sentence) => (
   sentence?.originalLanguage === 'ja'
-    ? sentence?.analysis?.sentence?.reading ?? sentence?.text
+    ? getJapaneseTextToRead(sentence?.analysis, sentence?.text)
     : sentence?.text
 );
 
@@ -138,7 +209,9 @@ module.exports = {
   clearSentenceAudioVariant,
   copySentenceAudioFromSource,
   findMatchingSentenceWithAudio,
+  getJapaneseTextToRead,
   getSentenceTextToRead,
+  toSpokenJapaneseParticle,
   hasAudioForVariant,
   refreshSentenceAudioUrls,
   resolveSentenceAudio

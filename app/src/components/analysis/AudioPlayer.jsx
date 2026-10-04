@@ -66,6 +66,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     const hasActiveAudio = isSlowMode ? hasSlowAudio : hasNormalAudio;
     const isQuotaBlocked = audioErrorCode === 'AUDIO_QUOTA_EXCEEDED';
     const isLengthBlocked = audioErrorCode === 'AUDIO_PREMIUM_LENGTH_REQUIRED';
+    const isGenerationFailed = audioErrorCode === 'GENERATION_FAILED';
 
     const getActiveVoices = () => isSlowMode
       ? { voice1: voices.voice1Slow, voice2: voices.voice2Slow }
@@ -96,7 +97,7 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
         if (activeAudio) {
           activeAudio.play()
             .catch(error => {
-              
+              setIsPlaying(false);
               // Check if the error is due to an expired URL (NotSupportedError or network error)
               if (error.name === 'NotSupportedError' || error.name === 'NetworkError') {
                 refreshAudioUrls(playbackMode);
@@ -384,6 +385,9 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     }, []);
 
     const previewVoices = getActiveVoices();
+    const generationFailedTitle = t('audioPlayer.generationFailed') === 'audioPlayer.generationFailed'
+      ? 'Audio could not be generated. Tap to try again.'
+      : t('audioPlayer.generationFailed');
     const slowLoginTitle = t('audioPlayer.slowLoginRequired.title') === 'audioPlayer.slowLoginRequired.title'
       ? 'Sign in to listen to slow audio.'
       : t('audioPlayer.slowLoginRequired.title');
@@ -509,6 +513,8 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
                           ? t('audioPlayer.noCredits.title')
                           : isLengthBlocked
                             ? lengthLimitTitle
+                          : (isGenerationFailed && !loadingAudio)
+                            ? generationFailedTitle
                           : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))
                       }
                     </div>
