@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import styles from '@/styles/components/emailauth.module.scss';
 import { track, getAttribution } from '@/lib/analytics';
+import HeardFromSelect from '@/components/HeardFromSelect';
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -196,6 +197,8 @@ const RegisterForm = () => {
                         placeholder="Confirm your password"
                     />
                 </div>
+
+                <HeardFromSelect disabled={loading} />
 
                 {error && (
                     <div className={styles.error}>

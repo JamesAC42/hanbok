@@ -46,3 +46,17 @@ export const getAttribution = () => {
         return null;
     }
 };
+
+// Records the signup form's "How did you hear about us?" answer alongside the stored
+// attribution, so it is sent with both email registration and Google sign-in.
+export const setHeardFrom = (heardFrom) => {
+    if (typeof window === 'undefined') return;
+    try {
+        const attribution = getAttribution() || {};
+        if (heardFrom) attribution.heardFrom = heardFrom;
+        else delete attribution.heardFrom;
+        localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify(attribution));
+    } catch (e) {
+        // best-effort, same as captureAttribution
+    }
+};

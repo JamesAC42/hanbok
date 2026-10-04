@@ -5,6 +5,10 @@ const ALLOWED_KEYS = [
     'referrer', 'landingPath', 'firstSeen'
 ];
 const MAX_LENGTH = 200;
+// Self-reported "How did you hear about us?" answer. Kept to a fixed list so it can be counted.
+const HEARD_FROM_OPTIONS = [
+    'tiktok', 'instagram', 'youtube', 'reddit', 'search', 'friend', 'discord', 'other'
+];
 
 const sanitizeAttribution = (raw) => {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
@@ -15,7 +19,10 @@ const sanitizeAttribution = (raw) => {
             clean[key] = value.trim().slice(0, MAX_LENGTH);
         }
     }
+    if (HEARD_FROM_OPTIONS.includes(raw.heardFrom)) {
+        clean.heardFrom = raw.heardFrom;
+    }
     return Object.keys(clean).length ? clean : null;
 };
 
-module.exports = { sanitizeAttribution };
+module.exports = { sanitizeAttribution, HEARD_FROM_OPTIONS };
