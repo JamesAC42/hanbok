@@ -11,10 +11,12 @@
 # the reload fails, the previous build is put back automatically.
 #
 # Server-specific settings can be overridden in ~/.hanbok-deploy.env (see the
-# defaults below). Setup and usage: docs/deploy.md
+# defaults below); staging uses ~/.hanbok-deploy-staging.env via DEPLOY_ENV_FILE.
+# Setup and usage: docs/deploy.md
 set -Eeuo pipefail
 
-[ -f "$HOME/.hanbok-deploy.env" ] && . "$HOME/.hanbok-deploy.env"
+DEPLOY_ENV_FILE="${DEPLOY_ENV_FILE:-$HOME/.hanbok-deploy.env}"
+[ -f "$DEPLOY_ENV_FILE" ] && . "$DEPLOY_ENV_FILE"
 # Non-interactive SSH sessions skip .bashrc, so load nvm if node isn't on PATH.
 if ! command -v pm2 >/dev/null && [ -s "${NVM_DIR:-$HOME/.nvm}/nvm.sh" ]; then
   . "${NVM_DIR:-$HOME/.nvm}/nvm.sh"
@@ -112,12 +114,22 @@ deploy() {
   # site keeps running its old build throughout.
   trap '[ "$BASH_SUBSHELL" -eq 0 ] && { log "failed before switching; site still on ${prev:0:7}"; git reset --hard -q "$prev"; rm -rf "$APP_DIR/.next-build"; }' ERR
   git reset --hard -q "$sha"
+  # Older commits build straight into the live app/.next; refuse those.
+  grep -q NEXT_DIST_DIR "$APP_DIR/next.config.mjs" || {
+    log "this commit's app/next.config.mjs predates side-by-side builds; merge main into it first"
+    false
+  }
   install_deps "$DEPLOY_PATH/server" "$prev" "$sha"
   install_deps "$APP_DIR" "$prev" "$sha"
 
+  # Production and staging share the server's memory, and two Next builds at
+  # once can run it out, so builds take turns.
+  exec 8>"$HOME/.hanbok-build.lock"
+  flock -n 8 || { log "waiting for another build to finish"; flock 8; }
   log "building app"
   rm -rf "$APP_DIR/.next-build"
   (cd "$APP_DIR" && NEXT_DIST_DIR=.next-build npm run build)
+  exec 8>&-
   trap - ERR
 
   rm -rf "$APP_DIR/.next-prev"

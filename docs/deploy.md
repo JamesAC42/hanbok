@@ -1,6 +1,8 @@
 # Deploying
 
-Every push to `main` deploys to hanbokstudy.com once CI passes on it.
+Every push to `main` deploys to hanbokstudy.com once CI passes on it. Any PR
+or branch can be put on staging.hanbokstudy.com by hand to try it first
+(see [Staging](#staging)).
 
 ## How it works
 
@@ -69,3 +71,60 @@ with the `git show` line above; `deploy.sh` updates itself with each deploy.
 
 Server-specific overrides (pm2 names, ports, health timeout) go in
 `~/.hanbok-deploy.env`; see the defaults at the top of `scripts/deploy.sh`.
+
+## Staging
+
+staging.hanbokstudy.com runs a second checkout,
+`/var/www/hanbokstudy.com/source/hanbok-staging`, under pm2 as `hanbok-staging`
+(API) and `hanbok-client-staging` (app, port 3060). Nothing deploys to it
+automatically.
+
+To put something on it: Actions → Deploy to staging → Run workflow, and enter
+
+- a **PR number** (e.g. `37`) to deploy the PR as it would look merged into
+  `main` (GitHub's `refs/pull/<n>/merge`; needs the PR to merge cleanly), or
+- a branch, tag or SHA to deploy exactly that. Branches that predate
+  side-by-side builds are refused; merge `main` into them or use the PR number.
+
+`rollback` swaps staging back to its previous build. To reset staging to
+production's code, deploy `main`.
+
+It uses the same deploy key as production. `scripts/deploy-entry.sh` sends
+`staging-deploy` / `staging-rollback` to the checkout named in
+`~/.hanbok-deploy-staging.env` and refuses if that is the production checkout.
+Staging always runs `main`'s `scripts/deploy.sh`. Production and staging builds
+take turns (`~/.hanbok-build.lock`) so they don't run the server out of memory.
+
+The deploy secrets must be repository secrets (not limited to the `production`
+environment) for the staging workflow to see them.
+
+### Staging setup
+
+On the server, as `adminuser`:
+
+```bash
+git -C /var/www/hanbokstudy.com/source/hanbok fetch origin
+git -C /var/www/hanbokstudy.com/source/hanbok show origin/main:scripts/deploy-entry.sh > ~/hanbok-deploy-entry.sh
+
+cat > ~/.hanbok-deploy-staging.env <<'ENV'
+DEPLOY_PATH=/var/www/hanbokstudy.com/source/hanbok-staging
+PM2_APPS="hanbok-staging hanbok-client-staging"
+SERVER_HEALTH_URL=http://127.0.0.1:3060/api/session
+APP_HEALTH_URL=http://127.0.0.1:3060/
+# The app's /api rewrite is baked in at build time; point it at the staging API.
+export API_INTERNAL_URL=http://localhost:5667
+ENV
+```
+
+Before staging is used, its `server/.env` must keep it away from real users:
+
+- `MONGODB_DB` is its own database, not production's. Code under test runs
+  schema setup and writes on startup, so sharing production's database means
+  testing on real users' data. To test with real data, copy production into the
+  staging database (`mongodump --db <prod> --archive | mongorestore --archive
+  --nsFrom '<prod>.*' --nsTo '<staging>.*'`, with the usual credentials).
+- Email only goes out for sign-up, verification and password-reset requests
+  made on staging itself, so `EMAIL_ENABLED=true` is fine there.
+- `STRIPE_SECRET_KEY` is a test key (`sk_test_…`), with its own webhook secret.
+- `REDIS_SESSION_PREFIX`, `SESSION_COOKIE_NAME` and `BULL_QUEUE_PREFIX` differ
+  from production, and `COOKIE_DOMAIN` / `FRONTEND_URL` are the staging domain.
