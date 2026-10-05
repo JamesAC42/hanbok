@@ -48,6 +48,10 @@ async function connectToDatabase() {
       }
     }
     await db.collection('sentences').createIndex({ userId: 1 });
+    await db.collection('sentences').createIndex({ userId: 1, dateCreated: -1 });
+    // Finds the sentence a flashcard word came from (lib/sourceSentence.js)
+    await db.collection('sentences').createIndex({ userId: 1, 'analysis.components.dictionary_form': 1 });
+    await db.collection('words').createIndex({ userId: 1, dateSaved: -1 });
     await db.collection('sentences').createIndex({ sentenceId: 1 }, { unique: true });
     await db.collection('savedSentences').createIndex(
       { userId: 1, sentenceId: 1 }, 

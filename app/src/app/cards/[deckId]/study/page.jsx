@@ -12,6 +12,7 @@ import { MaterialSymbolsVolumeOff } from '@/components/icons/VolumeOff';
 import { use } from 'react';
 import getFontClass from '@/lib/fontClass';
 import Dashboard from '@/components/Dashboard';
+import SourceSentence from '@/components/cards/SourceSentence';
 // Import our new study session manager
 import studySessionManager from '@/lib/studySessionManager';
 
@@ -516,6 +517,9 @@ const StudyView = ({ params }) => {
                                         )}
                                     </div>
                                     <p className={studyStyles.answerText} lang="en">{answer}</p>
+                                    {currentCard.contentType === 'word' && (
+                                        <SourceSentence source={currentCard.source} language={cardLanguage} />
+                                    )}
                                 </div>
                             </div>
                         </div>

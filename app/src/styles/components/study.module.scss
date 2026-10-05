@@ -1040,3 +1040,56 @@ $primary-button-hover: #5a67d8;
         pointer-events: none;
     }
 }
+// Source sentence on the answer side of word cards
+.sourceSentence {
+    margin-top: 1.75rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    background: var(--background);
+    border: 1px solid var(--foreground-lighter);
+    text-align: left;
+}
+
+.sourceLabel {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--foreground-muted);
+}
+
+.sourceText {
+    margin-top: 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--foreground);
+
+    mark {
+        background: color-mix(in srgb, var(--primary) 18%, transparent);
+        color: inherit;
+        border-radius: 0.25rem;
+        padding: 0 0.15rem;
+        box-shadow: inset 0 -2px 0 var(--primary);
+    }
+}
+
+.sourceTranslation {
+    margin-top: 0.3rem;
+    font-size: 0.95rem;
+    color: var(--foreground-muted);
+}
+
+.sourceLink {
+    display: inline-block;
+    margin-top: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -321,3 +321,115 @@
         max-height: 100rem;
     }
 }
+
+// Library tabs (History / Saved / Words)
+.libraryTabs {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    margin-bottom: 1.25rem;
+    border-radius: 0.8rem;
+    background: var(--background-alt);
+
+    @media screen and (max-width: 725px) {
+        margin-left: 1.5rem;
+    }
+}
+
+.libraryTab {
+    padding: 0.5rem 1.1rem;
+    border: none;
+    border-radius: 0.6rem;
+    background: none;
+    color: var(--foreground-muted);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+
+    &.active {
+        background: var(--background);
+        color: var(--foreground);
+        box-shadow: 0 2px 8px -4px var(--shadow);
+    }
+}
+
+.libraryEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 1rem;
+    border: 1px dashed var(--foreground-lighter);
+    text-align: center;
+    color: var(--foreground-muted);
+
+    p {
+        max-width: 26rem;
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+.libraryEmptyAction {
+    padding: 0.55rem 1.1rem;
+    border: none;
+    border-radius: 0.6rem;
+    background: var(--primary);
+    color: var(--background);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.wordItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    cursor: default;
+
+    &:hover {
+        outline: none;
+    }
+}
+
+.wordMain {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.8rem;
+    min-width: 0;
+}
+
+.wordOriginal {
+    font-size: 1.3rem;
+    color: var(--foreground);
+}
+
+.wordReading {
+    font-size: 0.9rem;
+    color: var(--foreground-muted);
+}
+
+.wordTranslation {
+    font-size: 1rem;
+    color: var(--foreground-muted);
+}
+
+.wordSource {
+    flex-shrink: 0;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}

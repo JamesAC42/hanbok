@@ -150,7 +150,7 @@ const RecentWork = ({ items }) => (
     <section className={styles.card} aria-labelledby="recent-heading">
         <div className={styles.cardHeader}>
             <h2 id="recent-heading" className={styles.cardTitle}>Continue</h2>
-            <Link href="/history" className={styles.cardLink}>See all in Library</Link>
+            <Link href="/library" className={styles.cardLink}>See all in Library</Link>
         </div>
         {items === null ? (
             <div className={styles.muted}>Loading…</div>
@@ -277,7 +277,7 @@ const HomeView = () => {
 
             <nav className={styles.shortcuts} aria-label="Shortcuts">
                 <Shortcut href="/analyze" color="#3d64e8" icon={<MaterialSymbolsVariableAddRounded />} label="Analyze" />
-                <Shortcut href="/history" color="#0f9f8f" icon={<MaterialSymbolsLibraryBooksSharp />} label="Library" />
+                <Shortcut href="/library" color="#0f9f8f" icon={<MaterialSymbolsLibraryBooksSharp />} label="Library" />
                 <Shortcut href="/cards" color="#e5484d" icon={<PhCardsFill />} label="Review" badge={cardsToday} />
                 <Shortcut href="/tutor" color="#7c4ddb" icon={<IcSharpSchool />} label="Tutor" />
                 <Shortcut href="/lyrics" color="#e08a1e" icon={<IcSharpQueueMusic />} label="Lyrics" />

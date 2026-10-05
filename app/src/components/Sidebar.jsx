@@ -157,7 +157,7 @@ function Sidebar() {
                 ...(isAuthenticated ? [{ path: "/home", label: label('sidebar.home', 'Home'), icon: <MaterialSymbolsLightOtherHouses /> }] : []),
                 { path: "/analyze", match: ["/analyze", "/sentence"], label: label('sidebar.analyze', 'Analyze'), icon: <MaterialSymbolsVariableAddRounded /> },
                 { path: "/extended-text", match: ["/extended-text"], label: label('sidebar.paragraphs', 'Paragraphs'), icon: <Fa6SolidParagraph /> },
-                { path: "/history", match: ["/history", "/bookmarks"], label: label('sidebar.library', 'Library'), icon: <MaterialSymbolsLibraryBooksSharp /> },
+                { path: "/library", match: ["/library", "/history", "/bookmarks"], label: label('sidebar.library', 'Library'), icon: <MaterialSymbolsLibraryBooksSharp /> },
                 { path: "/cards", match: ["/cards"], label: label('sidebar.review', 'Review'), icon: <PhCardsFill />, badge: cardsToday },
             ],
         },
