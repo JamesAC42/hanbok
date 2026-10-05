@@ -9,6 +9,8 @@ import Image from 'next/image';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 import EmailLoginForm from '@/components/EmailLoginForm';
 import RegisterForm from '@/components/RegisterForm';
+import HeardFromSelect from '@/components/HeardFromSelect';
+import emailAuthStyles from '@/styles/components/emailauth.module.scss';
 import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
 import { MdiHeadphones } from '@/components/icons/Headphones';
 import { MajesticonsLightbulbShine } from '@/components/icons/Lightbulb';
@@ -141,6 +143,9 @@ const Login = () => {
                                     <p className={loginStyles.googleText}>
                                         Sign in quickly with your Google account
                                     </p>
+                                    <div className={emailAuthStyles.authForm}>
+                                        <HeardFromSelect />
+                                    </div>
                                     <GoogleSignInButton />
                                 </div>
                             )}

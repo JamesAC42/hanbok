@@ -23,3 +23,9 @@ test('returns null for missing or invalid input', () => {
     assert.strictEqual(sanitizeAttribution(['utm_source']), null);
     assert.strictEqual(sanitizeAttribution({ foo: 'bar' }), null);
 });
+
+test('keeps a known heardFrom answer and drops unknown ones', () => {
+    assert.deepStrictEqual(sanitizeAttribution({ heardFrom: 'tiktok' }), { heardFrom: 'tiktok' });
+    assert.strictEqual(sanitizeAttribution({ heardFrom: 'myspace' }), null);
+    assert.strictEqual(sanitizeAttribution({ heardFrom: ['tiktok'] }), null);
+});
