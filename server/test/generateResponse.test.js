@@ -17,7 +17,7 @@ const stubModule = (relPath, exportsObj) => {
 };
 
 stubModule('anthropic.js', { prompt_anthropic: fakeProvider });
-stubModule('gemini.js', { prompt_gemini: fakeProvider });
+stubModule('gemini.js', { prompt_gemini: fakeProvider, prompt_gemini_analysis: fakeProvider, ANALYSIS_MODEL: 'test-model' });
 stubModule('openai.js', { prompt_openai: fakeProvider });
 stubModule('geminiThinking.js', { prompt_geminiThinking: fakeProvider });
 
