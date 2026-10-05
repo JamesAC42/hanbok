@@ -112,7 +112,7 @@ PM2_APPS="hanbok-staging hanbok-client-staging"
 SERVER_HEALTH_URL=http://127.0.0.1:3060/api/session
 APP_HEALTH_URL=http://127.0.0.1:3060/
 # The app's /api rewrite is baked in at build time; point it at the staging API.
-export API_INTERNAL_URL=http://localhost:<PORT from hanbok-staging/server/.env>
+export API_INTERNAL_URL=http://localhost:5667
 ENV
 ```
 
@@ -123,7 +123,8 @@ Before staging is used, its `server/.env` must keep it away from real users:
   testing on real users' data. To test with real data, copy production into the
   staging database (`mongodump --db <prod> --archive | mongorestore --archive
   --nsFrom '<prod>.*' --nsTo '<staging>.*'`, with the usual credentials).
-- `EMAIL_ENABLED` is not `true`, so it can't email real users.
+- Email only goes out for sign-up, verification and password-reset requests
+  made on staging itself, so `EMAIL_ENABLED=true` is fine there.
 - `STRIPE_SECRET_KEY` is a test key (`sk_test_…`), with its own webhook secret.
 - `REDIS_SESSION_PREFIX`, `SESSION_COOKIE_NAME` and `BULL_QUEUE_PREFIX` differ
   from production, and `COOKIE_DOMAIN` / `FRONTEND_URL` are the staging domain.
