@@ -3,6 +3,7 @@
 .profileContent {
 
   @include dashboard-page;
+  max-width: 56rem;
 
   @media screen and (max-width: 725px) {
     padding: 1.5rem;
@@ -13,201 +14,203 @@
     width: 100dvw;
     margin: 0;
     padding: 1rem;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    transform:translateY(-1rem);
-    min-height: 100dvh;
-    justify-content: center;
+  }
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  .pageTitle {
+    margin: 0 !important;
   }
 }
 
 .signOut {
-  margin-top: 1rem;
-  padding:0.5rem 1rem;
-  border-radius:0.5rem;
-  cursor:pointer;
-  background:var(--background-alt);
-  color:var(--foreground);
-  font-family:var(--font-funnel);
-  width:fit-content;
-  font-size:0.9rem;
-  font-weight:700;
-  margin-bottom:1rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--foreground-lighter);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+
   &:hover {
-    background:var(--foreground-lighter);
+    border-color: var(--foreground-light);
+    background: var(--background-alt);
   }
 }
 
-.userDetails {
-  margin-top: 2rem;
-  width:100%;
-  border-radius: 0.5rem;
-  font-size:1.2rem;
-  font-family:var(--font-funnel);
+.card {
+  background: var(--background);
+  border: 1px solid var(--foreground-lighter);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -24px var(--shadow);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
 }
 
-.userDetails h2 {
-  font-size:1.3rem;
-  margin-bottom: 1rem;
-  font-family:var(--font-funnel);
-  color:var(--foreground-muted);
+.sectionLabel {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--foreground-muted);
 }
 
-.userDetails p {
-  font-size:1rem;
-  margin-bottom: 1rem;
-  font-family:var(--font-funnel);
-  color:var(--foreground);  
+.account {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--primary) 14%, var(--background));
+  color: var(--primary);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.accountText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 
   strong {
-    font-weight:700;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+  }
+
+  span {
+    color: var(--foreground-muted);
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
-.userDetails a {
-  color: #395aff;
-  text-decoration: underline;
-  white-space:normal;
-  word-wrap: break-word;
+.planChip {
+  flex-shrink: 0;
+  padding: 0.3rem 0.8rem;
+  border-radius: 2rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  font-weight: 800;
+  border: 1px solid var(--foreground-lighter);
+  color: var(--foreground-muted);
+
+  &.basic,
+  &.plus {
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent);
+    background: color-mix(in srgb, var(--primary) 10%, var(--background));
+    color: var(--primary);
+  }
 }
 
-.tierInfo {
-  margin-top: 0rem;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-
-  background:var(--background-alt);
-  color:var(--foreground);
-  font-family:var(--font-funnel);
+.usageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+  gap: 0.75rem;
 }
 
-.tierInfo a {
-  color:var(--primary);
-  text-decoration: underline;
+.usageItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--background-alt);
+}
+
+.usageLabel {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  line-height: 1.3;
+}
+
+.usageValue {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--foreground);
+}
+
+.planText {
+  margin: 0 0 0.9rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.planLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+
+  a {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 .bonusAlert {
-    margin-top: 2rem;
-    padding: 1.5rem;
-    background:var(--background-alt);
-    border: 1px solid var(--foreground-light);
-    border-radius: 0.5rem;
-    text-align: center; 
+  margin-bottom: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+  background: color-mix(in srgb, var(--primary) 6%, var(--background));
 
-    h3 {
-        color:var(--primary);
-        margin-bottom: 0.5rem;
-        font-family: var(--font-display);
-    }
-
-    p {
-        color:var(--foreground);
-        margin: 0;
-    }
-
-    a {
-        color:var(--primary);
-        text-decoration: underline;
-        
-        &:hover {
-            color:var(--primary-dark);
-        }
-    }
-}
-
-.settingsContainer {
-
-  display:flex;
-  flex-direction:column;
-  gap:0rem;
-  margin-top: 2rem;
-
-  .settingsHeader {
-    h2 {
-      font-size:1.3rem;
-      margin-bottom: 1rem;
-      font-family:var(--font-funnel);
-      color:var(--foreground-muted);
-    }
+  h3 {
+    margin: 0 0 0.4rem;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: 1rem;
   }
 
-  .themeToggle {
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-    gap:0.5rem;
-    background:var(--background-alt);
-    border-radius:0.5rem;
-    justify-content:flex-start;
-    padding:0.5rem;
-    width:fit-content;
-
-    .themeToggleItem {
-      padding:0.5rem 1rem;
-      cursor:pointer;
-      margin:0.2rem;
-      color:var(--foreground);
-      border-radius:0.5rem;
-      font-family:var(--font-funnel);
-      outline:none;
-      border:none;
-      background:transparent;
-      &:hover {
-        outline:1px solid var(--foreground);
-      }
-
-      &.active {
-        background:var(--background);
-      }
-    }
-  }
-
-  .settingsMessage {
-    background:var(--background-alt);
-    border:1px solid var(--foreground-light);
-    border-radius:0.5rem;
-    padding:1rem;
-    font-family:var(--font-funnel);
-    font-size:0.95rem;
-    color:var(--foreground);
-    max-width:32rem;
-  }
-}
-
-.manageSubscription {
-  margin-top: 2rem;
-  padding: 1rem;
-  background:var(--background-alt);
-  
-  h2 {
-    font-family:var(--font-funnel);
-    font-size:1.1rem;
-    color:var(--foreground);
+  p {
+    color: var(--foreground-muted);
+    margin: 0;
+    line-height: 1.5;
   }
 
   a {
-    font-family:var(--font-funnel);
-    font-size:1rem;
-    color:var(--primary);
+    color: var(--primary);
+    font-weight: 700;
   }
+}
+
+.settingsMessage {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--foreground-muted);
 }
 
 .girl {
   @include bottom-girl;
 }
-
-@media screen and (max-width: 500px) {
-    .bonusAlert {
-        padding: 1rem;
-        
-        h3 {
-            font-size: 1.1rem;
-        }
-        
-        p {
-            font-size: 0.9rem;
-        }
-    }
-} 

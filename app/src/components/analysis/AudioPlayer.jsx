@@ -5,13 +5,12 @@ import { MaterialSymbolsPlayArrowRounded } from '@/components/icons/Play';
 import { MaterialSymbolsPause } from '@/components/icons/Pause';
 import {useSearchParams} from 'next/navigation';
 import { MaterialSymbolsArrowCircleRightRounded } from '@/components/icons/RightArrow';
-import { TdesignUserTalk1Filled } from '@/components/icons/Talk';
 import Image from 'next/image';
 import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import { MaterialSymbolsTurtle } from '@/components/icons/Turtle';
 import { LucideRabbit } from '@/components/icons/Rabbit';
 
-import styles from '@/styles/components/sentenceanalyzer/audioplayer.module.scss';
+import styles from '@/styles/components/sentenceanalyzer/audioplayerslim.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
@@ -424,98 +423,63 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
               Your browser does not support the audio element.
             </audio>
           </div>
-          <div className={`${styles.audioPlayerOuter} ${shouldLock() ? styles.locked : ''}`}>
+          <div className={`${styles.slimPlayer} ${shouldLock() ? styles.locked : ''}`}>
+            {shouldLock() ? (
+              <button
+                className={styles.playButton}
+                onClick={() => handleAudioLock()}
+                disabled={loadingAudio}
+              >
+                {loadingAudio ? <SvgSpinnersRingResize /> : <MaterialSymbolsPlayArrowRounded />}
+                <span>
+                  {isQuotaBlocked
+                    ? t('audioPlayer.noCredits.title')
+                    : isLengthBlocked
+                      ? lengthLimitTitle
+                      : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))}
+                </span>
+              </button>
+            ) : (
+              <button
+                className={`${styles.playButton} ${isPlaying ? styles.playing : ''}`}
+                onClick={handlePlayPause}
+                disabled={isSlowMode && loadingSlowAudio}
+                aria-label={isPlaying ? 'Pause' : 'Play'}
+              >
+                {isPlaying ? <MaterialSymbolsPause /> : <MaterialSymbolsPlayArrowRounded />}
+                <span>{isPlaying ? 'Pause' : 'Listen'}</span>
+              </button>
+            )}
 
             <button
-              onClick={handleSpeakerSwitch} 
-              className={`${
-                styles.speakersOuter
-                } ${
-                  activeSpeaker === 1 ? styles.speaker1Active : styles.speaker2Active
-                } ${
-                  shouldLock() ? styles.locked : ''
-                }`}>
-              <div className={styles.speaker}>
-                <div className={styles.speakerInner}>
-                  <div className={styles.speakerImage}>
-                    <Image 
-                      src="/images/speakers/female.png" 
-                      alt={t('audioPlayer.speakerImages.female')} 
-                      width={1920} 
-                      height={1080} 
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className={styles.speaker}>
-                <div className={styles.speakerInner}>
-                  <div className={styles.speakerImage}>
-                    <Image 
-                      src="/images/speakers/male.png" 
-                      alt={t('audioPlayer.speakerImages.male')} 
-                      width={1920} 
-                      height={1080} 
-                    />
-                  </div>
-                </div>
-              </div>
+              onClick={handleSpeakerSwitch}
+              className={styles.voiceToggle}
+              disabled={shouldLock()}
+              title="Switch voice"
+            >
+              <span className={styles.voiceAvatar}>
+                <Image
+                  src={activeSpeaker === 1 ? '/images/speakers/female.png' : '/images/speakers/male.png'}
+                  alt={activeSpeaker === 1 ? t('audioPlayer.speakerImages.female') : t('audioPlayer.speakerImages.male')}
+                  width={64}
+                  height={64}
+                />
+              </span>
+              <span>{activeSpeaker === 1 ? 'Voice 1' : 'Voice 2'}</span>
             </button>
 
-            <div className={styles.playbackColumn}>
-              <button 
-                className={`${
-                  styles.togglePlaying
-                } ${
-                  shouldLock() ? styles.locked : ''
-                }`}
-                onClick={handlePlayPause}
-                disabled={(shouldLock() && !isSlowMode) || (isSlowMode && loadingSlowAudio)}
-              >
-                <div className={styles.togglePlayingInner}>
-                  {isPlaying ? <MaterialSymbolsPause /> : <MaterialSymbolsPlayArrowRounded />}
-                </div>
-              </button>
-              <button
-                className={`${
-                  styles.speedToggle
-                } ${
-                  isSlowMode ? styles.active : ''
-                } ${
-                  shouldLock() ? styles.locked : ''
-                }`}
-                onClick={togglePlaybackMode}
-                disabled={shouldLock() || loadingSlowAudio}
-              >
-                <div className={styles.speedToggleInner}>
-                  {isSlowMode
-                    ? (loadingSlowAudio ? <SvgSpinnersRingResize /> : <MaterialSymbolsTurtle />)
-                    : <LucideRabbit />}
-                  <span>{isSlowMode ? '0.7x' : '1x'}</span>
-                </div>
-              </button>
-            </div>
+            <button
+              className={`${styles.speedToggle} ${isSlowMode ? styles.active : ''}`}
+              onClick={togglePlaybackMode}
+              disabled={shouldLock() || loadingSlowAudio}
+              title={isSlowMode ? 'Slow speed' : 'Normal speed'}
+            >
+              {isSlowMode
+                ? (loadingSlowAudio ? <SvgSpinnersRingResize /> : <MaterialSymbolsTurtle />)
+                : <LucideRabbit />}
+              <span>{isSlowMode ? '0.7x' : '1x'}</span>
+            </button>
           </div>
-          
-          {
-            (shouldLock() && !showPopup) && (
-              <div
-                onClick={() => handleAudioLock()}
-                className={styles.audioPlayerLocked}>
-                  <div className={styles.generateAudioButton}>
-                    {loadingAudio ? <SvgSpinnersRingResize /> : <TdesignUserTalk1Filled />}
-                    <div className={styles.generateAudioButtonText}>
-                      {
-                        isQuotaBlocked
-                          ? t('audioPlayer.noCredits.title')
-                          : isLengthBlocked
-                            ? lengthLimitTitle
-                          : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))
-                      }
-                    </div>
-                  </div>
-              </div>
-            )
-          }
 
           {
             showPopup && (

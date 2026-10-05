@@ -25,16 +25,21 @@
 
 .header {
   width: 100%;
-  text-align: center;
-  margin-bottom: 1rem;
+  text-align: left;
+  margin-bottom: 1.25rem;
   position: relative;
-  margin-top:1rem;
-  font-weight:800;
+  margin-top:1.5rem;
   h1 {
     color:var(--foreground);
-    font-family:var(--font-lilita) !important;
-    margin-top:0 !important;
-    font-size:3rem;
+    font-family:var(--font-body) !important;
+    font-weight:700;
+    margin:0 !important;
+    font-size:2.1rem;
+    line-height:1.2;
+
+    @media screen and (max-width: 725px) {
+      font-size:1.6rem;
+    }
   }
   
   @media screen and (max-width: 725px) {
@@ -44,8 +49,8 @@
 
 .backButton {
   position: absolute;
-  left: 1rem;
-  top: 1rem;
+  left: 5.5rem;
+  top: 1.5rem;
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -194,22 +199,24 @@
 }
 
 .cardCount {
-  font-size: 1rem;
-  background-color: var(--background-alt);
-  color:var(--foreground);
-  padding: 0.5rem 1rem;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  padding: 0.35rem 0.8rem;
   border-radius: 2rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--foreground-lighter);
 }
 
 .deckStats {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 1rem;
-  background-color: var(--background-alt);
+  background-color: var(--background);
   color: var(--foreground);
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--foreground-lighter);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -24px var(--shadow);
 }
 
 .statItem {
@@ -220,16 +227,19 @@
 }
 
 .statLabel {
-  font-size: 0.875rem;
-  color: var(--foreground);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--foreground-muted);
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .statValue {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 800;
   
   &.new {
     color: #2563eb; /* Blue */
@@ -260,54 +270,44 @@
 }
 
 .studyButton {
-  align-self: center;
+  align-self: flex-start;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: #16a34a;
-  color: white;
+  background-color: var(--primary);
+  color: var(--background);
   border: none;
-  padding: 0.75rem 2rem;
-  border-radius: 2rem;
-  font-size: 1.125rem;
-  font-weight: 600;
+  padding: 0.7rem 1.6rem;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 0.25rem 0.5rem rgba(22, 163, 74, 0.3);
-  font-family: inherit;
-
+  transition: transform 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 0.3rem 0.75rem -0.3rem color-mix(in srgb, var(--primary) 60%, transparent);
   font-family:var(--font-display);
-  
+
   svg {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
-  
+
   &:hover {
-    background-color: #15803d;
-    transform: translateY(-0.125rem);
-    box-shadow: 0 0.375rem 0.75rem rgba(22, 163, 74, 0.4);
+    transform: translateY(-1px);
+    filter: brightness(1.05);
   }
-  
+
   &:active {
     transform: translateY(0);
-    box-shadow: 0 0.125rem 0.25rem rgba(22, 163, 74, 0.3);
   }
-  
+
   &:disabled {
-    background-color: #9ca3af;
+    background-color: var(--background-alt);
+    color: var(--foreground-muted);
+    border: 1px solid var(--foreground-lighter);
     cursor: not-allowed;
     box-shadow: none;
-    
-    &:hover {
-      transform: none;
-      background-color: #9ca3af;
-      box-shadow: none;
-    }
-    
-    opacity: 0.7;
-    position: relative;
-    color: rgba(255, 255, 255, 0.9);
+    transform: none;
+    filter: none;
   }
 }
 

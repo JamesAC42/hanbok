@@ -29,7 +29,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: center;
 	min-height:calc(100dvh - 4.5rem);
 	max-height:calc(100dvh - 4.5rem);
 
@@ -52,23 +52,28 @@
 }
 
 .tryExampleHeader {
-	font-family:var(--font-funnel);
-	margin-bottom:1rem;
-	color:var(--foreground);
+	width:min(48rem, 100%);
+	font-family:var(--font-display);
+	font-size:0.8rem;
+	font-weight:700;
+	text-transform:uppercase;
+	letter-spacing:0.06em;
+	margin:0 0 0.6rem;
+	color:var(--foreground-muted);
     @media screen and (max-width: 750px) {
         margin-bottom: 0.5rem;
     }
 }
 
 .testSentences {
-	margin-bottom:6rem;
+	margin-bottom:2rem;
 
 	display:flex;
 	flex-wrap:wrap;
-	justify-content:center;
+	justify-content:flex-start;
 	gap:0.5rem;
 
-	max-width:60dvw;
+	width:min(48rem, 100%);
 
 	.exampleSentence {
 		font-size:0.9rem;
@@ -79,9 +84,10 @@
 		cursor:pointer;
 		border-radius:0.3rem;
 
-		padding:0.5rem 1rem;
-		border-radius:1.5rem;
-		border:2px solid var(--foreground-light);
+		padding:0.45rem 0.9rem;
+		border-radius:2rem;
+		border:1px solid var(--foreground-lighter);
+		background:var(--background);
 		color:var(--foreground);
 
 		transition:all .2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
@@ -96,8 +102,8 @@
 		}
 
 		&:hover {
-			background:var(--foreground);
-			color:var(--background);
+			border-color:var(--primary);
+			background:color-mix(in srgb, var(--primary) 8%, var(--background));
 		}
 	}
     @media screen and (max-width: 1450px) {

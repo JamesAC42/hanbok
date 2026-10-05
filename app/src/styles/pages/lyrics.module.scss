@@ -945,43 +945,43 @@
         }
         
         &:hover {
-            transform: translate(-0.15rem, -0.15rem);
+            transform: translateY(-1px);
             filter: brightness(1.1) saturate(1.1);
         }
         
         &.twitter {
             background-color: #000000;
-            box-shadow: 0.15rem 0.15rem 0 rgba(0, 0, 0, 0.468);
+            box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, rgba(0, 0, 0, 0.468) 45%, transparent);
             
             &:hover {
-                box-shadow: 0.25rem 0.25rem 0 rgba(0, 0, 0, 0.468);
+                box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, rgba(0, 0, 0, 0.468) 45%, transparent);
             }
         }
         
         &.email {
             background-color: #d44638;
-            box-shadow: 0.15rem 0.15rem 0 rgba(212, 69, 56, 0.406);
+            box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, rgba(212, 69, 56, 0.406) 45%, transparent);
             
             &:hover {
-                box-shadow: 0.25rem 0.25rem 0 rgba(212, 69, 56, 0.406);
+                box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, rgba(212, 69, 56, 0.406) 45%, transparent);
             }
         }
         
         &.discord {
             background-color: #5865f2;
-            box-shadow: 0.15rem 0.15rem 0 rgba(88, 101, 242, 0.491);
+            box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, rgba(88, 101, 242, 0.491) 45%, transparent);
             
             &:hover {
-                box-shadow: 0.25rem 0.25rem 0 rgba(88, 101, 242, 0.491);
+                box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, rgba(88, 101, 242, 0.491) 45%, transparent);
             }
         }
         
         &.copy {
             background-color: #00c853;
-            box-shadow: 0.15rem 0.15rem 0 rgba(0, 200, 83, 0.507);
+            box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, rgba(0, 200, 83, 0.507) 45%, transparent);
             
             &:hover {
-                box-shadow: 0.25rem 0.25rem 0 rgba(0, 200, 83, 0.507);
+                box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, rgba(0, 200, 83, 0.507) 45%, transparent);
             }
         }
     }

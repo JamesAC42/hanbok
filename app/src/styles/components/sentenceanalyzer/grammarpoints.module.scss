@@ -130,7 +130,7 @@
                         transform:translate(0, -5%);
                         background:var(--background);
                         color:var(--foreground);
-                        box-shadow: 0.3rem 0.3rem 0 rgba(0, 0, 0, 0.8);
+                        box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, rgba(0, 0, 0, 0.8) 45%, transparent);
                     }
                 }
             }

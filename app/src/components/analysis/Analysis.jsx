@@ -349,11 +349,11 @@ const Analysis = ({
                             onClose={handleCloseWordInfo} />
                     ) : (
                         <div className={styles.sidebarIdle}>
-                            <div className={styles.placeholderState}>
-                                <FluentCursorHover32Filled />
-                                <p>{t('analysis.hoverExplanation', 'Select a word to see details')}</p>
-                            </div>
                             <NextSteps {...nextStepsProps} />
+                            <p className={styles.hoverHint}>
+                                <FluentCursorHover32Filled />
+                                {t('analysis.hoverExplanation')}
+                            </p>
                         </div>
                     )}
                 </div>

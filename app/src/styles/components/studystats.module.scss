@@ -1,20 +1,23 @@
 // Study Stats Display Styles
 
 .statsContainer {
-  background-color: var(--background-alt);
-  border-radius: 0.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  background-color: var(--background);
+  border: 1px solid var(--foreground-lighter);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -24px var(--shadow);
   padding: 1.5rem;
   margin-bottom: 2rem;
   width: 100%;
 }
 
 .statsTitle {
-  font-size: 2.4rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  color: var(--foreground);
-  font-family:var(--font-lilita);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 1rem;
+  color: var(--foreground-muted);
+  font-family:var(--font-display);
 }
 
 .loading {
@@ -36,8 +39,7 @@
   margin-bottom: 2rem;
   padding: 1.25rem;
   background-color: var(--background-alt);
-  border-radius: 0.5rem;
-  border-left: 0.25rem solid var(--shadow);
+  border-radius: 0.75rem;
 }
 
 .streakInfo {

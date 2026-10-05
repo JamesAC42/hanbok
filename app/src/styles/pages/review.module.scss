@@ -1,0 +1,204 @@
+.page {
+    max-width: 72rem;
+}
+
+.hero {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    padding: 1.75rem 2rem;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+    background: color-mix(in srgb, var(--primary) 6%, var(--background));
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: auto 1fr;
+
+        .heroSide {
+            grid-column: 1 / -1;
+            align-items: flex-start;
+        }
+    }
+}
+
+.heroText {
+    h2 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--foreground);
+    }
+
+    p {
+        margin: 0.4rem 0 0;
+        color: var(--foreground-muted);
+        line-height: 1.5;
+    }
+}
+
+.streak {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: #e5484d !important;
+}
+
+.heroSide {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.startButton,
+.secondaryButton {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    border-radius: 0.8rem;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.startButton {
+    background: var(--primary);
+    color: var(--background);
+    box-shadow: 0 10px 24px -14px var(--primary);
+
+    &:hover {
+        opacity: 0.92;
+    }
+}
+
+.secondaryButton {
+    border: 1px solid var(--foreground-lighter);
+    color: var(--foreground);
+    background: var(--background);
+}
+
+.sectionTitle {
+    margin: 2.5rem 0 1rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--foreground-muted);
+}
+
+.deckGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: 1rem;
+}
+
+.deck {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    border: 1px solid var(--foreground-lighter);
+    background: var(--background);
+}
+
+.deckTop {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.deckIcon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.7rem;
+    background: var(--background-alt);
+
+    svg, img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+}
+
+.deckName {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--foreground);
+}
+
+.deckMeta {
+    font-size: 0.8rem;
+    color: var(--foreground-muted);
+}
+
+.deckCounts {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    span {
+        padding: 0.3rem 0.65rem;
+        border-radius: 999px;
+        font-family: var(--font-display);
+        font-size: 0.78rem;
+        color: var(--foreground-muted);
+        background: var(--background-alt);
+    }
+
+    strong {
+        margin-right: 0.15rem;
+    }
+}
+
+.countNew strong { color: #3d64e8; }
+.countLearning strong { color: #e08a1e; }
+.countDue strong { color: #0f9f8f; }
+
+.deckActions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: auto;
+}
+
+.deckStudy {
+    padding: 0.5rem 1rem;
+    border-radius: 0.6rem;
+    background: var(--primary);
+    color: var(--background);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-decoration: none;
+}
+
+.deckDone {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #0f9f8f;
+}
+
+.deckManage {
+    border: none;
+    background: none;
+    padding: 0;
+    font-family: var(--font-display);
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--foreground-muted);
+    cursor: pointer;
+
+    &:hover {
+        color: var(--foreground);
+        text-decoration: underline;
+    }
+}

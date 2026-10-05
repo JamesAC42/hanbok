@@ -51,19 +51,19 @@
     text-align: center;
     margin-bottom: 0.4rem;
     margin-top: 1rem;
-    font-family: var(--font-lilita);
 }
 
 .title {
-    font-size: 2.8rem;
+    font-size: 2.1rem;
     font-weight: 700;
+    line-height: 1.2;
     color: var(--foreground);
-    margin-bottom: 0.2rem;
-    font-family: var(--font-lilita);
+    margin: 0 0 0.3rem;
+    font-family: var(--font-body);
 }
 
 .subtitle {
-    font-size: 1.3rem;
+    font-size: 1rem;
     color: var(--foreground-muted);
     font-weight: 400;
 }

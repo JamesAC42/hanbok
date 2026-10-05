@@ -60,15 +60,15 @@
   border: 0.0625rem solid var(--background-alt);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0.3rem 0.3rem 0 var(--shadow);
+  box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
   animation: fadeIn 0.5s ease-in-out;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 
   &:hover {
-    transform: translate(-0.25rem, -0.25rem);
-    box-shadow: 0.55rem 0.55rem 0 var(--shadow);
+    transform: translateY(-1px);
+    box-shadow: 0 0.66rem 1.65rem -0.44rem color-mix(in srgb, var(--shadow) 45%, transparent);
   }
 }
 

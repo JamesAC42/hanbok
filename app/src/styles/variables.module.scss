@@ -149,13 +149,16 @@ $word-types: (
   overflow-y:auto;
 
   .pageTitle {
-    font-size:3rem;
+    font-size:2.1rem;
+    line-height:1.2;
+    margin:0 0 1.25rem;
     color:var(--foreground);
-    font-family:var(--font-lilita);
+    font-family:var(--font-body);
+    font-weight:700;
 
     @media screen and (max-width: 725px) {
-      margin-top:4rem;
-      text-align:center;
+      font-size:1.6rem;
+      margin-top:1rem;
     }
   }
 }

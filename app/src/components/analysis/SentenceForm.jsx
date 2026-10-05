@@ -505,34 +505,33 @@ const SentenceForm = ({
                 </div>
             )}
 
-            <div className={styles.languageSwitcherOuter}>
-                <LanguageSwitcher />
-
-                <div
-                    onClick={() => setTranslationMode(!translationMode)}
-                    className={styles.translationModeSwitch}>
-                    <div className={styles.translationModeSwitchInner}>
-                        <div className={styles.translationModeSwitchText}>
-                            Mode: 
-                            {
-                                translationMode ? ' Translate' : ' Analyze'
-                            }
-                        </div>
+            <div className={styles.analyzeHeader}>
+                <h1 className={styles.analyzeTitle}>
+                    {translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')}
+                </h1>
+                <div className={styles.analyzeControls}>
+                    <div className={styles.modeToggle} role="tablist">
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={!translationMode}
+                            className={!translationMode ? styles.modeActive : ''}
+                            onClick={() => setTranslationMode(false)}>
+                            Analyze
+                        </button>
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={translationMode}
+                            className={translationMode ? styles.modeActive : ''}
+                            onClick={() => setTranslationMode(true)}>
+                            Translate
+                        </button>
                     </div>
+                    <LanguageSwitcher />
                 </div>
             </div>
-            
-            <div className={styles.formContainerSplashImage}>
-                <div className={styles.formContainerSplashImageText}>
-                    {
-                        translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')
-                    }
-                </div>
-                <div className={styles.formContainerSplashImageInner}>
-                    <img className={isDark(theme) ? styles.dark : ''} src="/images/promptbackground.png" alt="Splash image" />
-                </div>
-            </div>
-                
+
             <div className={`${styles.formContainer} ${analysis ? styles.formContainerWithAnalysis : ''}`}>
                 
                 <form onSubmit={handleSubmit} className={styles.form}>

@@ -10,52 +10,54 @@
   transform: translate(0, 0);
 
   &.primary {
-    border: 1px solid var(--foreground-light);
-    color: var(--foreground);
-    background: var(--background);
-    box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid transparent;
+    border-radius: 0.6rem;
+    color: var(--background);
+    background: var(--primary);
+    font-weight: 700;
+    padding: 0.55rem 1.3rem;
+    box-shadow: 0 0.3rem 0.75rem -0.3rem color-mix(in srgb, var(--primary) 60%, transparent);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
 
     &:hover {
-      transform: translate(-0.125rem, -0.125rem);
-      box-shadow: 0.375rem 0.375rem 0 var(--foreground-light);
+      transform: translateY(-1px);
+      filter: brightness(1.05);
     }
 
     &:active {
-      transform: translate(0.125rem, 0.125rem);
-      box-shadow: 0.125rem 0.125rem 0 var(--foreground-light);
+      transform: translateY(0);
     }
 
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
-      box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
     }
   }
 
   &.secondary {
-    border: 1px solid var(--foreground-light);
+    border: 1px solid var(--foreground-lighter);
+    border-radius: 0.6rem;
     color: var(--foreground);
     background: var(--background);
-    box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
+    box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, var(--shadow) 45%, transparent);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 
     &:hover {
-      transform: translate(-0.125rem, -0.125rem);
-      box-shadow: 0.375rem 0.375rem 0 var(--foreground-light);
+      transform: translateY(-1px);
+      box-shadow: 0 0.45rem 1.12rem -0.3rem color-mix(in srgb, var(--shadow) 45%, transparent);
     }
 
     &:active {
-      transform: translate(0.125rem, 0.125rem);
-      box-shadow: 0.125rem 0.125rem 0 var(--foreground-light);
+      transform: translateY(0);
+      box-shadow: 0 0.15rem 0.38rem -0.1rem color-mix(in srgb, var(--shadow) 45%, transparent);
     }
 
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
       transform: none;
-      box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
+      box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, var(--shadow) 45%, transparent);
     }
   }
 } 

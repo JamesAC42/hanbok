@@ -18,7 +18,7 @@
     border-radius: 0.5rem;
     max-width: 28rem;
     width: 90%;
-    box-shadow: 0.3rem 0.3rem 0 #000;
+    box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
     border: 1px solid #000;
     animation: slideUp 0.3s ease-out;
 
@@ -71,8 +71,8 @@
     border: 1px solid #000;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #000;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, var(--shadow) 45%, transparent);
     }
 }
 
@@ -82,8 +82,8 @@
     border: 1px solid #000;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #000;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, var(--shadow) 45%, transparent);
     }
 }
 

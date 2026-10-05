@@ -3,8 +3,9 @@
 .modeSelector {
     width: 100%;
     background: var(--background);
-    border: 1px solid var(--foreground-light);
-    border-radius: 0.6rem;
+    border: 1px solid var(--foreground-lighter);
+    box-shadow: 0 10px 30px -24px var(--shadow);
+    border-radius: 1rem;
     padding: 1.2rem;
     min-height: 100%;
     height: auto;

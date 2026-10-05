@@ -20,7 +20,7 @@
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
-    box-shadow: 0.3rem 0.3rem 0 #000;
+    box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
     border: 1px solid #000;
     animation: slideUp 0.3s ease-out;
     position: relative;
@@ -84,8 +84,8 @@
     width: fit-content;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #3622e4;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, #3622e4 45%, transparent);
     }
 }
 
@@ -118,8 +118,8 @@
     margin: 0 auto 2rem;
     
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #ff8f00;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, #ff8f00 45%, transparent);
     }
 }
 
@@ -199,8 +199,8 @@
     justify-content: center;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #3622e4;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, #3622e4 45%, transparent);
     }
 }
 
@@ -246,8 +246,8 @@
     border: 1px solid #000;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #000;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, var(--shadow) 45%, transparent);
     }
 }
 
@@ -261,8 +261,8 @@
     overflow: hidden;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #5865F2;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, #5865F2 45%, transparent);
     }
     
     &:before {
@@ -282,8 +282,8 @@
     border: 1px solid #00c853;
 
     &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #00c853;
+        transform: translateY(-1px);
+        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, #00c853 45%, transparent);
     }
 }
 

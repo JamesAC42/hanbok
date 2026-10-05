@@ -10,7 +10,7 @@
   padding: 3rem;
   background-color: rgba(238, 255, 246, 0.865);
   backdrop-filter: blur(10px);
-  box-shadow: 0.5rem 0.5rem 0 #2c3730;
+  box-shadow: 0 0.6rem 1.5rem -0.4rem color-mix(in srgb, #2c3730 45%, transparent);
   border-radius: 0.5rem;
   border: 1px solid var(--foreground);
   min-height:70dvh;
@@ -48,7 +48,7 @@
         margin:0 auto;
         border-radius: 0.5rem;
         border: 1px solid var(--foreground);
-        box-shadow: 0.3rem 0.3rem 0 #394664;
+        box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, #394664 45%, transparent);
       }
 
       p {
@@ -137,7 +137,7 @@
       color: var(--foreground);
       transition: all 0.2s ease;
       background: var(--background);
-      box-shadow: 0.2rem 0.2rem 0 var(--foreground);
+      box-shadow: 0 0.24rem 0.6rem -0.16rem color-mix(in srgb, var(--shadow) 45%, transparent);
 
       .contactIcon {
         svg {
@@ -146,13 +146,13 @@
       }
 
       &:hover {
-        transform: translate(-0.2rem, -0.2rem);
-        box-shadow: 0.4rem 0.4rem 0 var(--foreground);
+        transform: translateY(-1px);
+        box-shadow: 0 0.48rem 1.2rem -0.32rem color-mix(in srgb, var(--shadow) 45%, transparent);
       }
 
       &:active {
-        transform: translate(0.1rem, 0.1rem);
-        box-shadow: 0.1rem 0.1rem 0 var(--foreground);
+        transform: translateY(0);
+        box-shadow: 0 0.12rem 0.3rem -0.08rem color-mix(in srgb, var(--shadow) 45%, transparent);
       }
 
       .contactLabel {

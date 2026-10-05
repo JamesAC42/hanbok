@@ -1,0 +1,113 @@
+// Compact audio controls under the sentence: listen, voice, speed.
+.audioPlayers {
+    display: none;
+}
+
+.audioPlayerWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 1.5rem 0 2rem;
+}
+
+.slimPlayer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem;
+    border-radius: 999px;
+    border: 1px solid var(--foreground-lighter);
+    background: var(--background);
+    box-shadow: 0 6px 18px -12px var(--shadow);
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border: none;
+        border-radius: 999px;
+        padding: 0.5rem 0.9rem;
+        background: none;
+        color: var(--foreground);
+        font-family: var(--font-display);
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.15s ease;
+
+        svg {
+            width: 1.15rem;
+            height: 1.15rem;
+        }
+
+        &:hover:not(:disabled) {
+            background: var(--background-alt);
+        }
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.45;
+        }
+    }
+}
+
+.playButton {
+    background: var(--primary) !important;
+    color: var(--background) !important;
+    padding: 0.55rem 1.2rem 0.55rem 0.9rem !important;
+
+    &:hover:not(:disabled) {
+        opacity: 0.9;
+    }
+
+    &:disabled {
+        opacity: 0.7 !important;
+    }
+}
+
+.voiceAvatar {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--background-alt);
+    flex-shrink: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.speedToggle.active {
+    color: var(--primary) !important;
+}
+
+.audioPlayerLockedPopup {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+    border-radius: 0.8rem;
+    background: var(--background-alt);
+    font-size: 0.9rem;
+
+    p {
+        margin: 0;
+        color: var(--foreground-muted);
+    }
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-family: var(--font-display);
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+    }
+}
