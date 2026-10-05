@@ -111,7 +111,7 @@ async function populateWordAudio() {
           }
           
           // Generate audio using ElevenLabs
-          const audioResult = await generateSpeech(textToSpeak);
+          const audioResult = await generateSpeech(textToSpeak, { language: originalLanguage });
           
           // Extract the S3 key from the URL
           // The URL format is like: https://bucket.s3.region.amazonaws.com/key?params

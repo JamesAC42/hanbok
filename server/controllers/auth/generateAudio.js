@@ -143,7 +143,7 @@ const generateAudio = async (req, res) => {
         }
 
         const textToRead = getSentenceTextToRead(sentence);
-        const normalAudio = await generateSpeech(textToRead);
+        const normalAudio = await generateSpeech(textToRead, { language: sentence.originalLanguage });
 
         await db.collection('sentences').updateOne(
             { sentenceId: parseInt(sentenceId) },

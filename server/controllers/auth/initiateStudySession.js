@@ -1,4 +1,7 @@
 const { getDb } = require('../../database');
+const { getWordAudio } = require('../../utils/wordAudio');
+const { CHINESE_MODEL_ID } = require('../../elevenlabs/generateSpeech');
+const { isChinese } = require('../../llm/chineseScript');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 
@@ -12,6 +15,22 @@ const s3Client = new S3Client({
 });
 
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+
+// Chinese word audio made before Chinese moved to a Mandarin-pinned TTS model
+// often has wrong tones. Regenerate it in the background, one word at a time,
+// so this session stays fast and the next one gets the new audio.
+function regenerateStaleChineseAudio(records) {
+  if (records.length === 0) return;
+  (async () => {
+    for (const record of records) {
+      try {
+        await getWordAudio(record.word, record.language, null, true);
+      } catch (error) {
+        console.error(`Error regenerating Chinese audio for ${record.word}:`, error);
+      }
+    }
+  })();
+}
 
 // Helper function to check if an audio URL needs refreshing (older than 6 days)
 async function checkAndRefreshAudioUrl(audioRecord) {
@@ -206,6 +225,8 @@ async function initiateStudySession(req, res) {
       ...limitedNewCards
     ];
 
+    const staleChineseAudio = [];
+
     // For each card in the study session, get the content (word, sentence, etc.)
     const cardsWithContent = await Promise.all(studyQueue.map(async (card) => {
       let content = null;
@@ -240,6 +261,9 @@ async function initiateStudySession(req, res) {
             // Check if the audio URL needs to be refreshed
             audioUrl = await checkAndRefreshAudioUrl(audioRecord);
             audioId = audioRecord._id.toString();
+            if (isChinese(audioRecord.language) && audioRecord.ttsModel !== CHINESE_MODEL_ID) {
+              staleChineseAudio.push(audioRecord);
+            }
           }
         }
       } else if (card.contentType === 'sentence') {
@@ -299,6 +323,8 @@ async function initiateStudySession(req, res) {
       success: true,
       studySession
     });
+
+    regenerateStaleChineseAudio(staleChineseAudio);
   } catch (error) {
     console.error('Error initiating study session:', error);
     res.status(500).json({
