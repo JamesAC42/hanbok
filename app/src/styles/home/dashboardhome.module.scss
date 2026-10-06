@@ -859,3 +859,52 @@
     font-size: .82rem;
     padding: .6rem 1rem;
 }
+
+.extensionCard {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    background: var(--bp-read-soft);
+    border-color: var(--bp-read-line);
+
+    p {
+        margin: .3rem 0 .85rem;
+        font-size: .92rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+    }
+}
+
+.extensionActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem 1rem;
+}
+
+.extensionButton {
+    @include bp-press(var(--bp-read), var(--bp-read-d));
+    font-size: .82rem;
+    padding: .6rem 1rem;
+}
+
+.extensionLink {
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--bp-read);
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+}
+
+.extensionDismiss {
+    font-family: var(--font-display);
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+    background: none;
+    border: none;
+    padding: .3rem 0;
+    cursor: pointer;
+    &:hover { color: var(--foreground); text-decoration: underline; }
+}

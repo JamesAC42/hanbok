@@ -15,6 +15,7 @@ export const meta = {
     minutes: 8,
     published: '2026-10-07',
     color: 'pink',
+    grammar: [{ form: '-아요/어요', label: 'polite ending' }, { form: '-습니다/ㅂ니다', label: 'formal ending' }, { form: '반말', label: 'casual speech' }, { form: '-(으)시-', label: 'honorific' }, { form: '께서', label: 'honorific subject particle' }],
 };
 
 export const faq = [

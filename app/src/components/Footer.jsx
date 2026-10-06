@@ -13,6 +13,7 @@ const COLUMNS = [
             { href: '/lyrics', label: 'Song lyrics' },
             { href: '/learn', label: 'Grammar guides' },
             { href: '/hangeul', label: 'Learn Hangeul' },
+            { href: '/extension', label: 'Chrome extension' },
         ],
     },
     {

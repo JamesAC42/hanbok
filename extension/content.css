@@ -1,0 +1,19 @@
+/* The only styles the extension puts in the page itself: the vocabulary
+   highlight. Everything else is in the shadow root (see ui-styles.js);
+   the two site fonts are declared by content.js, which needs absolute
+   extension URLs for them. */
+
+/* Gold is the site's "Keep" stage color, the one saved words carry there. */
+span.hanbok-highlight {
+  background-color: rgba(255, 176, 32, 0.22) !important;
+  border-bottom: 3px solid #FFB020 !important;
+  border-radius: 4px 4px 2px 2px !important;
+  padding: 0 2px !important;
+  color: inherit !important;
+  cursor: pointer !important;
+  transition: background-color 0.15s ease !important;
+}
+
+span.hanbok-highlight:hover {
+  background-color: rgba(255, 176, 32, 0.45) !important;
+}

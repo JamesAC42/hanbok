@@ -160,19 +160,47 @@ const isAuthenticated = (req, res, next) => {
     next();
 };
 
+// Throttle sign in and email-sending routes against brute force and spam
+const { createAuthRateLimit } = require('./utils/authRateLimit');
+const MINUTE = 60;
+const HOUR = 60 * MINUTE;
+const authLimit = (options) => createAuthRateLimit(() => redisClient, options);
+const loginLimit = authLimit({ name: 'login', ip: { max: 30, windowSeconds: 10 * MINUTE } });
+const loginEmailLimit = authLimit({
+    name: 'login-email',
+    ip: { max: 30, windowSeconds: 10 * MINUTE },
+    failures: { max: 8, windowSeconds: 15 * MINUTE }
+});
+const registerLimit = authLimit({
+    name: 'register',
+    ip: { max: 10, windowSeconds: HOUR },
+    email: { max: 3, windowSeconds: HOUR }
+});
+const resendVerificationLimit = authLimit({
+    name: 'resend-verification',
+    ip: { max: 10, windowSeconds: HOUR },
+    email: { max: 5, windowSeconds: HOUR }
+});
+const passwordResetLimit = authLimit({
+    name: 'request-password-reset',
+    ip: { max: 10, windowSeconds: HOUR },
+    email: { max: 3, windowSeconds: HOUR }
+});
+const resetPasswordLimit = authLimit({ name: 'reset-password', ip: { max: 20, windowSeconds: HOUR } });
+
 app.get('/api/session', async (req, res) => {
     await getSession(req, res);
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', loginLimit, (req, res) => {
     login(req, res, redisClient);
 });
 
-app.post('/api/login-email', (req, res) => {
+app.post('/api/login-email', loginEmailLimit, (req, res) => {
     loginEmail(req, res, redisClient);
 });
 
-app.post('/api/register', (req, res) => {
+app.post('/api/register', registerLimit, (req, res) => {
     register(req, res, redisClient);
 });
 
@@ -180,7 +208,7 @@ app.get('/api/verify/:code', (req, res) => {
     verifyEmail(req, res, redisClient);
 });
 
-app.post('/api/resend-verification', (req, res) => {
+app.post('/api/resend-verification', resendVerificationLimit, (req, res) => {
     resendVerification(req, res, redisClient);
 });
 
@@ -189,12 +217,12 @@ app.post('/api/logout', (req, res) => {
 });
 
 // Password reset routes
-app.post('/api/request-password-reset', (req, res) => {
+app.post('/api/request-password-reset', passwordResetLimit, (req, res) => {
     const requestPasswordReset = require('./controllers/auth/requestPasswordReset');
     requestPasswordReset(req, res, redisClient);
 });
 
-app.post('/api/reset-password', (req, res) => {
+app.post('/api/reset-password', resetPasswordLimit, (req, res) => {
     const resetPassword = require('./controllers/auth/resetPassword');
     resetPassword(req, res, redisClient);
 });

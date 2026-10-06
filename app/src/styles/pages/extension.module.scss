@@ -1,0 +1,398 @@
+@import '../variables.module.scss';
+
+// Hanbok for Chrome, Bright Path: big plain type, one stage color per
+// feature, chunky install button.
+
+.page {
+  position: relative;
+  min-height: 100%;
+  padding: 2.25rem 1.5rem 4rem;
+  font-family: var(--font-display);
+  color: var(--foreground);
+  background: var(--background);
+  overflow-x: hidden;
+
+  @media screen and (max-width: 725px) {
+    padding: 1.25rem 1rem 3rem;
+  }
+}
+
+.publicPage {
+  padding-top: 2.5rem;
+  @media screen and (max-width: 725px) { padding-top: 1.5rem; }
+}
+
+.content {
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.eyebrow {
+  @include bp-label;
+  color: var(--bp-read);
+  font-size: .8rem;
+}
+
+.sectionTitle {
+  @include bp-title;
+  margin: 0 0 1rem;
+  font-size: 1.75rem;
+}
+
+.card {
+  @include bp-card;
+  padding: 1.5rem 1.6rem;
+
+  @media screen and (max-width: 640px) { padding: 1.2rem 1.1rem; }
+}
+
+// ===== Install button =====
+
+.installButton {
+  @include bp-press(var(--bp-read), var(--bp-read-d));
+  font-size: 1rem;
+  padding: .95rem 1.6rem;
+
+  // "Coming soon": still fully readable, just clearly not clickable.
+  &:disabled {
+    opacity: 1;
+    filter: none;
+    background: var(--bp-gray-d);
+    box-shadow: 0 4px 0 #4F5368;
+  }
+}
+
+.installBig {
+  font-size: 1.08rem;
+  padding: 1.05rem 1.9rem;
+
+  @media screen and (max-width: 640px) {
+    width: 100%;
+    white-space: normal;
+  }
+}
+
+// ===== Hero =====
+
+.hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.75rem;
+  padding: 2rem 2.2rem;
+  border-radius: 24px;
+  border: 2px solid var(--bp-read-line);
+  box-shadow: 0 6px 0 var(--bp-read-line);
+  background: var(--bp-read-soft);
+
+  @media screen and (max-width: 640px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.4rem 1.1rem 1.5rem;
+  }
+}
+
+.heroMascot {
+  @media screen and (max-width: 640px) {
+    width: 96px;
+    height: auto;
+  }
+}
+
+.heroText {
+  min-width: 0;
+
+  h1 {
+    @include bp-title;
+    margin: .35rem 0 .6rem;
+    font-size: 2.7rem;
+
+    @media screen and (max-width: 640px) { font-size: 2rem; }
+  }
+
+  p {
+    margin: 0 0 1.4rem;
+    max-width: 36rem;
+    font-size: 1.12rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--foreground) 80%, var(--background));
+  }
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .9rem 1.2rem;
+
+  @media screen and (max-width: 640px) {
+    flex-direction: column;
+    gap: .8rem;
+  }
+}
+
+.heroSmall {
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--bp-ink2);
+}
+
+.installedNote {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  padding: .55rem .9rem;
+  border-radius: 12px;
+  background: var(--bp-und-soft);
+  border: 2px solid var(--bp-und-line);
+  color: var(--bp-und-d);
+  font-weight: 800;
+  font-size: .95rem;
+
+  svg { width: 1.15rem; height: 1.15rem; }
+}
+
+// ===== Features =====
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+
+  @media screen and (max-width: 880px) { grid-template-columns: 1fr; }
+}
+
+.feature {
+  --f-color: var(--bp-read);
+  --f-soft: var(--bp-read-soft);
+  --f-line: var(--bp-read-line);
+  @include bp-card;
+  display: flex;
+  flex-direction: column;
+  padding: 1.35rem 1.35rem 1.4rem;
+  border-color: var(--f-line);
+  box-shadow: 0 4px 0 var(--f-line);
+
+  h3 {
+    @include bp-title;
+    margin: .85rem 0 .45rem;
+    font-size: 1.4rem;
+  }
+
+  p {
+    margin: 0 0 1.1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--foreground) 78%, var(--background));
+  }
+}
+
+.feature_read { --f-color: var(--bp-read); --f-soft: var(--bp-read-soft); --f-line: var(--bp-read-line); }
+.feature_keep { --f-color: var(--bp-keep-d); --f-soft: var(--bp-keep-soft); --f-line: var(--bp-keep-line); }
+.feature_und { --f-color: var(--bp-und-d); --f-soft: var(--bp-und-soft); --f-line: var(--bp-und-line); }
+
+.featureIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 14px;
+  background: var(--f-soft);
+  color: var(--f-color);
+
+  svg { width: 1.7rem; height: 1.7rem; }
+}
+
+.feature_keep .featureIcon { color: var(--bp-keep); }
+
+.demoBox {
+  margin-top: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .6rem;
+  padding: .85rem .95rem;
+  border-radius: 14px;
+  background: var(--bp-soft);
+  border: 2px dashed var(--bp-line-strong);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.demoSelected {
+  background: color-mix(in srgb, var(--bp-read) 22%, transparent);
+  border-radius: 3px;
+  padding: 0 .15rem;
+}
+
+.demoChip {
+  display: inline-flex;
+  padding: .35rem .7rem;
+  border-radius: 10px;
+  background: var(--bp-read);
+  color: #fff;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  box-shadow: 0 3px 0 var(--bp-read-d);
+}
+
+.demoWord {
+  b { font-size: 1.2rem; margin-right: .35rem; }
+}
+
+.demoSave {
+  margin-left: auto;
+  padding: .35rem .75rem;
+  border-radius: 10px;
+  background: var(--bp-keep);
+  color: var(--bp-keep-ink);
+  font-size: .82rem;
+  font-weight: 800;
+  box-shadow: 0 3px 0 var(--bp-keep-d);
+}
+
+.demoSentence {
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+// Matches the extension's in-page highlight.
+.savedWord {
+  background: rgba(255, 176, 32, .22);
+  border-bottom: 3px solid #FFB020;
+  color: inherit;
+  padding: 0 .05rem;
+  border-radius: 2px 2px 0 0;
+}
+
+// ===== Steps =====
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+
+  @media screen and (max-width: 880px) { grid-template-columns: 1fr; gap: 1rem; }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: .9rem;
+  }
+
+  strong {
+    display: block;
+    font-size: 1.12rem;
+    font-weight: 800;
+    margin-bottom: .25rem;
+  }
+
+  span:not(.stepNumber) {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: color-mix(in srgb, var(--foreground) 75%, var(--background));
+  }
+}
+
+.stepNumber {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: var(--bp-read);
+  color: #fff;
+  font-family: var(--font-lilita);
+  font-size: 1.35rem;
+  box-shadow: 0 3px 0 var(--bp-read-d);
+}
+
+.stepsNote {
+  margin: 1.2rem 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--bp-ink2);
+
+  a { color: var(--bp-read); font-weight: 800; }
+}
+
+// ===== FAQ =====
+
+.faq {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.faqItem {
+  padding: 1rem 0;
+  border-top: 2px solid var(--bp-line);
+
+  &:first-child { border-top: none; padding-top: 0; }
+  &:last-child { padding-bottom: 0; }
+
+  dt {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: .35rem;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--foreground) 78%, var(--background));
+
+    a { color: var(--bp-read); font-weight: 800; }
+  }
+}
+
+// ===== Closing =====
+
+.closing {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.3rem 1.6rem;
+  border-radius: 22px;
+  background: var(--bp-keep-soft);
+  border: 2px solid var(--bp-keep-line);
+
+  h2 {
+    @include bp-title;
+    margin: 0 0 .25rem;
+    font-size: 1.6rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--foreground) 78%, var(--background));
+  }
+
+  @media screen and (max-width: 720px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    padding: 1.3rem 1.1rem;
+  }
+}

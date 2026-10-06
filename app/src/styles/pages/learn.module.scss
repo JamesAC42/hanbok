@@ -6,6 +6,7 @@
 // Lilita One has no Hangul, so headings fall back to heavy Noto Sans KR
 // (variable weight) for Korean, without faux-bolding the Lilita letters.
 @mixin learn-heading {
+    word-break: keep-all;
     @include bp-title;
     font-family: var(--font-lilita), var(--font-kr-sans);
     font-weight: 900;
@@ -236,12 +237,20 @@
     th, td {
         text-align: left;
         padding: .7rem 1rem;
+        word-break: keep-all;
         border-bottom: 2px solid var(--bp-line);
     }
 
     th {
         @include bp-label;
         background: var(--bp-soft);
+    }
+
+    // Korean forms stay on one line; the wrapper scrolls on narrow screens.
+    td[lang="ko"], th[lang="ko"], [lang="ko"] { white-space: nowrap; }
+
+    @media screen and (max-width: 725px) {
+        th, td { padding: .6rem .7rem; }
     }
 
     tr:last-child td { border-bottom: none; }

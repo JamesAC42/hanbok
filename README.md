@@ -26,6 +26,12 @@ Originally a Korean language learning app, Hanbok is now a general purpose langu
 - Vocabulary builder
 - Cultural insights
 
+## Chrome Extension
+
+The `extension/` folder holds a Chrome extension that brings Hanbok to any web page: select text to analyze it, save words from the analysis to your deck, and see the words you've saved highlighted as you browse. It uses your hanbokstudy.com login.
+
+To try it, open `chrome://extensions`, turn on Developer mode, click **Load unpacked**, and choose the `extension/` folder. See [extension/README.md](./extension/README.md) for details.
+
 ## Demo
 
 ### Basic Sentence Analysis

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { getAnalysisSchema, restoreMaps } = require('./analysisSchema');
+const { getAnalysisSchema, restoreMaps, hasRepetitionLoop } = require('./analysisSchema');
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const gemini = genAI.getGenerativeModel({
@@ -28,12 +28,18 @@ const ANALYSIS_MODEL = process.env.GEMINI_ANALYSIS_MODEL || "gemini-3.5-flash-li
 const ANALYSIS_THINKING = process.env.GEMINI_ANALYSIS_THINKING
     || (ANALYSIS_MODEL.includes("lite") ? "default" : "low");
 const ANALYSIS_TIMEOUT_MS = 40000;
+// The longest normal analyses use ~5,000 output tokens; anything past this is
+// a runaway generation.
+const ANALYSIS_MAX_OUTPUT_TOKENS = 8192;
 
 const analysisModel = genAI.getGenerativeModel({ model: ANALYSIS_MODEL });
 
 const buildAnalysisRequest = (text) => {
     const schemaInfo = getAnalysisSchema(text);
-    const generationConfig = { responseMimeType: "application/json" };
+    const generationConfig = {
+        responseMimeType: "application/json",
+        maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS
+    };
     if (schemaInfo) {
         generationConfig.responseJsonSchema = schemaInfo.schema;
     }
@@ -53,14 +59,18 @@ const prompt_gemini_analysis = async (text) => {
     const { request, mapPaths } = buildAnalysisRequest(text);
     const result = await analysisModel.generateContent(request, { timeout: ANALYSIS_TIMEOUT_MS });
     const raw = result.response.text();
-    if (mapPaths.length === 0) return raw;
 
+    let parsed;
     try {
-        return JSON.stringify(restoreMaps(JSON.parse(raw), mapPaths));
+        parsed = JSON.parse(raw);
     } catch (error) {
         // Let generateResponse's parser and retry loop handle bad output.
         return raw;
     }
+    if (hasRepetitionLoop(parsed)) {
+        throw new Error('Model output repeated itself; retrying');
+    }
+    return mapPaths.length === 0 ? raw : JSON.stringify(restoreMaps(parsed, mapPaths));
 }
 
 module.exports = {gemini, prompt_gemini, prompt_gemini_analysis, buildAnalysisRequest, ANALYSIS_MODEL, ANALYSIS_TIMEOUT_MS}

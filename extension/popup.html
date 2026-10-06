@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hanbok Study</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="popup-header">
+      <img class="popup-mascot" src="images/mascot/magpie-head-3.webp" width="44" height="44" alt="" draggable="false">
+      <div class="logo-section">
+        <h1 class="popup-title">Hanbok</h1>
+        <span class="popup-subtitle">Study on any page</span>
+      </div>
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span class="status-text" id="statusText">Checking…</span>
+      </div>
+    </div>
+
+    <div class="popup-content">
+      <div class="auth-section hidden" id="authSection">
+        <img class="popup-mascot" src="images/mascot/magpie-speak.webp" width="52" height="52" alt="" draggable="false">
+        <div>
+          <div class="auth-message">Log in to Hanbok to save words and see them highlighted.</div>
+          <button class="btn btn-primary" id="loginBtn">Log in to Hanbok</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">Languages</h3>
+
+        <div class="setting-group">
+          <label for="sourceLanguage" class="setting-label">I'm learning</label>
+          <select id="sourceLanguage" class="setting-select"></select>
+        </div>
+
+        <div class="setting-group">
+          <label for="targetLanguage" class="setting-label">Explain in</label>
+          <select id="targetLanguage" class="setting-select"></select>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <input type="checkbox" id="highlightEnabled" class="toggle-input">
+            <label for="highlightEnabled" class="toggle-label">
+              <span class="toggle-slider"></span>
+              Highlight my saved words
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <input type="checkbox" id="selectionButtonEnabled" class="toggle-input">
+            <label for="selectionButtonEnabled" class="toggle-label">
+              <span class="toggle-slider"></span>
+              Show "Analyze" button when I select text
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-section hidden" id="statsSection">
+        <h3 class="section-title">This page</h3>
+        <div class="stats-grid">
+          <div class="stat-item keep">
+            <span class="stat-number" id="vocabularyCount">0</span>
+            <span class="stat-label">Saved words</span>
+          </div>
+          <div class="stat-item understand">
+            <span class="stat-number" id="highlightedWords">–</span>
+            <span class="stat-label">Highlighted here</span>
+          </div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="refreshHighlights">Refresh highlights</button>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="section-title">How to use</h3>
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-icon">🔍</span>
+            <div class="feature-content">
+              <span class="feature-title">Analyze</span>
+              <span class="feature-description">Select text and click "Analyze with Hanbok", or right-click it.</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">➕</span>
+            <div class="feature-content">
+              <span class="feature-title">Save words</span>
+              <span class="feature-description">Add any word from an analysis to your deck.</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-icon">✨</span>
+            <div class="feature-content">
+              <span class="feature-title">See your words</span>
+              <span class="feature-description">Words you've saved are highlighted as you browse.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="setting-group">
+          <div class="setting-toggle">
+            <input type="checkbox" id="useLocalApi" class="toggle-input">
+            <label for="useLocalApi" class="toggle-label">
+              <span class="toggle-slider"></span>
+              Use local development server
+            </label>
+          </div>
+          <div class="setting-hint">Talks to http://localhost:3000 instead of hanbokstudy.com.</div>
+        </div>
+      </div>
+
+      <div class="popup-footer">
+        <div class="footer-links">
+          <a href="#" id="websiteLink" class="footer-link">Open Hanbok</a>
+        </div>
+        <div class="version-info" id="versionInfo"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
