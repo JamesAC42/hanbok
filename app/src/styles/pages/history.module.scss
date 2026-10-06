@@ -429,3 +429,77 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
     font-weight: 700;
     text-align: center;
 }
+
+// Word actions: see the source sentence, or remove the word (two taps,
+// because it also deletes the word's flashcards).
+.wordActions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: .5rem;
+    flex-shrink: 0;
+}
+
+.wordRemove {
+    @include bp-press-ghost(var(--bp-ink2), 3px);
+    width: 40px;
+    min-height: 40px;
+    padding: 0;
+    font-size: 1.35rem;
+    line-height: 1;
+
+    &:hover { color: color-mix(in srgb, var(--bp-rev) 80%, var(--foreground)); }
+}
+
+.wordConfirming {
+    border-color: var(--bp-rev-line);
+    background: var(--bp-rev-soft);
+
+    &:hover { background: var(--bp-rev-soft); }
+}
+
+.wordConfirmText {
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--foreground);
+}
+
+.wordRemoveConfirm {
+    @include bp-press(var(--bp-rev), var(--bp-rev-d), #fff, 3px);
+    min-height: 40px;
+    padding: .5rem 1rem;
+    font-size: .76rem;
+}
+
+.wordCancel {
+    @include bp-press-ghost(var(--bp-ink2), 3px);
+    min-height: 40px;
+    padding: .5rem 1rem;
+    font-size: .76rem;
+}
+
+.wordError {
+    flex-basis: 100%;
+    font-size: .85rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--bp-rev) 80%, var(--foreground));
+}
+
+// Phones stack the word card; the remove button sits in its top corner and
+// the confirm question takes its own line above the two buttons.
+@media screen and (max-width: 520px) {
+    .wordItem { position: relative; }
+
+    .wordItem:not(.wordConfirming) .wordMain { padding-right: 2.75rem; }
+
+    .wordRemove {
+        position: absolute;
+        top: .7rem;
+        right: .7rem;
+    }
+
+    .wordConfirming .wordActions { justify-content: flex-start; }
+
+    .wordConfirmText { flex-basis: 100%; }
+}
