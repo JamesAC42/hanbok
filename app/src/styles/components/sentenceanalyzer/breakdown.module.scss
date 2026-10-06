@@ -1,180 +1,149 @@
-@import '@/styles/variables.module.scss'; 
+@import '@/styles/variables.module.scss';
 
+// Each word is a pressable chip: romanization, the word in its part-of-speech
+// color, and a short meaning. Unsaved words get an amber edge so the
+// learner can see what is new to them.
 @mixin word-type-colors {
     @each $type, $color in $word-types {
         &[data-role="#{$type}"] {
-            color:$color;
-
-            &.locked {
-                &:not(.whitespace)::after {
-                    display: block;
-                    background-color: rgba($color, 0.2);
-                    border: 2px solid $color;
-                    animation:pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    filter:brightness(1.3);
-                    box-shadow:0 0 10px 0 $color;
-                }
-            }
-        }
-    }
-}
-
-@mixin word-type-color-hover {
-    @each $type, $color in $word-types {
-        &[data-role="#{$type}"] {
-            &:not(.whitespace)::after {
-                display: block;
-                background-color: rgba($color, 0.2);
-                border: 2px solid $color;
-                animation:pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            }
+            --type-color: #{$color};
         }
     }
 }
 
 .breakdown {
-	margin-top: 3rem;
-	font-size: 2.3rem;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	position: relative;
-	padding: 1rem;
+    margin-top: 1.75rem;
+    width: 100%;
+}
 
-	width:100%;
+.breakdownContent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .9rem .6rem;
+    justify-content: center;
+    align-items: stretch;
+}
 
-	.breakdownContent {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
+.sentenceItemContainer {
+    display: flex;
+    gap: .4rem;
+}
 
-		&.hasPronunciation {
-			row-gap:2rem;
-		}
-	}
-
-	.sentenceItemContainer {
-		display: flex;
-		gap: 0.5rem;
-		position: relative;
-
-		.pronunciation {
-			position:absolute;
-			top:0;
-			left:50%;
-			transform:translate(-50%,-100%);
-			font-size:1rem;
-			color:var(--foreground);
-			white-space: nowrap;
-		}
-	}
-
-	.sentenceItem {
-		padding: 0 0.5rem;
-		margin:0 0.2rem;
-		border-radius: 0.25rem;
-		margin: 0;
-		cursor: pointer;
-		position: relative;
-		z-index: 1;
-		font-size:2.6rem;
-
-		// override default button styles
-		background-color: unset;
-		border: unset;
-
-		&::after {
-			position: absolute;
-			content: '';
-			top: 0;
-			left: 50%;
-			transform: translateX(-50%);
-			width: calc(100%);
-			height: 100%;
-			border-radius: 0.25rem;
-			display:none;
-			pointer-events: none;
-			z-index: -1;
-
-		}
-
-		color:var(--foreground);
-
-		&.locked {
-			&:not(.whitespace)::after {
-				display: block;
-				background-color: rgba(var(--foreground), 0.2);
-				border: 2px solid var(--foreground);
-				animation:pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-				filter:brightness(1.3);
-				box-shadow:0 0 10px 0 var(--shadow);
-			}
-		}
+.sentenceItem {
+    --type-color: var(--foreground);
+    --edge: var(--bp-line);
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .1rem;
+    min-width: 4.6rem;
+    padding: .55rem .8rem .6rem;
+    border-radius: 16px;
+    border: 2px solid var(--edge);
+    box-shadow: 0 4px 0 var(--edge);
+    background: var(--background);
+    text-align: center;
+    transition: transform .08s ease, box-shadow .08s ease, background .12s ease, border-color .12s ease;
+    -webkit-tap-highlight-color: transparent;
 
     @include word-type-colors;
 
-    // Base generic hover (default gray) for ANY item that isn't locked or punctuation
-    &:hover:not(.locked):not([data-role="punctuation"]) {
-        &::after {
-            display: block;
-            background-color: var(--background-alt); // Default light gray bg
-            border: 2px solid var(--foreground-light); // Default dark gray border
-            animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+    &:hover {
+        background: var(--bp-soft);
     }
 
-    // Specific colors override the base styles if they exist
-    &:hover:not(.locked):not([data-role="punctuation"]) {
-        transform: none;
-        @include word-type-color-hover;
+    &:active {
+        transform: translateY(4px);
+        box-shadow: 0 0 0 var(--edge);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--bp-read-line);
+        outline-offset: 2px;
+    }
+
+    &.isNew {
+        --edge: var(--bp-keep-line);
+    }
+
+    &.locked {
+        --edge: var(--bp-read);
+        background: var(--bp-read-soft);
+        transform: translateY(2px);
+        box-shadow: 0 2px 0 var(--edge);
     }
 
     &[data-role="punctuation"] {
-			cursor:default;
-		}
+        cursor: default;
+        min-width: 0;
+        padding: .55rem .1rem;
+        border-color: transparent;
+        box-shadow: none;
+        background: none;
+        &:active { transform: none; }
+        .wordText { color: var(--bp-ink2); }
+    }
 
-		&.whitespace::after {
-			display: none !important;
-		}
-	}
-
-    @media screen and (max-width:725px) {
-
-		margin-top: 3rem;
-		margin-bottom:1rem;
-		font-size: 1.8rem;
-		padding: 0.5rem;
-		.breakdownContent {
-			gap: 0.6rem;
-			row-gap:2.5rem;
-		}
-	
-		.sentenceItemContainer {
-			gap: 0.1rem;
-		}
-	
-		.sentenceItem {
-			padding: 0 0.5rem;
-			margin:0 0.2rem;
-			border-radius: 0.25rem;
-			margin: 0;
-			cursor: pointer;
-			position: relative;
-			z-index: 1;
-			font-size:1.8rem;
-		}
-	}
+    &.whitespace {
+        display: none;
+    }
 }
 
-@keyframes pop {
-	0% { 
-		transform: translate(-50%, 15px) scale(0.9); 
-		opacity: 0; 
-	}
-	100% { 
-		transform: translate(-50%, 0) scale(1); 
-		opacity: 1; 
-	}
+.pronunciation {
+    font-family: var(--font-display);
+    font-size: .74rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+    white-space: nowrap;
+}
+
+.wordText {
+    font-size: 1.85rem;
+    line-height: 1.25;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--type-color) 82%, var(--foreground));
+    white-space: nowrap;
+
+    &:global(.korean) {
+        font-family: var(--font-kr-sans);
+    }
+}
+
+.gloss {
+    font-family: var(--font-display);
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--foreground);
+    opacity: .8;
+    max-width: 11rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hasPronunciation {}
+
+@media screen and (max-width: 725px) {
+    .breakdownContent {
+        gap: .7rem .45rem;
+    }
+
+    .sentenceItem {
+        min-width: 3.6rem;
+        padding: .45rem .55rem .5rem;
+        border-radius: 14px;
+    }
+
+    .wordText {
+        font-size: 1.45rem;
+    }
+
+    .gloss {
+        font-size: .72rem;
+        max-width: 8rem;
+    }
 }

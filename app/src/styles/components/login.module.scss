@@ -252,90 +252,94 @@
     padding: 1rem 0;
     width: 100%;
     max-width: 30rem;
+    // Signing in is why people are here, so the form comes before the pitch.
+    order: -1;
   }
 }
 
 .authCard {
   width: 100%;
   max-width: 26rem;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
-  border: 0.125rem solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(20px);
+  background: #fff;
+  color: #1c2035;
+  border-radius: 22px;
+  padding: 2.25rem 2.25rem 2rem;
+  border: 2px solid #dfe2ec;
+  box-shadow: 0 6px 0 #dfe2ec, 0 1.25rem 3rem rgba(10, 14, 40, 0.28);
 
   @media screen and (max-width: 768px) {
-    padding: 2rem;
-    border-radius: 1.25rem;
+    padding: 1.75rem 1.5rem 1.5rem;
   }
 
   @media screen and (max-width: 500px) {
-    padding: 1.5rem;
-    border-radius: 1rem;
+    padding: 1.5rem 1.15rem 1.25rem;
   }
 }
 
 .authTitle {
   font-family: var(--font-lilita);
-  font-size: 2rem;
-  color: #181a29;
+  font-weight: 400;
+  font-size: 2.1rem;
+  line-height: 1.1;
+  color: #1c2035;
   text-align: center;
-  margin: 0 0 2rem 0;
-  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+  margin: 0 0 1.5rem 0;
 
   @media screen and (max-width: 768px) {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    margin-bottom: 1.25rem;
   }
 }
 
 .authTabs {
   display: flex;
-  background: rgba(241, 245, 249, 0.8);
-  border-radius: 0.75rem;
-  padding: 0.25rem;
-  margin-bottom: 2rem;
-  border: 0.0625rem solid #e5e7eb;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  margin-bottom: 1.75rem;
+  border: 2px solid #dfe2ec;
+  border-radius: 16px;
+  background: #fff;
 
   .authTab {
     flex: 1;
-    padding: 0.75rem 1rem;
-    border: none;
+    padding: 0.65rem 0.5rem;
+    border: 2px solid transparent;
     background: transparent;
-    border-radius: 0.625rem;
+    border-radius: 12px;
     font-family: var(--font-display);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #6b7280;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #5f6480;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.12s ease, color 0.12s ease;
 
     &:hover {
-      color: #374151;
-      background: rgba(255, 255, 255, 0.5);
+      color: #1c2035;
+      background: #f4f5f9;
     }
 
     &.active {
-      background: #fff;
-      color: #1f2937;
-      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+      border-color: color-mix(in srgb, var(--bp-read) 35%, #fff);
+      background: color-mix(in srgb, var(--bp-read) 10%, #fff);
+      color: var(--bp-read);
     }
 
     @media screen and (max-width: 768px) {
-      font-size: 0.8rem;
-      padding: 0.625rem 0.75rem;
+      font-size: 0.72rem;
+      padding: 0.6rem 0.35rem;
     }
   }
 
   @media screen and (max-width: 768px) {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.35rem;
   }
 }
 
 .authContent {
   width: 100%;
-  min-height: 25rem; // Minimum height to reduce jumping
+  min-height: 20rem; // Minimum height to reduce jumping
   transition: all 0.3s ease;
   position: relative;
   

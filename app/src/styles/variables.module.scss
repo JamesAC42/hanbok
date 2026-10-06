@@ -141,24 +141,168 @@ $word-types: (
   justify-content:space-between;
 } 
 
+// ===== Bright Path building blocks (see styles/brightpath.scss) =====
+
+@mixin bp-title {
+  font-family:var(--font-lilita);
+  font-weight:400;
+  letter-spacing:.01em;
+  line-height:1.08;
+  color:var(--foreground);
+}
+
+@mixin bp-label {
+  font-family:var(--font-display);
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--bp-ink2);
+}
+
+@mixin bp-card {
+  background:var(--bp-card);
+  border:2px solid var(--bp-line);
+  border-radius:20px;
+}
+
+// A chunky button that sinks when pressed.
+@mixin bp-press($bg: var(--bp-read), $shade: var(--bp-read-d), $fg: #fff, $depth: 4px) {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:.92rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  text-decoration:none;
+  color:$fg;
+  background:$bg;
+  border:none;
+  border-radius:14px;
+  padding:.8rem 1.4rem;
+  box-shadow:0 $depth 0 $shade;
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .08s ease, filter .15s ease;
+
+  &:hover { filter:brightness(1.06); }
+  &:active { transform:translateY($depth); box-shadow:0 0 0 $shade; }
+  &:focus-visible { outline:3px solid color-mix(in srgb, #{$bg} 45%, transparent); outline-offset:3px; }
+  &:disabled {
+    cursor:not-allowed;
+    filter:grayscale(.6);
+    opacity:.55;
+    transform:none;
+    box-shadow:0 $depth 0 $shade;
+  }
+}
+
+// White pressable button with a line border.
+@mixin bp-press-ghost($fg: var(--bp-read), $depth: 3px) {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:.5rem;
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:.86rem;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  white-space:nowrap;
+  text-decoration:none;
+  color:$fg;
+  background:var(--bp-card);
+  border:2px solid var(--bp-line);
+  border-radius:14px;
+  padding:.7rem 1.2rem;
+  box-shadow:0 $depth 0 var(--bp-line);
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
+
+  &:hover { background:var(--bp-soft); }
+  &:active { transform:translateY($depth); box-shadow:0 0 0 var(--bp-line); }
+  &:focus-visible { outline:3px solid var(--bp-read-line); outline-offset:3px; }
+  &:disabled { cursor:not-allowed; opacity:.55; transform:none; }
+}
+
+// Pressable card (chips, list rows, choices).
+@mixin bp-press-card($line: var(--bp-line), $depth: 4px) {
+  background:var(--bp-card);
+  border:2px solid $line;
+  border-radius:16px;
+  box-shadow:0 $depth 0 $line;
+  cursor:pointer;
+  transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
+  &:hover { background:var(--bp-soft); }
+  &:active { transform:translateY($depth); box-shadow:0 0 0 $line; }
+}
+
+@mixin bp-pill {
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.3rem .75rem;
+  border-radius:12px;
+  border:2px solid var(--bp-line);
+  font-family:var(--font-lilita);
+  font-size:1.05rem;
+  line-height:1.2;
+  white-space:nowrap;
+}
+
+@mixin bp-bar($fill: var(--bp-und), $height: 14px) {
+  height:$height;
+  border-radius:$height;
+  background:var(--bp-soft);
+  overflow:hidden;
+  > i, > span {
+    display:block;
+    height:100%;
+    border-radius:$height;
+    background:$fill;
+    box-shadow:inset 0 -4px 0 rgba(0,0,0,.12);
+    transition:width .35s cubic-bezier(.3,1.4,.5,1);
+  }
+}
+
+@mixin bp-input {
+  font-family:var(--font-display);
+  font-size:1rem;
+  font-weight:600;
+  color:var(--foreground);
+  background:var(--bp-card);
+  border:2px solid var(--bp-line);
+  border-radius:14px;
+  padding:.75rem 1rem;
+  outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
+  &::placeholder { color:var(--bp-ink2); opacity:.75; }
+  &:focus { border-color:var(--bp-read); box-shadow:0 0 0 4px var(--bp-read-soft); }
+}
+
 @mixin dashboard-page {
-  padding:4rem 6rem;
+  padding:2.25rem 3rem 4rem;
+  font-family:var(--font-display);
 
   max-height:calc(100dvh - 4.3rem);
   flex-grow:1;
   overflow-y:auto;
 
+  @media screen and (max-width: 725px) {
+    padding:1.25rem 1rem 3rem;
+  }
+
   .pageTitle {
-    font-size:2.1rem;
-    line-height:1.2;
+    @include bp-title;
+    font-size:2.3rem;
     margin:0 0 1.25rem;
-    color:var(--foreground);
-    font-family:var(--font-body);
-    font-weight:700;
 
     @media screen and (max-width: 725px) {
-      font-size:1.6rem;
-      margin-top:1rem;
+      font-size:1.8rem;
+      margin-top:0.25rem;
     }
   }
 }

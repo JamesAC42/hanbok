@@ -1,91 +1,160 @@
 'use client';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import useCardsToday from '@/hooks/useCardsToday';
-import { PhCardsFill } from '@/components/icons/CardsFill';
-import { MaterialSymbolsChatBubbleOutline } from '@/components/icons/ChatBubble';
+import Mascot from '@/components/Mascot';
+import Tiger from '@/components/Tiger';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
+import { markStage } from '@/lib/todayLoop';
 import styles from '@/styles/components/sentenceanalyzer/nextsteps.module.scss';
 
-const Step = ({ icon, title, children, href, onClick, disabled, highlight }) => {
-    const body = (
-        <>
-            <span className={styles.icon} aria-hidden="true">{icon}</span>
-            <span className={styles.text}>
-                <span className={styles.title}>{title}</span>
-                {children && <span className={styles.detail}>{children}</span>}
-            </span>
-        </>
+const plural = (n, word, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
+
+// The Keep step: pick the new words from this sentence and turn them into
+// flashcards in one press.
+const KeepBox = ({ user, words, unsavedWords, savedLoading, addingAll, saveAll, cardsToday, onKept }) => {
+    const [unchecked, setUnchecked] = useState(() => new Set());
+    const savedCount = words.length - unsavedWords.length;
+    const chosen = useMemo(
+        () => unsavedWords.filter(word => !unchecked.has(word.originalWord)),
+        [unsavedWords, unchecked]
     );
-    const className = `${styles.step} ${highlight ? styles.highlight : ''}`;
-    if (href) {
-        return <Link href={href} className={className}>{body}</Link>;
+
+    const toggle = (word) => setUnchecked(prev => {
+        const next = new Set(prev);
+        if (next.has(word.originalWord)) next.delete(word.originalWord);
+        else next.add(word.originalWord);
+        return next;
+    });
+
+    const keep = async () => {
+        const count = chosen.length;
+        await saveAll(chosen);
+        markStage('keep');
+        onKept(count);
+    };
+
+    if (!user) {
+        return (
+            <section className={styles.keep}>
+                <h3 className={styles.keepTitle}>Keep these words</h3>
+                <p className={styles.keepText}>Sign in to save the new words as flashcards. Hanbok brings each one back right before you would forget it.</p>
+                <Link href="/login" className={styles.keepButton}>Sign in to keep words</Link>
+            </section>
+        );
     }
+
+    if (savedLoading) {
+        return <section className={styles.keep}><p className={styles.keepText}>Checking your flashcards…</p></section>;
+    }
+
+    if (unsavedWords.length === 0) {
+        return (
+            <section className={`${styles.keep} ${styles.keepDone}`}>
+                <h3 className={styles.keepTitle}>All {plural(words.length, 'word')} kept</h3>
+                <p className={styles.keepText}>
+                    Every word in this sentence is in your flashcards.
+                    {cardsToday ? ` ${plural(cardsToday, 'card is', 'cards are')} ready for review today.` : ''}
+                </p>
+                <Link href="/cards" className={styles.reviewButton}>
+                    {cardsToday ? `Review ${plural(cardsToday, 'card')}` : 'Open flashcards'}
+                </Link>
+            </section>
+        );
+    }
+
     return (
-        <button type="button" className={className} onClick={onClick} disabled={disabled}>
-            {body}
-        </button>
+        <section className={styles.keep}>
+            <h3 className={styles.keepTitle}>
+                Keep {plural(unsavedWords.length, 'new word')}
+            </h3>
+            <p className={styles.keepText}>
+                {savedCount > 0
+                    ? `${savedCount} ${savedCount === 1 ? 'is' : 'are'} already in your flashcards. Untick any you already know.`
+                    : 'They become flashcards. Untick any you already know.'}
+            </p>
+            <ul className={styles.checklist}>
+                {unsavedWords.map(word => (
+                    <li key={word.originalWord}>
+                        <label className={styles.check}>
+                            <input
+                                type="checkbox"
+                                checked={!unchecked.has(word.originalWord)}
+                                onChange={() => toggle(word)}
+                                disabled={addingAll}
+                            />
+                            <span className={styles.checkWord}>{word.originalWord}</span>
+                            <span className={styles.checkGloss}>{word.translatedWord}</span>
+                        </label>
+                    </li>
+                ))}
+            </ul>
+            <button
+                type="button"
+                className={styles.keepButton}
+                onClick={keep}
+                disabled={addingAll || chosen.length === 0}
+            >
+                {addingAll ? 'Keeping…' : chosen.length === 0 ? 'Pick a word to keep' : `Keep ${plural(chosen.length, 'word')}`}
+            </button>
+        </section>
     );
 };
 
-const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, saveAll, className = '' }) => {
+const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, saveAll, className = '', compact = false }) => {
     const { user } = useAuth();
     const savedCount = words.length - unsavedWords.length;
     // Refetch after saving words, since new cards change today's count.
     const cardsToday = useCardsToday(!!user && !addingAll, savedCount);
+    const [toast, setToast] = useState(null);
 
-    let flashcardStep;
-    if (!user) {
-        flashcardStep = (
-            <Step icon={<PhCardsFill />} title="Turn these words into flashcards" href="/login" highlight>
-                Sign in to save words and review them later.
-            </Step>
-        );
-    } else if (!savedLoading && unsavedWords.length > 0) {
-        flashcardStep = (
-            <Step
-                icon={<PhCardsFill />}
-                title={addingAll ? 'Adding words…' : `Add ${unsavedWords.length} new ${unsavedWords.length === 1 ? 'word' : 'words'} to Flashcards`}
-                onClick={saveAll}
-                disabled={addingAll}
-                highlight
-            >
-                {savedCount > 0
-                    ? `${savedCount} ${savedCount === 1 ? 'is' : 'are'} already in your deck.`
-                    : 'Review them with spaced repetition so they stick.'}
-            </Step>
-        );
-    } else {
-        flashcardStep = (
-            <Step icon={<PhCardsFill />} title="Study your flashcards" href="/cards" highlight>
-                {cardsToday
-                    ? `${cardsToday} ${cardsToday === 1 ? 'card' : 'cards'} ready today. Every word here is in your deck.`
-                    : 'Every word in this sentence is in your deck.'}
-            </Step>
-        );
-    }
+    useEffect(() => {
+        if (!toast) return;
+        const timer = setTimeout(() => setToast(null), 2800);
+        return () => clearTimeout(timer);
+    }, [toast]);
 
     return (
         <section className={`${styles.nextSteps} ${className}`} aria-label="Next steps">
-            <h3 className={styles.heading}>Next steps</h3>
-            {flashcardStep}
-            {sentenceId && (
-                <Step
-                    icon={<MaterialSymbolsChatBubbleOutline />}
-                    title="Ask the tutor about this sentence"
-                    href={`/tutor?sentenceId=${sentenceId}`}
-                >
-                    Ask why it's built this way or how to say it differently.
-                </Step>
+            {!compact && (
+                <div className={styles.railHead}>
+                    <Mascot pose="point" size={76} />
+                    <p className={styles.bubble}>
+                        Tap any word to see what it means and how it is built.
+                    </p>
+                </div>
             )}
-            <Step icon={<Fa6SolidParagraph />} title="Analyze a whole paragraph" href="/extended-text">
-                Paste the text around this sentence to read it in context.
-            </Step>
-            {user && unsavedWords.length > 0 && cardsToday ? (
-                <Link href="/cards" className={styles.footerLink}>
-                    {cardsToday} {cardsToday === 1 ? 'card' : 'cards'} ready to study today →
+
+            <KeepBox
+                user={user}
+                words={words}
+                unsavedWords={unsavedWords}
+                savedLoading={savedLoading}
+                addingAll={addingAll}
+                saveAll={saveAll}
+                cardsToday={cardsToday}
+                onKept={(count) => count && setToast(`${plural(count, 'word')} added to your flashcards!`)}
+            />
+
+            {sentenceId && (
+                <Link href={`/tutor?sentenceId=${sentenceId}`} className={styles.alt}>
+                    <Tiger size={46} />
+                    <span>
+                        <b>Ask Horangi about this sentence</b>
+                        <small>Why is it built this way? How else could I say it?</small>
+                    </span>
                 </Link>
-            ) : null}
+            )}
+            <Link href="/extended-text" className={styles.alt}>
+                <span className={styles.altIcon}><Fa6SolidParagraph /></span>
+                <span>
+                    <b>Read a whole paragraph</b>
+                    <small>Paste the text around this sentence to read it in context.</small>
+                </span>
+            </Link>
+
+            {toast && <div className={styles.toast} role="status">{toast}</div>}
         </section>
     );
 };

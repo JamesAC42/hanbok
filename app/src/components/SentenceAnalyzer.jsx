@@ -11,7 +11,7 @@ import getFontClass from '@/lib/fontClass';
 import { resources } from '@/translations';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
 
-import {IcBaselineLiveHelp} from '@/components/icons/QuestionBubble';
+import Tiger from '@/components/Tiger';
 
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
@@ -203,8 +203,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                     className={styles.floatingChatButton}
                     title={t('sentenceForm.askAIHelp')}
                 >
-                    <IcBaselineLiveHelp />
-                    <span>{t('sentenceForm.askAI')}</span>
+                    <Tiger size={34} />
+                    <span>Ask Horangi</span>
                 </Link>
             )}
 

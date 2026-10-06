@@ -1,4 +1,5 @@
 'use client';
+import Mascot from '@/components/Mascot';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -506,9 +507,15 @@ const SentenceForm = ({
             )}
 
             <div className={styles.analyzeHeader}>
-                <h1 className={styles.analyzeTitle}>
-                    {translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')}
-                </h1>
+                <div className={styles.analyzeHello}>
+                    <Mascot pose="point" size={84} motion="bob" />
+                    <div className={styles.analyzeBubble}>
+                        <span className={styles.stageTag}>Read</span>
+                        <h1 className={styles.analyzeTitle}>
+                            {translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')}
+                        </h1>
+                    </div>
+                </div>
                 <div className={styles.analyzeControls}>
                     <div className={styles.modeToggle} role="tablist">
                         <button
@@ -600,7 +607,7 @@ const SentenceForm = ({
             {
                 !error && loading && (
                     <div className={styles.loading}>
-                        <SvgSpinnersRingResize />
+                        <Mascot pose="cards" size={64} motion="bob" />
                         <div className={`${styles.loadingText} ${styles.fadeTransition}`}>
                             {loadingMessages[loadingMessageIndex]}
                         </div>

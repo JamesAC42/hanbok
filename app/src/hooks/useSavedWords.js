@@ -113,14 +113,16 @@ const useSavedWords = ({ analysis, originalLanguage, translationLanguage, senten
         [words, savedWords]
     );
 
-    const saveAll = useCallback(async () => {
+    // Saves every unsaved word, or just the ones passed in.
+    const saveAll = useCallback(async (subset) => {
+        const toSave = Array.isArray(subset) ? subset : unsavedWords;
         if (!user) {
             showLoginRequiredPopup('words');
             return;
         }
         setAddingAll(true);
         try {
-            for (const word of unsavedWords) {
+            for (const word of toSave) {
                 const result = await saveWord(word);
                 if (result.reachedLimit) {
                     showLimitReachedPopup('words');

@@ -1,0 +1,76 @@
+// Bright Path: one color per loop stage (Read, Understand, Keep, Review),
+// chunky pressable buttons, Lilita One headings. Stage colors are constant
+// across user themes; lines and soft fills derive from each theme's own
+// background and foreground so every theme keeps working.
+:root, div[class*="theme-"] {
+    --bp-read: #3D64E8;
+    --bp-read-d: #2645B8;
+    --bp-und: #13B5A6;
+    --bp-und-d: #0B8C80;
+    --bp-keep: #FFB020;
+    --bp-keep-d: #D18700;
+    --bp-keep-ink: #3A2600;
+    --bp-rev: #FF5A5F;
+    --bp-rev-d: #D63A40;
+    --bp-flame: #FF8A00;
+    --bp-flame-d: #C96A00;
+    --bp-freeze: #3A9BE0;
+    --bp-purple: #8E6CF0;
+    --bp-purple-d: #6B4BD0;
+    --bp-pink: #F06CB4;
+    --bp-pink-d: #C94C90;
+    --bp-gray: #8A8FA8;
+    --bp-gray-d: #6A6F88;
+
+    --bp-line: color-mix(in srgb, var(--foreground) 13%, var(--background));
+    --bp-line-strong: color-mix(in srgb, var(--foreground) 22%, var(--background));
+    --bp-soft: color-mix(in srgb, var(--foreground) 4%, var(--background));
+    --bp-ink2: color-mix(in srgb, var(--foreground) 62%, var(--background));
+    --bp-card: var(--background);
+
+    --bp-read-soft: color-mix(in srgb, var(--bp-read) 11%, var(--background));
+    --bp-read-line: color-mix(in srgb, var(--bp-read) 38%, var(--background));
+    --bp-und-soft: color-mix(in srgb, var(--bp-und) 12%, var(--background));
+    --bp-und-line: color-mix(in srgb, var(--bp-und) 42%, var(--background));
+    --bp-keep-soft: color-mix(in srgb, var(--bp-keep) 16%, var(--background));
+    --bp-keep-line: color-mix(in srgb, var(--bp-keep) 58%, var(--background));
+    --bp-rev-soft: color-mix(in srgb, var(--bp-rev) 11%, var(--background));
+    --bp-rev-line: color-mix(in srgb, var(--bp-rev) 45%, var(--background));
+    --bp-flame-soft: color-mix(in srgb, var(--bp-flame) 13%, var(--background));
+    --bp-flame-line: color-mix(in srgb, var(--bp-flame) 50%, var(--background));
+    --bp-purple-soft: color-mix(in srgb, var(--bp-purple) 12%, var(--background));
+    --bp-purple-line: color-mix(in srgb, var(--bp-purple) 45%, var(--background));
+    --bp-pink-soft: color-mix(in srgb, var(--bp-pink) 12%, var(--background));
+    --bp-freeze-soft: color-mix(in srgb, var(--bp-freeze) 16%, var(--background));
+
+    --bp-radius: 18px;
+}
+
+@keyframes bp-bob {
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes bp-hop {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(-14px) rotate(-4deg); }
+    70% { transform: translateY(0) rotate(2deg); }
+    100% { transform: none; }
+}
+
+@keyframes bp-pop-in {
+    0% { opacity: 0; transform: translateY(10px) scale(.97); }
+    100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bp-motion, .bp-motion * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+// The theme class sits on a wrapper div, so body's color resolves to the
+// light theme. Re-anchor inherited text color on the themed wrapper.
+div[class*="theme-"] {
+    color: var(--foreground);
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "@/styles/components/sidebar.module.scss";
-import Image from "next/image";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -52,7 +52,6 @@ function Sidebar() {
 
     const [collapsed, setCollapsed] = useState(false);
 
-    const [hover, setHover] = useState({ section: null, index: 0 });
     const [expanding, setExpanding] = useState(false);
     const [collapsing, setCollapsing] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -154,29 +153,29 @@ function Sidebar() {
         {
             key: 'main',
             items: [
-                ...(isAuthenticated ? [{ path: "/home", label: label('sidebar.home', 'Home'), icon: <MaterialSymbolsLightOtherHouses /> }] : []),
-                { path: "/analyze", match: ["/analyze", "/sentence"], label: label('sidebar.analyze', 'Analyze'), icon: <MaterialSymbolsVariableAddRounded /> },
-                { path: "/extended-text", match: ["/extended-text"], label: label('sidebar.paragraphs', 'Paragraphs'), icon: <Fa6SolidParagraph /> },
-                { path: "/library", match: ["/library", "/history", "/bookmarks"], label: label('sidebar.library', 'Library'), icon: <MaterialSymbolsLibraryBooksSharp /> },
-                { path: "/cards", match: ["/cards"], label: label('sidebar.review', 'Review'), icon: <PhCardsFill />, badge: cardsToday },
+                ...(isAuthenticated ? [{ path: "/home", label: label('sidebar.home', 'Home'), color: 'var(--bp-und)', icon: <MaterialSymbolsLightOtherHouses /> }] : []),
+                { path: "/analyze", match: ["/analyze", "/sentence"], label: label('sidebar.analyze', 'Analyze'), color: 'var(--bp-read)', icon: <MaterialSymbolsVariableAddRounded /> },
+                { path: "/extended-text", match: ["/extended-text"], label: label('sidebar.paragraphs', 'Paragraphs'), color: 'var(--bp-purple)', icon: <Fa6SolidParagraph /> },
+                { path: "/library", match: ["/library", "/history", "/bookmarks"], label: label('sidebar.library', 'Library'), color: 'var(--bp-keep)', icon: <MaterialSymbolsLibraryBooksSharp /> },
+                { path: "/cards", match: ["/cards"], label: label('sidebar.review', 'Review'), color: 'var(--bp-rev)', icon: <PhCardsFill />, badge: cardsToday },
             ],
         },
         {
             key: 'practice',
             header: label('sidebar.practice', 'Practice'),
             items: [
-                { path: "/tutor", match: ["/tutor"], label: t('sidebar.tutor'), icon: <IcSharpSchool /> },
-                { path: "/typing", match: ["/typing"], label: t('sidebar.koreanTyping'), icon: <MaterialSymbolsKeyboard /> },
-                { path: "/hangeul", match: ["/hangeul"], label: t('sidebar.learnHangeul'), icon: <TablerAlphabetKorean /> },
+                { path: "/tutor", match: ["/tutor"], label: t('sidebar.tutor'), color: 'var(--bp-flame)', icon: <IcSharpSchool /> },
+                { path: "/typing", match: ["/typing"], label: t('sidebar.koreanTyping'), color: 'var(--bp-purple)', icon: <MaterialSymbolsKeyboard /> },
+                { path: "/hangeul", match: ["/hangeul"], label: t('sidebar.learnHangeul'), color: 'var(--bp-und)', icon: <TablerAlphabetKorean /> },
             ],
         },
         {
             key: 'discover',
             header: label('sidebar.discover', 'Discover'),
             items: [
-                { path: "/lyrics", match: ["/lyrics"], label: t('sidebar.lyrics'), icon: <IcSharpQueueMusic /> },
-                { path: "/feedback", label: t('sidebar.feedback'), icon: <MingcuteCommentFill /> },
-                ...(user && isAdmin(user.email) ? [{ path: "/admin", match: ["/admin"], label: "Admin", icon: <MaterialSymbolsSettingsRounded /> }] : []),
+                { path: "/lyrics", match: ["/lyrics"], label: t('sidebar.lyrics'), color: 'var(--bp-pink)', icon: <IcSharpQueueMusic /> },
+                { path: "/feedback", label: t('sidebar.feedback'), color: 'var(--bp-freeze)', icon: <MingcuteCommentFill /> },
+                ...(user && isAdmin(user.email) ? [{ path: "/admin", match: ["/admin"], label: "Admin", color: 'var(--bp-gray)', icon: <MaterialSymbolsSettingsRounded /> }] : []),
             ],
         },
     ];
@@ -199,95 +198,87 @@ function Sidebar() {
             
             <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""} ${expanding ? styles.expanding : ""} ${collapsing ? styles.animateCollapse : ""}`}>
                 <div className={styles.sidebarInner}>
-                    <div className={styles.sidebarSection}>
-                        <div className={styles.sidebarHeader}>
-                            <div
-                                onClick={() => navigateTo(isAuthenticated ? "/home" : "/")}
-                                className={`${styles.homeIcon} ${collapsed ? styles.homeCollapsed : ""}`}>
-                                <MaterialSymbolsLightOtherHouses />
-                            </div>
-                            <div 
+                    <div className={styles.sidebarHeader}>
+                        <Link
+                            href={isAuthenticated ? "/home" : "/"}
+                            className={styles.wordmark}
+                            aria-label="Hanbok home">
+                            <span className={styles.wordmarkFull}>hanbok</span>
+                            <span className={styles.wordmarkShort}>h</span>
+                        </Link>
+                        <button
+                            type="button"
                             className={styles.collapseButton}
-                            onClick={() => toggleCollapse()}
-                            >
-                                <CuidaSidebarCollapseOutline />
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.sidebarSection}>
-                        <div className={styles.sidebarSectionItems}>
-                            <div className={`
-                                ${styles.sidebarSectionItem}
-                                ${expanding ? styles.expanding : ""} 
-                                ${getActiveClass(isAuthenticated ? "/profile" : "/login")}
-                                ${styles.profileSection}`}
-                             onClick={() => navigateTo(isAuthenticated ? "/profile" : "/login")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <IcBaselinePerson />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {isAuthenticated ? t('sidebar.myAccount') : t('sidebar.signIn')}
-                                </div>
-                            </div>
-                        </div>
+                            aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+                            onClick={() => toggleCollapse()}>
+                            <CuidaSidebarCollapseOutline />
+                        </button>
                     </div>
 
                     {sections.map(section => (
-                        <div
+                        <nav
                             key={section.key}
                             className={styles.sidebarSection}
-                            onMouseLeave={() => setHover({ section: null, index: 0 })}>
+                            aria-label={section.header || 'Main'}>
                             {section.header && (
                                 <div className={styles.sidebarSectionHeader}>
                                     {section.header}
                                 </div>
                             )}
                             <div className={styles.sidebarSectionItems}>
-                                {section.items.map((item, i) => (
-                                    <div
-                                        key={item.path}
-                                        onMouseEnter={() => setHover({ section: section.key, index: i })}
-                                        className={`
-                                            ${styles.sidebarSectionItem}
-                                            ${expanding ? styles.expanding : ""}
-                                            ${getActiveClass(item.match || item.path)}`}
-                                        onClick={() => navigateTo(item.path)}
-                                        title={collapsed ? item.label : undefined}>
-                                        <div className={styles.sidebarSectionItemIcon}>
-                                            {item.icon}
-                                        </div>
-                                        <div className={styles.sidebarSectionItemText}>
-                                            {item.label}
-                                        </div>
-                                        {item.badge ? (
-                                            <span className={styles.sidebarBadge} aria-label={`${item.badge} cards to study today`}>
-                                                {item.badge > 99 ? '99+' : item.badge}
+                                {section.items.map(item => {
+                                    const active = getActiveClass(item.match || item.path);
+                                    return (
+                                        <Link
+                                            key={item.path}
+                                            href={item.path}
+                                            onClick={() => { if (isMobile && !collapsed) toggleCollapse(); }}
+                                            className={`${styles.sidebarSectionItem} ${active}`}
+                                            aria-current={active ? "page" : undefined}
+                                            style={{ '--item-color': item.color }}
+                                            title={collapsed ? item.label : undefined}>
+                                            <span className={styles.sidebarSectionItemIcon}>
+                                                {item.icon}
                                             </span>
-                                        ) : null}
-                                    </div>
-                                ))}
-                                <div
-                                    className={`${styles.sidebarItemFloatyThing} ${hover.section === section.key ? styles.show : ""}`}
-                                    style={{ transform: `translateY(${hover.index * 2}rem)` }}>
-                                </div>
+                                            <span className={styles.sidebarSectionItemText}>
+                                                {item.label}
+                                            </span>
+                                            {item.badge ? (
+                                                <span className={styles.sidebarBadge} aria-label={`${item.badge} cards to study today`}>
+                                                    {item.badge > 99 ? '99+' : item.badge}
+                                                </span>
+                                            ) : null}
+                                        </Link>
+                                    );
+                                })}
                             </div>
-                        </div>
+                        </nav>
                     ))}
 
-                    {!collapsed && isAuthenticated && (
-                        <div className={`${styles.sidebarSection} ${styles.sidebarQuota}`}>
-                            <QuotaDisplay compact />
-                        </div>
-                    )}
-                    {!collapsed && !isAuthenticated && (
-                        <div className={`${styles.sidebarSection} ${styles.sidebarQuota}`}>
-                            <div
-                                className={styles.sidebarPlansLink}
-                                onClick={() => navigateTo("/pricing")}>
-                                <MynauiSparklesSolid /> {t('sidebar.viewPlans')}
+                    <div className={`${styles.sidebarSection} ${styles.sidebarFooter}`}>
+                        {!collapsed && isAuthenticated && (
+                            <div className={styles.sidebarQuota}>
+                                <QuotaDisplay compact />
                             </div>
-                        </div>
-                    )}
+                        )}
+                        {!collapsed && !isAuthenticated && (
+                            <Link href="/pricing" className={styles.sidebarPlansLink}>
+                                <MynauiSparklesSolid /> {t('sidebar.viewPlans')}
+                            </Link>
+                        )}
+                        <Link
+                            href={isAuthenticated ? "/profile" : "/login"}
+                            className={`${styles.sidebarSectionItem} ${styles.accountItem} ${getActiveClass(isAuthenticated ? "/profile" : "/login")}`}
+                            style={{ '--item-color': 'var(--bp-gray)' }}
+                            title={collapsed ? (isAuthenticated ? t('sidebar.myAccount') : t('sidebar.signIn')) : undefined}>
+                            <span className={styles.sidebarSectionItemIcon}>
+                                <IcBaselinePerson />
+                            </span>
+                            <span className={styles.sidebarSectionItemText}>
+                                {isAuthenticated ? (user?.name || t('sidebar.myAccount')) : t('sidebar.signIn')}
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </>

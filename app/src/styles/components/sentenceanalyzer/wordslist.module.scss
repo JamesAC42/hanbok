@@ -1,203 +1,174 @@
+@import '@/styles/variables.module.scss';
+
 .wordsList {
+    margin: .25rem 0 1rem;
+    font-family: var(--font-display);
 
-    margin:2rem 0;
-	.wordsListHeader {
-		font-family: var(--font-body);
-		font-size: 2.5rem;
-		font-weight: bold;
-		text-align: left;
-		margin-bottom: 1rem;
-        color:var(--foreground);
-	}
-	.wordListItem {
-		margin:0;
-		margin-bottom:1rem;
-		padding:1rem;
-		border:1px solid var(--foreground-light);
-		border-radius:0.3rem;
-		width:100%;
-		display: flex;
-		font-size:1.3rem;
-		align-items:center;
-        white-space: nowrap;
-        flex-wrap:wrap;
+    .wordsListHeader {
+        @include bp-title;
+        font-size: 1.7rem;
+        text-align: left;
+        margin-bottom: 1rem;
+    }
 
-        background:var(--background);
-        
-		.wordListItemActions {
+    .wordListItem {
+        margin: 0 0 .6rem;
+        padding: .75rem 1rem;
+        border: 2px solid var(--bp-line);
+        border-radius: 16px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: .75rem 1rem;
+        flex-wrap: wrap;
+        background: var(--background);
+        font-family: var(--font-display);
+
+        .wordListItemActions {
             position: relative;
-            margin-right: 1.5rem;
+            order: 2;
             flex-shrink: 0;
             display: flex;
             align-items: center;
-			.wordListItemAction {
-				cursor:pointer;
-                border: none;
-                outline: none;
-                padding: 0.5rem 1rem;
-                border-radius: 0.5rem;
-                font-size: 0.9rem;
-                font-weight: 600;
-                transition: all 0.2s ease;
-                display: flex;
+
+            .wordListItemAction {
+                display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                min-width: 10rem;
+                gap: .4rem;
+                min-width: 8.5rem;
+                padding: .55rem .9rem;
+                border-radius: 12px;
                 font-family: var(--font-display);
-                position: relative;
-                width: fit-content;
-                transition: width 0.2s ease;
+                font-size: .76rem;
+                font-weight: 800;
+                letter-spacing: .05em;
+                text-transform: uppercase;
+                cursor: pointer;
+                transition: transform .08s ease, box-shadow .08s ease, background .12s ease;
 
-				&.wordInLibrary {
-                    background-color: var(--background-alt);
-                    color: var(--foreground-muted);
-                    border: 1px solid var(--foreground-light);
+                &:active {
+                    transform: translateY(3px);
+                    box-shadow: none !important;
+                }
 
-
-                    &:hover {
-                        background-color: rgba(239, 83, 80, 0.1);
-                        color: #ef5350;
-                        border-color: #ef5350;
-                    }
-				}
-				&.wordNotInLibrary {
-                    background-color: #5061cd;
-                    color: white;
-                    border: 1px solid #5061cd;
+                &.wordInLibrary {
+                    background: var(--bp-und-soft);
+                    color: var(--bp-und-d);
+                    border: 2px solid var(--bp-und-line);
+                    box-shadow: 0 3px 0 var(--bp-und-line);
 
                     &:hover {
-                        opacity: 0.9;
+                        background: var(--bp-rev-soft);
+                        color: var(--bp-rev-d);
+                        border-color: var(--bp-rev-line);
+                        box-shadow: 0 3px 0 var(--bp-rev-line);
                     }
-				}
-			}
-			margin-right:1.5rem;
-		}
+                }
 
-        .wordInfo {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            flex: 1;
-            min-width: 0; /* prevents flex item from overflowing */
-            gap:1rem;
+                &.wordNotInLibrary {
+                    background: var(--bp-keep);
+                    color: var(--bp-keep-ink);
+                    border: 2px solid var(--bp-keep);
+                    box-shadow: 0 3px 0 var(--bp-keep-d);
+
+                    &:hover { filter: brightness(1.05); }
+                }
+            }
         }
 
-		span.wordDictionary {
-			font-weight:bold;
+        .wordInfo {
+            order: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            flex: 1;
+            min-width: 0;
+            gap: .25rem .75rem;
+        }
+
+        span.wordDictionary {
+            font-family: var(--font-kr-sans), var(--font-display);
+            font-size: 1.35rem;
+            font-weight: 800;
             white-space: nowrap;
-            color:var(--foreground);
-		}
+            color: var(--foreground);
+        }
 
         span.wordReading {
-            font-size:0.9rem;
-            color:var(--foreground-muted);
-            margin-left:0.5rem;
-            margin-right:0.5rem;
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--bp-ink2);
             white-space: nowrap;
         }
 
         span.wordListItemTranslation {
-            margin-left:0.5rem;
-            max-width:100%;
+            font-size: 1rem;
+            font-weight: 600;
+            max-width: 100%;
             white-space: normal;
-            color:var(--foreground);
+            color: var(--foreground);
         }
 
-		span.wordListItemType {
-
-			display:block;
-			font-weight:bold;
-			opacity:0.6;
-			font-size:0.8rem;
-			transform:translateY(0.1rem);
-			margin-left:0.5rem;
-            margin-right:1rem;
+        span.wordListItemType {
+            font-size: .66rem;
+            font-weight: 800;
+            letter-spacing: .07em;
+            text-transform: uppercase;
             white-space: nowrap;
-            color:var(--foreground-light);
-		}
+            color: var(--bp-ink2);
+            padding: .15rem .5rem;
+            border-radius: 99px;
+            background: var(--bp-soft);
+        }
 
         .showRelatedButton {
-            font-size: 0.875rem;
-            color:var(--foreground-light);
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            font-family:var(--font-display);
             margin-left: auto;
-            transition: all 0.2s ease-in-out;
-            border-radius:2rem;
+            padding: .35rem .7rem;
+            border: none;
+            border-radius: 10px;
+            background: none;
+            color: var(--bp-read);
+            font-family: var(--font-display);
+            font-size: .78rem;
+            font-weight: 700;
             white-space: nowrap;
-        
+            cursor: pointer;
+
             &:hover {
-                background:var(--background-alt);
-                color:var(--foreground);
+                background: var(--bp-read-soft);
             }
         }
-	}
+    }
 
-    @media screen and (max-width:725px) {
-        margin-top:2rem;
+    @media screen and (max-width: 725px) {
         .wordsListHeader {
-            font-size:1.8rem;
+            font-size: 1.45rem;
         }
-		.wordListItem {
-			font-size:1.2rem;
-			padding:1rem;
-			margin-bottom:0.4rem;
-			flex-wrap:wrap;
-			font-size:1rem;
-            flex-direction: column;
-            align-items: flex-start;
-			.wordListItemActions {
-				margin-right:0.5rem;
-                
-                .wordListItemAction {
-                    min-width:unset;
-                    padding:0.5rem 0.8rem;
-                    width:auto;
-                    font-size: 0.8rem;
-                }
-			}
-            .wordInfo {
-                display:flex;
-                flex-direction: column;
-                align-items: flex-start;
-                margin-top:1rem;
-                gap:0.5rem;
-                width: 100%;
 
-                span.wordDictionary {
-                    padding:0 0.5rem;
-                    font-size:2rem;
-                }
-                span.wordReading {
-                    font-size:0.8rem;
-                    margin-right:0.5rem;
-                }
-                span.wordListItemType {
-                    font-size:0.8rem;
-                    text-align:right;
-                    transform:none;
-                    margin-bottom:0.5rem;
-                }
-                span.wordListItemTranslation {
-                    font-size:1.6rem;
-                }
+        .wordListItem {
+            padding: .7rem .8rem;
 
-                button.showRelatedButton {
-                    display:block;
-                    margin-left:auto;
-                }
+            .wordListItemActions .wordListItemAction {
+                min-width: 0;
+                padding: .5rem .7rem;
             }
-		}
-	}
+
+            .wordInfo {
+                flex-basis: 100%;
+            }
+
+            .wordListItemActions {
+                order: 3;
+            }
+        }
+    }
 }
 
 .relatedWordsContainer {
     margin-left: 0.2rem;
     padding: 0.25rem 0.5rem;
-    border-left: 2px solid var(--shadow);
+    border-left: 3px solid var(--bp-line);
     margin-top: 0.25rem;
     margin-bottom: 1rem;
     padding:0.5rem 0;
@@ -232,17 +203,21 @@
 	padding-left:1rem;
 
     h4 {
-        color: var(--foreground-light);
-        font-size: 1.3rem;
+        font-family: var(--font-display);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        color: var(--bp-ink2);
+        font-size: .78rem;
         margin-bottom: 0.5rem;
     }
 }
 
 .relatedWordsPopup {
     position: relative;
-    background: var(--background-alt);
-    border: 1px solid var(--foreground-light);
-    border-radius: 0.5rem;
+    background: var(--bp-soft);
+    border: 2px solid var(--bp-line);
+    border-radius: 14px;
     padding: 1rem;
     margin: 0.5rem 0;
     margin-left: 1.2rem;
@@ -319,17 +294,19 @@
 
 .addWordTooltip {
     position: absolute;
-    background: var(--background);
-    color: var(--foreground);
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
+    background: var(--foreground);
+    color: var(--background);
+    padding: 0.5rem 0.9rem;
+    border-radius: 12px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.82rem;
     white-space: nowrap;
     left: calc(100% + 1.5rem);
     top: 0%;
     transform: translateY(-160%);
     z-index: 10;
-    box-shadow: 0 0 0.8rem 0.2rem var(--shadow);
+    box-shadow: none;
     animation: fadeIn 0.3s ease-in-out;
 
     .addWordTooltipInner {
@@ -371,29 +348,14 @@
     align-items: center;
     gap: 0.9rem;
     font-family: var(--font-display);
-    font-size: 0.9rem;
-    color: var(--foreground-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
 
     button {
-        cursor: pointer;
-        padding: 0.45rem 0.9rem;
-        border-radius: 0.5rem;
-        border: 1px solid var(--primary);
-        background: var(--primary);
-        color: var(--background);
-        font-family: var(--font-display);
-        font-weight: 700;
-        font-size: 0.85rem;
-        transition: opacity 0.15s ease;
-
-        &:hover:not(:disabled) {
-            opacity: 0.85;
-        }
-
-        &:disabled {
-            cursor: progress;
-            opacity: 0.6;
-        }
+        @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px);
+        padding: .5rem .9rem;
+        font-size: .74rem;
     }
 }
 
@@ -406,14 +368,16 @@
     border-radius: 50%;
     font-size: 0.8rem;
     line-height: 1;
-    border: 1px solid currentColor;
+    border: 2px solid currentColor;
+    font-weight: 900;
+    margin-right: 0;
     flex-shrink: 0;
 }
 
 .wordInLibrary .check {
-    background: var(--foreground-muted);
-    border-color: var(--foreground-muted);
-    color: var(--background);
+    background: var(--bp-und);
+    border-color: var(--bp-und);
+    color: #fff;
 }
 
 .actionLabel {

@@ -10,7 +10,8 @@
   transform: translate(0, 0);
   box-shadow: 0 0 0 transparent;
 
-  font-family:var(--font-funnel);
+  font-family:var(--font-kr-sans), var(--font-display);
+  font-weight:500;
   border:none;
   outline:none;
   font-size:1.2rem;

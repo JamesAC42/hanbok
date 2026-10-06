@@ -1,48 +1,60 @@
+@import "../variables.module.scss";
+
 .page {
-    max-width: 72rem;
+    color: var(--foreground);
+    max-width: 64rem;
+    margin: 0 auto;
 }
 
 .hero {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
-    padding: 1.75rem 2rem;
-    border-radius: 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
-    background: color-mix(in srgb, var(--primary) 6%, var(--background));
+    gap: 1.25rem 1.5rem;
+    margin-top: .5rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: 22px;
+    border: 2px solid var(--bp-rev-line);
+    box-shadow: 0 5px 0 var(--bp-rev-line);
+    background: color-mix(in srgb, var(--bp-rev) 5%, var(--background));
 
     @media screen and (max-width: 900px) {
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto minmax(0, 1fr);
 
         .heroSide {
             grid-column: 1 / -1;
-            align-items: flex-start;
+            align-items: stretch;
         }
+    }
+
+    @media screen and (max-width: 560px) {
+        padding: 1.1rem;
+        .heroMascot { width: 64px; height: auto; }
     }
 }
 
 .heroText {
     h2 {
+        @include bp-title;
         margin: 0;
-        font-family: var(--font-display);
-        font-size: 1.6rem;
-        font-weight: 800;
-        color: var(--foreground);
+        font-size: 2rem;
+
+        @media screen and (max-width: 560px) {
+            font-size: 1.5rem;
+        }
     }
 
     p {
-        margin: 0.4rem 0 0;
-        color: var(--foreground-muted);
+        margin: .35rem 0 0;
+        font-weight: 600;
+        color: var(--bp-ink2);
         line-height: 1.5;
     }
 }
 
 .streak {
-    font-family: var(--font-display);
-    font-weight: 700;
-    color: #e5484d !important;
+    font-weight: 800 !important;
+    color: var(--bp-flame-d) !important;
 }
 
 .heroSide {
@@ -52,42 +64,20 @@
     gap: 1rem;
 }
 
-.startButton,
-.secondaryButton {
-    display: inline-block;
-    padding: 0.8rem 1.6rem;
-    border-radius: 0.8rem;
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1rem;
-    text-decoration: none;
-    white-space: nowrap;
-}
-
 .startButton {
-    background: var(--primary);
-    color: var(--background);
-    box-shadow: 0 10px 24px -14px var(--primary);
-
-    &:hover {
-        opacity: 0.92;
-    }
+    @include bp-press(var(--bp-rev), var(--bp-rev-d), #fff, 5px);
+    padding: .95rem 2rem;
+    font-size: 1rem;
 }
 
 .secondaryButton {
-    border: 1px solid var(--foreground-lighter);
-    color: var(--foreground);
-    background: var(--background);
+    @include bp-press(var(--bp-read), var(--bp-read-d));
 }
 
 .sectionTitle {
-    margin: 2.5rem 0 1rem;
-    font-family: var(--font-display);
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--foreground-muted);
+    @include bp-title;
+    margin: 2.25rem 0 1rem;
+    font-size: 1.5rem;
 }
 
 .deckGrid {
@@ -97,108 +87,104 @@
 }
 
 .deck {
+    @include bp-card;
+    padding: 1.1rem 1.2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1.25rem;
-    border-radius: 1rem;
-    border: 1px solid var(--foreground-lighter);
-    background: var(--background);
 }
 
 .deckTop {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: .8rem;
 }
 
 .deckIcon {
+    width: 2.8rem;
+    height: 2.8rem;
     display: grid;
     place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 0.7rem;
-    background: var(--background-alt);
+    border-radius: 14px;
+    background: var(--bp-soft);
+    border: 2px solid var(--bp-line);
+    font-size: 1.6rem;
 
-    svg, img {
-        width: 1.5rem;
-        height: 1.5rem;
-    }
+    svg { width: 1.7rem; height: 1.7rem; }
 }
 
 .deckName {
-    font-family: var(--font-display);
-    font-weight: 800;
-    font-size: 1.1rem;
     color: var(--foreground);
+    font-family: var(--font-lilita);
+    text-transform: capitalize;
+    font-size: 1.35rem;
 }
 
 .deckMeta {
-    font-size: 0.8rem;
-    color: var(--foreground-muted);
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
 }
 
 .deckCounts {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .5rem;
 
     span {
-        padding: 0.3rem 0.65rem;
-        border-radius: 999px;
-        font-family: var(--font-display);
-        font-size: 0.78rem;
-        color: var(--foreground-muted);
-        background: var(--background-alt);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: .5rem .3rem;
+        border-radius: 14px;
+        background: var(--bp-soft);
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--bp-ink2);
     }
 
     strong {
-        margin-right: 0.15rem;
+        font-family: var(--font-lilita);
+        font-weight: 400;
+        font-size: 1.5rem;
+        letter-spacing: 0;
     }
 }
 
-.countNew strong { color: #3d64e8; }
-.countLearning strong { color: #e08a1e; }
-.countDue strong { color: #0f9f8f; }
+.countNew strong { color: var(--bp-read); }
+.countLearning strong { color: var(--bp-keep-d); }
+.countDue strong { color: var(--bp-rev); }
 
 .deckActions {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
-    margin-top: auto;
+    gap: .6rem;
+    flex-wrap: wrap;
 }
 
 .deckStudy {
-    padding: 0.5rem 1rem;
-    border-radius: 0.6rem;
-    background: var(--primary);
-    color: var(--background);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.88rem;
-    text-decoration: none;
+    @include bp-press(var(--bp-rev), var(--bp-rev-d));
+    padding: .65rem 1.1rem;
+    font-size: .8rem;
 }
 
 .deckDone {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: #0f9f8f;
+    font-size: .85rem;
+    font-weight: 800;
+    color: var(--bp-und-d);
 }
 
 .deckManage {
     border: none;
     background: none;
-    padding: 0;
     font-family: var(--font-display);
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--foreground-muted);
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--bp-read);
     cursor: pointer;
 
-    &:hover {
-        color: var(--foreground);
-        text-decoration: underline;
-    }
+    &:hover { text-decoration: underline; }
 }

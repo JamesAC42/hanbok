@@ -7,6 +7,16 @@ import { MaterialSymbolsSettingsRounded } from './icons/Settings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import themes from '@/lib/themes';
+import { useAuth } from '@/contexts/AuthContext';
+import useProgress from '@/hooks/useProgress';
+
+const FlameIcon = () => (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.6 2.2c.4 3.1-1.3 4.6-2.8 6.1C8.4 9.7 7 11.2 7 13.9a5 5 0 0 0 10 0c0-1.7-.6-3-1.4-4.1-.2 1.2-.8 2-1.7 2.4.5-3.6-.6-7.4-1.3-10z"/><path fill="#FFD27A" d="M12 21a3 3 0 0 1-3-3c0-1.9 1.6-2.7 2.4-4.3.9 1.4 3.6 2.1 3.6 4.3a3 3 0 0 1-3 3z"/></svg>
+);
+
+const WordsIcon = () => (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="13" height="16" rx="3" fill="currentColor" opacity=".35"/><rect x="7" y="3" width="14" height="16" rx="3" fill="currentColor"/><path d="M11 9h6M11 13h4" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
+);
 
 const themePreviewStyles = {
     light: {
@@ -141,6 +151,10 @@ const DashboardTopNav = () => {
     const { t, nativeLanguage, setNativeLanguage, supportedLanguages, getIcon } = useLanguage();
     const { theme, setTheme } = useTheme();
     const [settingsOpen, setSettingsOpen] = useState(false);
+    const { isAuthenticated } = useAuth();
+    const { progress } = useProgress(isAuthenticated);
+    const streak = progress?.streak?.current || 0;
+    const words = progress?.totals?.words || 0;
 
     const toggleSettings = () => {
         setSettingsOpen((prev) => !prev);
@@ -191,9 +205,27 @@ const DashboardTopNav = () => {
     return (
         <>
             <nav className={styles.topNav}>
-                <Link href="/" className={styles.brand}>
+                <Link href={isAuthenticated ? "/home" : "/"} className={styles.brand}>
                     hanbok
                 </Link>
+                <div className={styles.spacer} />
+                {progress && (
+                    <>
+                        <Link
+                            href="/home"
+                            className={`${styles.pill} ${styles.flame} ${progress.streak?.activeToday ? '' : styles.pillIdle}`}
+                            title={progress.streak?.activeToday ? `${streak} day streak` : 'Do one thing today to keep your streak'}>
+                            <FlameIcon />
+                            <span>{streak}</span>
+                            <span className={styles.pillLabel}>{streak === 1 ? 'day' : 'days'}</span>
+                        </Link>
+                        <Link href="/library?tab=words" className={`${styles.pill} ${styles.words}`} title={`${words} saved words`}>
+                            <WordsIcon />
+                            <span>{words}</span>
+                            <span className={styles.pillLabel}>words</span>
+                        </Link>
+                    </>
+                )}
                 <button
                     type="button"
                     className={styles.settingsButton}

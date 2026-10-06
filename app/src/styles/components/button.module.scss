@@ -1,63 +1,18 @@
+@import "../variables.module.scss";
+
 .button {
-  font-family: var(--font-display);
-  padding: var(--spacing-small) var(--spacing-medium);
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-variation-settings: 'wght' 600;
-  position: relative;
-  transform: translate(0, 0);
-
-  &.primary {
-    border: 1px solid transparent;
-    border-radius: 0.6rem;
-    color: var(--background);
-    background: var(--primary);
-    font-weight: 700;
-    padding: 0.55rem 1.3rem;
-    box-shadow: 0 0.3rem 0.75rem -0.3rem color-mix(in srgb, var(--primary) 60%, transparent);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-
-    &:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.05);
-    }
-
-    &:active {
-      transform: translateY(0);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-  }
+  @include bp-press(var(--bp-read), var(--bp-read-d));
+  padding:.65rem 1.2rem;
+  font-size:.86rem;
 
   &.secondary {
-    border: 1px solid var(--foreground-lighter);
-    border-radius: 0.6rem;
-    color: var(--foreground);
-    background: var(--background);
-    box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, var(--shadow) 45%, transparent);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-    &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0.45rem 1.12rem -0.3rem color-mix(in srgb, var(--shadow) 45%, transparent);
-    }
-
-    &:active {
-      transform: translateY(0);
-      box-shadow: 0 0.15rem 0.38rem -0.1rem color-mix(in srgb, var(--shadow) 45%, transparent);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: 0 0.3rem 0.75rem -0.2rem color-mix(in srgb, var(--shadow) 45%, transparent);
-    }
+    @include bp-press-ghost(var(--bp-read));
+    padding:.6rem 1.1rem;
+    font-size:.86rem;
   }
-} 
+
+  &.understand { @include bp-press(var(--bp-und), var(--bp-und-d)); }
+  &.keep { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink)); }
+  &.review { @include bp-press(var(--bp-rev), var(--bp-rev-d)); }
+  &.danger { @include bp-press(var(--bp-rev), var(--bp-rev-d)); }
+}

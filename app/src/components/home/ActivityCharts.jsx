@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import styles from '@/styles/home/dashboardhome.module.scss';
 
 export const METRICS = [
-    { key: 'analyzed', label: 'Sentences analyzed', color: 'var(--chart-analyzed)' },
+    { key: 'analyzed', label: 'Sentences read', color: 'var(--chart-analyzed)' },
     { key: 'wordsSaved', label: 'Words saved', color: 'var(--chart-words)' },
     { key: 'reviews', label: 'Cards reviewed', color: 'var(--chart-reviews)' },
 ];
@@ -40,7 +40,11 @@ export const WeekStrip = ({ days }) => {
                         className={`${styles.weekDay} ${active ? styles.weekDayActive : ''} ${isToday ? styles.weekDayToday : ''}`}
                         title={`${formatDay(day.date)}: ${describe(day)}`}
                     >
-                        <span className={styles.weekDayMark} aria-hidden="true">{active ? '✓' : ''}</span>
+                        <span className={styles.weekDayMark} aria-hidden="true">
+                            {active ? (
+                                <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12.6 2.2c.4 3.1-1.3 4.6-2.8 6.1C8.4 9.7 7 11.2 7 13.9a5 5 0 0 0 10 0c0-1.7-.6-3-1.4-4.1-.2 1.2-.8 2-1.7 2.4.5-3.6-.6-7.4-1.3-10z"/></svg>
+                            ) : null}
+                        </span>
                         <span className={styles.weekDayLabel}>
                             {formatDay(day.date, { weekday: 'narrow' })}
                         </span>

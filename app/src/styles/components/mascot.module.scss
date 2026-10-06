@@ -1,0 +1,60 @@
+.mascot {
+    display: block;
+    flex: none;
+    overflow: visible;
+}
+
+.bob {
+    animation: bp-bob 3.4s ease-in-out infinite;
+}
+
+.hop {
+    animation: bp-hop .7s cubic-bezier(.3, 1.6, .5, 1) both;
+}
+
+.wave {
+    transform-box: fill-box;
+    transform-origin: 90% 90%;
+    animation: mascot-wave 2.6s ease-in-out infinite;
+}
+
+.flap {
+    transform-box: fill-box;
+    transform-origin: 10% 10%;
+    animation: mascot-wave 0.9s ease-in-out infinite;
+}
+
+.zzz text {
+    animation: mascot-zzz 2.4s ease-in-out infinite;
+    &:nth-child(2) { animation-delay: .3s; }
+    &:nth-child(3) { animation-delay: .6s; }
+}
+
+@keyframes mascot-wave {
+    0%, 60%, 100% { transform: rotate(0); }
+    70% { transform: rotate(-14deg); }
+    80% { transform: rotate(6deg); }
+    90% { transform: rotate(-10deg); }
+}
+
+@keyframes mascot-zzz {
+    0%, 100% { opacity: .25; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bob, .hop, .wave, .flap, .zzz text {
+        animation: none;
+    }
+}
+
+@keyframes bp-bob {
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes bp-hop {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(-14px) rotate(-4deg); }
+    70% { transform: translateY(0) rotate(2deg); }
+    100% { transform: none; }
+}

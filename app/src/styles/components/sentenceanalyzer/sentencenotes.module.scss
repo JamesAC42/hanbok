@@ -1,46 +1,45 @@
+@import '@/styles/variables.module.scss';
+
 .sentenceNotes {
-    margin:2rem 0;
+    margin: .25rem 0 1rem;
+    font-family: var(--font-display);
+
     .sentenceNotesHeader {
-        font-family: var(--font-body);
-        font-size: 2.5rem;
-        font-weight: bold;
+        @include bp-title;
+        font-size: 1.7rem;
         margin-bottom: 1rem;
         text-align: left;
-        color:var(--foreground);
     }
 
     .sentenceNotesGrid {
         display: grid;
         grid-template-columns: max-content 1fr;
-        gap: 1rem;
-        align-items: center;
-        color:var(--foreground);
+        gap: .6rem 1.25rem;
+        align-items: baseline;
+        color: var(--foreground);
 
         .sentenceNoteLabel {
-            font-family: var(--font-body);
-            font-size: 1.1rem;
-            font-weight: bold;
-            color:var(--foreground);
+            @include bp-label;
         }
 
-        .sentenceNoteValue {  
-            font-family: var(--font-body);
-            font-size: 1.1rem;
-            color:var(--foreground);
+        .sentenceNoteValue {
+            font-size: 1.02rem;
+            font-weight: 600;
+            line-height: 1.5;
+            color: var(--foreground);
         }
     }
-    @media screen and (max-width:725px) {
-        margin-top:2rem;
+
+    @media screen and (max-width: 725px) {
         .sentenceNotesHeader {
-            font-size:1.8rem;
+            font-size: 1.45rem;
         }
         .sentenceNotesGrid {
-            grid-template-columns: 1fr 2fr;
-            .sentenceNoteLabel {
-                font-size:1rem;
-            }
+            grid-template-columns: minmax(0, 1fr);
+            gap: .2rem;
             .sentenceNoteValue {
-                font-size:1rem;
+                margin-bottom: .6rem;
+                font-size: .96rem;
             }
         }
     }

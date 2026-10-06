@@ -18,10 +18,10 @@ import { usePopup } from '@/contexts/PopupContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 import getFontClass from '@/lib/fontClass';
 import QuotaDisplay from '@/components/QuotaDisplay';
-import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
 import RecentlyAnalyzed from '@/components/analysis/RecentlyAnalyzed';
 import NextSteps from '@/components/analysis/NextSteps';
 import useSavedWords from '@/hooks/useSavedWords';
+import { markStage } from '@/lib/todayLoop';
 
 const Analysis = ({
     analysis,
@@ -46,7 +46,6 @@ const Analysis = ({
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const [showPronunciation, setShowPronunciation] = useState(true);
     const [activeSection, setActiveSection] = useState('breakdown');
-    const [isScrolled, setIsScrolled] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [cacheUpdating, setCacheUpdating] = useState(false);
     const [cacheMessage, setCacheMessage] = useState('');
@@ -88,6 +87,10 @@ const Analysis = ({
     const capitalize = (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
+
+    useEffect(() => {
+        if (!isLyric) markStage('understand');
+    }, [isLyric]);
 
     // Initialize showPronunciation from localStorage
     useEffect(() => {
@@ -143,15 +146,6 @@ const Analysis = ({
           setWordInfo(null);
         }
     }, [showTransition]);
-
-    // Handle scroll state
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     // Intersection Observer for active section tracking
     useEffect(() => {
@@ -221,12 +215,13 @@ const Analysis = ({
             
             {/* Navigation */}
             {!isLyric && (
-            <nav className={`${styles.navigation} ${isScrolled ? styles.scrolled : ''}`}>
-                <button onClick={() => scrollToSection('breakdown')} className={activeSection === 'breakdown' ? styles.active : ''}>Breakdown</button>
-                {analysis.sentence.context && <button onClick={() => scrollToSection('notes')} className={activeSection === 'notes' ? styles.active : ''}>Notes</button>}
-                <button onClick={() => scrollToSection('words')} className={activeSection === 'words' ? styles.active : ''}>Words</button>
-                <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
-                
+            <nav className={styles.navigation} aria-label="Sections">
+                <div className={styles.tabs}>
+                    <button onClick={() => scrollToSection('breakdown')} className={activeSection === 'breakdown' ? styles.active : ''}>Sentence</button>
+                    {analysis.sentence.context && <button onClick={() => scrollToSection('notes')} className={activeSection === 'notes' ? styles.active : ''}>Notes</button>}
+                    <button onClick={() => scrollToSection('words')} className={activeSection === 'words' ? styles.active : ''}>Words</button>
+                    <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
+                </div>
                 <div className={styles.embeddedControls}>
                     <SaveButton sentenceId={sentenceId} />
                     <SettingsButton 
@@ -245,8 +240,11 @@ const Analysis = ({
                     
                     {/* Header Card */}
                     <div ref={sectionRefs.breakdown} className={`${styles.card} ${styles.headerSection}`}>
-                        <div className={styles.breadcrumbs}>
-                            {capitalize(originalLanguage)} • {capitalize(translationLanguage)} 
+                        <div className={styles.heroTop}>
+                            <span className={styles.stageTag}>Understand</span>
+                            <span className={styles.breadcrumbs}>
+                                {originalLanguage.toUpperCase()} → {translationLanguage.toUpperCase()}
+                            </span>
                         </div>
                         
                         <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>
@@ -291,12 +289,22 @@ const Analysis = ({
                             setWordInfo={setWordInfo}
                             resetLockedWord={showTransition}
                             shouldAnimate={shouldAnimate}
-                            showPronunciation={showPronunciation} />
+                            showPronunciation={showPronunciation}
+                            savedWords={user && !savedWordsState.loading ? savedWordsState.savedWords : null} />
+                        <div className={styles.legend}>
+                            {user && !savedWordsState.loading && (
+                                <>
+                                    <span><i className={styles.legendNew} /> New to you</span>
+                                    <span><i className={styles.legendKept} /> In your flashcards</span>
+                                </>
+                            )}
+                            <span className={styles.legendHint}>Tap a word for details</span>
+                        </div>
                     </div>
                     
                     {/* Next steps (shown here when the side column is a bottom sheet) */}
                     <div className={styles.inlineNextSteps}>
-                        <NextSteps {...nextStepsProps} />
+                        <NextSteps {...nextStepsProps} compact />
                     </div>
 
                     {/* Recently Analyzed Section */}
@@ -350,10 +358,6 @@ const Analysis = ({
                     ) : (
                         <div className={styles.sidebarIdle}>
                             <NextSteps {...nextStepsProps} />
-                            <p className={styles.hoverHint}>
-                                <FluentCursorHover32Filled />
-                                {t('analysis.hoverExplanation')}
-                            </p>
                         </div>
                     )}
                 </div>
