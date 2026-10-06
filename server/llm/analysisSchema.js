@@ -61,16 +61,38 @@ const isMapTemplate = (node) => {
     return keys.length > 0 && keys.every((key) => key.trim().startsWith('['));
 };
 
-const stringSchema = (description) => (
-    description ? { type: 'string', description } : { type: 'string' }
-);
+// Length limits are enforced by Gemini while it generates, so a model stuck
+// repeating itself stops at the limit instead of writing thousands of
+// characters into one field (and billing for them).
+const SHORT_STRING_KEYS = new Set([
+    'text', 'dictionary_form', 'reading', 'transliteration', 'type', 'type_translated',
+    'original', 'translation', 'label', 'particle', 'step', 'pattern', 'formality',
+    'tense', 'importance', 'role'
+]);
+const SHORT_STRING_MAX = 600;
+const LONG_STRING_MAX = 2000;
+// Only top-level arrays get maxItems: Gemini rejects the schema ("invalid
+// argument") when components or nested arrays carry it too. Components follow
+// the input's length, and nested arrays are bounded by maxOutputTokens.
+const TOP_LEVEL_MAX_ITEMS = { grammar_points: 10, variants: 8, cultural_notes: 6 };
+const maxItemsFor = (key, path) => (path.length === 2 ? TOP_LEVEL_MAX_ITEMS[key] : undefined);
+
+const stringSchema = (description, key) => {
+    const schema = { type: 'string' };
+    if (description) schema.description = description;
+    schema.maxLength = SHORT_STRING_KEYS.has(key) ? SHORT_STRING_MAX : LONG_STRING_MAX;
+    return schema;
+};
 
 const toSchema = (node, key, path, mapPaths) => {
     if (Array.isArray(node)) {
-        return {
+        const schema = {
             type: 'array',
-            items: node.length > 0 ? toSchema(node[0], key, path, mapPaths) : { type: 'string' }
+            items: node.length > 0 ? toSchema(node[0], key, path, mapPaths) : stringSchema(undefined, key)
         };
+        const maxItems = maxItemsFor(key, path);
+        if (maxItems) schema.maxItems = maxItems;
+        return schema;
     }
 
     if (node && typeof node === 'object') {
@@ -78,28 +100,33 @@ const toSchema = (node, key, path, mapPaths) => {
             const [labelDescription] = Object.keys(node);
             mapPaths.push(path);
             const valueSchema = toSchema(node[labelDescription], key, path, mapPaths);
-            return {
+            const mapSchema = {
                 type: 'array',
                 items: {
                     type: 'object',
                     properties: {
-                        label: stringSchema(labelDescription.replace(/^\s*\[|\]\s*$/g, '')),
+                        label: stringSchema(labelDescription.replace(/^\s*\[|\]\s*$/g, ''), 'label'),
                         ...valueSchema.properties
                     },
                     required: ['label', ...Object.keys(valueSchema.properties || {})]
                 }
             };
+            const maxItems = maxItemsFor(key, path);
+            if (maxItems) mapSchema.maxItems = maxItems;
+            return mapSchema;
         }
 
         const properties = {};
         const entries = Object.entries(node);
-        // Put the translation first so it is generated (and can be shown) first.
-        entries.sort(([a], [b]) => (b === 'translation') - (a === 'translation'));
+        // Put the sentence's translation first so it is generated (and can be shown)
+        // first. Only there: when grammar examples put translation before original,
+        // Flash-Lite loops inside the example text (5 of 6 test calls did).
+        if (key === 'sentence') entries.sort(([a], [b]) => (b === 'translation') - (a === 'translation'));
         for (const [childKey, childValue] of entries) {
             properties[childKey] = toSchema(childValue, childKey, [...path, childKey], mapPaths);
         }
         if (key === 'components' && properties.text && path.length === 2) {
-            properties.text = stringSchema(COMPONENT_TEXT_RULE);
+            properties.text = stringSchema(COMPONENT_TEXT_RULE, 'text');
         }
 
         const schema = { type: 'object', properties };
@@ -108,7 +135,7 @@ const toSchema = (node, key, path, mapPaths) => {
         return schema;
     }
 
-    return stringSchema(typeof node === 'string' ? node : undefined);
+    return stringSchema(typeof node === 'string' ? node : undefined, key);
 };
 
 // Returns { schema, mapPaths } for a full analysis prompt, or null when the
@@ -127,8 +154,8 @@ const getAnalysisSchema = (promptText) => {
                     error: {
                         type: 'object',
                         properties: {
-                            type: stringSchema('not_<language> | nonsensical | other'),
-                            message: stringSchema('Explanation of what is wrong with the input')
+                            type: stringSchema('not_<language> | nonsensical | other', 'type'),
+                            message: stringSchema('Explanation of what is wrong with the input', 'message')
                         },
                         required: ['type', 'message']
                     },
@@ -168,7 +195,30 @@ const restoreMaps = (parsed, mapPaths) => {
     return parsed;
 };
 
+// True when some string in the analysis repeats the same sentence three or
+// more times, the signature of a generation loop. Such output is retried
+// rather than saved and shown.
+const MIN_REPEATED_SEGMENT = 8;
+const hasRepetitionLoop = (value) => {
+    if (typeof value === 'string') {
+        if (value.length < 100) return false;
+        const counts = new Map();
+        for (const segment of value.split(/(?<=[.!?。！？])\s*|\n+/)) {
+            const trimmed = segment.trim();
+            if (trimmed.length < MIN_REPEATED_SEGMENT) continue;
+            const count = (counts.get(trimmed) || 0) + 1;
+            if (count >= 3) return true;
+            counts.set(trimmed, count);
+        }
+        return false;
+    }
+    if (Array.isArray(value)) return value.some(hasRepetitionLoop);
+    if (value && typeof value === 'object') return Object.values(value).some(hasRepetitionLoop);
+    return false;
+};
+
 module.exports = {
+    hasRepetitionLoop,
     extractTemplate,
     getAnalysisSchema,
     restoreMaps
