@@ -1,5 +1,6 @@
 const { getDb } = require('../../database');
 const { findSourceSentence } = require('../../lib/sourceSentence');
+const { attachGrammarContent } = require('../../grammar/reviewCards');
 const { getWordAudio } = require('../../utils/wordAudio');
 const { CHINESE_MODEL_ID } = require('../../elevenlabs/generateSpeech');
 const { isChinese } = require('../../llm/chineseScript');
@@ -289,6 +290,13 @@ async function initiateStudySession(req, res) {
         audioId
       };
     }));
+
+    // Grammar cards come up as a quiz question or a flip card
+    try {
+      await attachGrammarContent(db, userId, cardsWithContent);
+    } catch (error) {
+      console.error('Error loading grammar review cards:', error);
+    }
 
     // Update the deck's lastReviewed timestamp
     await db.collection('flashcard_decks').updateOne(

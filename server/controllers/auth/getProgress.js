@@ -23,6 +23,12 @@ const perDay = (collection, match, dateField, timeZone, countExpr = 1) =>
         },
     ]).toArray();
 
+const mergeCounts = (a, b) => {
+    const byDay = new Map(a.map((row) => [row._id, row.count]));
+    b.forEach((row) => byDay.set(row._id, (byDay.get(row._id) || 0) + row.count));
+    return [...byDay].map(([_id, count]) => ({ _id, count }));
+};
+
 /**
  * Activity and progress over time for the signed-in Home page:
  * per-day analyses, saved words and flashcard reviews, totals and a streak.
@@ -38,7 +44,7 @@ async function getProgress(req, res) {
         const since = new Date(Date.now() - HISTORY_DAYS * DAY_MS);
         const weekAgo = new Date(Date.now() - 7 * DAY_MS);
 
-        const [analyzed, wordsSaved, reviews, totalSentences, totalWords, wordsThisWeek, mastered] = await Promise.all([
+        const [analyzed, wordsSaved, reviews, grammarPractice, totalSentences, totalWords, wordsThisWeek, mastered] = await Promise.all([
             perDay(db.collection('sentences'), { userId, dateCreated: { $gte: since } }, 'dateCreated', timeZone),
             perDay(db.collection('words'), { userId, dateSaved: { $gte: since } }, 'dateSaved', timeZone),
             perDay(
@@ -49,6 +55,8 @@ async function getProgress(req, res) {
                 'UTC',
                 { $add: [{ $ifNull: ['$newCardsStudied', 0] }, { $ifNull: ['$reviewsCompleted', 0] }] }
             ),
+            // Grammar questions answered on the path (Review answers are already in study_progress)
+            perDay(db.collection('grammar_practice_log'), { userId, kind: 'question', context: 'path', date: { $gte: since } }, 'date', timeZone),
             db.collection('sentences').countDocuments({ userId }),
             db.collection('words').countDocuments({ userId }),
             db.collection('words').countDocuments({ userId, dateSaved: { $gte: weekAgo } }),
@@ -60,7 +68,7 @@ async function getProgress(req, res) {
         ]);
 
         const keys = lastDayKeys(HISTORY_DAYS, timeZone);
-        const history = buildSeries(keys, { analyzed, wordsSaved, reviews });
+        const history = buildSeries(keys, { analyzed, wordsSaved, reviews: mergeCounts(reviews, grammarPractice) });
         const streak = computeStreak(history);
         const series = history.slice(-days);
         const lastWeekStart = history.length - 7;

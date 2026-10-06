@@ -95,6 +95,10 @@ const editDeckCard = require('./controllers/auth/editDeckCard');
 const addDeckCard = require('./controllers/auth/addDeckCard');
 
 const getRateLimits = require('./controllers/auth/getRateLimits');
+const grammarSave = require('./controllers/grammar/save');
+const grammarBrowse = require('./controllers/grammar/browse');
+const grammarStudy = require('./controllers/grammar/study');
+const { ensureSeed: ensureGrammarSeed } = require('./grammar/catalog');
 const { searchWordAudio, regenerateWordAudio } = require('./controllers/admin/wordAudioAdmin');
 const { markSentenceDoNotCache } = require('./controllers/admin/sentenceCache');
 
@@ -322,6 +326,18 @@ app.get('/api/words', isAuthenticated, async (req, res) => {
 app.post('/api/words/check', isAuthenticated, async (req, res) => {
     checkSavedWords(req, res);
 });
+
+// Grammar review: saved grammar points, lessons and practice (server/grammar)
+app.get('/api/grammar', isAuthenticated, grammarBrowse.listGrammar);
+app.get('/api/grammar/summary', isAuthenticated, grammarBrowse.grammarSummary);
+app.get('/api/grammar/saved-in', isAuthenticated, grammarSave.savedIn);
+app.post('/api/grammar/save', isAuthenticated, grammarSave.saveGrammar);
+app.post('/api/grammar/practice', isAuthenticated, grammarStudy.startPractice);
+app.post('/api/grammar/answers', isAuthenticated, grammarStudy.recordAnswers);
+app.get('/api/grammar/point/:grammarId', isAuthenticated, grammarBrowse.getGrammarPoint);
+app.delete('/api/grammar/point/:grammarId', isAuthenticated, grammarSave.removeGrammar);
+app.get('/api/grammar/point/:grammarId/lesson', isAuthenticated, grammarStudy.getGrammarLesson);
+app.post('/api/grammar/point/:grammarId/lesson/complete', isAuthenticated, grammarStudy.completeGrammarLesson);
 
 // Flashcard routes
 app.get('/api/decks', isAuthenticated, async (req, res) => {
@@ -779,6 +795,7 @@ async function startServer() {
     setRedisClient(redisClient);
     
     await connectToDatabase();
+    ensureGrammarSeed(getDb());
     
     // Log any active jobs
     const activeJobs = await analysisQueue.getActive();

@@ -27,6 +27,7 @@ import { MaterialSymbolsKeyboard } from "./icons/Keyboard";
 import { TablerAlphabetKorean } from "./icons/Korean";
 import { MaterialSymbolsSettingsRounded } from "./icons/Settings";
 import { MaterialSymbolsMenuBook } from "./icons/MenuBook";
+import { RiBrain2Fill } from "./icons/Brain";
 import QuotaDisplay from "./QuotaDisplay";
 import useCardsToday from "@/hooks/useCardsToday";
 
@@ -160,6 +161,7 @@ function Sidebar() {
                 { path: "/extended-text", match: ["/extended-text"], label: label('sidebar.paragraphs', 'Paragraphs'), color: 'var(--bp-purple)', icon: <Fa6SolidParagraph /> },
                 { path: "/library", match: ["/library", "/history", "/bookmarks"], label: label('sidebar.library', 'Library'), color: 'var(--bp-keep)', icon: <MaterialSymbolsLibraryBooksSharp /> },
                 { path: "/cards", match: ["/cards"], label: label('sidebar.review', 'Review'), color: 'var(--bp-rev)', icon: <PhCardsFill />, badge: cardsToday },
+                ...(isAuthenticated ? [{ path: "/my-grammar", match: ["/my-grammar"], label: label('sidebar.myGrammar', 'My grammar'), color: 'var(--bp-und)', icon: <RiBrain2Fill /> }] : []),
             ],
         },
         {

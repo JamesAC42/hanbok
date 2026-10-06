@@ -1,6 +1,7 @@
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
 const { getWordAudio } = require('../../utils/wordAudio');
+const { findOrCreateLanguageDeck } = require('../../lib/languageDeck');
 
 const addWord = async (req, res) => {
     const { originalWord, translatedWord, originalLanguage, translationLanguage, reading } = req.body;
@@ -86,60 +87,7 @@ const addWord = async (req, res) => {
             });
 
         // Find or create a deck for this language
-        let deck = await db.collection('flashcard_decks').findOne({
-            userId,
-            language: originalLanguage
-        });
-
-        if (!deck) {
-            // Get language name
-            const languageNames = {
-                'ko': 'Korean',
-                'en': 'English',
-                'zh': 'Chinese (Simplified)',
-                'zh-TW': 'Chinese (Traditional)',
-                'ja': 'Japanese',
-                'es': 'Spanish',
-                'it': 'Italian',
-                'fr': 'French',
-                'de': 'German',
-                'nl': 'Dutch',
-                'ru': 'Russian',
-                'tr': 'Turkish',
-                'id': 'Indonesian',
-                'vi': 'Vietnamese',
-                'hi': 'Hindi'
-            };
-            
-            const languageName = languageNames[originalLanguage] || 
-                originalLanguage.charAt(0).toUpperCase() + originalLanguage.slice(1);
-            
-            // Create a new deck
-            const deckCounterDoc = await db.collection('counters').findOneAndUpdate(
-                { _id: 'deckId' },
-                { $inc: { seq: 1 } },
-                { upsert: true, returnDocument: 'after' }
-            );
-            
-            const deckId = deckCounterDoc.seq;
-            
-            deck = {
-                deckId,
-                userId,
-                name: `${languageName} Words`,
-                language: originalLanguage,
-                description: `Flashcards for ${languageName} words`,
-                dateCreated: new Date(),
-                lastReviewed: null,
-                settings: {
-                    newCardsPerDay: 20,
-                    reviewsPerDay: 100,
-                    learningSteps: [1, 10, 60, 1440] // 1min, 10min, 1hr, 1day
-                }
-            };
-            
-            await db.collection('flashcard_decks').insertOne(deck);
-        }
+        const deck = await findOrCreateLanguageDeck(db, userId, originalLanguage);
 
         // Create a flashcard for the word
         const flashcardCounterDoc = await db.collection('counters').findOneAndUpdate(

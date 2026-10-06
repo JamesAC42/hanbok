@@ -344,6 +344,8 @@ const Analysis = ({
                         <GrammarPoints 
                             analysis={analysis} 
                             language={originalLanguage}
+                            translationLanguage={translationLanguage}
+                            sentenceId={sentenceId}
                             showPronunciation={showPronunciation} />
                     </div>
                 </div>

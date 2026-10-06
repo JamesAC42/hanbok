@@ -84,6 +84,10 @@ async function getDeckCards(req, res) {
         content = await db.collection('words').findOne({ wordId: card.contentId });
       } else if (card.contentType === 'sentence') {
         content = await db.collection('sentences').findOne({ sentenceId: card.contentId });
+      } else if (card.contentType === 'grammar') {
+        // Shown in the deck list as form / name, like a word
+        const entry = await db.collection('grammar_catalog').findOne({ grammarId: card.contentId });
+        if (entry) content = { originalWord: entry.form, translatedWord: entry.name, originalLanguage: entry.language };
       }
 
       return {

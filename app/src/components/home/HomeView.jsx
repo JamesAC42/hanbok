@@ -43,6 +43,21 @@ const useRecentWork = (enabled) => {
     return items;
 };
 
+// Saved grammar counts for the Review stop and the grammar card.
+const useGrammarSummary = (enabled) => {
+    const [summary, setSummary] = useState(null);
+    useEffect(() => {
+        if (!enabled) return;
+        let cancelled = false;
+        fetch('/api/grammar/summary')
+            .then(res => (res.ok ? res.json() : null))
+            .then(data => { if (!cancelled && data?.success) setSummary(data); })
+            .catch(() => {});
+        return () => { cancelled = true; };
+    }, [enabled]);
+    return summary;
+};
+
 const QuickInput = ({ inputRef }) => {
     const router = useRouter();
     const { t, language, supportedLanguages } = useLanguage();
@@ -97,7 +112,7 @@ const MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500, 750, 1000, 1500, 2
 const nextMilestone = (n) => MILESTONES.find(m => m > n) || Math.ceil((n + 1) / 5000) * 5000;
 
 // Today's loop: which stops are done and where the learner is now.
-const useTodayPath = ({ progress, cardsToday, recent }) => {
+const useTodayPath = ({ progress, cardsToday, recent, grammarDue = 0 }) => {
     const [local, setLocal] = useState({});
     useEffect(() => { setLocal(stagesToday()); }, []);
 
@@ -106,6 +121,9 @@ const useTodayPath = ({ progress, cardsToday, recent }) => {
     const sentenceHref = lastSentence ? `/sentence/${lastSentence.sentenceId}` : '/analyze';
     const read = !!today?.analyzed;
     const minutes = Math.max(1, Math.round((cardsToday * SECONDS_PER_CARD) / 60));
+    // Grammar cards sit in the same decks, so they are part of cardsToday.
+    const grammarToday = Math.min(grammarDue, cardsToday);
+    const wordsToday = cardsToday - grammarToday;
 
     const stops = [
         {
@@ -150,13 +168,18 @@ const useTodayPath = ({ progress, cardsToday, recent }) => {
         {
             key: 'review',
             name: 'Review',
-            caption: cardsToday ? `${plural(cardsToday, 'card')} waiting` : 'All caught up',
+            caption: !cardsToday ? 'All caught up'
+                : !grammarToday ? `${plural(cardsToday, 'card')} waiting`
+                : wordsToday ? `${plural(wordsToday, 'word')} · ${grammarToday} grammar`
+                : `${plural(grammarToday, 'grammar point')}`,
             done: cardsToday === 0,
             href: '/cards',
             badge: cardsToday,
             next: {
                 title: `Review ${plural(cardsToday, 'card')}`,
-                detail: `About ${plural(minutes, 'minute')}. Each word comes back right before you would forget it.`,
+                detail: grammarToday
+                    ? `About ${plural(minutes, 'minute')}. ${wordsToday ? `Your words and ${plural(grammarToday, 'grammar point')}` : `Your ${plural(grammarToday, 'grammar point')}`} come back right before you would forget them.`
+                    : `About ${plural(minutes, 'minute')}. Each word comes back right before you would forget it.`,
                 action: 'Start review',
                 href: '/cards',
             },
@@ -328,6 +351,29 @@ const StreakCard = ({ progress }) => {
     );
 };
 
+const GrammarCard = ({ summary }) => {
+    const total = summary?.total || 0;
+    let line = 'Save grammar from any sentence you analyze. Horangi teaches it in two minutes, then it comes back in Review with your own words.';
+    if (total) {
+        const parts = [`${plural(total, 'grammar point')} on your path`];
+        if (summary.due) parts.push(`${summary.due} due in Review`);
+        if (summary.notStarted) parts.push(`${plural(summary.notStarted, 'lesson')} waiting`);
+        line = `${parts.join(', ')}.`;
+    }
+    return (
+        <section className={`${styles.card} ${styles.grammarCard}`} aria-labelledby="grammar-heading">
+            <Tiger pose="study" size={72} />
+            <div>
+                <h2 id="grammar-heading" className={styles.cardTitle}>My grammar</h2>
+                <p>{line}</p>
+                <Link href={total ? '/my-grammar' : '/analyze'} className={styles.grammarButton}>
+                    {total ? (summary.notStarted ? 'Start a lesson' : 'Open my grammar') : 'Find grammar to save'}
+                </Link>
+            </div>
+        </section>
+    );
+};
+
 const TutorCard = () => (
     <section className={`${styles.card} ${styles.tutorCard}`} aria-labelledby="tutor-heading">
         <Tiger pose="teach" size={72} />
@@ -429,7 +475,8 @@ const HomeView = () => {
     const recent = useRecentWork(!!user);
     const [now] = useState(() => new Date());
     const inputRef = useRef(null);
-    const path = useTodayPath({ progress, cardsToday: cardsToday || 0, recent });
+    const grammar = useGrammarSummary(!!user);
+    const path = useTodayPath({ progress, cardsToday: cardsToday || 0, recent, grammarDue: grammar?.due || 0 });
 
     const firstName = user?.name ? user.name.split(' ')[0] : '';
     const streak = progress?.streak;
@@ -473,6 +520,7 @@ const HomeView = () => {
                 <div className={styles.column}>
                     {progress && <WordsCard totals={progress.totals} />}
                     {progress && <StreakCard progress={progress} />}
+                    <GrammarCard summary={grammar} />
                     <TutorCard />
                     <ExtensionCard />
                 </div>
