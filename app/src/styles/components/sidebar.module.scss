@@ -52,7 +52,13 @@
     color:var(--bp-read);
     text-decoration:none;
 
-    .wordmarkShort { display:none; }
+    display:inline-flex;
+    align-items:center;
+    gap:.45rem;
+}
+
+.wordmarkIcon {
+    margin:-2px 0;
 }
 
 .collapseButton {
@@ -196,7 +202,6 @@
             padding:.1rem 0 .6rem;
         }
         .wordmark .wordmarkFull { display:none; }
-        .wordmark .wordmarkShort { display:inline; }
 
         .sidebarSectionHeader {
             visibility:hidden;

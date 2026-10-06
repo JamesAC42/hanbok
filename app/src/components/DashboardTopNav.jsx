@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Mascot from '@/components/Mascot';
 import Link from 'next/link';
 import styles from '@/styles/components/DashboardTopNav.module.scss';
 import { MaterialSymbolsSettingsRounded } from './icons/Settings';
@@ -206,6 +207,7 @@ const DashboardTopNav = () => {
         <>
             <nav className={styles.topNav}>
                 <Link href={isAuthenticated ? "/home" : "/"} className={styles.brand}>
+                    <Mascot pose="head" size={28} label="" />
                     hanbok
                 </Link>
                 <div className={styles.spacer} />

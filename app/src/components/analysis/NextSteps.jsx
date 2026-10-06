@@ -119,7 +119,7 @@ const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, s
         <section className={`${styles.nextSteps} ${className}`} aria-label="Next steps">
             {!compact && (
                 <div className={styles.railHead}>
-                    <Mascot pose="point" size={76} />
+                    <Mascot pose="point" size={88} />
                     <p className={styles.bubble}>
                         Tap any word to see what it means and how it is built.
                     </p>

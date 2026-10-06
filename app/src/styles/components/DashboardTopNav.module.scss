@@ -25,6 +25,9 @@
     color: var(--bp-read);
     text-decoration: none;
     letter-spacing: .01em;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
 
     @media (min-width: 1001px) {
         display: none;

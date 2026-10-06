@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "@/styles/components/sidebar.module.scss";
+import Mascot from '@/components/Mascot';
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -203,8 +204,8 @@ function Sidebar() {
                             href={isAuthenticated ? "/home" : "/"}
                             className={styles.wordmark}
                             aria-label="Hanbok home">
+                            <Mascot pose="head" size={30} label="" className={styles.wordmarkIcon} />
                             <span className={styles.wordmarkFull}>hanbok</span>
-                            <span className={styles.wordmarkShort}>h</span>
                         </Link>
                         <button
                             type="button"
