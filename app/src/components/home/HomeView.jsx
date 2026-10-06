@@ -12,6 +12,7 @@ import QuotaDisplay from '@/components/QuotaDisplay';
 import { WeekStrip, ActivityHeatmap, TrendChart } from '@/components/home/ActivityCharts';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { stagesToday } from '@/lib/todayLoop';
+import { CHROME_EXTENSION_URL, isDesktopChrome, useExtensionInstalled } from '@/lib/extension';
 import styles from '@/styles/home/dashboardhome.module.scss';
 
 const SECONDS_PER_CARD = 8;
@@ -338,6 +339,43 @@ const TutorCard = () => (
     </section>
 );
 
+const EXTENSION_DISMISS_KEY = 'hanbokExtensionCardDismissed';
+
+// Suggests the browser extension to desktop Chrome users who do not have it.
+// Visibility is decided after mount so server and client render the same.
+const ExtensionCard = () => {
+    const installed = useExtensionInstalled();
+    const [eligible, setEligible] = useState(false);
+    useEffect(() => {
+        if (!CHROME_EXTENSION_URL || !isDesktopChrome()) return;
+        let dismissed = false;
+        try { dismissed = !!localStorage.getItem(EXTENSION_DISMISS_KEY); } catch { /* storage blocked */ }
+        if (!dismissed) setEligible(true);
+    }, []);
+
+    if (!eligible || installed) return null;
+
+    const dismiss = () => {
+        try { localStorage.setItem(EXTENSION_DISMISS_KEY, '1'); } catch { /* storage blocked */ }
+        setEligible(false);
+    };
+
+    return (
+        <section className={`${styles.card} ${styles.extensionCard}`} aria-labelledby="extension-heading">
+            <Mascot pose="teach" size={72} />
+            <div>
+                <h2 id="extension-heading" className={styles.cardTitle}>Hanbok in your browser</h2>
+                <p>Select a sentence on any website to see what each word means, and save words without leaving the page.</p>
+                <div className={styles.extensionActions}>
+                    <a href={CHROME_EXTENSION_URL} target="_blank" rel="noopener noreferrer" className={styles.extensionButton}>Add to Chrome</a>
+                    <Link href="/extension" className={styles.extensionLink}>Learn more</Link>
+                    <button type="button" className={styles.extensionDismiss} onClick={dismiss}>Not now</button>
+                </div>
+            </div>
+        </section>
+    );
+};
+
 const ProgressPanel = ({ progress }) => {
     const { totals, days } = progress;
     const hasActivity = days.some(d => d.analyzed || d.wordsSaved || d.reviews);
@@ -436,6 +474,7 @@ const HomeView = () => {
                     {progress && <WordsCard totals={progress.totals} />}
                     {progress && <StreakCard progress={progress} />}
                     <TutorCard />
+                    <ExtensionCard />
                 </div>
             </div>
 

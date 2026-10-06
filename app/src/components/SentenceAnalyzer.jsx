@@ -57,8 +57,11 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             loadSavedSentence(idToLoad);
         }
         
-        // Check for pending analysis from localStorage (from tutor examples)
-        const pendingAnalysis = localStorage.getItem('pendingAnalysis');
+        // Check for pending analysis from localStorage (from tutor examples),
+        // or ?text= from the browser extension on pages it can't run on.
+        // A link only fills the input, so it never spends anyone's quota.
+        const textParam = searchParams.get('text')?.slice(0, 1000);
+        const pendingAnalysis = localStorage.getItem('pendingAnalysis') || textParam;
         if (pendingAnalysis) {
             // Clear the localStorage item
             localStorage.removeItem('pendingAnalysis');

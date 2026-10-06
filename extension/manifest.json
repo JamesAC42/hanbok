@@ -1,0 +1,81 @@
+{
+  "manifest_version": 3,
+  "name": "Hanbok Study",
+  "version": "1.0.0",
+  "description": "Analyze sentences on any page with Hanbok, save words to your deck, and see the words you're learning highlighted as you browse.",
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "https://hanbokstudy.com/*",
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "exclude_matches": [
+        "https://hanbokstudy.com/*",
+        "https://staging.hanbokstudy.com/*",
+        "http://localhost:3000/*"
+      ],
+      "js": [
+        "shared.js",
+        "highlight.js",
+        "ui-styles.js",
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://hanbokstudy.com/*",
+        "https://staging.hanbokstudy.com/*",
+        "http://localhost:3000/*"
+      ],
+      "js": [
+        "site-marker.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Hanbok Study",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "fonts/*",
+        "images/mascot/*"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ]
+    }
+  ]
+}
