@@ -66,13 +66,24 @@ const isRetryableApiError = (error) => {
     return false;
 };
 
-const generateResponse = async (text, model) => {
+// options.deadlineMs: stop starting new attempts once this much time has
+// passed, so a request someone is waiting on fails instead of retrying past
+// the browser's timeout. options.attemptMs is the longest one attempt can take.
+const generateResponse = async (text, model, options = {}) => {
     let attempts = 0;
     let maxAttempts = 5;
     let parsedResponse = null;
     let lastError = null;
+    const startedAt = Date.now();
+    const { deadlineMs, attemptMs = 0 } = options;
+    const outOfTime = () => deadlineMs !== undefined
+        && Date.now() - startedAt + attemptMs > deadlineMs;
 
     while(!parsedResponse && attempts < maxAttempts) {
+        if (attempts > 0 && outOfTime()) {
+            console.log(`Giving up after ${attempts} attempt(s): no time left for another`);
+            break;
+        }
         try {
             console.log(`Generating response with ${modelLabels[model] || model}...`);
             console.log(`Attempt ${attempts + 1} of ${maxAttempts}`);

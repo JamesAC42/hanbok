@@ -17,12 +17,17 @@ const prompt_gemini = async (text) => {
     return result.response.text();
 }
 
-// Sentence analysis: a pinned model, low thinking, and a response schema built
-// from the prompt's own JSON template. Picked from a 50-sentence comparison
-// (see the "Model test results" section of the LLM pipeline review).
-const ANALYSIS_MODEL = process.env.GEMINI_ANALYSIS_MODEL || "gemini-3.8-flash";
-const ANALYSIS_THINKING = process.env.GEMINI_ANALYSIS_THINKING || "low";
-const ANALYSIS_TIMEOUT_MS = 60000;
+// Sentence analysis: a pinned model and a response schema built from the
+// prompt's own JSON template (see the "Model test results" section of the LLM
+// pipeline review). gemini-3.8-flash scored higher in that comparison but in
+// production it generates at ~100-130 tokens/s, so a long sentence takes 30-60 s
+// and the analysis page times out. Flash-Lite with the schema is ~3x faster.
+// Set GEMINI_ANALYSIS_MODEL=gemini-3.8-flash to switch back.
+const ANALYSIS_MODEL = process.env.GEMINI_ANALYSIS_MODEL || "gemini-3.5-flash-lite";
+// Flash-Lite runs without thinking by default; 3.8 Flash was tested at "low".
+const ANALYSIS_THINKING = process.env.GEMINI_ANALYSIS_THINKING
+    || (ANALYSIS_MODEL.includes("lite") ? "default" : "low");
+const ANALYSIS_TIMEOUT_MS = 40000;
 
 const analysisModel = genAI.getGenerativeModel({ model: ANALYSIS_MODEL });
 
@@ -58,4 +63,4 @@ const prompt_gemini_analysis = async (text) => {
     }
 }
 
-module.exports = {gemini, prompt_gemini, prompt_gemini_analysis, buildAnalysisRequest, ANALYSIS_MODEL}
+module.exports = {gemini, prompt_gemini, prompt_gemini_analysis, buildAnalysisRequest, ANALYSIS_MODEL, ANALYSIS_TIMEOUT_MS}
