@@ -1,18 +1,25 @@
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
 
+// Removes a saved word and every flashcard made from it (cards saved from an
+// analysis and cards added by hand both point at the word by contentId), plus
+// those cards' places in decks. Called with { wordId } from the Library, or
+// { originalWord, originalLanguage } from the analysis page.
 const removeWord = async (req, res) => {
     const { originalWord, originalLanguage } = req.body;
+    const wordId = Number.isInteger(Number(req.body.wordId)) && Number(req.body.wordId) > 0
+        ? Number(req.body.wordId)
+        : null;
     const userId = req.session.user.userId;
 
-    if (!originalWord || !originalLanguage) {
+    if (!wordId && (!originalWord || !originalLanguage)) {
         return res.status(400).json({
             success: false,
-            error: 'Original word and language are required'
+            error: 'A word id, or the original word and language, is required'
         });
     }
 
-    if (!SupportedLanguages[originalLanguage]) {
+    if (!wordId && !SupportedLanguages[originalLanguage]) {
         return res.status(400).json({
             success: false,
             error: 'Unsupported language'
@@ -21,48 +28,37 @@ const removeWord = async (req, res) => {
 
     try {
         const db = getDb();
-        
-        // Find the word first to get its ID
-        const word = await db.collection('words').findOne({
-            userId,
-            originalLanguage,
-            originalWord
-        });
-        
-        if (!word) {
+        const wordQuery = wordId
+            ? { userId, wordId }
+            : { userId, originalLanguage, originalWord };
+
+        const words = await db.collection('words')
+            .find(wordQuery, { projection: { wordId: 1 } })
+            .toArray();
+
+        if (words.length === 0) {
             return res.status(404).json({
                 success: false,
                 error: 'Word not found'
             });
         }
-        
-        // Delete the word
-        await db.collection('words').deleteOne({
-            userId,
-            originalLanguage,
-            originalWord
-        });
-        
-        // Find the flashcard associated with this word
-        const flashcard = await db.collection('flashcards').findOne({
-            userId,
-            contentType: 'word',
-            contentId: word.wordId
-        });
-        
-        if (flashcard) {
-            // Remove the flashcard from any decks
-            await db.collection('deck_cards').deleteMany({
-                flashcardId: flashcard.flashcardId
-            });
-            
-            // Delete the flashcard
-            await db.collection('flashcards').deleteOne({
-                flashcardId: flashcard.flashcardId
-            });
+
+        const wordIds = words.map(w => w.wordId);
+
+        // Only word cards: other card types (grammar) share the collection.
+        const flashcards = await db.collection('flashcards')
+            .find({ userId, contentType: 'word', contentId: { $in: wordIds } }, { projection: { flashcardId: 1 } })
+            .toArray();
+        const flashcardIds = flashcards.map(f => f.flashcardId);
+
+        if (flashcardIds.length > 0) {
+            await db.collection('deck_cards').deleteMany({ flashcardId: { $in: flashcardIds } });
+            await db.collection('flashcards').deleteMany({ userId, flashcardId: { $in: flashcardIds } });
         }
 
-        res.json({ success: true });
+        await db.collection('words').deleteMany({ userId, wordId: { $in: wordIds } });
+
+        res.json({ success: true, removedWords: wordIds.length, removedFlashcards: flashcardIds.length });
 
     } catch (error) {
         console.error('Error removing word:', error);

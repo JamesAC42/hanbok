@@ -57,6 +57,9 @@ export default function Library({ initialTab = 'history' }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [tab, setTab] = useState(TABS.some(x => x.key === initialTab) ? initialTab : 'history');
   const [totalCount, setTotalCount] = useState(null);
+  const [confirmRemove, setConfirmRemove] = useState(null);
+  const [removingWord, setRemovingWord] = useState(null);
+  const [removeError, setRemoveError] = useState(null);
 
   const safeLabel = (key, fallback) => {
     const value = t(key);
@@ -155,20 +158,72 @@ export default function Library({ initialTab = 'history' }) {
     );
   };
 
-  const renderWordItem = (word) => (
-    <div key={`word-${word.wordId}`} className={`${styles.sentenceItem} ${styles.wordItem}`}>
-      <div className={styles.wordMain}>
-        <span className={styles.wordOriginal} lang={word.originalLanguage}>{word.originalWord}</span>
-        {word.reading && word.reading !== word.originalWord && (
-          <span className={styles.wordReading}>{word.reading}</span>
+  // Removing a word also deletes its flashcards, so it takes a second tap.
+  const removeWord = async (word) => {
+    setRemovingWord(word.wordId);
+    setRemoveError(null);
+    try {
+      const response = await fetch('/api/words', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wordId: word.wordId }),
+      });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.error);
+      setConfirmRemove(null);
+      const remaining = items.filter(item => item.wordId !== word.wordId);
+      setItems(remaining);
+      setTotalCount(count => (count === null ? null : Math.max(0, count - 1)));
+      if (remaining.length === 0 && page > 1) setPage(page - 1);
+    } catch (err) {
+      console.error(err);
+      setRemoveError(word.wordId);
+    } finally {
+      setRemovingWord(null);
+    }
+  };
+
+  const renderWordItem = (word) => {
+    const confirming = confirmRemove === word.wordId;
+    const removing = removingWord === word.wordId;
+    return (
+      <div key={`word-${word.wordId}`} className={`${styles.sentenceItem} ${styles.wordItem} ${confirming ? styles.wordConfirming : ''}`}>
+        <div className={styles.wordMain}>
+          <span className={styles.wordOriginal} lang={word.originalLanguage}>{word.originalWord}</span>
+          {word.reading && word.reading !== word.originalWord && (
+            <span className={styles.wordReading}>{word.reading}</span>
+          )}
+          <span className={styles.wordTranslation}>{word.translatedWord}</span>
+          {removeError === word.wordId && (
+            <span className={styles.wordError} role="alert">Couldn&apos;t remove this word. Try again.</span>
+          )}
+        </div>
+        {confirming ? (
+          <div className={styles.wordActions}>
+            <span className={styles.wordConfirmText}>Remove it and its flashcard?</span>
+            <button className={styles.wordRemoveConfirm} onClick={() => removeWord(word)} disabled={removing}>
+              {removing ? 'Removing…' : 'Remove'}
+            </button>
+            <button className={styles.wordCancel} onClick={() => setConfirmRemove(null)} disabled={removing}>Cancel</button>
+          </div>
+        ) : (
+          <div className={styles.wordActions}>
+            {word.sentenceId && (
+              <Link href={`/sentence/${word.sentenceId}`} className={styles.wordSource}>See sentence</Link>
+            )}
+            <button
+              className={styles.wordRemove}
+              onClick={() => { setConfirmRemove(word.wordId); setRemoveError(null); }}
+              aria-label={`Remove ${word.originalWord}`}
+              title="Remove word"
+            >
+              ×
+            </button>
+          </div>
         )}
-        <span className={styles.wordTranslation}>{word.translatedWord}</span>
       </div>
-      {word.sentenceId && (
-        <Link href={`/sentence/${word.sentenceId}`} className={styles.wordSource}>See sentence</Link>
-      )}
-    </div>
-  );
+    );
+  };
 
   const handleTypeChange = (nextType) => {
     setTypeFilter(nextType);
