@@ -1333,6 +1333,18 @@ const collections = {
           title: {
             bsonType: ["string", "null"],
             description: "Optional user-provided title for the text"
+          },
+          pipelineVersion: {
+            bsonType: ["int", "null"],
+            description: "2 for texts made with the reading pass; missing for older texts, which have a full breakdown of every sentence"
+          },
+          reading: {
+            bsonType: ["array", "null"],
+            description: "Reading pass, one entry per sentence: text, paragraph, translation, words, grammar (failed: true if it could not be read)"
+          },
+          model: {
+            bsonType: ["string", "null"],
+            description: "Model that made the reading pass"
           }
         }
       }
@@ -1484,6 +1496,22 @@ const collections = {
           resultTextId: {
             bsonType: ["int", "null"],
             description: "Final textId once job has completed"
+          },
+          paragraphs: {
+            bsonType: ["array", "null"],
+            description: "Paragraph index of each sentence"
+          },
+          pipelineVersion: {
+            bsonType: ["int", "null"],
+            description: "2 for jobs that use the reading pass"
+          },
+          reading: {
+            bsonType: ["object", "null"],
+            description: "Reading pass results so far, keyed by sentence index (removed once the job completes)"
+          },
+          overallAnalysis: {
+            bsonType: ["object", "null"],
+            description: "Overview saved mid-job so a restarted job does not redo it"
           }
         }
       }

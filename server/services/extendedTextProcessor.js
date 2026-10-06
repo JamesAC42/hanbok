@@ -1,50 +1,18 @@
-const generateResponse = require('../llm/generateResponse');
-const basicPrompt = require('../llm/prompt');
-const chinesePrompt = require('../llm/prompt_chinese');
-const japanesePrompt = require('../llm/prompt_japanese');
-const russianPrompt = require('../llm/prompt_russian');
-const indonesianPrompt = require('../llm/prompt_indonesian');
-const vietnamesePrompt = require('../llm/prompt_vietnamese');
-const hindiPrompt = require('../llm/prompt_hindi');
-const { EXTENDED_TEXT_ANALYSIS_PROMPT } = require('../llm/prompt_extended_text');
+const extendedTextLlm = require('../llm/extendedText');
 const { incrementExtendedTextRateLimits } = require('../controllers/auth/extendedTextRateLimits');
-const SupportedLanguages = require('../supported_languages');
 
-const getSentenceAnalysisPrompt = (originalLanguage) => {
-    switch (originalLanguage) {
-        case 'zh':
-        case 'zh-TW':
-            return chinesePrompt.ANALYSIS_PROMPT;
-        case 'ja':
-            return japanesePrompt.ANALYSIS_PROMPT;
-        case 'ru':
-            return russianPrompt.ANALYSIS_PROMPT;
-        case 'id':
-            return indonesianPrompt.ANALYSIS_PROMPT;
-        case 'vi':
-            return vietnamesePrompt.ANALYSIS_PROMPT;
-        case 'hi':
-            return hindiPrompt.ANALYSIS_PROMPT;
-        default:
-            return basicPrompt.ANALYSIS_PROMPT;
-    }
-};
-
-const buildContextualPrompt = (promptFactory, job, sentenceText) => {
-    const basePrompt = promptFactory(job.originalLanguage, job.translationLanguage);
-    const contextIndicator = `${SupportedLanguages[job.originalLanguage]} text to analyze: `;
-    const sanitizedContext = job.text.trim();
-
-    if (basePrompt.includes(contextIndicator)) {
-        const contextualized = basePrompt.replace(
-            contextIndicator,
-            `Full ${SupportedLanguages[job.originalLanguage]} passage for context (use this only to understand nuance; analyze the target sentence below):\n${sanitizedContext}\n\n${contextIndicator}`
-        );
-        return `${contextualized}${sentenceText}`;
-    }
-
-    return `${basePrompt}\n\nContext from the full text (do not analyze separately, just reference for nuance):\n${sanitizedContext}\n\nTarget sentence:\n${sentenceText}`;
-};
+// Extended text runs in two passes:
+// 1. A reading pass, a few sentences per call, all in parallel: translation,
+//    word glosses and grammar tags for every sentence, plus one overview call
+//    for the whole passage. This is what the reader shows, and the text is
+//    ready once it finishes.
+// 2. The full sentence breakdown (the regular sentence analysis), run only for
+//    sentences the learner opens (see analyzeExtendedTextSentence). Long texts
+//    stay fast and cheap because most sentences are never broken down.
+const READING_CONCURRENCY = parseInt(process.env.EXTENDED_READING_CONCURRENCY, 10) || 8;
+const CHUNK_CHARS = 320;
+// A text fails only when more than this share of its sentences could not be read.
+const MAX_FAILED_SHARE = 0.2;
 
 const safeCallback = (callback, payload) => {
     if (typeof callback === 'function') {
@@ -56,7 +24,41 @@ const safeCallback = (callback, payload) => {
     }
 };
 
-const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplete, onError }) => {
+// Groups consecutive sentences into chunks of about CHUNK_CHARS characters,
+// preferring to break at paragraph ends.
+const buildChunks = (sentences, paragraphs) => {
+    const chunks = [];
+    let current = [];
+    let length = 0;
+    sentences.forEach((sentence, index) => {
+        const newParagraph = index > 0 && paragraphs[index] !== paragraphs[index - 1];
+        const tooLong = length + sentence.length > CHUNK_CHARS;
+        if (current.length > 0 && (tooLong || (newParagraph && length >= CHUNK_CHARS / 2))) {
+            chunks.push(current);
+            current = [];
+            length = 0;
+        }
+        current.push(index);
+        length += sentence.length;
+    });
+    if (current.length > 0) chunks.push(current);
+    return chunks;
+};
+
+// Runs `worker` over `items` with at most `limit` running at once.
+const runPool = async (items, limit, worker) => {
+    let next = 0;
+    const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+        while (next < items.length) {
+            const item = items[next++];
+            await worker(item);
+        }
+    });
+    await Promise.all(runners);
+};
+
+const processExtendedTextJob = async (job, { db, onProgress, onStatus, onSentences, onComplete, onError, llm = extendedTextLlm }) => {
+    const { readChunk, overview, MODEL } = llm;
     const jobsCollection = db.collection('extended_text_jobs');
 
     if (!job) {
@@ -83,138 +85,139 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
             { jobId: job.jobId },
             { $set: { status: 'processing', updatedAt: new Date() } }
         );
-
         safeCallback(onStatus, { status: 'processing' });
 
-        const sentencePromptFactory = getSentenceAnalysisPrompt(job.originalLanguage);
-        const sentenceAnalyses = [];
-        const totalSentences = job.sentences.length;
-        let processedSentences = 0;
+        const { sentences, originalLanguage, translationLanguage } = job;
+        const totalSentences = sentences.length;
+        const paragraphs = Array.isArray(job.paragraphs) && job.paragraphs.length === totalSentences
+            ? job.paragraphs
+            : sentences.map(() => 0);
 
-        for (let index = 0; index < job.sentences.length; index++) {
-            const sentenceText = job.sentences[index];
+        // Sentences already read by an earlier run of this job (the server
+        // restarted mid-job) are kept.
+        const reading = new Array(totalSentences).fill(null);
+        for (const [key, value] of Object.entries(job.reading || {})) {
+            const index = Number(key);
+            if (Number.isInteger(index) && index < totalSentences && value) reading[index] = value;
+        }
+        let processedSentences = reading.filter(Boolean).length;
 
-            safeCallback(onStatus, {
-                status: 'analyzing_sentence',
-                index: index + 1,
-                total: totalSentences
-            });
-
-            const promptWithContext = buildContextualPrompt(sentencePromptFactory, job, sentenceText);
-            const sentenceResponse = await generateResponse(
-                promptWithContext,
-                'geminiAnalysis'
-            );
-
-            if (!sentenceResponse.isValid) {
-                throw new Error(sentenceResponse.error?.message || 'Failed to analyze one of the sentences. Please try again.');
-            }
-
-            if (!sentenceResponse.analysis) {
-                throw new Error('Failed to analyze one of the sentences. Please try again.');
-            }
-
-            sentenceAnalyses.push({
-                text: sentenceText,
-                analysis: sentenceResponse.analysis
-            });
-
-            processedSentences = index + 1;
-
-            await jobsCollection.updateOne(
-                { jobId: job.jobId },
-                {
-                    $set: {
-                        processedSentences,
-                        updatedAt: new Date()
-                    }
-                }
-            );
-
+        const reportProgress = () => {
             safeCallback(onProgress, {
                 processedSentences,
                 totalSentences,
                 percentage: Math.round((processedSentences / totalSentences) * 100),
-                message: `Analyzing sentence ${processedSentences} of ${totalSentences}`
+                message: `Read ${processedSentences} of ${totalSentences} sentences`
             });
-        }
+        };
 
-        safeCallback(onStatus, { status: 'overall_analysis' });
+        const saveSentences = async (indices) => {
+            const update = { processedSentences, updatedAt: new Date() };
+            for (const index of indices) update[`reading.${index}`] = reading[index];
+            await jobsCollection.updateOne({ jobId: job.jobId }, { $set: update });
+            safeCallback(onSentences, {
+                sentences: indices.map((index) => ({ index, paragraph: paragraphs[index], text: sentences[index], ...reading[index] }))
+            });
+            reportProgress();
+        };
 
-        const overallResponse = await generateResponse(
-            EXTENDED_TEXT_ANALYSIS_PROMPT(job.originalLanguage, job.translationLanguage) + job.text,
-            'gemini'
-        );
+        const readIndices = async (indices) => {
+            const context = indices[0] > 0 ? sentences[indices[0] - 1] : '';
+            const results = await readChunk({
+                sentences: indices.map((i) => sentences[i]),
+                numbers: indices.map((i) => i + 1),
+                context,
+                originalLanguage,
+                translationLanguage
+            });
+            const done = [];
+            for (const index of indices) {
+                const result = results.get(index + 1);
+                if (result) {
+                    reading[index] = result;
+                    done.push(index);
+                }
+            }
+            return done;
+        };
 
-        if (!overallResponse.isValid) {
-            throw new Error(overallResponse.error?.message || 'Failed to generate the overall analysis.');
-        }
+        const pendingChunks = buildChunks(sentences, paragraphs)
+            .map((chunk) => chunk.filter((index) => !reading[index]))
+            .filter((chunk) => chunk.length > 0);
 
-        const overallAnalysis = overallResponse.analysis?.overallAnalysis;
+        const readAll = runPool(pendingChunks, READING_CONCURRENCY, async (chunk) => {
+            let done = [];
+            try {
+                done = await readIndices(chunk);
+            } catch (error) {
+                console.error(`Reading pass failed for sentences ${chunk[0] + 1}-${chunk[chunk.length - 1] + 1} of job ${job.jobId}:`, error.message);
+            }
+            // Anything the chunk call skipped gets one more try on its own.
+            for (const index of chunk.filter((i) => !reading[i])) {
+                try {
+                    done.push(...await readIndices([index]));
+                } catch (error) {
+                    console.error(`Reading pass failed for sentence ${index + 1} of job ${job.jobId}:`, error.message);
+                }
+            }
+            processedSentences = reading.filter(Boolean).length;
+            if (done.length > 0) await saveSentences(done);
+        });
 
-        if (!overallAnalysis) {
-            throw new Error('Failed to generate the overall analysis for the text. Please try again.');
+        const overviewPromise = job.overallAnalysis
+            ? Promise.resolve(job.overallAnalysis)
+            : overview({ sentences, paragraphs, originalLanguage, translationLanguage })
+                .then(async (result) => {
+                    await jobsCollection.updateOne({ jobId: job.jobId }, { $set: { overallAnalysis: result } });
+                    return result;
+                })
+                .catch((error) => {
+                    console.error(`Overview failed for job ${job.jobId}:`, error.message);
+                    return null;
+                });
+
+        reportProgress();
+        const [overallAnalysis] = await Promise.all([overviewPromise, readAll]);
+
+        const failed = reading.filter((item) => !item).length;
+        if (failed > totalSentences * MAX_FAILED_SHARE) {
+            throw new Error('We could not read enough of this text. Please try again in a moment.');
         }
 
         safeCallback(onStatus, { status: 'saving_results' });
 
         const createdAt = new Date();
-        const insertedSentenceIds = [];
-        const sentenceDocs = [];
+        const readingDocs = sentences.map((text, index) => ({
+            text,
+            paragraph: paragraphs[index],
+            ...(reading[index] || { failed: true })
+        }));
 
         try {
-            for (let index = 0; index < sentenceAnalyses.length; index++) {
-                const sentenceData = sentenceAnalyses[index];
-                const sentenceCounterDoc = await db.collection('counters').findOneAndUpdate(
-                    { _id: 'sentenceId' },
-                    { $inc: { seq: 1 } },
-                    { upsert: true, returnDocument: 'after' }
-                );
-
-                const sentenceDoc = {
-                    sentenceId: sentenceCounterDoc.seq,
-                    userId: job.userId,
-                    text: sentenceData.text,
-                    analysis: sentenceData.analysis,
-                    originalLanguage: job.originalLanguage,
-                    translationLanguage: job.translationLanguage,
-                    dateCreated: createdAt,
-                    extendedTextId: job.textId
-                };
-
-                await db.collection('sentences').insertOne(sentenceDoc);
-                insertedSentenceIds.push(sentenceDoc.sentenceId);
-                sentenceDocs.push(sentenceDoc);
-            }
-
-            const sentenceGroupDoc = {
+            await db.collection('extended_text_sentence_groups').insertOne({
                 textId: job.textId,
                 userId: job.userId,
-                originalLanguage: job.originalLanguage,
-                translationLanguage: job.translationLanguage,
-                sentences: sentenceDocs.map((doc, index) => ({
-                    sentenceId: doc.sentenceId,
-                    order: index
-                })),
+                originalLanguage,
+                translationLanguage,
+                sentences: [],
                 dateCreated: createdAt
-            };
+            });
 
-            await db.collection('extended_text_sentence_groups').insertOne(sentenceGroupDoc);
-
-            const extendedTextDoc = {
+            await db.collection('extended_texts').insertOne({
                 textId: job.textId,
                 userId: job.userId,
                 text: job.text,
                 sentenceCount: job.sentenceCount,
                 sentenceGroupId: job.textId,
-                overallAnalysis,
-                originalLanguage: job.originalLanguage,
-                translationLanguage: job.translationLanguage,
+                overallAnalysis: overallAnalysis || {},
+                reading: readingDocs,
+                pipelineVersion: 2,
+                model: MODEL,
+                originalLanguage,
+                translationLanguage,
                 title: job.title,
                 dateCreated: createdAt
-            };
-
-            await db.collection('extended_texts').insertOne(extendedTextDoc);
+            });
 
             await db.collection('feature_usage').updateOne(
                 { userId: job.userId, feature: 'extended_text_analysis' },
@@ -226,23 +229,14 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
                 { upsert: true }
             );
         } catch (insertError) {
-            if (insertedSentenceIds.length > 0) {
-                await db.collection('sentences').deleteMany({
-                    sentenceId: { $in: insertedSentenceIds }
-                });
-            }
-
             await db.collection('extended_text_sentence_groups').deleteOne({ textId: job.textId });
             await db.collection('extended_texts').deleteOne({ textId: job.textId });
-
             throw insertError;
         }
 
         let weeklyQuotaInfo = null;
         if (job.requiresRateLimitUpdate) {
-            const identifier = job.userId.toString();
-            const identifierType = 'userId';
-            weeklyQuotaInfo = await incrementExtendedTextRateLimits(identifier, identifierType, db, 1);
+            weeklyQuotaInfo = await incrementExtendedTextRateLimits(job.userId.toString(), 'userId', db, 1);
         }
 
         await jobsCollection.updateOne(
@@ -255,7 +249,9 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
                     weeklyQuota: weeklyQuotaInfo,
                     resultTextId: job.textId,
                     error: null
-                }
+                },
+                // The finished text holds the reading data now.
+                $unset: { reading: '', overallAnalysis: '' }
             }
         );
 
@@ -290,3 +286,5 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
 };
 
 module.exports = processExtendedTextJob;
+module.exports.buildChunks = buildChunks;
+module.exports.runPool = runPool;

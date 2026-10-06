@@ -270,7 +270,7 @@ export const it = {
         features: {
             free: {
                 analyses: '10 analisi di frasi a settimana',
-                extendedText: '2 analisi di testo esteso a settimana (fino a 500 caratteri)',
+                extendedText: '2 analisi di testo esteso a settimana (fino a 1.000 caratteri)',
                 conversations: '5 conversazioni gratuite al mese',
                 messages: '5 messaggi per conversazione',
                 bookmarks: 'Massimo 30 frasi salvate',
@@ -279,7 +279,7 @@ export const it = {
             },
             basic: {
                 analyses: 'Analisi di frasi illimitate',
-                extendedText: 'Analisi di testo esteso illimitate (fino a 2.000 caratteri)',
+                extendedText: 'Analisi di testo esteso illimitate (fino a 5.000 caratteri)',
                 conversations: '50 conversazioni al mese',
                 messages: '15 messaggi per conversazione',
                 bookmarks: 'Frasi salvate illimitate',
@@ -288,7 +288,7 @@ export const it = {
             },
             plus: {
                 everythingInBasic: 'Tutto incluso nel piano Base',
-                extendedText: 'Analisi di testo esteso illimitate (fino a 5.000 caratteri)',
+                extendedText: 'Analisi di testo esteso illimitate (fino a 20.000 caratteri)',
                 imageExtraction: 'Estrazione di testo da immagini illimitata',
                 audioGeneration: 'Generazione audio illimitata',
                 conversations: '200 conversazioni al mese',

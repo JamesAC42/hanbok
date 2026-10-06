@@ -270,7 +270,7 @@ export const ko = {
         features: {
             free: {
                 analyses: '주당 10문장 분석',
-                extendedText: '주당 2회 확장 텍스트 분석 (최대 500자)',
+                extendedText: '주당 2회 확장 텍스트 분석 (최대 1,000자)',
                 conversations: '월 5회 무료 대화',
                 messages: '대화당 5개 메시지',
                 bookmarks: '최대 30개 북마크 문장',
@@ -279,7 +279,7 @@ export const ko = {
             },
             basic: {
                 analyses: '무제한 문장 분석',
-                extendedText: '무제한 확장 텍스트 분석 (최대 2,000자)',
+                extendedText: '무제한 확장 텍스트 분석 (최대 5,000자)',
                 conversations: '월 50회 대화',
                 messages: '대화당 15개 메시지',
                 bookmarks: '무제한 북마크 문장',
@@ -288,7 +288,7 @@ export const ko = {
             },
             plus: {
                 everythingInBasic: '베이직 플랜의 모든 기능 포함',
-                extendedText: '무제한 확장 텍스트 분석 (최대 5,000자)',
+                extendedText: '무제한 확장 텍스트 분석 (최대 20,000자)',
                 imageExtraction: '무제한 이미지 텍스트 추출',
                 audioGeneration: '무제한 오디오 생성',
                 conversations: '월 200회 대화',

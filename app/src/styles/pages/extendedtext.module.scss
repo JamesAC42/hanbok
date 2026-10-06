@@ -1,610 +1,377 @@
 @import '../variables.module.scss';
 
-// Paragraphs (extended text) input page. Bright Path, purple = Paragraphs.
-// Purple text is pulled toward the theme's foreground so it reads on light
-// and dark themes alike.
-$purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
+// Paste screen for extended text ("Read a passage"). Bright Path: purple is
+// the paragraphs color, blue (Read) is the main action.
 
 .page {
-    flex: 1;
-    min-height: 100%;
-    max-height: calc(100dvh - 4.3rem);
-    overflow-y: auto;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
     padding: 2.25rem 3rem 4rem;
-    position: relative;
     font-family: var(--font-display);
     color: var(--foreground);
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
 
-    > *:not(.onboardingOverlay) {
-        max-width: 68rem;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    @media (max-width: 725px) {
-        padding: 1.25rem 1rem 3rem;
-    }
+    @media (max-width: 1024px) { padding: 1.75rem 1.5rem 3rem; }
+    @media (max-width: 725px) { padding: 1.25rem 1rem 3rem; }
 }
-
-// Header
 
 .hero {
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    margin-bottom: 1.75rem;
 
-    @media (max-width: 560px) {
-        gap: .85rem;
-        align-items: flex-start;
-    }
-}
-
-.heroMascot {
-    flex: none;
-
-    @media (max-width: 560px) {
-        width: 64px;
-        height: auto;
+    @media (max-width: 600px) {
+        .heroMascot { display: none; }
     }
 }
 
 .heroCopy {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: .35rem;
     min-width: 0;
 
     h1 {
         @include bp-title;
+        font-size: 2.6rem;
         margin: 0;
-        font-size: 2.2rem;
+        @media (max-width: 725px) { font-size: 2rem; }
+    }
 
-        @media (max-width: 725px) {
-            font-size: 1.65rem;
-        }
+    p {
+        margin: 0;
+        max-width: 48rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--bp-ink2);
     }
 }
 
-.newBadge {
-    order: -1;
-    padding: .2rem .65rem;
-    border-radius: 99px;
-    background: var(--bp-purple-soft);
-    color: $purple-text;
-    font-size: .68rem;
-    font-weight: 800;
-    letter-spacing: .07em;
-    text-transform: uppercase;
+.kicker {
+    @include bp-label;
+    color: color-mix(in srgb, var(--bp-purple) 75%, var(--foreground));
 }
 
-.description {
-    margin: 0;
-    max-width: 44rem;
-    font-size: 1.02rem;
-    font-weight: 600;
-    line-height: 1.55;
-    color: var(--bp-ink2);
-}
-
-// Language and plan facts: four small tiles in one row.
-
-.languageControls,
-.statsBar {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .85rem;
-    margin-bottom: .85rem;
-
-    @media (max-width: 640px) {
-        grid-template-columns: 1fr;
-    }
-}
-
-.statsBar {
-    margin-bottom: 1.5rem;
-
-    @media (max-width: 640px) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: .6rem;
-    }
-}
-
-.languageCard,
-.statItem {
-    @include bp-card;
-    border-radius: 16px;
-    min-width: 0;
-    padding: .8rem 1.1rem;
-}
-
-.languageCard {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: .5rem 1rem;
-    min-height: 4.25rem;
-}
-
-.languageLabel,
-.statLabel {
+.label {
     @include bp-label;
 }
 
-.languageSwitcherWrap {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-}
-
-.languageSwitcherWrap :global(.languageSwitcherOuter) {
-    transform: scale(.85);
-    transform-origin: right center;
-}
-
-.languageValue {
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--foreground);
-}
-
-.translationValue {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--foreground);
-}
-
-.translationIcon {
-    display: flex;
-    align-items: center;
-
-    :global(svg) {
-        font-size: 1.5rem;
-    }
-}
-
-.statItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: .25rem 1rem;
-}
-
-@media (max-width: 640px) {
-    .statItem {
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        padding: .7rem .9rem;
-    }
-}
-
-.statValue {
-    font-size: 1.05rem;
-    font-weight: 800;
-    color: var(--foreground);
-}
-
-// Notices
-
-.notice,
-.noticeWarning,
-.error {
-    padding: .95rem 1.2rem;
-    border-radius: 16px;
-    border: 2px solid;
-    margin-bottom: 1.25rem;
-    font-size: .98rem;
-    font-weight: 700;
-    line-height: 1.5;
-
-    p { margin: 0; }
-}
-
-.notice {
-    border-color: var(--bp-purple-line);
-    background: var(--bp-purple-soft);
-    color: var(--foreground);
-}
-
-.noticeWarning {
-    border-color: var(--bp-keep-line);
-    background: var(--bp-keep-soft);
-    color: var(--foreground);
-}
-
-.error {
-    border-color: var(--bp-rev-line);
-    background: var(--bp-rev-soft);
-    color: color-mix(in srgb, var(--bp-rev-d) 75%, var(--foreground));
-}
-
-// Form + sidebar
-
 .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 1.5rem;
-    align-items: start;
+    align-items: flex-start;
+}
 
-    @media (max-width: 1100px) {
-        grid-template-columns: 1fr;
-    }
+.main {
+    flex: 999 1 560px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.side {
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .formCard {
     @include bp-card;
     border-color: var(--bp-purple-line);
-    box-shadow: 0 5px 0 var(--bp-purple-line);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1.35rem;
-
-    @media (max-width: 725px) {
-        padding: 1.1rem;
-    }
-}
-
-.inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: .55rem;
-
-    label {
-        display: flex;
-        align-items: baseline;
-        gap: .5rem;
-        font-size: 1rem;
-        font-weight: 800;
-        color: var(--foreground);
-    }
-}
-
-// The title field is a TextInput (its own module classes), so it needs the
-// extra .formCard to win over them.
-.formCard .inputGroup textarea {
-    @include bp-input;
-    width: 100%;
-    min-width: 0;
-    font-size: 1.05rem;
-
-    &:focus {
-        border-color: var(--bp-purple);
-        box-shadow: 0 0 0 4px var(--bp-purple-soft);
-    }
-}
-
-.formCard .inputGroup textarea.textarea {
-    min-height: 220px;
-    height: 17rem;
-    padding: 1rem 1.1rem;
-    font-family: var(--font-kr-sans), var(--font-display);
-    font-size: 1.12rem;
-    font-weight: 500;
-    line-height: 1.7;
-    resize: vertical;
-
-    @media (max-width: 725px) {
-        min-height: 180px;
-        height: 13rem;
-    }
-}
-
-.optional {
-    font-size: .85rem;
-    font-weight: 600;
-    color: var(--bp-ink2);
-}
-
-.charInfo {
-    display: flex;
-    flex-direction: column;
-    gap: .4rem;
-}
-
-.charCount {
-    @include bp-label;
-    align-self: flex-end;
-}
-
-.charMeter {
-    @include bp-bar(var(--bp-purple), 10px);
-    width: 100%;
-}
-
-.charWarning {
-    font-size: .9rem;
-    font-weight: 700;
-    color: color-mix(in srgb, var(--bp-rev-d) 75%, var(--foreground));
-}
-
-.actions {
-    display: flex;
-    justify-content: flex-end;
-
-    @media (max-width: 520px) {
-        justify-content: stretch;
-    }
-}
-
-.submitButton,
-.primaryButton {
-    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 5px);
-    min-height: 52px;
-    padding: .9rem 2rem;
-    font-size: 1rem;
-
-    @media (max-width: 520px) {
-        width: 100%;
-    }
-}
-
-.primaryButton {
-    min-height: 48px;
-    padding: .8rem 1.5rem;
-}
-
-.secondaryButton,
-.walkthroughButton {
-    @include bp-press-ghost($purple-text, 4px);
-    min-height: 48px;
-}
-
-.sidebar {
+    border-radius: 22px;
+    box-shadow: 0 5px 0 var(--bp-purple-soft);
+    padding: 1.35rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.walkthroughButton {
-    width: 100%;
-}
-
-.sidebarCard {
-    @include bp-card;
-    padding: 1.35rem 1.4rem;
-
-    h3 {
-        @include bp-title;
-        margin: 0 0 1rem;
-        font-size: 1.3rem;
-    }
-
-    ol {
-        list-style: none;
-        counter-reset: step;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: .85rem;
-
-        li {
-            counter-increment: step;
-            display: flex;
-            align-items: flex-start;
-            gap: .75rem;
-            font-size: .98rem;
-            font-weight: 600;
-            line-height: 1.45;
-
-            &::before {
-                content: counter(step);
-                flex: none;
-                width: 1.9rem;
-                height: 1.9rem;
-                display: grid;
-                place-items: center;
-                border-radius: 50%;
-                background: var(--bp-purple-soft);
-                border: 2px solid var(--bp-purple-line);
-                color: $purple-text;
-                font-size: .85rem;
-                font-weight: 800;
-            }
-        }
-    }
-}
-
-// Tutorial modal
-
-.onboardingOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(10, 14, 40, .45);
+.formTop {
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
-    z-index: 1300;
-    padding: 1rem;
+    justify-content: space-between;
+    gap: .75rem 1rem;
 }
 
-.onboardingModal {
-    @include bp-card;
-    position: relative;
-    width: min(620px, 100%);
-    max-height: calc(100dvh - 2rem);
-    overflow-y: auto;
-    padding: 4rem 2rem 2rem;
-    border-radius: 24px;
-    box-shadow: 0 6px 0 var(--bp-line);
-    font-family: var(--font-display);
-
-    @media (max-width: 600px) {
-        padding: 3.85rem 1.15rem 1.5rem;
-    }
-}
-
-.onboardingClose {
-    position: absolute;
-    top: .9rem;
-    right: .9rem;
-    width: 2.75rem;
-    height: 2.75rem;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    border: 2px solid var(--bp-line);
-    box-shadow: 0 3px 0 var(--bp-line);
-    background: var(--bp-card);
-    color: var(--bp-ink2);
-    font-size: 1.1rem;
+.languages {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
     font-weight: 800;
-    cursor: pointer;
-    z-index: 1;
-    transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
+}
 
-    &:hover {
-        background: var(--bp-soft);
-        color: var(--foreground);
-    }
+.languageTo {
+    color: var(--bp-ink2);
+    font-weight: 700;
+}
 
-    &:active {
-        transform: translateY(3px);
-        box-shadow: none;
+.nativeLanguage {
+    @include bp-pill;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: .95rem;
+}
+
+.titleField {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    flex: 1 1 260px;
+    max-width: 360px;
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+
+    input {
+        @include bp-input;
+        flex: 1;
+        min-width: 0;
+        padding: .6rem .9rem;
     }
 }
 
-.onboardingContent {
+.textField {
     display: flex;
     flex-direction: column;
-    gap: .85rem;
+    gap: .5rem;
+}
 
-    .onboardingMedia {
-        width: 100%;
-        max-height: min(52vh, 24rem);
-        border-radius: 16px;
-        overflow: hidden;
-        border: 2px solid var(--bp-line);
-        background: var(--bp-soft);
-        display: flex;
-        justify-content: center;
-        align-items: center;
+.fieldLabel {
+    @include bp-label;
+}
+
+.textarea {
+    @include bp-input;
+    min-height: 18rem;
+    resize: vertical;
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.8;
+    padding: 1rem 1.15rem;
+
+    &:global(.korean) { font-family: var(--font-kr-sans), var(--font-display); }
+}
+
+.meter {
+    @include bp-bar(var(--bp-purple), 8px);
+
+    .meterOver { background: var(--bp-rev); }
+}
+
+.formBottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+}
+
+.counts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.countPill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0 .75rem;
+    border-radius: 99px;
+    background: var(--bp-purple-soft);
+    color: color-mix(in srgb, var(--bp-purple) 72%, var(--foreground));
+    font-size: .85rem;
+    font-weight: 800;
+}
+
+.countPlain {
+    background: var(--bp-soft);
+    color: var(--bp-ink2);
+}
+
+.countOver {
+    background: var(--bp-rev-soft);
+    color: var(--bp-rev-d);
+}
+
+.estimate {
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.submit {
+    @include bp-press;
+    min-height: 54px;
+    padding: 0 2rem;
+    font-size: 1rem;
+
+    @media (max-width: 600px) { width: 100%; }
+}
+
+.formNote,
+.formError {
+    margin: 0;
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+
+    a { color: var(--bp-read); }
+}
+
+.formError { color: var(--bp-rev-d); }
+
+.samples {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+
+    > span {
+        font-size: .95rem;
+        font-weight: 700;
+        color: var(--bp-ink2);
     }
+}
 
-    // Kkachi on a soft purple disc for the slides without a video.
-    .onboardingArt {
-        align-self: center;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
-        width: 8rem;
-        height: 7rem;
-        margin-top: -1.75rem;
-        border-radius: 50% 50% 22px 22px;
-        background: var(--bp-purple-soft);
+.sample {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    min-height: 44px;
+    padding: 0 .9rem;
+    border-radius: 99px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-card);
+    font-family: var(--font-display);
+    font-size: .9rem;
+    font-weight: 800;
+    cursor: pointer;
 
-        img {
-            margin-bottom: -.35rem;
-        }
-    }
+    :global(.korean) { font-family: var(--font-kr-sans), var(--font-display); font-weight: 700; }
+}
 
-    .onboardingVideo {
-        display: block;
-        width: 100%;
-        max-height: inherit;
-        height: 100%;
-        object-fit: contain;
-    }
+.sample_easy { border-color: var(--bp-und-line); background: var(--bp-und-soft); color: var(--bp-und-d); }
+.sample_medium { border-color: var(--bp-keep-line); background: var(--bp-keep-soft); color: color-mix(in srgb, var(--bp-keep-d) 70%, var(--foreground)); }
+.sample_hard { border-color: var(--bp-rev-line); background: var(--bp-rev-soft); color: var(--bp-rev-d); }
+
+.sideCard {
+    @include bp-card;
+    padding: 1.25rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
 
     h2 {
         @include bp-title;
-        margin: .25rem 0 0;
-        font-size: 1.6rem;
-    }
-
-    p {
+        font-size: 1.55rem;
         margin: 0;
-        font-weight: 600;
-        color: var(--bp-ink2);
-        line-height: 1.55;
-    }
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        gap: .55rem;
-
-        li {
-            position: relative;
-            padding-left: 1.6rem;
-            font-weight: 600;
-            line-height: 1.45;
-            color: var(--foreground);
-
-            &::before {
-                content: '✓';
-                position: absolute;
-                left: 0;
-                color: $purple-text;
-                font-weight: 800;
-            }
-        }
     }
 }
 
-.onboardingControls {
+.benefit {
+    display: flex;
+    gap: .85rem;
+    align-items: flex-start;
+
+    strong { display: block; font-size: 1rem; font-weight: 800; }
+    p { margin: .15rem 0 0; font-size: .92rem; font-weight: 600; color: var(--bp-ink2); line-height: 1.4; }
+}
+
+.benefitIcon {
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tintRead { background: var(--bp-read-soft); color: var(--bp-read-d); }
+.tintUnd { background: var(--bp-und-soft); color: var(--bp-und-d); }
+.tintKeep { background: var(--bp-keep-soft); color: var(--bp-keep-d); }
+.tintRev { background: var(--bp-rev-soft); color: var(--bp-rev-d); }
+
+.planRow {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     gap: 1rem;
-    margin-top: 1.75rem;
-    flex-wrap: wrap;
+    font-size: .95rem;
+    font-weight: 700;
+
+    strong { font-weight: 800; }
 }
 
-.dots {
+.planLink {
+    font-weight: 800;
+    font-size: .92rem;
+    color: var(--bp-read);
+    text-decoration: none;
+}
+
+.recent {
     display: flex;
-    gap: .25rem;
+    flex-direction: column;
+    gap: .9rem;
 }
 
-// Visible dot is small; the button around it stays a 40px touch target.
-.dot {
-    position: relative;
-    width: 2.5rem;
-    height: 2.5rem;
-    border: none;
-    background: none;
-    cursor: pointer;
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 50% auto auto 50%;
-        width: .8rem;
-        height: .8rem;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background: var(--bp-line-strong);
-    }
-}
-
-.activeDot::after {
-    width: 1.6rem;
-    border-radius: 99px;
-    background: var(--bp-purple);
-}
-
-.buttons {
+.recentHeader {
     display: flex;
-    gap: .75rem;
-    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
 
-    @media (max-width: 500px) {
-        width: 100%;
-        flex-direction: column;
-
-        button {
-            width: 100%;
-        }
-    }
+    h2 { @include bp-title; font-size: 1.7rem; margin: 0; }
+    a { font-weight: 800; color: var(--bp-read); text-decoration: none; }
 }
+
+.recentGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.recentCard {
+    @include bp-press-card;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    color: var(--foreground);
+    text-decoration: none;
+}
+
+.recentTitle {
+    font-size: 1.15rem;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &:global(.korean) { font-family: var(--font-kr-sans), var(--font-display); }
+}
+
+.recentMeta {
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.recentBar {
+    @include bp-bar(var(--bp-read), 8px);
+
+    .recentDone { background: var(--bp-und); }
+}
+
+.recentStatus { font-size: .82rem; font-weight: 800; color: var(--bp-read-d); }
+.recentStatusDone { font-size: .82rem; font-weight: 800; color: var(--bp-und-d); }

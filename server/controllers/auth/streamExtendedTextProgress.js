@@ -107,11 +107,24 @@ const streamExtendedTextProgress = async (req, res) => {
         }
     }, 15000);
 
+    const paragraphs = Array.isArray(job.paragraphs) ? job.paragraphs : [];
     sendEvent(res, 'init', {
         status: job.status,
         processedSentences: job.processedSentences || 0,
         totalSentences: job.sentenceCount,
-        sentenceCount: job.sentenceCount
+        sentenceCount: job.sentenceCount,
+        textId: job.textId,
+        title: job.title || null,
+        originalLanguage: job.originalLanguage,
+        translationLanguage: job.translationLanguage,
+        // Every sentence's text up front so the reader can lay out the whole
+        // passage, then each sentence's reading as it arrives.
+        sentences: (job.sentences || []).map((text, index) => ({
+            index,
+            paragraph: paragraphs[index] ?? 0,
+            text,
+            ...((job.reading && job.reading[index]) || {})
+        }))
     });
 
     if (job.status === 'completed') {
@@ -155,6 +168,9 @@ const streamExtendedTextProgress = async (req, res) => {
         },
         onProgress: (progressPayload) => {
             broadcast(jobId, 'progress', progressPayload);
+        },
+        onSentences: (sentencesPayload) => {
+            broadcast(jobId, 'sentences', sentencesPayload);
         },
         onComplete: (completionPayload) => {
             broadcast(jobId, 'completed', completionPayload, { endStream: true });

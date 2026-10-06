@@ -1,0 +1,167 @@
+@import '../../variables.module.scss';
+
+// Passage quiz: one question at a time, Duolingo-style answer feedback.
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1300;
+    background: rgba(10, 14, 40, .45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.dialog {
+    width: 100%;
+    max-width: 640px;
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    background: var(--background);
+    color: var(--foreground);
+    border: 2px solid var(--bp-line);
+    border-radius: 24px;
+    box-shadow: 0 6px 0 var(--bp-line);
+    padding: 1.25rem 1.5rem 1.5rem;
+    font-family: var(--font-display);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.bar {
+    @include bp-bar(var(--bp-rev), 14px);
+    flex: 1;
+}
+
+.close {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: none;
+    background: none;
+    color: var(--bp-ink2);
+    cursor: pointer;
+}
+
+.count { @include bp-label; }
+
+.question {
+    @include bp-title;
+    margin: 0;
+    font-size: 1.6rem;
+    line-height: 1.25;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.option {
+    @include bp-press-card;
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    min-height: 56px;
+    padding: .7rem 1rem;
+    text-align: left;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--foreground);
+
+    &:disabled { cursor: default; }
+}
+
+.optionKey {
+    flex: none;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    border: 2px solid var(--bp-line);
+    font-size: .85rem;
+    font-weight: 800;
+    color: var(--bp-ink2);
+}
+
+.correct {
+    border-color: var(--bp-und);
+    background: var(--bp-und-soft);
+    box-shadow: 0 4px 0 var(--bp-und-d);
+}
+
+.wrong {
+    border-color: var(--bp-rev);
+    background: var(--bp-rev-soft);
+    box-shadow: 0 4px 0 var(--bp-rev-d);
+}
+
+.dim { opacity: .55; }
+
+.feedbackGood,
+.feedbackBad {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding: 1rem;
+    border-radius: 16px;
+    background: var(--bp-und-soft);
+    color: var(--bp-und-d);
+
+    strong { font-size: 1.1rem; font-weight: 800; }
+    p { margin: .25rem 0 0; font-weight: 600; color: var(--foreground); }
+}
+
+.feedbackBad {
+    background: var(--bp-rev-soft);
+    color: var(--bp-rev-d);
+}
+
+.linkButton {
+    margin-top: .35rem;
+    padding: 0;
+    min-height: 32px;
+    border: none;
+    background: none;
+    font-family: var(--font-display);
+    font-weight: 800;
+    color: var(--bp-read);
+    cursor: pointer;
+}
+
+.primaryGood { @include bp-press(var(--bp-und), var(--bp-und-d)); min-height: 50px; }
+.primaryBad { @include bp-press(var(--bp-rev), var(--bp-rev-d)); min-height: 50px; }
+.primary { @include bp-press; min-height: 50px; }
+.ghost { @include bp-press-ghost(var(--bp-ink2)); min-height: 50px; }
+
+.result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .75rem;
+    text-align: center;
+    padding: 1rem 0;
+
+    h2 { @include bp-title; margin: 0; font-size: 2rem; }
+    p { margin: 0; font-weight: 600; color: var(--bp-ink2); }
+}
+
+.resultButtons {
+    display: flex;
+    gap: .6rem;
+    margin-top: .5rem;
+}

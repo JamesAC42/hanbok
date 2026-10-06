@@ -270,7 +270,7 @@ export const zh = {
         features: {
             free: {
                 analyses: '每周10个句子分析',
-                extendedText: '每周2次扩展文本分析（最多500字符）',
+                extendedText: '每周2次扩展文本分析（最多1,000字符）',
                 conversations: '每月5次免费对话',
                 messages: '每次对话5条消息',
                 bookmarks: '最多收藏30个句子',
@@ -279,7 +279,7 @@ export const zh = {
             },
             basic: {
                 analyses: '无限制句子分析',
-                extendedText: '无限制扩展文本分析（最多2,000字符）',
+                extendedText: '无限制扩展文本分析（最多5,000字符）',
                 conversations: '每月50次对话',
                 messages: '每次对话15条消息',
                 bookmarks: '无限收藏句子',
@@ -288,7 +288,7 @@ export const zh = {
             },
             plus: {
                 everythingInBasic: '包含基础方案的所有内容',
-                extendedText: '无限制扩展文本分析（最多5,000字符）',
+                extendedText: '无限制扩展文本分析（最多20,000字符）',
                 imageExtraction: '无限制图片文字提取',
                 audioGeneration: '无限制语音生成',
                 conversations: '每月200次对话',

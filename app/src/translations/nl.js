@@ -270,7 +270,7 @@ export const nl = {
         features: {
             free: {
                 analyses: '10 zinsanalyses per week',
-                extendedText: '2 uitgebreide tekstanalyses per week (tot 500 tekens)',
+                extendedText: '2 uitgebreide tekstanalyses per week (tot 1.000 tekens)',
                 conversations: '5 gratis gesprekken per maand',
                 messages: '5 berichten per gesprek',
                 bookmarks: 'Maximaal 30 gemarkeerde zinnen',
@@ -279,7 +279,7 @@ export const nl = {
             },
             basic: {
                 analyses: 'Onbeperkte zinsanalyses',
-                extendedText: 'Onbeperkte uitgebreide tekstanalyses (tot 2.000 tekens)',
+                extendedText: 'Onbeperkte uitgebreide tekstanalyses (tot 5.000 tekens)',
                 conversations: '50 gesprekken per maand',
                 messages: '15 berichten per gesprek',
                 bookmarks: 'Onbeperkt gemarkeerde zinnen',
@@ -288,7 +288,7 @@ export const nl = {
             },
             plus: {
                 everythingInBasic: 'Alles van het Basis-plan',
-                extendedText: 'Onbeperkte uitgebreide tekstanalyses (tot 5.000 tekens)',
+                extendedText: 'Onbeperkte uitgebreide tekstanalyses (tot 20.000 tekens)',
                 imageExtraction: 'Onbeperkte tekstextractie uit afbeeldingen',
                 audioGeneration: 'Onbeperkte audiogeneratie',
                 conversations: '200 gesprekken per maand',

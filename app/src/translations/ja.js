@@ -270,7 +270,7 @@ export const ja = {
         features: {
             free: {
                 analyses: '週あたり10文の分析',
-                extendedText: '週2回の拡張テキスト分析（500文字まで）',
+                extendedText: '週2回の拡張テキスト分析（1,000文字まで）',
                 conversations: '月に5回の無料会話',
                 messages: '1会話あたり5メッセージ',
                 bookmarks: '最大30件のブックマーク文',
@@ -279,7 +279,7 @@ export const ja = {
             },
             basic: {
                 analyses: '無制限の文分析',
-                extendedText: '拡張テキスト分析が無制限（2,000文字まで）',
+                extendedText: '拡張テキスト分析が無制限（5,000文字まで）',
                 conversations: '月に50回の会話',
                 messages: '1会話あたり15メッセージ',
                 bookmarks: '無制限のブックマーク文',
@@ -288,7 +288,7 @@ export const ja = {
             },
             plus: {
                 everythingInBasic: 'ベーシックプランのすべてを含む',
-                extendedText: '拡張テキスト分析が無制限（5,000文字まで）',
+                extendedText: '拡張テキスト分析が無制限（20,000文字まで）',
                 imageExtraction: '無制限の画像テキスト抽出',
                 audioGeneration: '無制限の音声生成',
                 conversations: '月に200回の会話',
