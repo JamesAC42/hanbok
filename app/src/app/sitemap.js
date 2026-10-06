@@ -1,5 +1,6 @@
 import { apiGet, SITE_URL } from '@/lib/seo';
 import { articles } from '@/content/learn';
+import { updates } from '@/content/updates';
 
 // Rebuilt at most hourly so new songs show up without a deploy.
 export const revalidate = 3600;
@@ -13,6 +14,7 @@ const STATIC_PAGES = [
     { path: '/pricing', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
     { path: '/lyrics/suggestions', changeFrequency: 'weekly', priority: 0.4 },
+    { path: '/updates', changeFrequency: 'monthly', priority: 0.4 },
     { path: '/feedback', changeFrequency: 'monthly', priority: 0.3 },
 ];
 
@@ -34,5 +36,12 @@ export default async function sitemap() {
         priority: 0.9,
     }));
 
-    return [...pages, ...guides, ...songs];
+    const posts = updates.map((post) => ({
+        url: `${SITE_URL}/updates/${post.slug}`,
+        lastModified: new Date(post.published),
+        changeFrequency: 'yearly',
+        priority: 0.4,
+    }));
+
+    return [...pages, ...guides, ...posts, ...songs];
 }
