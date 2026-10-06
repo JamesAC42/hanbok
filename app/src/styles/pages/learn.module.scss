@@ -579,3 +579,62 @@
         color: var(--bp-ink2);
     }
 }
+
+// ===== Word list =====
+
+.wordList {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: .85rem;
+    counter-reset: word;
+    font-family: var(--font-display);
+}
+
+.wordItem {
+    @include bp-card;
+    padding: .9rem 1rem;
+    counter-increment: word;
+}
+
+.wordHead {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+
+    &::before {
+        content: counter(word);
+        @include bp-label;
+        min-width: 1.4rem;
+    }
+
+    button { margin-left: auto; align-self: center; }
+}
+
+.wordKo {
+    font-family: var(--font-kr-sans);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.wordRom {
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.wordEn {
+    margin: .35rem 0 0;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.wordNote {
+    margin: .3rem 0 0;
+    font-size: .92rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--bp-ink2);
+}
