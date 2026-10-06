@@ -212,6 +212,11 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
 
 .summaryMuted { color: var(--bp-ink2); }
 
+.keyWordsLabel {
+    @include bp-label;
+    margin-top: .25rem;
+}
+
 .keyWords {
     display: flex;
     flex-wrap: wrap;
@@ -275,6 +280,14 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
     border-radius: 5px;
     background: var(--bp-keep-soft);
     border: 2px solid var(--bp-keep-line);
+}
+
+.legendKey {
+    width: 24px;
+    height: 10px;
+    border: none;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--bp-keep) 42%, transparent);
 }
 
 .legendGrammar {

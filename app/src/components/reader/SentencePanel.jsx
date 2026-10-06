@@ -6,10 +6,10 @@ import { isContentWord } from './segment';
 import styles from '@/styles/components/reader/panel.module.scss';
 
 const PlusIcon = () => (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg>
 );
 const CheckIcon = () => (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
 );
 
 // The open sentence: translation, each word with its gloss (and a save
@@ -50,7 +50,9 @@ const SentencePanel = ({
             )}
 
             {tab === 'words' && words.length > 0 && (
-                <div className={styles.wordGrid} role="tabpanel">
+                <div role="tabpanel">
+                <p className={styles.hint}>{t('reader.save_words_hint')}</p>
+                <div className={styles.wordGrid}>
                     {words.map((word, index) => {
                         const saveable = isContentWord(word) && word.base;
                         const isSaved = savedWords.has(word.base);
@@ -76,11 +78,13 @@ const SentencePanel = ({
                                         aria-pressed={isSaved}
                                     >
                                         {isSaved ? <CheckIcon /> : <PlusIcon />}
+                                        <span>{isSaved ? t('reader.saved_short') : t('reader.save_short')}</span>
                                     </button>
                                 )}
                             </div>
                         );
                     })}
+                </div>
                 </div>
             )}
 

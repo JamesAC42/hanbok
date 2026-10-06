@@ -357,6 +357,9 @@ function ExtendedTextReader() {
                                         ? <p className={styles.summary} lang={translationLanguage}>{overview.summary}</p>
                                         : <p className={styles.summaryMuted}>{t('reader.kkachi_reading')}</p>}
                                     {keyVocabulary.length > 0 && (
+                                        <span className={styles.keyWordsLabel}>{t('reader.key_words_label')}</span>
+                                    )}
+                                    {keyVocabulary.length > 0 && (
                                         <div className={styles.keyWords}>
                                             {shownKeyWords.map((word) => {
                                                 const isSaved = words.saved.has(word.word);
@@ -383,20 +386,6 @@ function ExtendedTextReader() {
                             </section>
                         )}
 
-                        <ReaderText
-                            sentences={sentences}
-                            language={language}
-                            mode={mode}
-                            selected={selected}
-                            selectedWord={selectedWord}
-                            highlightSet={highlightSet}
-                            keyWords={keyWords}
-                            savedWords={words.saved}
-                            onSelect={select}
-                            onSeen={onSeen}
-                            labels={{ sentence: t('reader.sentence'), translationLanguage }}
-                        />
-
                         <div className={styles.legend}>
                             {keyVocabulary.length > 0 && (
                                 <span><i className={styles.legendKey} aria-hidden="true" />{t('reader.legend_key_words')}</span>
@@ -409,6 +398,20 @@ function ExtendedTextReader() {
                                 </span>
                             )}
                         </div>
+
+                        <ReaderText
+                            sentences={sentences}
+                            language={language}
+                            mode={mode}
+                            selected={selected}
+                            selectedWord={selectedWord}
+                            highlightSet={highlightSet}
+                            keyWords={keyWords}
+                            savedWords={words.saved}
+                            onSelect={select}
+                            onSeen={onSeen}
+                            labels={{ sentence: t('reader.sentence'), keyWord: t('reader.key_word_title'), translationLanguage }}
+                        />
 
                         {!isLive && (
                             <section className={`${styles.finishCard} ${finished ? styles.finishDone : ''}`}>

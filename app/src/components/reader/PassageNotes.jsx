@@ -28,6 +28,12 @@ const PassageNotes = ({ overview, language, translationLanguage, highlightPatter
         <div className={styles.notes} lang={translationLanguage}>
             <span className={styles.panelLabel}>{t('reader.about_passage')}</span>
             <p className={styles.tip}>{t('reader.tap_tip')}</p>
+            {overview?.keyVocabulary?.length > 0 && (
+                <p className={styles.keyTip}>
+                    <i className={styles.keyMark} aria-hidden="true" />
+                    {t('reader.legend_key_words')}
+                </p>
+            )}
 
             {overview?.structure && (
                 <div className={styles.noteBlock}>

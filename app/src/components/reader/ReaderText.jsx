@@ -6,8 +6,9 @@ import styles from '@/styles/components/reader/readertext.module.scss';
 
 // The passage itself. Paragraphs are kept; every word is a button that opens
 // its sentence in the side panel. `mode` decides where translations show:
-// 'tap' only under the open sentence, 'all' under every sentence, 'side' in a
-// second column next to each paragraph.
+// 'tap' only in the panel, 'all' under every sentence, 'side' in a second
+// column next to each paragraph. Opening a sentence never changes the text's
+// layout (no inserted lines, padding or badges), so nothing jumps.
 const Sentence = memo(function Sentence({
     sentence, selected, selectedWord, highlighted, keyWords, savedWords, onSelect, showTranslation, language, labels
 }) {
@@ -23,7 +24,6 @@ const Sentence = memo(function Sentence({
     return (
         <span className={styles.sentenceWrap} data-index={sentence.index}>
             <span className={classes}>
-                {selected && <span className={styles.number} aria-hidden="true">{sentence.index + 1}</span>}
                 {ready ? parts.map((part, i) => {
                     if (part.gap !== undefined) return <span key={i}>{part.gap}</span>;
                     const word = sentence.words[part.word];
@@ -35,6 +35,7 @@ const Sentence = memo(function Sentence({
                             className={`${styles.word} ${isKey ? styles.keyWord : ''} ${selected && selectedWord === part.word ? styles.activeWord : ''}`}
                             onClick={() => onSelect(sentence.index, part.word)}
                             aria-label={`${part.text}, ${labels.sentence} ${sentence.index + 1}`}
+                            title={isKey ? labels.keyWord : undefined}
                         >
                             {part.text}
                         </button>
@@ -103,7 +104,7 @@ const ReaderText = ({
                         keyWords={keyWords}
                         savedWords={savedWords}
                         onSelect={onSelect}
-                        showTranslation={mode === 'all' || (mode === 'tap' && selected === sentence.index)}
+                        showTranslation={mode === 'all'}
                         language={language}
                         labels={labels}
                     />

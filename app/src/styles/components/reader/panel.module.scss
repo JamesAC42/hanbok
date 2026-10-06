@@ -99,13 +99,39 @@
     @media (max-width: 420px) { grid-template-columns: 1fr; }
 }
 
+.keyTip {
+    display: flex;
+    align-items: center;
+    gap: .55rem;
+    margin: 0;
+    font-size: .88rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: var(--bp-ink2);
+}
+
+.keyMark {
+    flex: none;
+    width: 24px;
+    height: 10px;
+    border-radius: 3px;
+    background: color-mix(in srgb, var(--bp-keep) 42%, transparent);
+}
+
+.hint {
+    margin: 0 0 .5rem;
+    font-size: .82rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
 .wordCard {
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
     border: 2px solid var(--bp-line);
     border-radius: 14px;
-    overflow: hidden;
     background: var(--bp-card);
+    padding-bottom: .55rem;
 }
 
 .wordCardActive {
@@ -120,7 +146,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: .1rem;
-    padding: .55rem .7rem;
+    padding: .55rem .7rem .45rem;
     border: none;
     background: none;
     text-align: left;
@@ -151,22 +177,37 @@
     :global(.korean) { font-family: var(--font-kr-sans), var(--font-display); }
 }
 
+// A labelled pill, so it reads as "save to flashcards" rather than a mystery
+// icon. Yellow is Keep's color everywhere else in the app.
 .saveButton,
 .savedButton {
-    flex: none;
-    width: 40px;
-    border: none;
-    border-left: 2px solid var(--bp-line);
-    display: grid;
-    place-items: center;
+    align-self: flex-start;
+    margin-left: .7rem;
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    min-height: 30px;
+    padding: .2rem .7rem .2rem .55rem;
+    border-radius: 999px;
+    border: 2px solid var(--bp-keep-line);
     background: var(--bp-keep-soft);
     color: var(--bp-keep-d);
+    font-family: var(--font-display);
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .02em;
     cursor: pointer;
+    transition: background .12s ease, border-color .12s ease;
+
+    &:hover { background: color-mix(in srgb, var(--bp-keep) 28%, var(--background)); }
 }
 
 .savedButton {
+    border-color: var(--bp-und-line);
     background: var(--bp-und-soft);
     color: var(--bp-und-d);
+
+    &:hover { background: var(--bp-und-soft); }
 }
 
 .grammarList,

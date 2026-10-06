@@ -48,7 +48,6 @@
 .selected {
     background: var(--bp-read-soft);
     box-shadow: 0 0 0 2px var(--bp-read-line);
-    padding: .1rem .3rem;
 }
 
 .highlighted:not(.selected) {
@@ -57,16 +56,6 @@
 }
 
 .pending { color: var(--bp-ink2); }
-
-.number {
-    display: inline-block;
-    margin-right: .3rem;
-    font-family: var(--font-display);
-    font-size: .75rem;
-    font-weight: 800;
-    vertical-align: super;
-    color: var(--bp-read-d);
-}
 
 .word {
     display: inline;
@@ -91,9 +80,11 @@
     &:disabled, &[aria-disabled="true"] { cursor: default; }
 }
 
+// A highlighter stroke under the lower half of the word, so key words read
+// as "marked" without changing spacing.
 .keyWord {
-    background: var(--bp-keep-soft);
-    padding: 0 .12em;
+    --marker: color-mix(in srgb, var(--bp-keep) 42%, transparent);
+    background: linear-gradient(transparent 60%, var(--marker) 60%, var(--marker) 94%, transparent 94%);
 }
 
 .activeWord {
