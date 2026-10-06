@@ -1,7 +1,7 @@
 const { test, describe } = require('node:test');
 const assert = require('node:assert/strict');
 
-const { extractTemplate, getAnalysisSchema, restoreMaps } = require('../llm/analysisSchema');
+const { extractTemplate, getAnalysisSchema, restoreMaps, hasRepetitionLoop } = require('../llm/analysisSchema');
 
 const PROMPTS = [
     ['ko', require('../llm/prompt').ANALYSIS_PROMPT, ['analysis', 'variants']],
@@ -75,5 +75,51 @@ describe('restoreMaps', () => {
 
         const already = { analysis: { variants: { casual: { text: 'a' } } } };
         assert.deepEqual(restoreMaps(structuredClone(already), [['analysis', 'variants']]), already);
+    });
+});
+
+describe('output limits', () => {
+    const { schema } = getAnalysisSchema(require('../llm/prompt').ANALYSIS_PROMPT('ko', 'en') + 'sample');
+    const analysis = schema.properties.analysis;
+
+    test('caps every string so a looping model stops', () => {
+        const walk = (node, path) => {
+            if (node.type === 'string') assert.ok(node.maxLength > 0, `${path} has no maxLength`);
+            if (node.items) walk(node.items, `${path}[]`);
+            for (const [key, child] of Object.entries(node.properties || {})) walk(child, `${path}.${key}`);
+        };
+        walk(schema, 'root');
+    });
+
+    test('caps only top-level lists, which Gemini accepts', () => {
+        assert.equal(analysis.properties.grammar_points.maxItems, 10);
+        assert.equal(analysis.properties.variants.maxItems, 8);
+        assert.equal(analysis.properties.components.maxItems, undefined);
+        assert.equal(analysis.properties.grammar_points.items.properties.examples.maxItems, undefined);
+    });
+
+    test('keeps grammar examples short', () => {
+        const example = analysis.properties.grammar_points.items.properties.examples.items;
+        assert.equal(example.properties.original.maxLength, 600);
+    });
+});
+
+describe('hasRepetitionLoop', () => {
+    test('flags a field that repeats the same sentence', () => {
+        const looped = Array(20).fill('저는 학생이에요.').join(' ');
+        assert.equal(hasRepetitionLoop({ analysis: { grammar_points: [{ examples: [{ original: looped }] }] } }), true);
+    });
+
+    test('accepts normal analysis text', () => {
+        const normal = {
+            analysis: {
+                sentence: { translation: 'I am a student.', original: '저는 학생이에요.' },
+                grammar_points: [{
+                    explanation: 'The topic particle 는 marks what the sentence is about. It follows a vowel. After a consonant, use 은 instead.',
+                    examples: [{ original: '저는 학생이에요.' }, { original: '저는 선생님이에요.' }]
+                }]
+            }
+        };
+        assert.equal(hasRepetitionLoop(normal), false);
     });
 });
