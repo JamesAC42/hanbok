@@ -139,7 +139,7 @@ const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, s
 
             {sentenceId && (
                 <Link href={`/tutor?sentenceId=${sentenceId}`} className={styles.alt}>
-                    <Tiger size={46} />
+                    <Tiger size={48} />
                     <span>
                         <b>Ask Horangi about this sentence</b>
                         <small>Why is it built this way? How else could I say it?</small>

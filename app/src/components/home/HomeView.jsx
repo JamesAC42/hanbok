@@ -329,7 +329,7 @@ const StreakCard = ({ progress }) => {
 
 const TutorCard = () => (
     <section className={`${styles.card} ${styles.tutorCard}`} aria-labelledby="tutor-heading">
-        <Tiger size={64} />
+        <Tiger pose="teach" size={72} />
         <div>
             <h2 id="tutor-heading" className={styles.cardTitle}>Practice with Horangi</h2>
             <p>Chat with your tutor in Korean. Ask anything about the sentences you read.</p>

@@ -823,7 +823,7 @@ export default function TutorPage() {
                   <div key={index} className={`${styles.messageWrapper} ${styles[message.role]}`}>
                     {message.role === 'assistant' && (
                       <div className={styles.tutorBubble}>
-                        <Tiger size={34} label={t('tutor.messages.aiTutor')} />
+                        <Tiger pose="happy" size={38} label={t('tutor.messages.aiTutor')} />
                       </div>
                     )}
                     <div className={`${styles.message} ${styles[message.role]} ${message.isStreaming ? styles.streaming : ''}`}>
@@ -852,7 +852,7 @@ export default function TutorPage() {
                 {isLoading && !messages.some(msg => msg.isStreaming) && (
                   <div className={`${styles.messageWrapper} ${styles.assistant}`}>
                     <div className={styles.tutorBubble}>
-                      <Tiger size={34} label={t('tutor.messages.aiTutor')} />
+                      <Tiger pose="happy" size={38} label={t('tutor.messages.aiTutor')} />
                     </div>
                     
                     <div className={styles.loadingMessage}>
@@ -872,7 +872,7 @@ export default function TutorPage() {
             <div className={styles.emptyState}>
               <div className={styles.tutorIntro}>
                 <div className={styles.tutorCharacter}>
-                  <Tiger size={132} motion="bob" label={t('tutor.messages.aiTutor')} />
+                  <Tiger pose="wave" size={124} motion="bob" label={t('tutor.messages.aiTutor')} />
                 </div>
                 <div className={styles.tutorIntroText}>
                   <h2>{t('tutor.intro.title')}</h2>
