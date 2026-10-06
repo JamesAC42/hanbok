@@ -15,6 +15,7 @@ export const meta = {
     minutes: 7,
     published: '2026-10-06',
     color: 'read',
+    grammar: [{ form: '을/를', label: 'object particle' }, { form: '에', label: 'time, destination' }, { form: '에서', label: 'place of an action' }],
 };
 
 export const faq = [

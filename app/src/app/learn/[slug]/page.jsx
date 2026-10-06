@@ -33,7 +33,8 @@ export default async function LearnArticle({ params }) {
     if (!article) notFound();
     const { meta, Body, quiz, faq } = article;
     const url = `${SITE_URL}/learn/${meta.slug}`;
-    const more = articles.filter((a) => a.meta.slug !== meta.slug).slice(0, 3);
+    const at = articles.findIndex((a) => a.meta.slug === meta.slug);
+    const more = [1, 2, 3].map((i) => articles[(at + i) % articles.length]).filter((a) => a.meta.slug !== meta.slug);
 
     const structuredData = [
         {
