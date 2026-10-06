@@ -1067,6 +1067,7 @@ export const en = {
         tutor: "Tutor",
         history: "History",
         lyrics: "Lyrics",
+        learn: "Learn",
         lessons: "Lessons",
         feedback: "Feedback",
         viewPlans: "View Plans",

@@ -12,7 +12,6 @@ const COLUMNS = [
             { href: '/analyze', label: 'Break down a sentence' },
             { href: '/lyrics', label: 'Song lyrics' },
             { href: '/learn', label: 'Grammar guides' },
-            { href: '/lessons', label: 'Lessons' },
             { href: '/hangeul', label: 'Learn Hangeul' },
         ],
     },

@@ -9,7 +9,6 @@ import { useAuth } from '@/contexts/AuthContext';
 const LINKS = [
     { href: '/lyrics', label: 'Lyrics' },
     { href: '/learn', label: 'Learn' },
-    { href: '/lessons', label: 'Lessons' },
     { href: '/pricing', label: 'Pricing' },
 ];
 

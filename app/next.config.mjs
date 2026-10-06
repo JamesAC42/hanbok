@@ -10,6 +10,15 @@ const nextConfig = {
   // Deploys build into a side directory (NEXT_DIST_DIR) while the live site
   // keeps serving from .next, then swap it in. See scripts/deploy.sh.
   distDir: process.env.NEXT_DIST_DIR || '.next',
+  // Lessons and Grammar (coming-soon stubs) became the Learn guides; keep
+  // old links and rankings.
+  async redirects() {
+    return [
+      { source: '/grammar', destination: '/learn', statusCode: 301 },
+      { source: '/lessons', destination: '/learn', statusCode: 301 },
+      { source: '/lessons/:path*', destination: '/learn', statusCode: 301 },
+    ];
+  },
   async rewrites() {
     return [
       {

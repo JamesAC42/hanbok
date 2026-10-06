@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/login.module.scss';
+import emailAuthStyles from '@/styles/components/emailauth.module.scss';
 import Mascot from '@/components/Mascot';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 import EmailLoginForm from '@/components/EmailLoginForm';
@@ -66,7 +67,7 @@ const Login = () => {
                     </div>
 
                     {signup && (
-                        <div className={styles.heardFrom}>
+                        <div className={`${styles.heardFrom} ${emailAuthStyles.authForm}`}>
                             <HeardFromSelect />
                         </div>
                     )}
