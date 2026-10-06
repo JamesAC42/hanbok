@@ -16,10 +16,13 @@ const PLAN_BY_PRICE = {
     price_1RjhBODv6kE7GatajkAfu5cB: 'Plus',
 };
 
+// STRIPE_ANALYTICS_KEY lets a server read revenue with a separate read-only
+// key, e.g. staging showing live numbers while its checkout stays in test mode.
 let stripeClient;
 const getStripe = () => {
     if (stripeClient === undefined) {
-        stripeClient = process.env.STRIPE_SECRET_KEY ? require('stripe')(process.env.STRIPE_SECRET_KEY) : null;
+        const key = process.env.STRIPE_ANALYTICS_KEY || process.env.STRIPE_SECRET_KEY;
+        stripeClient = key ? require('stripe')(key) : null;
     }
     return stripeClient;
 };

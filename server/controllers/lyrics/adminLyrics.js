@@ -59,17 +59,20 @@ async function getAllLyrics(req, res) {
     // Get all lyrics with their analysis information
     const lyrics = await db.collection('lyrics').find({}).sort({ dateCreated: -1 }).toArray();
     
-    // For each lyric, check if it has an analysis
-    const lyricsWithAnalysisInfo = await Promise.all(lyrics.map(async lyric => {
-      const hasAnalysis = await db.collection('lyrics_analysis')
-        .find({ lyricId: lyric._id.toString() })
-        .limit(1) // Limit to 1 to check existence
-        .count(); // Count the number of documents
+    // Which songs have an analysis, and how often each was viewed, in two queries.
+    const [analyzedIds, views] = await Promise.all([
+      db.collection('lyrics_analysis').distinct('lyricId', { lyricId: { $in: lyrics.map(l => l._id.toString()) } }),
+      db.collection('lyric_views')
+        .find({ lyricId: { $in: lyrics.map(l => l.lyricId) } }, { projection: { _id: 0, lyricId: 1, viewCount: 1 } })
+        .toArray()
+    ]);
+    const analyzed = new Set(analyzedIds);
+    const viewsById = new Map(views.map(v => [v.lyricId, v.viewCount || 0]));
 
-      return {
-        ...lyric,
-        hasAnalysis: hasAnalysis > 0
-      };
+    const lyricsWithAnalysisInfo = lyrics.map(lyric => ({
+      ...lyric,
+      hasAnalysis: analyzed.has(lyric._id.toString()),
+      viewCount: viewsById.get(lyric.lyricId) || 0
     }));
 
     return res.status(200).json({
@@ -96,7 +99,7 @@ async function addLyrics(req, res) {
       });
     }
 
-    const { title, artist, genre, youtubeUrl, lyricsText, language, published } = req.body;
+    const { title, artist, anime, genre, youtubeUrl, lyricsText, language, published } = req.body;
     
     // Validation
     if (!title || !genre || !lyricsText || !language) {
@@ -115,6 +118,7 @@ async function addLyrics(req, res) {
     const newLyric = {
       title,
       artist: artist || null,
+      anime: anime || null,
       genre,
       youtubeUrl: youtubeUrl || null,
       published: published || false,
