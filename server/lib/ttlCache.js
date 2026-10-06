@@ -1,32 +1,35 @@
-// Small in-memory cache for expensive admin queries. Concurrent callers for the
-// same key share one in-flight promise, and failures are never cached.
-const createTtlCache = (ttlMs, maxEntries = 50) => {
+// Small in-memory cache for expensive admin queries. Fresh values are reused
+// for ttlMs. Older values (up to staleMs) are still returned at once while a
+// refresh runs in the background, so a repeat visit never waits on the
+// database. Concurrent callers share one in-flight computation, and failures
+// are never cached.
+const createTtlCache = (ttlMs, { staleMs = ttlMs * 12, maxEntries = 50 } = {}) => {
     const entries = new Map();
+
+    const refresh = (key, compute) => {
+        const current = entries.get(key);
+        if (current?.pending) return current.pending;
+        const pending = Promise.resolve().then(compute).then((value) => {
+            entries.set(key, { value, at: Date.now(), pending: null });
+            if (entries.size > maxEntries) entries.delete(entries.keys().next().value);
+            return { value, cachedAt: Date.now() };
+        }).catch((error) => {
+            const entry = entries.get(key);
+            if (entry) entry.pending = null;
+            if (entry && !('value' in entry)) entries.delete(key);
+            throw error;
+        });
+        entries.set(key, { ...(current || {}), pending });
+        return pending;
+    };
 
     const get = async (key, compute, { fresh = false } = {}) => {
         const hit = entries.get(key);
-        const now = Date.now();
-        if (!fresh && hit && (hit.pending || now - hit.at < ttlMs)) {
-            const value = await hit.promise;
-            return { value, cachedAt: hit.at };
-        }
+        const age = hit && 'value' in hit ? Date.now() - hit.at : Infinity;
 
-        const promise = Promise.resolve().then(compute);
-        const entry = { promise, at: now, pending: true };
-        entries.set(key, entry);
-        if (entries.size > maxEntries) {
-            entries.delete(entries.keys().next().value);
-        }
-
-        try {
-            const value = await promise;
-            entry.pending = false;
-            entry.at = Date.now();
-            return { value, cachedAt: entry.at };
-        } catch (error) {
-            if (entries.get(key) === entry) entries.delete(key);
-            throw error;
-        }
+        if (fresh || age >= staleMs) return refresh(key, compute);
+        if (age >= ttlMs) refresh(key, compute).catch(() => {});
+        return { value: hit.value, cachedAt: hit.at };
     };
 
     return { get, clear: () => entries.clear() };

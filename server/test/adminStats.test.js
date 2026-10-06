@@ -90,6 +90,19 @@ test('ttl cache reuses values, shares in-flight work and never caches failures',
     assert.strictEqual((await cache.get('bad', async () => 'ok')).value, 'ok');
 });
 
+test('ttl cache serves a stale value at once and refreshes it in the background', async () => {
+    const cache = createTtlCache(10, { staleMs: 10000 });
+    let calls = 0;
+    const compute = async () => { calls += 1; return calls; };
+
+    assert.strictEqual((await cache.get('k', compute)).value, 1);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    assert.strictEqual((await cache.get('k', compute)).value, 1); // stale, refresh started
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    assert.strictEqual((await cache.get('k', compute)).value, 2);
+    assert.strictEqual(calls, 2);
+});
+
 test('range and time zone inputs fall back to safe defaults', () => {
     assert.strictEqual(parseDays('90'), 90);
     assert.strictEqual(parseDays('1000'), 30);
