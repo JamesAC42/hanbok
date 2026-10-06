@@ -123,3 +123,13 @@ describe('hasRepetitionLoop', () => {
         assert.equal(hasRepetitionLoop(normal), false);
     });
 });
+
+describe('field order', () => {
+    test('generates example sentences before their translations', () => {
+        const { schema } = getAnalysisSchema(require('../llm/prompt').ANALYSIS_PROMPT('ko', 'en') + 'sample');
+        const analysis = schema.properties.analysis;
+        assert.equal(Object.keys(analysis.properties.sentence.properties)[0], 'translation');
+        const example = analysis.properties.grammar_points.items.properties.examples.items;
+        assert.deepEqual(Object.keys(example.properties), ['original', 'translation']);
+    });
+});

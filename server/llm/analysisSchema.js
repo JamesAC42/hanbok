@@ -118,8 +118,10 @@ const toSchema = (node, key, path, mapPaths) => {
 
         const properties = {};
         const entries = Object.entries(node);
-        // Put the translation first so it is generated (and can be shown) first.
-        entries.sort(([a], [b]) => (b === 'translation') - (a === 'translation'));
+        // Put the sentence's translation first so it is generated (and can be shown)
+        // first. Only there: when grammar examples put translation before original,
+        // Flash-Lite loops inside the example text (5 of 6 test calls did).
+        if (key === 'sentence') entries.sort(([a], [b]) => (b === 'translation') - (a === 'translation'));
         for (const [childKey, childValue] of entries) {
             properties[childKey] = toSchema(childValue, childKey, [...path, childKey], mapPaths);
         }
