@@ -20,6 +20,20 @@ Highlighting tests run without a browser:
 node --test extension/test/highlight.test.js
 ```
 
+## Build the store zip
+
+Writes `extension/dist/hanbok-study-<version>.zip`, without the localhost entries in the manifest. Bump `version` in `manifest.json` before each new upload.
+
+```powershell
+# Windows
+powershell -ExecutionPolicy Bypass -File extension\package.ps1
+```
+
+```sh
+# macOS / Linux
+extension/package.sh
+```
+
 ## How it fits together
 
 | File | Role |
