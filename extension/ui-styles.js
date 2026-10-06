@@ -5,8 +5,8 @@
 // This is the site's Bright Path look: tokens and building blocks are
 // ported from app/src/styles/brightpath.scss and variables.module.scss
 // (bp-press, bp-press-ghost, bp-card, bp-pill, bp-label). Stage colors
-// carry the same meaning as on the site: Understand teal for analyzing,
-// Keep gold for saving words. The two fonts are declared in content.css,
+// carry the same meaning as on the site (see design/bright-path.md in the
+// project files): Read blue for analyzing, Keep gold for saving words. The two fonts are declared in content.css,
 // since Chrome resolves @font-face against the document, not a shadow tree.
 self.HANBOK_UI_CSS = `
 :host { all: initial; }
@@ -32,6 +32,8 @@ self.HANBOK_UI_CSS = `
   --bp-ink2: color-mix(in srgb, var(--foreground) 62%, var(--background));
   --bp-card: var(--background);
   --bp-und-soft: color-mix(in srgb, var(--bp-und) 12%, var(--background));
+  --bp-read-soft: color-mix(in srgb, var(--bp-read) 11%, var(--background));
+  --bp-title: 'Hanbok Lilita', 'Noto Sans KR', 'Hanbok Montserrat', sans-serif;
   --bp-keep-soft: color-mix(in srgb, var(--bp-keep) 16%, var(--background));
 
   font-family: 'Hanbok Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', 'Noto Sans JP', sans-serif;
@@ -74,19 +76,20 @@ self.HANBOK_UI_CSS = `
 }
 .button:hover:not(:disabled) { background: var(--bp-soft); }
 .button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--bp-line); }
-.button:focus-visible { outline: 3px solid color-mix(in srgb, var(--bp-read) 45%, transparent); outline-offset: 3px; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--bp-read) 70%, transparent); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
 .button:disabled { cursor: not-allowed; opacity: 0.55; transform: none; }
 
 .button-primary {
   color: #fff;
-  background: var(--bp-und);
+  background: var(--bp-read);
   border: none;
   padding: 11px 18px;
-  box-shadow: 0 4px 0 var(--bp-und-d);
+  box-shadow: 0 4px 0 var(--bp-read-d);
 }
-.button-primary:hover:not(:disabled) { background: var(--bp-und); filter: brightness(1.06); }
-.button-primary:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--bp-und-d); }
-.button-primary:disabled { filter: grayscale(0.6); box-shadow: 0 4px 0 var(--bp-und-d); }
+.button-primary:hover:not(:disabled) { background: var(--bp-read); filter: brightness(1.06); }
+.button-primary:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 0 0 var(--bp-read-d); }
+.button-primary:disabled { filter: grayscale(0.6); box-shadow: 0 4px 0 var(--bp-read-d); }
 
 .button-keep {
   color: var(--bp-keep-ink);
@@ -151,14 +154,13 @@ p { margin: 0; }
   font-weight: 600;
   color: #fff;
   background: var(--bp-read);
-  border-bottom: 4px solid var(--bp-read-d);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 0 var(--bp-read-d);
   pointer-events: auto;
   animation: hanbok-in 0.2s ease-out;
   transition: opacity 0.3s, transform 0.3s;
 }
-.toast-success { background: var(--bp-und); border-bottom-color: var(--bp-und-d); }
-.toast-error { background: var(--bp-rev); border-bottom-color: var(--bp-rev-d); }
+.toast-success { background: var(--bp-und); box-shadow: 0 4px 0 var(--bp-und-d); }
+.toast-error { background: var(--bp-rev); box-shadow: 0 4px 0 var(--bp-rev-d); }
 .toast-out { opacity: 0; transform: translateX(16px); }
 .toast-action { display: block; margin-top: 6px; color: #fff; font-weight: 800; text-decoration: underline; }
 .toast .mascot { margin-top: -2px; }
@@ -174,7 +176,7 @@ p { margin: 0; }
   border: none;
   border-radius: 999px;
   padding: 9px 18px 9px 10px;
-  background: var(--bp-und);
+  background: var(--bp-read);
   color: #fff;
   font-family: inherit;
   font-size: 13px;
@@ -182,11 +184,11 @@ p { margin: 0; }
   letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 4px 0 var(--bp-und-d), 0 8px 18px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 0 var(--bp-read-d);
   transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.15s ease;
 }
 .selection-button:hover { filter: brightness(1.06); }
-.selection-button:active { transform: translateY(4px); box-shadow: 0 0 0 var(--bp-und-d), 0 4px 10px rgba(0, 0, 0, 0.18); }
+.selection-button:active { transform: translateY(4px); box-shadow: 0 0 0 var(--bp-read-d); }
 
 .word-card {
   width: 310px;
@@ -198,10 +200,10 @@ p { margin: 0; }
   border-top: 6px solid var(--bp-keep);
   border-radius: 18px;
   padding: 16px;
-  box-shadow: 0 5px 0 var(--bp-line), 0 14px 28px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 0 var(--bp-line-strong);
 }
 .word-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.word-card .word { font-family: 'Hanbok Lilita', 'Hanbok Montserrat', sans-serif; font-weight: 400; font-size: 24px; line-height: 1.1; }
+.word-card .word { font-family: var(--bp-title); font-weight: 700; font-synthesis: none; font-size: 24px; line-height: 1.1; }
 .word-card .meaning { font-size: 15px; margin-top: 8px; }
 .word-card .actions { margin-top: 14px; gap: 8px; }
 .relations { margin-top: 2px; }
@@ -214,7 +216,7 @@ p { margin: 0; }
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(10, 12, 20, 0.5);
+  background: rgba(10, 14, 40, 0.45);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -228,7 +230,7 @@ p { margin: 0; }
   max-height: min(82vh, 760px);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 6px 0 var(--bp-line), 0 28px 56px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 0 var(--bp-line);
   animation: hanbok-pop-in 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .modal-header {
@@ -239,8 +241,9 @@ p { margin: 0; }
   border-bottom: 2px solid var(--bp-line);
 }
 .brand {
-  font-family: 'Hanbok Lilita', 'Hanbok Montserrat', sans-serif;
-  font-weight: 400;
+  font-family: var(--bp-title);
+  font-weight: 700;
+  font-synthesis: none;
   font-size: 20px;
   letter-spacing: 0.01em;
   margin-right: auto;
@@ -248,8 +251,9 @@ p { margin: 0; }
 .modal-body { padding: 18px; overflow-y: auto; }
 
 .sentence .original {
-  font-family: 'Hanbok Lilita', 'Hanbok Montserrat', sans-serif;
-  font-weight: 400;
+  font-family: var(--bp-title);
+  font-weight: 700;
+  font-synthesis: none;
   font-size: 26px;
   line-height: 1.25;
 }
@@ -269,22 +273,24 @@ p { margin: 0; }
 }
 .components li:last-child { border-bottom: none; }
 .component-main { min-width: 0; }
-.component-text { font-family: 'Hanbok Lilita', 'Hanbok Montserrat', sans-serif; font-weight: 400; font-size: 19px; margin-right: 8px; }
+.component-text { font-family: var(--bp-title); font-weight: 700; font-synthesis: none; font-size: 19px; margin-right: 8px; }
 .reading, .dictionary { color: var(--bp-ink2); margin-right: 6px; }
 .type {
   display: inline-block;
-  padding: 1px 9px;
-  border-radius: 10px;
-  background: var(--bp-soft);
-  border: 2px solid var(--bp-line);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--bp-ink2);
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: var(--bp-read-soft);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bp-read);
+  vertical-align: 2px;
 }
 .meaning { margin-top: 4px; }
 .grammar li { padding: 10px 0; border-bottom: 2px solid var(--bp-line); }
 .grammar li:last-child { border-bottom: none; }
-.grammar strong { font-family: 'Hanbok Lilita', 'Hanbok Montserrat', sans-serif; font-weight: 400; font-size: 17px; }
+.grammar strong { font-family: var(--bp-title); font-weight: 700; font-synthesis: none; font-size: 17px; }
 .grammar p { margin-top: 2px; }
 
 .quota {
@@ -293,10 +299,12 @@ p { margin: 0; }
   gap: 6px;
   margin-top: 20px;
   padding: 5px 12px;
-  border-radius: 12px;
-  border: 2px solid var(--bp-line);
-  font-size: 12px;
-  font-weight: 700;
+  border-radius: 99px;
+  background: var(--bp-soft);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--bp-ink2);
 }
 
@@ -305,8 +313,8 @@ p { margin: 0; }
 .spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid var(--bp-und-soft);
-  border-top-color: var(--bp-und);
+  border: 3px solid var(--bp-read-soft);
+  border-top-color: var(--bp-read);
   border-radius: 50%;
   animation: hanbok-spin 0.8s linear infinite;
 }

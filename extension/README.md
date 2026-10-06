@@ -41,9 +41,9 @@ API endpoints used: `GET /api/session`, `GET /api/words`, `POST /api/words`, `PO
 The extension follows the site's Bright Path design: the same two fonts
 (Lilita One for headings, Montserrat for everything else), the same chunky
 pressable buttons and 2px-line cards, and the same stage colors, with the
-same meanings as on the site — Understand teal for analyzing, Keep gold for
+same meanings as on the site: Read blue for analyzing, Keep gold for
 saved words and the highlights themselves. Tokens and building blocks are
-ported from `app/src/styles/brightpath.scss` and `variables.module.scss`;
+ported from `app/src/styles/brightpath.scss` and `variables.module.scss` (summary in the project files at `design/bright-path.md`);
 when those change, change `ui-styles.js` and `popup.css` to match. Light and
 dark follow the browser's setting, using the site's `theme-light` and
 `theme-dark` backgrounds.

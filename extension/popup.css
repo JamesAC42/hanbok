@@ -76,9 +76,9 @@ body {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  background: var(--bp-und);
+  background: var(--bp-read);
   color: #fff;
-  border-bottom: 4px solid var(--bp-und-d);
+  border-bottom: 4px solid var(--bp-read-d);
 }
 
 .popup-mascot {
@@ -95,7 +95,7 @@ body {
 }
 
 .popup-title {
-  font-family: 'Hanbok Lilita', sans-serif;
+  font-family: 'Hanbok Lilita', 'Noto Sans KR', sans-serif;
   font-size: 1.5rem;
   font-weight: 400;
   line-height: 1.1;
@@ -203,9 +203,9 @@ body {
 .btn-secondary:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 0 0 var(--bp-line); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
-.btn:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--bp-read) 45%, transparent);
-  outline-offset: 3px;
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--bp-read) 70%, transparent);
+  outline-offset: 2px;
 }
 
 /* Settings */
@@ -291,8 +291,8 @@ body {
 }
 
 .toggle-input:focus-visible + .toggle-label .toggle-slider {
-  outline: 3px solid color-mix(in srgb, var(--bp-und) 45%, transparent);
-  outline-offset: 3px;
+  outline: 3px solid color-mix(in srgb, var(--bp-read) 70%, transparent);
+  outline-offset: 2px;
 }
 
 .setting-hint {
