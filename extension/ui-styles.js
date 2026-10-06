@@ -130,7 +130,7 @@ h3, h4 {
   margin: 22px 0 8px;
 }
 p { margin: 0; }
-.mascot { display: block; flex: none; user-select: none; }
+.mascot { display: block; flex: none; width: auto; object-fit: contain; user-select: none; }
 
 /* ---------- Toasts ---------- */
 

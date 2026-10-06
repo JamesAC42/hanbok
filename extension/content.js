@@ -157,7 +157,7 @@
   async function analyze(text) {
     hideFloating();
     showModal(el('div', { className: 'loading' }, [
-      mascot('think', 48, { motion: 'bob', alt: '' }),
+      mascot('think', 64, { motion: 'bob', alt: '' }),
       el('div', { className: 'spinner' }),
       'Analyzing…'
     ]));
@@ -165,7 +165,7 @@
     if (!modal) return; // closed while waiting
     if (!result?.success) {
       showModal(el('div', { className: 'error' }, [
-        mascot('think', 48, { alt: '' }),
+        mascot('think', 64, { alt: '' }),
         el('p', { textContent: result?.error || 'Failed to analyze the text.' })
       ]));
       return;
