@@ -15,6 +15,7 @@ export const meta = {
     minutes: 8,
     published: '2026-10-06',
     color: 'und',
+    grammar: [{ form: '은/는', label: 'topic particle' }, { form: '이/가', label: 'subject particle' }],
 };
 
 export const faq = [
@@ -137,7 +138,7 @@ export function Body() {
             <Example
                 words={[chip(W('민수', 'Minsu (a name)'), P('가', 'subject: Minsu is the new information')), chip(W('왔어요', 'came (past, polite)', '오다'))]}
                 translation="Minsu came."
-                note="민수는 왔어요 would sound like &quot;Minsu came (but someone else didn't)&quot;, which is rule 3."
+                note={`민수는 왔어요 would sound like "Minsu came (but someone else didn't)", which is rule 3.`}
             />
 
             <h2 id="contrast">3. 은/는 compares and contrasts</h2>
@@ -178,7 +179,7 @@ export function Body() {
             <Example
                 words={[chip(W('나', 'I (casual)'), P('는', 'topic')), chip(W('네', 'you (너 changes before 가)', '너'), P('가', 'subject: the one who is liked')), chip(W('좋아', 'like (casual)', '좋다'))]}
                 translation="I like you."
-                note="Literally &quot;as for me, you are good.&quot; This is why 좋다 takes 이/가 on the thing you like."
+                note={`Literally "as for me, you are good." This is why 좋다 takes 이/가 on the thing you like.`}
             />
 
             <h2 id="become">5. 이/가 with &ldquo;not be&rdquo; and &ldquo;become&rdquo;</h2>
@@ -204,7 +205,7 @@ export function Body() {
             <Example
                 words={[chip(W('제', 'I (저 changes before 가)', '저'), P('가', 'subject inside the phrase')), chip(W('좋아하', 'like', '좋아하다'), P('는', 'turns "like" into "that I like" (not the topic particle)')), chip(W('노래', 'song'), P('예요', '"is" (polite, after a vowel)'))]}
                 translation="It's a song I like."
-                note="Careful: the 는 in 좋아하는 is a verb ending meaning &quot;that ...&quot;, not the topic particle."
+                note={`Careful: the 는 in 좋아하는 is a verb ending meaning "that ...", not the topic particle.`}
             />
 
             <TryIt placeholder="예: 저는 커피가 좋아요" />

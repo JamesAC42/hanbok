@@ -16,6 +16,7 @@ export const meta = {
     minutes: 9,
     published: '2026-10-06',
     color: 'pink',
+    grammar: [],
 };
 
 const FEELINGS = [
@@ -142,7 +143,7 @@ export function Body() {
             <Example
                 words={[chip(W('아이고', 'oh my (a sigh)')), chip(W('배고파', 'hungry (casual)', '배고프다')), chip(W('죽겠다', '"I could die" (exaggeration)', '죽다'))]}
                 translation="Ugh, I'm starving."
-                note="-어 죽겠다 is how Koreans exaggerate: 배고파 죽겠다 is &quot;so hungry I could die.&quot;"
+                note={`-어 죽겠다 is how Koreans exaggerate: 배고파 죽겠다 is "so hungry I could die."`}
             />
 
             <TryIt title="Heard a line you didn't catch?" placeholder="예: 너 진짜 미쳤어?" />

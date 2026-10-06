@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 export default function LearnIndex() {
-    const list = [...articles].sort((a, b) => b.meta.published.localeCompare(a.meta.published));
+    const list = articles;
     return (
         <LearnShell>
             <JsonLd data={{
