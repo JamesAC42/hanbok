@@ -9,6 +9,7 @@
 <body>
   <div class="popup-container">
     <div class="popup-header">
+      <img class="popup-mascot" src="images/mascot/magpie-head-3.webp" width="44" height="44" alt="" draggable="false">
       <div class="logo-section">
         <h1 class="popup-title">Hanbok</h1>
         <span class="popup-subtitle">Study on any page</span>
@@ -21,8 +22,11 @@
 
     <div class="popup-content">
       <div class="auth-section hidden" id="authSection">
-        <div class="auth-message">Log in to Hanbok to save words and see them highlighted.</div>
-        <button class="btn btn-primary" id="loginBtn">Log in to Hanbok</button>
+        <img class="popup-mascot" src="images/mascot/magpie-speak.webp" width="52" height="52" alt="" draggable="false">
+        <div>
+          <div class="auth-message">Log in to Hanbok to save words and see them highlighted.</div>
+          <button class="btn btn-primary" id="loginBtn">Log in to Hanbok</button>
+        </div>
       </div>
 
       <div class="settings-section">
@@ -62,11 +66,11 @@
       <div class="stats-section hidden" id="statsSection">
         <h3 class="section-title">This page</h3>
         <div class="stats-grid">
-          <div class="stat-item">
+          <div class="stat-item keep">
             <span class="stat-number" id="vocabularyCount">0</span>
             <span class="stat-label">Saved words</span>
           </div>
-          <div class="stat-item">
+          <div class="stat-item understand">
             <span class="stat-number" id="highlightedWords">–</span>
             <span class="stat-label">Highlighted here</span>
           </div>

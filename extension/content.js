@@ -38,6 +38,31 @@
     if (!host.isConnected) document.documentElement.appendChild(host);
   }
 
+  // The site's two fonts. @font-face has to be declared against the
+  // document rather than inside the shadow root, because Chrome resolves
+  // font faces document-wide. The family names are prefixed so they can't
+  // collide with the page's own fonts, and a page whose
+  // Content-Security-Policy blocks the files just falls back to its
+  // system sans.
+  function loadFonts() {
+    const url = (file) => chrome.runtime.getURL(`fonts/${file}`);
+    const style = document.createElement('style');
+    style.textContent = `
+      @font-face {
+        font-family: 'Hanbok Lilita';
+        src: url('${url('LilitaOne-Regular.ttf')}') format('truetype');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Hanbok Montserrat';
+        src: url('${url('Montserrat-Variable.ttf')}') format('truetype-variations');
+        font-weight: 100 900;
+        font-display: swap;
+      }`;
+    document.documentElement.appendChild(style);
+  }
+
   // Small DOM helper: el('div', { className: 'x', onclick }, [children])
   function el(tag, props = {}, children = []) {
     const node = document.createElement(tag);
@@ -55,13 +80,29 @@
   }
 
   // `action` is an optional { label, path } link to the Hanbok site.
+  // Kkachi, the magpie from the site. Poses: head-3, speak, think,
+  // celebrate (see extension/images/mascot).
+  function mascot(pose, size, { motion = '', alt = 'Kkachi the magpie' } = {}) {
+    return el('img', {
+      className: `mascot ${motion}`.trim(),
+      src: chrome.runtime.getURL(`images/mascot/magpie-${pose}.webp`),
+      width: String(size),
+      height: String(size),
+      alt,
+      draggable: 'false'
+    });
+  }
+
   function toast(message, type = 'info', action = null) {
     mountHost();
-    const node = el('div', { className: `toast toast-${type}`, role: 'status' }, [message]);
+    const node = el('div', { className: `toast toast-${type}`, role: 'status' }, [
+      type === 'success' ? mascot('celebrate', 28, { alt: '' }) : null,
+      el('div', {}, [message])
+    ]);
     if (action) {
       const link = el('a', { className: 'toast-action', target: '_blank', rel: 'noopener', textContent: action.label });
       siteUrl().then((url) => link.setAttribute('href', `${url}${action.path}`));
-      node.appendChild(link);
+      node.lastChild.appendChild(link);
     }
     toastStack.appendChild(node);
     const duration = action ? 6000 : 3000;
@@ -115,11 +156,16 @@
 
   async function analyze(text) {
     hideFloating();
-    showModal(el('div', { className: 'loading' }, [el('div', { className: 'spinner' }), 'Analyzing…']));
+    showModal(el('div', { className: 'loading' }, [
+      mascot('think', 48, { motion: 'bob', alt: '' }),
+      el('div', { className: 'spinner' }),
+      'Analyzing…'
+    ]));
     const result = await send({ type: 'ANALYZE', text });
     if (!modal) return; // closed while waiting
     if (!result?.success) {
       showModal(el('div', { className: 'error' }, [
+        mascot('think', 48, { alt: '' }),
         el('p', { textContent: result?.error || 'Failed to analyze the text.' })
       ]));
       return;
@@ -133,6 +179,7 @@
       modal = el('div', { className: 'backdrop', onclick: (e) => { if (e.target === modal) closeModal(); } }, [
         el('div', { className: 'modal', role: 'dialog', 'aria-label': 'Hanbok analysis' }, [
           el('div', { className: 'modal-header' }, [
+            mascot('head-3', 30, { alt: '' }),
             el('span', { className: 'brand', textContent: 'Hanbok' }),
             el('button', { className: 'icon-button', title: 'Close', 'aria-label': 'Close', textContent: '✕', onclick: closeModal })
           ]),
@@ -227,7 +274,7 @@
     const isSaved = savedWords.has(dictionaryForm);
 
     const addButton = el('button', {
-      className: 'button button-small',
+      className: isSaved ? 'button button-small' : 'button button-keep button-small',
       textContent: isSaved ? 'Saved' : '+ Add',
       disabled: isSaved || !meaning,
       title: isSaved ? 'Already in your words' : 'Add to your words'
@@ -245,6 +292,7 @@
         }
       });
       if (result?.success) {
+        addButton.className = 'button button-small';
         addButton.textContent = 'Saved';
         savedWords.set(dictionaryForm, { word: dictionaryForm, meaning });
         toast(`Added “${dictionaryForm}” to your words`, 'success');
@@ -313,10 +361,9 @@
       if (!rect.width && !rect.height) return;
       const button = el('button', {
         className: 'floating selection-button',
-        textContent: 'Analyze with Hanbok',
         onmousedown: (e) => e.preventDefault(), // keep the selection
         onclick: () => analyze(text)
-      });
+      }, [mascot('head-3', 24, { alt: '' }), 'Analyze with Hanbok']);
       placeFloating(button, rect);
     }, 10);
   }
@@ -381,14 +428,14 @@
     });
 
     const relations = el('div', { className: 'relations' });
-    const relationsButton = el('button', { className: 'button button-small', textContent: 'Synonyms & antonyms' });
+    const relationsButton = el('button', { className: 'button button-small', textContent: 'Related words' });
     relationsButton.addEventListener('click', async () => {
       relationsButton.disabled = true;
       relationsButton.textContent = 'Loading…';
       const result = await send({ type: 'GET_WORD_RELATIONS', word: entry.word });
       if (!result?.success) {
         relationsButton.disabled = false;
-        relationsButton.textContent = 'Synonyms & antonyms';
+        relationsButton.textContent = 'Related words';
         errorToast(result, 'Could not load related words');
         return;
       }
@@ -404,7 +451,7 @@
       ? el('button', { className: 'button button-primary button-small', textContent: 'Analyze sentence', title: sentence, onclick: () => analyze(sentence) })
       : el('button', { className: 'button button-primary button-small', textContent: 'Analyze', onclick: () => analyze(surface) });
 
-    const deckLink = el('a', { className: 'button button-small', target: '_blank', rel: 'noopener', textContent: 'Study deck ↗' });
+    const deckLink = el('a', { className: 'button button-small', target: '_blank', rel: 'noopener', textContent: 'My deck ↗' });
     siteUrl().then((url) => deckLink.setAttribute('href', `${url}/cards`));
 
     return el('div', { className: 'floating word-card' }, [
@@ -577,6 +624,8 @@
     if (!document.body) return; // XML, PDF viewers and other non-HTML pages
     const stored = await chrome.storage.sync.get(Object.keys(DEFAULT_SETTINGS));
     settings = { ...DEFAULT_SETTINGS, ...stored };
+
+    loadFonts();
 
     document.addEventListener('mouseup', onMouseUp, true);
     document.addEventListener('mousedown', onMouseDown, true);
