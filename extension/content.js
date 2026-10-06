@@ -241,7 +241,7 @@
         const key = component.dictionary_form || component.text;
         if (!key || seen.has(key)) continue;
         seen.add(key);
-        rows.push(renderComponent(component, originalLanguage, translationLanguage));
+        rows.push(renderComponent(component, originalLanguage, translationLanguage, sentenceId));
       }
       sections.push(el('h3', { textContent: 'Words' }), el('ul', { className: 'components' }, rows));
     }
@@ -268,7 +268,7 @@
     return el('div', {}, sections);
   }
 
-  function renderComponent(component, originalLanguage, translationLanguage) {
+  function renderComponent(component, originalLanguage, translationLanguage, sentenceId) {
     const dictionaryForm = component.dictionary_form || component.text;
     const meaning = component.meaning?.description || '';
     const isSaved = savedWords.has(dictionaryForm);
@@ -288,7 +288,9 @@
           translatedWord: meaning,
           originalLanguage,
           translationLanguage,
-          reading: component.reading || ''
+          reading: component.reading || '',
+          // Links the word to this sentence, so the site can show where it came from.
+          ...(sentenceId ? { sentenceId } : {})
         }
       });
       if (result?.success) {
