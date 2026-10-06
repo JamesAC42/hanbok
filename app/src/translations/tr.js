@@ -270,7 +270,7 @@ export const tr = {
         features: {
             free: {
                 analyses: 'Haftada 10 cümle analizi',
-                extendedText: 'Haftada 2 genişletilmiş metin analizi (500 karaktere kadar)',
+                extendedText: 'Haftada 2 genişletilmiş metin analizi (1.000 karaktere kadar)',
                 conversations: 'Ayda 5 ücretsiz konuşma',
                 messages: 'Konuşma başına 5 mesaj',
                 bookmarks: 'En fazla 30 yer imi cümlesi',
@@ -279,7 +279,7 @@ export const tr = {
             },
             basic: {
                 analyses: 'Sınırsız cümle analizi',
-                extendedText: 'Sınırsız genişletilmiş metin analizi (2.000 karaktere kadar)',
+                extendedText: 'Sınırsız genişletilmiş metin analizi (5.000 karaktere kadar)',
                 conversations: 'Ayda 50 konuşma',
                 messages: 'Konuşma başına 15 mesaj',
                 bookmarks: 'Sınırsız yer imi cümlesi',
@@ -288,7 +288,7 @@ export const tr = {
             },
             plus: {
                 everythingInBasic: 'Temel plandaki her şey',
-                extendedText: 'Sınırsız genişletilmiş metin analizi (5.000 karaktere kadar)',
+                extendedText: 'Sınırsız genişletilmiş metin analizi (20.000 karaktere kadar)',
                 imageExtraction: 'Sınırsız görsel metin çıkarımı',
                 audioGeneration: 'Sınırsız ses üretimi',
                 conversations: 'Ayda 200 konuşma',
