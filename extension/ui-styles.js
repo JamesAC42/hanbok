@@ -178,7 +178,9 @@ p { margin: 0; }
   padding: 9px 18px 9px 10px;
   background: var(--bp-read);
   color: #fff;
-  font-family: inherit;
+  /* This button is a top-level element of the shadow root, so "inherit"
+     would pick up the host's reset (serif) instead of the UI font. */
+  font-family: 'Hanbok Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.05em;
