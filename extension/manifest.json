@@ -22,6 +22,7 @@
       ],
       "exclude_matches": [
         "https://hanbokstudy.com/*",
+        "https://staging.hanbokstudy.com/*",
         "http://localhost:3000/*"
       ],
       "js": [
@@ -34,6 +35,17 @@
         "content.css"
       ],
       "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://hanbokstudy.com/*",
+        "https://staging.hanbokstudy.com/*",
+        "http://localhost:3000/*"
+      ],
+      "js": [
+        "site-marker.js"
+      ],
+      "run_at": "document_start"
     }
   ],
   "action": {

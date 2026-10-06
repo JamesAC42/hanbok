@@ -13,6 +13,7 @@ const STATIC_PAGES = [
     { path: '/hangeul', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/pricing', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
+    { path: '/extension', changeFrequency: 'monthly', priority: 0.6 },
     { path: '/lyrics/suggestions', changeFrequency: 'weekly', priority: 0.4 },
     { path: '/updates', changeFrequency: 'monthly', priority: 0.4 },
     { path: '/feedback', changeFrequency: 'monthly', priority: 0.3 },
