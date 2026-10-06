@@ -159,19 +159,40 @@ const isAuthenticated = (req, res, next) => {
     next();
 };
 
+// Rate limiter for authentication endpoints to prevent brute-force / credential stuffing
+const authRateLimiter = async (req, res, next) => {
+    try {
+        const key = `ratelimit:auth:${req.ip}:${req.path}`;
+        const count = await redisClient.incr(key);
+        if (count === 1) {
+            await redisClient.expire(key, 60);
+        }
+        if (count > 10) {
+            return res.status(429).json({
+                success: false,
+                message: 'Too many requests, please try again later'
+            });
+        }
+        next();
+    } catch (err) {
+        console.error('Rate limiter error:', err);
+        next();
+    }
+};
+
 app.get('/api/session', async (req, res) => {
     await getSession(req, res);
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', authRateLimiter, (req, res) => {
     login(req, res, redisClient);
 });
 
-app.post('/api/login-email', (req, res) => {
+app.post('/api/login-email', authRateLimiter, (req, res) => {
     loginEmail(req, res, redisClient);
 });
 
-app.post('/api/register', (req, res) => {
+app.post('/api/register', authRateLimiter, (req, res) => {
     register(req, res, redisClient);
 });
 
@@ -179,7 +200,7 @@ app.get('/api/verify/:code', (req, res) => {
     verifyEmail(req, res, redisClient);
 });
 
-app.post('/api/resend-verification', (req, res) => {
+app.post('/api/resend-verification', authRateLimiter, (req, res) => {
     resendVerification(req, res, redisClient);
 });
 
@@ -188,7 +209,7 @@ app.post('/api/logout', (req, res) => {
 });
 
 // Password reset routes
-app.post('/api/request-password-reset', (req, res) => {
+app.post('/api/request-password-reset', authRateLimiter, (req, res) => {
     const requestPasswordReset = require('./controllers/auth/requestPasswordReset');
     requestPasswordReset(req, res, redisClient);
 });
