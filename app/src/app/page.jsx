@@ -6,6 +6,7 @@ import Mascot from '@/components/Mascot';
 import Tiger from '@/components/Tiger';
 import HeroDemo from '@/components/landing/HeroDemo';
 import HeroTry from '@/components/landing/HeroTry';
+import PromoVideo from '@/components/landing/PromoVideo';
 import SignedInRedirect from '@/components/landing/SignedInRedirect';
 import { apiGet, JsonLd, SITE_NAME, SITE_URL } from '@/lib/seo';
 
@@ -181,6 +182,7 @@ export default async function Home() {
                             </li>
                         ))}
                     </ol>
+                    <PromoVideo />
                 </section>
 
                 {/* ---------- Features ---------- */}

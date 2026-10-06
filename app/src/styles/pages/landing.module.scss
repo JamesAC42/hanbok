@@ -968,3 +968,24 @@
 @media (max-width: 640px) {
   .quote:nth-child(n + 5) { display: none; }
 }
+
+// ---------- Promo video ----------
+
+.promo {
+  margin-top: 4rem !important;
+  max-width: 60rem !important;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 2px solid var(--bp-line-strong);
+  box-shadow: 0 6px 0 var(--bp-line);
+  background: #eef1fd;
+  aspect-ratio: 16 / 9;
+  @media (max-width: 725px) { margin-top: 2.5rem !important; border-radius: 16px; }
+}
+
+.promoVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
