@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import styles from '@/styles/pages/extendedtext.module.scss';
+import { track } from '@/lib/analytics';
 
 export default function ExtendedTextPage() {
     const router = useRouter();
@@ -165,6 +166,7 @@ export default function ExtendedTextPage() {
                 return;
             }
 
+            track('paragraph_submit', { language: learningLanguage, sentences: data.sentenceCount });
             const params = new URLSearchParams();
             if (title.trim()) {
                 params.set('title', title.trim());

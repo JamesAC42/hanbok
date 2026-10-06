@@ -10,6 +10,7 @@ import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
 import Mascot from '@/components/Mascot';
 import Footer from '@/components/Footer';
+import { track } from '@/lib/analytics';
 
 // Signed-in readers get the app shell; visitors keep the public site header.
 // While auth is still loading, render a plain surface so neither shell flashes.
@@ -161,6 +162,7 @@ const Feedback = () => {
             const data = await response.json();
             
             if (data.success) {
+                track('feedback_sent', { reply: !!parentId });
                 await fetchFeedback();
                 setNewComment('');
                 setReplyText('');

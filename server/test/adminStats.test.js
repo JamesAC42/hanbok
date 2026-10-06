@@ -121,3 +121,18 @@ test('listDays covers every local day in the range once', () => {
     assert.strictEqual(days[days.length - 1], '2026-03-10');
     assert.strictEqual(new Set(days).size, days.length);
 });
+
+test('umami stats read both v2 ({ value, prev }) and v3 (plain number) shapes', () => {
+    const { normalizeStats } = require('../controllers/admin/traffic');
+    const v2 = normalizeStats({ pageviews: { value: 120, prev: 90 }, visitors: { value: 40, prev: 30 }, visits: { value: 50 }, bounces: { value: 20 }, totaltime: { value: 3000 } });
+    const v3 = normalizeStats({ pageviews: 120, visitors: 40, visits: 50, bounces: 20, totaltime: 3000, comparison: {} });
+    assert.deepStrictEqual(v2, v3);
+    assert.deepStrictEqual(normalizeStats(undefined), { pageviews: 0, visitors: 0, visits: 0, bounces: 0, totaltime: 0 });
+});
+
+test('umami daily series fills missing days and accepts both date formats', () => {
+    const { toDailySeries, toList } = require('../controllers/admin/traffic');
+    const rows = [{ x: '2026-10-01 00:00:00', y: 5 }, { x: '2026-10-03T00:00:00Z', y: 2 }];
+    assert.deepStrictEqual(toDailySeries(rows, ['2026-10-01', '2026-10-02', '2026-10-03']), [5, 0, 2]);
+    assert.deepStrictEqual(toList([{ x: '/analyze', y: 9 }, { x: '/x', y: 0 }]), [{ label: '/analyze', value: 9 }]);
+});

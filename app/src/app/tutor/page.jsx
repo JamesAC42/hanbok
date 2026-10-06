@@ -10,6 +10,7 @@ import Link from 'next/link';
 import Tiger from '@/components/Tiger';
 import { MaterialSymbolsDelete } from '@/components/icons/Delete';
 import { MaterialSymbolsHistory } from '@/components/icons/History';
+import { track } from '@/lib/analytics';
 
 export default function TutorPage() {
   const router = useRouter();
@@ -198,6 +199,7 @@ export default function TutorPage() {
         const error = await createResponse.json();
         throw new Error(error.message || 'Failed to create conversation');
       }
+      track('tutor_start', { fromSentence: !!sentenceId });
 
       const conversationData = await createResponse.json();
       setCurrentConversation(conversationData.conversation);

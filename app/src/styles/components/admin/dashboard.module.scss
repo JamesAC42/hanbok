@@ -1104,3 +1104,43 @@ a.alert:hover { filter: brightness(.98); }
 a.toolCard { cursor: pointer; }
 
 div.toolCard:active { transform: none; box-shadow: 0 4px 0 var(--bp-line); }
+
+// ---------- Traffic ----------
+
+.headActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .6rem;
+  a { text-decoration: none; }
+}
+
+.liveNow {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: .82rem;
+  font-weight: 800;
+  color: var(--bp-und-d);
+  i {
+    width: .6rem;
+    height: .6rem;
+    border-radius: 50%;
+    background: var(--bp-und);
+    box-shadow: 0 0 0 0 var(--bp-und);
+    animation: livePulse 2s infinite;
+  }
+  @media (prefers-reduced-motion: reduce) { i { animation: none; } }
+}
+
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--bp-und) 60%, transparent); }
+  70% { box-shadow: 0 0 0 .5rem transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.sectionTitle {
+  @include bp-title;
+  font-size: 1.5rem;
+  margin: 1.5rem 0 0;
+}

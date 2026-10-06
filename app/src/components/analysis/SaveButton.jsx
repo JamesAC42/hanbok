@@ -6,6 +6,7 @@ import styles from '@/styles/components/sentenceanalyzer/savebutton.module.scss'
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { track } from '@/lib/analytics';
 
 const SaveButton = ({ sentenceId }) => {
     const [isSaved, setIsSaved] = useState(false);
@@ -55,6 +56,7 @@ const SaveButton = ({ sentenceId }) => {
             }
 
             if (data.success) {
+                if (!isSaved) track('sentence_save');
                 setIsSaved(!isSaved);
             }
         } catch (error) {

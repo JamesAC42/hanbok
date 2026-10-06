@@ -5,6 +5,7 @@
  *   - removing a word,
  *   - and checking saved words.
  */
+import { track } from '@/lib/analytics';
 
 export async function fetchWordRelations(word, originalLanguage, translationLanguage) {
   try {
@@ -41,6 +42,7 @@ export async function addWord({ originalWord, translatedWord, originalLanguage, 
     if (!response.ok) {
       throw new Error('Failed to add word');
     }
+    track('word_save', { language: originalLanguage });
     return { success: true };
   } catch (error) {
     throw error;

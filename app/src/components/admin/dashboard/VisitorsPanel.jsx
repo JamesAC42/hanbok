@@ -4,6 +4,7 @@ import styles from '@/styles/components/admin/dashboard.module.scss';
 import useAdminData from './useAdminData';
 import { ColumnChart, Delta, StatTile } from './charts';
 import { PanelSkeleton, SectionError, toWeeks } from './OverviewPanel';
+import TrafficSection from './TrafficSection';
 import { fmt, pct, timeAgo } from './format';
 
 const WEEK = 7 * 24 * 60 * 60 * 1000;
@@ -34,8 +35,11 @@ export default function VisitorsPanel({ days, tz, refreshKey, onForbidden }) {
     const v = visitors.data;
 
     return (
-        <div className={`${styles.panel} ${overview.loading ? styles.stale : ''}`}>
-            <div className={styles.tiles}>
+        <div className={styles.panel}>
+            <TrafficSection days={days} tz={tz} refreshKey={refreshKey} onForbidden={onForbidden} signups={o.kpis.signups} />
+
+            <h2 className={styles.sectionTitle}>Trying Hanbok without an account</h2>
+            <div className={`${styles.tiles} ${overview.loading ? styles.stale : ''}`}>
                 <StatTile label="Analyses without an account" accent="var(--bp-gray)" value={fmt(anon)}>
                     <span>{pct(anon, o.kpis.sentences.value)} of all analyses this period</span>
                 </StatTile>
@@ -63,7 +67,7 @@ export default function VisitorsPanel({ days, tz, refreshKey, onForbidden }) {
             <section className={styles.card}>
                 <header className={styles.cardHead}>
                     <div>
-                        <h2>Visitors</h2>
+                        <h2>Visitors without an account</h2>
                         <p>Each row is one network address. Heavy users here are good candidates for a signup nudge.</p>
                     </div>
                     <label className={styles.inlineSelect}>

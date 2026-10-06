@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { usePopup } from '@/contexts/PopupContext';
+import { track } from '@/lib/analytics';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
@@ -328,6 +329,7 @@ const SentenceForm = ({
 
             // Send either the text or the image data
             const dataToSend = imagePreview ? imagePreview : text;
+            const source = imagePreview ? 'image' : 'text';
 
             playStartSound();
             const response = await fetch('/api/submit', {
@@ -421,12 +423,14 @@ const SentenceForm = ({
                 }
                 
                 playFinishedSound();
+                track('analyze', { language, source, signedIn: isAuthenticated });
                 
                 // If originalLanguage or sentenceId is in the response, add them to query params
                 if (data.originalLanguage && data.sentenceId) {
                     router.push(`/sentence/${data.sentenceId}`);
                 }
             } else {
+                track('analyze_error', { reason: data.message.error?.type || 'other' });
                 setError({
                     type: data.message.error?.type || 'other',
                     message: data.message.error?.message
@@ -437,6 +441,7 @@ const SentenceForm = ({
             setIsProcessingImage(false);
         } catch (error) {
             console.error('Error:', error);
+            track('analyze_error', { reason: error.name === 'AbortError' ? 'timeout' : 'server' });
             if (error.name === 'AbortError') {
                 setError({
                     type: 'timeout',

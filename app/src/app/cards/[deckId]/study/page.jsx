@@ -20,6 +20,7 @@ import Mascot from '@/components/Mascot';
 import Confetti from '@/components/celebrate/Confetti';
 import useProgress from '@/hooks/useProgress';
 import { markStage } from '@/lib/todayLoop';
+import { track } from '@/lib/analytics';
 
 const FOUR_BUTTONS_KEY = 'studyFourButtons';
 
@@ -86,6 +87,11 @@ const StudyView = ({ params }) => {
     const [fourButtons, setFourButtons] = useState(false);
     const initialTotal = useRef(0);
     const { progress } = useProgress(isAuthenticated && reviewed > 0 && studySession?.cards?.length === 0);
+    const sessionDone = reviewed > 0 && studySession?.cards?.length === 0;
+    useEffect(() => {
+        if (sessionDone) track('review_done', { cards: reviewed });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sessionDone]);
 
     useEffect(() => {
         try { setFourButtons(localStorage.getItem(FOUR_BUTTONS_KEY) === '1'); } catch { /* storage off */ }

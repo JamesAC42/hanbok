@@ -113,3 +113,40 @@ export const languageLabel = (code) => {
         return code;
     }
 };
+
+// Umami custom events, in the order a visitor meets them.
+export const EVENTS = {
+    analyze: 'Analyzed a sentence',
+    analyze_error: 'Analysis failed',
+    limit_hit: 'Hit a free limit',
+    limit_upgrade_click: 'Clicked upgrade on a limit',
+    word_save: 'Saved a word',
+    sentence_save: 'Saved a sentence',
+    paragraph_submit: 'Analyzed a paragraph',
+    tutor_start: 'Started a tutor chat',
+    review_done: 'Finished a review session',
+    signup: 'Signed up',
+    pricing_view: 'Opened pricing',
+    checkout_start: 'Started checkout',
+    purchase: 'Paid',
+    feedback_sent: 'Sent feedback',
+};
+export const eventLabel = (key) => EVENTS[key] || key.replace(/_/g, ' ');
+
+let regionNames;
+export const countryLabel = (code) => {
+    if (!code) return 'Unknown';
+    try {
+        regionNames = regionNames || new Intl.DisplayNames(['en'], { type: 'region' });
+        return regionNames.of(code) || code;
+    } catch {
+        return code;
+    }
+};
+
+export const fmtDuration = (seconds) => {
+    if (!seconds || !Number.isFinite(seconds)) return '–';
+    const m = Math.floor(seconds / 60);
+    const s = Math.round(seconds % 60);
+    return m ? `${m}m ${String(s).padStart(2, '0')}s` : `${s}s`;
+};
