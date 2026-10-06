@@ -2,7 +2,7 @@
 
 // Lyrics pages (home, song detail, favorites), Bright Path. Stage color: pink.
 // Signed-in readers see these inside the app shell; visitors get the public
-// header, so .publicPage adds room for it and .publicBand paints behind it.
+// header and footer, with .publicPage spacing.
 
 @mixin lyr-tokens {
     --t-pink: color-mix(in srgb, var(--bp-pink) 72%, var(--foreground));
@@ -51,28 +51,11 @@
 }
 
 .publicPage {
-    padding-top: 7rem;
-    padding-bottom: 8rem; // room for the footer's overlapping Discord banner
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
 
     @media screen and (max-width: 725px) {
-        padding-top: 6rem;
-    }
-}
-
-// Dark painted strip under the public (translucent) header so its white
-// links stay readable on our white page.
-.publicBand {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5rem;
-    z-index: 999; // just under the public header (1000)
-    overflow: hidden;
-    background: #0d2a1c;
-
-    img {
-        filter: brightness(0.6);
+        padding-top: 1.5rem;
     }
 }
 

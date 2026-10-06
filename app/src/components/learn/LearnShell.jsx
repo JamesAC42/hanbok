@@ -17,7 +17,6 @@ const LearnShell = ({ children }) => {
     if (user) return <Dashboard>{body}</Dashboard>;
     return (
         <ContentPage>
-            <div className={styles.publicBand} aria-hidden="true" />
             {body}
             <Footer />
         </ContentPage>

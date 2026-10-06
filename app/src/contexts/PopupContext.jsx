@@ -29,9 +29,11 @@ export function PopupProvider({ children }) {
             // Skip if another popup is already showing
             if (popupState.show) return;
 
-            // Never cover a reading page with a popup: visitors from search land
-            // there, and Google penalizes interstitials over the content.
-            if (/^\/(learn|lyrics)(\/|$)/.test(window.location.pathname)) return;
+            // Never cover a reading page or the front door with a popup: visitors
+            // from search land there, and Google penalizes interstitials over the
+            // content. "What's new" means nothing to someone on their first visit.
+            const path = window.location.pathname;
+            if (path === '/' || /^\/(learn|lyrics|login|pricing|about)(\/|$)/.test(path)) return;
             
             // Check if user has seen this announcement
             const seenAnnouncements = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');

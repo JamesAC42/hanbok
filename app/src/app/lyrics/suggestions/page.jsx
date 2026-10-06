@@ -12,7 +12,6 @@ import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
 import Mascot from '@/components/Mascot';
-import Image from 'next/image';
 
 import Footer from '@/components/Footer';
 
@@ -238,11 +237,6 @@ const Suggestions = () => {
   return (
     <Shell>
       <div className={`${styles.suggestionsPage} ${isPublic ? styles.publicPage : ''}`}>
-        {isPublic && (
-          <div className={styles.publicBand}>
-            <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-          </div>
-        )}
         <div className={styles.suggestionsHero}>
           <Link href="/lyrics" className={styles.backLink}>
             <MaterialSymbolsArrowBackRounded />

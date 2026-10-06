@@ -4,7 +4,9 @@ import styles from '@/styles/components/emailauth.module.scss';
 import { track, getAttribution } from '@/lib/analytics';
 import HeardFromSelect from '@/components/HeardFromSelect';
 
-const RegisterForm = () => {
+// The login page shows the "how did you hear" question above both sign-up
+// options, so it can turn the form's own copy off.
+const RegisterForm = ({ showHeardFrom = true }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -202,7 +204,7 @@ const RegisterForm = () => {
                     />
                 </div>
 
-                <HeardFromSelect disabled={loading} />
+                {showHeardFrom && <HeardFromSelect disabled={loading} />}
 
                 {error && (
                     <div className={styles.error} role="alert">

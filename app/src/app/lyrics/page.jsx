@@ -180,11 +180,6 @@ const Lyrics = () => {
     return (
         <Shell>
             <div className={`${lyricsStyles.lyricsPage} ${isPublic ? lyricsStyles.publicPage : ''}`}>
-                {isPublic && (
-                    <div className={lyricsStyles.publicBand}>
-                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                    </div>
-                )}
                 <div className={lyricsStyles.lyricsHero}>
                     <span className={lyricsStyles.heroIcon}><IcSharpQueueMusic /></span>
                     <div>

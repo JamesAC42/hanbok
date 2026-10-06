@@ -3,7 +3,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import lyricsStyles from '@/styles/pages/lyrics.module.scss';
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsFavorite } from '@/components/icons/Favorite';
@@ -140,9 +139,6 @@ const FavoriteLyrics = () => {
         return (
             <ContentPage>
                 <div className={`${lyricsStyles.lyricsPage} ${lyricsStyles.publicPage}`}>
-                    <div className={lyricsStyles.publicBand}>
-                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                    </div>
                     <div className={lyricsStyles.lyricsHero}>
                         <span className={lyricsStyles.heroIcon}><MaterialSymbolsFavorite /></span>
                         <div>

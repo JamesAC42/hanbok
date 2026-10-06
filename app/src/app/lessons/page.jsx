@@ -1,6 +1,5 @@
 'use client';
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from '@/styles/pages/lessons.module.scss';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
@@ -22,11 +21,6 @@ export default function Home() {
   return (
     <Shell>
       <div className={`${styles.lessonsPage} ${isPublic ? styles.publicPage : ''}`}>
-        {isPublic && (
-          <div className={styles.publicBand}>
-            <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-          </div>
-        )}
 
         <div className={styles.lessonsCard}>
           <Mascot pose="study" size={150} motion="bob" className={styles.mascot} />

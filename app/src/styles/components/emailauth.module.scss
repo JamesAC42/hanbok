@@ -21,36 +21,37 @@
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #5f6480;
+      color: var(--bp-ink2);
       margin-bottom: 0.25rem;
     }
 
     input,
     select {
       padding: 0.85rem 1rem;
-      border: 2px solid #dfe2ec;
+      border: 2px solid var(--bp-line);
       border-radius: 14px;
       font-family: var(--font-display);
       font-size: 1.05rem;
       font-weight: 600;
-      color: #1c2035;
-      background: #fff;
+      color: var(--foreground);
+      background: var(--bp-card);
       transition: border-color 0.12s ease, box-shadow 0.12s ease;
 
       &:focus {
         outline: none;
         border-color: var(--bp-read);
-        box-shadow: 0 3px 0 color-mix(in srgb, var(--bp-read) 35%, #fff);
+        box-shadow: 0 3px 0 color-mix(in srgb, var(--bp-read) 35%, var(--bp-card));
       }
 
       &:disabled {
-        background: #f9fafb;
-        color: #6b7280;
+        background: var(--bp-soft);
+        color: var(--bp-ink2);
         cursor: not-allowed;
       }
 
       &::placeholder {
-        color: #9ca3af;
+        color: var(--bp-ink2);
+        opacity: .75;
       }
 
       @media screen and (max-width: 768px) {
@@ -70,10 +71,10 @@
       background-repeat: no-repeat;
       background-position: right 0.9rem center;
       background-size: 1.1rem;
-      box-shadow: 0 3px 0 #dfe2ec;
+      box-shadow: 0 3px 0 var(--bp-line);
 
       &:focus {
-        box-shadow: 0 3px 0 color-mix(in srgb, var(--bp-read) 35%, #fff);
+        box-shadow: 0 3px 0 color-mix(in srgb, var(--bp-read) 35%, var(--bp-card));
       }
 
       &:focus-visible {
@@ -86,7 +87,7 @@
       font-weight: 700;
       letter-spacing: 0.02em;
       text-transform: none;
-      color: #8a8fa8;
+      color: var(--bp-ink2);
     }
 
     .forgotPassword {
@@ -114,7 +115,7 @@
   }
 
   .submitButton {
-    @include bp-press(var(--bp-read), var(--bp-read-d), #fff);
+    @include bp-press(var(--bp-read), var(--bp-read-d), var(--bp-card));
     width: 100%;
     padding: 1rem 1.5rem;
     font-size: 0.95rem;
@@ -122,8 +123,8 @@
 
   .error {
     padding: 0.8rem 1rem;
-    background: color-mix(in srgb, var(--bp-rev) 9%, #fff);
-    border: 2px solid color-mix(in srgb, var(--bp-rev) 40%, #fff);
+    background: color-mix(in srgb, var(--bp-rev) 9%, var(--bp-card));
+    border: 2px solid color-mix(in srgb, var(--bp-rev) 40%, var(--bp-card));
     border-radius: 14px;
     color: var(--bp-rev-d);
     font-family: var(--font-display);
@@ -132,8 +133,8 @@
     line-height: 1.45;
 
     &.info {
-      background: color-mix(in srgb, var(--bp-read) 9%, #fff);
-      border-color: color-mix(in srgb, var(--bp-read) 35%, #fff);
+      background: color-mix(in srgb, var(--bp-read) 9%, var(--bp-card));
+      border-color: color-mix(in srgb, var(--bp-read) 35%, var(--bp-card));
       color: var(--bp-read-d);
     }
 
@@ -146,8 +147,8 @@
   // Sign-up done: "check your email" box.
   .success {
     padding: 0.9rem 1rem;
-    background: color-mix(in srgb, var(--bp-und) 10%, #fff);
-    border: 2px solid color-mix(in srgb, var(--bp-und) 42%, #fff);
+    background: color-mix(in srgb, var(--bp-und) 10%, var(--bp-card));
+    border: 2px solid color-mix(in srgb, var(--bp-und) 42%, var(--bp-card));
     border-radius: 14px;
     color: var(--bp-und-d);
     font-family: var(--font-display);
@@ -164,7 +165,7 @@
   .resendContainer {
     margin-top: 0.85rem;
     padding-top: 0.85rem;
-    border-top: 2px dashed color-mix(in srgb, var(--bp-und) 30%, #fff);
+    border-top: 2px dashed color-mix(in srgb, var(--bp-und) 30%, var(--bp-card));
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
@@ -175,7 +176,7 @@
       font-family: var(--font-display);
       font-size: 0.88rem;
       font-weight: 600;
-      color: #5f6480;
+      color: var(--bp-ink2);
     }
 
     .resendButton {
@@ -184,11 +185,11 @@
       justify-content: center;
       min-height: 2.75rem;
       padding: 0.6rem 1.1rem;
-      background: #fff;
+      background: var(--bp-card);
       color: var(--bp-read);
-      border: 2px solid #dfe2ec;
+      border: 2px solid var(--bp-line);
       border-radius: 14px;
-      box-shadow: 0 3px 0 #dfe2ec;
+      box-shadow: 0 3px 0 var(--bp-line);
       font-family: var(--font-display);
       font-size: 0.82rem;
       font-weight: 800;
@@ -198,12 +199,12 @@
       transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
 
       &:hover:not(:disabled) {
-        background: #f6f7fb;
+        background: var(--bp-soft);
       }
 
       &:active:not(:disabled) {
         transform: translateY(3px);
-        box-shadow: 0 0 0 #dfe2ec;
+        box-shadow: 0 0 0 var(--bp-line);
       }
 
       &:focus-visible {

@@ -62,17 +62,20 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         if (pendingAnalysis) {
             // Clear the localStorage item
             localStorage.removeItem('pendingAnalysis');
+            // The homepage asks for the breakdown to start right away.
+            const run = localStorage.getItem('pendingAnalysisRun') === '1';
+            localStorage.removeItem('pendingAnalysisRun');
+            const fill = () => {
+                if (run && window.runInputText) window.runInputText(pendingAnalysis);
+                else if (window.setInputText) window.setInputText(pendingAnalysis);
+            };
             
             // Set the text in the input field if the global function is available
             if (window.setInputText) {
-                window.setInputText(pendingAnalysis);
+                fill();
             } else {
                 // If the function isn't available yet, try again after a short delay
-                const timer = setTimeout(() => {
-                    if (window.setInputText) {
-                        window.setInputText(pendingAnalysis);
-                    }
-                }, 100);
+                const timer = setTimeout(fill, 100);
                 
                 return () => clearTimeout(timer);
             }

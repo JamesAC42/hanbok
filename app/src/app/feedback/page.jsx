@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import feedbackStyles from '@/styles/components/feedback.module.scss';
-import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
@@ -221,11 +220,6 @@ const Feedback = () => {
     return (
         <Shell>
             <div className={`${feedbackStyles.feedbackPage} ${isPublic ? feedbackStyles.publicPage : ''}`}>
-                {isPublic && (
-                    <div className={feedbackStyles.publicBand}>
-                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                    </div>
-                )}
                 <div className={feedbackStyles.feedbackHero}>
                     <Mascot pose="wave" size={96} motion="bob" className={feedbackStyles.heroMascot} />
                     <div>

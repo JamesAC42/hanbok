@@ -123,6 +123,7 @@ export const EVENTS = {
     word_save: 'Saved a word',
     sentence_save: 'Saved a sentence',
     paragraph_submit: 'Analyzed a paragraph',
+    landing_try: 'Tried a sentence on the homepage',
     tutor_start: 'Started a tutor chat',
     review_done: 'Finished a review session',
     signup: 'Signed up',

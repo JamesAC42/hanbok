@@ -1,5 +1,4 @@
 'use client';
-import Image from 'next/image';
 import pricingStyles from '@/styles/components/pricing.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -185,11 +184,6 @@ const Pricing = () => {
     return (
         <Shell>
             <div className={`${pricingStyles.pricingPage} ${isPublic ? pricingStyles.publicPage : ''}`}>
-                {isPublic && (
-                    <div className={pricingStyles.publicBand}>
-                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                    </div>
-                )}
 
                 {/* Hero Section */}
                 <div className={pricingStyles.pricingHero}>

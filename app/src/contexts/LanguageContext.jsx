@@ -48,12 +48,10 @@ export function LanguageProvider({ children }) {
         const fallback = typeof replacements === 'string' ? replacements : path;
         if (typeof replacements === 'string') replacements = {};
         const keys = path.split('.');
-        let result = resources[nativeLanguage];
-        
-        for (const key of keys) {
-            if (result === undefined) return fallback; // Return fallback if translation not found
-            result = result[key];
-        }
+        const lookup = (lang) => keys.reduce((node, key) => (node == null ? undefined : node[key]), resources[lang]);
+        // A string missing from a translation falls back to English, not the raw key.
+        let result = lookup(nativeLanguage);
+        if (result === undefined && nativeLanguage !== 'en') result = lookup('en');
 
         if (typeof result === 'string') {
             return Object.keys(replacements).reduce((acc, key) => {

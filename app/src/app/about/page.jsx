@@ -59,11 +59,6 @@ const About = () => {
     return (
         <Shell>
             <div className={`${aboutStyles.aboutPage} ${isPublic ? aboutStyles.publicPage : ''}`}>
-                {isPublic && (
-                    <div className={aboutStyles.publicBand}>
-                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                    </div>
-                )}
                 <div className={aboutStyles.aboutContent}>
                     <div className={aboutStyles.hero}>
                         <Mascot pose="teach" size={120} motion="bob" className={aboutStyles.heroMascot} />

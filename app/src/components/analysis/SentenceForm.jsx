@@ -91,15 +91,30 @@ const SentenceForm = ({
         };
     }, [loading]);
 
+    // Set by window.runInputText: analyze as soon as the text is in.
+    const [autoRun, setAutoRun] = useState(false);
+
     useEffect(() => {
         // Expose setText function globally so it can be accessed by SentenceAnalyzer
         window.setInputText = setText;
+        window.runInputText = (value) => {
+            setText(value);
+            setAutoRun(true);
+        };
         
         // Cleanup
         return () => {
             delete window.setInputText;
+            delete window.runInputText;
         };
     }, []);
+
+    useEffect(() => {
+        if (!autoRun || !text) return;
+        setAutoRun(false);
+        handleSubmit({ preventDefault() {} });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [autoRun, text]);
 
     // Focus the text input when component mounts
     useEffect(() => {

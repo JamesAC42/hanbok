@@ -31,27 +31,16 @@
     }
 }
 
-// Visitors see the translucent public header; leave room and paint a band
-// behind it so its white links stay readable.
+// Visitors get the public header and footer around the page.
 .publicPage {
-    padding-top: 7rem;
-    padding-bottom: 8rem;
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
 
     @media screen and (max-width: 725px) {
-        padding-top: 6rem;
+        padding-top: 1.5rem;
     }
 }
 
-.publicBand {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5rem;
-    z-index: 999;
-    background: #0d2a1c url('/images/background.png') center / cover;
-    filter: brightness(0.6);
-}
 
 .label {
     @include bp-label;

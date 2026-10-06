@@ -1,187 +1,94 @@
-@import '@/styles/variables.module.scss'; 
+@import '@/styles/variables.module.scss';
 
-
-.joinDiscord {
-    width:100dvw;
-    height:10rem;
-    display:flex;
-    flex-direction:row;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:visible;
-    z-index: 2;
-
-    background:linear-gradient(to bottom, #0a0a1a, #09091e);
-    background:#0a0a1a;
-
-    .joinDiscordBubble {
-        display:flex;
-        flex-direction:row;
-        align-items:center;
-        transform:translateY(-50%);
-        justify-content:space-between;
-        background-color:#5676df;
-        border:2px solid #88a2f9;
-        box-shadow:0 5px 15px 5px rgba(0, 0, 0, 0.384);
-        color:#fff;
-        padding:2rem 4rem;
-        width:70dvw;
-        border-radius:1rem;
-        font-family:var(--font-lilita);
-        font-size:1.8rem;
-
-        a {
-            display:flex;
-            flex-direction:row;
-            align-items:center;
-            justify-content:center;
-            gap:0.5rem;
-            border-radius:1rem;
-            padding:0.5rem 1rem;
-            text-decoration:none;
-            background:#5952ea;
-            color:#fff;
-            border:2px solid #d1cfff;
-            font-family:var(--font-lilita);
-            transition:all 0.2s ease;
-            svg  {
-                transform:translateY(0px);
-            }
-
-            &:hover {
-                filter:brightness(1.2);
-            }
-        }
-    }
-
-    @media screen and (max-width:1000px) {
-        .joinDiscordBubble {
-            padding:1rem 2rem;
-            width:90dvw;
-
-            a {
-                font-size:1rem;
-            }
-        }
-    }
-}
+// Bright Path footer: a Discord invite card, then the link columns.
 
 .footer {
-    width:100dvw;
-    display:flex;
-    flex-direction:row;
-    justify-content:center;
-    align-items:center;
-    background:#0a0a1a;
-    position: relative;
-    z-index: 2;
+  font-family: var(--font-display);
+  color: var(--foreground);
+  background: var(--bp-soft);
+  border-top: 2px solid var(--bp-line);
+  padding: 3rem 1.5rem 2rem;
+  @media (max-width: 600px) { padding: 2.25rem 1rem 1.5rem; }
+}
 
-    padding:5rem 0 10rem 0;
+.inner { max-width: 72rem; margin: 0 auto; }
 
-    .footerContent {
-        display:flex;
-        flex-direction:row;
-        justify-content:center;
-        align-items:stretch;
-        width:80dvw;
+.discord {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.4rem;
+  border-radius: 22px;
+  background: var(--bp-card);
+  border: 2px solid var(--bp-purple-line);
+  box-shadow: 0 5px 0 var(--bp-purple-line);
+  @media (max-width: 700px) {
+    flex-direction: column;
+    text-align: center;
+    gap: .75rem;
+  }
+}
 
-        gap:6rem;
+.discordMascot { flex: none; margin-top: -1.75rem; }
 
-        .footerLinks {
-            display:flex;
-            flex-direction:row;
-            justify-content:space-between;
-            align-items:stretch;
-            width:50%;
+.discordText {
+  flex: 1;
+  min-width: 0;
+  strong { display: block; @include bp-title; font-size: 1.45rem; }
+  span { display: block; margin-top: .3rem; font-size: .95rem; font-weight: 600; color: var(--bp-ink2); line-height: 1.5; }
+}
 
-            .footerLinkColumn {
-                display:flex;
-                flex-direction:column;
-                justify-content:flex-start;
-                align-items:stretch;
-                .footerLinkColumnHeader {
-                    font-family:var(--font-lilita);
-                    font-size:1.3rem;
-                    color:#5c85c7;
-                    margin-bottom:1rem;
-                }
-                .footerLinkColumnLinks {
-                    display:flex;
-                    flex-direction:column;
-                    justify-content:center;
-                    align-items:flex-start;
-                    text-align:left;
+.discordButton {
+  @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 4px);
+  flex: none;
+  gap: .45rem;
+  svg { width: 1.3em; height: 1.3em; }
+}
 
-                    a {
-                        text-decoration: none;
-                        color:#fff;
-                        font-family:var(--font-lilita);
-                        font-size:1.2rem;
-                        margin-bottom:0.5rem;
-                        transition:all 0.2s ease;
-                        &:hover {   
-                            color:#c4c4c4;
-                            opacity:0.8;
-                        }
-                    }
-                }
-            }
-        }
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(4, minmax(0, 1fr));
+  gap: 2rem;
+  margin-top: 2.75rem;
+  @media (max-width: 900px) { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 1.25rem; }
+}
 
-        .footerCopyright {
-            font-family:var(--font-lilita);
-            font-size:1.2rem;
-            color:#6761bfae;
+.brand {
+  @media (max-width: 900px) { grid-column: 1 / -1; }
+  p { margin: .75rem 0 0; max-width: 20rem; font-size: .92rem; font-weight: 600; line-height: 1.55; color: var(--bp-ink2); }
+}
 
-            border-left:1px solid #272e42;
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  text-decoration: none;
+  color: var(--foreground);
+  span { font-family: var(--font-lilita); font-size: 1.7rem; line-height: 1; color: var(--bp-read); }
+}
 
-            padding-left:6rem;
-            padding-top:0.5rem;
-            text-align:right;
-        }
-    }
+.column {
+  h2 { @include bp-label; font-size: .74rem; margin: 0 0 .8rem; }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .55rem; }
+  a {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--foreground);
+    text-decoration: none;
+    &:hover { color: var(--bp-read); text-decoration: underline; }
+  }
+}
 
-    @media screen and (max-width:1200px) {
-        flex-direction:column;
-        .footerContent {
-            flex-direction:column;
-            width:90dvw;
-            .footerLinks {
-                width:100%;
-                justify-content:center;
-                gap:2rem;
-            }
-            .footerCopyright {
-                border-left:none;
-                padding-left:0;
-                text-align:center;
-            }
-        }
-    }
-
-    @media screen and (max-width:480px) {
-        .footerContent {
-            .footerLinks {
-                flex-direction:column;
-                align-items:center;
-                justify-content:center;
-                gap:2rem;
-                .footerLinkColumn {
-                    align-items:center;
-                    text-align:center;
-                    .footerLinkColumnHeader {
-                        font-size:2rem;
-                    }
-                    .footerLinkColumnLinks {
-                        @include flex-center-column;
-                        a {
-                            text-align:center;
-                            font-size:1.5rem;
-                        }
-                    }
-                }
-            }
-        }
-    }
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--bp-line);
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--bp-ink2);
+  span[lang='ko'] { font-family: var(--font-kr-sans), sans-serif; }
 }

@@ -7,7 +7,6 @@ import Analysis from '@/components/analysis/Analysis';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { supportedLanguages } from '@/translations';
-import Image from 'next/image';
 import Link from 'next/link';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
@@ -467,11 +466,6 @@ const LyricPageClient = ({ initialLyric = null }) => {
         return (
             <Shell>
                 <div className={`${styles.lyricsContainer} ${isPublic ? styles.publicPage : ''}`}>
-                    {isPublic && (
-                        <div className={styles.publicBand}>
-                            <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                        </div>
-                    )}
                     <div className={styles.statusCard}>
                         <Mascot pose="sleep" size={96} />
                         <h1>{error ? t('lyrics.detail.error') : t('lyrics.detail.notFound')}</h1>
@@ -495,11 +489,6 @@ const LyricPageClient = ({ initialLyric = null }) => {
     return (
         <Shell>
             <div className={`${styles.lyricsContainer} ${isPublic ? styles.publicPage : ''}`}>
-                {isPublic && (
-                    <div className={styles.publicBand}>
-                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
-                    </div>
-                )}
                 <div className={styles.lyricsHeader}>
                     <div className={styles.backButton}>
                         <Link href="/lyrics">

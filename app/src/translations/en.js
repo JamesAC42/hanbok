@@ -413,6 +413,8 @@ export const en = {
             other: 'There was an error analyzing your input.',
             empty: 'Please enter a sentence.',
             file_too_large: 'Image file is too large. Maximum size is 2MB.',
+            invalid_file: 'Please choose an image file.',
+            server: 'Something went wrong on our end. Please try again in a moment.',
         },
         translateMode: {
             analysis: 'Analyze {language} sentence',

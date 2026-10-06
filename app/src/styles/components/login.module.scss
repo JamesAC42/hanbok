@@ -1,478 +1,166 @@
 @import '../variables.module.scss';
 
-.loginPage {
-  min-height: 100vh;
-  background: linear-gradient(to bottom, #0a0a1a, #154584, rgb(5, 39, 82));
-  position: relative;
-  overflow: hidden;
-  padding-top: 5rem; // Always leave room for navbar
+// Bright Path login / sign-up: one centered card with Kkachi on top.
 
-  img {
-    z-index: 1;
-    opacity: 0.3;
-  }
-
-  @media screen and (max-width: 768px) {
-    padding-top: 4rem;
-  }
-}
-
-.loginContainer {
-  position: relative;
-  z-index: 2;
-  min-height: calc(100vh - 5rem);
-  display: flex;
-  align-items: stretch;
-  max-width: 85rem;
-  margin: 0 auto;
-  padding: 2rem;
-  gap: 4rem;
-
-  @media screen and (max-width: 1024px) {
-    flex-direction: column;
-    gap: 2rem;
-    padding: 1.5rem;
-    align-items: center;
-  }
-
-  @media screen and (max-width: 768px) {
-    padding: 1rem;
-    gap: 1.5rem;
-    min-height: calc(100vh - 4rem);
-  }
-}
-
-// Hero Section (Left Side)
-.heroSection {
-  flex: 1.2;
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
-
-  @media screen and (max-width: 1024px) {
-    flex: none;
-    padding: 1rem 0;
-    text-align: center;
-  }
-}
-
-.heroContent {
-  width: 100%;
-  max-width: 40rem;
-
-  @media screen and (max-width: 1024px) {
-    max-width: 100%;
-  }
-}
-
-.heroTitle {
-  font-family: var(--font-lilita);
-  font-size: 4rem;
-  color: #ffffff;
-  text-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.3);
-  margin-bottom: 1.5rem;
-  line-height: 1.1;
-
-  @media screen and (max-width: 1024px) {
-    font-size: 3.5rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 2.8rem;
-    margin-bottom: 1rem;
-  }
-
-  @media screen and (max-width: 500px) {
-    font-size: 2.2rem;
-  }
-}
-
-.heroDescription {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.6;
-  margin-bottom: 2.5rem;
-  text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-
-  @media screen and (max-width: 1024px) {
-    font-size: 1.125rem;
-    margin-bottom: 2rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-  }
-}
-
-.features {
+.page {
+  font-family: var(--font-display);
+  color: var(--foreground);
+  min-height: calc(100dvh - 4.5rem);
+  box-sizing: border-box;
+  padding: 4.5rem 1.5rem 4rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-
-  @media screen and (max-width: 1024px) {
-    gap: 1.25rem;
-  }
-
-  @media screen and (max-width: 768px) {
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-}
-
-.feature {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  border: 0.0625rem solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-0.125rem);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
-  }
-
-  @media screen and (max-width: 1024px) {
-    align-items: center;
-    text-align: left;
-  }
-
-  @media screen and (max-width: 768px) {
-    padding: 1rem;
-    gap: 0.875rem;
-  }
-
-  @media screen and (max-width: 500px) {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 0.75rem;
-  }
-}
-
-.featureIcon {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
-  min-width: 3.5rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
-  border: 0.125rem solid rgba(255, 255, 255, 0.3);
-  border-radius: 1rem;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
-
-  svg {
-    transform: scale(1.5);
-    color: #fff;
-  }
-
-  @media screen and (max-width: 768px) {
-    width: 3rem;
-    height: 3rem;
-    min-width: 3rem;
-    
-    svg {
-      transform: scale(1.3);
-    }
-  }
+  background:
+    radial-gradient(circle, var(--bp-read-line) 1.3px, transparent 1.5px) 0 0 / 24px 24px,
+    var(--bp-read-soft);
+  @media (max-width: 600px) { padding: 3.5rem 1rem 3rem; }
 }
 
-.featureText {
-  flex: 1;
-  
-  h3 {
-    font-family: var(--font-display);
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0 0 0.5rem 0;
-    text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-
-    @media screen and (max-width: 768px) {
-      font-size: 1rem;
-      margin-bottom: 0.375rem;
-    }
-  }
-
-  p {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.4;
-    margin: 0;
-
-    @media screen and (max-width: 768px) {
-      font-size: 0.85rem;
-    }
-  }
-}
-
-.signInInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  
-  p {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.8);
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    @media screen and (max-width: 1024px) {
-      justify-content: center;
-    }
-
-    @media screen and (max-width: 768px) {
-      font-size: 0.9rem;
-    }
-  }
-}
-
-// Auth Section (Right Side)
-.authSection {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 0;
-
-  @media screen and (max-width: 1024px) {
-    flex: none;
-    padding: 1rem 0;
-    width: 100%;
-    max-width: 30rem;
-    // Signing in is why people are here, so the form comes before the pitch.
-    order: -1;
-  }
-}
-
-.authCard {
+.card {
+  position: relative;
   width: 100%;
-  max-width: 26rem;
-  background: #fff;
-  color: #1c2035;
-  border-radius: 22px;
-  padding: 2.25rem 2.25rem 2rem;
-  border: 2px solid #dfe2ec;
-  box-shadow: 0 6px 0 #dfe2ec, 0 1.25rem 3rem rgba(10, 14, 40, 0.28);
-
-  @media screen and (max-width: 768px) {
-    padding: 1.75rem 1.5rem 1.5rem;
-  }
-
-  @media screen and (max-width: 500px) {
-    padding: 1.5rem 1.15rem 1.25rem;
-  }
+  max-width: 28rem;
+  box-sizing: border-box;
+  padding: 3.25rem 2rem 1.75rem;
+  border-radius: 28px;
+  background: var(--bp-card);
+  border: 2px solid var(--bp-line-strong);
+  box-shadow: 0 6px 0 var(--bp-line);
+  @media (max-width: 600px) { padding: 3rem 1.15rem 1.5rem; }
 }
 
-.authTitle {
-  font-family: var(--font-lilita);
-  font-weight: 400;
-  font-size: 2.1rem;
-  line-height: 1.1;
-  color: #1c2035;
+.mascot {
+  position: absolute;
+  top: -3.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.title {
+  @include bp-title;
+  font-size: clamp(1.8rem, 5vw, 2.2rem);
   text-align: center;
-  margin: 0 0 1.5rem 0;
-
-  @media screen and (max-width: 768px) {
-    font-size: 1.8rem;
-    margin-bottom: 1.25rem;
-  }
+  margin: 0;
 }
 
-.authTabs {
-  display: flex;
-  gap: 0.3rem;
-  padding: 0.3rem;
-  margin-bottom: 1.75rem;
-  border: 2px solid #dfe2ec;
+.sub {
+  margin: .5rem 0 0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--bp-ink2);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .3rem;
+  margin: 1.5rem 0 0;
+  padding: .3rem;
   border-radius: 16px;
-  background: #fff;
-
-  .authTab {
-    flex: 1;
-    padding: 0.65rem 0.5rem;
-    border: 2px solid transparent;
-    background: transparent;
-    border-radius: 12px;
-    font-family: var(--font-display);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: #5f6480;
-    cursor: pointer;
-    transition: background 0.12s ease, color 0.12s ease;
-
-    &:hover {
-      color: #1c2035;
-      background: #f4f5f9;
-    }
-
-    &.active {
-      border-color: color-mix(in srgb, var(--bp-read) 35%, #fff);
-      background: color-mix(in srgb, var(--bp-read) 10%, #fff);
-      color: var(--bp-read);
-    }
-
-    @media screen and (max-width: 768px) {
-      font-size: 0.72rem;
-      padding: 0.6rem 0.35rem;
-    }
-  }
-
-  @media screen and (max-width: 768px) {
-    margin-bottom: 1.35rem;
-  }
-}
-
-.authContent {
-  width: 100%;
-  min-height: 20rem; // Minimum height to reduce jumping
-  transition: all 0.3s ease;
-  position: relative;
-  
-  // Smooth transitions for form changes
-  > div {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  // Add fade effect during transitions
-  &.transitioning > div {
-    opacity: 0.3;
-    transform: translateY(0.5rem);
-  }
-
-  @media screen and (max-width: 768px) {
-    min-height: 22rem;
-  }
-
-  @media screen and (max-width: 500px) {
-    min-height: 20rem;
-  }
-}
-
-.googleContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem 0;
-  min-height: 12rem; // Ensure consistent height
-  width: 100%;
-
-  .googleText {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin: 0 0 1.5rem 0;
-    line-height: 1.4;
-    max-width: 80%;
-  }
-
-  // Ensure Google button is perfectly centered
-  > :last-child {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-  }
-
-  // Override any global button styles that might interfere
+  background: var(--bp-soft);
+  border: 2px solid var(--bp-line);
   button {
-    margin: 0 auto;
+    font-family: var(--font-display);
+    font-size: .95rem;
+    font-weight: 800;
+    padding: .6rem;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    color: var(--bp-ink2);
+    cursor: pointer;
+    &:hover { color: var(--foreground); }
+    &:focus-visible { outline: 3px solid var(--bp-read-line); outline-offset: 1px; }
   }
-
-  @media screen and (max-width: 768px) {
-    padding: 1.5rem 0;
-    min-height: 10rem;
-
-    .googleText {
-      font-size: 0.85rem;
-      max-width: 90%;
-    }
-  }
-}
-
-// Remove old styles that are no longer needed
-.buttonContainer {
-  position: relative;
-  padding: 1.5rem;
-  margin: 1rem 0;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
-  border: 0.125rem solid rgba(59, 130, 246, 0.2);
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: calc(100% + 0.5rem);
-    height: calc(100% + 0.5rem);
-    transform: translate(-50%, -50%);
-    border: 0.125rem solid transparent;
-    border-radius: 1.25rem;
-    background: linear-gradient(90deg, 
-      transparent 0%, 
-      transparent 25%,
-      rgba(59, 130, 246, 0.3) 50%,
-      transparent 75%, 
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: borderGlow 2s linear infinite;
-    z-index: -1;
-  }
-
-  &::after {
-    content: '👆';
-    position: absolute;
-    bottom: -2.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5rem;
-    animation: bounce 1s infinite;
-  }
-
-  @media screen and (max-width: 768px) {
-    padding: 1rem;
-    
-    &::before {
-      width: calc(100% + 0.25rem);
-      height: calc(100% + 0.25rem);
-    }
+  .tabOn, .tabOn:hover {
+    background: var(--bp-card);
+    color: var(--bp-read);
+    box-shadow: 0 3px 0 var(--bp-line);
   }
 }
 
-@keyframes borderGlow {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: -100% 0;
+.heardFrom {
+  margin-top: 1.25rem;
+  // Reuses the email form's field styles.
+  > div { display: flex; flex-direction: column; gap: .5rem; }
+}
+
+.google {
+  margin-top: 1.4rem;
+  min-height: 44px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin: 1.4rem 0;
+  &::before, &::after { content: ''; flex: 1; border-top: 2px solid var(--bp-line); }
+  span { @include bp-label; font-size: .7rem; }
+}
+
+.switch {
+  margin: 1.4rem 0 0;
+  text-align: center;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--bp-ink2);
+  button {
+    font: inherit;
+    font-weight: 800;
+    color: var(--bp-read);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
   }
 }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateX(-50%) translateY(0);
+.perks {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .6rem;
+  max-width: 62rem;
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem .85rem .5rem .5rem;
+    border-radius: 99px;
+    background: var(--bp-card);
+    border: 2px solid var(--bp-line);
+    font-size: .88rem;
+    font-weight: 700;
   }
-  50% {
-    transform: translateX(-50%) translateY(-0.5rem);
+  i {
+    font-style: normal;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: .8rem;
+    color: #fff;
+    background: var(--perk);
   }
+}
+.perk_read { --perk: var(--bp-read); }
+.perk_keep { --perk: var(--bp-keep); i { color: var(--bp-keep-ink) !important; } }
+.perk_und { --perk: var(--bp-und); }
+
+.try {
+  margin: 1.25rem 0 0;
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--bp-ink2);
+  text-align: center;
+  a { color: var(--bp-read); font-weight: 800; text-decoration: none; &:hover { text-decoration: underline; } }
 }

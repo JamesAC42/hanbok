@@ -157,7 +157,7 @@ const EmailLoginForm = () => {
                     className={styles.submitButton}
                     disabled={loading}
                 >
-                    {loading ? 'Signing In...' : 'Sign In'}
+                    {loading ? 'Logging in...' : 'Log in'}
                 </button>
             </form>
         </div>
