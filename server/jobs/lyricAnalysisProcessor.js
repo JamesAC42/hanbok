@@ -133,7 +133,7 @@ async function processLyricAnalysis(job) {
         console.log("Analyzing sentence:", sentence);
         const parsedResponse = await generateResponse(
           prompt + sentence, 
-          'gemini'
+          'geminiAnalysis'
         );
         
         if(!parsedResponse || !parsedResponse.isValid) {

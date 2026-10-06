@@ -507,7 +507,7 @@ const submitSentence = async (req, res) => {
             // Generate new analysis
             parsedResponse = await generateResponse(
                 prompt(originalLanguage, translationLanguage) + text, 
-                'gemini'
+                'geminiAnalysis'
             );
 
             if(!parsedResponse.isValid) {
