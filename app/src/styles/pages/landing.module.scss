@@ -444,13 +444,19 @@
   max-width: 72rem;
   margin: 0 auto;
   padding: 0 1.5rem 1rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  // Items whose number didn't load are dropped, so the row shares its width
+  // among however many are left and stays centered.
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
-  @media (max-width: 800px) { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 0 1rem 1rem; }
+  @media (max-width: 800px) { padding: 0 1rem 1rem; }
 }
 
 .proofItem {
+  flex: 1 1 0;
+  min-width: 0;
+  @media (max-width: 800px) { flex: 0 1 calc(50% - .5rem); }
   text-align: center;
   padding: 1.1rem .75rem;
   border-radius: 18px;
