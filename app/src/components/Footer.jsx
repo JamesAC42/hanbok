@@ -19,6 +19,7 @@ const COLUMNS = [
         title: 'Hanbok',
         links: [
             { href: '/about', label: 'About' },
+            { href: '/updates', label: "What's new" },
             { href: '/pricing', label: 'Pricing' },
             { href: '/feedback', label: 'Send feedback' },
             { href: 'mailto:admin@hanbokstudy.com', label: 'Email us', external: true },

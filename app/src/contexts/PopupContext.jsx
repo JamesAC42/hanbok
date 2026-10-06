@@ -4,18 +4,22 @@ import LimitReachedPopup from '@/components/LimitReachedPopup';
 import LoginRequiredPopup from '@/components/LoginRequiredPopup';
 import AnnouncementPopup from '@/components/AnnouncementPopup';
 import PromoPopup from '@/components/PromoPopup';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const PopupContext = createContext();
 
-// Current announcement data
+// Current announcement. A new id shows it once more to everyone it targets.
+// The redesign note only makes sense to people who used the old design, so it
+// goes to signed-in accounts created before the new look went out.
 const CURRENT_ANNOUNCEMENT = {
-    id: '2025-04-09-extended-text', // Use this as a key to track in localStorage
-    content: {
-        // Content will be pulled from translations
-    }
+    id: '2026-10-new-look',
+    accountsCreatedBefore: '2026-10-08T00:00:00Z',
 };
 
 export function PopupProvider({ children }) {
+    const { user, loading: authLoading } = useAuth();
+    const pathname = usePathname();
     const [popupState, setPopupState] = useState({
         show: false,
         type: null,
@@ -23,36 +27,40 @@ export function PopupProvider({ children }) {
         announcementId: null
     });
 
-    // Check for announcements on initial load
+    // Check for the announcement once we know who is signed in, and again on
+    // navigation in case they arrived on a page that skips it
     useEffect(() => {
-        const checkAnnouncement = () => {
-            // Skip if another popup is already showing
-            if (popupState.show) return;
+        if (authLoading || !user) return;
 
+        const checkAnnouncement = () => {
             // Never cover a reading page or the front door with a popup: visitors
             // from search land there, and Google penalizes interstitials over the
-            // content. "What's new" means nothing to someone on their first visit.
-            const path = window.location.pathname;
-            if (path === '/' || /^\/(learn|lyrics|login|pricing|about)(\/|$)/.test(path)) return;
-            
-            // Check if user has seen this announcement
-            const seenAnnouncements = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
-            
-            if (!seenAnnouncements[CURRENT_ANNOUNCEMENT.id]) {
-                // Show the announcement if not seen
-                setPopupState({
-                    show: true,
-                    type: null,
-                    variant: 'announcement',
-                    announcementId: CURRENT_ANNOUNCEMENT.id
-                });
-            }
+            // content. The update post itself doesn't need a popup pointing at it.
+            const path = pathname || window.location.pathname;
+            if (path === '/' || /^\/(learn|lyrics|login|pricing|about|updates)(\/|$)/.test(path)) return;
+
+            const created = user.dateCreated ? new Date(user.dateCreated) : null;
+            if (!created || created >= new Date(CURRENT_ANNOUNCEMENT.accountsCreatedBefore)) return;
+
+            let seenAnnouncements = {};
+            try {
+                seenAnnouncements = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
+            } catch {}
+            if (seenAnnouncements[CURRENT_ANNOUNCEMENT.id]) return;
+
+            // Don't replace a popup that is already open
+            setPopupState(prev => prev.show ? prev : {
+                show: true,
+                type: null,
+                variant: 'announcement',
+                announcementId: CURRENT_ANNOUNCEMENT.id
+            });
         };
-        
+
         // Small delay to ensure the page is loaded first
         const timer = setTimeout(checkAnnouncement, 1000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [authLoading, user?.userId, pathname]);
 
     const showLimitReachedPopup = (type) => {
         setPopupState({
@@ -125,11 +133,7 @@ export function PopupProvider({ children }) {
                 />
             )}
             {popupState.show && popupState.variant === 'announcement' && (
-                <AnnouncementPopup 
-                    onClose={hidePopup}
-                    announcementId={popupState.announcementId}
-                    content={CURRENT_ANNOUNCEMENT.content}
-                />
+                <AnnouncementPopup onClose={hidePopup} />
             )}
             {popupState.show && popupState.variant === 'promo' && (
                 <PromoPopup 

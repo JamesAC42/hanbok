@@ -755,7 +755,17 @@ export const en = {
         leaveFeedback: 'Leave Feedback',
         joinDiscord: 'Join Our Discord',
         shareWebsite: 'Share With Friends',
-        linkCopied: 'Link copied to clipboard! Share it with your friends.'
+        linkCopied: 'Link copied to clipboard! Share it with your friends.',
+        redesignBadge: 'New look',
+        redesignTitle: 'Hanbok has a new look',
+        redesignBody: 'Same Hanbok, same account. Your sentences, words and flashcards are right where you left them.',
+        redesignPath: 'A Home page that shows today\'s path: read, understand, keep, review',
+        redesignReview: 'Flashcards that show the sentence you found each word in',
+        redesignLibrary: 'Your history and saved sentences together in Library',
+        redesignCta: 'See what\'s new',
+        redesignDismiss: 'Take me to Hanbok',
+        redesignFeedback: 'Something look off or missing?',
+        redesignFeedbackLink: 'Tell us'
     },
     subscriptionPrompt: {
         title: 'Support Hanbok Development!',

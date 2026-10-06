@@ -277,3 +277,70 @@ $read-text: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
         margin-right: -.35rem;
     }
 }
+
+// "Hanbok has a new look": centered, a little wider than the base card,
+// with a short checklist of what changed.
+.news {
+    max-width: 30rem;
+
+    .badge {
+        display: inline-block;
+        background: var(--bp-und-soft);
+        color: color-mix(in srgb, var(--bp-und) 70%, var(--foreground));
+    }
+}
+
+.highlights {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: .85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    text-align: left;
+    border: 2px solid var(--bp-line);
+    border-radius: 16px;
+    background: var(--bp-soft);
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .65rem;
+        font-size: .94rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--foreground);
+    }
+}
+
+.dot {
+    flex: 0 0 auto;
+    width: .7rem;
+    height: .7rem;
+    margin-top: .32em;
+    border-radius: 50%;
+}
+
+.dotUnd { background: var(--bp-und); }
+.dotRev { background: var(--bp-rev); }
+.dotKeep { background: var(--bp-keep); }
+
+.buttons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.feedbackNote {
+    margin: 1rem 0 0 !important;
+    font-size: .85rem !important;
+    color: var(--bp-ink2) !important;
+
+    a {
+        color: color-mix(in srgb, var(--bp-read) 80%, var(--foreground));
+        font-weight: 800;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+}
