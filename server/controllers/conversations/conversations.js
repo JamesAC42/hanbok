@@ -3,6 +3,9 @@ const { generateTutorResponse } = require('../../llm/tutorResponse');
 const { generateTutorResponseStream } = require('../../llm/tutorResponseStream');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 
+// The server picks the tutor model; clients can't choose a provider.
+const TUTOR_MODEL = 'openai';
+
 /**
  * Tier limitations for conversations:
  * Free: 5 conversations/month, 1 conversation per sentence, and 5 messages per conversation
@@ -272,7 +275,8 @@ async function getConversationCount(req, res) {
 // Create a new conversation
 async function createConversation(req, res) {
   try {
-    const { sentenceId, initialMessage, targetLanguage = 'ko', responseLanguage = 'en', model = 'openai', skipAiResponse = false } = req.body;
+    const { sentenceId, initialMessage, targetLanguage = 'ko', responseLanguage = 'en', skipAiResponse = false } = req.body;
+    const model = TUTOR_MODEL;
     const userId = req.session.user ? req.session.user.userId : null;
     const db = getDb();
 
@@ -457,7 +461,8 @@ async function createConversation(req, res) {
 async function addMessage(req, res) {
   try {
     const { conversationId } = req.params;
-    const { role, content, targetLanguage = 'ko', responseLanguage = 'en', model = 'openai' } = req.body;
+    const { role, content, targetLanguage = 'ko', responseLanguage = 'en' } = req.body;
+    const model = TUTOR_MODEL;
     const userId = req.session.user.userId;
     const db = getDb();
 
@@ -854,7 +859,8 @@ async function getConversationLimits(req, res) {
 async function addMessageStream(req, res) {
   try {
     const { conversationId } = req.params;
-    const { role, content, targetLanguage = 'ko', responseLanguage = 'en', model = 'openai', isFirstMessage = false } = req.body;
+    const { role, content, targetLanguage = 'ko', responseLanguage = 'en', isFirstMessage = false } = req.body;
+    const model = TUTOR_MODEL;
     const userId = req.session.user.userId;
     const db = getDb();
 
