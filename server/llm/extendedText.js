@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { extractJsonText, isRetryableApiError } = require('./generateResponse');
+const { hasRepetitionLoop } = require('./analysisSchema');
 const { READING_PROMPT } = require('./prompt_extended_reading');
 const { EXTENDED_TEXT_ANALYSIS_PROMPT } = require('./prompt_extended_text');
 
@@ -148,6 +149,7 @@ const callJson = async (prompt, schema, maxOutputTokens, validate, generate = nu
                 raw = result.response.text();
             }
             const parsed = JSON.parse(extractJsonText(raw));
+            if (hasRepetitionLoop(parsed)) throw new Error('Model output repeated itself');
             return validate ? validate(parsed) : parsed;
         } catch (error) {
             lastError = error;
