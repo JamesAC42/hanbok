@@ -1,242 +1,166 @@
+@import "../variables.module.scss";
+
+// Edit / create card modal (Bright Path card modal).
+
 .modalOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.662);
-  backdrop-filter: blur(4px);
+  inset: 0;
+  background: color-mix(in srgb, #000 50%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 1100;
   padding: 1rem;
 }
 
 .modal {
-  background: var(--background-alt);
-  border-radius: 0.75rem;
-  max-width: 32rem;
   width: 100%;
+  max-width: 32rem;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.15);
-  animation: modalAppear 0.2s ease-out;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  border: 2px solid var(--bp-line);
+  border-radius: 22px;
+  box-shadow: 0 6px 0 var(--bp-line);
+  animation: modalAppear .2s ease-out;
 }
 
 @keyframes modalAppear {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(-1.25rem);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  from { opacity: 0; transform: translateY(10px) scale(.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal { animation: none; }
 }
 
 .modalHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid var(--shadow);
+  gap: 1rem;
+  padding: 1.25rem 1.5rem 0;
 
   h3 {
+    @include bp-title;
     margin: 0;
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--foreground);
+    font-size: 1.6rem;
   }
 }
 
 .closeButton {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: var(--foreground-light);
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: none;
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  border: 2px solid var(--bp-line);
+  box-shadow: 0 3px 0 var(--bp-line);
+  background: var(--background);
+  color: var(--bp-ink2);
+  font-size: 1.4rem;
   font-family: inherit;
-  color:var(--foreground);
-  
-  &:hover {
-    background-color: var(--background-alt);
-    color: var(--foreground);
-  }
+  cursor: pointer;
+
+  &:hover { color: var(--foreground); background: var(--bp-soft); }
+  &:active { transform: translateY(3px); box-shadow: none; }
 }
 
 .modalBody {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem .5rem;
 }
 
 .error {
-  background-color: var(--error-background);
-  border: 1px solid var(--error-foreground);
-  color: var(--error-foreground);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
   margin-bottom: 1rem;
-  font-size: 0.875rem;
+  padding: .75rem 1rem;
+  border-radius: 14px;
+  border: 2px solid var(--bp-rev-line);
+  background: var(--bp-rev-soft);
+  color: color-mix(in srgb, var(--bp-rev) 72%, var(--foreground));
+  font-size: .92rem;
+  font-weight: 700;
 }
 
 .fieldGroup {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.1rem;
 
   label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+    margin-bottom: .45rem;
+    font-size: 1rem;
+    font-weight: 800;
     color: var(--foreground);
-    font-size: 0.875rem;
   }
 
   textarea {
+    @include bp-input;
     width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--shadow);
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
+    min-height: 5rem;
     line-height: 1.5;
     resize: vertical;
-    min-height: 4.5rem;
-    font-family: inherit;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    background-color: var(--background);
-    color: var(--foreground);
-
-    &:focus {
-      outline: none;
-      border-color: var(--shadow);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
 
     &:disabled {
-      background-color: var(--background-alt);
-      color: var(--foreground-light);
+      background: var(--bp-soft);
+      color: var(--bp-ink2);
       cursor: not-allowed;
     }
-
-    &::placeholder {
-      color: var(--foreground-light);
-    }
   }
+}
+
+.fieldGroup :global(#front) {
+  font-family: var(--font-kr-sans);
+  font-size: 1.15rem;
+  font-weight: 700;
 }
 
 .modalFooter {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.5rem 1.5rem;
-  border-top: 1px solid var(--shadow);
-  gap: 1rem;
-}
-
-.deleteButton {
-  background-color: var(--error-foreground);
-  color: var(--error-background);
-  border: none;
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color:var(--foreground);
-  
-  &:hover:not(:disabled) {
-    background-color: var(--error-foreground);
-  }
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  gap: .75rem;
+  padding: .75rem 1.5rem 1.5rem;
 }
 
 .actionButtons {
   display: flex;
-  gap: 0.75rem;
+  gap: .75rem;
+  margin-left: auto;
+}
+
+.deleteButton {
+  @include bp-press-ghost(color-mix(in srgb, var(--bp-rev) 72%, var(--foreground)));
 }
 
 .cancelButton {
-  background: none;
-  border: 0.125rem solid var(--shadow);
-  color: var(--foreground);
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  
-  &:hover:not(:disabled) {
-    background-color: var(--background-alt);
-    border-color: var(--shadow);
-    color: var(--foreground);
-  }
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
+  @include bp-press-ghost(var(--bp-ink2));
 }
 
 .saveButton {
-  background-color: var(--success-foreground);
-  color: var(--success-background);
-  border: none;
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  color:var(--foreground);
-  
-  &:hover:not(:disabled) {
-    background-color: var(--shadow);
-  }
-  
-  &:disabled {
-    background-color: var(--foreground-light);
-    cursor: not-allowed;
-  }
+  @include bp-press(var(--bp-read), var(--bp-read-d));
 }
 
 @media (max-width: 640px) {
   .modalOverlay {
-    padding: 0.5rem;
-  }
-
-  .modal {
-    border-radius: 0.5rem;
+    padding: .75rem;
   }
 
   .modalHeader {
-    padding: 1rem 1rem 0.75rem;
+    padding: 1.1rem 1.1rem 0;
 
-    h3 {
-      font-size: 1rem;
-    }
+    h3 { font-size: 1.4rem; }
   }
 
   .modalBody {
-    padding: 1rem;
+    padding: 1rem 1.1rem .25rem;
   }
 
   .modalFooter {
-    padding: 0.75rem 1rem 1rem;
+    padding: .75rem 1.1rem 1.25rem;
     flex-direction: column;
-    gap: 0.75rem;
+    align-items: stretch;
 
     .deleteButton {
       order: 2;
@@ -246,7 +170,7 @@
     .actionButtons {
       order: 1;
       width: 100%;
-      gap: 0.5rem;
+      margin-left: 0;
 
       .cancelButton,
       .saveButton {
@@ -254,4 +178,4 @@
       }
     }
   }
-} 
+}

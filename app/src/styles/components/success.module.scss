@@ -1,72 +1,132 @@
+@import '../variables.module.scss';
+
+// After checkout, Bright Path: a short wait with Kkachi thinking, then a
+// celebration (confetti + Kkachi cheering) and one clear next step.
+
+.successPage {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem 4rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    background: var(--background);
+
+    @media screen and (max-width: 725px) {
+        padding: 1.5rem 1rem 3rem;
+    }
+}
+
 .successContent {
-    max-width: 40rem;
-    margin: 0 auto;
-    padding: 2rem;
+    position: relative;
+    width: 100%;
+    max-width: 34rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
+    padding: 2.25rem 2rem 2rem;
+    border-radius: 22px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 5px 0 var(--bp-line);
+    background: var(--background);
+    animation: bp-pop-in 0.35s ease both;
+
+    &.done {
+        border-color: var(--bp-und-line);
+        box-shadow: 0 5px 0 var(--bp-und-line);
+        background: var(--bp-und-soft);
+    }
 
     h1 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-        color: var(--text-primary);
+        @include bp-title;
+        margin: 0.25rem 0 0.5rem;
+        font-size: 2.3rem;
     }
 
     p {
-        font-size: 1.125rem;
-        color: var(--text-secondary);
-        margin-bottom: 2rem;
+        margin: 0;
+        max-width: 26rem;
+        font-size: 1.08rem;
+        font-weight: 600;
+        line-height: 1.55;
+        color: var(--bp-ink2);
+    }
+
+    @media screen and (max-width: 500px) {
+        padding: 1.75rem 1.25rem 1.5rem;
+
+        h1 {
+            font-size: 1.9rem;
+        }
     }
 }
 
-.checkmark {
-    font-size: 4rem;
-    color: var(--success);
-    margin-bottom: 1rem;
-    animation: scaleIn 0.5s ease-out;
+.mascot {
+    margin-bottom: 0.75rem;
+
+    @media screen and (max-width: 500px) {
+        width: 110px;
+        height: auto;
+    }
+}
+
+// Indeterminate bar while the payment is confirmed.
+.progress {
+    @include bp-bar(var(--bp-read), 14px);
+    width: 100%;
+    max-width: 18rem;
+    margin-top: 1.5rem;
+
+    > i {
+        width: 40%;
+        animation: successSlide 1.3s ease-in-out infinite;
+    }
+}
+
+@keyframes successSlide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(250%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .progress > i {
+        animation: none;
+        width: 100%;
+    }
 }
 
 .buttons {
+    position: relative;
+    z-index: 6; // above the confetti canvas
+    width: 100%;
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-    width:100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.75rem;
 }
 
-.button {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
+.primaryButton {
+    @include bp-press(var(--bp-und), var(--bp-und-d), #fff, 5px);
+    width: 100%;
+    max-width: 20rem;
+    min-height: 3.4rem;
+    font-size: 1.05rem;
+}
+
+.secondaryLink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
     text-decoration: none;
 
-    &:first-child {
-        background-color: rgb(69, 60, 101);
-        color: white;
-
-        &:hover {
-            background-color: black;
-            color: white;
-        }
-    }
-
-    &:last-child {
-        background-color: rgb(100, 113, 218);
-        color: var(--primary);
-
-        &:hover {
-            background-color: black;
-            color: white;
-        }
+    &:hover {
+        text-decoration: underline;
     }
 }
-
-@keyframes scaleIn {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-} 

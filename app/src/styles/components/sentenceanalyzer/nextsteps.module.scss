@@ -1,0 +1,184 @@
+@import '@/styles/variables.module.scss';
+
+.nextSteps {
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+    font-family: var(--font-display);
+}
+
+.railHead {
+    display: flex;
+    align-items: flex-end;
+    gap: .6rem;
+}
+
+.bubble {
+    position: relative;
+    margin: 0 0 .6rem;
+    padding: .7rem .9rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 16px 16px 16px 4px;
+    background: var(--background);
+    font-size: .9rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--foreground);
+}
+
+// Keep
+
+.keep {
+    @include bp-card;
+    padding: 1rem 1.1rem 1.1rem;
+    border-color: var(--bp-keep-line);
+    background: color-mix(in srgb, var(--bp-keep) 6%, var(--background));
+}
+
+.keepDone {
+    border-color: var(--bp-und-line);
+    background: color-mix(in srgb, var(--bp-und) 6%, var(--background));
+
+    .keepTitle { color: var(--bp-und-d); }
+}
+
+.keepTitle {
+    @include bp-title;
+    font-size: 1.35rem;
+    margin: 0;
+    color: var(--bp-keep-d);
+}
+
+.keep {
+    color: var(--foreground);
+}
+
+.keepText {
+    margin: .3rem 0 .7rem;
+    font-size: .88rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--bp-ink2);
+}
+
+.checklist {
+    list-style: none;
+    margin: 0 0 .9rem;
+    padding: 0;
+    max-height: 15rem;
+    overflow-y: auto;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .45rem .2rem;
+    cursor: pointer;
+    border-bottom: 1px dashed var(--bp-keep-line);
+
+    input {
+        width: 1.2rem;
+        height: 1.2rem;
+        flex: none;
+        accent-color: var(--bp-keep-d);
+        cursor: pointer;
+    }
+}
+
+li:last-child .check {
+    border-bottom: none;
+}
+
+.checkWord {
+    color: var(--foreground);
+    font-family: var(--font-kr-sans), var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.checkGloss {
+    margin-left: auto;
+    text-align: right;
+    font-size: .82rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 60%;
+}
+
+.keepButton {
+    @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink));
+    width: 100%;
+}
+
+.reviewButton {
+    @include bp-press(var(--bp-rev), var(--bp-rev-d));
+    width: 100%;
+}
+
+// Other ways to go
+
+.alt {
+    @include bp-press-card(var(--bp-line), 3px);
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    padding: .7rem .9rem;
+    text-decoration: none;
+    color: var(--foreground);
+
+    b {
+        display: block;
+        font-size: .92rem;
+        font-weight: 800;
+    }
+
+    small {
+        display: block;
+        margin-top: .1rem;
+        font-size: .8rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+        line-height: 1.35;
+    }
+}
+
+.altIcon {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: var(--bp-purple);
+    color: #fff;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .14);
+
+    svg { width: 20px; height: 20px; }
+}
+
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.5rem;
+    z-index: 2000;
+    transform: translateX(-50%);
+    padding: .75rem 1.3rem;
+    border-radius: 16px;
+    background: var(--bp-und);
+    box-shadow: 0 4px 0 var(--bp-und-d);
+    color: #fff;
+    font-family: var(--font-lilita);
+    font-size: 1.1rem;
+    white-space: nowrap;
+    animation: toast-in .35s cubic-bezier(.2, .9, .3, 1.3);
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translate(-50%, 24px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}

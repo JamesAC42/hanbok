@@ -71,6 +71,8 @@ const ExtendedTextSaveButton = ({ textId }) => {
             onClick={toggleSave}
             disabled={isLoading}
             title={isSaved ? t('extended_text.saveButtonRemove') || t('analysis.saveButton.remove') : t('extended_text.saveButtonSave') || t('analysis.saveButton.save')}
+            aria-label={isSaved ? t('extended_text.saveButtonRemove') || t('analysis.saveButton.remove') : t('extended_text.saveButtonSave') || t('analysis.saveButton.save')}
+            aria-pressed={isSaved}
         >
             {isSaved ? <MaterialSymbolsBookmarkSharp /> : <MaterialSymbolsBookmarkOutlineSharp />}
         </button>

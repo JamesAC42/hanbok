@@ -17,7 +17,7 @@ const stubModule = (relPath, exportsObj) => {
 };
 
 stubModule('anthropic.js', { prompt_anthropic: fakeProvider });
-stubModule('gemini.js', { prompt_gemini: fakeProvider });
+stubModule('gemini.js', { prompt_gemini: fakeProvider, prompt_gemini_analysis: fakeProvider, ANALYSIS_MODEL: 'test-model' });
 stubModule('openai.js', { prompt_openai: fakeProvider });
 stubModule('geminiThinking.js', { prompt_geminiThinking: fakeProvider });
 
@@ -104,5 +104,22 @@ describe('generateResponse', () => {
             /Could not generate valid response\. Last error: .*JSON/
         );
         assert.equal(queuedResponses.length, 0);
+    });
+
+    test('stops retrying when another attempt would pass the deadline', async () => {
+        queuedResponses.push('not json', '{"translation":"hello"}');
+        await assert.rejects(
+            generateResponse('prompt', 'geminiAnalysis', { deadlineMs: 1000, attemptMs: 5000 }),
+            /Could not generate valid response/
+        );
+        assert.equal(queuedResponses.length, 1);
+    });
+
+    test('keeps retrying while there is time for another attempt', async () => {
+        queuedResponses.push('not json', '{"translation":"hello"}');
+        assert.deepEqual(
+            await generateResponse('prompt', 'geminiAnalysis', { deadlineMs: 60000, attemptMs: 1000 }),
+            { translation: 'hello' }
+        );
     });
 });

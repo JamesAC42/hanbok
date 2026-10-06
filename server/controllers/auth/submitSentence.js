@@ -1,4 +1,5 @@
 const generateResponse = require('../../llm/generateResponse');
+const { ANALYSIS_TIMEOUT_MS } = require('../../llm/gemini');
 const basicPrompt = require('../../llm/prompt');
 const chinesePrompt = require('../../llm/prompt_chinese');
 const { isChinese } = require('../../llm/chineseScript');
@@ -505,9 +506,11 @@ const submitSentence = async (req, res) => {
             }
 
             // Generate new analysis
+            // The browser gives up after 100 s, so don't retry past that.
             parsedResponse = await generateResponse(
                 prompt(originalLanguage, translationLanguage) + text, 
-                'gemini'
+                'geminiAnalysis',
+                { deadlineMs: 90000, attemptMs: ANALYSIS_TIMEOUT_MS }
             );
 
             if(!parsedResponse.isValid) {

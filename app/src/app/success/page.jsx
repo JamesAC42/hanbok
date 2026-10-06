@@ -3,11 +3,12 @@ import { useEffect, useState, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import styles from '@/styles/components/pagelayout.module.scss';
 import successStyles from '@/styles/components/success.module.scss';
-import Image from 'next/image';
 import Link from 'next/link';
-import { MaterialSymbolsCheckCircleOutlineRounded } from '@/components/icons/CheckCircle';
+import { track } from '@/lib/analytics';
+import Dashboard from '@/components/Dashboard';
+import Mascot from '@/components/Mascot';
+import Confetti from '@/components/celebrate/Confetti';
 
 const SuccessContent = () => {
     const router = useRouter();
@@ -34,6 +35,18 @@ const SuccessContent = () => {
             const timer = setTimeout(async () => {
                 await fetchSession();
                 setProcessingPayment(false);
+
+                // Fire once per checkout session so refreshes don't double count
+                const sessionId = searchParams.get('session_id');
+                const trackedKey = `purchaseTracked:${sessionId}`;
+                try {
+                    if (sessionId && !sessionStorage.getItem(trackedKey)) {
+                        sessionStorage.setItem(trackedKey, '1');
+                        track('purchase');
+                    }
+                } catch (e) {
+                    // sessionStorage unavailable; skip tracking
+                }
             }, 2000);
             return () => clearTimeout(timer);
         }
@@ -42,34 +55,37 @@ const SuccessContent = () => {
     if (loading || !isAuthenticated) return null;
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.pageContent}>
-                <div className={successStyles.successContent}>
+        <Dashboard>
+            <div className={successStyles.successPage}>
+                <div className={`${successStyles.successContent} ${processingPayment ? '' : successStyles.done}`}>
                     {processingPayment ? (
                         <>
+                            <Mascot pose="think" size={130} motion="bob" className={successStyles.mascot} />
                             <h1>{t('success.processing.title')}</h1>
                             <p>{t('success.processing.description')}</p>
+                            <div className={successStyles.progress} role="progressbar" aria-label={t('success.processing.title')}>
+                                <i />
+                            </div>
                         </>
                     ) : (
                         <>
-                            <div className={successStyles.checkmark}>
-                                <MaterialSymbolsCheckCircleOutlineRounded />
-                            </div>
+                            <Confetti />
+                            <Mascot pose="celebrate" size={150} motion="hop" className={successStyles.mascot} />
                             <h1>{t('success.completed.title')}</h1>
                             <p>{t('success.completed.description')}</p>
                             <div className={successStyles.buttons}>
-                                <Link href="/profile" className={successStyles.button}>
-                                    {t('success.completed.viewProfile')}
-                                </Link>
-                                <Link href="/" className={successStyles.button}>
+                                <Link href="/" className={successStyles.primaryButton}>
                                     {t('success.completed.startLearning')}
+                                </Link>
+                                <Link href="/profile" className={successStyles.secondaryLink}>
+                                    {t('success.completed.viewProfile')}
                                 </Link>
                             </div>
                         </>
                     )}
                 </div>
             </div>
-        </div>
+        </Dashboard>
     );
 };
 

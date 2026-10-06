@@ -11,7 +11,7 @@
   padding: 2rem;
   background:#fff;
   border-radius: 0.5rem;
-  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+  box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
 
   animation: fadeIn 0.5s ease-in-out;
 
@@ -56,13 +56,13 @@
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   width:100%;
   
-  box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+  box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
 
   animation: fadeIn 0.5s ease-in-out;
 
   &:hover {
-    transform:translate(-0.25rem, -0.25rem);
-    box-shadow: 0.55rem 0.55rem 0 var(--foreground);
+    transform:translateY(-1px);
+    box-shadow: 0 0.66rem 1.65rem -0.44rem color-mix(in srgb, var(--shadow) 45%, transparent);
   }
 }
 
@@ -187,15 +187,15 @@
     flex: 1;
     width:33%;
     min-width:20rem;
-    box-shadow: 0.3rem 0.3rem 0 var(--foreground);
+    box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
     position: relative;
     
     animation: fadeIn 0.5s ease-in-out;
 
     @media (hover: hover) {
         &:hover {
-            transform:translate(-0.25rem, -0.25rem);
-            box-shadow: 0.55rem 0.55rem 0 var(--foreground);
+            transform:translateY(-1px);
+            box-shadow: 0 0.66rem 1.65rem -0.44rem color-mix(in srgb, var(--shadow) 45%, transparent);
 
             .deleteButton {
                 opacity: 1;
@@ -204,8 +204,8 @@
     }
 
     &.active {
-        transform:translate(-0.25rem, -0.25rem);
-        box-shadow: 0.55rem 0.55rem 0 var(--foreground);
+        transform:translateY(-1px);
+        box-shadow: 0 0.66rem 1.65rem -0.44rem color-mix(in srgb, var(--shadow) 45%, transparent);
 
         .deleteButton {
             opacity: 1;

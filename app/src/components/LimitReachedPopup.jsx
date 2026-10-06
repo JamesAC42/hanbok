@@ -1,6 +1,12 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
+import { track } from '@/lib/analytics';
+import Mascot from '@/components/Mascot';
+
+// Friendly heads-up notices (not a hard stop) get the teaching pose.
+const NOTICE_TYPES = ['first-five-used', 'fifteen-remaining', 'five-remaining'];
 
 const LimitReachedPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
@@ -46,7 +52,12 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
         }
     };
 
+    useEffect(() => {
+        track('limit_hit', { type });
+    }, [type]);
+
     const handleUpgradeClick = () => {
+        track('limit_upgrade_click', { type });
         router.push('/pricing');
         onClose();
     };
@@ -58,9 +69,15 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
             <div 
                 className={styles.popup} 
                 onClick={e => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="limit-popup-title"
             >
-                <button className={styles.closeButton} onClick={onClose}>×</button>
-                <h2>{title}</h2>
+                <button className={styles.closeButton} onClick={onClose} aria-label={t('common.close')}>×</button>
+                <div className={styles.art}>
+                    <Mascot pose={NOTICE_TYPES.includes(type) ? 'teach' : 'think'} size={96} />
+                </div>
+                <h2 id="limit-popup-title">{title}</h2>
                 <p>{message}</p>
                 <div className={styles.buttons}>
                     <button 

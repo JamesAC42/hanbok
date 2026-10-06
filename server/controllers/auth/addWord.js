@@ -4,6 +4,10 @@ const { getWordAudio } = require('../../utils/wordAudio');
 
 const addWord = async (req, res) => {
     const { originalWord, translatedWord, originalLanguage, translationLanguage, reading } = req.body;
+    // Sentence the word was saved from, so flashcards can show it as context.
+    const sentenceId = Number.isInteger(Number(req.body.sentenceId)) && Number(req.body.sentenceId) > 0
+        ? Number(req.body.sentenceId)
+        : null;
     const userId = req.session.user.userId;
 
     // Validate inputs
@@ -63,6 +67,7 @@ const addWord = async (req, res) => {
             originalWord,
             translationLanguage,
             translatedWord,
+            ...(sentenceId ? { sentenceId } : {}),
             dateSaved: new Date()
         });
 

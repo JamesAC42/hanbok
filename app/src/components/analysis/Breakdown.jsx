@@ -10,7 +10,8 @@ const Breakdown = ({
 	setWordInfo,
 	resetLockedWord,
 	shouldAnimate,
-	showPronunciation
+	showPronunciation,
+	savedWords,
 }) => {
 
 	const [lockedWord, setLockedWord] = useState(null);
@@ -28,8 +29,8 @@ const Breakdown = ({
 	};
 
 	const handleWordInfoEnter = (item, isParticle = false) => {
-		// Check if window exists and width is greater than mobile breakpoint (1400px)
-		if (typeof window !== 'undefined' && window.innerWidth <= 1400) {
+		// Check if window exists and width is greater than mobile breakpoint (1200px)
+		if (typeof window !== 'undefined' && window.innerWidth <= 1200) {
 			return;
 		}
 		if (!lockedWord || (lockedWord && lockedWord.dictionary_form === item.dictionary_form)) {
@@ -79,6 +80,13 @@ const Breakdown = ({
 		return "";
 	}
 
+	// Short gloss under each word: the first sense, trimmed.
+	const gloss = (item) => {
+		const text = item.meaning?.description || '';
+		const first = text.split(/[;,(]/)[0].trim();
+		return first.length > 22 ? `${first.slice(0, 20).trim()}…` : first;
+	};
+
 	if (!analysis) {
 		return null;
 	}
@@ -99,14 +107,8 @@ const Breakdown = ({
 				className={styles.sentenceItemContainer}
 				onMouseLeave={() => handleWordInfoLeave()}
 			>
-				{showPronunciation && (
-					<div className={styles.pronunciation}>
-						{
-							renderPronunciation(item, language)
-						}
-					</div>
-				)}
 				<button
+				type="button"
 				className={`${styles.sentenceItem} ${
 					isWhitespace ? styles.whitespace : ""
 				} ${
@@ -115,7 +117,7 @@ const Breakdown = ({
 					? styles.locked
 					: ""
 				} ${
-					getFontClass(language)
+					savedWords && item.type !== 'punctuation' && item.dictionary_form && !savedWords.has(item.dictionary_form) ? styles.isNew : ""
 				}`}
 				data-role={getCleanedType(item.type)}
 				onMouseEnter={() => handleWordInfoEnter(item)}
@@ -123,7 +125,13 @@ const Breakdown = ({
 				// TODO: Translate this aria-label into other supported languages
 				aria-label={`Show details for ${item.text}`}
 				>
-				{item.text}
+				{showPronunciation && (
+					<span className={styles.pronunciation}>
+						{renderPronunciation(item, language) || '\u00a0'}
+					</span>
+				)}
+				<span className={`${styles.wordText} ${getFontClass(language)}`}>{item.text}</span>
+				{item.type !== 'punctuation' && <span className={styles.gloss}>{gloss(item) || '\u00a0'}</span>}
 				</button>
 				{item.grammar?.particles?.length > 0 && renderParticles(item)}
 			</div>

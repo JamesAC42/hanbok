@@ -1,173 +1,35 @@
 @import '../variables.module.scss';
 
+// Review page shell. Deck and hero styles live in styles/pages/review.module.scss.
 .cardsContent {
-  
   @include dashboard-page;
-  @media screen and (max-width: 725px) {
-    padding: 1.5rem;
-  }
-
-  @media screen and (max-width: 500px) {
-    max-width: 100dvw;
-    width: 100dvw;
-    margin: 0;
-    padding: 1rem;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    min-height: 100dvh;
-    justify-content: center;
-    transform:translateY(-1rem);
-  }
 }
 
 .loading {
-  @include loading-text;
-}
-
-.header {
-  margin-top:2rem;
-  width: 100%;
-  text-align: center;
-  margin-bottom: 0rem;
-}
-
-.subtitle {
-  color: var(--text-secondary);
-  font-size: 1rem;
-  margin-top: 0.5rem;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(0.625rem);
-  }
-}
-
-.deckList {
-  margin-top:1rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-}
-
-.deckItem {
-  background-color: var(--background-alt);
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  border: 0.0625rem solid var(--background-alt);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0.3rem 0.3rem 0 var(--shadow);
-  animation: fadeIn 0.5s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
-  &:hover {
-    transform: translate(-0.25rem, -0.25rem);
-    box-shadow: 0.55rem 0.55rem 0 var(--shadow);
-  }
-}
-
-.deckHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color:var(--foreground);
-}
-
-.deckName {
-  font-size: 1.25rem;
-  font-weight: 600;
+  @include bp-label;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: center;
+  min-height: 12rem;
   margin: 0;
-  color:var(--foreground);
-  font-family:var(--font-serif);
-  font-size:1.7rem;
-}
-
-.languageIcon {
-  display: flex;
-  align-items: center;
-  
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-}
-
-.cardCount {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  background-color: var(--background);
-  padding: 0.25rem 0.5rem;
-  border-radius: 1rem;
-  font-family: var(--font-display);
-}
-
-.deckStats {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem;
-  background-color: var(--background-alt);
-  border-radius: 0.5rem;
-}
-
-.statItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.5rem;
-  color:var(--foreground);
-}
-
-.statLabel {
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin-bottom: 0.25rem;
-}
-
-.statValue {
-  font-size: 1.25rem;
-  font-weight: 600;
-  
-  &.new {
-    color: #2563eb; /* Blue */
-  }
-  
-  &.learning {
-    color: #d97706; /* Amber */
-  }
-  
-  &.due {
-    color: #059669; /* Green */
-  }
-}
-
-.lastReviewed {
-  font-size: 0.75rem;
-  color: var(--foreground-muted);
-  text-align: right;
-}
-
-.noDecks {
-  text-align: center;
-  color: #333333;
-  padding:0;
+  font-size: .85rem;
 }
 
 .error {
-  color: red;
+  max-width: 32rem;
+  margin: 1.5rem auto 0;
+  padding: .9rem 1.1rem;
+  border: 2px solid var(--bp-rev-line);
+  border-radius: 16px;
+  background: var(--bp-rev-soft);
+  color: var(--bp-rev-d);
   font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
   text-align: center;
-  margin-top: 1rem;
-} 
+}
 
-.girl {
-  @include bottom-girl;
+.noDecks {
+  padding: 0;
+  color: var(--foreground);
 }

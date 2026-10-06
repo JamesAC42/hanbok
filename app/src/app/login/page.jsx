@@ -1,154 +1,106 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import styles from '@/styles/components/pagelayout.module.scss';
-import loginStyles from '@/styles/components/login.module.scss';
-import Image from 'next/image';
+import styles from '@/styles/components/login.module.scss';
+import emailAuthStyles from '@/styles/components/emailauth.module.scss';
+import Mascot from '@/components/Mascot';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 import EmailLoginForm from '@/components/EmailLoginForm';
 import RegisterForm from '@/components/RegisterForm';
-import { MaterialSymbolsBookmarkSharp } from '@/components/icons/Bookmark';
-import { MdiHeadphones } from '@/components/icons/Headphones';
-import { MajesticonsLightbulbShine } from '@/components/icons/Lightbulb';
-import { MaterialSymbolsNestClockFarsightAnalogRounded } from '@/components/icons/Clock';
-
+import HeardFromSelect from '@/components/HeardFromSelect';
 import ContentPage from '@/components/ContentPage';
+import Footer from '@/components/Footer';
+
+const PERKS = [
+    { color: 'read', icon: '✓', text: 'Free to start, no card needed' },
+    { color: 'keep', icon: '★', text: 'Save words and sentences as flashcards' },
+    { color: 'und', icon: '↻', text: 'Your history follows you to every device' },
+];
 
 const Login = () => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
     const { t } = useLanguage();
-    const [activeTab, setActiveTab] = useState('login'); // 'login', 'register', 'google'
-    const [isTransitioning, setIsTransitioning] = useState(false);
+    const [mode, setMode] = useState('login');
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            router.push('/profile');
+            router.push('/home');
         }
         document.title = t('login.pageTitle');
     }, [isAuthenticated, loading, router, t]);
 
-    const handleTabChange = (newTab) => {
-        if (newTab === activeTab) return;
-        
-        setIsTransitioning(true);
-        
-        // Small delay for smooth transition
-        setTimeout(() => {
-            setActiveTab(newTab);
-            setTimeout(() => {
-                setIsTransitioning(false);
-            }, 50);
-        }, 150);
-    };
+    // /login?signup opens on the sign-up tab.
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('signup') || params.get('mode') === 'signup') setMode('signup');
+    }, []);
 
     if (loading) return null;
 
+    const signup = mode === 'signup';
+
     return (
         <ContentPage>
-        <div className={loginStyles.loginPage}>
-            <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
-            
-            <div className={loginStyles.loginContainer}>
-                {/* Hero Section */}
-                <div className={loginStyles.heroSection}>
-                    <div className={loginStyles.heroContent}>
-                        <h1 className={loginStyles.heroTitle}>{t('login.title')}</h1>
-                        <p className={loginStyles.heroDescription}>
-                            Master your language through interactive sentence analysis, 
-                            vocabulary building, and AI-powered conversations.
-                        </p>
-                        
-                        <div className={loginStyles.features}>
-                            <div className={loginStyles.feature}>
-                                <div className={loginStyles.featureIcon}>
-                                    <MaterialSymbolsBookmarkSharp />
-                                </div>
-                                <div className={loginStyles.featureText}>
-                                    <h3>Save & Study</h3>
-                                    <p>Save sentences and build custom vocabulary flashcard decks</p>
-                                </div>
-                            </div>
-                            <div className={loginStyles.feature}>
-                                <div className={loginStyles.featureIcon}>
-                                    <MaterialSymbolsNestClockFarsightAnalogRounded />
-                                </div>
-                                <div className={loginStyles.featureText}>
-                                    <h3>Sentence History</h3>
-                                    <p>Track your learning progress with detailed sentence analysis history</p>
-                                </div>
-                            </div>
-                            <div className={loginStyles.feature}>
-                                <div className={loginStyles.featureIcon}>
-                                    <MdiHeadphones />
-                                </div>
-                                <div className={loginStyles.featureText}>
-                                    <h3>Audio Practice</h3>
-                                    <p>Generate native pronunciation audio for any sentence or word</p>
-                                </div>
-                            </div>
-                            <div className={loginStyles.feature}>
-                                <div className={loginStyles.featureIcon}>
-                                    <MajesticonsLightbulbShine />
-                                </div>
-                                <div className={loginStyles.featureText}>
-                                    <h3>AI Tutor</h3>
-                                    <p>Get personalized explanations and practice with your AI language tutor</p>
-                                </div>
-                            </div>
-                        </div>
+            <main className={styles.page}>
+                <div className={styles.card}>
+                    <Mascot pose={signup ? 'celebrate' : 'wave'} size={96} label="" motion="bob" className={styles.mascot} />
+                    <h1 className={styles.title}>{signup ? 'Create your free account' : 'Welcome back'}</h1>
+                    <p className={styles.sub}>
+                        {signup
+                            ? 'Keep every sentence you break down, and review it later.'
+                            : 'Log in to pick up where you left off.'}
+                    </p>
 
-                        <div className={loginStyles.signInInfo}>
-                            <p>✨ Create your free account to get started</p>
-                            <p>🔒 Secure authentication with email or Google</p>
-                        </div>
+                    <div className={styles.tabs} role="tablist" aria-label="Log in or sign up">
+                        <button type="button" role="tab" aria-selected={!signup}
+                            className={!signup ? styles.tabOn : undefined} onClick={() => setMode('login')}>
+                            Log in
+                        </button>
+                        <button type="button" role="tab" aria-selected={signup}
+                            className={signup ? styles.tabOn : undefined} onClick={() => setMode('signup')}>
+                            Sign up
+                        </button>
                     </div>
+
+                    {signup && (
+                        <div className={`${styles.heardFrom} ${emailAuthStyles.authForm}`}>
+                            <HeardFromSelect />
+                        </div>
+                    )}
+
+                    <div className={styles.google}>
+                        <GoogleSignInButton key={mode} text={signup ? 'signup_with' : 'signin_with'} />
+                    </div>
+
+                    <div className={styles.divider}><span>or with email</span></div>
+
+                    {signup ? <RegisterForm showHeardFrom={false} /> : <EmailLoginForm />}
+
+                    <p className={styles.switch}>
+                        {signup ? 'Already have an account? ' : 'New to Hanbok? '}
+                        <button type="button" onClick={() => setMode(signup ? 'login' : 'signup')}>
+                            {signup ? 'Log in' : 'Create a free account'}
+                        </button>
+                    </p>
                 </div>
 
-                {/* Auth Section */}
-                <div className={loginStyles.authSection}>
-                    <div className={loginStyles.authCard}>
-                        <h2 className={loginStyles.authTitle}>Get Started</h2>
-                        
-                        <div className={loginStyles.authTabs}>
-                            <button 
-                                className={`${loginStyles.authTab} ${activeTab === 'login' ? loginStyles.active : ''}`}
-                                onClick={() => handleTabChange('login')}
-                            >
-                                Sign In
-                            </button>
-                            <button 
-                                className={`${loginStyles.authTab} ${activeTab === 'register' ? loginStyles.active : ''}`}
-                                onClick={() => handleTabChange('register')}
-                            >
-                                Sign Up
-                            </button>
-                            <button 
-                                className={`${loginStyles.authTab} ${activeTab === 'google' ? loginStyles.active : ''}`}
-                                onClick={() => handleTabChange('google')}
-                            >
-                                Google
-                            </button>
-                        </div>
+                <ul className={styles.perks}>
+                    {PERKS.map((p) => (
+                        <li key={p.text} className={styles[`perk_${p.color}`]}>
+                            <i aria-hidden="true">{p.icon}</i>{p.text}
+                        </li>
+                    ))}
+                </ul>
 
-                        <div className={`${loginStyles.authContent} ${isTransitioning ? loginStyles.transitioning : ''}`}>
-                            {activeTab === 'login' && <EmailLoginForm />}
-                            {activeTab === 'register' && <RegisterForm />}
-                            {activeTab === 'google' && (
-                                <div className={loginStyles.googleContainer}>
-                                    <p className={loginStyles.googleText}>
-                                        Sign in quickly with your Google account
-                                    </p>
-                                    <GoogleSignInButton />
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <p className={styles.try}>
+                    Just looking? <Link href="/analyze">Try a sentence without an account</Link>
+                </p>
+            </main>
+            <Footer />
         </ContentPage>
     );
 };

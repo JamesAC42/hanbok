@@ -413,6 +413,8 @@ export const en = {
             other: 'There was an error analyzing your input.',
             empty: 'Please enter a sentence.',
             file_too_large: 'Image file is too large. Maximum size is 2MB.',
+            invalid_file: 'Please choose an image file.',
+            server: 'Something went wrong on our end. Please try again in a moment.',
         },
         translateMode: {
             analysis: 'Analyze {language} sentence',
@@ -753,7 +755,17 @@ export const en = {
         leaveFeedback: 'Leave Feedback',
         joinDiscord: 'Join Our Discord',
         shareWebsite: 'Share With Friends',
-        linkCopied: 'Link copied to clipboard! Share it with your friends.'
+        linkCopied: 'Link copied to clipboard! Share it with your friends.',
+        redesignBadge: 'New look',
+        redesignTitle: 'Hanbok has a new look',
+        redesignBody: 'Same Hanbok, same account. Your sentences, words and flashcards are right where you left them.',
+        redesignPath: 'A Home page that shows today\'s path: read, understand, keep, review',
+        redesignReview: 'Flashcards that show the sentence you found each word in',
+        redesignLibrary: 'Your history and saved sentences together in Library',
+        redesignCta: 'See what\'s new',
+        redesignDismiss: 'Take me to Hanbok',
+        redesignFeedback: 'Something look off or missing?',
+        redesignFeedbackLink: 'Tell us'
     },
     subscriptionPrompt: {
         title: 'Support Hanbok Development!',
@@ -1065,12 +1077,20 @@ export const en = {
         tutor: "Tutor",
         history: "History",
         lyrics: "Lyrics",
+        learn: "Learn",
         lessons: "Lessons",
         feedback: "Feedback",
         viewPlans: "View Plans",
         navigation: "Navigation",
         activity: "Activity",
-        tools: "Tools"
+        tools: "Tools",
+        home: "Home",
+        analyze: "Analyze",
+        paragraphs: "Paragraphs",
+        library: "Library",
+        review: "Review",
+        practice: "Practice",
+        discover: "Discover"
     },
     extended_text: {
         title: "Extended Text Analysis",

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/pages/hangeul.module.scss';
 import Dashboard from '@/components/Dashboard';
-import Image from 'next/image';
+import Mascot from '@/components/Mascot';
 import { MaterialSymbolsCheckCircleOutlineRounded } from '@/components/icons/CheckCircle';
 import { MaterialSymbolsCancel } from '@/components/icons/Close';
 
@@ -453,19 +453,23 @@ export default function HangeulPractice() {
         <Dashboard>
             <div className={styles.hangeulContainer}>
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Learn Hangeul</h1>
-                    <p className={styles.subtitle}>Master the Korean alphabet with interactive flashcards</p>
+                    <Mascot pose="cards" size={72} className={styles.headerMascot} />
+                    <div className={styles.headerText}>
+                        <h1 className={styles.title}>Learn Hangeul</h1>
+                        <p className={styles.subtitle}>Master the Korean alphabet with interactive flashcards</p>
+                    </div>
                 </div>
                 
                 {/* Controls */}
                 <div className={styles.controls}>
                     <div className={styles.modeSelector}>
                         <label className={styles.controlLabel}>Practice Mode:</label>
-                        <div className={styles.modeButtons}>
+                        <div className={styles.modeButtons} role="group" aria-label="Practice mode">
                             {Object.entries(MODE_TYPES).map(([key, value]) => (
                                 <button
                                     key={value}
                                     className={`${styles.modeButton} ${currentMode === value ? styles.active : ''}`}
+                                    aria-pressed={currentMode === value}
                                     onClick={() => handleModeChange(value)}
                                 >
                                     {key.charAt(0) + key.slice(1).toLowerCase()}
@@ -477,12 +481,14 @@ export default function HangeulPractice() {
                 
                 {/* Score Counter */}
                 <div className={styles.counter}>
-                    <div className={`${styles.counterItem} ${styles.correct}`}>
+                    <div className={`${styles.counterItem} ${styles.correct}`} title="Right">
                         <MaterialSymbolsCheckCircleOutlineRounded className={styles.counterIcon} />
+                        <span className={styles.counterLabel}>Right</span>
                         <span>{score.correct}</span>
                     </div>
-                    <div className={`${styles.counterItem} ${styles.incorrect}`}>
+                    <div className={`${styles.counterItem} ${styles.incorrect}`} title="Wrong">
                         <MaterialSymbolsCancel className={styles.counterIcon} />
+                        <span className={styles.counterLabel}>Wrong</span>
                         <span>{score.incorrect}</span>
                     </div>
                 </div>
@@ -494,6 +500,9 @@ export default function HangeulPractice() {
                         onClick={!isExpanded ? handleExpand : undefined}
                         style={{ cursor: !isExpanded ? 'pointer' : 'default' }}
                     >
+                        <div className={styles.faceLabel}>
+                            {isExpanded ? 'How it sounds' : 'What sound is this?'}
+                        </div>
                         <div className={styles.cardContent}>
                             <div className={styles.characterSection}>
                                 <div className={styles.character}>
@@ -544,7 +553,7 @@ export default function HangeulPractice() {
                                                 handleAnswer(true);
                                             }}
                                         >
-                                            <MaterialSymbolsCheckCircleOutlineRounded style={{ fontSize: '16px' }} />
+                                            <MaterialSymbolsCheckCircleOutlineRounded />
                                             Right <span className={styles.key}>D</span>
                                         </button>
                                         <button
@@ -554,7 +563,7 @@ export default function HangeulPractice() {
                                                 handleAnswer(false);
                                             }}
                                         >
-                                            <MaterialSymbolsCancel style={{ fontSize: '16px' }} />
+                                            <MaterialSymbolsCancel />
                                             Wrong <span className={styles.key}>F</span>
                                         </button>
                                     </div>
@@ -582,15 +591,7 @@ export default function HangeulPractice() {
                         Learning {currentMode} • {getCurrentCharacterSet().length} characters available
                     </div>
                 </div>
-                
-                {/* Hanbok Girl Image */}
-                <Image
-                    src="/images/hanbokgirl.png"
-                    alt="Hanbok Girl"
-                    width={128}
-                    height={192}
-                    className={styles.hanbokGirl}
-                />
+
             </div>
         </Dashboard>
     );

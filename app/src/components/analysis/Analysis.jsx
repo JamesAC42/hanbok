@@ -18,8 +18,10 @@ import { usePopup } from '@/contexts/PopupContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 import getFontClass from '@/lib/fontClass';
 import QuotaDisplay from '@/components/QuotaDisplay';
-import { FluentCursorHover32Filled } from '@/components/icons/CursorHover';
 import RecentlyAnalyzed from '@/components/analysis/RecentlyAnalyzed';
+import NextSteps from '@/components/analysis/NextSteps';
+import useSavedWords from '@/hooks/useSavedWords';
+import { markStage } from '@/lib/todayLoop';
 
 const Analysis = ({
     analysis,
@@ -33,7 +35,8 @@ const Analysis = ({
     sentenceId,
     doNotCache,
     onCacheStatusChange,
-    isLyric
+    isLyric,
+    inParagraph = false
 }) => {
     const { t, language } = useLanguage();
     const { user } = useAuth();
@@ -44,11 +47,27 @@ const Analysis = ({
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const [showPronunciation, setShowPronunciation] = useState(true);
     const [activeSection, setActiveSection] = useState('breakdown');
-    const [isScrolled, setIsScrolled] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const [cacheUpdating, setCacheUpdating] = useState(false);
     const [cacheMessage, setCacheMessage] = useState('');
     const [cacheError, setCacheError] = useState('');
+
+    const savedWordsState = useSavedWords({
+        analysis,
+        originalLanguage,
+        translationLanguage,
+        sentenceId,
+    });
+
+    const nextStepsProps = {
+        sentenceId: isLyric ? null : sentenceId,
+        words: savedWordsState.words,
+        unsavedWords: savedWordsState.unsavedWords,
+        savedLoading: savedWordsState.loading,
+        addingAll: savedWordsState.addingAll,
+        saveAll: savedWordsState.saveAll,
+        showParagraphLink: !inParagraph,
+    };
 
     const sectionRefs = {
         breakdown: useRef(null),
@@ -70,6 +89,10 @@ const Analysis = ({
     const capitalize = (word) => {
         return word.charAt(0).toUpperCase() + word.slice(1);
     }
+
+    useEffect(() => {
+        if (!isLyric) markStage('understand');
+    }, [isLyric]);
 
     // Initialize showPronunciation from localStorage
     useEffect(() => {
@@ -125,15 +148,6 @@ const Analysis = ({
           setWordInfo(null);
         }
     }, [showTransition]);
-
-    // Handle scroll state
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     // Intersection Observer for active section tracking
     useEffect(() => {
@@ -203,12 +217,13 @@ const Analysis = ({
             
             {/* Navigation */}
             {!isLyric && (
-            <nav className={`${styles.navigation} ${isScrolled ? styles.scrolled : ''}`}>
-                <button onClick={() => scrollToSection('breakdown')} className={activeSection === 'breakdown' ? styles.active : ''}>Breakdown</button>
-                {analysis.sentence.context && <button onClick={() => scrollToSection('notes')} className={activeSection === 'notes' ? styles.active : ''}>Notes</button>}
-                <button onClick={() => scrollToSection('words')} className={activeSection === 'words' ? styles.active : ''}>Words</button>
-                <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
-                
+            <nav className={styles.navigation} aria-label="Sections">
+                <div className={styles.tabs}>
+                    <button onClick={() => scrollToSection('breakdown')} className={activeSection === 'breakdown' ? styles.active : ''}>Sentence</button>
+                    {analysis.sentence.context && <button onClick={() => scrollToSection('notes')} className={activeSection === 'notes' ? styles.active : ''}>Notes</button>}
+                    <button onClick={() => scrollToSection('words')} className={activeSection === 'words' ? styles.active : ''}>Words</button>
+                    <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
+                </div>
                 <div className={styles.embeddedControls}>
                     <SaveButton sentenceId={sentenceId} />
                     <SettingsButton 
@@ -220,15 +235,18 @@ const Analysis = ({
             </nav>
             )}
 
-            {!isLyric && <QuotaDisplay />}
+            {!isLyric && <QuotaDisplay smallScreensOnly />}
 
             <div className={styles.mainGrid}>
                 <div className={styles.contentColumn}>
                     
                     {/* Header Card */}
                     <div ref={sectionRefs.breakdown} className={`${styles.card} ${styles.headerSection}`}>
-                        <div className={styles.breadcrumbs}>
-                            {capitalize(originalLanguage)} • {capitalize(translationLanguage)} 
+                        <div className={styles.heroTop}>
+                            <span className={styles.stageTag}>Understand</span>
+                            <span className={styles.breadcrumbs}>
+                                {originalLanguage.toUpperCase()} → {translationLanguage.toUpperCase()}
+                            </span>
                         </div>
                         
                         <div className={`${styles.sentence} ${getFontClass(originalLanguage)}`}>
@@ -273,9 +291,24 @@ const Analysis = ({
                             setWordInfo={setWordInfo}
                             resetLockedWord={showTransition}
                             shouldAnimate={shouldAnimate}
-                            showPronunciation={showPronunciation} />
+                            showPronunciation={showPronunciation}
+                            savedWords={user && !savedWordsState.loading ? savedWordsState.savedWords : null} />
+                        <div className={styles.legend}>
+                            {user && !savedWordsState.loading && (
+                                <>
+                                    <span><i className={styles.legendNew} /> New to you</span>
+                                    <span><i className={styles.legendKept} /> In your flashcards</span>
+                                </>
+                            )}
+                            <span className={styles.legendHint}>Tap a word for details</span>
+                        </div>
                     </div>
                     
+                    {/* Next steps (shown here when the side column is a bottom sheet) */}
+                    <div className={styles.inlineNextSteps}>
+                        <NextSteps {...nextStepsProps} compact />
+                    </div>
+
                     {/* Recently Analyzed Section */}
                     {/*<RecentlyAnalyzed />*/}
 
@@ -295,7 +328,15 @@ const Analysis = ({
                             analysis={analysis} 
                             originalLanguage={originalLanguage} 
                             translationLanguage={translationLanguage}
-                            showPronunciation={showPronunciation} />
+                            showPronunciation={showPronunciation}
+                            words={savedWordsState.words}
+                            savedWords={savedWordsState.savedWords}
+                            setSavedWords={savedWordsState.setSavedWords}
+                            unsavedWords={savedWordsState.unsavedWords}
+                            isSavedWordsLoading={savedWordsState.loading}
+                            toggleWordInLibrary={savedWordsState.toggleWord}
+                            saveAll={savedWordsState.saveAll}
+                            addingAll={savedWordsState.addingAll} />
                     </div>
 
                     {/* Grammar Points */}
@@ -317,9 +358,8 @@ const Analysis = ({
                             showPronunciation={showPronunciation}
                             onClose={handleCloseWordInfo} />
                     ) : (
-                        <div className={styles.placeholderState}>
-                            <FluentCursorHover32Filled />
-                            <p>{t('analysis.hoverExplanation', 'Select a word to see details')}</p>
+                        <div className={styles.sidebarIdle}>
+                            <NextSteps {...nextStepsProps} />
                         </div>
                     )}
                 </div>

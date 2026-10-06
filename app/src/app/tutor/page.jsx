@@ -7,7 +7,10 @@ import MarkdownRenderer from '@/components/MarkdownRenderer';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/pages/tutor.module.scss';
 import Link from 'next/link';
-import Image from 'next/image';
+import Tiger from '@/components/Tiger';
+import { MaterialSymbolsDelete } from '@/components/icons/Delete';
+import { MaterialSymbolsHistory } from '@/components/icons/History';
+import { track } from '@/lib/analytics';
 
 export default function TutorPage() {
   const router = useRouter();
@@ -196,6 +199,7 @@ export default function TutorPage() {
         const error = await createResponse.json();
         throw new Error(error.message || 'Failed to create conversation');
       }
+      track('tutor_start', { fromSentence: !!sentenceId });
 
       const conversationData = await createResponse.json();
       setCurrentConversation(conversationData.conversation);
@@ -624,7 +628,7 @@ export default function TutorPage() {
   if (loading || !isAuthenticated) return null;
 
   return (
-    <Dashboard>
+    <Dashboard noScroll>
       <div className={styles.tutorContainer}>
         {/* Sidebar */}
         <div className={`${styles.sidebar} ${sidebarCollapsed ? styles.collapsed : ''}`}>
@@ -634,8 +638,9 @@ export default function TutorPage() {
               className={styles.toggleButton}
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
               title={t('tutor.collapseSidebar')}
+              aria-label={t('tutor.collapseSidebar')}
             >
-              ← 
+              ←
             </button>
           </div>
           
@@ -677,6 +682,11 @@ export default function TutorPage() {
                   {conversationLimits.monthlyConversations.used}/{conversationLimits.monthlyConversations.total}
                 </span>
               </div>
+              {conversationLimits.monthlyConversations.total > 0 && (
+                <div className={styles.rateLimitBar}>
+                  <i style={{ width: `${Math.min(100, (conversationLimits.monthlyConversations.used / conversationLimits.monthlyConversations.total) * 100)}%` }} />
+                </div>
+              )}
               
               {conversationLimits.tier === 0 && (
                 <div className={styles.tierNotice}>
@@ -718,13 +728,14 @@ export default function TutorPage() {
                         deleteConversation(conversation.conversationId);
                       }}
                       title={t('tutor.deleteConversation')}
+                      aria-label={t('tutor.deleteConversation')}
                     >
-                      🗑️
+                      <MaterialSymbolsDelete />
                     </button>
                   </div>
                   {conversation.sentence && (
                     <div className={styles.conversationSentence}>
-                      {t('tutor.linkedTo')} "{conversation.sentence.text.substring(0, 50)}..."
+                      <span className={styles.linkedLabel}>{t('tutor.linkedTo')}</span> {conversation.sentence.text.substring(0, 50)}…
                     </div>
                   )}
                 </div>
@@ -739,14 +750,22 @@ export default function TutorPage() {
 
         {/* Main Content */}
         <div className={styles.mainContent}>
-          {sidebarCollapsed && (
-            <button 
-              className={styles.collapsedToggle}
-              onClick={() => setSidebarCollapsed(false)}
-              title={t('tutor.showSidebar')}
-            >
-              →
-            </button>
+          {(sidebarCollapsed || currentConversation) && (
+            <div className={styles.mainTop}>
+              {sidebarCollapsed && (
+                <button 
+                  className={styles.collapsedToggle}
+                  onClick={() => setSidebarCollapsed(false)}
+                  title={t('tutor.showSidebar')}
+                >
+                  <MaterialSymbolsHistory />
+                  <span>{t('tutor.chatHistory')}</span>
+                </button>
+              )}
+              {currentConversation && (
+                <h1 className={styles.chatTitle}>{currentConversation.title}</h1>
+              )}
+            </div>
           )}
           
           {/* Sentence Preview Banner */}
@@ -778,10 +797,6 @@ export default function TutorPage() {
           
           {currentConversation ? (
             <>
-              <div className={styles.chatHeader}>
-                <h1>{currentConversation.title}</h1>
-              </div>
-              
               {/* Sentence Context Banner for Active Conversations */}
               {currentConversation.sentence && (
                 <div className={styles.activeSentenceContext}>
@@ -810,12 +825,7 @@ export default function TutorPage() {
                   <div key={index} className={`${styles.messageWrapper} ${styles[message.role]}`}>
                     {message.role === 'assistant' && (
                       <div className={styles.tutorBubble}>
-                        <Image 
-                          src="/images/speakers/female.png"
-                          alt={t('tutor.messages.aiTutor')} 
-                          width={633}
-                          height={784}
-                        />
+                        <Tiger pose="happy" size={38} label={t('tutor.messages.aiTutor')} />
                       </div>
                     )}
                     <div className={`${styles.message} ${styles[message.role]} ${message.isStreaming ? styles.streaming : ''}`}>
@@ -844,12 +854,7 @@ export default function TutorPage() {
                 {isLoading && !messages.some(msg => msg.isStreaming) && (
                   <div className={`${styles.messageWrapper} ${styles.assistant}`}>
                     <div className={styles.tutorBubble}>
-                      <Image 
-                        src="/images/speakers/female.png"
-                        alt={t('tutor.messages.aiTutor')} 
-                        width={633}
-                        height={784}
-                      />
+                      <Tiger pose="happy" size={38} label={t('tutor.messages.aiTutor')} />
                     </div>
                     
                     <div className={styles.loadingMessage}>
@@ -869,13 +874,7 @@ export default function TutorPage() {
             <div className={styles.emptyState}>
               <div className={styles.tutorIntro}>
                 <div className={styles.tutorCharacter}>
-                  <Image 
-                    src="/images/speakers/female.png"
-                    alt={t('tutor.messages.aiTutor')} 
-                    width={633}
-                    height={784}
-                    className={styles.tutorCharacter}
-                  />
+                  <Tiger pose="wave" size={124} motion="bob" label={t('tutor.messages.aiTutor')} />
                 </div>
                 <div className={styles.tutorIntroText}>
                   <h2>{t('tutor.intro.title')}</h2>
@@ -910,7 +909,7 @@ export default function TutorPage() {
                           <span className={styles.exampleIcon}>
                             {getIcon(lang)}
                           </span>
-                          <span>"{question}"</span>
+                          <span>{question}</span>
                         </li>
                       ))}
                     </ul>

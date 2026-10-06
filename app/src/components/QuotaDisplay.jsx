@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import styles from '@/styles/components/QuotaDisplay.module.scss';
-import Image from 'next/image';
 
-const QuotaDisplay = () => {
+// compact: the stacked version that sits at the bottom of the sidebar.
+// smallScreensOnly: hide on desktop, where the sidebar already shows the meter.
+const QuotaDisplay = ({ compact = false, smallScreensOnly = false }) => {
     const [quota, setQuota] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -30,23 +31,22 @@ const QuotaDisplay = () => {
     if (loading || !quota || quota.isPremium) {
         return null;
     }
-    
+
+    const total = quota.totalWeekly || 10;
+    const remaining = Math.max(0, Math.min(quota.remainingWeekly, total));
+    const used = total - remaining;
+
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.quotaContainer}>
-                <p>
-                    You have <strong>{quota.remainingWeekly}</strong> free sentence analyses remaining for the week.
-                </p>
-                <Link href="/pricing" className={styles.upgradeButton}>
-                    Upgrade to Premium
-                </Link>
-                <p className={styles.subtext}>
-                    Unlock unlimited sentences and more.
-                </p>
+        <div className={`${styles.meter} ${compact ? styles.compact : ''} ${smallScreensOnly ? styles.smallScreensOnly : ''}`}>
+            <div className={styles.meterText}>
+                <strong>{remaining} of {total}</strong> free analyses left this week
             </div>
-            <div className={styles.imageWrapper}>
-                <Image src="/images/concentration.png" alt="Concentration" width={380} height={459} />
+            <div className={styles.meterBar} role="progressbar" aria-valuemin={0} aria-valuemax={total} aria-valuenow={used} aria-label="Free analyses used this week">
+                <span style={{ width: `${(used / total) * 100}%` }} />
             </div>
+            <Link href="/pricing" className={styles.meterLink}>
+                Go unlimited
+            </Link>
         </div>
     );
 };

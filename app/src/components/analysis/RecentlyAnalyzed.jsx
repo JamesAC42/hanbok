@@ -56,7 +56,6 @@ const RecentlyAnalyzed = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.backdrop}></div>
             <div className={styles.content}>
                 <h2 className={styles.title}>{t('analysis.recentlyAnalyzed', 'Recently Analyzed by the Community')}</h2>
                 <div className={styles.cardList}>
@@ -64,7 +63,7 @@ const RecentlyAnalyzed = () => {
                         <div 
                             key={item.id} 
                             className={styles.card}
-                            style={{ borderTopColor: item.color }}
+                            style={{ '--accent': item.color }}
                         >
                             <div className={styles.cardHeader}>
                                 <div className={styles.userInfo}>
@@ -91,7 +90,7 @@ const RecentlyAnalyzed = () => {
                             </div>
                             
                             <div className={styles.cardFooter}>
-                                <button className={styles.analyzeBtn}>
+                                <button type="button" className={styles.analyzeBtn}>
                                     {t('analysis.analyzeBtn', 'Analyse')}
                                 </button>
                             </div>

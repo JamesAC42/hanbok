@@ -9,14 +9,22 @@ import { useAuth } from '@/contexts/AuthContext';
 import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { BasilEyeSolid } from '@/components/icons/Eye';
 import { MaterialSymbolsChatBubbleOutline } from '@/components/icons/ChatBubble';
+import { IcSharpQueueMusic } from '@/components/icons/MusicLyrics';
 import ContentPage from '@/components/ContentPage';
+import Dashboard from '@/components/Dashboard';
 
 import Footer from '@/components/Footer';
+
+// Signed-in readers get the app shell; visitors keep the public site header.
+// While auth is still loading, render a plain surface so neither shell flashes.
+const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
 
 const Lyrics = () => {
     const { t } = useLanguage();
     const { isAdmin } = useAdmin();
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
+    const isPublic = !authLoading && !user;
+    const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
 
     const [activeCategory, setActiveCategory] = useState('kpop');
     const [viewMode, setViewMode] = useState('categories'); // 'categories' or 'songs'
@@ -50,7 +58,6 @@ const Lyrics = () => {
     ];
     
     useEffect(() => {
-        document.title = t('lyrics.pageTitle');
         fetchRecentLyrics();
     }, [t]);
 
@@ -171,12 +178,14 @@ const Lyrics = () => {
     };
 
     return (
-        <ContentPage>
-            <div className={lyricsStyles.lyricsPage}>
-                <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
+        <Shell>
+            <div className={`${lyricsStyles.lyricsPage} ${isPublic ? lyricsStyles.publicPage : ''}`}>
                 <div className={lyricsStyles.lyricsHero}>
-                    <h1 className={lyricsStyles.heroTitle}>{t('lyrics.title')}</h1>
-                    <p className={lyricsStyles.heroSubtitle}>{t('lyrics.description')}</p>
+                    <span className={lyricsStyles.heroIcon}><IcSharpQueueMusic /></span>
+                    <div>
+                        <h1 className={lyricsStyles.heroTitle}>{t('lyrics.title')}</h1>
+                        <p className={lyricsStyles.heroSubtitle}>{t('lyrics.description')}</p>
+                    </div>
                 </div>
 
                 <div className={lyricsStyles.lyricsHomeContainer}>
@@ -200,6 +209,7 @@ const Lyrics = () => {
                                                         key={lyric.lyricId}
                                                         className={lyricsStyles.recentLyricCard}
                                                     >
+                                                        <span className={lyricsStyles.recentLyricIcon}><IcSharpQueueMusic /></span>
                                                         <div className={lyricsStyles.recentLyricInfo}>
                                                             <h4>{lyric.title}</h4>
                                                             <p>{lyric.anime || lyric.artist}</p>
@@ -356,9 +366,9 @@ const Lyrics = () => {
                         )}
                     </div>
                 </div>
-                <Footer />
             </div>
-        </ContentPage>
+            {isPublic && <Footer />}
+        </Shell>
     );
 };
 

@@ -27,9 +27,10 @@ const getUsersAdmin = async (req, res) => {
         const limit = parseInt(req.query.limit) || 20;
         const page = parseInt(req.query.page) || 1;
         const skip = (page - 1) * limit;
-        const sortBy = req.query.sortBy || 'dateCreated';
+        const sortBy = ['dateCreated', 'name', 'email', 'tier', 'userId'].includes(req.query.sortBy) ? req.query.sortBy : 'dateCreated';
         const sortOrder = req.query.sortOrder === 'asc' ? 1 : -1;
-        const search = req.query.search || '';
+        // Match the search text literally, not as a regular expression.
+        const search = (req.query.search || '').slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const tierFilter = req.query.tier;
         
         // Build query

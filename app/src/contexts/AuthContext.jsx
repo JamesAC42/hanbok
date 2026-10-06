@@ -1,5 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { track, getAttribution, identifyUser } from '@/lib/analytics';
 
 const AuthContext = createContext();
 
@@ -8,6 +9,10 @@ export function AuthProvider({ children }) {
     // user object now includes: tier (0 for free, 1 for basic, 2 for plus), 
     // remainingAudioGenerations (number), and remainingImageExtracts (number)
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        identifyUser(user);
+    }, [user?.userId, user?.tier]);
 
     useEffect(() => {
         fetchSession();
@@ -77,11 +82,17 @@ export function AuthProvider({ children }) {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ token: userDataOrGoogleResponse.credential })
+                    body: JSON.stringify({
+                        token: userDataOrGoogleResponse.credential,
+                        attribution: getAttribution()
+                    })
                 });
                 const data = await loginResponse.json();
                 console.log("Login response:", data);
                 if(data.success) {
+                    if (data.isNewUser) {
+                        track('signup', { method: 'google' });
+                    }
                     setUser(data.user);
                 }
             } catch (error) {

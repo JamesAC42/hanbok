@@ -1,0 +1,77 @@
+name: Deploy to staging
+
+# Puts any PR, branch or commit on staging.hanbokstudy.com so it can be tried
+# before merging. Manual only; production deploys are in deploy.yml.
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: PR number (deploys the PR as it would look merged into main), or a branch, tag or commit SHA
+        required: true
+      action:
+        description: rollback swaps staging back to its previous build without rebuilding
+        type: choice
+        options: [deploy, rollback]
+        default: deploy
+
+# One staging deploy at a time; production deploys don't wait on these.
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.hanbokstudy.com
+    timeout-minutes: 30
+    steps:
+      - name: Resolve ref
+        id: ref
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          if [[ "$REF" =~ ^#?[0-9]+$ ]]; then
+            echo "ref=refs/pull/${REF#\#}/merge" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Resolve commit
+        if: inputs.action == 'deploy'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.ref.outputs.ref }}
+
+      - name: Pick command
+        id: cmd
+        env:
+          ACTION: ${{ inputs.action }}
+          REF: ${{ inputs.ref }}
+        run: |
+          if [ "$ACTION" = rollback ]; then
+            echo "command=staging-rollback" >> "$GITHUB_OUTPUT"
+          else
+            echo "command=staging-deploy $(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+            echo "Deploying \`$REF\` ($(git log -1 --format='%h %s')) to https://staging.hanbokstudy.com" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          COMMAND: ${{ steps.cmd.outputs.command }}
+        # Same forced-command key as production; scripts/deploy-entry.sh sends
+        # staging-* commands to the staging checkout only.
+        run: ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" "$COMMAND"

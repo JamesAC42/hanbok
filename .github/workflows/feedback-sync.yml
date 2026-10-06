@@ -1,0 +1,44 @@
+name: Feedback sync
+
+# Mirrors new posts and replies from hanbokstudy.com/feedback into GitHub issues
+# labelled `feedback`, where they get triaged and bugs get fixed. See scripts/feedback-sync.js.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+  # On PRs that change the sync, do a read-only run that prints the current feedback.
+  pull_request:
+    paths:
+      - scripts/feedback-sync.js
+      - .github/workflows/feedback-sync.yml
+
+concurrency:
+  group: feedback-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Preview feedback (read-only)
+        if: github.event_name == 'pull_request'
+        run: node scripts/feedback-sync.js
+        env:
+          DRY_RUN: '1'
+
+      - name: Sync feedback to issues
+        if: github.event_name != 'pull_request'
+        run: node scripts/feedback-sync.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

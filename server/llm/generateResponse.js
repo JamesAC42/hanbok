@@ -1,11 +1,12 @@
 const {prompt_anthropic} = require('./anthropic');
-const {prompt_gemini} = require('./gemini');
+const {prompt_gemini, prompt_gemini_analysis, ANALYSIS_MODEL} = require('./gemini');
 const {prompt_openai} = require('./openai');
 const {prompt_geminiThinking} = require('./geminiThinking');
 
 const models = {
     anthropic: prompt_anthropic,
     gemini: prompt_gemini,
+    geminiAnalysis: prompt_gemini_analysis,
     openai: prompt_openai,
     geminiThinking: prompt_geminiThinking
 }
@@ -13,8 +14,9 @@ const models = {
 const modelLabels = {
     anthropic: 'anthropic/claude-sonnet-4-5',
     gemini: 'gemini/gemini-flash-lite-latest',
+    geminiAnalysis: `gemini/${ANALYSIS_MODEL}`,
     openai: 'openai/gpt-4.1',
-    geminiThinking: 'gemini/gemini-3.1-flash-lite-preview'
+    geminiThinking: 'gemini/gemini-3.1-flash-lite'
 }
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -57,20 +59,31 @@ const extractJsonText = (raw) => {
 const isRetryableApiError = (error) => {
     const status = error?.status ?? error?.statusCode;
     const message = String(error?.message || error || '');
-    if (status === 429 || status === 500 || status === 503) return true;
-    if (/\[429 |\[500 |\[503 |overloaded|high demand|timed out|Resource has been exhausted/i.test(message)) {
+    if (status === 429 || status === 500 || status === 502 || status === 503) return true;
+    if (/\[429 |\[500 |\[502 |\[503 |overloaded|high demand|timed out|Resource has been exhausted/i.test(message)) {
         return true;
     }
     return false;
 };
 
-const generateResponse = async (text, model) => {
+// options.deadlineMs: stop starting new attempts once this much time has
+// passed, so a request someone is waiting on fails instead of retrying past
+// the browser's timeout. options.attemptMs is the longest one attempt can take.
+const generateResponse = async (text, model, options = {}) => {
     let attempts = 0;
     let maxAttempts = 5;
     let parsedResponse = null;
     let lastError = null;
+    const startedAt = Date.now();
+    const { deadlineMs, attemptMs = 0 } = options;
+    const outOfTime = () => deadlineMs !== undefined
+        && Date.now() - startedAt + attemptMs > deadlineMs;
 
     while(!parsedResponse && attempts < maxAttempts) {
+        if (attempts > 0 && outOfTime()) {
+            console.log(`Giving up after ${attempts} attempt(s): no time left for another`);
+            break;
+        }
         try {
             console.log(`Generating response with ${modelLabels[model] || model}...`);
             console.log(`Attempt ${attempts + 1} of ${maxAttempts}`);

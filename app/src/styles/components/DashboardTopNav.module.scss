@@ -1,48 +1,99 @@
+@import "../variables.module.scss";
+
 .topNav {
     position: sticky;
     top: 0;
     z-index: 200;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: .6rem;
     padding: 0 1.5rem;
-    height:4.2rem;
+    height: 4.2rem;
     background: var(--background);
-    border-bottom: 1px solid var(--foreground-light);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border-bottom: 2px solid var(--bp-line);
+    font-family: var(--font-display);
+
+    @media (max-width: 1000px) {
+        padding: 0 .9rem 0 4.25rem;
+    }
 }
 
 .brand {
-    font-family: 'Merriweather', serif;
-    font-weight: 600;
-    font-size: 1.2rem;
-    color: var(--foreground);
+    font-family: var(--font-lilita);
+    font-size: 1.6rem;
+    line-height: 1;
+    color: var(--bp-read);
     text-decoration: none;
-    letter-spacing: 0.04em;
-    text-transform: lowercase;
+    letter-spacing: .01em;
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+
+    @media (min-width: 1001px) {
+        display: none;
+    }
+}
+
+.spacer {
+    flex: 1;
+}
+
+.pill {
+    @include bp-pill;
+    text-decoration: none;
+    transition: background .12s ease;
+
+    svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    &:hover {
+        background: var(--bp-soft);
+    }
+
+    &.flame { color: var(--bp-flame); }
+    &.words { color: var(--bp-read); }
+    &.pillIdle { color: var(--bp-ink2); svg { filter: grayscale(1); opacity: .6; } }
+}
+
+.pillLabel {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--bp-ink2);
+
+    @media (max-width: 560px) {
+        display: none;
+    }
 }
 
 .settingsButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    border: 1px solid var(--foreground-light);
-    background: var(--background-alt);
-    color: var(--foreground);
-    font-size: 1.35rem;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    margin-left: .2rem;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    background: var(--background);
+    color: var(--bp-ink2);
+    font-size: 1.3rem;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
+    box-shadow: 0 3px 0 var(--bp-line);
+    transition: transform .08s ease, box-shadow .08s ease, color .15s ease;
 }
 
 .settingsButton:hover,
 .settingsButton:focus-visible {
-    background: var(--primary);
-    color: var(--background);
-    border-color: var(--primary);
+    color: var(--bp-read);
+}
+
+.settingsButton:active {
+    transform: translateY(3px);
+    box-shadow: none;
 }
 
 .overlay {
@@ -61,9 +112,10 @@
     width: min(32rem, calc(100vw - 2rem));
     max-height: calc(100vh - 2rem);
     background: var(--background);
-    border-radius: 0.75rem;
-    border: 1px solid var(--foreground-light);
-    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.15);
+    border-radius: 22px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 6px 0 var(--bp-line), 0 1.5rem 3rem rgba(0, 0, 0, 0.15);
+    font-family: var(--font-display);
     z-index: 1101;
     display: flex;
     flex-direction: column;
@@ -79,9 +131,8 @@
 }
 
 .modalHeader h2 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--foreground);
+    @include bp-title;
+    font-size: 1.6rem;
 }
 
 .closeButton {
@@ -109,9 +160,7 @@
 }
 
 .section h3 {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--foreground);
+    @include bp-label;
     margin-bottom: 0.75rem;
 }
 
@@ -127,8 +176,11 @@
     justify-content: space-between;
     gap: 0.75rem;
     padding: 0.6rem 0.85rem;
-    border-radius: 0.6rem;
-    border: 1px solid var(--foreground-light);
+    border-radius: 14px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 3px 0 var(--bp-line);
+    font-family: var(--font-display);
+    font-weight: 700;
     background: var(--background-alt);
     color: var(--foreground);
     font-size: 0.9rem;
@@ -138,12 +190,11 @@
 
 .themeButton:hover,
 .themeButton:focus-visible {
-    border-color: var(--primary);
-    transform: translateY(-1px);
+    border-color: var(--bp-read-line);
 }
 
 .themeButtonActive {
-    outline: 2px solid var(--primary);
+    outline: 3px solid var(--bp-read);
     outline-offset: 2px;
 }
 
@@ -177,8 +228,11 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.6rem 0.75rem;
-    border-radius: 0.6rem;
-    border: 1px solid var(--foreground-light);
+    border-radius: 14px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 3px 0 var(--bp-line);
+    font-family: var(--font-display);
+    font-weight: 700;
     background: var(--background-alt);
     color: var(--foreground);
     font-size: 0.9rem;
@@ -188,14 +242,13 @@
 
 .languageButton:hover,
 .languageButton:focus-visible {
-    border-color: var(--primary);
-    transform: translateY(-1px);
+    border-color: var(--bp-read-line);
 }
 
 .languageButtonActive {
-    border-color: var(--primary);
-    background: var(--primary);
-    color: var(--background);
+    border-color: var(--bp-read-line);
+    background: var(--bp-read-soft);
+    color: var(--bp-read);
 }
 
 .languageButtonActive .languageIcon {
@@ -212,8 +265,3 @@
     font-size: 0.9rem;
 }
 
-@media (max-width: 1000px) {
-    .topNav {
-        padding-left: 5rem; /* Account for mobile sidebar toggle button */
-    }
-}

@@ -12,8 +12,45 @@ import { MaterialSymbolsVolumeOff } from '@/components/icons/VolumeOff';
 import { use } from 'react';
 import getFontClass from '@/lib/fontClass';
 import Dashboard from '@/components/Dashboard';
+import SourceSentence from '@/components/cards/SourceSentence';
 // Import our new study session manager
 import studySessionManager from '@/lib/studySessionManager';
+import Link from 'next/link';
+import Mascot from '@/components/Mascot';
+import Confetti from '@/components/celebrate/Confetti';
+import useProgress from '@/hooks/useProgress';
+import { markStage } from '@/lib/todayLoop';
+import { track } from '@/lib/analytics';
+
+const FOUR_BUTTONS_KEY = 'studyFourButtons';
+
+const SessionDone = ({ reviewed, got, streak }) => {
+    const pct = reviewed ? Math.round((got / reviewed) * 100) : 0;
+    const days = streak ? (streak.activeToday ? streak.current : streak.current + 1) : null;
+    return (
+        <div className={studyStyles.done}>
+            <Confetti />
+            <Mascot pose="cheer" size={150} motion="hop" className={studyStyles.doneMascot} />
+            <h1 className={studyStyles.doneTitle}>Review complete!</h1>
+            <p className={studyStyles.doneLede}>Every word you saw today comes back right before you would forget it.</p>
+            <div className={studyStyles.tiles}>
+                <div className={studyStyles.tileKeep}><span>Reviewed</span><b>{reviewed}</b></div>
+                <div className={studyStyles.tileFlame}><span>Streak</span><b>{days ? `${days} ${days === 1 ? 'day' : 'days'}` : '—'}</b></div>
+                <div className={studyStyles.tileUnd}><span>Got it</span><b>{pct}%</b></div>
+            </div>
+            <div className={studyStyles.doneAsk}>
+                <div>
+                    <strong>Keep the loop going</strong>
+                    <span>Read one new sentence and save its words for tomorrow.</span>
+                </div>
+                <div className={studyStyles.doneActions}>
+                    <Link href="/home" className={studyStyles.ghostButton}>Home</Link>
+                    <Link href="/analyze" className={studyStyles.readButton}>Read a sentence</Link>
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const StudyView = ({ params }) => {
     // Unwrap params using React.use()
@@ -31,7 +68,12 @@ const StudyView = ({ params }) => {
 
     const [currentCard, setCurrentCard] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
-    const [updatingCard, setUpdatingCard] = useState(false);
+    // Rating saves run in the background (chained in order) so they never
+    // block revealing the next card.
+    const saveQueueRef = useRef(Promise.resolve());
+    // Synchronous guard so a double click / key repeat can't rate twice
+    // before React re-renders.
+    const ratingLockRef = useRef(false);
     const [cardIndex, setCardIndex] = useState(0);
     const [muted, setMuted] = useState(false);
     const [audioError, setAudioError] = useState(false);
@@ -40,6 +82,27 @@ const StudyView = ({ params }) => {
     const [cardFlipping, setCardFlipping] = useState(false);
     const [showCelebration, setShowCelebration] = useState(false);
     const [ratingInProgress, setRatingInProgress] = useState(null);
+    const [reviewed, setReviewed] = useState(0);
+    const [got, setGot] = useState(0);
+    const [fourButtons, setFourButtons] = useState(false);
+    const initialTotal = useRef(0);
+    const { progress } = useProgress(isAuthenticated && reviewed > 0 && studySession?.cards?.length === 0);
+    const sessionDone = reviewed > 0 && studySession?.cards?.length === 0;
+    useEffect(() => {
+        if (sessionDone) track('review_done', { cards: reviewed });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [sessionDone]);
+
+    useEffect(() => {
+        try { setFourButtons(localStorage.getItem(FOUR_BUTTONS_KEY) === '1'); } catch { /* storage off */ }
+    }, []);
+
+    const toggleFourButtons = () => {
+        setFourButtons(prev => {
+            try { localStorage.setItem(FOUR_BUTTONS_KEY, prev ? '0' : '1'); } catch { /* storage off */ }
+            return !prev;
+        });
+    };
     
     // Reset showAnswer when currentCard changes
     useEffect(() => {
@@ -47,6 +110,7 @@ const StudyView = ({ params }) => {
         setCardFlipping(false);
         setShowCelebration(false);
         setRatingInProgress(null);
+        ratingLockRef.current = false;
     }, [currentCard]);
     
     // Audio player reference
@@ -138,6 +202,7 @@ const StudyView = ({ params }) => {
 
                 // Initialize the study session
                 setStudySession(studyData.studySession);
+                initialTotal.current = studyData.studySession?.cards?.length || 0;
                 
                 // Initialize the study session manager with the session data and deck settings
                 const firstCard = studySessionManager.initialize(studyData.studySession, (updateInfo) => {
@@ -219,9 +284,6 @@ const StudyView = ({ params }) => {
                 return;
             }
             
-            // If card is updating, don't process keyboard shortcuts
-            if (updatingCard) return;
-            
             // Handle show answer with space or enter
             if (!showAnswer && (e.key === ' ' || e.key === 'Enter')) {
                 e.preventDefault(); // Prevent page scrolling on space
@@ -230,6 +292,11 @@ const StudyView = ({ params }) => {
             }
             
             // Handle rating with number keys 1-4
+            if (showAnswer && !fourButtons) {
+                if (e.key === '1') handleCardRating('again');
+                if (e.key === '2') handleCardRating('good');
+                return;
+            }
             if (showAnswer) {
                 switch (e.key) {
                     case '1':
@@ -257,12 +324,17 @@ const StudyView = ({ params }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [showAnswer, currentCard, updatingCard]);
+    }, [showAnswer, currentCard, cardFlipping, fourButtons]);
+
+    const flipTimerRef = useRef(null);
+    useEffect(() => () => clearTimeout(flipTimerRef.current), []);
 
     const handleShowAnswer = () => {
+        if (cardFlipping) return;
         setCardFlipping(true);
+        clearTimeout(flipTimerRef.current);
         // Small delay to sync with animation
-        setTimeout(() => {
+        flipTimerRef.current = setTimeout(() => {
             setShowAnswer(true);
             setCardFlipping(false);
         }, 150);
@@ -289,11 +361,14 @@ const StudyView = ({ params }) => {
     };
 
     const handleCardRating = async (rating) => {
-        if (!currentCard || updatingCard) return;
-        
+        if (!currentCard || ratingLockRef.current) return;
+        ratingLockRef.current = true;
+
         try {
-            setUpdatingCard(true);
             setRatingInProgress(rating);
+            setReviewed(n => n + 1);
+            if (rating !== 'again') setGot(n => n + 1);
+            markStage('review');
 
             // Show celebration for good/easy ratings
             if (rating === 'good' || rating === 'easy') {
@@ -368,32 +443,39 @@ const StudyView = ({ params }) => {
                 nextReviewDate: completeCardState.nextReviewDate
             });
             
-            // Send the updated card state to the server
-            const response = await fetch(`/api/decks/${deckId}/study`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    flashcardId: currentCard.flashcardId,
-                    updatedCardState: completeCardState
-                }),
+            // Persist in the background. The session manager has already
+            // advanced to the next card locally, so the UI must not wait on
+            // this request (previously the Show Answer button stayed disabled
+            // until the POST finished, making it seem unresponsive).
+            // Saves are chained so they reach the server in order.
+            const body = JSON.stringify({
+                flashcardId: currentCard.flashcardId,
+                updatedCardState: completeCardState
             });
-
-            const data = await response.json();
-
-            if (!data.success) {
-                console.error('Error updating card:', data.error);
-                setError(t('cards.study.errorUpdating'));
-                return;
-            }
-            
+            saveQueueRef.current = saveQueueRef.current.then(async () => {
+                try {
+                    const response = await fetch(`/api/decks/${deckId}/study`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body,
+                    });
+                    const data = await response.json();
+                    if (!data.success) {
+                        console.error('Error updating card:', data.error);
+                        setError(t('cards.study.errorUpdating'));
+                    }
+                } catch (err) {
+                    console.error('Error saving card rating:', err);
+                    setError(t('cards.study.errorUpdating'));
+                }
+            });
         } catch (err) {
             console.error('Error rating card:', err);
             setError(t('cards.study.errorUpdating'));
-        } finally {
-            setUpdatingCard(false);
             setRatingInProgress(null);
+            ratingLockRef.current = false;
         }
     };
 
@@ -427,9 +509,13 @@ const StudyView = ({ params }) => {
         return { question, answer };
     };
     
+    const remaining = studySession?.cards?.length || 0;
+    const total = Math.max(initialTotal.current, remaining, 1);
+    const pctDone = Math.round(((total - remaining) / total) * 100);
+
     const renderContent = () => {
         if (loadingContent) {
-            return <p>{t('cards.loading')}</p>;
+            return <p className={studyStyles.loading}>{t('cards.loading')}</p>;
         }
 
         if (error) {
@@ -441,16 +527,18 @@ const StudyView = ({ params }) => {
         }
 
         if (!studySession || !studySession.cards || studySession.cards.length === 0) {
+            if (reviewed > 0) {
+                return <SessionDone reviewed={reviewed} got={got} streak={progress?.streak} />;
+            }
             return (
                 <div className={studyStyles.emptyState}>
+                    <Mascot pose="sleep" size={120} />
+                    <h2>Nothing to review right now</h2>
                     <p>{t('cards.study.finishedStudying')}</p>
-                <button 
-                    className={`${studyStyles.backButton} ${studyStyles.backButtonEmpty}`}
-                    onClick={handleBackClick}
-                    aria-label={t('common.back')}
-                >
-                    <MaterialSymbolsArrowBackRounded />
-                </button>
+                    <div className={studyStyles.doneActions}>
+                        <button type="button" className={studyStyles.ghostButton} onClick={handleBackClick}>Back to deck</button>
+                        <Link href="/analyze" className={studyStyles.readButton}>Read a sentence</Link>
+                    </div>
                 </div>
             );
         }
@@ -464,22 +552,36 @@ const StudyView = ({ params }) => {
 
         return (
             <div className={studyStyles.studyContainer}>
-                <button 
-                    className={studyStyles.backButton}
-                    onClick={handleBackClick}
-                    aria-label={t('common.back')}
-                >
-                    <MaterialSymbolsArrowBackRounded />
-                </button>
-                
-                <button 
-                    className={studyStyles.muteButton}
-                    onClick={handleToggleMute}
-                    aria-label={muted ? t('cards.study.unmute') : t('cards.study.mute')}
-                >
-                    {muted ? <MaterialSymbolsVolumeOff /> : <MaterialSymbolsVolumeUp />}
-                </button>
-                
+                <div className={studyStyles.rhead}>
+                    <button
+                        type="button"
+                        className={studyStyles.iconButton}
+                        onClick={handleBackClick}
+                        aria-label={t('common.back')}
+                    >
+                        <MaterialSymbolsArrowBackRounded />
+                    </button>
+                    <div
+                        className={studyStyles.prog}
+                        role="progressbar"
+                        aria-label="Session progress"
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-valuenow={pctDone}
+                    >
+                        <i style={{ width: `${Math.max(pctDone, 3)}%` }} />
+                    </div>
+                    <span className={studyStyles.left}>{remaining} left</span>
+                    <button
+                        type="button"
+                        className={studyStyles.iconButton}
+                        onClick={handleToggleMute}
+                        aria-label={muted ? t('cards.study.unmute') : t('cards.study.mute')}
+                    >
+                        {muted ? <MaterialSymbolsVolumeOff /> : <MaterialSymbolsVolumeUp />}
+                    </button>
+                </div>
+
                 {/* Hidden audio player */}
                 {currentCard && currentCard.audioUrl && (
                     <audio 
@@ -488,151 +590,104 @@ const StudyView = ({ params }) => {
                         preload="auto"
                         onError={(e) => {
                             console.error('Audio element error:', e);
-                            console.log('Failed to load audio URL:', currentCard.audioUrl);
                             setAudioError(true);
                         }}
                     />
                 )}
-                
-                <div className={studyStyles.cardOuter}>
-                    {currentCard && (
-                        <div className={studyStyles.cardContent}>
-                            <div className={`${studyStyles.cardFace} ${showAnswer ? studyStyles.showAnswer : ''} ${cardFlipping ? studyStyles.flipping : ''} ${showCelebration ? studyStyles.celebration : ''}`}>
-                                <div className={studyStyles.questionSide}>
-                                    <h3>{t('cards.study.question')}</h3>
-                                    <p className={`${cardLanguage} ${getFontClass(deck.language)}`} lang={cardLanguage}>{question}</p>
-                                </div>
-                                <div className={studyStyles.answerSide}>
-                                    <div className={studyStyles.answerHeader}>
-                                        <h3>{t('cards.study.answer')}</h3>
-                                        {currentCard.audioUrl && !audioError && (
-                                            <button 
-                                                className={studyStyles.playAudioButton}
-                                                onClick={handlePlayAudio}
-                                                aria-label={t('cards.study.playAudio')}
-                                            >
-                                                <MaterialSymbolsVolumeUp />
-                                            </button>
-                                        )}
-                                    </div>
-                                    <p className={studyStyles.answerText} lang="en">{answer}</p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
 
-                <div className={studyStyles.studyStats}>
-                    {deckSettings && (
-                        <div className={studyStyles.statsContainer}>
-                            <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.newCards')}</span>
-                                <span className={studyStyles.statValue}>
-                                    {studySession?.stats?.new || 0}
-                                </span>
-                            </div>
-                            <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.learningCards')}</span>
-                                <span className={studyStyles.statValue}>
-                                    {studySession?.stats?.learning || 0}
-                                </span>
-                            </div>
-                            <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.dueCards')}</span>
-                                <span className={studyStyles.statValue}>
-                                    {studySession?.stats?.due || 0}
-                                </span>
-                            </div>
-                            <div className={studyStyles.statItem}>
-                                <span className={studyStyles.statLabel}>{t('cards.study.totalCards')}</span>
-                                <span className={studyStyles.statValue}>
-                                    {studySession?.stats?.total || 0}
-                                </span>
-                            </div>
+                <div className={studyStyles.cardOuter}>
+                    <div
+                        className={`${studyStyles.flip} ${showAnswer ? studyStyles.flipped : ''} ${showCelebration ? studyStyles.celebration : ''}`}
+                        onClick={() => { if (!showAnswer) handleShowAnswer(); }}
+                    >
+                        <div className={`${studyStyles.face} ${studyStyles.front}`} aria-hidden={showAnswer}>
+                            <span className={studyStyles.faceLabel}>What does this mean?</span>
+                            <p className={`${studyStyles.bigWord} ${cardLanguage} ${getFontClass(deck.language)}`} lang={cardLanguage}>{question}</p>
+                            <span className={studyStyles.tapHint}>Tap the card or press space</span>
                         </div>
-                    )}
+                        <div className={`${studyStyles.face} ${studyStyles.back}`} aria-hidden={!showAnswer}>
+                            <p className={`${studyStyles.smallWord} ${getFontClass(deck.language)}`} lang={cardLanguage}>{question}</p>
+                            <div className={studyStyles.answerRow}>
+                                <p className={studyStyles.answerText} lang="en">{answer}</p>
+                                {currentCard.audioUrl && !audioError && (
+                                    <button 
+                                        type="button"
+                                        className={studyStyles.playAudioButton}
+                                        onClick={(e) => { e.stopPropagation(); handlePlayAudio(); }}
+                                        aria-label={t('cards.study.playAudio')}
+                                    >
+                                        <MaterialSymbolsVolumeUp />
+                                    </button>
+                                )}
+                            </div>
+                            {currentCard.contentType === 'word' && (
+                                <SourceSentence source={currentCard.source} language={cardLanguage} />
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 <div className={studyStyles.studyControls}>
-                    {
-                        showAnswer ? (
-                            <div className={studyStyles.ratingControls}>
-                                <h4>{t('cards.study.rateYourRecall')}</h4>
-                                <div className={studyStyles.ratingButtons}>
-                                    <button 
-                                        ref={againButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.againButton} ${ratingInProgress === 'again' ? studyStyles.processing : ''}`}
-                                        onClick={() => handleCardRating('again')}
-                                        disabled={updatingCard}
-                                        title={t('cards.study.againShortcut')}
+                    {showAnswer ? (
+                        fourButtons ? (
+                            <div className={studyStyles.grade4}>
+                                {[['again', 'again'], ['hard', 'hard'], ['good', 'good'], ['easy', 'easy']].map(([rating, key], i) => (
+                                    <button
+                                        key={rating}
+                                        type="button"
+                                        className={`${studyStyles.gradeButton} ${studyStyles[`g_${rating}`]} ${ratingInProgress === rating ? studyStyles.processing : ''}`}
+                                        onClick={() => handleCardRating(rating)}
+                                        disabled={ratingInProgress !== null}
                                     >
-                                        <span className={studyStyles.ratingLabel}>{t('cards.study.again')}</span>
-                                        <span className={studyStyles.ratingShortcut}>(1)</span>
+                                        {t(`cards.study.${key}`)} <kbd>{i + 1}</kbd>
                                     </button>
-                                    <button 
-                                        ref={hardButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.hardButton} ${ratingInProgress === 'hard' ? studyStyles.processing : ''}`}
-                                        onClick={() => handleCardRating('hard')}
-                                        disabled={updatingCard}
-                                        title={t('cards.study.hardShortcut')}
-                                    >
-                                        <span className={studyStyles.ratingLabel}>{t('cards.study.hard')}</span>
-                                        <span className={studyStyles.ratingShortcut}>(2)</span>
-                                    </button>
-                                    <button 
-                                        ref={goodButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.goodButton} ${ratingInProgress === 'good' ? studyStyles.processing : ''}`}
-                                        onClick={() => handleCardRating('good')}
-                                        disabled={updatingCard}
-                                        title={t('cards.study.goodShortcut')}
-                                    >
-                                        <span className={studyStyles.ratingLabel}>{t('cards.study.good')}</span>
-                                        <span className={studyStyles.ratingShortcut}>(3)</span>
-                                    </button>
-                                    <button 
-                                        ref={easyButtonRef}
-                                        className={`${studyStyles.ratingButton} ${studyStyles.easyButton} ${ratingInProgress === 'easy' ? studyStyles.processing : ''}`}
-                                        onClick={() => handleCardRating('easy')}
-                                        disabled={updatingCard}
-                                        title={t('cards.study.easyShortcut')}
-                                    >
-                                        <span className={studyStyles.ratingLabel}>{t('cards.study.easy')}</span>
-                                        <span className={studyStyles.ratingShortcut}>(4)</span>
-                                    </button>
-                                </div>
+                                ))}
                             </div>
                         ) : (
-                            <button 
-                                ref={showAnswerButtonRef}
-                                className={studyStyles.showAnswerButton}
-                                onClick={handleShowAnswer}
-                                disabled={updatingCard || cardFlipping}
-                                title={t('cards.study.showAnswerShortcut')}
-                            >
-                                {t('cards.study.showAnswer')}
-                                <span className={studyStyles.keyboardHint}>{t('cards.study.spaceOrEnter')}</span>
-                            </button>
+                            <div className={studyStyles.grade}>
+                                <button
+                                    type="button"
+                                    className={`${studyStyles.gradeButton} ${studyStyles.g_again}`}
+                                    onClick={() => handleCardRating('again')}
+                                    disabled={ratingInProgress !== null}
+                                >
+                                    Missed it <kbd>1</kbd>
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`${studyStyles.gradeButton} ${studyStyles.g_good}`}
+                                    onClick={() => handleCardRating('good')}
+                                    disabled={ratingInProgress !== null}
+                                >
+                                    Got it <kbd>2</kbd>
+                                </button>
+                            </div>
                         )
-                    }
+                    ) : (
+                        <button 
+                            type="button"
+                            className={studyStyles.showAnswerButton}
+                            onClick={handleShowAnswer}
+                            disabled={cardFlipping}
+                        >
+                            {t('cards.study.showAnswer')}
+                        </button>
+                    )}
+                    <button type="button" className={studyStyles.modeNote} onClick={toggleFourButtons}>
+                        {fourButtons ? 'Prefer two buttons? Switch to Missed it / Got it.' : 'Prefer Again, Hard, Good and Easy? Switch to four buttons.'}
+                    </button>
                 </div>
-
             </div>
         );
     };
 
     // Don't render while main auth is loading
     if (loading || !isAuthenticated) return null;
-    if (!deck) return null;
+    if (!deck && loadingContent) return null;
 
     return (
         <Dashboard>
             <div className={studyStyles.studyContent}>
-                
-                <div className={studyStyles.header}>
-                    <h2 className={studyStyles.deckName}>
-                    {t('cards.study.studying') + " "}{deck.name}</h2>
-                </div>
-                
                 {renderContent()}
             </div>
         </Dashboard>

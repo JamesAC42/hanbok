@@ -89,6 +89,7 @@ const updateDeckSettings = require('./controllers/auth/updateDeckSettings');
 const initiateStudySession = require('./controllers/auth/initiateStudySession');
 const updateCardProgress = require('./controllers/auth/updateCardProgress');
 const getStudyStats = require('./controllers/auth/getStudyStats');
+const getProgress = require('./controllers/auth/getProgress');
 const exportDeck = require('./controllers/auth/exportDeck');
 const editDeckCard = require('./controllers/auth/editDeckCard');
 const addDeckCard = require('./controllers/auth/addDeckCard');
@@ -101,6 +102,10 @@ const getEmailList = require('./controllers/admin/getEmailList');
 const getAdmins = require('./controllers/admin/getAdmins');
 const { getUsersAdmin } = require('./controllers/admin/getUsersAdmin');
 const { updateUser } = require('./controllers/admin/updateUser');
+const requireAdmin = require('./lib/requireAdmin');
+const adminStats = require('./controllers/admin/stats');
+const { getRevenue } = require('./controllers/admin/revenue');
+const { getTraffic } = require('./controllers/admin/traffic');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -335,6 +340,11 @@ app.get('/api/study/stats', isAuthenticated, async (req, res) => {
     getStudyStats(req, res);
 });
 
+// Activity over time for the signed-in Home page
+app.get('/api/progress', isAuthenticated, async (req, res) => {
+    getProgress(req, res);
+});
+
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
 
@@ -385,6 +395,14 @@ app.put('/api/admin/users/:userId', isAuthenticated, async (req, res) => {
     updateUser(req, res);
 });
 
+// Admin dashboard numbers
+app.get('/api/admin/stats/overview', isAuthenticated, requireAdmin, adminStats.getOverview);
+app.get('/api/admin/stats/engagement', isAuthenticated, requireAdmin, adminStats.getEngagement);
+app.get('/api/admin/stats/feed', isAuthenticated, requireAdmin, adminStats.getFeed);
+app.get('/api/admin/stats/revenue', isAuthenticated, requireAdmin, getRevenue);
+app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
+app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
+
 app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
     searchWordAudio(req, res);
 });
@@ -425,16 +443,7 @@ app.get('/api/lyrics/recent', async (req, res) => {
     getRecentLyrics(req, res);
 });
 
-// SEO routes
-app.get('/api/sitemap/lyrics', async (req, res) => {
-    const { generateLyricsSitemap } = require('./controllers/seo/sitemap');
-    generateLyricsSitemap(req, res);
-});
-
-app.get('/robots.txt', async (req, res) => {
-    const { generateRobotsTxt } = require('./controllers/seo/sitemap');
-    generateRobotsTxt(req, res);
-});
+// The sitemap and robots.txt are served by the Next app (app/src/app/sitemap.js, robots.js).
 
 // Lyric suggestions routes
 app.get('/api/lyrics/suggestions', async (req, res) => {

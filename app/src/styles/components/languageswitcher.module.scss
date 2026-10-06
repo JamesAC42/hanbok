@@ -1,182 +1,156 @@
-@mixin flex-center {
-    display:flex;
-    align-items:center;
-    justify-content:center;
+@import './../variables.module.scss';
+
+// Language picker: a white pressable button that opens a menu card.
+.languageSwitcherOuter {
+    position: relative;
+    z-index: 1001;
+    font-family: var(--font-display);
 }
 
-.languageSwitcherOuter {
-    position:relative;
-    z-index:1000;
-    border:1px solid var(--foreground-light);
-    border-radius:0.7rem;
+.flag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: 1.45rem;
+    line-height: 1;
 
-    z-index:1001;
+    svg {
+        width: 1.45rem;
+        height: 1.45rem;
+    }
+}
 
-    .languageItem {
-        font-family: var(--font-display);
-        font-weight:600;
-        font-size:1.2rem;
-        letter-spacing:0.1rem;
-        width:100%;
-        cursor:pointer;
-        text-align:center;
-        color:var(--foreground);
-        z-index:100;
-        @include flex-center;
-        justify-content:flex-start;
+.trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    min-height: 2.9rem;
+    max-width: 15rem;
+    padding: .45rem .7rem .45rem .75rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 14px;
+    background: var(--bp-card);
+    box-shadow: 0 3px 0 var(--bp-line);
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: .95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .08s ease, background .15s ease, border-color .15s ease;
 
-        height:3rem;
-        width:10rem;
+    &:hover { background: var(--bp-soft); }
+    &:active { transform: translateY(3px); box-shadow: 0 0 0 var(--bp-line); }
+    &:focus-visible { outline: 3px solid var(--bp-read-line); outline-offset: 3px; }
 
-        .languageItemInner {
-            @include flex-center;
-            gap:0.5rem;
-            align-items:stretch;
-            .languageItemIcon {
-                font-size:1.5rem;
-                transform:translate(0, 0.2rem);
-                margin-left:0.5rem;
-            }
-            .languageItemText {
-                @include flex-center;
-                font-size:1rem;
-                text-align:left;
-                letter-spacing:0.1rem;
-            }
-        }
+    &.open {
+        border-color: var(--bp-read-line);
+        background: var(--bp-read-soft);
+        box-shadow: 0 3px 0 var(--bp-read-line);
+
+        .chevron { transform: rotate(180deg); color: var(--bp-read); }
+    }
+}
+
+.triggerText {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.chevron {
+    flex: none;
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--bp-ink2);
+    transition: transform .15s ease;
+}
+
+@keyframes menuIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + .6rem);
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: max-content;
+    min-width: 15rem;
+    max-width: calc(100vw - 2rem);
+    max-height: min(24rem, 60vh);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: .4rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 16px;
+    background: var(--bp-card);
+    box-shadow: 0 4px 0 var(--bp-line);
+    animation: menuIn .14s ease-out;
+
+    @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
+.languageItem {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    width: 100%;
+    min-height: 2.9rem;
+    padding: .45rem .75rem;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: .98rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover { background: var(--bp-soft); }
+
+    &:focus-visible {
+        outline: none;
+        border-color: var(--bp-read-line);
+        background: var(--bp-soft);
     }
 
-    @keyframes dropdownExpand {
-        0% {
-            transform:translate(-1px, -1px);
-            max-height:0;
-        }
-        100% {
-            transform:translate(-1px, -1px);
-            max-height:100dvh;
-        }
+    &.selected {
+        background: var(--bp-read-soft);
+        color: var(--bp-read);
+        font-weight: 800;
+
+        &:focus-visible { border-color: var(--bp-read); }
     }
+}
 
-    .dropdown {
+.languageItemText {
+    flex: 1;
+    min-width: 0;
+}
 
-        border:1px solid var(--foreground-light);
-        position:absolute;
-        top:0;
-        left:0;
-        border-radius:0.7rem;
-        background:var(--background);
-        z-index:1000;
-        overflow:hidden;
-        animation:dropdownExpand 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-        transform:translate(-1px, -1px);
+.check {
+    display: inline-flex;
+    font-size: 1.15rem;
+    color: var(--bp-read);
+}
 
-        .languageItem:hover {
-            background:var(--background-alt);
-        }
+@media screen and (max-width: 500px) {
+    .trigger {
+        max-width: 11rem;
+        font-size: .88rem;
     }
+}
 
-    .languageSwitcherContainer {
-        height:3rem;
-        width:10rem;
-
-        background:var(--background);
-        border-radius:0.7rem;
-
-        @include flex-center;
-        overflow:hidden;
-        position:relative;
-
-        &:hover {
-            background:var(--background-alt);
-            outline:1px solid var(--foreground-light);
-        }
-
-        @keyframes languageSwitcherAnimation {
-            0% {
-                filter:blur(10px);
-                transform:translate(0, 0);
-            }
-            90% {
-                filter:blur(2px);
-            }
-            100% {
-                filter:blur(0px);
-                transform:translate(0,-50%);
-            }   
-        }
-
-        .languageSwitcherInner {
-            position:absolute;
-            color:var(--foreground);
-
-            display:flex;
-            flex-direction:column;
-            align-items:stretch;
-
-            top:0;
-            left:0;
-
-            animation: languageSwitcherAnimation 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-        }
-
-    }
-
-    @media screen and (max-width: 1150px) {
-        .languageSwitcherContainer {
-            width: 9rem;
-            height: 2.5rem;
-        }
-        .languageItem {
-            font-size: 0.9rem;
-            width: 9rem;
-            height: 2.5rem;
-            
-            .languageItemInner {
-                .languageItemIcon {
-                    font-size: 1.2rem;
-                }
-                .languageItemText {
-                    font-size: 0.9rem;
-                }
-            }
-        }
-    }
-
-    @media screen and (max-width: 500px) {
-        .languageSwitcherContainer {
-            width:8rem;
-        }
-        .languageItem {
-            font-size:0.8rem;
-            width:8rem;
-            .languageItemInner {
-                .languageItemText {
-                    font-size:0.8rem;
-                }
-            }
-        }
-    }
-
-    .helpTextImage {
-        position:absolute;
-        top:0;
-        left:0;
-        transform:translate(-55%, -70%);
-
-        pointer-events:none;
-
-        img {
-            width:100%;
-            height:auto;
-        }
-
-        &.hidden {
-            display:none;
-        }
-
-        @media (max-width:1500px) {
-            transform:scale(0.6) translate(-90%, -80%);
-        }
-    }
+.dropdown.alignLeft {
+    right: auto;
+    left: 0;
 }

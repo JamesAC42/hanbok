@@ -1,70 +1,76 @@
+@import '../variables.module.scss';
+
+// Lyric comments, Bright Path (pink lyrics stage). Theme-aware: every color
+// comes from the --bp-* tokens, so no separate dark-mode block is needed.
+
 .commentsSection {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-top: 2rem;
-    margin-bottom:5rem;
-    margin-left:auto;
-    margin-right:auto;
-    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    z-index:100;
-    width:100%;
-    max-width:80rem;
+    --t-pink: color-mix(in srgb, var(--bp-pink) 72%, var(--foreground));
+    --t-read: color-mix(in srgb, var(--bp-read) 72%, var(--foreground));
+    --t-purple: color-mix(in srgb, var(--bp-purple) 72%, var(--foreground));
+    --t-rev: color-mix(in srgb, var(--bp-rev) 76%, var(--foreground));
+    --t-und: color-mix(in srgb, var(--bp-und) 68%, var(--foreground));
+    --t-keep: color-mix(in srgb, var(--bp-keep) 55%, var(--foreground));
+    --t-flame: color-mix(in srgb, var(--bp-flame) 70%, var(--foreground));
+    --lyr-line: color-mix(in srgb, var(--bp-pink) 45%, var(--background));
+
+    @include bp-card;
+    width: 100%;
+    max-width: 64rem;
+    margin: 0 auto 4rem;
+    padding: 1.4rem 1.5rem 1.5rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+
+    @media (max-width: 725px) {
+        padding: 1.1rem 1rem 1.2rem;
+        margin-bottom: 2.5rem;
+    }
 }
 
 .commentsTitle {
+    @include bp-title;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d3748;
-    margin-bottom: 1.5rem;
-    
+    margin: 0 0 1rem;
+    font-size: 1.45rem;
+
     svg {
-        color: #4a5568;
+        width: 1.4rem;
+        height: 1.4rem;
+        color: var(--bp-pink);
     }
 }
 
 .commentForm {
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: rgba(247, 250, 252, 0.8);
-    border-radius: 0.75rem;
-    border: 1px solid rgba(203, 213, 225, 0.5);
+    margin-bottom: 1.5rem;
 }
 
 .commentInput {
+    @include bp-input;
+    display: block;
     width: 100%;
-    padding: 0.875rem;
-    border: 1px solid #cbd5e0;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    font-family: inherit;
-    resize: vertical;
     min-height: 6rem;
-    transition: border-color 0.2s ease;
-    
+    resize: vertical;
+    line-height: 1.5;
+    font-family: var(--font-display), var(--font-kr-sans);
+
     &:focus {
-        outline: none;
-        border-color: #4c51bf;
-        box-shadow: 0 0 0 3px rgba(76, 81, 191, 0.1);
+        border-color: var(--bp-pink);
+        box-shadow: 0 0 0 4px var(--bp-pink-soft);
     }
-    
-    &.overLimit {
-        border-color: #e53e3e;
-        
-        &:focus {
-            border-color: #e53e3e;
-            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
-        }
-    }
-    
+
     &:disabled {
-        background-color: #f7fafc;
+        background: var(--bp-soft);
         cursor: not-allowed;
-        opacity: 0.7;
+    }
+
+    &.overLimit {
+        border-color: var(--bp-rev);
+
+        &:focus {
+            box-shadow: 0 0 0 4px var(--bp-rev-soft);
+        }
     }
 }
 
@@ -72,333 +78,173 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
-    
-    @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: stretch;
-    }
+    gap: 1rem;
+    margin-top: 0.75rem;
 }
 
 .characterCount {
-    font-size: 0.875rem;
-    color: #718096;
-    
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+
     .overLimit {
-        color: #e53e3e;
-        font-weight: 600;
+        color: var(--t-rev);
     }
 }
 
 .submitButton {
-    padding: 0.75rem 1.5rem;
-    background: #4c51bf;
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    
-    &:hover:not(:disabled) {
-        background: #434190;
-        transform: translateY(-0.0625rem);
-    }
-    
-    &:disabled {
-        background: #a0aec0;
-        cursor: not-allowed;
-        opacity: 0.7;
-        transform: none;
-    }
+    @include bp-press(var(--bp-pink), var(--bp-pink-d), #fff, 4px);
 }
 
 .rateLimitError {
-    margin-top: 1rem;
-    padding: 0.75rem 1rem;
-    background: #fed7d7;
-    border: 1px solid #fc8181;
-    border-radius: 0.5rem;
-    color: #c53030;
-    font-size: 0.875rem;
-    font-weight: 500;
+    margin-top: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 14px;
+    border: 2px solid var(--bp-rev-line);
+    background: var(--bp-rev-soft);
+    color: var(--t-rev);
+    font-size: 0.9rem;
+    font-weight: 700;
 }
 
 .loginPrompt {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(247, 250, 252, 0.8);
-    border-radius: 0.75rem;
-    border: 1px solid rgba(203, 213, 225, 0.5);
-    margin-bottom: 2rem;
-    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.1rem;
+    border-radius: 16px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-soft);
+
     p {
-        margin-bottom: 1rem;
-        color: #4a5568;
-        font-size: 1rem;
+        margin: 0;
+        font-weight: 600;
+        color: var(--foreground);
     }
 }
 
 .loginButton {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: #4c51bf;
-    color: white;
-    text-decoration: none;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    
-    &:hover {
-        background: #434190;
-        transform: translateY(-0.0625rem);
-    }
+    @include bp-press(var(--bp-pink), var(--bp-pink-d), #fff, 4px);
 }
 
 .commentsList {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
 }
 
-.loading, .noComments {
-    text-align: center;
-    padding: 2rem;
-    color: #718096;
-    font-size: 1rem;
-}
-
+.loading,
 .noComments {
-    background: rgba(247, 250, 252, 0.8);
-    border-radius: 0.75rem;
-    border: 1px solid rgba(203, 213, 225, 0.5);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-weight: 600;
+    color: var(--bp-ink2);
+    border-radius: 16px;
+    background: var(--bp-soft);
 }
 
 .comment {
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 0.75rem;
-    border: 1px solid rgba(226, 232, 240, 0.8);
-    transition: all 0.2s ease;
-    
-    &:hover {
-        border-color: rgba(203, 213, 225, 0.8);
-        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05);
-    }
+    padding: 0.9rem 1.1rem;
+    border-radius: 16px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-card);
 }
 
 .commentHeader {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 0.75rem;
-    
-    @media (max-width: 768px) {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
 }
 
 .commentAuthor {
-    font-weight: 600;
-    color: #2d3748;
-    font-size: 1rem;
+    font-weight: 800;
+    font-size: 0.98rem;
+    color: var(--foreground);
 }
 
 .commentDate {
-    color: #718096;
-    font-size: 0.875rem;
-    margin-left: auto;
-    
-    @media (max-width: 768px) {
-        margin-left: 0;
-        width: 100%;
-        order: 2;
-    }
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
 }
 
 .deleteButton {
-    background: none;
+    margin-left: auto;
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
     border: none;
-    color: #e53e3e;
+    border-radius: 12px;
+    background: none;
+    color: var(--bp-ink2);
     cursor: pointer;
-    padding: 0.25rem;
-    border-radius: 0.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    
-    &:hover {
-        background: rgba(229, 62, 62, 0.1);
-        transform: scale(1.1);
-    }
-    
+    transition: color 0.15s ease, background 0.15s ease;
+
     svg {
-        width: 1rem;
-        height: 1rem;
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+
+    &:hover {
+        color: var(--t-rev);
+        background: var(--bp-rev-soft);
     }
 }
 
 .commentContent {
-    color: #2d3748;
+    font-family: var(--font-display), var(--font-kr-sans);
     font-size: 1rem;
+    font-weight: 500;
     line-height: 1.6;
-    margin-bottom: 1rem;
+    color: var(--foreground);
     white-space: pre-wrap;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .commentActions {
     display: flex;
-    gap: 1rem;
-    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.7rem;
 }
 
 .voteButton {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    background: none;
-    border: 1px solid #cbd5e0;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.5rem;
+    gap: 0.35rem;
+    min-height: 2.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-card);
+    color: var(--bp-ink2);
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 800;
     cursor: pointer;
-    font-size: 0.875rem;
-    color: #4a5568;
-    transition: all 0.2s ease;
-    
-    &:hover:not(:disabled) {
-        border-color: #a0aec0;
-        background: rgba(247, 250, 252, 0.8);
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+    svg {
+        width: 1.1rem;
+        height: 1.1rem;
     }
-    
+
+    &:hover:not(:disabled) {
+        background: var(--bp-soft);
+    }
+
     &:disabled {
-        opacity: 0.5;
+        opacity: 0.55;
         cursor: not-allowed;
     }
-    
+
     &.voted {
-        background: rgba(76, 81, 191, 0.1);
-        border-color: #4c51bf;
-        color: #4c51bf;
-        
-        &:hover {
-            background: rgba(76, 81, 191, 0.15);
-        }
-    }
-    
-    svg {
-        width: 1rem;
-        height: 1rem;
+        border-color: var(--lyr-line);
+        background: var(--bp-pink-soft);
+        color: var(--t-pink);
     }
 }
-
-// Dark mode support
-@media (prefers-color-scheme: dark) {
-    .commentsSection {
-        background: rgba(45, 55, 72, 0.95);
-        border-color: rgba(74, 85, 104, 0.3);
-    }
-    
-    .commentsTitle {
-        color: #f7fafc;
-        
-        svg {
-            color: #cbd5e0;
-        }
-    }
-    
-    .commentForm {
-        background: rgba(26, 32, 44, 0.8);
-        border-color: rgba(74, 85, 104, 0.5);
-    }
-    
-    .commentInput {
-        background: #2d3748;
-        border-color: #4a5568;
-        color: #f7fafc;
-        
-        &::placeholder {
-            color: #a0aec0;
-        }
-    }
-    
-    .loginPrompt {
-        background: rgba(26, 32, 44, 0.8);
-        border-color: rgba(74, 85, 104, 0.5);
-        
-        p {
-            color: #cbd5e0;
-        }
-    }
-    
-    .noComments {
-        background: rgba(26, 32, 44, 0.8);
-        border-color: rgba(74, 85, 104, 0.5);
-    }
-    
-    .comment {
-        background: rgba(45, 55, 72, 0.9);
-        border-color: rgba(74, 85, 104, 0.8);
-        
-        &:hover {
-            border-color: rgba(113, 128, 150, 0.8);
-        }
-    }
-    
-    .commentAuthor {
-        color: #f7fafc;
-    }
-    
-    .commentContent {
-        color: #e2e8f0;
-    }
-    
-    .voteButton {
-        border-color: #4a5568;
-        color: #cbd5e0;
-        
-        &:hover:not(:disabled) {
-            border-color: #718096;
-            background: rgba(45, 55, 72, 0.8);
-        }
-        
-        &.voted {
-            background: rgba(76, 81, 191, 0.2);
-            border-color: #6366f1;
-            color: #818cf8;
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    .commentsSection {
-        padding: 1.5rem;
-        margin-top: 1.5rem;
-    }
-    
-    .commentsTitle {
-        font-size: 1.25rem;
-    }
-    
-    .commentForm {
-        padding: 1rem;
-    }
-    
-    .comment {
-        padding: 1rem;
-    }
-    
-    .commentActions {
-        flex-wrap: wrap;
-        gap: 0.75rem;
-    }
-    
-    .voteButton {
-        padding: 0.375rem 0.625rem;
-        font-size: 0.8125rem;
-    }
-} 

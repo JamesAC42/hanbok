@@ -1,206 +1,178 @@
-$buttonSize:3rem;
+@import './../variables.module.scss';
 
-@keyframes blurIn {
-    0% {
-        backdrop-filter: blur(0px);
-        background:transparent;
-    }
-    100% {
-        backdrop-filter: blur(3px);
-        background:#00000029;
-    }
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popIn {
+    from { opacity: 0; transform: translate(-50%, -46%) scale(.97); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
 .languageButtonOuter {
-    position:relative;
-    height:$buttonSize;
-    width:fit-content;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    margin-top:0.5rem;
-
-    .picker {
-
-        position: fixed;
-        height: 100dvh;
-        width: 100dvw;
-        backdrop-filter: blur(3px);
-        top: 0;
-        left: 0;
-        z-index: 2000;
-        background:#00000029;
-        animation: blurIn 0.2s ease-in-out;
-
-        .pickerBackground {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        @keyframes expand {
-            0% {
-                opacity:0;
-            }
-            100% {
-                opacity:1;
-            }
-        }
-
-        .pickerContent {
-            position: fixed;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap:1.4rem;
-            background: var(--background-alt);
-            backdrop-filter: blur(10px);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            padding-top:2rem;
-            justify-content: center;
-            animation:expand 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.175);
-
-            .pickerHeader {
-                text-align:center;
-                color:var(--foreground);
-                font-family:var(--font-funnel);
-                h3 {
-                    font-size:1rem;
-                }
-            }
-            .pickerItemContainer {
-                width:100%;
-                display: flex;
-                flex-direction: column;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 1px;
-                width: 15rem;
-            }
-        }
-
-        .pickerItem {
-            button {
-                padding: 0;
-                border: none;
-                background: none;
-                cursor: pointer;
-                border-radius: 0.3rem;
-                width:100%;
-                transition: background-color 0.2s;
-                display:flex;
-                align-items:center;
-                justify-content:flex-start;
-                gap:1rem;
-                padding:0.2rem 0.5rem;
-
-                font-family: var(--font-funnel);
-                font-size:1rem;
-
-                color:var(--foreground);
-                background:var(--background-alt);
-
-                &:hover {
-                    background-color: var(--foreground-lighter);
-                }
-
-                svg {
-                    font-size: 2rem;
-                    transform:translateY(2px);
-                }
-            }
-        }
-
-        &.reverse {
-            .pickerContent {
-                transform: translateX(-100%);
-            }
-        }
-    }
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: .5rem;
+    font-family: var(--font-display);
 }
 
+// The trigger: white pressable button with the current flag.
 .buttonContainer {
-    position: relative;
-    display: flex;
+    @include bp-press-ghost(var(--foreground));
+    min-height: 2.9rem;
+    padding: .4rem .6rem .4rem 1rem;
+    gap: .6rem;
+}
+
+.buttonLabel {
+    color: var(--bp-ink2);
+}
+
+.languageButton {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    position:relative;
-    height:$buttonSize;
-    width:fit-content;
-    border-radius:0.5rem;
-    overflow:hidden;
-    background:var(--background-alt);
-    animation:blurIn 0.2s ease-in-out;
-    padding:0 1rem;
-    font-family:var(--font-funnel);
-    font-size:1rem;
-    color:var(--foreground);
-    cursor:pointer;
-    &:hover {
-        background:var(--foreground-lighter);
-    }
-    svg {
-        margin-left:0.5rem;
-    }
-    .languageButton {
-        background: none;
-        border: none;
-        cursor: pointer;
-        padding: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background:var(--background-alt);
-        &:hover {
-            opacity: 0.8;
-        }
-    
-        svg {
-            transform:scale(2) translateY(0px);
-        }
-    }
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.6rem;
+
+    svg { width: 1.6rem; height: 1.6rem; }
 }
 
+// First-visit hint above the button.
+.tooltipAnchor {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + .6rem);
+}
 
 .tooltip {
-    position: absolute;
-    bottom: calc(100% + 0.5rem);
-    left: 50%;
+    position: relative;
     transform: translateX(-50%);
-    background-color: var(--background-alt);
-    color: var(--foreground);
-    padding: 0.5rem 1rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .55rem .6rem .55rem .9rem;
+    border: 2px solid var(--bp-read-line);
+    border-radius: 14px;
+    background: var(--bp-read-soft);
+    color: var(--bp-read-d);
+    font-size: .85rem;
+    font-weight: 700;
     white-space: nowrap;
     z-index: 1000;
-    
+
     &::after {
         content: '';
         position: absolute;
         top: 100%;
         left: 50%;
-        transform: translateX(-50%);
-        border-width: 0.25rem;
-        border-style: solid;
-        border-color: var(--background-alt) transparent transparent transparent;
+        width: .7rem;
+        height: .7rem;
+        background: var(--bp-read-soft);
+        border-right: 2px solid var(--bp-read-line);
+        border-bottom: 2px solid var(--bp-read-line);
+        transform: translate(-50%, -50%) rotate(45deg);
     }
 }
 
 .closeTooltip {
-    background: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.8rem;
+    height: 1.8rem;
     border: none;
-    color: var(--foreground);
-    margin-left: 0.5rem;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-size: 1.2rem;
+    line-height: 1;
     cursor: pointer;
-    padding: 0 0.25rem;
-    font-size: 1rem;
-    
-    &:hover {
-        opacity: 0.8;
+
+    &:hover { background: color-mix(in srgb, var(--bp-read) 14%, transparent); }
+}
+
+// Picker: a centered card over a dimmed page.
+.picker {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: color-mix(in srgb, #0b0d1a 45%, transparent);
+    animation: fadeIn .15s ease-out;
+
+    .pickerBackground {
+        position: fixed;
+        inset: 0;
     }
-} 
+}
+
+.pickerContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: min(22rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 1.25rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 22px;
+    background: var(--bp-card);
+    box-shadow: 0 5px 0 var(--bp-line);
+    color: var(--foreground);
+    animation: popIn .18s ease-out;
+
+    @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
+.pickerHeader h3 {
+    @include bp-title;
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.pickerItemContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.pickerItem button {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    width: 100%;
+    min-height: 2.9rem;
+    padding: .45rem .75rem;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover { background: var(--bp-soft); }
+
+    &:focus-visible {
+        outline: none;
+        border-color: var(--bp-read-line);
+        background: var(--bp-soft);
+    }
+
+    svg {
+        flex: none;
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+}

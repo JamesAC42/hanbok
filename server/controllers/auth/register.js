@@ -3,9 +3,10 @@ const { v4: uuidv4 } = require('uuid');
 const { getDb } = require('../../database');
 const { sendVerificationEmail } = require('../../utils/emailService');
 const polyfillData = require('../../migrations/user_polyfill');
+const { sanitizeAttribution } = require('../../utils/attribution');
 
 const register = async (req, res, redisClient) => {
-    const { email, password, name } = req.body;
+    const { email, password, name, attribution } = req.body;
 
     // Basic validation
     if (!email || !password || !name) {
@@ -87,6 +88,11 @@ const register = async (req, res, redisClient) => {
             remainingImageExtracts: 20,
             remainingSentenceAnalyses: 0
         };
+
+        const cleanAttribution = sanitizeAttribution(attribution);
+        if (cleanAttribution) {
+            user.attribution = cleanAttribution;
+        }
 
         await usersCollection.insertOne(user);
 

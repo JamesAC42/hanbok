@@ -6,6 +6,7 @@ const SupportedLanguages = require('../supported_languages');
 const { getLyricsAnalysisPrompt } = require('../llm/lyrics_prompts');
 const { createClient } = require('redis');
 const { generateSpeech } = require('../elevenlabs/generateSpeech');
+const { getJapaneseTextToRead } = require('../utils/sentenceAudio');
 
 // Redis connection options
 const redisOptions = {
@@ -132,7 +133,7 @@ async function processLyricAnalysis(job) {
         console.log("Analyzing sentence:", sentence);
         const parsedResponse = await generateResponse(
           prompt + sentence, 
-          'gemini'
+          'geminiAnalysis'
         );
         
         if(!parsedResponse || !parsedResponse.isValid) {
@@ -156,7 +157,7 @@ async function processLyricAnalysis(job) {
   
           let textToRead;
           if(lyric.language === 'ja') {
-              textToRead = analysis.sentence.reading ?? sentence;
+              textToRead = getJapaneseTextToRead(analysis, sentence);
           } else {
               textToRead = sentence;
           }
@@ -168,7 +169,7 @@ async function processLyricAnalysis(job) {
             type: 'status',
             message: `Analysis generated. Generating audio...`
           });
-          const { voice1, voice2 } = await generateSpeech(textToRead);
+          const { voice1, voice2 } = await generateSpeech(textToRead, { language: lyric.language });
           console.log('voice1', voice1);
           console.log('voice2', voice2);
         
