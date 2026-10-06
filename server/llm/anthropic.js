@@ -7,7 +7,7 @@ const anthropic = new Anthropic({
 
 const prompt_anthropic = async (text) => {
     const msg = await anthropic.messages.create({
-        model: "claude-sonnet-4-5",
+        model: "claude-sonnet-5-5",
 
         max_tokens: 4096,
         messages: [{ 
@@ -15,7 +15,7 @@ const prompt_anthropic = async (text) => {
             content: text
         }],
     });
-    return msg.content[0].text;
+    return msg.content.find((block) => block.type === "text")?.text;
 }
 
 module.exports = {anthropic, prompt_anthropic};
