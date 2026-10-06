@@ -1,5 +1,4 @@
 'use client';
-import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/pages/lessons.module.scss';
@@ -19,10 +18,6 @@ export default function Home() {
   const { user, loading: authLoading } = useAuth();
   const isPublic = !authLoading && !user;
   const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
-
-  useEffect(() => {
-    document.title = `Hanbok - ${t('sidebar.lessons')}`;
-  }, [t]);
 
   return (
     <Shell>

@@ -28,6 +28,10 @@ export function PopupProvider({ children }) {
         const checkAnnouncement = () => {
             // Skip if another popup is already showing
             if (popupState.show) return;
+
+            // Never cover a reading page with a popup: visitors from search land
+            // there, and Google penalizes interstitials over the content.
+            if (/^\/(learn|lyrics)(\/|$)/.test(window.location.pathname)) return;
             
             // Check if user has seen this announcement
             const seenAnnouncements = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
