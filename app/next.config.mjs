@@ -1,10 +1,25 @@
+const apiUrl = process.env.API_INTERNAL_URL || 'http://localhost:5666';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Baked in at build time (like the rewrite below) so server-rendered pages
+  // reach the same API at runtime. See src/lib/seo.js.
+  env: {
+    API_INTERNAL_URL: apiUrl,
+  },
   // Deploys build into a side directory (NEXT_DIST_DIR) while the live site
   // keeps serving from .next, then swap it in. See scripts/deploy.sh.
   distDir: process.env.NEXT_DIST_DIR || '.next',
+  // Lessons and Grammar (coming-soon stubs) became the Learn guides; keep
+  // old links and rankings.
+  async redirects() {
+    return [
+      { source: '/grammar', destination: '/learn', statusCode: 301 },
+      { source: '/lessons', destination: '/learn', statusCode: 301 },
+      { source: '/lessons/:path*', destination: '/learn', statusCode: 301 },
+    ];
+  },
   async rewrites() {
-    const apiUrl = process.env.API_INTERNAL_URL || 'http://localhost:5666';
     return [
       {
         source: '/api/:path*',

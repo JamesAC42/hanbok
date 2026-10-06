@@ -28,6 +28,7 @@ async function getPublishedLyrics(req, res) {
         anime: 1,
         genre: 1,
         language: 1,
+        youtubeUrl: 1,
         dateCreated: 1
       })
       .sort({ dateCreated: -1 })

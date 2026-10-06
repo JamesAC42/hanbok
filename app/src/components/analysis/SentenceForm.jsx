@@ -1,9 +1,11 @@
 'use client';
+import Mascot from '@/components/Mascot';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { usePopup } from '@/contexts/PopupContext';
+import { track } from '@/lib/analytics';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
@@ -89,15 +91,30 @@ const SentenceForm = ({
         };
     }, [loading]);
 
+    // Set by window.runInputText: analyze as soon as the text is in.
+    const [autoRun, setAutoRun] = useState(false);
+
     useEffect(() => {
         // Expose setText function globally so it can be accessed by SentenceAnalyzer
         window.setInputText = setText;
+        window.runInputText = (value) => {
+            setText(value);
+            setAutoRun(true);
+        };
         
         // Cleanup
         return () => {
             delete window.setInputText;
+            delete window.runInputText;
         };
     }, []);
+
+    useEffect(() => {
+        if (!autoRun || !text) return;
+        setAutoRun(false);
+        handleSubmit({ preventDefault() {} });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [autoRun, text]);
 
     // Focus the text input when component mounts
     useEffect(() => {
@@ -327,6 +344,7 @@ const SentenceForm = ({
 
             // Send either the text or the image data
             const dataToSend = imagePreview ? imagePreview : text;
+            const source = imagePreview ? 'image' : 'text';
 
             playStartSound();
             const response = await fetch('/api/submit', {
@@ -420,12 +438,14 @@ const SentenceForm = ({
                 }
                 
                 playFinishedSound();
+                track('analyze', { language, source, signedIn: isAuthenticated });
                 
                 // If originalLanguage or sentenceId is in the response, add them to query params
                 if (data.originalLanguage && data.sentenceId) {
                     router.push(`/sentence/${data.sentenceId}`);
                 }
             } else {
+                track('analyze_error', { reason: data.message.error?.type || 'other' });
                 setError({
                     type: data.message.error?.type || 'other',
                     message: data.message.error?.message
@@ -436,6 +456,7 @@ const SentenceForm = ({
             setIsProcessingImage(false);
         } catch (error) {
             console.error('Error:', error);
+            track('analyze_error', { reason: error.name === 'AbortError' ? 'timeout' : 'server' });
             if (error.name === 'AbortError') {
                 setError({
                     type: 'timeout',
@@ -505,34 +526,39 @@ const SentenceForm = ({
                 </div>
             )}
 
-            <div className={styles.languageSwitcherOuter}>
-                <LanguageSwitcher />
-
-                <div
-                    onClick={() => setTranslationMode(!translationMode)}
-                    className={styles.translationModeSwitch}>
-                    <div className={styles.translationModeSwitchInner}>
-                        <div className={styles.translationModeSwitchText}>
-                            Mode: 
-                            {
-                                translationMode ? ' Translate' : ' Analyze'
-                            }
-                        </div>
+            <div className={styles.analyzeHeader}>
+                <div className={styles.analyzeHello}>
+                    <Mascot pose="point" size={84} motion="bob" />
+                    <div className={styles.analyzeBubble}>
+                        <span className={styles.stageTag}>Read</span>
+                        <h1 className={styles.analyzeTitle}>
+                            {translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')}
+                        </h1>
                     </div>
                 </div>
-            </div>
-            
-            <div className={styles.formContainerSplashImage}>
-                <div className={styles.formContainerSplashImageText}>
-                    {
-                        translationMode ? t('sentenceForm.howDoISay') : t('sentenceForm.gotASentence')
-                    }
+                <div className={styles.analyzeControls}>
+                    <div className={styles.modeToggle} role="tablist">
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={!translationMode}
+                            className={!translationMode ? styles.modeActive : ''}
+                            onClick={() => setTranslationMode(false)}>
+                            Analyze
+                        </button>
+                        <button
+                            type="button"
+                            role="tab"
+                            aria-selected={translationMode}
+                            className={translationMode ? styles.modeActive : ''}
+                            onClick={() => setTranslationMode(true)}>
+                            Translate
+                        </button>
+                    </div>
+                    <LanguageSwitcher />
                 </div>
-                <div className={styles.formContainerSplashImageInner}>
-                    <img className={isDark(theme) ? styles.dark : ''} src="/images/promptbackground.png" alt="Splash image" />
-                </div>
             </div>
-                
+
             <div className={`${styles.formContainer} ${analysis ? styles.formContainerWithAnalysis : ''}`}>
                 
                 <form onSubmit={handleSubmit} className={styles.form}>
@@ -601,7 +627,7 @@ const SentenceForm = ({
             {
                 !error && loading && (
                     <div className={styles.loading}>
-                        <SvgSpinnersRingResize />
+                        <Mascot pose="cards" size={64} motion="bob" />
                         <div className={`${styles.loadingText} ${styles.fadeTransition}`}>
                             {loadingMessages[loadingMessageIndex]}
                         </div>

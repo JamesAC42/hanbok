@@ -55,14 +55,14 @@
         padding-bottom:0;
 
         .pageTitle {
-            font-family: var(--font-display);
-            font-variation-settings: 'wght' 800;
-            font-size: 3rem;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 2.1rem;
             margin-bottom: 2rem;
             text-align: center;
 
             @media screen and (max-width: 725px) {
-                font-size: 3rem;
+                font-size: 1.6rem;
                 margin-bottom:0;
                 margin-top:2rem;
             }

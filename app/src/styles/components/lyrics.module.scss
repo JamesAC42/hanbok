@@ -83,7 +83,7 @@
 
             background: linear-gradient(315deg, rgba(171, 222, 234, 0.68), rgba(211, 241, 211, 0.776));
 
-            box-shadow: 0.5rem 0.5rem 0 #2c3730;
+            box-shadow: 0 0.6rem 1.5rem -0.4rem color-mix(in srgb, #2c3730 45%, transparent);
 
             backdrop-filter: blur(10px);
             border-radius:1rem;

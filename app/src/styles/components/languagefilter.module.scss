@@ -1,34 +1,41 @@
 @import '../variables.module.scss';
 
+// Language picker used by the Library search row.
+
 .container {
   position: relative;
   display: inline-flex;
-  align-items: center;
+  align-items: stretch;
   z-index: 100;
 }
 
 .trigger {
-  background: var(--background-alt);
-  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
-  border-radius: 0.75rem;
-  padding: 0.65rem 0.75rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  gap: .5rem;
+  min-height: 48px;
+  padding: .5rem .85rem;
+  border: 2px solid var(--bp-line);
+  border-radius: 14px;
+  background: var(--bp-card);
+  box-shadow: 0 3px 0 var(--bp-line);
   color: var(--foreground);
-  font-size: 0.9rem;
-  font-weight: 500;
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
 
   &:hover {
-    background: color-mix(in srgb, var(--foreground) 5%, var(--background-alt));
-    border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
+    background: var(--bp-soft);
+  }
+
+  &:active {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 var(--bp-line);
   }
 
   &.active {
-    border-color: var(--primary);
-    background: color-mix(in srgb, var(--primary) 5%, var(--background-alt));
+    border-color: var(--bp-keep-line);
+    background: var(--bp-keep-soft);
+    box-shadow: 0 3px 0 var(--bp-keep-line);
   }
 }
 
@@ -36,13 +43,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .chevron {
-  opacity: 0.5;
-  font-size: 0.8rem;
-  transition: transform 0.2s ease;
+  font-size: .7rem;
+  color: var(--bp-ink2);
+  transition: transform .2s ease;
 
   &.rotated {
     transform: rotate(180deg);
@@ -51,21 +58,21 @@
 
 .dropdown {
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + .5rem);
   right: 0;
-  background: var(--background);
-  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
-  border-radius: 0.75rem;
-  padding: 0.5rem;
-  box-shadow: 0 4px 20px -2px color-mix(in srgb, var(--shadow) 20%, transparent), 0 10px 40px -10px color-mix(in srgb, var(--shadow) 10%, transparent);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.25rem;
+  gap: .3rem;
   min-width: max-content;
+  padding: .45rem;
+  background: var(--bp-card);
+  border: 2px solid var(--bp-line);
+  border-radius: 16px;
+  box-shadow: 0 4px 0 var(--bp-line);
   opacity: 0;
-  transform: translateY(-0.5rem);
+  transform: translateY(-.4rem);
   pointer-events: none;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity .15s ease, transform .15s ease;
   z-index: 101;
 
   &.show {
@@ -76,27 +83,25 @@
 }
 
 .option {
-  background: transparent;
-  border: none;
-  border-radius: 0.5rem;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 1.2rem;
-  position: relative;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: transparent;
   color: var(--foreground);
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background .12s ease;
 
   &:hover {
-    background: color-mix(in srgb, var(--foreground) 8%, transparent);
-    transform: scale(1.05);
+    background: var(--bp-soft);
   }
 
   &.selected {
-    background: color-mix(in srgb, var(--primary) 15%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 30%, transparent);
+    border-color: var(--bp-keep-line);
+    background: var(--bp-keep-soft);
   }
 }

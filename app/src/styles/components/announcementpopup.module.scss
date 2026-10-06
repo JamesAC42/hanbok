@@ -1,330 +1,346 @@
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999999;
-    animation: fadeIn 0.2s ease-out;
-}
+// Announcement + subscription prompt popups. The base popup look (backdrop,
+// card, close button, mascot disc, buttons) comes from the shared file.
+@import "./limitreachedpopup.module.scss";
 
-.popup {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    max-width: 36rem;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0.3rem 0.3rem 0 #000;
-    border: 1px solid #000;
-    animation: slideUp 0.3s ease-out;
-    position: relative;
+$purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
+$read-text: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
+
+// These popups carry more text, so the card is wider and reads left-aligned.
+.wide {
+    max-width: 34rem;
+    text-align: left;
+    padding-top: 1.5rem;
 }
 
 .header {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    margin-bottom: 1.5rem;
-    gap:1rem;
-    
+    text-align: center;
+    margin-bottom: 1.25rem;
+
     h2 {
-        margin: 0;
-        font-family: var(--font-display);
+        margin: .6rem 0 0;
+        padding: 0 1.5rem;
         font-size: 1.75rem;
-        max-width: 80%;
-    }
-}
-
-.badge {
-    background: #ff3e00;
-    color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.content {
-    h3 {
-        margin: 1.5rem 0 0.5rem;
-        font-family: var(--font-display);
-        font-size: 1.25rem;
-    }
-    
-    p {
-        margin: 0.5rem 0 1rem;
-        line-height: 1.6;
-        color: var(--text-secondary);
     }
 
-    & > *.highlight {
-        color:#3622e4;
-    }
-}
-
-.lyricsButton {
-    background: #3622e4;
-    color: white;
-    border: 1px solid #3622e4;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: var(--font-display);
-    transition: all 0.2s ease;
-    font-weight: 600;
-    display: block;
-    margin: 1.5rem auto;
-    width: fit-content;
-
-    &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #3622e4;
-    }
-}
-
-.featureList {
-    margin: 0.5rem 0 1.5rem;
-    padding-left: 1.5rem;
-    
-    li {
-        margin-bottom: 0.5rem;
-        color: var(--text-secondary);
-        line-height: 1.5;
-        
-        &:last-child {
-            margin-bottom: 0;
+    @media (max-width: 480px) {
+        h2 {
+            padding: 0;
+            font-size: 1.5rem;
         }
     }
 }
 
-.tryFeatureButton {
-    background: #ff8f00;
-    color: white;
-    border: 1px solid #ff8f00;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: var(--font-display);
-    transition: all 0.2s ease;
-    font-weight: 600;
-    display: block;
-    margin: 0 auto 2rem;
-    
-    &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #ff8f00;
+.badge {
+    margin-top: .85rem;
+    padding: .3rem .75rem;
+    border-radius: 99px;
+    background: var(--bp-rev-soft);
+    color: color-mix(in srgb, var(--bp-rev) 75%, var(--foreground));
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+
+    h3 {
+        @include bp-title;
+        margin: 0 0 .45rem;
+        font-size: 1.25rem;
+    }
+
+    p {
+        margin: 0 0 .5rem;
+        font-size: .95rem;
+        color: var(--bp-ink2);
+
+        &:last-child { margin-bottom: 0; }
     }
 }
 
+// One card per news item.
+.feature {
+    padding: 1.1rem 1.15rem 1.15rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 18px;
+    background: var(--background);
+
+    > button {
+        margin-top: .5rem;
+    }
+}
+
+.featurePurple {
+    border-color: var(--bp-purple-line);
+    background: var(--bp-purple-soft);
+
+    .highlight { color: $purple-text; }
+    p { color: var(--foreground); }
+}
+
+.highlight {
+    color: $read-text;
+}
+
+.lyricsButton {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 4px);
+    min-height: 46px;
+    white-space: normal;
+}
+
+.ghostButton {
+    @include bp-press-ghost($read-text, 3px);
+    min-height: 46px;
+    white-space: normal;
+}
+
+.featureList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    li {
+        position: relative;
+        padding-left: 1.4rem;
+        font-size: .95rem;
+        font-weight: 600;
+        line-height: 1.45;
+        color: var(--foreground);
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: .2rem;
+            top: .5em;
+            width: .55rem;
+            height: .55rem;
+            border-radius: 50%;
+            background: var(--bp-keep);
+        }
+    }
+}
+
+// Subscription prompt: two plan cards, side by side when there is room.
+.tiers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+
+    @media (max-width: 520px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.tier {
+    padding: 1rem 1.05rem;
+    border: 2px solid var(--bp-read-line);
+    border-radius: 18px;
+    background: var(--bp-read-soft);
+
+    h3 {
+        font-size: 1.15rem;
+    }
+
+    p {
+        color: var(--foreground);
+        font-size: .92rem;
+    }
+}
+
+.tierPlus {
+    border-color: var(--bp-purple-line);
+    background: var(--bp-purple-soft);
+
+    .highlight { color: $purple-text; }
+}
+
+.note {
+    text-align: center;
+    margin: 0 !important;
+
+    strong {
+        font-weight: 800;
+        color: var(--foreground);
+    }
+}
+
+.stackedButtons {
+    margin-top: .35rem;
+}
+
+.ctaButton {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 5px);
+    font-size: 1rem;
+}
+
+.secondaryButton {
+    @include bp-press-ghost(var(--bp-ink2), 4px);
+    font-size: .9rem;
+}
+
+// Community block at the bottom, kept quiet.
 .communitySection {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eee;
+    margin-top: .5rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--bp-line);
+    text-align: center;
 }
 
 .discordPromo {
-    background: #f6f6ff;
-    border: 1px solid #5865F2;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin: 1.5rem 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: .55rem;
+    margin: .9rem 0 0;
+    padding: .9rem 1rem;
+    border-radius: 16px;
+    border: 2px solid color-mix(in srgb, #5865F2 40%, var(--background));
+    background: color-mix(in srgb, #5865F2 9%, var(--background));
     text-align: center;
 }
 
 .discordMessage {
-    font-weight: 600;
-    color: #5865F2;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
+    margin: 0 !important;
+    font-size: .92rem !important;
+    font-weight: 700 !important;
+    color: var(--foreground) !important;
 }
 
 .discordLogoContainer {
-    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: center;
 }
 
+// The Discord logo is a wide wordmark.
 .discordLogo {
-    height: 2rem;
     width: auto;
+    height: 1.35rem;
 }
 
-.closeButton {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    color: var(--text-secondary);
+.buttonRow {
+    display: flex;
+    gap: .75rem;
+    margin-top: .9rem;
 
-    &:hover {
-        color: var(--text-primary);
+    > button {
+        flex: 1 1 0;
+        min-width: 0;
+        min-height: 48px;
+        white-space: normal;
+    }
+
+    @media (max-width: 420px) {
+        flex-direction: column;
     }
 }
 
-.buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
+// The base .buttons stacks full width; .buttonRow inside it sits flush.
+.buttons .buttonRow {
+    margin-top: 0;
 }
 
-.centeredButtons {
-    justify-content: center;
+.discordButton {
+    @include bp-press(#5865F2, #3F4BC7, #fff, 4px);
 }
 
-.ctaButton {
-    background: #3622e4;
-    color: white;
-    border: 1px solid #3622e4;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: var(--font-display);
-    transition: all 0.2s ease;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #3622e4;
-    }
-}
-
-.secondaryButton {
-    background: #f0f0f0;
-    color: var(--text-secondary);
-    border: 1px solid #ccc;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: var(--font-display);
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-        background-color: #e0e0e0;
-        border-color: #bbb;
-    }
-}
-
-.feedbackButton, .discordButton, .shareButton {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: var(--font-display);
-    transition: all 0.2s ease;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.shareButton,
+.feedbackButton {
+    @include bp-press-ghost($read-text, 3px);
 }
 
 .buttonText {
     display: inline-block;
 }
 
-.feedbackButton {
-    background: #000;
-    color: white;
-    border: 1px solid #000;
+.centeredButtons {
+    justify-content: center;
+}
 
-    &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #000;
+// Long popups scroll; keep the close button in reach while they do.
+.wide .closeButton {
+    position: sticky;
+    top: 0;
+    float: right;
+    margin: -.6rem -.75rem -2.6rem 0;
+
+    @media (max-width: 480px) {
+        margin-right: -.35rem;
     }
 }
 
-.discordButton {
-    background: #5865F2;
-    color: white;
-    border: 1px solid #5865F2;
-    font-size: 1.1rem;
-    padding: 0.875rem 1.75rem;
-    position: relative;
-    overflow: hidden;
+// "Hanbok has a new look": centered, a little wider than the base card,
+// with a short checklist of what changed.
+.news {
+    max-width: 30rem;
 
-    &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #5865F2;
-    }
-    
-    &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(rgba(255,255,255,0.1), transparent);
+    .badge {
+        display: inline-block;
+        background: var(--bp-und-soft);
+        color: color-mix(in srgb, var(--bp-und) 70%, var(--foreground));
     }
 }
 
-.shareButton {
-    background: #00c853;
-    color: white;
-    border: 1px solid #00c853;
+.highlights {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: .85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    text-align: left;
+    border: 2px solid var(--bp-line);
+    border-radius: 16px;
+    background: var(--bp-soft);
 
-    &:hover {
-        transform: translate(-0.15rem, -0.15rem);
-        box-shadow: 0.15rem 0.15rem 0 #00c853;
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: .65rem;
+        font-size: .94rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--foreground);
     }
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+.dot {
+    flex: 0 0 auto;
+    width: .7rem;
+    height: .7rem;
+    margin-top: .32em;
+    border-radius: 50%;
 }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(1rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.dotUnd { background: var(--bp-und); }
+.dotRev { background: var(--bp-rev); }
+.dotKeep { background: var(--bp-keep); }
+
+.buttons a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
-@media (max-width: 640px) {
-    .popup {
-        padding: 1.5rem;
+.feedbackNote {
+    margin: 1rem 0 0 !important;
+    font-size: .85rem !important;
+    color: var(--bp-ink2) !important;
+
+    a {
+        color: color-mix(in srgb, var(--bp-read) 80%, var(--foreground));
+        font-weight: 800;
+        text-decoration: underline;
+        text-underline-offset: 2px;
     }
-    
-    .buttons {
-        flex-direction: column;
-    }
-    
-    .feedbackButton, .discordButton, .shareButton {
-        width: 100%;
-    }
-    
-    .discordButton {
-        order: -1;
-    }
-    
-    .shareButton {
-        order: 0;
-    }
-    
-    .feedbackButton {
-        order: 1;
-    }
-} 
+}

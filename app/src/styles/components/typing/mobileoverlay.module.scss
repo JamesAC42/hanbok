@@ -1,70 +1,91 @@
 @import "../../variables.module.scss";
 
 .overlay {
-    min-height: 80vh;
-    @include flex-center;
-    padding: 2rem;
-    width:100%;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 3rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
 }
 
 .content {
-    text-align: center;
+    width: 100%;
     max-width: 30rem;
-    
-    @include flex-center-column;
-    gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
 }
 
 .icon {
-    font-size: 4rem;
-    color: var(--foreground-muted);
-    margin-bottom: 1rem;
+    display: grid;
+    place-items: center;
 }
 
 .title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--foreground);
-    font-family: var(--font-funnel);
-    margin-bottom: 0.5rem;
+    @include bp-title;
+    margin: 0;
+    font-size: 1.9rem;
 }
 
 .message {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: var(--foreground-muted);
-    margin-bottom: 1.5rem;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--bp-ink2);
 }
 
 .features {
-    background: var(--foreground-lighter);
-    padding: 1.5rem;
-    border-radius: 0.75rem;
+    @include bp-card;
+    width: 100%;
+    padding: 1.1rem 1.2rem;
     text-align: left;
-    
+
     h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: var(--foreground);
-        margin-bottom: 1rem;
-        font-family: var(--font-funnel);
+        @include bp-label;
+        margin: 0 0 .6rem;
     }
-    
+
     ul {
         list-style: none;
-        padding: 0;
         margin: 0;
-        
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .55rem;
+
         li {
-            padding: 0.5rem 0;
-            color: var(--foreground-muted);
-            
-            &:before {
+            display: flex;
+            align-items: flex-start;
+            gap: .6rem;
+            font-size: .98rem;
+            font-weight: 700;
+            line-height: 1.4;
+            color: var(--foreground);
+
+            &::before {
                 content: "✓";
-                color: #28a745;
-                font-weight: bold;
-                margin-right: 0.5rem;
+                flex: none;
+                width: 1.4rem;
+                height: 1.4rem;
+                display: grid;
+                place-items: center;
+                border-radius: 50%;
+                background: var(--bp-purple-soft);
+                color: var(--bp-purple);
+                font-size: .8rem;
+                font-weight: 900;
             }
         }
     }
-} 
+}
+
+.altButton {
+    @include bp-press(var(--bp-und), var(--bp-und-d), #fff, 4px);
+    width: 100%;
+    margin-top: .5rem;
+}

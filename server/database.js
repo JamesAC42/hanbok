@@ -48,6 +48,10 @@ async function connectToDatabase() {
       }
     }
     await db.collection('sentences').createIndex({ userId: 1 });
+    await db.collection('sentences').createIndex({ userId: 1, dateCreated: -1 });
+    // Finds the sentence a flashcard word came from (lib/sourceSentence.js)
+    await db.collection('sentences').createIndex({ userId: 1, 'analysis.components.dictionary_form': 1 });
+    await db.collection('words').createIndex({ userId: 1, dateSaved: -1 });
     await db.collection('sentences').createIndex({ sentenceId: 1 }, { unique: true });
     await db.collection('savedSentences').createIndex(
       { userId: 1, sentenceId: 1 }, 
@@ -96,6 +100,16 @@ async function connectToDatabase() {
 
     // Add index for feature_usage collection
     await safeCreateIndex('feature_usage', { userId: 1, feature: 1 }, { unique: true });
+
+    // Date indexes for the admin dashboard's range queries
+    await safeCreateIndex('users', { dateCreated: -1 });
+    await safeCreateIndex('sentences', { dateCreated: -1 });
+    await safeCreateIndex('words', { dateSaved: -1 });
+    await safeCreateIndex('flashcards', { dateCreated: -1 });
+    await safeCreateIndex('conversations', { lastUpdated: -1 });
+    await safeCreateIndex('conversations', { dateCreated: -1 });
+    await safeCreateIndex('extended_texts', { dateCreated: -1 });
+    await safeCreateIndex('extended_text_jobs', { createdAt: -1 });
 
     // Add index for word_audio collection
     await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });

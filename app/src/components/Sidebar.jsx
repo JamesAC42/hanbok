@@ -1,7 +1,8 @@
 "use client";
 
 import styles from "@/styles/components/sidebar.module.scss";
-import Image from "next/image";
+import Mascot from '@/components/Mascot';
+import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -25,6 +26,16 @@ import { MaterialSymbolsHistory } from "./icons/History";
 import { MaterialSymbolsKeyboard } from "./icons/Keyboard";
 import { TablerAlphabetKorean } from "./icons/Korean";
 import { MaterialSymbolsSettingsRounded } from "./icons/Settings";
+import { MaterialSymbolsMenuBook } from "./icons/MenuBook";
+import QuotaDisplay from "./QuotaDisplay";
+import useCardsToday from "@/hooks/useCardsToday";
+
+// Translation lookup that falls back to English text for keys that are new
+// and not yet translated in every language.
+const useLabel = (t) => (key, fallback) => {
+    const value = t(key);
+    return !value || value === key ? fallback : value;
+};
 
 // Hamburger Menu Icon Component
 function HamburgerMenuIcon() {
@@ -43,44 +54,12 @@ function Sidebar() {
 
     const [collapsed, setCollapsed] = useState(false);
 
-    const [showToolsHover, setShowToolsHover] = useState(false);
-    const [showSavedHover, setShowSavedHover] = useState(false);
-    const [showLearnHover, setShowLearnHover] = useState(false);
-    const [showNavHover, setShowNavHover] = useState(false);
-
-    const [toolsTransform, setToolsTransform] = useState(0);
-    const [savedTransform, setSavedTransform] = useState(0);
-    const [learnTransform, setLearnTransform] = useState(0);
-    const [navTransform, setNavTransform] = useState(0);
-
     const [expanding, setExpanding] = useState(false);
     const [collapsing, setCollapsing] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
 
     const router = useRouter();
     const pathname = usePathname();
-
-    function setHoverTransform(section, i) {
-        const transform = (2 * i) + "rem";
-        switch(section) {
-            case 'tools':
-                setToolsTransform(transform);
-                setShowToolsHover(true);
-                break;
-            case 'saved':
-                setSavedTransform(transform);
-                setShowSavedHover(true);
-                break;
-            case 'learn':
-                setLearnTransform(transform);
-                setShowLearnHover(true);
-                break;
-            case 'nav':
-                setNavTransform(transform);
-                setShowNavHover(true);
-                break;
-        }
-    }
 
     useEffect(() => {
         
@@ -169,6 +148,41 @@ function Sidebar() {
         }
     }
 
+    const label = useLabel(t);
+    const cardsToday = useCardsToday(isAuthenticated);
+
+    const sections = [
+        {
+            key: 'main',
+            items: [
+                ...(isAuthenticated ? [{ path: "/home", label: label('sidebar.home', 'Home'), color: 'var(--bp-und)', icon: <MaterialSymbolsLightOtherHouses /> }] : []),
+                { path: "/analyze", match: ["/analyze", "/sentence"], label: label('sidebar.analyze', 'Analyze'), color: 'var(--bp-read)', icon: <MaterialSymbolsVariableAddRounded /> },
+                { path: "/extended-text", match: ["/extended-text"], label: label('sidebar.paragraphs', 'Paragraphs'), color: 'var(--bp-purple)', icon: <Fa6SolidParagraph /> },
+                { path: "/library", match: ["/library", "/history", "/bookmarks"], label: label('sidebar.library', 'Library'), color: 'var(--bp-keep)', icon: <MaterialSymbolsLibraryBooksSharp /> },
+                { path: "/cards", match: ["/cards"], label: label('sidebar.review', 'Review'), color: 'var(--bp-rev)', icon: <PhCardsFill />, badge: cardsToday },
+            ],
+        },
+        {
+            key: 'practice',
+            header: label('sidebar.practice', 'Practice'),
+            items: [
+                { path: "/learn", match: ["/learn"], label: label('sidebar.learn', 'Learn'), color: 'var(--bp-read)', icon: <MaterialSymbolsMenuBook /> },
+                { path: "/tutor", match: ["/tutor"], label: t('sidebar.tutor'), color: 'var(--bp-flame)', icon: <IcSharpSchool /> },
+                { path: "/typing", match: ["/typing"], label: t('sidebar.koreanTyping'), color: 'var(--bp-purple)', icon: <MaterialSymbolsKeyboard /> },
+                { path: "/hangeul", match: ["/hangeul"], label: t('sidebar.learnHangeul'), color: 'var(--bp-und)', icon: <TablerAlphabetKorean /> },
+            ],
+        },
+        {
+            key: 'discover',
+            header: label('sidebar.discover', 'Discover'),
+            items: [
+                { path: "/lyrics", match: ["/lyrics"], label: t('sidebar.lyrics'), color: 'var(--bp-pink)', icon: <IcSharpQueueMusic /> },
+                { path: "/feedback", label: t('sidebar.feedback'), color: 'var(--bp-freeze)', icon: <MingcuteCommentFill /> },
+                ...(user && isAdmin(user.email) ? [{ path: "/admin", match: ["/admin"], label: "Admin", color: 'var(--bp-gray)', icon: <MaterialSymbolsSettingsRounded /> }] : []),
+            ],
+        },
+    ];
+
     return (
         <>
             {/* Mobile Menu Button */}
@@ -187,316 +201,86 @@ function Sidebar() {
             
             <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""} ${expanding ? styles.expanding : ""} ${collapsing ? styles.animateCollapse : ""}`}>
                 <div className={styles.sidebarInner}>
-                    <div className={styles.sidebarSection}>
-                        <div className={styles.sidebarHeader}>
-                            <div
-                                onClick={() => navigateTo("/")}
-                                className={`${styles.homeIcon} ${collapsed ? styles.homeCollapsed : ""}`}>
-                                <MaterialSymbolsLightOtherHouses />
-                            </div>
-                            <div 
+                    <div className={styles.sidebarHeader}>
+                        <Link
+                            href={isAuthenticated ? "/home" : "/"}
+                            className={styles.wordmark}
+                            aria-label="Hanbok home">
+                            <Mascot pose="head" size={30} label="" className={styles.wordmarkIcon} />
+                            <span className={styles.wordmarkFull}>hanbok</span>
+                        </Link>
+                        <button
+                            type="button"
                             className={styles.collapseButton}
-                            onClick={() => toggleCollapse()}
-                            >
-                                <CuidaSidebarCollapseOutline />
-                            </div>
-                        </div>
+                            aria-label={collapsed ? "Expand menu" : "Collapse menu"}
+                            onClick={() => toggleCollapse()}>
+                            <CuidaSidebarCollapseOutline />
+                        </button>
                     </div>
-                    <div className={styles.sidebarSection}>
-                        <div className={styles.sidebarSectionItems}>
-                            <div className={`
-                                ${styles.sidebarSectionItem}
-                                ${expanding ? styles.expanding : ""} 
-                                ${getActiveClass(isAuthenticated ? "/profile" : "/login")}
-                                ${styles.profileSection}`}
-                             onClick={() => navigateTo(isAuthenticated ? "/profile" : "/login")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <IcBaselinePerson />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {isAuthenticated ? t('sidebar.myAccount') : t('sidebar.signIn')}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.sidebarSection}
-                        onMouseEnter={() => setShowToolsHover(true)}
-                        onMouseLeave={() => setShowToolsHover(false)}>
-                        <div className={styles.sidebarSectionItems}>
-                            <div
-                                onMouseEnter={() => setHoverTransform('tools', 0)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${styles.newAnalysisSection}
-                                    ${getActiveClass("/analyze")}`}
-                                onClick={() => navigateTo("/analyze")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MaterialSymbolsVariableAddRounded />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.analyzeText')}
-                                </div>
-                            </div>
-                            <div
-                                onMouseEnter={() => setHoverTransform('tools', 1)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass(["/extended-text"])}`}
-                                onClick={() => navigateTo("/extended-text")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <Fa6SolidParagraph />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.extendedText')}
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('tools', 2)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass(["/cards"])}`}
-                                onClick={() => navigateTo("/cards")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <PhCardsFill />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.flashcards')}
-                                </div>
-                            </div>
 
-                            <div 
-                                className={`${styles.sidebarItemFloatyThing} ${showToolsHover ? styles.show : ""}`} 
-                                style={{
-                                    transform: `translateY(${toolsTransform})`}
-                                }>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.sidebarSection}
-                        onMouseEnter={() => setShowSavedHover(true)}
-                        onMouseLeave={() => setShowSavedHover(false)}>
-                        <div 
-                            onMouseEnter={() => setShowNavHover(false)}
-                            className={styles.sidebarSectionHeader}>
-                            {t('sidebar.activity')}
-                        </div>
-                        <div className={styles.sidebarSectionItems}>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('saved', 0)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/bookmarks")}`}
-                                onClick={() => navigateTo("/bookmarks")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MaterialSymbolsBookmarkSharp />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.savedSentences')}
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('saved', 1)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/history")}`}
-                                onClick={() => navigateTo("/history")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MaterialSymbolsHistory />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.history')}
-                                </div>
-                            </div>
-
-                            <div 
-                                className={`${styles.sidebarItemFloatyThing} ${showSavedHover ? styles.show : ""}`} 
-                                style={{
-                                    transform: `translateY(${savedTransform})`}
-                                }>
-                            </div>
-                        </div>
-                    </div>
-                    <div 
-                        className={styles.sidebarSection}
-                        onMouseEnter={() => setShowLearnHover(true)}
-                        onMouseLeave={() => setShowLearnHover(false)}>
-                        <div 
-                            onMouseEnter={() => setShowNavHover(false)}
-                            className={styles.sidebarSectionHeader}>
-                            {t('sidebar.tools')}
-                        </div>
-                        <div className={styles.sidebarSectionItems}>
-
-                            {
-                                false && (
-                                    <div 
-                                        onMouseEnter={() => setHoverTransform('learn', -1)}
-                                        className={`
-                                            ${styles.sidebarSectionItem}
-                                            ${expanding ? styles.expanding : ""}
-                                            ${getActiveClass("/grammar")}`}
-                                        onClick={() => navigateTo("/grammar")}>
-                                        <div className={styles.sidebarSectionItemIcon}>
-                                            <Fa6SolidParagraph />
-                                        </div>
-                                        <div className={styles.sidebarSectionItemText}>
-                                            {t('sidebar.myGrammar')}
-                                        </div>
-                                    </div>
-                                )
-                            }
-
-                            <div 
-                                onMouseEnter={() => setHoverTransform('learn', 0)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/typing")}`}
-                                onClick={() => navigateTo("/typing")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MaterialSymbolsKeyboard />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.koreanTyping')}
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('learn', 1)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/hangeul")}`}
-                                onClick={() => navigateTo("/hangeul")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <TablerAlphabetKorean />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.learnHangeul')}
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('learn', 2)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/tutor")}`}
-                                onClick={() => navigateTo("/tutor")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <IcSharpSchool />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.tutor')}
-                                </div>
-                            </div>
-
-                            <div 
-                                className={`${styles.sidebarItemFloatyThing} ${showLearnHover ? styles.show : ""}`} 
-                                style={{
-                                    transform: `translateY(${learnTransform})`}
-                                }>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={styles.sidebarSection}>
-                        
-                        <div className={styles.sidebarSectionItems}>
-                            {user && isAdmin(user.email) && (
-                                <div 
-                                    onMouseEnter={() => setHoverTransform('admin', 0)}
-                                    className={`
-                                        ${styles.sidebarSectionItem}
-                                        ${expanding ? styles.expanding : ""}
-                                        ${getActiveClass(["/admin"])}`} 
-                                    onClick={() => navigateTo("/admin")}>
-                                    <div className={styles.sidebarSectionItemIcon}>
-                                        <MaterialSymbolsSettingsRounded />
-                                    </div>
-                                    <div className={styles.sidebarSectionItemText}>
-                                        Admin
-                                    </div>
+                    {sections.map(section => (
+                        <nav
+                            key={section.key}
+                            className={styles.sidebarSection}
+                            aria-label={section.header || 'Main'}>
+                            {section.header && (
+                                <div className={styles.sidebarSectionHeader}>
+                                    {section.header}
                                 </div>
                             )}
-                        </div>
-                    </div>
-                    <div className={styles.sidebarSection}
-                        onMouseEnter={() => setShowNavHover(true)}
-                        onMouseLeave={() => setShowNavHover(false)}>
-                        <div 
-                            onMouseEnter={() => setShowNavHover(false)}
-                            className={styles.sidebarSectionHeader}>
-                            {t('sidebar.navigation')}
-                        </div>
-                        <div className={styles.sidebarSectionItems}>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('nav', 0)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/lyrics")}`} 
-                                onClick={() => navigateTo("/lyrics")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <IcSharpQueueMusic />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.lyrics')}
-                                </div>
+                            <div className={styles.sidebarSectionItems}>
+                                {section.items.map(item => {
+                                    const active = getActiveClass(item.match || item.path);
+                                    return (
+                                        <Link
+                                            key={item.path}
+                                            href={item.path}
+                                            onClick={() => { if (isMobile && !collapsed) toggleCollapse(); }}
+                                            className={`${styles.sidebarSectionItem} ${active}`}
+                                            aria-current={active ? "page" : undefined}
+                                            style={{ '--item-color': item.color }}
+                                            title={collapsed ? item.label : undefined}>
+                                            <span className={styles.sidebarSectionItemIcon}>
+                                                {item.icon}
+                                            </span>
+                                            <span className={styles.sidebarSectionItemText}>
+                                                {item.label}
+                                            </span>
+                                            {item.badge ? (
+                                                <span className={styles.sidebarBadge} aria-label={`${item.badge} cards to study today`}>
+                                                    {item.badge > 99 ? '99+' : item.badge}
+                                                </span>
+                                            ) : null}
+                                        </Link>
+                                    );
+                                })}
                             </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('nav', 1)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/lessons")}`} 
-                                onClick={() => navigateTo("/lessons")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MaterialSymbolsLibraryBooksSharp />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.lessons')}
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('nav', 2)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${getActiveClass("/feedback")}`} 
-                                onClick={() => navigateTo("/feedback")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MingcuteCommentFill />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.feedback')}
-                                </div>
-                            </div>
-                            <div 
-                                onMouseEnter={() => setHoverTransform('nav', 3)}
-                                className={`
-                                    ${styles.sidebarSectionItem}
-                                    ${expanding ? styles.expanding : ""}
-                                    ${styles.sidebarSectionItemPricing} 
-                                    ${getActiveClass("/pricing")}`} 
-                                onClick={() => navigateTo("/pricing")}>
-                                <div className={styles.sidebarSectionItemIcon}>
-                                    <MynauiSparklesSolid />
-                                </div>
-                                <div className={styles.sidebarSectionItemText}>
-                                    {t('sidebar.viewPlans')}
-                                </div>
-                            </div>
+                        </nav>
+                    ))}
 
-                            <div 
-                                className={`${styles.sidebarItemFloatyThing} ${showNavHover ? styles.show : ""}`} 
-                                style={{    
-                                    transform: `translateY(${navTransform})`}
-                                }>
+                    <div className={`${styles.sidebarSection} ${styles.sidebarFooter}`}>
+                        {!collapsed && isAuthenticated && (
+                            <div className={styles.sidebarQuota}>
+                                <QuotaDisplay compact />
                             </div>
-                        </div>
+                        )}
+                        {!collapsed && !isAuthenticated && (
+                            <Link href="/pricing" className={styles.sidebarPlansLink}>
+                                <MynauiSparklesSolid /> {t('sidebar.viewPlans')}
+                            </Link>
+                        )}
+                        <Link
+                            href={isAuthenticated ? "/profile" : "/login"}
+                            className={`${styles.sidebarSectionItem} ${styles.accountItem} ${getActiveClass(isAuthenticated ? "/profile" : "/login")}`}
+                            style={{ '--item-color': 'var(--bp-gray)' }}
+                            title={collapsed ? (isAuthenticated ? t('sidebar.myAccount') : t('sidebar.signIn')) : undefined}>
+                            <span className={styles.sidebarSectionItemIcon}>
+                                <IcBaselinePerson />
+                            </span>
+                            <span className={styles.sidebarSectionItemText}>
+                                {isAuthenticated ? (user?.name || t('sidebar.myAccount')) : t('sidebar.signIn')}
+                            </span>
+                        </Link>
                     </div>
                 </div>
             </div>

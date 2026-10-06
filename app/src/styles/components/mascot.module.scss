@@ -1,0 +1,32 @@
+.mascot {
+    display: block;
+    flex: none;
+    max-width: none;
+    object-fit: contain;
+    user-select: none;
+}
+
+.bob {
+    animation: bp-bob 3.4s ease-in-out infinite;
+}
+
+.hop {
+    animation: bp-hop .7s cubic-bezier(.3, 1.6, .5, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bob, .hop {
+        animation: none;
+    }
+}
+
+@keyframes bp-bob {
+    50% { transform: translateY(-4px); }
+}
+
+@keyframes bp-hop {
+    0% { transform: translateY(0); }
+    35% { transform: translateY(-14px) rotate(-4deg); }
+    70% { transform: translateY(0) rotate(2deg); }
+    100% { transform: none; }
+}

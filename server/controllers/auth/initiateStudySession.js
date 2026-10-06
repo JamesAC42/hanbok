@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { findSourceSentence } = require('../../lib/sourceSentence');
 const { getWordAudio } = require('../../utils/wordAudio');
 const { CHINESE_MODEL_ID } = require('../../elevenlabs/generateSpeech');
 const { isChinese } = require('../../llm/chineseScript');
@@ -232,10 +233,20 @@ async function initiateStudySession(req, res) {
       let content = null;
       let audioUrl = null;
       let audioId = null;
+      let source = null;
 
       if (card.contentType === 'word') {
         // Fetch word content
         content = await db.collection('words').findOne({ wordId: card.contentId });
+
+        // The sentence the word was saved from, shown on the answer side
+        if (content) {
+          try {
+            source = await findSourceSentence(db, userId, content);
+          } catch (error) {
+            console.error('Error finding source sentence:', error);
+          }
+        }
         
         // If the content exists, fetch the audio URL
         if (content) {
@@ -273,6 +284,7 @@ async function initiateStudySession(req, res) {
       return {
         ...card,
         content,
+        source,
         audioUrl,
         audioId
       };

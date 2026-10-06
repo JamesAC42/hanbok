@@ -1,35 +1,50 @@
+@import '@/styles/variables.module.scss';
+
+// Bookmark icon button (sentence + paragraph pages). Same size and feel as
+// the settings icon next to it; saved = Keep amber.
 .saveButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-    font-size: 1.5rem;
-    color: var(--foreground);
-    opacity: 0.5;
+    flex: none;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--bp-ink2);
+    font-size: 1.45rem;
+    cursor: pointer;
+    transition: background .12s ease, color .12s ease, border-color .12s ease, transform .08s ease;
 
-    &:hover {
-        opacity: 1;
-        background: rgba(0, 0, 0, 0.05);
+    &:hover:not(:disabled) {
+        background: var(--bp-soft);
+        color: var(--foreground);
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(.92);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--bp-read-line);
+        outline-offset: 2px;
     }
 
     &.saved {
-        opacity: 1; 
-        color: var(--primary);
+        border-color: var(--bp-keep-line);
+        background: var(--bp-keep-soft);
+        color: color-mix(in srgb, var(--bp-keep-d) 80%, var(--foreground));
+
+        &:hover:not(:disabled) {
+            background: var(--bp-keep-soft);
+            color: color-mix(in srgb, var(--bp-keep-d) 80%, var(--foreground));
+        }
     }
 
     &.loading {
-        cursor: not-allowed;
-        opacity: 0.3;
+        cursor: progress;
+        opacity: .45;
     }
-
-    @media screen and (max-width: 725px) {
-        top: 0.5rem;
-        right: 0.5rem;
-        font-size: 1.2rem;
-    }
-} 
+}

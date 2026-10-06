@@ -11,9 +11,14 @@ import Image from 'next/image';
 import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import RedditPixel from '@/components/RedditPixel';
+import { LoadingScreen } from '@/components/StatusScreen';
 
 export const metadata = {
-  title: "Hanbok - Multi-Language Learning Tool",
+  metadataBase: new URL('https://hanbokstudy.com'),
+  title: {
+    default: "Hanbok - Learn Korean, Japanese & Chinese from Real Sentences",
+    template: "%s | Hanbok",
+  },
   description: "Learn Korean, Chinese, Japanese, Spanish, and more languages with AI-powered sentence analysis, vocabulary tools, and cultural insights.",
   keywords: "language learning, Korean, Chinese, Japanese, Spanish, Italian, French, German, Dutch, Russian, Turkish, vocabulary, grammar, translation",
   icons: {
@@ -70,9 +75,10 @@ export default function RootLayout({ children }) {
                       src="https://accounts.google.com/gsi/client"
                       strategy="afterInteractive"
                     />
-                    <script defer src="https://umami.fukuin.dev/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
+                    {/* data-domains keeps staging and local dev out of the real numbers. */}
+                    <script defer src="https://umami.fukuin.dev/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8" data-domains="hanbokstudy.com,www.hanbokstudy.com"></script>
                     <RedditPixel />                    
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<LoadingScreen />}>
                       {children}
                     </Suspense>
                   </ClientLayoutWrapper>

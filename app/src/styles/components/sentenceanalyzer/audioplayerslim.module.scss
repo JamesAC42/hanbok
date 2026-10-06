@@ -1,0 +1,202 @@
+@import '@/styles/variables.module.scss';
+
+// Compact audio controls under the sentence: listen, voice, speed.
+.audioPlayers {
+    display: none;
+}
+
+.audioPlayerWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+}
+
+.slimPlayer {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        border: 2px solid var(--bp-line);
+        border-radius: 12px;
+        padding: 0.5rem 0.85rem;
+        background: var(--background);
+        box-shadow: 0 3px 0 var(--bp-line);
+        color: var(--bp-read);
+        font-family: var(--font-display);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
+
+        &:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        svg {
+            width: 1.15rem;
+            height: 1.15rem;
+        }
+
+        &:hover:not(:disabled) {
+            background: var(--bp-soft);
+        }
+
+        &:disabled {
+            cursor: default;
+            opacity: 0.45;
+        }
+    }
+}
+
+.playButton {
+    background: var(--bp-read) !important;
+    border-color: var(--bp-read) !important;
+    box-shadow: 0 3px 0 var(--bp-read-d) !important;
+    color: #fff !important;
+    padding: 0.5rem 1.1rem 0.5rem 0.85rem !important;
+
+    &:hover:not(:disabled) {
+        filter: brightness(1.06);
+    }
+
+    &:active:not(:disabled) {
+        box-shadow: none !important;
+    }
+
+    &:disabled {
+        opacity: 0.7 !important;
+    }
+}
+
+.voiceAvatar {
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--background-alt);
+    flex-shrink: 0;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.speedToggle.active {
+    color: var(--bp-und-d) !important;
+    background: var(--bp-und-soft) !important;
+    border-color: var(--bp-und-line) !important;
+}
+
+// Inline note under the player when audio is locked (no credits, long
+// sentence, slow audio needs sign in). It shows on its own after the page
+// loads, so it stays an inline card instead of a blocking modal.
+.audioPlayerLockedPopup {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    width: 100%;
+    max-width: 30rem;
+    padding: .85rem 3.4rem .85rem .9rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 20px;
+    background: var(--background);
+    box-shadow: 0 4px 0 var(--bp-line);
+    font-family: var(--font-display);
+    text-align: left;
+    animation: audioNoteIn .2s cubic-bezier(.3, 1.4, .5, 1);
+
+    @media (max-width: 480px) {
+        padding: .85rem 3.1rem .9rem .75rem;
+        gap: .7rem;
+    }
+}
+
+@keyframes audioNoteIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .audioPlayerLockedPopup { animation: none; }
+}
+
+.popupMascot {
+    flex: none;
+}
+
+.popupBody {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .6rem;
+    min-width: 0;
+
+    p {
+        margin: 0;
+        font-size: .95rem;
+        font-weight: 700;
+        line-height: 1.4;
+        color: var(--foreground);
+        text-wrap: pretty;
+    }
+
+    a {
+        min-height: 42px;
+        padding: .55rem 1rem;
+        font-size: .8rem;
+        white-space: normal;
+
+        svg {
+            width: 1.15rem;
+            height: 1.15rem;
+            flex: none;
+        }
+    }
+}
+
+.popupUpgrade {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 4px);
+}
+
+.popupSignIn {
+    @include bp-press(var(--bp-read), var(--bp-read-d), #fff, 4px);
+}
+
+// Reset the shared .slimPlayer button look; this one is a plain square.
+.popupClose {
+    position: absolute;
+    top: .55rem;
+    right: .55rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 3px 0 var(--bp-line);
+    background: var(--background);
+    color: var(--bp-ink2);
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
+
+    &:hover { color: var(--foreground); background: var(--bp-soft); }
+    &:active { transform: translateY(3px); box-shadow: none; }
+}

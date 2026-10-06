@@ -1,150 +1,107 @@
+@import '@/styles/variables.module.scss';
+
 .variants {
-    margin: 2rem 0;
+    margin: 1.5rem 0 .5rem;
     width: 100%;
+    font-family: var(--font-display);
 
     .variantsHeader {
-        font-family: var(--font-body);
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--foreground);
-        margin-bottom: 1.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        &::before {
-            content: '';
-            display: block;
-            width: 0.25rem;
-            height: 1.5rem;
-            background-color: var(--primary);
-            border-radius: 0.125rem;
-        }
+        @include bp-title;
+        font-size: 1.35rem;
+        margin-bottom: .9rem;
     }
 
     .variantsContainer {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 1rem;
     }
 }
 
 .variantCard {
-    background: var(--background-alt, #fff);
-    border: 1px solid var(--border-color, #e0e0e0);
-    border-radius: 1rem;
+    --tone: var(--bp-read);
+    --tone-d: var(--bp-read-d);
+    background: var(--background);
+    border: 2px solid var(--bp-line);
+    border-radius: 18px;
+    box-shadow: 0 4px 0 var(--bp-line);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
 
     .cardHeader {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.05));
+        padding: .8rem 1rem 0;
         display: flex;
         align-items: center;
-        
+
         .variantType {
-            font-family: var(--font-body);
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: .7rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.35rem 0.75rem;
-            border-radius: 2rem;
-            color: white;
+            letter-spacing: .07em;
+            padding: .3rem .7rem;
+            border-radius: 99px;
+            color: #fff;
+            background: var(--tone);
         }
     }
 
     .cardBody {
-        padding: 1.5rem 1.25rem;
+        padding: .9rem 1.1rem 1rem;
         flex: 1;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         text-align: center;
-        gap: 0.5rem;
+        gap: .35rem;
 
         .variantText {
-            font-size: 1.75rem;
+            font-size: 1.4rem;
             color: var(--foreground);
-            font-weight: 500;
-            line-height: 1.4;
+            font-weight: 700;
+            line-height: 1.5;
+
+            &:global(.korean) {
+                font-family: var(--font-kr-sans);
+            }
         }
 
         .variantReading {
-            font-size: 1rem;
-            color: var(--foreground-light);
-            font-style: italic;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--bp-ink2);
         }
     }
 
     .cardFooter {
-        background: var(--background-alt, #f8f9fa);
-        padding: 1rem 1.25rem;
-        border-top: 1px solid var(--border-color, rgba(0,0,0,0.05));
-        min-height: 3.5rem;
+        background: var(--bp-soft);
+        padding: .7rem 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
 
         .variantWhenToUse {
-            font-family: var(--font-body);
-            font-size: 0.9rem;
-            color: var(--foreground-light);
+            font-size: .86rem;
+            font-weight: 700;
+            color: var(--bp-ink2);
             text-align: center;
             line-height: 1.4;
         }
     }
 
-    // Variant specific coloring
-    &[data-formality="formal"] {
-        .cardHeader .variantType {
-            background-color: #5e72f4; // Blue/Purple
-            box-shadow: 0 2px 4px rgba(94, 114, 244, 0.3);
-        }
-        border-top: 4px solid #5e72f4;
-    }
-
-    &[data-formality="polite"] {
-        .cardHeader .variantType {
-            background-color: #2dce89; // Green/Teal
-            box-shadow: 0 2px 4px rgba(45, 206, 137, 0.3);
-        }
-        border-top: 4px solid #2dce89;
-    }
-
+    &[data-formality="formal"] { --tone: var(--bp-read); }
+    &[data-formality="polite"] { --tone: var(--bp-und); }
     &[data-formality="casual"],
-    &[data-formality="informal"] {
-        .cardHeader .variantType {
-            background-color: #f5365c; // Pink/Red
-            box-shadow: 0 2px 4px rgba(245, 54, 92, 0.3);
-        }
-        border-top: 4px solid #f5365c;
-    }
-
-    // Default fallbacks for other types
-    &:not([data-formality="formal"]):not([data-formality="polite"]):not([data-formality="casual"]):not([data-formality="informal"]) {
-        .cardHeader .variantType {
-            background-color: var(--primary);
-        }
-        border-top: 4px solid var(--primary);
-    }
+    &[data-formality="informal"] { --tone: var(--bp-pink); }
 }
 
 @media screen and (max-width: 600px) {
-    .variantsContainer {
+    .variants .variantsContainer {
         grid-template-columns: 1fr;
     }
 
-    .cardBody .variantText {
-        font-size: 1.5rem;
+    .variantCard .cardBody .variantText {
+        font-size: 1.25rem;
     }
 }

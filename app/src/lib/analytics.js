@@ -4,14 +4,53 @@
 const ATTRIBUTION_KEY = 'hanbokAttribution';
 const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
 
-export const track = (event, data) => {
-    try {
-        if (typeof window !== 'undefined' && window.umami?.track) {
-            window.umami.track(event, data);
+// Umami loads with `defer`, so events fired on first render (e.g. pricing_view)
+// would be lost. Queue them until the tracker appears, for up to 15 seconds.
+const pending = [];
+let flushTimer = null;
+
+const umamiReady = () => typeof window !== 'undefined' && window.umami?.track;
+
+const flush = () => {
+    if (umamiReady()) {
+        while (pending.length) {
+            const [method, args] = pending.shift();
+            try { window.umami[method]?.(...args); } catch (e) { /* never break the app */ }
         }
+    }
+    if (!pending.length || Date.now() - pending[0][2] > 15000) {
+        pending.length = 0;
+        clearInterval(flushTimer);
+        flushTimer = null;
+    }
+};
+
+const send = (method, args) => {
+    if (typeof window === 'undefined') return;
+    try {
+        if (umamiReady() && !pending.length) {
+            window.umami[method]?.(...args);
+            return;
+        }
+        pending.push([method, args, Date.now()]);
+        if (!flushTimer) flushTimer = setInterval(flush, 500);
     } catch (e) {
         // Analytics must never break the app
     }
+};
+
+export const track = (event, data) => send('track', data ? [event, data] : [event]);
+
+// Tags the visitor's Umami session with their plan, so traffic can be split by
+// signed-in and paying learners. Never sends names or emails.
+const PLANS = ['Free', 'Basic', 'Plus'];
+let identified = null;
+export const identifyUser = (user) => {
+    if (!user) return;
+    const plan = PLANS[user.tier] || 'Free';
+    if (identified === plan) return;
+    identified = plan;
+    send('identify', [{ plan, signedIn: true }]);
 };
 
 // Stores the first UTM/referrer we see so it can be attached to the account at signup.

@@ -1,50 +1,51 @@
+@import '@/styles/variables.module.scss';
 
 .culturalNotes {
-    display:flex;
-    flex-direction:column;
-    gap:2rem;
-    padding:1.5rem 1rem;
-    padding-top:1.8rem;
-    padding-right:1.5rem;
-    background:var(--background);   
-    border:2px solid var(--foreground-light);
-    box-shadow: 0.3rem 0.3rem 0 var(--shadow);
-    margin:2rem 0;
-    border-radius:0.5rem;
-    color:var(--foreground);
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin: 1.25rem 0;
+    font-family: var(--font-display);
+    color: var(--foreground);
+
     .culturalNotesItem {
-        display:flex;
-        gap:2rem;
-        align-items:center;
+        display: flex;
+        gap: .9rem;
+        align-items: flex-start;
+        padding: .9rem 1rem;
+        border-radius: 16px;
+        border: 2px solid var(--bp-purple-line);
+        background: var(--bp-purple-soft);
+
         .culturalNoteIcon {
-        color:#ec70c2;
-        svg {
-            transform:scale(2.2) translateX(calc(50% - 3px));
-        }
-        &.highImportance {
-            color:#f1b754;
-        }
-        &.mediumImportance {
-            color:#e088c3;
+            flex: none;
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: var(--bp-purple);
+            box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .14);
+
+            svg { width: 1.2rem; height: 1.2rem; }
+
+            &.highImportance { background: var(--bp-flame); }
+            &.mediumImportance { background: var(--bp-pink); }
+            &.lowImportance { background: var(--bp-purple); }
         }
 
-        &.lowImportance {
-            color:#717bff;
-        }
-        }
         .culturalNoteText {
-            transform:translateY(-2px);
-            font-size:1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.5;
+            padding-top: .2rem;
         }
     }
-    @media screen and (max-width:725px) {
-        padding:1rem 0.7rem;
-        gap:1rem;
-        .culturalNotesItem {
-            gap:2rem;
-            .culturalNoteText {
-                font-size:1rem;
-            }
+
+    @media screen and (max-width: 725px) {
+        .culturalNotesItem .culturalNoteText {
+            font-size: .94rem;
         }
     }
 }

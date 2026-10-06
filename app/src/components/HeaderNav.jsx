@@ -1,96 +1,90 @@
 'use client';
-import styles from '@/styles/components/headernav.module.scss';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import {IcBaselinePerson} from '@/components/icons/Profile';
-import { useRouter } from 'next/navigation';    
-import { useState, useEffect } from 'react';
-import { MaterialSymbolsMenu } from '@/components/icons/Menu';
+import { usePathname } from 'next/navigation';
+import styles from '@/styles/components/headernav.module.scss';
+import Mascot from '@/components/Mascot';
+import { useAuth } from '@/contexts/AuthContext';
 
+const LINKS = [
+    { href: '/lyrics', label: 'Lyrics' },
+    { href: '/learn', label: 'Learn' },
+    { href: '/pricing', label: 'Pricing' },
+];
+
+// Header for the public pages (landing, lyrics, learn, pricing, login).
+// Signed-in learners get one button back into the app instead of log in / sign up.
 function HeaderNav() {
-    const router = useRouter();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const pathname = usePathname();
+    const { isAuthenticated, loading } = useAuth();
+    const [open, setOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
-    // Close sidebar when clicking outside or on links
+    useEffect(() => setOpen(false), [pathname]);
+
     useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (sidebarOpen && !event.target.closest(`.${styles.sidebar}`) && !event.target.closest(`.${styles.hamburgerButton}`)) {
-                setSidebarOpen(false);
-            }
-        };
+        const onScroll = () => setScrolled(window.scrollY > 8);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [sidebarOpen]);
+    useEffect(() => {
+        if (!open) return undefined;
+        const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+    }, [open]);
 
-    const toggleSidebar = () => {
-        setSidebarOpen(!sidebarOpen);
-    };
+    const isActive = (href) => pathname === href || pathname?.startsWith(`${href}/`);
 
-    const closeSidebar = () => {
-        setSidebarOpen(false);
-    };
+    const actions = loading ? null : isAuthenticated ? (
+        <Link href="/home" className={styles.primary}>Open Hanbok</Link>
+    ) : (
+        <>
+            <Link href="/login" className={styles.ghost}>Log in</Link>
+            <Link href="/analyze" className={styles.primary} data-cta="nav">Start free</Link>
+        </>
+    );
 
     return (
-        <>
-            <div className={styles.headerNav}>
-                {/* Hamburger menu button - only visible on mobile */}
-                <div 
-                    className={styles.hamburgerButton} 
-                    onClick={toggleSidebar}
-                    aria-label="Toggle navigation menu"
-                >
-                    <MaterialSymbolsMenu className={styles.hamburgerIcon} />
-                </div>
+        <header className={`${styles.header} ${scrolled || open ? styles.raised : ''}`}>
+            <div className={styles.inner}>
+                <Link href="/" className={styles.wordmark} aria-label="Hanbok home">
+                    <Mascot pose="head" size={34} label="" />
+                    <span>hanbok</span>
+                </Link>
 
-                {/* Desktop navigation links */}
-                <div className={styles.headerNavLeft}>
-                    <Link href="/pricing" className={styles.headerLinkSpecial}>Pricing</Link>
-                    <Link href="/lessons">Lessons</Link>
-                    <Link href="/lyrics">Lyrics</Link>
-                    <Link href="/feedback">Feedback</Link>
-                </div>
+                <nav className={styles.links} aria-label="Main">
+                    {LINKS.map((link) => (
+                        <Link key={link.href} href={link.href} className={isActive(link.href) ? styles.active : undefined}
+                            aria-current={isActive(link.href) ? 'page' : undefined}>
+                            {link.label}
+                        </Link>
+                    ))}
+                </nav>
 
-                <div className={styles.headerNavCenter}>
-                    <Link href="/">hanbok</Link>
-                </div>
-                <div className={styles.headerNavRight}>
-                    <Link href={"/profile"}><IcBaselinePerson className={styles.profileIcon} /></Link>
-                    <button className={styles.getStartedButton} onClick={() => router.push("/analyze")}>
-                        Get Started
-                    </button>
-                </div>
+                <div className={styles.actions}>{actions}</div>
+
+                <button type="button" className={styles.menuButton} aria-expanded={open} aria-controls="site-menu"
+                    aria-label={open ? 'Close menu' : 'Open menu'} onClick={() => setOpen((v) => !v)}>
+                    <span className={open ? styles.menuIconOpen : styles.menuIcon} aria-hidden="true"><i /><i /><i /></span>
+                </button>
             </div>
 
-            {/* Mobile sidebar */}
-            <div className={`${styles.sidebar} ${sidebarOpen ? styles.sidebarOpen : ''}`}>
-                <div className={styles.sidebarContent}>
-                    <Link href="/" onClick={closeSidebar}>
-                        Home
-                    </Link>
-                    <Link href="/pricing" className={styles.headerLinkSpecial} onClick={closeSidebar}>
-                        Pricing
-                    </Link>
-                    <Link href="/lessons" onClick={closeSidebar}>Lessons</Link>
-                    <Link href="/lyrics" onClick={closeSidebar}>Lyrics</Link>
-                    <Link href="/feedback" onClick={closeSidebar}>Feedback</Link>
-                    
-                    <button 
-                        className={styles.getStartedButton} 
-                        onClick={() => {
-                            router.push("/analyze");
-                            closeSidebar();
-                        }}
-                    >
-                        Get Started
-                    </button>
-                </div>
+            <div id="site-menu" className={`${styles.sheet} ${open ? styles.sheetOpen : ''}`} hidden={!open}>
+                <nav aria-label="Main">
+                    {LINKS.map((link) => (
+                        <Link key={link.href} href={link.href} className={isActive(link.href) ? styles.active : undefined}>
+                            {link.label}
+                        </Link>
+                    ))}
+                </nav>
+                <div className={styles.sheetActions}>{actions}</div>
             </div>
-
-            {/* Overlay */}
-            {sidebarOpen && <div className={styles.sidebarOverlay} onClick={closeSidebar}></div>}
-        </>
-    )
+            {open && <button type="button" className={styles.scrim} aria-label="Close menu" onClick={() => setOpen(false)} />}
+        </header>
+    );
 }
 
 export default HeaderNav;

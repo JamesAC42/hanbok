@@ -1,474 +1,378 @@
-// Using theme variables from theme.scss
+@import "../variables.module.scss";
+
+// Learn Hangeul (Bright Path, teal "Understand" stage color)
+
 .hangeulContainer {
+    --und-ink: color-mix(in srgb, var(--bp-und) 68%, var(--foreground));
+    --rev-ink: color-mix(in srgb, var(--bp-rev) 78%, var(--foreground));
+
     width: 100%;
-    margin: 0;
-    padding: var(--spacing-large);
-    min-height: 100vh;
+    max-width: 40rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-medium);
-    font-family: var(--font-kr-sans);
-    position: relative;
-    background-image: url('/images/background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    overflow-x: hidden;
+    align-items: stretch;
+    gap: 1.25rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    background: var(--background);
+
+    @media (max-width: 725px) {
+        padding: 1.25rem 1rem 3rem;
+        gap: 1rem;
+    }
 }
+
+// Header
 
 .header {
-    text-align: center;
-    margin-bottom: var(--spacing-medium);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
 
-    .title {
-        font-size: 3rem;
-        font-weight: 400;
-        color: white;
-        margin-bottom: var(--spacing-small);
-        font-family: var(--font-lilita);
+.headerMascot {
+    flex: none;
 
-        @media (min-width: 768px) {
-            font-size: 3.5rem;
-        }
-    }
-
-    .subtitle {
-        font-size: var(--text-normal);
-        color: white;
-        margin: 0;
-        font-weight: 400;
-        font-family: var(--font-body);
+    @media (max-width: 725px) {
+        width: 56px;
+        height: auto;
     }
 }
 
-.hanbokGirl {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 14rem;
-    height: auto;
-    pointer-events: none;
-    z-index: 1;
+.headerText {
+    min-width: 0;
+}
 
-    @media (max-width: 768px) {
-        width: 10rem;
-        bottom: 1rem;
-        right: 1rem;
+.title {
+    @include bp-title;
+    margin: 0;
+    font-size: 2.3rem;
+
+    @media (max-width: 725px) {
+        font-size: 1.8rem;
     }
 }
+
+.subtitle {
+    margin: .3rem 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--bp-ink2);
+}
+
+// Mode tabs
 
 .controls {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-medium);
-    background: rgba(240, 255, 255, 0.322);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: var(--spacing-medium);
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    width: fit-content;
-    min-width: 20rem;
-
-    @media (min-width: 640px) {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--spacing-large);
-        min-width: 28rem;
-    }
+    width: 100%;
 }
 
 .modeSelector {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-small);
-
-    @media (min-width: 640px) {
-        flex-direction: row;
-        align-items: center;
-        gap: var(--spacing-medium);
-    }
+    gap: .5rem;
 }
 
 .controlLabel {
-    font-weight: 600;
-    font-size: var(--text-small);
-    color: black;
-    white-space: nowrap;
-    font-family: var(--font-display);
+    @include bp-label;
 }
 
 .modeButtons {
-    display: flex;
-    gap: var(--spacing-small);
-    background: var(--background);
-    border-radius: var(--border-radius);
-    padding: var(--spacing-xsmall);
-    border: 1px solid var(--shadow);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .5rem;
 }
 
 .modeButton {
-    background: none;
-    border: none;
-    padding: var(--spacing-small) var(--spacing-medium);
-    border-radius: var(--border-radius);
-    font-size: var(--text-small);
-    font-weight: 500;
-    color: var(--foreground);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 1;
-    text-align: center;
+    min-height: 2.9rem;
+    padding: .55rem .5rem;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-card);
+    color: var(--bp-ink2);
     font-family: var(--font-display);
+    font-size: .92rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, color .15s ease;
 
     &:hover {
+        background: var(--bp-soft);
         color: var(--foreground);
-        background: var(--background-alt);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--bp-und-line);
+        outline-offset: 2px;
     }
 
     &.active {
-        background: var(--foreground);
-        color: var(--background);
-        box-shadow: 0 2px 4px var(--shadow);
+        border-color: var(--bp-und-line);
+        background: var(--bp-und-soft);
+        color: var(--und-ink);
+    }
+
+    @media (max-width: 400px) {
+        font-size: .8rem;
+        letter-spacing: .02em;
     }
 }
 
-.audioToggle {
+// Score pills
+
+.counter {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
 
-    .controlLabel {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-small);
-        cursor: pointer;
+.counterItem {
+    @include bp-pill;
+    padding: .4rem 1rem .4rem .75rem;
+    font-size: 1.25rem;
+    border-radius: 99px;
+
+    .counterIcon {
+        font-size: 1.35rem;
+        flex: none;
     }
 
-    .checkbox {
-        width: var(--spacing-medium);
-        height: var(--spacing-medium);
-        border-radius: var(--border-radius);
-        border: 2px solid var(--shadow);
-        background: var(--background-alt);
-        cursor: pointer;
-        transition: all 0.2s ease;
+    &.correct {
+        background: var(--bp-und-soft);
+        border-color: var(--bp-und-line);
+        color: var(--und-ink);
+        .counterIcon { color: var(--bp-und); }
+    }
 
-        &:checked {
-            background: var(--foreground);
-            border-color: var(--foreground);
-        }
+    &.incorrect {
+        background: var(--bp-rev-soft);
+        border-color: var(--bp-rev-line);
+        color: var(--rev-ink);
+        .counterIcon { color: var(--bp-rev); }
     }
 }
+
+.counterLabel {
+    font-family: var(--font-display);
+    font-size: .74rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+// The flashcard
 
 .flashcardContainer {
     width: 100%;
-    max-width: 28rem;
-    margin: var(--spacing-small) 0;
-    z-index:100;
 }
 
 .flashcard {
     position: relative;
     width: 100%;
-    height: fit-content;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    border-radius: var(--border-radius);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    background: rgba(240, 255, 255, 0.674);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    min-height: 20rem;
+    display: flex;
+    flex-direction: column;
+    padding: 2.6rem 1.5rem 1.75rem;
+    background: var(--background);
+    border: 2px solid var(--bp-line);
+    border-radius: 26px;
+    box-shadow: 0 6px 0 var(--bp-line);
     color: var(--foreground);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    overflow: hidden;
+    transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease;
 
-    &:hover {
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-        transform: translateY(-2px);
+    &:not(.expanded) {
+        justify-content: center;
+
+        &:hover { border-color: var(--bp-und-line); box-shadow: 0 6px 0 var(--bp-und-line); }
+        &:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--bp-und-line); }
     }
+
+    @media (max-width: 725px) {
+        min-height: 17rem;
+        padding: 2.5rem 1.1rem 1.4rem;
+    }
+}
+
+.faceLabel {
+    @include bp-label;
+    position: absolute;
+    top: 1.1rem;
+    left: 0;
+    right: 0;
+    text-align: center;
 }
 
 .cardContent {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding: var(--spacing-medium);
+    align-items: stretch;
 }
 
 .characterSection {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     text-align: center;
-    padding: var(--spacing-small) 0;
+    gap: 1rem;
 
     .character {
-        font-size: 6rem;
-        font-weight: 300;
-        margin-bottom: 1rem;
-        line-height: 1;
-        font-family: var(--font-kr-serif);
-        color: black;
-        margin-bottom:1rem;
+        font-family: var(--font-kr-sans);
+        font-size: 8rem;
+        font-weight: 700;
+        line-height: 1.1;
+        color: var(--foreground);
 
-        @media (min-width: 768px) {
-            font-size: 6rem;
+        @media (max-width: 725px) {
+            font-size: 6.5rem;
         }
 
         .flashcard.expanded & {
-            font-size: 3rem;
-            margin-bottom: var(--spacing-small);
-
-            @media (min-width: 768px) {
-                font-size: 3.5rem;
-            }
+            width: 6.5rem;
+            height: 6.5rem;
+            display: grid;
+            place-items: center;
+            border-radius: 22px;
+            background: var(--bp-und-soft);
+            border: 2px solid var(--bp-und-line);
+            font-size: 4rem;
+            line-height: 1;
         }
     }
 
     .instruction {
-        font-size: var(--text-small);
-        opacity: 0.7;
-        font-weight: 500;
-        font-family: var(--font-body);
-        color:black;
-        transition: opacity 0.2s ease;
+        @include bp-label;
+        font-size: .74rem;
     }
 }
 
 .expandedContent {
-    animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    padding-bottom: var(--spacing-medium);
+    animation: bp-pop-in .3s ease both;
 }
 
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(1rem);
+.characterInfo {
+    margin: 1.4rem 0 0;
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid var(--bp-soft);
+}
+
+.infoRow {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: .75rem;
+    padding: .7rem 0;
+    border-bottom: 2px solid var(--bp-soft);
+
+    @media (max-width: 725px) {
+        grid-template-columns: 6.25rem minmax(0, 1fr);
+        gap: .6rem;
+        padding: .6rem 0;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+
+    @media (max-width: 340px) {
+        grid-template-columns: 1fr;
+        gap: .2rem;
+    }
+
+    .label {
+        @include bp-label;
+    }
+
+    .value {
+        font-size: 1.05rem;
+        font-weight: 600;
+        line-height: 1.45;
+        color: var(--foreground);
+    }
+
+    // Sound row stands out
+    &:nth-child(2) .value {
+        font-family: var(--font-lilita);
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 1.2;
+        color: var(--und-ink);
     }
 }
 
 .answerButtons {
-    display: flex;
-    gap: var(--spacing-medium);
-    justify-content: center;
-    margin-top: var(--spacing-medium);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .9rem;
+    margin-top: 1.5rem;
 }
 
 .answerButton {
-    background: rgba(240, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    color: black;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: var(--spacing-small) var(--spacing-large);
-    border-radius: var(--border-radius);
-    font-size: var(--text-normal);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: var(--font-display);
-    min-width: 6rem;
-    margin-top:2rem;
+    min-height: 3.2rem;
+    font-size: 1rem;
 
     svg {
-        transform:translateY(3px);
-        margin-right:0.5rem;
+        font-size: 1.3rem;
+        flex: none;
     }
 
     &.correct {
-        background: rgba(48, 172, 53, 0.66);
-        border-color: rgba(36, 153, 40, 0.909);
-        color:white;
-        &:hover {
-            transform:translateY(-2px);
-        }
+        @include bp-press(var(--bp-und), var(--bp-und-d), #fff, 4px);
     }
 
     &.incorrect {
-        background: rgba(232, 62, 50, 0.669);
-        border-color: rgba(118, 20, 13, 0.74);
-        color:white;
-        &:hover {
-            transform:translateY(-2px);
-        }
+        @include bp-press(var(--bp-rev), var(--bp-rev-d), #fff, 4px);
+    }
+
+    @media (max-width: 400px) {
+        padding-left: .8rem;
+        padding-right: .8rem;
     }
 }
 
-.counter {
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-large);
-    margin: var(--spacing-medium) 0;
-    font-family: var(--font-display);
-    font-weight: 600;
-
-    background: rgba(240, 255, 255, 0.491);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: var(--spacing-medium);
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-
-    .counterItem {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-xsmall);
-        font-size: 1.3rem;
-        color: black;
-
-        .counterIcon {
-            font-size: var(--text-normal);
-        }
-
-        &.correct .counterIcon {
-            color: #1c7a1f;
-            font-size: 1.5rem;
-        }
-
-        &.incorrect .counterIcon {
-            color: #f44336;
-            font-size: 1.5rem;
-        }
-    }
+.key,
+.spaceKey {
+    padding: .12rem .45rem;
+    border-radius: 7px;
+    background: rgba(255, 255, 255, .22);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .06em;
 }
 
-.characterInfo {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-small);
-    width: 100%;
-    margin:1rem 0;
-}
-
-.infoRow {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-xsmall);
-
-    @media (min-width: 640px) {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .label {
-        font-weight: 600;
-        color:rgb(58, 58, 58);
-        font-size: 1rem;
-        min-width: 6rem;
-        font-family: var(--font-display);
-        margin-right:1rem;
-    }
-
-    .value {
-        color: black;
-        font-size: 1rem;
-        line-height: 1.4;
-        font-family: var(--font-body);
-    }
-}
-
-.audioControls {
-    display: flex;
-    justify-content: center;
-    margin: var(--spacing-small) 0;
-}
-
-.audioButton {
-    background: white;
-    color: black;
-    border: none;
-    padding: var(--spacing-small) var(--spacing-medium);
-    border-radius: var(--border-radius);
-    font-size: var(--text-small);
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-small);
-    font-family: var(--font-display);
-
-    &:hover:not(:disabled) {
-        background: #f1f1f1;
-        transform: translateY(-1px);
-    }
-
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-}
-
-.instruction {
-    font-size: var(--text-xsmall);
-    color: var(--foreground-light);
-    text-align: center;
-    margin-top: auto;
-    font-weight: 500;
-    font-family: var(--font-body);
-
-    .cardFront & {
-        color: rgba(255, 255, 255, 0.9);
-        margin-top: 0;
-    }
-}
+// Reveal
 
 .actionButtons {
     display: flex;
     justify-content: center;
-    width: 100%;
-    max-width: 20rem;
 }
 
 .actionButton {
-    background: var(--foreground);
-    color: var(--background);
-    border: none;
-    padding: var(--spacing-medium) var(--spacing-large);
-    border-radius: var(--border-radius);
-    font-size: var(--text-normal);
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 6px var(--shadow);
-    font-family: var(--font-display);
-
-    z-index:100;
-
-    &:hover {
-        background: var(--background);
-        color:var(--foreground);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px var(--shadow);
-    }
-
-    &:active {
-        transform: translateY(0);
-    }
+    @include bp-press(var(--bp-und), var(--bp-und-d), #fff, 5px);
+    width: 100%;
+    max-width: 22rem;
+    min-height: 3.4rem;
+    font-size: 1.05rem;
 }
 
 .progress {
     text-align: center;
-    margin-top: auto;
-    padding-top: var(--spacing-medium);
 }
 
 .progressInfo {
-    font-size: var(--text-small);
-    color: white;
-    font-weight: 500;
-    font-family: var(--font-body);
+    display: inline-block;
+    padding: .35rem .9rem;
+    border-radius: 99px;
+    background: var(--bp-soft);
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+
+    &::first-letter {
+        text-transform: uppercase;
+    }
 }
 
 .loading {
@@ -476,102 +380,20 @@
     justify-content: center;
     align-items: center;
     height: 20rem;
-    font-size: var(--text-large);
-    color: var(--foreground-muted);
-    font-family: var(--font-body);
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--bp-ink2);
 }
 
-// Mobile optimizations
-@media (max-width: 640px) {
-    .hangeulContainer {
-        padding: var(--spacing-medium);
-        gap:0.5rem;
+// Touch screens have no keyboard: hide the key hints.
+@media (max-width: 725px) {
+    .instruction,
+    .spaceKey,
+    .key {
+        display: none;
     }
+}
 
-    .header {
-        margin-top:0.5rem;
-    }
-
-    .header .title {
-        font-size: 2rem;
-    }
-
-    .header .subtitle {
-        font-size: 1rem;
-        margin-top:1rem;
-    }
-
-    .controls {
-        padding:0.5rem 0.2rem;
-        align-items: center;
-        gap:1rem;
-
-        .controlLabel {
-            text-align:center;
-        }
-    }
-
-    .counter {
-        margin:0;
-        padding:0.5rem 1rem;
-        .counterItem {
-            font-size:0.8rem;
-            svg {
-                font-size:0.8rem !important;
-            }
-        }
-    }
-
-    .flashcard {
-        background:rgba(255, 255, 255, 0.79);
-
-    }
-
-    .cardContent {
-        padding:0rem;
-    }
-
-    .flashcardContainer {
-        height: 18rem;
-        margin: 0;
-        z-index:100;
-    }
-
-    .characterSection .character {
-        font-size: 4rem;
-
-        .flashcard.expanded & {
-            font-size: 2.5rem;
-        }
-    }
-
-    .answerButtons {
-        .answerButton {
-            margin-top: 0;
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-    }
-
-    .characterInfo {
-        margin:0;
-    }
-
-    .cardContent {
-        padding: var(--spacing-medium);
-    }
-
-    .actionButton {
-        padding: var(--spacing-small) var(--spacing-large);
-        font-size: var(--text-small);
-        z-index:100;
-    }
-
-    .instruction, .spaceKey, .key {
-        display:none;
-    }
-
-    .hanbokGirl {
-        opacity:1;
-    }
-} 
+@media (prefers-reduced-motion: reduce) {
+    .expandedContent { animation: none; }
+}

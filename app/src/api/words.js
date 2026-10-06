@@ -5,6 +5,7 @@
  *   - removing a word,
  *   - and checking saved words.
  */
+import { track } from '@/lib/analytics';
 
 export async function fetchWordRelations(word, originalLanguage, translationLanguage) {
   try {
@@ -19,7 +20,7 @@ export async function fetchWordRelations(word, originalLanguage, translationLang
   }
 }
 
-export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage, reading }) {
+export async function addWord({ originalWord, translatedWord, originalLanguage, translationLanguage, reading, sentenceId }) {
   try {
     const response = await fetch('/api/words', {
       method: 'POST',
@@ -30,7 +31,8 @@ export async function addWord({ originalWord, translatedWord, originalLanguage, 
         translatedWord,
         originalLanguage,
         translationLanguage,
-        reading
+        reading,
+        sentenceId
       })
     });
     const data = await response.json();
@@ -40,6 +42,7 @@ export async function addWord({ originalWord, translatedWord, originalLanguage, 
     if (!response.ok) {
       throw new Error('Failed to add word');
     }
+    track('word_save', { language: originalLanguage });
     return { success: true };
   } catch (error) {
     throw error;

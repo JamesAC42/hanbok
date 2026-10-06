@@ -49,23 +49,28 @@ const ChangeLanguageButton = ({ native = false }) => {
 
     return (
         <div className={styles.languageButtonOuter}>
-            <div className={styles.buttonContainer} onClick={handleButtonClick}>
-                
-                {t('languagePicker.language')}:
-                
-                <div 
-                    className={styles.languageButton}
-                    onClick={handleTooltipClose}
-                >
+            <button
+                type="button"
+                className={styles.buttonContainer}
+                onClick={(event) => { handleTooltipClose(); handleButtonClick(event); }}
+                aria-haspopup="dialog"
+                aria-expanded={showPicker}
+            >
+                <span className={styles.buttonLabel}>{t('languagePicker.language')}</span>
+                <span className={styles.languageButton}>
                     {native ? getIcon(nativeLanguage) : getIcon(language)}
-                </div>
+                </span>
+            </button>
+            <div className={styles.tooltipAnchor}>
                 
                 {showTooltip && (
                     <div className={styles.tooltip}>
                         {t('languagePicker.tooltip')}
                         <button 
+                            type="button"
                             className={styles.closeTooltip}
                             onClick={handleTooltipClose}
+                            aria-label="Close"
                         >
                             ×
                         </button>
@@ -76,13 +81,7 @@ const ChangeLanguageButton = ({ native = false }) => {
                 showPicker && (
                     <div className={`${styles.picker} ${native ? styles.reverse : ''}`}>
                         <div className={styles.pickerBackground} onClick={() => setShowPicker(false)}></div>
-                        <div 
-                            className={styles.pickerContent}
-                            style={{
-                                top: `${pickerPosition.top}`,
-                                left: `${pickerPosition.left}`
-                            }}
-                        >
+                        <div className={styles.pickerContent} role="dialog" aria-modal="true">
                             <div className={styles.pickerHeader}>
                                 <h3>
                                     {t(native ? 'languagePicker.changeNative' : 'languagePicker.changeLearning')}
@@ -93,6 +92,7 @@ const ChangeLanguageButton = ({ native = false }) => {
                                 availableLanguages.map((lang) => (
                                     <div className={styles.pickerItem} key={lang}>
                                         <button 
+                                            type="button"
                                             onClick={() => handleLanguageChange(lang)}
                                             title={t(`languages.${supportedLanguages[lang]}`)}
                                             className={styles.languagePickerButton}

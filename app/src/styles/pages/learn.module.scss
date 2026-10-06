@@ -1,0 +1,629 @@
+@import '../variables.module.scss';
+
+// Learn hub and articles, Bright Path. Stage color: Understand teal, with
+// Keep amber for saving words and Read blue for "break it down" actions.
+
+// Lilita One has no Hangul, so headings fall back to heavy Noto Sans KR
+// (variable weight) for Korean, without faux-bolding the Lilita letters.
+@mixin learn-heading {
+    @include bp-title;
+    font-family: var(--font-lilita), var(--font-kr-sans);
+    font-weight: 900;
+    font-synthesis: none;
+}
+
+.blankShell {
+    min-height: 100dvh;
+    background: var(--background);
+}
+
+.learnPage {
+    position: relative;
+    min-height: 100%;
+    padding: 2.25rem 3rem 4rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    background: var(--background);
+    overflow-x: hidden;
+
+    @media screen and (max-width: 725px) {
+        padding: 1.25rem 1rem 3rem;
+    }
+}
+
+// Visitors get the public header and footer around the page.
+.publicPage {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+
+    @media screen and (max-width: 725px) {
+        padding-top: 1.5rem;
+    }
+}
+
+
+.label {
+    @include bp-label;
+    margin: 0 0 .35rem;
+}
+
+.title {
+    @include learn-heading;
+    font-size: 2.6rem;
+    margin: 0 0 .75rem;
+
+    @media screen and (max-width: 725px) {
+        font-size: 2rem;
+    }
+}
+
+.dek {
+    font-size: 1.15rem;
+    line-height: 1.55;
+    color: var(--bp-ink2);
+    margin: 0 0 1rem;
+    max-width: 44rem;
+}
+
+.pill {
+    @include bp-pill;
+    font-family: var(--font-display);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    border-color: var(--bp-und-line);
+    background: var(--bp-und-soft);
+    color: color-mix(in srgb, var(--bp-und) 70%, var(--foreground));
+}
+
+.primaryButton {
+    @include bp-press(var(--bp-read), var(--bp-read-d));
+}
+
+.ghostButton {
+    @include bp-press-ghost(var(--bp-read));
+}
+
+// ===== Hub =====
+
+.hubHeader {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 60rem;
+    margin: 0 auto 2rem;
+
+    @media screen and (max-width: 725px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .75rem;
+    }
+}
+
+.cards {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto 2rem;
+    max-width: 60rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    gap: 1rem;
+}
+
+.card {
+    @include bp-press-card(var(--bp-line));
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    height: 100%;
+    padding: 1.25rem 1.25rem 1.1rem;
+    color: var(--foreground);
+    text-decoration: none;
+    border-top: 8px solid var(--bp-und);
+}
+
+.tone_und { border-top-color: var(--bp-und); }
+.tone_read { border-top-color: var(--bp-read); }
+.tone_keep { border-top-color: var(--bp-keep); }
+.tone_pink { border-top-color: var(--bp-pink); }
+
+.cardTitle {
+    @include learn-heading;
+    font-size: 1.5rem;
+}
+
+.cardDek {
+    font-size: .95rem;
+    line-height: 1.5;
+    color: var(--bp-ink2);
+    font-weight: 600;
+}
+
+.cardMeta {
+    @include bp-label;
+    margin-top: auto;
+}
+
+// ===== Article =====
+
+.article {
+    max-width: 46rem;
+    margin: 0 auto;
+}
+
+.crumbs {
+    @include bp-label;
+    margin-bottom: 1rem;
+
+    a {
+        color: var(--bp-read);
+        text-decoration: none;
+        &:hover { text-decoration: underline; }
+    }
+}
+
+.articleMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+    margin: 0 0 2rem;
+}
+
+.sectionTitle {
+    @include learn-heading;
+    font-size: 1.9rem;
+    margin: 3rem 0 1rem;
+}
+
+// Body copy: large and plain for older readers.
+.prose {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.75;
+
+    h2 {
+        @include learn-heading;
+        font-size: 1.9rem;
+        margin: 2.75rem 0 .75rem;
+        scroll-margin-top: 6rem;
+    }
+
+    p { margin: 0 0 1.1rem; }
+
+    a {
+        color: var(--bp-read);
+        font-weight: 700;
+    }
+
+    [lang="ko"] {
+        font-family: var(--font-kr-sans);
+        font-weight: 700;
+    }
+}
+
+.answerBox {
+    @include bp-card;
+    border-color: var(--bp-und-line);
+    background: var(--bp-und-soft);
+    padding: 1.25rem 1.5rem .4rem;
+    margin: 0 0 1.75rem;
+}
+
+.list {
+    padding-left: 1.25rem;
+    li { margin-bottom: .6rem; }
+}
+
+.tableWrap {
+    overflow-x: auto;
+    margin: 0 0 1.25rem;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    @include bp-card;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-size: 1rem;
+
+    th, td {
+        text-align: left;
+        padding: .7rem 1rem;
+        border-bottom: 2px solid var(--bp-line);
+    }
+
+    th {
+        @include bp-label;
+        background: var(--bp-soft);
+    }
+
+    tr:last-child td { border-bottom: none; }
+}
+
+// ===== Example sentence =====
+
+.example {
+    @include bp-card;
+    margin: 1.25rem 0 1.5rem;
+    padding: 1.1rem 1.25rem 1rem;
+    font-family: var(--font-display);
+}
+
+.exampleSentence {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.chip {
+    @include bp-press-card(var(--bp-line), 3px);
+    font-family: var(--font-kr-sans);
+    font-size: 1.55rem;
+    font-weight: 700;
+    line-height: 1.2;
+    padding: .4rem .75rem;
+    color: var(--foreground);
+}
+
+.chipOpen {
+    border-color: var(--bp-read);
+    background: var(--bp-read-soft);
+    box-shadow: 0 3px 0 var(--bp-read-d);
+}
+
+.particle {
+    color: color-mix(in srgb, var(--bp-und) 78%, var(--foreground));
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 5px;
+    text-decoration-color: var(--bp-und);
+}
+
+.exampleTranslation {
+    margin: .75rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}
+
+.exampleDetail {
+    margin-top: .9rem;
+    border-top: 2px dashed var(--bp-line);
+    padding-top: .75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    animation: bp-pop-in .18s ease-out both;
+}
+
+.detailRow {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.detailWord {
+    font-family: var(--font-kr-sans);
+    font-size: 1.25rem;
+    font-weight: 700;
+    min-width: 4.5rem;
+
+    small {
+        font-size: .85rem;
+        color: var(--bp-ink2);
+    }
+}
+
+.detailParticle {
+    color: color-mix(in srgb, var(--bp-und) 78%, var(--foreground));
+}
+
+.detailGloss {
+    flex: 1 1 0;
+    min-width: 0;
+    font-weight: 600;
+}
+
+.saveButton {
+    @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px);
+    font-size: .75rem;
+    padding: .45rem .9rem;
+}
+
+.exampleFoot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: .75rem;
+}
+
+.exampleNote {
+    margin: 0;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}
+
+.breakDownButton {
+    @include bp-press-ghost(var(--bp-read), 3px);
+    font-size: .72rem;
+    padding: .45rem .8rem;
+    margin-left: auto;
+}
+
+// ===== Tutor bubble =====
+
+.tutor {
+    display: flex;
+    align-items: flex-end;
+    gap: .75rem;
+    margin: 1.5rem 0;
+}
+
+.tutorBubble {
+    position: relative;
+    @include bp-card;
+    border-color: var(--bp-flame-line);
+    background: var(--bp-flame-soft);
+    padding: .9rem 1.1rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.55;
+}
+
+// ===== Try it =====
+
+.tryIt {
+    @include bp-card;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0;
+    padding: 1.25rem;
+    border-color: var(--bp-read-line);
+    background: var(--bp-read-soft);
+    font-family: var(--font-display);
+
+    p {
+        font-size: .95rem;
+        margin: .25rem 0 .75rem;
+    }
+
+    @media screen and (max-width: 725px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.tryItBody {
+    flex: 1;
+    min-width: 0;
+}
+
+.tryItTitle {
+    @include learn-heading;
+    font-size: 1.35rem;
+}
+
+.tryItRow {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.tryItInput {
+    @include bp-input;
+    flex: 1 1 14rem;
+    font-family: var(--font-kr-sans);
+}
+
+// ===== Quiz =====
+
+.quiz {
+    @include bp-card;
+    position: relative;
+    padding: 1.5rem;
+    font-family: var(--font-display);
+    overflow: hidden;
+}
+
+.quizHead {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: .75rem;
+}
+
+.quizBar {
+    @include bp-bar(var(--bp-und), 12px);
+    margin-bottom: 1.25rem;
+}
+
+.quizPrompt {
+    font-family: var(--font-kr-sans);
+    font-size: 1.45rem;
+    font-weight: 700;
+    margin: 0 0 .35rem;
+}
+
+.quizHint {
+    margin: 0 0 1rem;
+    color: var(--bp-ink2);
+    font-weight: 600;
+}
+
+.quizChoices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+
+.choice {
+    @include bp-press-card(var(--bp-line));
+    font-family: var(--font-kr-sans);
+    font-size: 1.35rem;
+    font-weight: 700;
+    padding: .7rem 1.4rem;
+    color: var(--foreground);
+    min-width: 5rem;
+}
+
+.choice.right {
+    border-color: var(--bp-und);
+    background: var(--bp-und-soft);
+    box-shadow: 0 4px 0 var(--bp-und-d);
+}
+
+.choice.wrong {
+    border-color: var(--bp-rev);
+    background: var(--bp-rev-soft);
+    box-shadow: 0 4px 0 var(--bp-rev-d);
+}
+
+.choice.dim {
+    opacity: .5;
+}
+
+.quizFeedback {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    margin-top: 1.25rem;
+    padding: 1rem 1.1rem;
+    border-radius: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    animation: bp-pop-in .18s ease-out both;
+
+    strong { font-weight: 800; }
+    button { margin-left: auto; }
+
+    &.right { background: var(--bp-und-soft); }
+    &.wrong { background: var(--bp-rev-soft); }
+}
+
+.quizDone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: .5rem;
+
+    canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
+    h3 {
+        @include learn-heading;
+        font-size: 2rem;
+        margin: .25rem 0 0;
+    }
+
+    p {
+        margin: 0 0 .75rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+    }
+}
+
+.quizActions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .75rem;
+}
+
+// ===== FAQ =====
+
+.faqItem {
+    @include bp-card;
+    margin-bottom: .75rem;
+    padding: .9rem 1.1rem;
+    font-family: var(--font-display);
+
+    summary {
+        cursor: pointer;
+        font-weight: 800;
+        font-size: 1.05rem;
+    }
+
+    p {
+        margin: .6rem 0 0;
+        font-weight: 600;
+        line-height: 1.6;
+        color: var(--bp-ink2);
+    }
+}
+
+// ===== Word list =====
+
+.wordList {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+    gap: .85rem;
+    counter-reset: word;
+    font-family: var(--font-display);
+}
+
+.wordItem {
+    @include bp-card;
+    padding: .9rem 1rem;
+    counter-increment: word;
+}
+
+.wordHead {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+
+    &::before {
+        content: counter(word);
+        @include bp-label;
+        min-width: 1.4rem;
+    }
+
+    button { margin-left: auto; align-self: center; }
+}
+
+.wordKo {
+    font-family: var(--font-kr-sans);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.wordRom {
+    font-size: .9rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.wordEn {
+    margin: .35rem 0 0;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.wordNote {
+    margin: .3rem 0 0;
+    font-size: .92rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--bp-ink2);
+}

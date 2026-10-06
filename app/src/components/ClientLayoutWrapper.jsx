@@ -16,8 +16,10 @@ function ClientLayoutWrapper({ children }) {
   useEffect(() => {
     // Only run on the client
     if (typeof window !== 'undefined' && !loading) {
-      // Show prompt only for logged-out users or free-tier users
-      if (!user || user.tier === 0) {
+      // Show prompt only for logged-out users or free-tier users, and never
+      // over a reading page (search visitors land there; see PopupContext).
+      const onReadingPage = /^\/(learn|lyrics)(\/|$)/.test(window.location.pathname);
+      if ((!user || user.tier === 0) && !onReadingPage) {
         const promptKey = 'lastSubscriptionPromptTimestamp';
         const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
         const lastPromptTime = localStorage.getItem(promptKey);

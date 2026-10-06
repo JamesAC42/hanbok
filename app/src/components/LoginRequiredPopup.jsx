@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
+import Mascot from '@/components/Mascot';
 
 const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
@@ -47,14 +48,20 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
             <div 
                 className={styles.popup} 
                 onClick={e => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="login-popup-title"
             >
-                <button className={styles.closeButton} onClick={onClose}>×</button>
-                <h2>{title}</h2>
+                <button className={styles.closeButton} onClick={onClose} aria-label={t('common.close')}>×</button>
+                <div className={`${styles.art} ${styles.read}`}>
+                    <Mascot pose="wave" size={96} />
+                </div>
+                <h2 id="login-popup-title">{title}</h2>
                 <p>{message}</p>
-                <p>{subMessage}</p>
+                <p className={styles.subText}>{subMessage}</p>
                 <div className={styles.buttons}>
                     <button 
-                        className={styles.upgradeButton}
+                        className={styles.primaryButton}
                         onClick={handleLoginClick}
                     >
                         {t('loginRequired.createAccount')}

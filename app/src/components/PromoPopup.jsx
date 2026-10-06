@@ -1,6 +1,15 @@
 'use client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/popups/promoPopup.module.scss';
+import Mascot from '@/components/Mascot';
+
+const BENEFITS = [
+    'Unlimited sentence analyses',
+    'Unlimited flashcards',
+    'Higher tutor limits - chat without a sentence',
+    'Audio generation',
+    'Priority support',
+];
 
 const PromoPopup = ({ onClose }) => {
     const { t, language } = useLanguage();
@@ -12,45 +21,40 @@ const PromoPopup = ({ onClose }) => {
 
     return (
         <div className={styles.overlay} onClick={onClose}>
-            <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-                <button className={styles.closeButton} onClick={onClose}>
+            <div
+                className={styles.popup}
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="promo-popup-title"
+            >
+                <button className={styles.closeButton} onClick={onClose} aria-label="Close">
                     ×
                 </button>
                 
                 <div className={styles.content}>
                     <div className={styles.header}>
-                        <h2>Are you enjoying Hanbok?</h2>
+                        <div className={styles.art}>
+                            <Mascot pose="hero" size={96} />
+                        </div>
+                        <h2 id="promo-popup-title">Are you enjoying Hanbok?</h2>
                         <div className={styles.subtitle}>
                             Get unlimited access to analyses, flashcards, and more benefits
                         </div>
                     </div>
 
+                    <ul className={styles.benefits}>
+                        {BENEFITS.map((benefit) => (
+                            <li key={benefit} className={styles.benefitItem}>
+                                <span className={styles.checkmark} aria-hidden="true">✓</span>
+                                {benefit}
+                            </li>
+                        ))}
+                    </ul>
+
                     <div className={styles.pricing}>
                         <div className={styles.startingPrice}>
                             Starting at <span className={styles.price}>$4/month</span>
-                        </div>
-                    </div>
-
-                    <div className={styles.benefits}>
-                        <div className={styles.benefitItem}>
-                            <span className={styles.checkmark}>✓</span>
-                            Unlimited sentence analyses
-                        </div>
-                        <div className={styles.benefitItem}>
-                            <span className={styles.checkmark}>✓</span>
-                            Unlimited flashcards
-                        </div>
-                        <div className={styles.benefitItem}>
-                            <span className={styles.checkmark}>✓</span>
-                            Higher tutor limits - chat without a sentence
-                        </div>
-                        <div className={styles.benefitItem}>
-                            <span className={styles.checkmark}>✓</span>
-                            Audio generation
-                        </div>
-                        <div className={styles.benefitItem}>
-                            <span className={styles.checkmark}>✓</span>
-                            Priority support
                         </div>
                     </div>
 

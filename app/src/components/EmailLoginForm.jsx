@@ -53,7 +53,7 @@ const EmailLoginForm = () => {
             if (data.success) {
                 // Update auth context with user data
                 await login(data.user);
-                router.push('/profile');
+                router.push('/home');
             } else {
                 setError(data.message);
                 if (data.requiresVerification) {
@@ -157,7 +157,7 @@ const EmailLoginForm = () => {
                     className={styles.submitButton}
                     disabled={loading}
                 >
-                    {loading ? 'Signing In...' : 'Sign In'}
+                    {loading ? 'Logging in...' : 'Log in'}
                 </button>
             </form>
         </div>

@@ -1,66 +1,95 @@
 import styles from '@/styles/components/footer.module.scss';
 import Link from 'next/link';
-
+import Mascot from '@/components/Mascot';
 import { IcTwotoneDiscord } from '@/components/icons/DiscordIcon';
+
+const DISCORD = 'https://discord.gg/EQVvphzctc';
+
+const COLUMNS = [
+    {
+        title: 'Learn',
+        links: [
+            { href: '/analyze', label: 'Break down a sentence' },
+            { href: '/lyrics', label: 'Song lyrics' },
+            { href: '/learn', label: 'Grammar guides' },
+            { href: '/hangeul', label: 'Learn Hangeul' },
+        ],
+    },
+    {
+        title: 'Hanbok',
+        links: [
+            { href: '/about', label: 'About' },
+            { href: '/updates', label: "What's new" },
+            { href: '/pricing', label: 'Pricing' },
+            { href: '/feedback', label: 'Send feedback' },
+            { href: 'mailto:admin@hanbokstudy.com', label: 'Email us', external: true },
+        ],
+    },
+    {
+        title: 'Follow',
+        links: [
+            { href: 'https://www.tiktok.com/@hanbokstudy', label: 'TikTok', external: true },
+            { href: 'https://www.instagram.com/hanbokstudy', label: 'Instagram', external: true },
+            { href: 'https://www.youtube.com/@HanbokStudy', label: 'YouTube', external: true },
+            { href: 'https://x.com/fifltriggi', label: 'X (Twitter)', external: true },
+            { href: 'https://github.com/JamesAC42/hanbok', label: 'GitHub', external: true },
+        ],
+    },
+    {
+        title: 'Legal',
+        links: [
+            { href: '/privacy-policy.html', label: 'Privacy Policy' },
+            { href: '/terms-of-service.html', label: 'Terms of Service' },
+        ],
+    },
+];
 
 function Footer() {
     return (
-        <>
-        <div className={styles.joinDiscord}>
-          <div className={styles.joinDiscordBubble}>
-            Join the Discord!
-  
-            <Link href="https://discord.gg/EQVvphzctc" target="_blank">
-              <IcTwotoneDiscord /> Join Now
-            </Link>
-          </div>
-        </div>
-        <div className={styles.footer}>
-          <div className={styles.footerContent}>
-            <div className={styles.footerLinks}>
-              <div className={styles.footerLinkColumn}>
-                <div className={styles.footerLinkColumnHeader}>
-                  Explore
+        <footer className={styles.footer}>
+            <div className={styles.inner}>
+                <div className={styles.discord}>
+                    <Mascot pose="speak" size={84} label="" className={styles.discordMascot} />
+                    <div className={styles.discordText}>
+                        <strong>Study with other learners</strong>
+                        <span>Ask questions, share what you are reading and tell us what to build next.</span>
+                    </div>
+                    <a href={DISCORD} target="_blank" rel="noopener noreferrer" className={styles.discordButton}>
+                        <IcTwotoneDiscord /> Join the Discord
+                    </a>
                 </div>
-                <div className={styles.footerLinkColumnLinks}>
-                  <Link href="/about">About</Link>
-                  <Link href="/analyze">Analyze</Link>
-                  <Link href="/cards">Cards</Link>
-                  <Link href="/lyrics">Lyrics</Link>
-                  <Link href="/pricing">Pricing</Link>
+
+                <div className={styles.grid}>
+                    <div className={styles.brand}>
+                        <Link href="/" className={styles.wordmark}>
+                            <Mascot pose="head" size={34} label="" />
+                            <span>hanbok</span>
+                        </Link>
+                        <p>Understand Korean, Japanese and Chinese sentences word by word, then keep what you learn.</p>
+                    </div>
+                    {COLUMNS.map((col) => (
+                        <nav key={col.title} className={styles.column} aria-label={col.title}>
+                            <h2>{col.title}</h2>
+                            <ul>
+                                {col.links.map((l) => (
+                                    <li key={l.href}>
+                                        {l.external
+                                            ? <a href={l.href} target="_blank" rel="noopener noreferrer">{l.label}</a>
+                                            : <Link href={l.href}>{l.label}</Link>}
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    ))}
                 </div>
-              </div>
-              <div className={styles.footerLinkColumn}>
-                <div className={styles.footerLinkColumnHeader}>
-                  Socials
+
+                <div className={styles.bottom}>
+                    <span>© {new Date().getFullYear()} Hanbok Study</span>
+                    <span lang="ko">한국어 · 日本語 · 中文</span>
                 </div>
-                <div className={styles.footerLinkColumnLinks}>
-                  <Link href="https://x.com/fifltriggi" target="_blank">Twitter</Link>
-                  <Link href="https://discord.gg/EQVvphzctc" target="_blank">Discord</Link>
-                  <Link href="https://github.com/JamesAC42/hanbok" target="_blank">GitHub</Link>
-                  <Link href="https://www.instagram.com/hanbokstudy" target="_blank">Instagram</Link>
-                  <Link href="https://www.youtube.com/@HanbokStudy" target="_blank">Youtube</Link>
-                  <Link href="https://www.tiktok.com/@hanbokstudy" target="_blank">TikTok</Link>
-                  <Link href="mailto:admin@hanbokstudy.com" target="_blank">Email</Link>
-                </div>
-              </div>
-              <div className={styles.footerLinkColumn}>
-                <div className={styles.footerLinkColumnHeader}>
-                  Resources
-                </div>
-                <div className={styles.footerLinkColumnLinks}>
-                  <Link href="/privacy-policy.html">Privacy Policy</Link>
-                  <Link href="/terms-of-service.html">Terms of Service</Link>
-                </div>
-              </div>
             </div>
-            <div className={styles.footerCopyright}>
-              © 2025 Hanbok Study. All rights reserved.
-            </div>
-          </div>
-        </div>
-        </>
-    )
+        </footer>
+    );
 }
 
 export default Footer;

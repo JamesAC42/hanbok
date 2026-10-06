@@ -1,0 +1,333 @@
+@import '../variables.module.scss';
+
+// Updates, Bright Path: one readable article column with Lilita headings,
+// Montserrat text, screenshots in line-bordered frames and a few soft
+// colored callouts. Same page frame as Learn.
+
+.blankShell {
+    min-height: 100dvh;
+    background: var(--background);
+}
+
+.updatesPage {
+    position: relative;
+    min-height: 100%;
+    padding: 2.25rem 1.5rem 4rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    background: var(--background);
+    overflow-x: hidden;
+
+    @media screen and (max-width: 725px) {
+        padding: 1.25rem 1rem 3rem;
+    }
+}
+
+// Visitors get the public header and footer around the page.
+.publicPage {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+
+    @media screen and (max-width: 725px) {
+        padding-top: 1.5rem;
+    }
+}
+
+.column {
+    max-width: 46rem;
+    margin: 0 auto;
+}
+
+.label {
+    @include bp-label;
+    margin: 0 0 .4rem;
+}
+
+.title {
+    @include bp-title;
+    font-size: 2.7rem;
+    margin: 0 0 .75rem;
+    text-wrap: balance;
+
+    @media screen and (max-width: 725px) {
+        font-size: 2.05rem;
+    }
+}
+
+.dek {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--bp-ink2);
+    text-wrap: pretty;
+}
+
+// ===== Index =====
+
+.indexHeader {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    @media screen and (max-width: 725px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .75rem;
+    }
+}
+
+.postList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.postCard {
+    @include bp-press-card(var(--bp-line));
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    padding: 1rem;
+    color: var(--foreground);
+    text-decoration: none;
+
+    @media screen and (max-width: 640px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.postThumb {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: left top;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+}
+
+.postText {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+}
+
+.postDate {
+    @include bp-label;
+}
+
+.postTitle {
+    @include bp-title;
+    font-size: 1.5rem;
+}
+
+.postDek {
+    font-size: .98rem;
+    line-height: 1.5;
+    color: var(--bp-ink2);
+}
+
+// ===== Post =====
+
+.back {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    font-size: .9rem;
+    font-weight: 800;
+    color: var(--bp-ink2);
+    text-decoration: none;
+
+    &:hover { color: var(--foreground); }
+}
+
+.postHeader {
+    margin-bottom: 2rem;
+}
+
+.postMascot {
+    display: block;
+    margin: 0 0 .75rem -.35rem;
+}
+
+.section {
+    margin: 2.5rem 0 0;
+
+    h2 {
+        @include bp-title;
+        margin: 0 0 .75rem;
+        font-size: 1.85rem;
+        text-wrap: balance;
+
+        @media screen and (max-width: 725px) {
+            font-size: 1.55rem;
+        }
+    }
+
+    p {
+        margin: 0 0 1rem;
+        font-size: 1.05rem;
+        font-weight: 500;
+        line-height: 1.7;
+        text-wrap: pretty;
+    }
+
+    a {
+        color: color-mix(in srgb, var(--bp-read) 82%, var(--foreground));
+        font-weight: 700;
+        text-underline-offset: 2px;
+    }
+}
+
+// The four loop words carry their step colors.
+.read { color: color-mix(in srgb, var(--bp-read) 85%, var(--foreground)); }
+.und { color: color-mix(in srgb, var(--bp-und) 75%, var(--foreground)); }
+.keep { color: color-mix(in srgb, var(--bp-keep) 70%, var(--foreground)); }
+.rev { color: color-mix(in srgb, var(--bp-rev) 80%, var(--foreground)); }
+
+.shot {
+    margin: 1.25rem 0 1.5rem;
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 2px solid var(--bp-line);
+        border-radius: 16px;
+        box-shadow: 0 5px 0 var(--bp-line);
+        background: var(--bp-card);
+    }
+}
+
+.narrow {
+    max-width: 32rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.callout {
+    margin: 2rem 0 0;
+    padding: 1.35rem 1.5rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 20px;
+    background: var(--bp-soft);
+
+    h2 {
+        @include bp-title;
+        margin: 0 0 .75rem;
+        font-size: 1.5rem;
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.6;
+    }
+
+    @media screen and (max-width: 725px) {
+        padding: 1.15rem 1.1rem;
+    }
+}
+
+.toneUnd {
+    border-color: var(--bp-und-line);
+    background: var(--bp-und-soft);
+}
+
+.checks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+
+    li {
+        position: relative;
+        padding-left: 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+
+        // A filled check disc in the Understand teal.
+        &::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: .05em;
+            width: 1.35rem;
+            height: 1.35rem;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--bp-und);
+            color: #fff;
+            font-size: .8rem;
+            font-weight: 900;
+        }
+    }
+}
+
+.cast {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    border-color: var(--bp-keep-line);
+    background: var(--bp-keep-soft);
+
+    @media screen and (max-width: 640px) {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    span[lang] {
+        font-family: var(--font-kr-sans);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+}
+
+.castArt {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-end;
+    gap: .25rem;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    margin-top: 1.25rem;
+
+    a {
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1.4rem;
+        text-decoration: none;
+    }
+
+    @media screen and (max-width: 480px) {
+        flex-direction: column;
+
+        a { width: 100%; }
+    }
+}
+
+.section .primary {
+    @include bp-press(var(--bp-read), var(--bp-read-d), #fff, 4px);
+    color: #fff;
+}
+
+.section .ghost {
+    @include bp-press-ghost(color-mix(in srgb, var(--bp-read) 82%, var(--foreground)), 3px);
+}

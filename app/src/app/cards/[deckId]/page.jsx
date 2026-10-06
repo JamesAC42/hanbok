@@ -16,6 +16,7 @@ import DeckSettings from '@/components/cards/DeckSettings';
 import EditCardModal from '@/components/cards/EditCardModal';
 import StudyStatsDisplay from '@/components/StudyStatsDisplay';
 import Dashboard from '@/components/Dashboard';
+import Mascot from '@/components/Mascot';
 import { use } from 'react';
 
 const DeckView = ({ params }) => {
@@ -271,76 +272,64 @@ const DeckView = ({ params }) => {
 
     // Render the grid view of cards
     const renderGridView = () => {
+        if (cards.length === 0) {
+            return renderEmptyDeck();
+        }
+
         return (
             <>
                 <div className={deckStyles.cardsGrid}>
-                    {cards.length === 0 ? (
-                        // Show empty state with add card option
-                        <div className={deckStyles.emptyDeckContainer}>
-                            <p className={deckStyles.noCards}>{t('cards.noCardsInDeck')}</p>
-                            <div className={deckStyles.addCardItem} onClick={handleCreateCard}>
-                                <div className={deckStyles.addCardButton}>
-                                    <MaterialSymbolsAdd />
-                                    <span>{t('cards.addFirstCard')}</span>
-                                </div>
+                    {currentCards.map(card => (
+                        <div key={card.flashcardId} className={deckStyles.cardItem}>
+                            <div className={deckStyles.cardText}>
+                                <span className={deckStyles.wordText}>
+                                    {card.customFront || card.content?.originalWord || t('cards.unknownWord')}
+                                </span>
+                                <span className={deckStyles.translationText}>
+                                    {card.customBack || card.content?.translatedWord || t('cards.unknownTranslation')}
+                                </span>
                             </div>
+                            <span className={`${deckStyles.statePill} ${deckStyles[card.reviewState || 'new']}`}>
+                                {t(`cards.${card.reviewState || 'new'}`)}
+                            </span>
+                            <button 
+                                className={deckStyles.cardEditButton}
+                                onClick={() => handleEditCard(card)}
+                                aria-label={t('cards.editCard')}
+                                title={t('cards.editCard')}
+                            >
+                                <MaterialSymbolsMoreVertRounded />
+                            </button>
                         </div>
-                    ) : (
-                        <>
-                            {currentCards.map(card => (
-                                <div key={card.flashcardId} className={deckStyles.cardItem}>
-                                    <button 
-                                        className={deckStyles.cardEditButton}
-                                        onClick={() => handleEditCard(card)}
-                                        aria-label={t('cards.editCard')}
-                                        title={t('cards.editCard')}
-                                    >
-                                        <MaterialSymbolsMoreVertRounded />
-                                    </button>
-                                    <div className={deckStyles.cardFront}>
-                                        <span className={deckStyles.wordText}>
-                                            {card.customFront || card.content?.originalWord || t('cards.unknownWord')}
-                                        </span>
-                                    </div>
-                                    <div className={deckStyles.cardDivider}></div>
-                                    <div className={deckStyles.cardBack}>
-                                        <span className={deckStyles.translationText}>
-                                            {card.customBack || card.content?.translatedWord || t('cards.unknownTranslation')}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                            
-                            {/* Add card button */}
-                            <div className={deckStyles.addCardItem} onClick={handleCreateCard}>
-                                <div className={deckStyles.addCardButton}>
-                                    <MaterialSymbolsAdd />
-                                    <span>{t('cards.addCard')}</span>
-                                </div>
-                            </div>
-                        </>
-                    )}
+                    ))}
+
+                    {/* Add card button */}
+                    <button type="button" className={deckStyles.addCardItem} onClick={handleCreateCard}>
+                        <MaterialSymbolsAdd />
+                        <span>{t('cards.addCard')}</span>
+                    </button>
                 </div>
-                {/* Always render pagination if there are cards */}
-                {cards.length > 0 && renderPagination()}
+                {renderPagination()}
             </>
         );
     };
 
+    // Friendly empty state shared by both views
+    const renderEmptyDeck = () => (
+        <div className={deckStyles.emptyDeckContainer}>
+            <Mascot pose="cards" size={84} />
+            <p className={deckStyles.noCards}>{t('cards.noCardsInDeck')}</p>
+            <button type="button" className={deckStyles.emptyAddButton} onClick={handleCreateCard}>
+                <MaterialSymbolsAdd />
+                {t('cards.addFirstCard')}
+            </button>
+        </div>
+    );
+
     // Render the table view of cards with spaced repetition details
     const renderTableView = () => {
         if (cards.length === 0) {
-            return (
-                <div className={deckStyles.emptyDeckContainer}>
-                    <p className={deckStyles.noCards}>{t('cards.noCardsInDeck')}</p>
-                    <div className={deckStyles.tableAddCardContainer}>
-                        <button className={deckStyles.tableAddCardButton} onClick={handleCreateCard}>
-                            <MaterialSymbolsAdd />
-                            {t('cards.addFirstCard')}
-                        </button>
-                    </div>
-                </div>
-            );
+            return renderEmptyDeck();
         }
 
         return (
@@ -366,7 +355,7 @@ const DeckView = ({ params }) => {
                                     <td>{card.customFront || card.content?.originalWord || t('cards.unknownWord')}</td>
                                     <td>{card.customBack || card.content?.translatedWord || t('cards.unknownTranslation')}</td>
                                     <td>
-                                        <span className={deckStyles[card.reviewState || 'new']}>
+                                        <span className={`${deckStyles.statePill} ${deckStyles[card.reviewState || 'new']}`}>
                                             {t(`cards.${card.reviewState || 'new'}`)}
                                         </span>
                                     </td>
@@ -399,8 +388,7 @@ const DeckView = ({ params }) => {
                     </button>
                 </div>
                 
-                {/* Always render pagination if there are cards */}
-                {cards.length > 0 && renderPagination()}
+                {renderPagination()}
             </>
         );
     };
@@ -457,7 +445,7 @@ const DeckView = ({ params }) => {
 
     const renderContent = () => {
         if (loadingContent) {
-            return <p>{t('cards.loading')}</p>;
+            return <p className={deckStyles.loadingText}>{t('cards.loading')}</p>;
         }
 
         if (error) {
@@ -468,43 +456,15 @@ const DeckView = ({ params }) => {
             return <p className={deckStyles.error}>{t('cards.deckNotFound')}</p>;
         }
 
+        const toStudy = deck.stats.new + deck.stats.learning + deck.stats.due;
+
         return (
             <>
-                <div className={deckStyles.deckInfo}>
-                    <div className={deckStyles.deckHeader}>
-                        <h2 className={deckStyles.deckName}>
-                            <span className={deckStyles.languageIcon}>
-                                {getIcon(deck.language)}
-                            </span>
-                            {deck.name}
-                        </h2>
-                        <div className={deckStyles.deckActions}>
-                            <button 
-                                className={`${deckStyles.downloadButton} ${exportStatus === 'loading' ? deckStyles.loading : ''}`}
-                                onClick={handleExportClick}
-                                disabled={exportStatus === 'loading' || deck.cardCount === 0}
-                                aria-label={t('cards.exportDeck')}
-                                title={t('cards.exportDeckForAnki')}
-                            >
-                                <MaterialSymbolsDownloadRounded />
-                            </button>
-                            <button 
-                                className={deckStyles.settingsButton}
-                                onClick={toggleSettings}
-                                aria-label={t('cards.settings')}
-                            >
-                                <MaterialSymbolsSettingsRounded />
-                            </button>
-                            <div className={deckStyles.cardCount}>
-                                {deck.cardCount} {t('cards.cards')}
-                            </div>
-                        </div>
-                    </div>
-                    
+                <section className={deckStyles.deckInfo}>
                     <div className={deckStyles.deckStats}>
-                        <div className={deckStyles.statItem}>
+                        <div className={`${deckStyles.statItem} ${deckStyles.new}`}>
                             <span className={deckStyles.statLabel}>{t('cards.new')}</span>
-                            <span className={`${deckStyles.statValue} ${deckStyles.new}`}>
+                            <span className={deckStyles.statValue}>
                                 {deck.stats.new}
                             </span>
                             {deck.stats.detailedStats && deck.stats.detailedStats.new.available > deck.stats.detailedStats.new.remaining && (
@@ -516,15 +476,15 @@ const DeckView = ({ params }) => {
                                 </span>
                             )}
                         </div>
-                        <div className={deckStyles.statItem}>
+                        <div className={`${deckStyles.statItem} ${deckStyles.learning}`}>
                             <span className={deckStyles.statLabel}>{t('cards.learning')}</span>
-                            <span className={`${deckStyles.statValue} ${deckStyles.learning}`}>
+                            <span className={deckStyles.statValue}>
                                 {deck.stats.learning}
                             </span>
                         </div>
-                        <div className={deckStyles.statItem}>
+                        <div className={`${deckStyles.statItem} ${deckStyles.due}`}>
                             <span className={deckStyles.statLabel}>{t('cards.due')}</span>
-                            <span className={`${deckStyles.statValue} ${deckStyles.due}`}>
+                            <span className={deckStyles.statValue}>
                                 {deck.stats.due}
                             </span>
                             {deck.stats.detailedStats && deck.stats.detailedStats.due.available > deck.stats.detailedStats.due.limited && (
@@ -535,48 +495,58 @@ const DeckView = ({ params }) => {
                             )}
                         </div>
                     </div>
-                    
-                    {/* Calculate whether there are any cards to study */}
-                    {(deck.stats.new + deck.stats.learning + deck.stats.due) === 0 && deck.cardCount > 0 && (
-                        <div className={deckStyles.completedMessage}>
-                            {t('cards.completedForDay')} {t('cards.checkBackTomorrow')}
-                        </div>
-                    )}
-                    
-                    <button 
-                        className={deckStyles.studyButton}
-                        onClick={handleStudyClick}
-                        disabled={deck.cardCount === 0 || (deck.stats.new + deck.stats.learning + deck.stats.due) === 0}
-                    >
-                        <MaterialSymbolsPlayArrowRounded />
-                        {t('cards.studyNow')}
-                    </button>
-                </div>
+
+                    <div className={deckStyles.studySide}>
+                        {/* Calculate whether there are any cards to study */}
+                        {toStudy === 0 && deck.cardCount > 0 && (
+                            <div className={deckStyles.completedMessage}>
+                                <Mascot pose="cheer" size={56} />
+                                <p>{t('cards.completedForDay')} {t('cards.checkBackTomorrow')}</p>
+                            </div>
+                        )}
+
+                        <button 
+                            className={deckStyles.studyButton}
+                            onClick={handleStudyClick}
+                            disabled={deck.cardCount === 0 || toStudy === 0}
+                        >
+                            <MaterialSymbolsPlayArrowRounded />
+                            {t('cards.studyNow')}
+                        </button>
+                    </div>
+                </section>
                 
                 {/* Study Stats Display Component */}
                 <StudyStatsDisplay deckId={deckId} />
                 
-                <div className={deckStyles.cardsList}>
+                <section className={deckStyles.cardsList}>
                     <div className={deckStyles.cardsListHeader}>
-                        <h3 className={deckStyles.cardsListTitle}>
+                        <h2 className={deckStyles.cardsListTitle}>
                             {t('cards.cardsInDeck')}
-                        </h3>
-                        <div className={deckStyles.viewToggle}>
-                            <span>{t('cards.viewMode')}:</span>
-                            <label className={deckStyles.switch}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={viewMode === 'table'} 
-                                    onChange={toggleViewMode}
-                                />
-                                <span className={deckStyles.slider}></span>
-                            </label>
-                            <span>{viewMode === 'grid' ? t('cards.gridView') : t('cards.tableView')}</span>
+                            <span className={deckStyles.cardCount}>{deck.cardCount}</span>
+                        </h2>
+                        <div className={deckStyles.viewToggle} role="group" aria-label={t('cards.viewMode')}>
+                            <button
+                                type="button"
+                                className={viewMode === 'grid' ? deckStyles.viewTabActive : deckStyles.viewTab}
+                                aria-pressed={viewMode === 'grid'}
+                                onClick={() => viewMode !== 'grid' && toggleViewMode()}
+                            >
+                                {t('cards.gridView')}
+                            </button>
+                            <button
+                                type="button"
+                                className={viewMode === 'table' ? deckStyles.viewTabActive : deckStyles.viewTab}
+                                aria-pressed={viewMode === 'table'}
+                                onClick={() => viewMode !== 'table' && toggleViewMode()}
+                            >
+                                {t('cards.tableView')}
+                            </button>
                         </div>
                     </div>
                     
                     {viewMode === 'grid' ? renderGridView() : renderTableView()}
-                </div>
+                </section>
             </>
         );
     };
@@ -587,19 +557,54 @@ const DeckView = ({ params }) => {
     return (
         <Dashboard>
             <div className={deckStyles.deckContent}>
-                <button 
-                    className={deckStyles.backButton}
-                    onClick={handleBackClick}
-                    aria-label={t('common.back')}
-                >
-                    <MaterialSymbolsArrowBackRounded />
-                </button>
-                
-                <div className={deckStyles.header}>
-                    <h1>{t('cards.deckTitle')}</h1>
+                <div className={deckStyles.page}>
+                    <div className={deckStyles.header}>
+                        <button 
+                            className={deckStyles.backButton}
+                            onClick={handleBackClick}
+                            aria-label={t('common.back')}
+                            title={t('common.back')}
+                        >
+                            <MaterialSymbolsArrowBackRounded />
+                        </button>
+
+                        <div className={deckStyles.titleBlock}>
+                            {deck && <span className={deckStyles.eyebrow}>{t('cards.deckTitle')}</span>}
+                            <h1 className={deckStyles.deckName}>
+                                {deck && (
+                                    <span className={deckStyles.languageIcon}>
+                                        {getIcon(deck.language)}
+                                    </span>
+                                )}
+                                <span className={deckStyles.deckNameText}>{deck ? deck.name : t('cards.deckTitle')}</span>
+                            </h1>
+                        </div>
+
+                        {deck && (
+                            <div className={deckStyles.deckActions}>
+                                <button 
+                                    className={`${deckStyles.iconButton} ${exportStatus === 'loading' ? deckStyles.loading : ''}`}
+                                    onClick={handleExportClick}
+                                    disabled={exportStatus === 'loading' || deck.cardCount === 0}
+                                    aria-label={t('cards.exportDeck')}
+                                    title={t('cards.exportDeckForAnki')}
+                                >
+                                    <MaterialSymbolsDownloadRounded />
+                                </button>
+                                <button 
+                                    className={deckStyles.iconButton}
+                                    onClick={toggleSettings}
+                                    aria-label={t('cards.settings')}
+                                    title={t('cards.deckSettings')}
+                                >
+                                    <MaterialSymbolsSettingsRounded />
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                    
+                    {renderContent()}
                 </div>
-                
-                {renderContent()}
             </div>
             
             {/* Edit Card Modal */}
@@ -625,4 +630,4 @@ const DeckView = ({ params }) => {
     );
 };
 
-export default DeckView; 
+export default DeckView;

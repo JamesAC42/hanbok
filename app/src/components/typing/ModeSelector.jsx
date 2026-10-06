@@ -57,9 +57,10 @@ export default function ModeSelector({
                     >
                         <div className={styles.modeHeader}>
                             <h3 className={styles.modeTitle}>{getModeTitle(mode)}</h3>
-                            <div className={`${styles.modeIcon} ${currentMode === mode ? styles.active : ''}`}>
-                                {currentMode === mode ? '●' : '○'}
-                            </div>
+                            <span
+                                className={`${styles.modeIcon} ${currentMode === mode ? styles.active : ''}`}
+                                aria-hidden="true"
+                            />
                         </div>
                         <p className={styles.modeDescription}>
                             {getModeDescription(mode)}

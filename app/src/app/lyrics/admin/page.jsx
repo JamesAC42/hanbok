@@ -1,803 +1,471 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
-import styles from '@/styles/components/pagelayout.module.scss';
-import adminLyricsStyles from '@/styles/components/adminlyrics.module.scss';
-import { MaterialSymbolsLibraryAddRounded } from '@/components/icons/Add';
-import { MaterialSymbolsCheckCircleOutlineRounded } from '@/components/icons/CheckCircle';
-import { MaterialSymbolsPublishRounded } from '@/components/icons/Publish';
-import { MaterialSymbolsBackspace } from '@/components/icons/Exit';
-import { IcSharpPreview } from '@/components/icons/Preview';
-import { MaterialSymbolsDelete } from '@/components/icons/Delete';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAdmin } from '@/contexts/AdminContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import Dashboard from '@/components/Dashboard';
+import dash from '@/styles/components/admin/dashboard.module.scss';
+import styles from '@/styles/components/admin/lyricsAdmin.module.scss';
+import { fmt, timeAgo } from '@/components/admin/dashboard/format';
 
-const AdminLyrics = () => {
+const EMPTY = { title: '', artist: '', anime: '', genre: '', youtubeUrl: '', lyricsText: '', language: 'ko', published: false };
+const GENRES = [['kpop', 'K-Pop'], ['jpop', 'J-Pop'], ['anime', 'Anime'], ['other', 'Other']];
+const LANGUAGES = [['ko', 'Korean'], ['ja', 'Japanese'], ['en', 'English']];
+const FILTERS = [['all', 'All'], ['live', 'Published'], ['draft', 'Drafts'], ['todo', 'Needs analysis']];
+
+const toForm = (lyric) => Object.fromEntries(Object.keys(EMPTY).map((key) => [key, lyric?.[key] ?? EMPTY[key]]));
+
+// Accepts a pasted YouTube link and keeps just the video id.
+const youtubeId = (value) => {
+    const text = (value || '').trim();
+    const match = text.match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/);
+    return match ? match[1] : text;
+};
+
+const lineCount = (text) => text.split('\n').filter((line) => line.trim()).length;
+
+export default function AdminLyrics() {
     const router = useRouter();
     const { user, isAuthenticated, loading } = useAuth();
-    const [lyrics, setLyrics] = useState([]);
+    const { isAdmin, loading: adminLoading } = useAdmin();
     const { t } = useLanguage();
-    const [selectedLyric, setSelectedLyric] = useState(null);
-    const [isCreating, setIsCreating] = useState(false);
-    const [loadingLyrics, setLoadingLyrics] = useState(true);
-    const [error, setError] = useState(null);
-    const [formData, setFormData] = useState({
-        title: '',
-        artist: '',
-        anime: '',
-        genre: '',
-        youtubeUrl: '',
-        lyricsText: '',
-        language: 'ko',
-        published: false
-    });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitError, setSubmitError] = useState(null);
-    const [submitSuccess, setSubmitSuccess] = useState(false);
 
-    const [generatingAnalysis, setGeneratingAnalysis] = useState(false);
-    const [analysisLog, setAnalysisLog] = useState([]);
+    const [lyrics, setLyrics] = useState([]);
+    const [listState, setListState] = useState({ loading: true, error: null });
+    const [selectedId, setSelectedId] = useState(null); // song _id, 'new', or null
+    const [form, setForm] = useState(EMPTY);
+    const [query, setQuery] = useState('');
+    const [filter, setFilter] = useState('all');
+    const [saving, setSaving] = useState(false);
+    const [notice, setNotice] = useState(null); // { kind: 'good' | 'bad', text }
+    const [analysis, setAnalysis] = useState({ running: false, log: [], progress: null });
+    const [deletingAnalysis, setDeletingAnalysis] = useState(false);
+    const logRef = useRef(null);
+    const sourceRef = useRef(null);
 
-    const [message, setMessage] = useState('');
-    
-    // Create ref for terminal content to enable auto-scrolling
-    const terminalContentRef = useRef(null);
-
-    // Auto-scroll terminal when new logs are added
-    useEffect(() => {
-        if (terminalContentRef.current && analysisLog.length > 0) {
-            const terminal = terminalContentRef.current;
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-    }, [analysisLog]);
+    const selected = lyrics.find((l) => l._id === selectedId) || null;
+    const isNew = selectedId === 'new';
+    const dirty = useMemo(() => {
+        if (!selectedId) return false;
+        const base = isNew ? EMPTY : toForm(selected);
+        return Object.keys(EMPTY).some((key) => (form[key] ?? '') !== (base[key] ?? ''));
+    }, [form, selected, selectedId, isNew]);
 
     useEffect(() => {
         document.title = t('lyrics.adminPageTitle');
+    }, [t]);
+
+    useEffect(() => {
+        if (loading || adminLoading) return;
+        if (!isAuthenticated || !isAdmin(user?.email)) router.replace('/');
+    }, [loading, adminLoading, isAuthenticated, isAdmin, user, router]);
+
+    const loadLyrics = useCallback(async (attempt = 0) => {
+        try {
+            const response = await fetch('/api/lyrics/admin', { credentials: 'include' });
+            // A request right after an analysis stream closes can hit a dropped
+            // keep-alive socket in the /api proxy, so try once more.
+            if (!response.ok && attempt === 0) return loadLyrics(1);
+            const data = await response.json();
+            if (!data.success) throw new Error(data.message || 'Could not load songs');
+            setLyrics(data.lyrics.filter((l) => l && l._id));
+            setListState({ loading: false, error: null });
+            return data.lyrics;
+        } catch (error) {
+            setListState({ loading: false, error: error.message });
+            return null;
+        }
     }, []);
 
-    // Check if user is authenticated and is admin
     useEffect(() => {
-        if (!loading && !isAuthenticated) {
-            router.replace('/');
-        }
-    }, [isAuthenticated, loading, router]);
+        if (isAuthenticated) loadLyrics();
+    }, [isAuthenticated, loadLyrics]);
 
-    // Fetch all lyrics
+    // Keep the newest log line in view.
     useEffect(() => {
-        const fetchLyrics = async () => {
-            try {
-                setLoadingLyrics(true);
-                const response = await fetch('/api/lyrics/admin', {
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                const data = await response.json();
-                
-                if (data.success) {
-                    setLyrics(data.lyrics);
-                } else {
-                    setError(data.message || 'Failed to fetch lyrics');
-                }
-            } catch (err) {
-                setError('An error occurred while fetching lyrics');
-                console.error(err);
-            } finally {
-                setLoadingLyrics(false);
-            }
-        };
+        if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight;
+    }, [analysis.log]);
 
+    // Close a running analysis stream when leaving the page.
+    useEffect(() => () => sourceRef.current?.close(), []);
 
-        if (isAuthenticated) {
-            fetchLyrics();
+    // Warn before closing the tab with unsaved edits.
+    useEffect(() => {
+        if (!dirty) return undefined;
+        const onBeforeUnload = (e) => { e.preventDefault(); e.returnValue = ''; };
+        window.addEventListener('beforeunload', onBeforeUnload);
+        return () => window.removeEventListener('beforeunload', onBeforeUnload);
+    }, [dirty]);
+
+    const open = (id) => {
+        if (id === selectedId) return;
+        if (dirty && !confirm('You have unsaved changes. Leave them?')) return;
+        if (analysis.running) {
+            sourceRef.current?.close();
         }
-
-    }, [isAuthenticated]);
-
-    // Handle form input changes
-    const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
+        setSelectedId(id);
+        setForm(id === 'new' ? EMPTY : toForm(lyrics.find((l) => l._id === id)));
+        setNotice(null);
+        setAnalysis({ running: false, log: [], progress: null });
     };
 
-    // Handle song selection
-    const handleSelectSong = (lyric) => {
-        if (!lyric || typeof lyric !== 'object') {
-            console.error('Invalid lyric object provided to handleSelectSong');
+    const set = (key, value) => setForm((prev) => ({ ...prev, [key]: value }));
+
+    const save = async (overrides = {}) => {
+        const body = { ...form, ...overrides, youtubeUrl: youtubeId(form.youtubeUrl) };
+        if (!body.title.trim() || !body.genre || !body.lyricsText.trim()) {
+            setNotice({ kind: 'bad', text: 'Add a title, a genre and the lyrics before saving.' });
             return;
         }
-        
-        setSelectedLyric(lyric);
-        setIsCreating(false);
-        setFormData({
-            title: lyric.title || '',
-            artist: lyric.artist || '',
-            anime: lyric.anime || '',
-            genre: lyric.genre || '',
-            youtubeUrl: lyric.youtubeUrl || '',
-            lyricsText: lyric.lyricsText || '',
-            language: lyric.language || 'ko',
-            published: lyric.published || false
+        setSaving(true);
+        setNotice(null);
+        try {
+            const response = await fetch(isNew ? '/api/lyrics/admin' : `/api/lyrics/admin/${selectedId}`, {
+                method: isNew ? 'POST' : 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(body),
+            });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.message || 'Could not save');
+            const list = await loadLyrics();
+            const id = isNew ? data.lyric?._id : selectedId;
+            const fresh = list?.find((l) => l._id === id);
+            if (fresh) {
+                setSelectedId(fresh._id);
+                setForm(toForm(fresh));
+            } else {
+                setForm(body);
+            }
+            setNotice({ kind: 'good', text: isNew ? 'Song added.' : overrides.published !== undefined ? (overrides.published ? 'Published. Learners can see it now.' : 'Unpublished. It is hidden from learners.') : 'Saved.' });
+        } catch (error) {
+            setNotice({ kind: 'bad', text: error.message });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const remove = async () => {
+        if (!selected || !confirm(`Delete "${selected.title}"? This cannot be undone.`)) return;
+        try {
+            const response = await fetch(`/api/lyrics/admin/${selected._id}`, { method: 'DELETE', credentials: 'include' });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.message || 'Could not delete');
+            setLyrics((prev) => prev.filter((l) => l._id !== selected._id));
+            setSelectedId(null);
+            setForm(EMPTY);
+        } catch (error) {
+            setNotice({ kind: 'bad', text: error.message });
+        }
+    };
+
+    const addLog = (type, message) => setAnalysis((prev) => ({ ...prev, log: [...prev.log, { type, message, at: new Date() }] }));
+
+    const generate = () => {
+        if (!selected) return;
+        const lyricKey = selected._id;
+        setAnalysis({ running: true, log: [{ type: 'info', message: 'Connecting…', at: new Date() }], progress: 0 });
+
+        const source = new EventSource(`/api/lyrics/admin/generate-analysis/${lyricKey}`, { withCredentials: true });
+        sourceRef.current = source;
+        const parse = (event) => { try { return JSON.parse(event.data); } catch { return {}; } };
+        const finish = () => { source.close(); setAnalysis((prev) => ({ ...prev, running: false })); };
+
+        source.onopen = () => addLog('info', 'Connected. Analyzing every line…');
+        source.onmessage = (event) => addLog('info', parse(event).message || String(event.data));
+        source.addEventListener('status', (event) => addLog('status', parse(event).message));
+        source.addEventListener('progress', (event) => {
+            const data = parse(event);
+            setAnalysis((prev) => ({
+                ...prev,
+                progress: Math.max(0, Math.min(100, data.progress || 0)),
+                log: [...prev.log, { type: 'progress', message: `Line ${data.processed} of ${data.total}`, at: new Date() }],
+            }));
+        });
+        source.addEventListener('error', (event) => {
+            const data = event.data ? parse(event) : {};
+            addLog('error', data.message || (source.readyState === EventSource.CLOSED ? 'The connection closed before the analysis finished.' : 'Connection lost. Trying again…'));
+            if (event.data || source.readyState === EventSource.CLOSED) finish();
+        });
+        source.addEventListener('complete', async (event) => {
+            addLog('success', parse(event).message || 'Analysis finished.');
+            setAnalysis((prev) => ({ ...prev, progress: 100 }));
+            setLyrics((prev) => prev.map((l) => (l._id === lyricKey ? { ...l, hasAnalysis: true } : l)));
+            finish();
+            await loadLyrics();
         });
     };
 
-    // Handle create new song button
-    const handleCreateNew = () => {
-        setSelectedLyric(null);
-        setIsCreating(true);
-        setFormData({
-            title: '',
-            artist: '',
-            anime: '',
-            genre: '',
-            youtubeUrl: '',
-            lyricsText: '',
-            language: 'ko',
-            published: false
+    const deleteAnalysis = async () => {
+        if (!selected || !confirm('Delete the analysis for this song? Every analyzed line will be removed.')) return;
+        setDeletingAnalysis(true);
+        try {
+            const response = await fetch(`/api/lyrics/${selected._id}/analysis`, { method: 'DELETE', credentials: 'include' });
+            const data = await response.json();
+            if (!data.success) throw new Error(data.message || 'Could not delete the analysis');
+            setLyrics((prev) => prev.map((l) => (l._id === selected._id ? { ...l, hasAnalysis: false } : l)));
+            setNotice({ kind: 'good', text: `Analysis deleted (${fmt(data.deletedSentences)} lines).` });
+        } catch (error) {
+            setNotice({ kind: 'bad', text: error.message });
+        } finally {
+            setDeletingAnalysis(false);
+        }
+    };
+
+    const visible = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        return lyrics.filter((l) => {
+            if (filter === 'live' && !l.published) return false;
+            if (filter === 'draft' && l.published) return false;
+            if (filter === 'todo' && l.hasAnalysis) return false;
+            if (!q) return true;
+            return [l.title, l.artist, l.anime].some((v) => v && v.toLowerCase().includes(q));
         });
-    };
+    }, [lyrics, query, filter]);
 
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSubmitError(null);
-        setSubmitSuccess(false);
+    const counts = useMemo(() => ({
+        all: lyrics.length,
+        live: lyrics.filter((l) => l.published).length,
+        draft: lyrics.filter((l) => !l.published).length,
+        todo: lyrics.filter((l) => !l.hasAnalysis).length,
+    }), [lyrics]);
 
-        try {
-            const url = isCreating 
-                ? '/api/lyrics/admin' 
-                : `/api/lyrics/admin/${selectedLyric._id}`;
-            
-            const method = isCreating ? 'POST' : 'PUT';
-            
-            const response = await fetch(url, {
-                method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify(formData)
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                setSubmitSuccess(true);
-                
-                // Refresh lyrics list
-                const lyricsResponse = await fetch('/api/lyrics/admin', {
-                    credentials: 'include'
-                });
-                const lyricsData = await lyricsResponse.json();
-                
-                if (lyricsData.success) {
-                    setLyrics(lyricsData.lyrics);
-                    
-                    // If we just created a new song, select it
-                    if (isCreating && data.lyric) {
-                        const newLyric = lyricsData.lyrics.find(l => l._id === data.lyric._id);
-                        if (newLyric) {
-                            setSelectedLyric(newLyric);
-                            setIsCreating(false);
-                        }
-                    }
-                }
-                
-                // Reset form after successful submission
-                setTimeout(() => {
-                    setSubmitSuccess(false);
-                }, 3000);
-            } else {
-                setSubmitError(data.message || 'Failed to save lyrics');
-            }
-        } catch (err) {
-            setSubmitError('An error occurred while saving lyrics');
-            console.error(err);
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    if (loading || adminLoading || !isAuthenticated || !isAdmin(user?.email)) return null;
 
-    // Handle delete song
-    const handleDelete = async () => {
-        if (!selectedLyric || !selectedLyric._id) {
-            console.error('Cannot delete song: selectedLyric or _id is undefined');
-            return;
-        }
-        
-        if (!confirm('Are you sure you want to delete this song?')) {
-            return;
-        }
-        
-        try {
-            const response = await fetch(`/api/lyrics/admin/${selectedLyric._id}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                // Remove the deleted song from the list
-                setLyrics(prev => prev.filter(l => l._id !== selectedLyric._id));
-                setSelectedLyric(null);
-                setIsCreating(false);
-                setFormData({
-                    title: '',
-                    artist: '',
-                    genre: '',
-                    youtubeUrl: '',
-                    lyricsText: '',
-                    language: 'ko',
-                    published: false
-                });
-            } else {
-                setSubmitError(data.message || 'Failed to delete lyrics');
-            }
-        } catch (err) {
-            setSubmitError('An error occurred while deleting lyrics');
-            console.error(err);
-        }
-    };
-
-    const handleGenerateAnalysis = async () => {
-        if (!selectedLyric || !selectedLyric._id) {
-            console.error('Cannot generate analysis: selectedLyric or _id is undefined');
-            return;
-        }
-        
-        setGeneratingAnalysis(true);
-        setAnalysisLog([]);
-
-        try {
-            // Create EventSource connection with retry mechanism
-            
-            // Add connection message to log
-            setAnalysisLog(prev => [...prev, { 
-                type: 'info', 
-                message: 'Connecting to server...', 
-                timestamp: new Date() 
-            }]);
-            
-            const eventSourceUrl = `/api/lyrics/admin/generate-analysis/${selectedLyric._id}`;
-            const eventSource = new EventSource(eventSourceUrl, {
-                withCredentials: true
-            });
-
-            // Define retry timeout value
-            eventSource.onerror = (event) => {
-                
-                // Check if the connection is closed due to an error
-                if (eventSource.readyState === EventSource.CLOSED) {
-                    const errorMessage = 'Connection lost. The server may have disconnected or encountered an error.';
-                    console.error(errorMessage);
-                    
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'error', 
-                        message: errorMessage, 
-                        timestamp: new Date() 
-                    }]);
-                    
-                    // Close the connection and reset state
-                    eventSource.close();
-                    setGeneratingAnalysis(false);
-                } else if (eventSource.readyState === EventSource.CONNECTING) {
-                    // We're trying to reconnect
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'info', 
-                        message: 'Connection lost. Attempting to reconnect...', 
-                        timestamp: new Date() 
-                    }]);
-                }
-            };
-
-            eventSource.onopen = () => {
-                setAnalysisLog(prev => [...prev, { 
-                    type: 'info', 
-                    message: 'Connected to server. Starting analysis...', 
-                    timestamp: new Date() 
-                }]);
-            };
-
-            // Handle general message events
-            eventSource.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'info', 
-                        message: data.message || 'Received update from server', 
-                        timestamp: new Date() 
-                    }]);
-                } catch (err) {
-                    console.error('Error parsing message event data:', err);
-                    // Still show the raw message if parsing fails
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'info', 
-                        message: String(event.data) || 'Received update from server', 
-                        timestamp: new Date() 
-                    }]);
-                }
-            };
-
-            // Handle specific event types
-            eventSource.addEventListener('status', (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'status', 
-                        message: data.message, 
-                        timestamp: new Date() 
-                    }]);
-                } catch (err) {
-                    console.error('Error parsing status event data:', err);
-                }
-            });
-
-            eventSource.addEventListener('progress', (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'progress', 
-                        message: `Processing ${data.processed}/${data.total} segments (${Math.round(data.progress)}%)`,
-                        progress: data.progress,
-                        timestamp: new Date()
-                    }]);
-                } catch (err) {
-                    console.error('Error parsing progress event data:', err);
-                }
-            });
-
-            eventSource.addEventListener('error', (event) => {
-                let errorMessage = 'An unexpected error occurred';
-                
-                try {
-                    // Try to parse the error data if it exists
-                    if (event.data) {
-                        const data = JSON.parse(event.data);
-                        errorMessage = data.message || errorMessage;
-                    }
-                } catch (err) {
-                    console.error('Error parsing error event:', err);
-                }
-
-                setAnalysisLog(prev => [...prev, { 
-                    type: 'error', 
-                    message: errorMessage, 
-                    timestamp: new Date() 
-                }]);
-                
-                eventSource.close();
-                setGeneratingAnalysis(false);
-            });
-
-            eventSource.addEventListener('complete', async (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'success', 
-                        message: data.message || 'Analysis completed successfully', 
-                        timestamp: new Date() 
-                    }]);
-                } catch (err) {
-                    console.error('Error parsing complete event data:', err);
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'success', 
-                        message: 'Analysis completed successfully', 
-                        timestamp: new Date() 
-                    }]);
-                }
-                
-                eventSource.close();
-                setGeneratingAnalysis(false);
-
-                // Refresh the lyric list to show updated analysis status
-                try {
-                    const lyricsResponse = await fetch('/api/lyrics/admin', {
-                        credentials: 'include'
-                    });
-                    
-                    const lyricsData = await lyricsResponse.json();
-                    
-                    if (lyricsData.success) {
-                        setLyrics(lyricsData.lyrics);
-                        // Update the selected lyric with new data
-                        const updatedLyric = lyricsData.lyrics.find(l => l._id === selectedLyric._id);
-                        if (updatedLyric) {
-                            setSelectedLyric(updatedLyric);
-                        }
-                    }
-                } catch (refreshError) {
-                    console.error('Error refreshing lyrics list:', refreshError);
-                    setAnalysisLog(prev => [...prev, { 
-                        type: 'error', 
-                        message: 'Analysis completed but failed to refresh the song list', 
-                        timestamp: new Date() 
-                    }]);
-                }
-            });
-
-            // Cleanup function to close EventSource connection
-            return () => {
-                if (eventSource) {
-                    eventSource.close();
-                }
-            };
-
-        } catch (err) {
-            console.error('Error in handleGenerateAnalysis:', err);
-            setAnalysisLog(prev => [...prev, { 
-                type: 'error', 
-                message: `Error generating analysis: ${err.message || 'Unknown error'}`, 
-                timestamp: new Date() 
-            }]);
-            setGeneratingAnalysis(false);
-        }
-    };
-
-    const [isDeleting, setIsDeleting] = useState(false);
-
-    // Handle delete analysis
-    const handleDeleteAnalysis = async () => {
-        if (!selectedLyric || !selectedLyric._id) {
-            console.error('Cannot delete analysis: selectedLyric or _id is undefined');
-            return;
-        }
-        
-        if (!confirm('Are you sure you want to delete the analysis for this song? This will permanently delete all sentence analysis data.')) {
-            return;
-        }
-        
-        try {
-            setIsDeleting(true);
-            setMessage('');
-            
-            const response = await fetch(`/api/lyrics/${selectedLyric._id}/analysis`, {
-                method: 'DELETE',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                // Update the lyric in the list
-                setLyrics(prev => 
-                    prev.map(lyric => 
-                        lyric._id === selectedLyric._id 
-                        ? { ...lyric, hasAnalysis: false } 
-                        : lyric
-                    )
-                );
-                
-                // Update the selected lyric
-                setSelectedLyric(prev => ({ ...prev, hasAnalysis: false }));
-                
-                setMessage(`Analysis deleted successfully. ${data.deletedSentences} sentences were removed.`);
-                
-                // Clear message after 3 seconds
-                setTimeout(() => {
-                    setMessage('');
-                }, 3000);
-            } else {
-                setMessage(`Error: ${data.message || 'Failed to delete analysis'}`);
-            }
-        } catch (err) {
-            console.error('Error deleting analysis:', err);
-            setMessage('An error occurred while deleting the analysis');
-        } finally {
-            setIsDeleting(false);
-        }
-    };
-
-    // Don't render while loading auth or if not an admin
-    if (loading || !isAuthenticated) {
-        return null;
-    }
+    const videoId = youtubeId(form.youtubeUrl);
+    const lines = lineCount(form.lyricsText);
 
     return (
-        <div className={adminLyricsStyles.adminLyricsContainer}>
-            <div className={adminLyricsStyles.sidebar}>
+        <Dashboard>
+            <div className={`${dash.page} ${styles.page}`}>
+                <header className={dash.pageHead}>
+                    <div>
+                        <Link href="/admin?tab=tools" className={styles.back}>← Admin</Link>
+                        <h1 className={dash.pageTitle}>Lyrics library</h1>
+                    </div>
+                    <button type="button" className={dash.pressButton} onClick={() => open('new')}>+ Add a song</button>
+                </header>
 
-                <div className={adminLyricsStyles.sidebarHeader}>
-                    <Link href="/lyrics">
-                        <MaterialSymbolsBackspace /> Back
-                    </Link>
-                    <button 
-                        className={adminLyricsStyles.addSongButton}
-                        onClick={handleCreateNew}
-                    >
-                        <MaterialSymbolsLibraryAddRounded /> Add New Song
-                    </button>
-                </div>
-                
-                <div className={adminLyricsStyles.songList}>
-                    {loadingLyrics ? (
-                        <div className={adminLyricsStyles.loading}>Loading songs...</div>
-                    ) : error ? (
-                        <div className={adminLyricsStyles.error}>{error}</div>
-                    ) : lyrics.length === 0 ? (
-                        <div className={adminLyricsStyles.loading}>No songs found</div>
-                    ) : (
-                        lyrics
-                            .filter(lyric => lyric && typeof lyric === 'object' && lyric._id)
-                            .map((lyric, index) => (
-                            <div 
-                                key={lyric._id || `lyric-${index}`}
-                                className={`${adminLyricsStyles.songItem} ${selectedLyric?._id === lyric._id ? adminLyricsStyles.active : ''}`}
-                                onClick={() => handleSelectSong(lyric)}
-                            >
-                                <div className={adminLyricsStyles.songTitle}>{lyric.title || 'Unknown Title'}</div>
-                                <div className={adminLyricsStyles.songArtist}>{lyric.artist || 'Unknown Artist'}</div>
-                                <div className={adminLyricsStyles.indicators}>
-                                    {lyric.hasAnalysis && (
-                                        <div className={`${adminLyricsStyles.indicator} ${adminLyricsStyles.hasAnalysis}`}>
-                                            <MaterialSymbolsCheckCircleOutlineRounded /> Analysis
-                                        </div>
-                                    )}
-                                    {lyric.published && (
-                                        <div className={`${adminLyricsStyles.indicator} ${adminLyricsStyles.published}`}>
-                                            <MaterialSymbolsPublishRounded /> Published
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        ))
-                    )}
-                </div>
-            </div>
-            
-            <div className={adminLyricsStyles.mainContent}>
-                {isCreating || selectedLyric ? (
-                    <>
-                        <h2 className={adminLyricsStyles.formTitle}>
-                            {isCreating ? 'Add New Song' : 'Edit Song'}
-                        </h2>
-                        
-                        {submitError && (
-                            <div className={adminLyricsStyles.error}>{submitError}</div>
-                        )}
-                        
-                        {submitSuccess && (
-                            <div style={{ 
-                                background: '#4caf50', 
-                                color: 'white', 
-                                padding: '1rem', 
-                                borderRadius: '0.5rem',
-                                marginBottom: '1rem'
-                            }}>
-                                Song saved successfully!
-                            </div>
-                        )}
-                        
-                        {message && (
-                            <div style={{ 
-                                background: message.startsWith('Error') ? '#f44336' : '#4caf50', 
-                                color: 'white', 
-                                padding: '1rem', 
-                                borderRadius: '0.5rem',
-                                marginBottom: '1rem'
-                            }}>
-                                {message}
-                            </div>
-                        )}
-                        
-                        <form onSubmit={handleSubmit}>
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="title">Title *</label>
-                                <input
-                                    type="text"
-                                    id="title"
-                                    name="title"
-                                    value={formData.title}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="artist">Artist</label>
-                                <input
-                                    type="text"
-                                    id="artist"
-                                    name="artist"
-                                    value={formData.artist}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="anime">Anime</label>
-                                <input
-                                    type="text"
-                                    id="anime"
-                                    name="anime"
-                                    value={formData.anime}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="genre">Genre *</label>
-                                <select
-                                    id="genre"
-                                    name="genre"
-                                    value={formData.genre}
-                                    onChange={handleInputChange}
-                                    required
-                                >
-                                    <option value="">Select a genre</option>
-                                    <option value="kpop">K-Pop</option>
-                                    <option value="jpop">J-Pop</option>
-                                    <option value="anime">Anime</option>
-                                    <option value="other">Other</option>
-                                </select>
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="youtubeUrl">YouTube Video ID</label>
-                                <input
-                                    type="text"
-                                    id="youtubeUrl"
-                                    name="youtubeUrl"
-                                    value={formData.youtubeUrl}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="language">Language *</label>
-                                <select
-                                    id="language"
-                                    name="language"
-                                    value={formData.language}
-                                    onChange={handleInputChange}
-                                    required
-                                >
-                                    <option value="ko">Korean</option>
-                                    <option value="ja">Japanese</option>
-                                    <option value="en">English</option>
-                                </select>
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formGroup}>
-                                <label htmlFor="lyricsText">Lyrics Text *</label>
-                                <textarea
-                                    id="lyricsText"
-                                    name="lyricsText"
-                                    value={formData.lyricsText}
-                                    onChange={handleInputChange}
-                                    required
-                                />
-                            </div>
-                            
-                            <div className={adminLyricsStyles.publishToggle}>
-                                <input
-                                    type="checkbox"
-                                    id="published"
-                                    name="published"
-                                    checked={formData.published}
-                                    onChange={handleInputChange}
-                                />
-                                <label htmlFor="published">Published (visible to users)</label>
-                            </div>
-                            
-                            <div className={adminLyricsStyles.formActions}>
-                                <button 
-                                    type="submit" 
-                                    className={adminLyricsStyles.saveButton}
-                                    disabled={isSubmitting}
-                                >
-                                    {isSubmitting ? 'Saving...' : 'Save'}
+                <div className={`${styles.layout} ${selectedId ? styles.editing : ''}`}>
+                    <aside className={`${dash.card} ${styles.listCard}`}>
+                        <input
+                            type="search"
+                            className={dash.input}
+                            placeholder="Search title, artist or anime"
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            aria-label="Search songs"
+                        />
+                        <div className={styles.filters} role="group" aria-label="Filter songs">
+                            {FILTERS.map(([key, label]) => (
+                                <button key={key} type="button" aria-pressed={filter === key}
+                                    className={`${styles.filter} ${filter === key ? styles.filterOn : ''}`}
+                                    onClick={() => setFilter(key)}>
+                                    {label} <span>{fmt(counts[key])}</span>
                                 </button>
-                                
-                                <button 
-                                    type="button" 
-                                    className={adminLyricsStyles.cancelButton}
-                                    onClick={handleCreateNew}
-                                >
-                                    New Song
-                                </button>
-                                
-                                {!isCreating && (
-                                    <button 
-                                        type="button" 
-                                        className={adminLyricsStyles.deleteButton}
-                                        onClick={handleDelete}
-                                    >
-                                        Delete
-                                    </button>
-                                )}
-                            </div>
+                            ))}
+                        </div>
 
-                            <div className={adminLyricsStyles.analysisPreviewContainer}>
-                                {
-                                    generatingAnalysis ? (
-                                        <div className={adminLyricsStyles.terminalContainer}>
-                                            <div className={adminLyricsStyles.terminalHeader}>
-                                                <div className={adminLyricsStyles.terminalTitle}>Analysis Progress</div>
-                                                <div className={adminLyricsStyles.terminalControls}>
-                                                    <div className={adminLyricsStyles.terminalButton}></div>
-                                                    <div className={adminLyricsStyles.terminalButton}></div>
-                                                    <div className={adminLyricsStyles.terminalButton}></div>
-                                                </div>
-                                            </div>
-                                            <div 
-                                                ref={terminalContentRef} 
-                                                className={adminLyricsStyles.terminalContent}
-                                            >
-                                                {analysisLog
-                                                    .filter(log => log && typeof log === 'object')
-                                                    .map((log, index) => (
-                                                    <div 
-                                                        key={index} 
-                                                        className={`${adminLyricsStyles.logEntry} ${log.type ? adminLyricsStyles[log.type] : ''}`}
-                                                    >
-                                                        <span className={adminLyricsStyles.timestamp}>
-                                                            {log.timestamp ? log.timestamp.toLocaleTimeString() : 'Unknown Time'}
-                                                        </span>
-                                                        <span className={adminLyricsStyles.message}>
-                                                            {log.message || 'Unknown message'}
-                                                        </span>
-                                                    </div>
+                        {listState.error && <p className={dash.sectionError}>{listState.error}</p>}
+                        {listState.loading ? <p className={dash.empty}>Loading songs…</p> : (
+                            <ul className={styles.songs}>
+                                {visible.map((l) => (
+                                    <li key={l._id}>
+                                        <button type="button" className={`${styles.song} ${selectedId === l._id ? styles.songOn : ''}`} onClick={() => open(l._id)}>
+                                            <span className={styles.songMain}>
+                                                <strong>{l.title || 'Untitled'}</strong>
+                                                <span>{[l.artist, l.anime].filter(Boolean).join(' · ') || 'Unknown artist'}</span>
+                                            </span>
+                                            <span className={styles.songMeta}>
+                                                <span className={`${dash.chip} ${l.published ? styles.chipLive : ''}`}>{l.published ? 'Live' : 'Draft'}</span>
+                                                {!l.hasAnalysis && <span className={`${dash.chip} ${dash.chipBad}`}>No analysis</span>}
+                                                <span className={styles.views}>{fmt(l.viewCount)} views</span>
+                                            </span>
+                                        </button>
+                                    </li>
+                                ))}
+                                {!visible.length && <p className={dash.empty}>No songs match.</p>}
+                            </ul>
+                        )}
+                    </aside>
+
+                    <section className={styles.editor}>
+                        {!selectedId ? (
+                            <div className={`${dash.card} ${styles.placeholder}`}>
+                                <h2>Pick a song to edit</h2>
+                                <p>Or add a new one. A song goes live in three steps: save the lyrics, generate the analysis, then publish.</p>
+                                <button type="button" className={dash.pressButton} onClick={() => open('new')}>+ Add a song</button>
+                            </div>
+                        ) : (
+                            <>
+                                <button type="button" className={styles.mobileBack} onClick={() => open(null)}>← All songs</button>
+
+                                <form className={dash.card} onSubmit={(e) => { e.preventDefault(); save(); }}>
+                                    <header className={dash.cardHead}>
+                                        <div>
+                                            <h2>{isNew ? 'New song' : form.title || 'Untitled'}</h2>
+                                            <p>
+                                                {isNew ? 'Saved as a draft. You can publish after the analysis is ready.' : (
+                                                    <>
+                                                        {selected?.published ? 'Live on the lyrics page' : 'Draft, hidden from learners'}
+                                                        {selected?.dateCreated && ` · added ${timeAgo(selected.dateCreated)}`}
+                                                        {selected && ` · ${fmt(selected.viewCount)} views`}
+                                                    </>
+                                                )}
+                                            </p>
+                                        </div>
+                                        {dirty && <span className={`${dash.chip} ${styles.unsaved}`}>Unsaved changes</span>}
+                                    </header>
+
+                                    <Steps isNew={isNew} selected={selected} />
+
+                                    <div className={styles.fields}>
+                                        <label className={`${dash.field} ${styles.wide}`}>
+                                            <span>Title</span>
+                                            <input className={dash.input} value={form.title} onChange={(e) => set('title', e.target.value)} required />
+                                        </label>
+                                        <label className={dash.field}>
+                                            <span>Artist</span>
+                                            <input className={dash.input} value={form.artist} onChange={(e) => set('artist', e.target.value)} />
+                                        </label>
+                                        <label className={dash.field}>
+                                            <span>Anime (optional)</span>
+                                            <input className={dash.input} value={form.anime} onChange={(e) => set('anime', e.target.value)} />
+                                        </label>
+                                        <div className={dash.field}>
+                                            <span>Genre</span>
+                                            <div className={dash.segmented} role="group" aria-label="Genre">
+                                                {GENRES.map(([key, label]) => (
+                                                    <button key={key} type="button" aria-pressed={form.genre === key}
+                                                        className={form.genre === key ? dash.segOn : ''} onClick={() => set('genre', key)}>{label}</button>
                                                 ))}
                                             </div>
-                                            {analysisLog.some(log => log && log.type === 'progress') && (
-                                                <div className={adminLyricsStyles.progressBar}>
-                                                    <div 
-                                                        className={adminLyricsStyles.progressFill}
-                                                        style={{ 
-                                                            width: `${Math.max(0, Math.min(100, analysisLog.find(log => log && log.type === 'progress')?.progress || 0))}%` 
-                                                        }}
-                                                    />
-                                                </div>
-                                            )}
                                         </div>
-                                    ) : selectedLyric?.hasAnalysis ? (
-                                        <div className={adminLyricsStyles.analysisActions}>
-                                            <Link
-                                                href={`/lyrics/${selectedLyric.lyricId}`}>
-                                                <IcSharpPreview /> Preview Analysis
-                                            </Link>
-                                            <div 
-                                                className={adminLyricsStyles.deleteAnalysis}
-                                                onClick={handleDeleteAnalysis}
-                                                style={{ 
-                                                    backgroundColor: '#f44336',
-                                                    cursor: isDeleting ? 'not-allowed' : 'pointer',
-                                                    opacity: isDeleting ? 0.7 : 1
-                                                }}
-                                            >
-                                                <MaterialSymbolsDelete /> Delete Analysis
+                                        <div className={dash.field}>
+                                            <span>Language</span>
+                                            <div className={dash.segmented} role="group" aria-label="Language">
+                                                {LANGUAGES.map(([key, label]) => (
+                                                    <button key={key} type="button" aria-pressed={form.language === key}
+                                                        className={form.language === key ? dash.segOn : ''} onClick={() => set('language', key)}>{label}</button>
+                                                ))}
                                             </div>
                                         </div>
-                                    ) : (
-                                        <div 
-                                            className={adminLyricsStyles.generateAnalysisButton}
-                                            onClick={handleGenerateAnalysis}
-                                        >
-                                            Generate Analysis
-                                        </div>
-                                    )
-                                }
-                            </div>
-                        </form>
-                    </>
-                ) : (
-                    <div className={adminLyricsStyles.loading}>
-                        Select a song to edit or click "Add New Song" to create one
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
+                                        <label className={`${dash.field} ${styles.wide}`}>
+                                            <span>YouTube video (paste the link or the id)</span>
+                                            <div className={styles.videoRow}>
+                                                <input className={dash.input} value={form.youtubeUrl} placeholder="https://www.youtube.com/watch?v=…"
+                                                    onChange={(e) => set('youtubeUrl', e.target.value)}
+                                                    onBlur={(e) => set('youtubeUrl', youtubeId(e.target.value))} />
+                                                {/^[\w-]{11}$/.test(videoId) && (
+                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                    <img key={videoId} src={`https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`} alt="" className={styles.thumb}
+                                                        onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                                )}
+                                            </div>
+                                        </label>
+                                        <label className={`${dash.field} ${styles.wide}`}>
+                                            <span>Lyrics, one line per line of the song <em className={styles.lineCount}>{fmt(lines)} lines</em></span>
+                                            <textarea className={`${dash.input} ${styles.lyricsBox}`} value={form.lyricsText}
+                                                onChange={(e) => set('lyricsText', e.target.value)} lang={form.language} required />
+                                        </label>
+                                    </div>
 
-export default AdminLyrics;
+                                    {notice && <p className={`${styles.notice} ${notice.kind === 'bad' ? styles.noticeBad : ''}`} role="status">{notice.text}</p>}
+
+                                    <footer className={styles.actions}>
+                                        <button type="submit" className={dash.pressButton} disabled={saving || (!dirty && !isNew)}>
+                                            {saving ? 'Saving…' : isNew ? 'Save song' : 'Save changes'}
+                                        </button>
+                                        {!isNew && selected && (
+                                            <button type="button" className={dash.ghostButton} disabled={saving || dirty}
+                                                title={dirty ? 'Save your changes first' : undefined}
+                                                onClick={() => save({ published: !selected.published })}>
+                                                {selected.published ? 'Unpublish' : 'Publish'}
+                                            </button>
+                                        )}
+                                        {!isNew && selected?.lyricId && (
+                                            <Link href={`/lyrics/${selected.lyricId}`} target="_blank" className={dash.ghostButton}>Preview ↗</Link>
+                                        )}
+                                        {!isNew && <button type="button" className={`${dash.ghostButton} ${styles.danger}`} onClick={remove}>Delete song</button>}
+                                    </footer>
+                                </form>
+
+                                {!isNew && selected && (
+                                    <section className={dash.card}>
+                                        <header className={dash.cardHead}>
+                                            <div>
+                                                <h2>Line-by-line analysis</h2>
+                                                <p>{selected.hasAnalysis
+                                                    ? 'Ready. Learners can tap any line to see its breakdown.'
+                                                    : 'Not generated yet. This analyzes every line of the lyrics with the same model as sentence analysis.'}</p>
+                                            </div>
+                                            <span className={`${dash.chip} ${selected.hasAnalysis ? styles.chipLive : dash.chipBad}`}>{selected.hasAnalysis ? 'Ready' : 'Missing'}</span>
+                                        </header>
+
+                                        {(analysis.running || analysis.log.length > 0) && (
+                                            <div className={styles.progressBox}>
+                                                {analysis.progress !== null && (
+                                                    <div className={dash.barTrack} aria-label={`${Math.round(analysis.progress)}% done`}>
+                                                        <i style={{ width: `${analysis.progress}%`, background: 'var(--bp-pink)' }} />
+                                                    </div>
+                                                )}
+                                                <ol ref={logRef} className={styles.log}>
+                                                    {analysis.log.map((entry, i) => (
+                                                        <li key={i} className={styles[`log_${entry.type}`]}>
+                                                            <time>{entry.at.toLocaleTimeString()}</time>
+                                                            <span>{entry.message}</span>
+                                                        </li>
+                                                    ))}
+                                                </ol>
+                                            </div>
+                                        )}
+
+                                        <div className={styles.actions}>
+                                            {!selected.hasAnalysis && (
+                                                <button type="button" className={styles.pinkButton} onClick={generate} disabled={analysis.running || dirty}
+                                                    title={dirty ? 'Save your changes first' : undefined}>
+                                                    {analysis.running ? 'Analyzing…' : 'Generate analysis'}
+                                                </button>
+                                            )}
+                                            {selected.hasAnalysis && (
+                                                <>
+                                                    <Link href={`/lyrics/${selected.lyricId}`} target="_blank" className={dash.ghostButton}>Open the song page ↗</Link>
+                                                    <button type="button" className={`${dash.ghostButton} ${styles.danger}`} onClick={deleteAnalysis} disabled={deletingAnalysis}>
+                                                        {deletingAnalysis ? 'Deleting…' : 'Delete analysis'}
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                        {selected.hasAnalysis && (
+                                            <p className={dash.cardNote}>Changed the lyrics? Delete the analysis and generate it again so the lines match.</p>
+                                        )}
+                                    </section>
+                                )}
+                            </>
+                        )}
+                    </section>
+                </div>
+            </div>
+        </Dashboard>
+    );
+}
+
+function Steps({ isNew, selected }) {
+    const steps = [
+        { label: 'Lyrics saved', done: !isNew },
+        { label: 'Analysis ready', done: !!selected?.hasAnalysis },
+        { label: 'Published', done: !!selected?.published },
+    ];
+    return (
+        <ol className={styles.steps}>
+            {steps.map((step, i) => (
+                <li key={step.label} className={step.done ? styles.stepDone : ''}>
+                    <span aria-hidden="true">{step.done ? '✓' : i + 1}</span>
+                    {step.label}
+                </li>
+            ))}
+        </ol>
+    );
+}

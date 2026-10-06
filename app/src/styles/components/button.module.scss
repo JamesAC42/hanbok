@@ -1,61 +1,18 @@
+@import "../variables.module.scss";
+
 .button {
-  font-family: var(--font-display);
-  padding: var(--spacing-small) var(--spacing-medium);
-  border: none;
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-variation-settings: 'wght' 600;
-  position: relative;
-  transform: translate(0, 0);
-
-  &.primary {
-    border: 1px solid var(--foreground-light);
-    color: var(--foreground);
-    background: var(--background);
-    box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-    &:hover {
-      transform: translate(-0.125rem, -0.125rem);
-      box-shadow: 0.375rem 0.375rem 0 var(--foreground-light);
-    }
-
-    &:active {
-      transform: translate(0.125rem, 0.125rem);
-      box-shadow: 0.125rem 0.125rem 0 var(--foreground-light);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
-    }
-  }
+  @include bp-press(var(--bp-read), var(--bp-read-d));
+  padding:.65rem 1.2rem;
+  font-size:.86rem;
 
   &.secondary {
-    border: 1px solid var(--foreground-light);
-    color: var(--foreground);
-    background: var(--background);
-    box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-    &:hover {
-      transform: translate(-0.125rem, -0.125rem);
-      box-shadow: 0.375rem 0.375rem 0 var(--foreground-light);
-    }
-
-    &:active {
-      transform: translate(0.125rem, 0.125rem);
-      box-shadow: 0.125rem 0.125rem 0 var(--foreground-light);
-    }
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: 0.25rem 0.25rem 0 var(--foreground-light);
-    }
+    @include bp-press-ghost(var(--bp-read));
+    padding:.6rem 1.1rem;
+    font-size:.86rem;
   }
-} 
+
+  &.understand { @include bp-press(var(--bp-und), var(--bp-und-d)); }
+  &.keep { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink)); }
+  &.review { @include bp-press(var(--bp-rev), var(--bp-rev-d)); }
+  &.danger { @include bp-press(var(--bp-rev), var(--bp-rev-d)); }
+}

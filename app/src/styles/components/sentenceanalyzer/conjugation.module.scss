@@ -1,115 +1,123 @@
 @import '@/styles/variables.module.scss';
 
+// How a word is built: tags, then numbered steps down to the final form.
 .conjugation {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-light);
+    // Teal text that stays readable on both light and dark themes.
+    --und-ink: color-mix(in srgb, var(--bp-und-d) 70%, var(--foreground));
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed var(--bp-line);
+    font-family: var(--font-display);
+    color: var(--foreground);
 
     .tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1.5rem;
+        gap: .4rem;
+        margin-bottom: 1.25rem;
 
         .tag {
-            background: var(--primary);
-            color: var(--background);
-            padding: 0.2rem 0.8rem;
-            padding-bottom:0.4rem;
-            border-radius: 1rem;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: capitalize;
+            display: inline-flex;
+            align-items: center;
+            padding: .3rem .7rem;
+            border-radius: 99px;
+            background: var(--bp-und-soft);
+            color: var(--und-ink);
+            font-size: .72rem;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
         }
     }
 
     .formulaContainer {
         .header {
-            color: var(--foreground);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
+            @include bp-label;
+            margin-bottom: .75rem;
         }
 
         .stepsList {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
+            align-items: stretch;
+            gap: .25rem;
         }
 
         .stepItem {
-            width: 100%;
-            background: var(--background-alt);
-            color: var(--foreground);
-            border-radius: 0.8rem;
-            padding: 1rem;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            border: 1px solid var(--border-light);
-
-            &.finalResult {
-                background: var(--primary);
-                border-color: var(--primary);
-
-                color: var(--background);
-
-                .stepText {
-                    color: var(--background);
-                    font-weight: 800;
-                    font-size: 1.5rem;
-                }
-
-                .stepExplanation {
-                    color: var(--background-alt);
-                }
-            }
+            align-items: flex-start;
+            gap: .25rem;
+            padding: .7rem .9rem;
+            border: 2px solid var(--bp-line);
+            border-radius: 14px;
+            background: var(--bp-soft);
+            color: var(--foreground);
+            text-align: left;
 
             .stepContent {
                 display: flex;
                 align-items: center;
-                gap: 0.5rem;
-                margin-bottom: 0.5rem;
+                gap: .6rem;
             }
 
             .stepNumber {
-                background: var(--foreground-light);
-                color: var(--background);
-                width: 1.5rem;
-                height: 1.5rem;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 0.8rem;
-                font-weight: bold;
-                transform:translateY(0.1rem);
-
-                .stepNumberText {
-                    transform:translateY(-2px);
-                }
+                flex: none;
+                display: grid;
+                place-items: center;
+                width: 1.6rem;
+                height: 1.6rem;
+                border-radius: 8px;
+                background: var(--bp-und);
+                color: #fff;
+                font-size: .8rem;
+                font-weight: 800;
+                box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .14);
             }
 
             .stepText {
-                font-size: 1.2rem;
-                font-weight: 600;
+                font-family: var(--font-kr-sans), var(--font-display);
+                font-size: 1.12rem;
+                font-weight: 700;
+                line-height: 1.35;
                 color: var(--foreground);
             }
 
             .stepExplanation {
-                font-size: 0.9rem;
-                font-style: italic;
-                color: var(--foreground);
+                font-size: .9rem;
+                font-weight: 600;
+                line-height: 1.45;
+                color: var(--bp-ink2);
+            }
+
+            &.finalResult {
+                align-items: center;
+                text-align: center;
+                padding: .9rem 1rem;
+                border-color: var(--bp-und-line);
+                background: var(--bp-und-soft);
+                box-shadow: 0 3px 0 var(--bp-und-line);
+
+                .stepText {
+                    font-size: 1.6rem;
+                    font-weight: 800;
+                    color: var(--und-ink);
+                }
+
+                .stepExplanation {
+                    @include bp-label;
+                    color: var(--und-ink);
+                }
             }
         }
 
         .arrow {
-            margin-top:0.5rem;
-            color: var(--foreground-light);
-            font-size: 1.2rem;
-            font-weight: bold;
+            align-self: center;
+            color: var(--bp-line-strong);
+            font-size: 1.1rem;
+            font-weight: 800;
+            line-height: 1;
+            margin: .1rem 0;
         }
     }
 }

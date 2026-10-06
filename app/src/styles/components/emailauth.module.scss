@@ -17,43 +17,77 @@
 
     label {
       font-family: var(--font-display);
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: #374151;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--bp-ink2);
       margin-bottom: 0.25rem;
     }
 
     input,
     select {
-      padding: 0.875rem 1rem;
-      border: 0.125rem solid #d1d5db;
-      border-radius: 0.5rem;
+      padding: 0.85rem 1rem;
+      border: 2px solid var(--bp-line);
+      border-radius: 14px;
       font-family: var(--font-display);
-      font-size: 1rem;
-      color: #1f2937;
-      background: #fff;
-      transition: all 0.2s ease;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--foreground);
+      background: var(--bp-card);
+      transition: border-color 0.12s ease, box-shadow 0.12s ease;
 
       &:focus {
         outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 0.1875rem rgba(59, 130, 246, 0.1);
+        border-color: var(--bp-read);
+        box-shadow: 0 3px 0 color-mix(in srgb, var(--bp-read) 35%, var(--bp-card));
       }
 
       &:disabled {
-        background: #f9fafb;
-        color: #6b7280;
+        background: var(--bp-soft);
+        color: var(--bp-ink2);
         cursor: not-allowed;
       }
 
       &::placeholder {
-        color: #9ca3af;
+        color: var(--bp-ink2);
+        opacity: .75;
       }
 
       @media screen and (max-width: 768px) {
-        padding: 0.75rem;
-        font-size: 0.9rem;
+        padding: 0.75rem 0.9rem;
+        // 16px keeps phones from zooming into the field.
+        font-size: 1rem;
       }
+    }
+
+    // Sign-up "heard from" dropdown: same field look with a drawn chevron.
+    select {
+      appearance: none;
+      -webkit-appearance: none;
+      cursor: pointer;
+      padding-right: 2.75rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%235f6480' stroke-width='3' stroke-linecap='round' stroke-linejoin='round' d='M6 9.5l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      background-size: 1.1rem;
+      box-shadow: 0 3px 0 var(--bp-line);
+
+      &:focus {
+        box-shadow: 0 3px 0 color-mix(in srgb, var(--bp-read) 35%, var(--bp-card));
+      }
+
+      &:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--bp-read) 40%, transparent);
+        outline-offset: 2px;
+      }
+    }
+
+    .optional {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: none;
+      color: var(--bp-ink2);
     }
 
     .forgotPassword {
@@ -61,7 +95,7 @@
       text-align: right;
 
       a {
-        color: #3b82f6;
+        color: var(--bp-read);
         text-decoration: none;
         font-family: var(--font-display);
         font-size: 0.875rem;
@@ -69,7 +103,7 @@
         transition: all 0.2s ease;
 
         &:hover {
-          color: #2563eb;
+          color: var(--bp-read-d);
           text-decoration: underline;
         }
 
@@ -81,121 +115,107 @@
   }
 
   .submitButton {
+    @include bp-press(var(--bp-read), var(--bp-read-d), var(--bp-card));
+    width: 100%;
     padding: 1rem 1.5rem;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .error {
+    padding: 0.8rem 1rem;
+    background: color-mix(in srgb, var(--bp-rev) 9%, var(--bp-card));
+    border: 2px solid color-mix(in srgb, var(--bp-rev) 40%, var(--bp-card));
+    border-radius: 14px;
+    color: var(--bp-rev-d);
     font-family: var(--font-display);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 0.25rem 0.5rem rgba(59, 130, 246, 0.3);
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1.45;
 
-    &:hover:not(:disabled) {
-      transform: translateY(-0.0625rem);
-      box-shadow: 0 0.375rem 0.75rem rgba(59, 130, 246, 0.4);
-    }
-
-    &:active:not(:disabled) {
-      transform: translateY(0);
-      box-shadow: 0 0.125rem 0.25rem rgba(59, 130, 246, 0.3);
-    }
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: 0 0.25rem 0.5rem rgba(59, 130, 246, 0.2);
+    &.info {
+      background: color-mix(in srgb, var(--bp-read) 9%, var(--bp-card));
+      border-color: color-mix(in srgb, var(--bp-read) 35%, var(--bp-card));
+      color: var(--bp-read-d);
     }
 
     @media screen and (max-width: 768px) {
-      padding: 0.875rem 1.25rem;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.88rem;
+    }
+  }
+
+  // Sign-up done: "check your email" box.
+  .success {
+    padding: 0.9rem 1rem;
+    background: color-mix(in srgb, var(--bp-und) 10%, var(--bp-card));
+    border: 2px solid color-mix(in srgb, var(--bp-und) 42%, var(--bp-card));
+    border-radius: 14px;
+    color: var(--bp-und-d);
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.45;
+
+    @media screen and (max-width: 768px) {
+      padding: 0.8rem 0.9rem;
       font-size: 0.9rem;
     }
   }
 
-  .error {
-    padding: 0.75rem 1rem;
-    background: rgba(239, 68, 68, 0.1);
-    border: 0.0625rem solid rgba(239, 68, 68, 0.2);
-    border-radius: 0.5rem;
-    color: #dc2626;
-    font-family: var(--font-display);
-    font-size: 0.875rem;
-    line-height: 1.4;
-
-    &.info {
-      background: rgba(59, 130, 246, 0.1);
-      border-color: rgba(59, 130, 246, 0.2);
-      color: #2563eb;
-    }
-
-    @media screen and (max-width: 768px) {
-      padding: 0.625rem 0.875rem;
-      font-size: 0.8rem;
-    }
-  }
-
-  .success {
-    padding: 0.75rem 1rem;
-    background: rgba(34, 197, 94, 0.1);
-    border: 0.0625rem solid rgba(34, 197, 94, 0.2);
-    border-radius: 0.5rem;
-    color: #16a34a;
-    font-family: var(--font-display);
-    font-size: 0.875rem;
-    line-height: 1.4;
-
-    @media screen and (max-width: 768px) {
-      padding: 0.625rem 0.875rem;
-      font-size: 0.8rem;
-    }
-  }
-
   .resendContainer {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 0.0625rem solid #e5e7eb;
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 2px dashed color-mix(in srgb, var(--bp-und) 30%, var(--bp-card));
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
     align-items: center;
 
     p {
       margin: 0;
       font-family: var(--font-display);
-      font-size: 0.875rem;
-      color: #6b7280;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--bp-ink2);
     }
 
     .resendButton {
-      padding: 0.5rem 1rem;
-      background: transparent;
-      color: #3b82f6;
-      border: 0.0625rem solid #3b82f6;
-      border-radius: 0.375rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      padding: 0.6rem 1.1rem;
+      background: var(--bp-card);
+      color: var(--bp-read);
+      border: 2px solid var(--bp-line);
+      border-radius: 14px;
+      box-shadow: 0 3px 0 var(--bp-line);
       font-family: var(--font-display);
-      font-size: 0.875rem;
-      font-weight: 500;
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.15s ease;
 
       &:hover:not(:disabled) {
-        background: #3b82f6;
-        color: white;
+        background: var(--bp-soft);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(3px);
+        box-shadow: 0 0 0 var(--bp-line);
+      }
+
+      &:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--bp-read) 40%, transparent);
+        outline-offset: 2px;
       }
 
       &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
       }
-
-      @media screen and (max-width: 768px) {
-        padding: 0.4375rem 0.875rem;
-        font-size: 0.8rem;
-      }
     }
   }
-} 
+}

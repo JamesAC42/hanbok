@@ -1,6 +1,4 @@
 'use client';
-import Image from 'next/image';
-import styles from '@/styles/components/pagelayout.module.scss';
 import pricingStyles from '@/styles/components/pricing.module.scss';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
@@ -8,7 +6,13 @@ import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { track } from '@/lib/analytics';
 import ContentPage from '@/components/ContentPage';
+import Dashboard from '@/components/Dashboard';
+import Mascot from '@/components/Mascot';
 import Footer from '@/components/Footer';
+
+// Signed-in readers get the app shell; visitors keep the public site header.
+// While auth is still loading, render a plain surface so neither shell flashes.
+const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
 
 //real
 const PRICE_IDS = {
@@ -78,7 +82,9 @@ const FAQ_ITEMS = [
 ];
 
 const Pricing = () => {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
+    const isPublic = !authLoading && !user;
+    const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [isYearly, setIsYearly] = useState(false);
@@ -156,40 +162,65 @@ const Pricing = () => {
         ));
     };
 
+    const renderPlanPrice = (plan) => {
+        const amount = isYearly ? PRICING[plan].yearly : PRICING[plan].monthly;
+        const info = getPriceInfo(plan);
+        return (
+            <>
+                <div className={pricingStyles.planPrice}>
+                    <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
+                    <span className={pricingStyles.amount}>{amount}</span>
+                    <span className={pricingStyles.period}>{isYearly ? '/year' : '/month'}</span>
+                </div>
+                {isYearly && info && (
+                    <p className={pricingStyles.priceNote}>
+                        {`${t('pricing.badges.save')} ${t('pricing.pricing.currency')}${info.savings}`}
+                    </p>
+                )}
+            </>
+        );
+    };
+
     return (
-        <ContentPage>
-            <div className={pricingStyles.pricingPage}>
+        <Shell>
+            <div className={`${pricingStyles.pricingPage} ${isPublic ? pricingStyles.publicPage : ''}`}>
+
                 {/* Hero Section */}
                 <div className={pricingStyles.pricingHero}>
-                    <h1 className={pricingStyles.heroTitle}>{t('pricing.title')}</h1>
-                    <p className={pricingStyles.heroSubtitle}>{t('pricing.subtitle')}</p>
+                    <Mascot pose="hero" size={120} motion="bob" className={pricingStyles.heroMascot} />
+                    <div className={pricingStyles.heroText}>
+                        <h1 className={pricingStyles.heroTitle}>{t('pricing.title')}</h1>
+                        <p className={pricingStyles.heroSubtitle}>{t('pricing.subtitle')}</p>
+                    </div>
                 </div>
 
                 {/* Billing Toggle */}
                 <div className={pricingStyles.billingToggle}>
-                    <div className={pricingStyles.toggleContainer}>
-                        <span className={`${pricingStyles.toggleLabel} ${!isYearly ? pricingStyles.active : ''}`}>
-                            {t('pricing.billing.monthly')}
-                        </span>
-                        <div 
-                            className={pricingStyles.toggleSwitch} 
-                            onClick={() => setIsYearly(!isYearly)}
+                    <div className={pricingStyles.toggleContainer} role="group" aria-label="Billing period">
+                        <button
+                            type="button"
+                            className={`${pricingStyles.toggleOption} ${!isYearly ? pricingStyles.active : ''}`}
+                            aria-pressed={!isYearly}
+                            onClick={() => setIsYearly(false)}
                         >
-                            <div className={`${pricingStyles.toggleSlider} ${isYearly ? pricingStyles.yearly : ''}`}>
-                                <div className={pricingStyles.toggleButton}></div>
-                            </div>
-                        </div>
-                        <span className={`${pricingStyles.toggleLabel} ${isYearly ? pricingStyles.active : ''}`}>
+                            {t('pricing.billing.monthly')}
+                        </button>
+                        <button
+                            type="button"
+                            className={`${pricingStyles.toggleOption} ${isYearly ? pricingStyles.active : ''}`}
+                            aria-pressed={isYearly}
+                            onClick={() => setIsYearly(true)}
+                        >
                             {t('pricing.billing.yearly')}
                             <span className={pricingStyles.saveBadge}>{t('pricing.billing.saveUp')}</span>
-                        </span>
+                        </button>
                     </div>
                 </div>
 
                 {/* Main Subscription Plans */}
                 <section id="pricing-plans" className={pricingStyles.mainPlansSection}>
                     <div className={pricingStyles.mainPlansContainer}>
-                        
+
                         {/* Free Plan (Anchor) */}
                         <div className={`${pricingStyles.planCard} ${pricingStyles.freePlan}`}>
                             <div className={pricingStyles.planHeader}>
@@ -197,7 +228,7 @@ const Pricing = () => {
                                 <div className={pricingStyles.planPrice}>
                                     <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
                                     <span className={pricingStyles.amount}>0</span>
-                                    <span className={pricingStyles.period}>/{t('pricing.billing.monthly')}</span>
+                                    <span className={pricingStyles.period}>/month</span>
                                 </div>
                             </div>
                             <ul className={pricingStyles.planFeatures}>
@@ -206,8 +237,8 @@ const Pricing = () => {
                                 <li>{t('pricing.features.free.limitations')}</li>
                                 <li>{t('pricing.features.free.support')}</li>
                             </ul>
-                            <button 
-                                className={`${pricingStyles.planButton} ${pricingStyles.freeButton}`} 
+                            <button
+                                className={`${pricingStyles.planButton} ${pricingStyles.freeButton}`}
                                 onClick={() => router.push('/analyze')} // Assuming Free plan just means using the app without sub
                             >
                                 {t('pricing.planButtons.stayFree')}
@@ -219,17 +250,9 @@ const Pricing = () => {
                             <div className={pricingStyles.popularBadge}>{t('pricing.badges.mostPopular')}</div>
                             <div className={pricingStyles.planHeader}>
                                 <h3 className={pricingStyles.planName}>
-                                    {t('pricing.plans.plus')} 👑
+                                    {t('pricing.plans.plus')} <span aria-hidden="true">👑</span>
                                 </h3>
-                                <div className={pricingStyles.planPrice}>
-                                    <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
-                                    <span className={pricingStyles.amount}>
-                                        {isYearly ? PRICING.plus.yearly : PRICING.plus.monthly}
-                                    </span>
-                                    <span className={pricingStyles.period}>
-                                        {isYearly ? '/year' : '/month'}
-                                    </span>
-                                </div>
+                                {renderPlanPrice('plus')}
                                 <p className={pricingStyles.subText}>{t('pricing.features.plus.subtext')}</p>
                             </div>
                             <ul className={pricingStyles.planFeatures}>
@@ -238,8 +261,8 @@ const Pricing = () => {
                                 <li>{t('pricing.features.plus.image')}</li>
                                 <li>{t('pricing.features.plus.support')}</li>
                             </ul>
-                            <button 
-                                className={`${pricingStyles.planButton} ${pricingStyles.plusButton}`} 
+                            <button
+                                className={`${pricingStyles.planButton} ${pricingStyles.plusButton}`}
                                 onClick={() => handlePurchase(getPriceId('plus'))}
                                 disabled={loading}
                             >
@@ -252,15 +275,7 @@ const Pricing = () => {
                         <div className={`${pricingStyles.planCard} ${pricingStyles.basicPlan}`}>
                             <div className={pricingStyles.planHeader}>
                                 <h3 className={pricingStyles.planName}>{t('pricing.plans.basic')}</h3>
-                                <div className={pricingStyles.planPrice}>
-                                    <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
-                                    <span className={pricingStyles.amount}>
-                                        {isYearly ? PRICING.basic.yearly : PRICING.basic.monthly}
-                                    </span>
-                                    <span className={pricingStyles.period}>
-                                        {isYearly ? '/year' : '/month'}
-                                    </span>
-                                </div>
+                                {renderPlanPrice('basic')}
                             </div>
                             <ul className={pricingStyles.planFeatures}>
                                 <li>{t('pricing.features.basic.analyses')}</li>
@@ -269,7 +284,7 @@ const Pricing = () => {
                                 <li>{t('pricing.features.basic.saves')}</li>
                                 <li>{t('pricing.features.basic.support')}</li>
                             </ul>
-                            <button 
+                            <button
                                 className={`${pricingStyles.planButton} ${pricingStyles.basicButton}`}
                                 onClick={() => handlePurchase(getPriceId('basic'))}
                                 disabled={loading}
@@ -282,20 +297,20 @@ const Pricing = () => {
 
                 {/* Why Upgrade Section */}
                 <section className={pricingStyles.whyUpgradeSection}>
-                    <h2 className={pricingStyles.whyUpgradeTitle}>{t('pricing.whyUpgrade.title')}</h2>
+                    <h2 className={pricingStyles.sectionTitle}>{t('pricing.whyUpgrade.title')}</h2>
                     <div className={pricingStyles.whyUpgradeGrid}>
-                        <div className={pricingStyles.whyUpgradeCard}>
-                            <div className={pricingStyles.whyUpgradeIcon}>🤖</div>
+                        <div className={`${pricingStyles.whyUpgradeCard} ${pricingStyles.tintRead}`}>
+                            <div className={pricingStyles.whyUpgradeIcon} aria-hidden="true">🤖</div>
                             <h3>{t('pricing.whyUpgrade.aiAnalysis.title')}</h3>
                             <p>{t('pricing.whyUpgrade.aiAnalysis.desc')}</p>
                         </div>
-                        <div className={pricingStyles.whyUpgradeCard}>
-                            <div className={pricingStyles.whyUpgradeIcon}>🔊</div>
+                        <div className={`${pricingStyles.whyUpgradeCard} ${pricingStyles.tintUnd}`}>
+                            <div className={pricingStyles.whyUpgradeIcon} aria-hidden="true">🔊</div>
                             <h3>{t('pricing.whyUpgrade.audio.title')}</h3>
                             <p>{t('pricing.whyUpgrade.audio.desc')}</p>
                         </div>
-                        <div className={pricingStyles.whyUpgradeCard}>
-                            <div className={pricingStyles.whyUpgradeIcon}>📷</div>
+                        <div className={`${pricingStyles.whyUpgradeCard} ${pricingStyles.tintKeep}`}>
+                            <div className={pricingStyles.whyUpgradeIcon} aria-hidden="true">📷</div>
                             <h3>{t('pricing.whyUpgrade.image.title')}</h3>
                             <p>{t('pricing.whyUpgrade.image.desc')}</p>
                         </div>
@@ -307,7 +322,7 @@ const Pricing = () => {
                     <div className={pricingStyles.reviewBubbles}>
                         {REVIEWS.map((review, index) => (
                             <div key={index} className={pricingStyles.reviewBubble}>
-                                <div className={pricingStyles.reviewStars}>
+                                <div className={pricingStyles.reviewStars} aria-label={`${review.rating} out of 5 stars`}>
                                     {renderStars(review.rating)}
                                 </div>
                                 <p className={pricingStyles.reviewText}>"{review.text}"</p>
@@ -319,16 +334,17 @@ const Pricing = () => {
 
                 {/* FAQ Section */}
                 <section className={pricingStyles.faqSection}>
-                    <h2 className={pricingStyles.faqTitle}>Frequently Asked Questions</h2>
+                    <h2 className={pricingStyles.sectionTitle}>Frequently Asked Questions</h2>
                     <div className={pricingStyles.faqContainer}>
                         {FAQ_ITEMS.map((item, index) => (
-                            <div key={index} className={pricingStyles.faqItem}>
-                                <button 
+                            <div key={index} className={`${pricingStyles.faqItem} ${openFaqIndex === index ? pricingStyles.open : ''}`}>
+                                <button
                                     className={`${pricingStyles.faqQuestion} ${openFaqIndex === index ? pricingStyles.active : ''}`}
                                     onClick={() => toggleFaq(index)}
+                                    aria-expanded={openFaqIndex === index}
                                 >
-                                    {item.question}
-                                    <span className={pricingStyles.faqToggle}>{openFaqIndex === index ? '−' : '+'}</span>
+                                    <span>{item.question}</span>
+                                    <span className={pricingStyles.faqToggle} aria-hidden="true">{openFaqIndex === index ? '−' : '+'}</span>
                                 </button>
                                 {openFaqIndex === index && (
                                     <div className={pricingStyles.faqAnswer}>
@@ -343,8 +359,9 @@ const Pricing = () => {
                 {/* Final CTA / Footer Replacement */}
                 <section className={pricingStyles.finalCtaSection}>
                     <div className={pricingStyles.finalCtaContent}>
+                        <Mascot pose="celebrate" size={96} className={pricingStyles.finalCtaMascot} />
                         <h2>{t('pricing.finalCta.title')}</h2>
-                        <button 
+                        <button
                             className={pricingStyles.finalCtaButton}
                             onClick={() => document.getElementById('pricing-plans').scrollIntoView({ behavior: 'smooth' })}
                         >
@@ -354,8 +371,8 @@ const Pricing = () => {
                 </section>
 
             </div>
-            <Footer />
-        </ContentPage>
+            {isPublic && <Footer />}
+        </Shell>
     );
 };
 

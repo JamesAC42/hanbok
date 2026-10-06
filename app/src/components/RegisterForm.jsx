@@ -4,7 +4,9 @@ import styles from '@/styles/components/emailauth.module.scss';
 import { track, getAttribution } from '@/lib/analytics';
 import HeardFromSelect from '@/components/HeardFromSelect';
 
-const RegisterForm = () => {
+// The login page shows the "how did you hear" question above both sign-up
+// options, so it can turn the form's own copy off.
+const RegisterForm = ({ showHeardFrom = true }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -146,6 +148,7 @@ const RegisterForm = () => {
                         type="text"
                         id="name"
                         name="name"
+                        autoComplete="username"
                         value={formData.name}
                         onChange={handleChange}
                         required
@@ -161,6 +164,7 @@ const RegisterForm = () => {
                         type="email"
                         id="email"
                         name="email"
+                        autoComplete="email"
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -175,6 +179,7 @@ const RegisterForm = () => {
                         type="password"
                         id="password"
                         name="password"
+                        autoComplete="new-password"
                         value={formData.password}
                         onChange={handleChange}
                         required
@@ -190,6 +195,7 @@ const RegisterForm = () => {
                         type="password"
                         id="confirmPassword"
                         name="confirmPassword"
+                        autoComplete="new-password"
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
@@ -198,16 +204,16 @@ const RegisterForm = () => {
                     />
                 </div>
 
-                <HeardFromSelect disabled={loading} />
+                {showHeardFrom && <HeardFromSelect disabled={loading} />}
 
                 {error && (
-                    <div className={styles.error}>
+                    <div className={styles.error} role="alert">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className={styles.success}>
+                    <div className={styles.success} role="status">
                         {success}
                         <div className={styles.resendContainer}>
                             <p>Didn't receive the email?</p>
