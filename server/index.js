@@ -102,6 +102,9 @@ const getEmailList = require('./controllers/admin/getEmailList');
 const getAdmins = require('./controllers/admin/getAdmins');
 const { getUsersAdmin } = require('./controllers/admin/getUsersAdmin');
 const { updateUser } = require('./controllers/admin/updateUser');
+const requireAdmin = require('./lib/requireAdmin');
+const adminStats = require('./controllers/admin/stats');
+const { getRevenue } = require('./controllers/admin/revenue');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -390,6 +393,13 @@ app.get('/api/admin/users', isAuthenticated, async (req, res) => {
 app.put('/api/admin/users/:userId', isAuthenticated, async (req, res) => {
     updateUser(req, res);
 });
+
+// Admin dashboard numbers
+app.get('/api/admin/stats/overview', isAuthenticated, requireAdmin, adminStats.getOverview);
+app.get('/api/admin/stats/engagement', isAuthenticated, requireAdmin, adminStats.getEngagement);
+app.get('/api/admin/stats/feed', isAuthenticated, requireAdmin, adminStats.getFeed);
+app.get('/api/admin/stats/revenue', isAuthenticated, requireAdmin, getRevenue);
+app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
 
 app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
     searchWordAudio(req, res);

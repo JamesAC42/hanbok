@@ -101,6 +101,16 @@ async function connectToDatabase() {
     // Add index for feature_usage collection
     await safeCreateIndex('feature_usage', { userId: 1, feature: 1 }, { unique: true });
 
+    // Date indexes for the admin dashboard's range queries
+    await safeCreateIndex('users', { dateCreated: -1 });
+    await safeCreateIndex('sentences', { dateCreated: -1 });
+    await safeCreateIndex('words', { dateSaved: -1 });
+    await safeCreateIndex('flashcards', { dateCreated: -1 });
+    await safeCreateIndex('conversations', { lastUpdated: -1 });
+    await safeCreateIndex('conversations', { dateCreated: -1 });
+    await safeCreateIndex('extended_texts', { dateCreated: -1 });
+    await safeCreateIndex('extended_text_jobs', { createdAt: -1 });
+
     // Add index for word_audio collection
     await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });
 
