@@ -3,7 +3,8 @@
 import * as particles from './korean-particles-eun-neun-vs-i-ga';
 import * as sentenceStructure from './korean-sentence-structure';
 import * as kdramaWords from './korean-words-from-kdramas';
+import * as speechLevels from './korean-speech-levels';
 
-export const articles = [particles, sentenceStructure, kdramaWords];
+export const articles = [particles, sentenceStructure, kdramaWords, speechLevels];
 
 export const getArticle = (slug) => articles.find((a) => a.meta.slug === slug) || null;
