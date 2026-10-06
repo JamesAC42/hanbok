@@ -105,3 +105,21 @@
     background: var(--bp-keep-soft);
   }
 }
+
+.allLabel {
+  font-size: .85rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+// "All languages" spans the whole first row of the flag grid.
+.allOption {
+  grid-column: 1 / -1;
+  width: auto;
+  height: 2.5rem;
+  padding: 0 .75rem;
+  font-family: var(--font-display);
+  font-size: .85rem;
+  font-weight: 800;
+  white-space: nowrap;
+}

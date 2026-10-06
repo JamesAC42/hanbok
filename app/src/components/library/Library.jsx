@@ -50,7 +50,9 @@ export default function Library({ initialTab = 'history' }) {
   const [loadingContent, setLoadingContent] = useState(true);
   const [error, setError] = useState(null);
   const { t, language, getIcon, supportedAnalysisLanguages } = useLanguage();
-  const [selectedLanguage, setSelectedLanguage] = useState(language);
+  // Every language by default; the analysis language is often not the one
+  // someone last studied, and filtering by it hid most of their history.
+  const [selectedLanguage, setSelectedLanguage] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [tab, setTab] = useState(TABS.some(x => x.key === initialTab) ? initialTab : 'history');
@@ -77,10 +79,10 @@ export default function Library({ initialTab = 'history' }) {
 
         let endpoint;
         if (tab === 'words') {
-          endpoint = `/api/words?page=${page}&limit=${limit}&originalLanguage=${selectedLanguage}`;
+          endpoint = `/api/words?page=${page}&limit=${limit}${selectedLanguage ? `&originalLanguage=${selectedLanguage}` : ''}`;
         } else {
           const typesParam = typeFilter === 'all' ? 'sentences,extended' : typeFilter === 'sentences' ? 'sentences' : 'extended';
-          endpoint = `${ENDPOINTS[tab]}?page=${page}&limit=${limit}&language=${selectedLanguage}&types=${typesParam}`;
+          endpoint = `${ENDPOINTS[tab]}?page=${page}&limit=${limit}${selectedLanguage ? `&language=${selectedLanguage}` : ''}&types=${typesParam}`;
         }
         const response = await fetch(endpoint);
         const data = await response.json();

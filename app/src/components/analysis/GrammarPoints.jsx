@@ -6,6 +6,15 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
 
+// Examples are one short sentence each. Now and then the model runs away and
+// writes hundreds of sentences into one field; drop those rather than let
+// them take over the page, and show at most a few.
+const MAX_EXAMPLE_CHARS = 200;
+const MAX_EXAMPLES = 4;
+const usableExamples = (examples) => (Array.isArray(examples) ? examples : [])
+    .filter(e => e && typeof e.original === 'string' && e.original.trim() && e.original.length <= MAX_EXAMPLE_CHARS)
+    .slice(0, MAX_EXAMPLES);
+
 const GrammarPoints = ({analysis, language, showPronunciation}) => {
     const { t } = useLanguage();
     
@@ -78,13 +87,13 @@ const GrammarPoints = ({analysis, language, showPronunciation}) => {
                         {lesson.explanation}
                     </div>
 
-                    {lesson.examples && (
+                    {usableExamples(lesson.examples).length > 0 && (
                         <div className={styles.grammarListItemExamples}>
                             <div className={styles.grammarListItemExamplesHeader}>
                                 {t('analysis.examples')}
                             </div>
                             <div className={styles.grammarListItemExamplesContent}>
-                                {lesson.examples.map((example, index) => (
+                                {usableExamples(lesson.examples).map((example, index) => (
                                     <div
                                         key={`${example.korean}-${index}`}
                                         className={styles.grammarListItemExample}
