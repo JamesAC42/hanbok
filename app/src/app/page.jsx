@@ -47,13 +47,14 @@ const FEATURES = [
     { key: 'hangeul', color: 'freeze', icon: '가', title: 'Start from zero', text: 'New to Korean? Learn Hangeul with short lessons, then practice typing it.', href: '/hangeul', cta: 'Learn Hangeul' },
 ];
 
+// Real reviews, as credited on the About page (Reddit handles where they came from Reddit).
 const QUOTES = [
-    { quote: 'I was amazed when I discovered this site. I have no words, really great site.', name: 'Mina' },
-    { quote: "Oh my god! It's exactly what I need!! I'm a highly visual person and the interface is so pretty.", name: 'Jordan' },
-    { quote: 'This is such an amazing website and by far the best translation tool I ever came across.', name: 'Taylor' },
-    { quote: "I use Hanbok nearly everyday and honestly I can't thank you enough!!!", name: 'Korean learner' },
-    { quote: 'This is such an insanely useful tool.', name: 'Alex' },
-    { quote: 'I loveeee this site!! The translations are super helpful!', name: 'Jamie' },
+    { quote: "Wow, this is incredible. I don't know how something like this even gets made. This will be my new go-to over AI LLMs for sure!", name: '/u/Kiolvor' },
+    { quote: "Oh my god! It's exactly what I need!! I'm a highly visual person and the interface is so pretty.", name: '/u/FuriaDC' },
+    { quote: 'I was amazed when I discovered this site. I have no words, really great site', name: 'Luigi Cozzolino' },
+    { quote: "I use your tool nearly everyday and honestly I can't thank you enough!!!", name: '/u/Alternative-Part-436' },
+    { quote: 'I use this tool for Chinese, it is very helpful to understand how sentences are built.', name: 'Sergio Hernández González' },
+    { quote: 'This is such an insanely useful tool. Especially that you can see the vocabulary listed at the end.', name: '/u/tatamigalaxy_' },
 ];
 
 const FAQ = [
@@ -97,6 +98,13 @@ export default async function Home() {
         .slice()
         .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
         .slice(0, 6);
+    // Only real numbers: an item whose count didn't load is left out.
+    const PROOF = [
+        { value: fmt(stats?.totalSentences), label: 'sentences broken down' },
+        { value: fmt(stats?.totalUsers), label: 'learners' },
+        { value: '14', label: 'languages' },
+        { value: lyricsRes?.lyrics?.length ? fmt(lyricsRes.lyrics.length) : null, label: 'songs broken down line by line' },
+    ];
 
     return (
         <ContentPage>
@@ -146,22 +154,12 @@ export default async function Home() {
 
                 {/* ---------- Proof ---------- */}
                 <section className={styles.proof} aria-label="Hanbok in numbers">
-                    <div className={styles.proofItem}>
-                        <strong>{fmt(stats?.totalSentences) || 'Thousands of'}</strong>
-                        <span>sentences broken down</span>
-                    </div>
-                    <div className={styles.proofItem}>
-                        <strong>{fmt(stats?.totalUsers) || 'Thousands of'}</strong>
-                        <span>learners</span>
-                    </div>
-                    <div className={styles.proofItem}>
-                        <strong>14</strong>
-                        <span>languages</span>
-                    </div>
-                    <div className={styles.proofItem}>
-                        <strong>★★★★★</strong>
-                        <span>from learners on Reddit</span>
-                    </div>
+                    {PROOF.filter((item) => item.value).map((item) => (
+                        <div key={item.label} className={styles.proofItem}>
+                            <strong>{item.value}</strong>
+                            <span>{item.label}</span>
+                        </div>
+                    ))}
                 </section>
 
                 {/* ---------- The loop ---------- */}
@@ -241,15 +239,14 @@ export default async function Home() {
                 <section className={`${styles.section} ${styles.sectionSoft}`}>
                     <header className={styles.sectionHead}>
                         <span className={styles.kicker}>From learners</span>
-                        <h2>People actually use it every day</h2>
+                        <h2>What learners say about Hanbok</h2>
                     </header>
                     <ul className={styles.quotes}>
                         {QUOTES.map((q) => (
                             <li key={q.name} className={styles.quote}>
-                                <span className={styles.stars} aria-label="5 out of 5 stars">★★★★★</span>
                                 <blockquote>{q.quote}</blockquote>
                                 <span className={styles.quoteName}>
-                                    <i aria-hidden="true">{q.name[0]}</i>{q.name}
+                                    <i aria-hidden="true">{q.name.replace('/u/', '')[0].toUpperCase()}</i>{q.name}
                                 </span>
                             </li>
                         ))}
@@ -310,7 +307,7 @@ export default async function Home() {
                         <Mascot pose="celebrate" size={150} label="" motion="bob" />
                         <Tiger pose="wave" size={150} label="" />
                     </div>
-                    <h2>Your first sentence takes ten seconds.</h2>
+                    <h2>Your first sentence is one paste away.</h2>
                     <p>No account, no credit card. Paste something you want to read and see what happens.</p>
                     <Link href="/analyze" className={styles.bigButton} data-cta="footer">Start reading for free</Link>
                 </section>

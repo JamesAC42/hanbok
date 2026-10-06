@@ -776,7 +776,7 @@
   background: var(--bp-card);
   border: 2px solid var(--bp-line);
   box-shadow: 0 4px 0 var(--bp-line);
-  blockquote { margin: .6rem 0 0; font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
+  blockquote { margin: 0; font-size: 1.05rem; font-weight: 700; line-height: 1.5; }
 }
 
 .stars { color: var(--bp-keep); letter-spacing: .1em; font-size: 1rem; }
