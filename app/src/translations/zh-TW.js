@@ -270,7 +270,7 @@ export const zhTW = {
         features: {
             free: {
                 analyses: '每週10個句子分析',
-                extendedText: '每週2次擴充套件文字分析（最多500字元）',
+                extendedText: '每週2次擴充套件文字分析（最多1,000字元）',
                 conversations: '每月5次免費對話',
                 messages: '每次對話5條訊息',
                 bookmarks: '最多收藏30個句子',
@@ -279,7 +279,7 @@ export const zhTW = {
             },
             basic: {
                 analyses: '無限制句子分析',
-                extendedText: '無限制擴充套件文字分析（最多2,000字元）',
+                extendedText: '無限制擴充套件文字分析（最多5,000字元）',
                 conversations: '每月50次對話',
                 messages: '每次對話15條訊息',
                 bookmarks: '無限收藏句子',
@@ -288,7 +288,7 @@ export const zhTW = {
             },
             plus: {
                 everythingInBasic: '包含基礎方案的所有內容',
-                extendedText: '無限制擴充套件文字分析（最多5,000字元）',
+                extendedText: '無限制擴充套件文字分析（最多20,000字元）',
                 imageExtraction: '無限制圖片文字提取',
                 audioGeneration: '無限制語音生成',
                 conversations: '每月200次對話',

@@ -1,14 +1,31 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Dashboard from '@/components/Dashboard';
-import TextInput from '@/components/TextInput';
 import Mascot from '@/components/Mascot';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import styles from '@/styles/pages/extendedtext.module.scss';
+import { characterLimitFor, countPassage, estimateSeconds } from '@/lib/extendedTextLimits';
+import { samplesFor } from '@/lib/readerSamples';
+import { readProgress } from '@/lib/readerProgress';
 import { track } from '@/lib/analytics';
+import getFontClass from '@/lib/fontClass';
+import styles from '@/styles/pages/extendedtext.module.scss';
+
+const BookIcon = () => (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 4h8a4 4 0 0 1 2 2v14a3 3 0 0 0-3-3H2z" /><path d="M22 4h-8a4 4 0 0 0-2 2v14a3 3 0 0 1 3-3h7z" /></svg>
+);
+const BulbIcon = () => (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18h6" /><path d="M10 22h4" /><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z" /></svg>
+);
+const BookmarkIcon = () => (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>
+);
+const CheckIcon = () => (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
+);
 
 export default function ExtendedTextPage() {
     const router = useRouter();
@@ -18,425 +35,273 @@ export default function ExtendedTextPage() {
         nativeLanguage,
         supportedLanguages,
         supportedAnalysisLanguages,
-        getIcon,
         t
     } = useLanguage();
 
     const [text, setText] = useState('');
     const [title, setTitle] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState(null);
-    const [showOnboarding, setShowOnboarding] = useState(false);
-    const [onboardingSlide, setOnboardingSlide] = useState(0);
-    const [demoVariant, setDemoVariant] = useState('desktop');
+    const [recent, setRecent] = useState([]);
 
-    const tierCharLimits = useMemo(() => ({
-        0: 500,
-        1: 2000,
-        2: 5000
-    }), []);
-
-    const userTier = user?.tier ?? 0;
-    const maxCharacters = tierCharLimits[userTier] ?? tierCharLimits[0];
-    const charactersUsed = text.length;
-    const characterProgress = Math.min((charactersUsed / maxCharacters) * 100, 100);
+    const tier = user?.tier ?? 0;
+    const maxCharacters = characterLimitFor(tier);
+    const trimmed = text.trim();
+    const counts = useMemo(() => countPassage(text), [text]);
+    const overLimit = trimmed.length > maxCharacters;
     const weeklyTotal = user?.weekExtendedTextTotal ?? null;
     const weeklyRemaining = user?.weekExtendedTextRemaining ?? null;
     const isUnlimited = weeklyTotal === null;
     const isOutOfQuota = !isUnlimited && weeklyRemaining !== null && weeklyRemaining <= 0;
-    const canSubmit = isAuthenticated && !isOutOfQuota;
-    const overCharLimit = charactersUsed > maxCharacters;
-    const resolveLanguageName = (code) => {
-        if (!code) return '';
+    const tooShort = trimmed.length > 0 && counts.sentences < 2;
+    const canSubmit = isAuthenticated && !isOutOfQuota && trimmed.length > 0 && !overLimit && !tooShort && !isSubmitting;
+    const samples = samplesFor(learningLanguage);
+    const fontClass = getFontClass(learningLanguage);
+
+    const languageName = (code) => {
         const key = supportedAnalysisLanguages[code] || supportedLanguages[code];
-        return key ? t(`languages.${key}`) : code.toUpperCase();
+        return key ? t(`languages.${key}`) : (code || '').toUpperCase();
     };
 
-    const analysisLanguageName = resolveLanguageName(learningLanguage);
-    const translationLanguageName = resolveLanguageName(nativeLanguage);
-
-    const onboardingSlides = useMemo(() => ([
-        {
-            title: 'Decode longer passages with ease',
-            description: 'Upload multi-sentence excerpts to see grammar, vocabulary, tone, and structure all in one place.',
-            bullets: ['Instant sentence-by-sentence breakdowns', 'Automatic translations and summaries', 'Great for essays, textbook passages, and lyrics']
-        },
-        {
-            title: 'Plan-friendly weekly allowances',
-            description: 'Every plan unlocks different extended-analysis perks so you can level up at your own pace.',
-            bullets: ['Free: 2 extended analyses per week, 500-character excerpts', 'Basic: Unlimited analyses, 2,000-character excerpts', 'Plus: Unlimited analyses, 5,000-character excerpts']
-        },
-        {
-            title: 'Upgrade to go unlimited',
-            description: 'Basic and Plus members enjoy unlimited extended texts, priority features, and more study power.',
-            bullets: ['Unlock longer passages', 'Never worry about weekly limits', 'Support Hanbok’s continuing development'],
-            cta: 'View plans'
-        }
-    ]), []);
+    const planName = tier === 2 ? 'Plus' : tier === 1 ? 'Basic' : t('reader.plan_free');
 
     useEffect(() => {
-        if (loading) return;
+        if (!isAuthenticated) return;
+        let cancelled = false;
+        fetch('/api/user/history?types=extended&limit=3', { credentials: 'include' })
+            .then((response) => response.json())
+            .then((data) => {
+                if (!cancelled && data.success) setRecent(data.items || []);
+            })
+            .catch(() => {});
+        return () => { cancelled = true; };
+    }, [isAuthenticated]);
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         if (!isAuthenticated) {
-            setOnboardingSlide(0);
-            setShowOnboarding(true);
+            router.push('/login');
             return;
         }
+        if (!canSubmit) return;
 
-        try {
-            const hasSeen = window.localStorage.getItem('extendedTextOnboardingSeen');
-            if (!hasSeen) {
-                setOnboardingSlide(0);
-                setShowOnboarding(true);
-            }
-        } catch (err) {
-            console.warn('Unable to read onboarding state:', err);
-        }
-    }, [isAuthenticated, loading]);
-
-    useEffect(() => {
-        const updateVariant = () => {
-            if (typeof window === 'undefined') return;
-            const { innerWidth, innerHeight } = window;
-            if (!innerWidth || !innerHeight) return;
-            const aspectRatio = innerWidth / innerHeight;
-            setDemoVariant(aspectRatio < 1 ? 'mobile' : 'desktop');
-        };
-
-        updateVariant();
-        window.addEventListener('resize', updateVariant);
-        return () => window.removeEventListener('resize', updateVariant);
-    }, []);
-
-    const closeOnboarding = () => {
-        try {
-            window.localStorage.setItem('extendedTextOnboardingSeen', '1');
-        } catch (err) {
-            console.warn('Unable to persist onboarding state:', err);
-        }
-        setShowOnboarding(false);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!isAuthenticated) {
-            setError(t('extended_text.login_required'));
-            return;
-        }
-
-        if (!text.trim()) {
-            setError(t('extended_text.text_required'));
-            return;
-        }
-
-        if (overCharLimit) {
-            setError(t('extended_text.char_limit_error', { limit: maxCharacters }));
-            return;
-        }
-
-        if (isOutOfQuota) {
-            setError(t('extended_text.limit_reached'));
-            return;
-        }
-
-        setIsLoading(true);
+        setIsSubmitting(true);
         setError(null);
-
         try {
             const response = await fetch('/api/extended-text/submit', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify({
-                    text: text.trim(),
+                    text: trimmed,
                     title: title.trim() || null,
                     originalLanguage: learningLanguage,
-                    translationLanguage: nativeLanguage,
-                }),
+                    translationLanguage: nativeLanguage
+                })
             });
-
             const data = await response.json();
-
             if (!response.ok || (data.message && !data.message.isValid)) {
                 setError(data.message?.error?.message || t('extended_text.analysis_failed'));
-                setIsLoading(false);
+                setIsSubmitting(false);
                 return;
             }
-
             track('paragraph_submit', { language: learningLanguage, sentences: data.sentenceCount });
-            const params = new URLSearchParams();
-            if (title.trim()) {
-                params.set('title', title.trim());
-            }
-            if (data.sentenceCount) {
-                params.set('count', data.sentenceCount);
-            }
-            if (data.textId) {
-                params.set('textId', data.textId);
-            }
-
-            const queryString = params.toString();
-            router.push(`/extended-text/progress/${data.jobId}${queryString ? `?${queryString}` : ''}`);
+            router.push(`/extended-text/${data.textId}?job=${data.jobId}`);
         } catch (err) {
             console.error('Error submitting text:', err);
             setError(t('extended_text.submission_error'));
-            setIsLoading(false);
+            setIsSubmitting(false);
         }
     };
+
+    const applySample = (sample) => {
+        setText(sample.text);
+        setTitle(sample.title);
+        setError(null);
+    };
+
+    const seconds = estimateSeconds(counts.sentences);
 
     return (
         <Dashboard>
             <div className={styles.page}>
-                <section className={styles.hero}>
-                    <Mascot pose="point" size={92} motion="bob" className={styles.heroMascot} />
+                <header className={styles.hero}>
+                    <Mascot pose="teach" size={96} motion="bob" className={styles.heroMascot} />
                     <div className={styles.heroCopy}>
-                        <div className={styles.newBadge}>New!</div>
-                        <h1>{t('extended_text.title')}</h1>
-                        <p className={styles.description}>
-                            {t('extended_text.description')}
-                        </p>
+                        <span className={styles.kicker}>{t('reader.kicker')}</span>
+                        <h1>{t('reader.paste_title')}</h1>
+                        <p>{t('reader.paste_description')}</p>
                     </div>
-                </section>
-
-                <div className={styles.languageControls}>
-                    <div className={styles.languageCard}>
-                        <span className={styles.languageLabel}>{t('extended_text.language_selector_label')}</span>
-                        <div className={styles.languageSwitcherWrap}>
-                            <LanguageSwitcher />
-                        </div>
-                    </div>
-                    <div className={styles.languageCard}>
-                        <span className={styles.languageLabel}>
-                            {t('extended_text.translation_language_label', { language: translationLanguageName })}
-                        </span>
-                        <div className={styles.translationValue}>
-                            <span className={styles.translationIcon}>{getIcon(nativeLanguage)}</span>
-                            <span>{translationLanguageName}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={styles.statsBar}>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>{t('extended_text.char_limit_label')}</span>
-                        <span className={styles.statValue}>{maxCharacters.toLocaleString()} {t('extended_text.characters')}</span>
-                    </div>
-                    <div className={styles.statItem}>
-                        <span className={styles.statLabel}>{t('extended_text.weekly_usage_label')}</span>
-                        <span className={styles.statValue}>
-                            {!isAuthenticated
-                                ? t('extended_text.weekly_usage_login')
-                                : isUnlimited
-                                    ? t('extended_text.weekly_usage_unlimited')
-                                    : `${Math.max(weeklyRemaining ?? 0, 0)} / ${weeklyTotal}`}
-                        </span>
-                    </div>
-                </div>
-
-                {!isAuthenticated && !loading && (
-                    <div className={styles.notice}>
-                        <p>{t('extended_text.login_gate_message')}</p>
-                    </div>
-                )}
-
-                {isOutOfQuota && (
-                    <div className={styles.noticeWarning}>
-                        <p>{t('extended_text.limit_reached')}</p>
-                    </div>
-                )}
-
-                {error && (
-                    <div className={styles.error}>
-                        {error}
-                    </div>
-                )}
+                </header>
 
                 <div className={styles.layout}>
-                    <form onSubmit={handleSubmit} className={styles.formCard}>
-                        <div className={styles.inputGroup}>
-                            <label htmlFor="title">
-                                {t('extended_text.title_label')}{' '}
-                                <span className={styles.optional}>({t('extended_text.optional')})</span>
-                            </label>
-                            <TextInput
-                                id="title"
-                                value={title}
-                                onChange={(e) => {
-                                    setTitle(e.target.value);
-                                    if (error) setError(null);
-                                }}
-                                placeholder={t('extended_text.title_placeholder')}
-                                maxLength={100}
-                                style={{ minWidth: 0, width: '100%' }}
-                            />
-                        </div>
-
-                        <div className={styles.inputGroup}>
-                            <label htmlFor="text">
-                                {t('extended_text.text_label')}
-                            </label>
-                            <textarea
-                                id="text"
-                                value={text}
-                                onChange={(e) => {
-                                    setText(e.target.value);
-                                    if (error) setError(null);
-                                }}
-                                placeholder={t('extended_text.text_placeholder')}
-                                className={styles.textarea}
-                                rows={15}
-                                maxLength={maxCharacters}
-                                required
-                            />
-                            <div className={styles.charInfo}>
-                                <span className={styles.charCount}>
-                                    {charactersUsed} / {maxCharacters}
-                                </span>
-                                <div
-                                    className={styles.charMeter}
-                                    role="progressbar"
-                                    aria-valuenow={charactersUsed}
-                                    aria-valuemin={0}
-                                    aria-valuemax={maxCharacters}
-                                >
-                                    <span style={{ width: `${characterProgress}%` }} />
+                    <div className={styles.main}>
+                        <form onSubmit={handleSubmit} className={styles.formCard}>
+                            <div className={styles.formTop}>
+                                <div className={styles.languages}>
+                                    <LanguageSwitcher />
+                                    <span className={styles.languageTo}>{t('reader.to')}</span>
+                                    <span className={styles.nativeLanguage}>{languageName(nativeLanguage)}</span>
                                 </div>
-                                {overCharLimit && (
-                                    <span className={styles.charWarning}>
-                                        {t('extended_text.char_limit_error', { limit: maxCharacters })}
+                                <label className={styles.titleField}>
+                                    <span>{t('reader.title_label')}</span>
+                                    <input
+                                        type="text"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        placeholder={t('reader.title_placeholder')}
+                                        maxLength={100}
+                                        className={fontClass}
+                                    />
+                                </label>
+                            </div>
+
+                            <label className={styles.textField}>
+                                <span className={styles.fieldLabel}>{t('reader.text_label')}</span>
+                                <textarea
+                                    value={text}
+                                    onChange={(e) => {
+                                        setText(e.target.value);
+                                        if (error) setError(null);
+                                    }}
+                                    placeholder={t('reader.text_placeholder')}
+                                    className={`${styles.textarea} ${fontClass}`}
+                                    rows={12}
+                                    lang={learningLanguage}
+                                />
+                            </label>
+
+                            <div className={styles.meter} aria-hidden="true">
+                                <span
+                                    className={overLimit ? styles.meterOver : ''}
+                                    style={{ width: `${Math.min((trimmed.length / maxCharacters) * 100, 100)}%` }}
+                                />
+                            </div>
+
+                            <div className={styles.formBottom}>
+                                <div className={styles.counts}>
+                                    {counts.paragraphs > 0 && (
+                                        <span className={styles.countPill}>{t('reader.paragraphs_count', { count: counts.paragraphs })}</span>
+                                    )}
+                                    {counts.sentences > 0 && (
+                                        <span className={styles.countPill}>{t('reader.sentences_count', { count: counts.sentences })}</span>
+                                    )}
+                                    <span className={`${styles.countPill} ${styles.countPlain} ${overLimit ? styles.countOver : ''}`}>
+                                        {trimmed.length.toLocaleString()} / {maxCharacters.toLocaleString()}
                                     </span>
-                                )}
+                                    {counts.sentences >= 2 && !overLimit && (
+                                        <span className={styles.estimate}>{t('reader.ready_in', { seconds })}</span>
+                                    )}
+                                </div>
+                                <button type="submit" className={styles.submit} disabled={isAuthenticated && !canSubmit}>
+                                    {!isAuthenticated
+                                        ? t('extended_text.login_cta')
+                                        : isSubmitting ? t('reader.starting') : t('reader.start_reading')}
+                                </button>
+                            </div>
+
+                            {overLimit && (
+                                <p className={styles.formNote} role="alert">
+                                    {t('reader.over_limit', { limit: maxCharacters.toLocaleString() })}{' '}
+                                    {tier < 2 && <Link href="/pricing">{t('reader.see_plans')}</Link>}
+                                </p>
+                            )}
+                            {tooShort && <p className={styles.formNote}>{t('reader.too_short')}</p>}
+                            {isOutOfQuota && (
+                                <p className={styles.formNote} role="alert">
+                                    {t('extended_text.limit_reached')} <Link href="/pricing">{t('reader.see_plans')}</Link>
+                                </p>
+                            )}
+                            {error && <p className={styles.formError} role="alert">{error}</p>}
+                        </form>
+
+                        {samples.length > 0 && (
+                            <div className={styles.samples}>
+                                <span>{t('reader.try_sample')}</span>
+                                {samples.map((sample) => (
+                                    <button
+                                        key={sample.level}
+                                        type="button"
+                                        className={`${styles.sample} ${styles[`sample_${sample.level}`]}`}
+                                        onClick={() => applySample(sample)}
+                                    >
+                                        <span className={fontClass} lang={learningLanguage}>{sample.title}</span>
+                                        <span>· {t(`reader.level_${sample.level}`)}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <aside className={styles.side}>
+                        <div className={styles.sideCard}>
+                            <h2>{t('reader.what_you_get')}</h2>
+                            <div className={styles.benefit}>
+                                <span className={`${styles.benefitIcon} ${styles.tintRead}`}><BookIcon /></span>
+                                <div><strong>{t('reader.benefit_read_title')}</strong><p>{t('reader.benefit_read')}</p></div>
+                            </div>
+                            <div className={styles.benefit}>
+                                <span className={`${styles.benefitIcon} ${styles.tintUnd}`}><BulbIcon /></span>
+                                <div><strong>{t('reader.benefit_grammar_title')}</strong><p>{t('reader.benefit_grammar')}</p></div>
+                            </div>
+                            <div className={styles.benefit}>
+                                <span className={`${styles.benefitIcon} ${styles.tintKeep}`}><BookmarkIcon /></span>
+                                <div><strong>{t('reader.benefit_keep_title')}</strong><p>{t('reader.benefit_keep')}</p></div>
+                            </div>
+                            <div className={styles.benefit}>
+                                <span className={`${styles.benefitIcon} ${styles.tintRev}`}><CheckIcon /></span>
+                                <div><strong>{t('reader.benefit_quiz_title')}</strong><p>{t('reader.benefit_quiz')}</p></div>
                             </div>
                         </div>
-
-                        <div className={styles.actions}>
-                            <button
-                                type="submit"
-                                className={styles.submitButton}
-                                disabled={isLoading || !text.trim() || overCharLimit || !canSubmit}
-                            >
-                                {isAuthenticated
-                                    ? (isLoading ? t('extended_text.analyzing') : t('extended_text.analyze_button'))
-                                    : t('extended_text.login_cta')}
-                            </button>
-                        </div>
-                    </form>
-
-                    <aside className={styles.sidebar}>
-                        <div className={styles.sidebarCard}>
-                            <h3>{t('extended_text.info_title')}</h3>
-                            <ol>
-                                <li>{t('extended_text.info_1')}</li>
-                                <li>{t('extended_text.info_2')}</li>
-                                <li>{t('extended_text.info_3')}</li>
-                            </ol>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setOnboardingSlide(0);
-                                setShowOnboarding(true);
-                            }}
-                            className={styles.walkthroughButton}
-                        >
-                            {t('extended_text.open_walkthrough') || 'View Tutorial'}
-                        </button>
+                        {isAuthenticated && !loading && (
+                            <div className={styles.sideCard}>
+                                <span className={styles.label}>{t('reader.your_plan', { plan: planName })}</span>
+                                <div className={styles.planRow}>
+                                    <span>{t('reader.text_length')}</span>
+                                    <strong>{t('reader.characters_value', { count: maxCharacters.toLocaleString() })}</strong>
+                                </div>
+                                <div className={styles.planRow}>
+                                    <span>{t('reader.passages_this_week')}</span>
+                                    <strong>{isUnlimited ? t('extended_text.weekly_usage_unlimited') : `${Math.max(weeklyRemaining ?? 0, 0)} / ${weeklyTotal}`}</strong>
+                                </div>
+                                {tier < 2 && (
+                                    <Link href="/pricing" className={styles.planLink}>{t('reader.upgrade_longer')}</Link>
+                                )}
+                            </div>
+                        )}
                     </aside>
                 </div>
 
-                {showOnboarding && (
-                    <div className={styles.onboardingOverlay}>
-                        <div className={styles.onboardingModal} role="dialog" aria-modal="true">
-                            <button className={styles.onboardingClose} type="button" onClick={closeOnboarding} aria-label={t('extended_text.close_tutorial')}>
-                                ✕
-                            </button>
-                            <div className={styles.onboardingContent}>
-                                {onboardingSlide === 0 && (
-                                    <div className={styles.onboardingMedia}>
-                                        <video
-                                            key={demoVariant}
-                                            className={styles.onboardingVideo}
-                                            src={
-                                                demoVariant === 'mobile'
-                                                    ? 'https://fukuin-hanbok.s3.us-east-2.amazonaws.com/site-assets/mobile+extended+text+recording.mp4'
-                                                    : 'https://fukuin-hanbok.s3.us-east-2.amazonaws.com/site-assets/desktop+extended+text.mp4'
-                                            }
-                                            controls
-                                            playsInline
-                                            loop
-                                            muted
-                                            autoPlay
-                                        >
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
-                                )}
-                                {onboardingSlide !== 0 && (
-                                    <div className={styles.onboardingArt}>
-                                        <Mascot pose={onboardingSlide === 1 ? 'teach' : 'celebrate'} size={104} />
-                                    </div>
-                                )}
-                                <h2>{onboardingSlides[onboardingSlide].title}</h2>
-                                <p>{onboardingSlides[onboardingSlide].description}</p>
-                                <ul>
-                                    {onboardingSlides[onboardingSlide].bullets.map((bullet, index) => (
-                                        <li key={index}>{bullet}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className={styles.onboardingControls}>
-                                <div className={styles.dots}>
-                                    {onboardingSlides.map((_, index) => (
-                                        <button
-                                            key={index}
-                                            type="button"
-                                            className={`${styles.dot} ${index === onboardingSlide ? styles.activeDot : ''}`}
-                                            onClick={() => setOnboardingSlide(index)}
-                                            aria-label={`Go to slide ${index + 1}`}
-                                        />
-                                    ))}
-                                </div>
-                                <div className={styles.buttons}>
-                                    <button
-                                        type="button"
-                                        className={styles.primaryButton}
-                                        onClick={() => {
-                                            if (onboardingSlide === onboardingSlides.length - 1) {
-                                                closeOnboarding();
-                                            } else {
-                                                setOnboardingSlide((prev) => Math.min(prev + 1, onboardingSlides.length - 1));
-                                            }
-                                        }}
-                                    >
-                                        {onboardingSlide === onboardingSlides.length - 1
-                                            ? t('extended_text.onboarding_finish')
-                                            : t('extended_text.onboarding_next')}
-                                    </button>
-                                    {!isAuthenticated && (
-                                    <button
-                                        type="button"
-                                        className={styles.secondaryButton}
-                                        onClick={() => router.push('/login')}
-                                    >
-                                        {t('extended_text.login_cta')}
-                                    </button>
-                                    )}
-                                    {onboardingSlides[onboardingSlide].cta && (
-                                        <button
-                                            type="button"
-                                            className={styles.secondaryButton}
-                                            onClick={() => router.push('/pricing')}
-                                        >
-                                            {onboardingSlides[onboardingSlide].cta}
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
+                {recent.length > 0 && (
+                    <section className={styles.recent}>
+                        <div className={styles.recentHeader}>
+                            <h2>{t('reader.recent_title')}</h2>
+                            <Link href="/library?tab=history">{t('reader.all_passages')}</Link>
                         </div>
-                    </div>
+                        <div className={styles.recentGrid}>
+                            {recent.map((item) => {
+                                const progress = readProgress(item.textId);
+                                const total = item.sentenceCount || 0;
+                                const read = Math.min(progress, total);
+                                const finished = total > 0 && read >= total;
+                                return (
+                                    <Link key={item.textId} href={`/extended-text/${item.textId}`} className={styles.recentCard}>
+                                        <span className={`${styles.recentTitle} ${getFontClass(item.originalLanguage)}`} lang={item.originalLanguage}>
+                                            {item.title || (item.text || '').slice(0, 40)}
+                                        </span>
+                                        <span className={styles.recentMeta}>
+                                            {t('reader.sentences_count', { count: total })}
+                                            {item.dateCreated ? ` · ${new Date(item.dateCreated).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}` : ''}
+                                        </span>
+                                        <span className={styles.recentBar}><span className={finished ? styles.recentDone : ''} style={{ width: `${total ? (read / total) * 100 : 0}%` }} /></span>
+                                        <span className={finished ? styles.recentStatusDone : styles.recentStatus}>
+                                            {finished ? t('reader.finished') : read > 0 ? t('reader.read_of', { read, total }) : t('reader.not_started')}
+                                        </span>
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </section>
                 )}
             </div>
         </Dashboard>

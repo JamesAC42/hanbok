@@ -1,0 +1,145 @@
+@import '../../variables.module.scss';
+
+// The passage: big, plain text with every word a quiet button. The open
+// sentence gets a blue wash, grammar matches a teal one, and key words not
+// yet saved a yellow marker.
+
+.text {
+    @include bp-card;
+    border-radius: 22px;
+    padding: 1.75rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+
+    @media (max-width: 725px) { padding: 1.25rem 1.1rem; }
+}
+
+.paragraph {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 2.05;
+    color: var(--foreground);
+
+    &:global(.korean) { font-family: var(--font-kr-sans), var(--font-display); }
+
+    @media (max-width: 725px) { font-size: 1.3rem; line-height: 1.95; }
+}
+
+.lineByLine {
+    display: flex;
+    flex-direction: column;
+    gap: .9rem;
+
+    .sentenceWrap { display: block; }
+}
+
+.sentenceWrap { scroll-margin: 6rem; }
+
+.sentence {
+    border-radius: 8px;
+    padding: .1rem 0;
+    transition: background .15s ease;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.selected {
+    background: var(--bp-read-soft);
+    box-shadow: 0 0 0 2px var(--bp-read-line);
+    padding: .1rem .3rem;
+}
+
+.highlighted:not(.selected) {
+    background: var(--bp-und-soft);
+    box-shadow: 0 0 0 2px var(--bp-und-line);
+}
+
+.pending { color: var(--bp-ink2); }
+
+.number {
+    display: inline-block;
+    margin-right: .3rem;
+    font-family: var(--font-display);
+    font-size: .75rem;
+    font-weight: 800;
+    vertical-align: super;
+    color: var(--bp-read-d);
+}
+
+.word {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    line-height: inherit;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: .3em;
+    text-decoration-thickness: 2px;
+    transition: text-decoration-color .12s ease, background .12s ease;
+
+    &:hover { text-decoration-color: var(--bp-read-line); }
+    text-align: inherit;
+
+    &:disabled, &[aria-disabled="true"] { cursor: default; }
+}
+
+.keyWord {
+    background: var(--bp-keep-soft);
+    padding: 0 .12em;
+}
+
+.activeWord {
+    text-decoration-color: var(--bp-read);
+    text-decoration-thickness: 3px;
+}
+
+.translation {
+    display: block;
+    margin: .1rem 0 .35rem;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--bp-ink2);
+}
+
+.translationSelected { color: var(--bp-read-d); }
+
+.sideBySide { gap: 1.25rem; }
+
+.sideRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 2px solid var(--bp-soft);
+
+    &:last-child { border-bottom: none; padding-bottom: 0; }
+
+    @media (max-width: 725px) {
+        grid-template-columns: 1fr;
+        gap: .5rem;
+    }
+}
+
+.sideTranslation {
+    margin: 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--bp-line);
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.75;
+    color: var(--bp-ink2);
+
+    @media (max-width: 725px) { padding-left: 0; border-left: none; }
+}
+
+.sideSelected { color: var(--bp-read-d); }
