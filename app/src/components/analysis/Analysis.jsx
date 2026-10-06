@@ -35,7 +35,8 @@ const Analysis = ({
     sentenceId,
     doNotCache,
     onCacheStatusChange,
-    isLyric
+    isLyric,
+    inParagraph = false
 }) => {
     const { t, language } = useLanguage();
     const { user } = useAuth();
@@ -65,6 +66,7 @@ const Analysis = ({
         savedLoading: savedWordsState.loading,
         addingAll: savedWordsState.addingAll,
         saveAll: savedWordsState.saveAll,
+        showParagraphLink: !inParagraph,
     };
 
     const sectionRefs = {

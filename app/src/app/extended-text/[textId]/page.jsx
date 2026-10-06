@@ -1,11 +1,12 @@
 'use client';
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import Image from 'next/image';
+import Link from 'next/link';
 import Dashboard from '@/components/Dashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Analysis from '@/components/analysis/Analysis';
+import Mascot from '@/components/Mascot';
 import ExtendedTextSaveButton from '@/components/ExtendedTextSaveButton';
 import styles from '@/styles/pages/extendedtextanalysis.module.scss';
 
@@ -160,7 +161,9 @@ export default function ExtendedTextAnalysisPage() {
         return (
             <Dashboard>
                 <div className={styles.error}>
+                    <Mascot pose="sleep" size={96} />
                     <p>{error}</p>
+                    <Link href="/extended-text" className={styles.errorAction}>{t('extended_text.title')}</Link>
                 </div>
             </Dashboard>
         );
@@ -170,7 +173,9 @@ export default function ExtendedTextAnalysisPage() {
         return (
             <Dashboard>
                 <div className={styles.error}>
+                    <Mascot pose="sleep" size={96} />
                     <p>{t('extended_text.not_found')}</p>
+                    <Link href="/library?tab=history" className={styles.errorAction}>Library</Link>
                 </div>
             </Dashboard>
         );
@@ -192,7 +197,7 @@ export default function ExtendedTextAnalysisPage() {
                             <ExtendedTextSaveButton textId={extendedText?.textId} />
                         </div>
                         
-                        <h1 className={styles.title}>{headingTitle}</h1>
+                        <h1 className={styles.title} lang={extendedText?.title ? extendedText.originalLanguage : undefined}>{headingTitle}</h1>
                         <p className={styles.description}>{t('extended_text.description')}</p>
                         
                         <div className={styles.metaTags}>
@@ -218,15 +223,6 @@ export default function ExtendedTextAnalysisPage() {
                                 </div>
                             )}
                         </div>
-                    </div>
-                    <div className={styles.heroIllustration}>
-                         <Image
-                            src="/images/extended-text-overview.svg"
-                            alt=""
-                            width={300}
-                            height={220}
-                            priority
-                        />
                     </div>
                 </header>
 
@@ -264,7 +260,7 @@ export default function ExtendedTextAnalysisPage() {
                                         >
                                             <div className={styles.sentenceIndex}>{index + 1}</div>
                                             <div className={styles.sentenceBody}>
-                                                <p className={styles.originalText}>{sentence.text}</p>
+                                                <p className={styles.originalText} lang={extendedText.originalLanguage}>{sentence.text}</p>
                                                 {translation && (
                                                     <p className={styles.translationText}>{translation}</p>
                                                 )}
@@ -389,6 +385,7 @@ export default function ExtendedTextAnalysisPage() {
                                 voice2={currentSentenceVoice2}
                                 voice1Slow={currentSentenceVoice1Slow}
                                 voice2Slow={currentSentenceVoice2Slow}
+                                inParagraph
                             />
                         ) : null}
                     </div>

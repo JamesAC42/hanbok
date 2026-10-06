@@ -127,7 +127,10 @@ export default function TypingArea({
     };
     
     return (
-        <div className={styles.typingArea} key={mode} onClick={handleAreaClick}>
+        <div className={`${styles.typingArea} ${mode === 'paragraph' ? styles.paragraphMode : ''}`} key={mode} onClick={handleAreaClick}>
+            <div className={styles.faceLabel}>
+                {mode === 'paragraph' ? 'Type this paragraph' : 'Type this letter'}
+            </div>
             <div className={styles.textDisplay}>
                 {renderText()}
             </div>

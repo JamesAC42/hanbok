@@ -6,6 +6,7 @@ import Dashboard from '@/components/Dashboard';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import styles from '@/styles/pages/extendedtextprogress.module.scss';
+import Mascot from '@/components/Mascot';
 
 export const languageFunFacts = [
     "There are over 7,000 languages spoken in the world today.",
@@ -256,6 +257,12 @@ export default function ExtendedTextProgressPage() {
         <Dashboard>
             <div className={styles.wrapper}>
                 <div className={styles.content}>
+                    <Mascot
+                        pose={error ? 'sleep' : completed ? 'cheer' : 'cards'}
+                        size={96}
+                        motion={error ? '' : 'bob'}
+                        className={styles.mascot}
+                    />
                     <h1 className={styles.heading}>{title || t('extended_text.progress_title')}</h1>
                     <p className={styles.subtitle}>{subtitle}</p>
 

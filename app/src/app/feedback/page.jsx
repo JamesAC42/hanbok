@@ -1,15 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import styles from '@/styles/components/pagelayout.module.scss';
 import feedbackStyles from '@/styles/components/feedback.module.scss';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
-import { MingcuteCommentFill } from '@/components/icons/CommentFill';
 import ContentPage from '@/components/ContentPage';
+import Dashboard from '@/components/Dashboard';
+import Mascot from '@/components/Mascot';
 import Footer from '@/components/Footer';
+
+// Signed-in readers get the app shell; visitors keep the public site header.
+// While auth is still loading, render a plain surface so neither shell flashes.
+const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
 
 // Move FeedbackItem outside the main component
 const FeedbackItem = ({ 
@@ -30,9 +34,11 @@ const FeedbackItem = ({
     const isOwnComment = userId === item.userId;
 
     return (
-        <div className={`${feedbackStyles.feedbackItem} ${isOwnComment ? feedbackStyles.ownComment : ''}`} 
-        >
+        <div className={`${feedbackStyles.feedbackItem} ${level > 0 ? feedbackStyles.reply : ''} ${isOwnComment ? feedbackStyles.ownComment : ''}`}>
             <div className={feedbackStyles.feedbackHeader}>
+                <span className={feedbackStyles.avatar} aria-hidden="true">
+                    {(item.userName || '?').charAt(0).toUpperCase()}
+                </span>
                 <span className={feedbackStyles.userName}>
                     {item.userName}
                     {isOwnComment && <span className={feedbackStyles.youBadge}>{t('feedback.youBadge')}</span>}
@@ -68,8 +74,8 @@ const FeedbackItem = ({
                         placeholder={t('feedback.replyPlaceholder')}
                     />
                     <div className={feedbackStyles.formActions}>
-                        <button type="submit">{t('feedback.actions.submit')}</button>
-                        <button type="button" onClick={onCancelReply}>{t('feedback.actions.cancel')}</button>
+                        <button type="submit" className={feedbackStyles.replySubmit}>{t('feedback.actions.submit')}</button>
+                        <button type="button" className={feedbackStyles.replyCancel} onClick={onCancelReply}>{t('feedback.actions.cancel')}</button>
                     </div>
                 </form>
             )}
@@ -105,7 +111,9 @@ const Feedback = () => {
     const [replyingTo, setReplyingTo] = useState(null);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const { user, isAuthenticated } = useAuth();
+    const { user, isAuthenticated, loading: authLoading } = useAuth();
+    const isPublic = !authLoading && !user;
+    const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
 
     const fetchFeedback = async () => {
         try {
@@ -209,12 +217,19 @@ const Feedback = () => {
     };
 
     return (
-        <ContentPage>
-            <div className={feedbackStyles.feedbackPage}>
-                <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
+        <Shell>
+            <div className={`${feedbackStyles.feedbackPage} ${isPublic ? feedbackStyles.publicPage : ''}`}>
+                {isPublic && (
+                    <div className={feedbackStyles.publicBand}>
+                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
+                    </div>
+                )}
                 <div className={feedbackStyles.feedbackHero}>
-                    <h1 className={feedbackStyles.heroTitle}>{t('feedback.title')}</h1>
-                    <p className={feedbackStyles.heroSubtitle}>{t('feedback.description')}</p>
+                    <Mascot pose="wave" size={96} motion="bob" className={feedbackStyles.heroMascot} />
+                    <div>
+                        <h1 className={feedbackStyles.heroTitle}>{t('feedback.title')}</h1>
+                        <p className={feedbackStyles.heroSubtitle}>{t('feedback.description')}</p>
+                    </div>
                 </div>
 
                 <div className={feedbackStyles.feedbackContainer}>
@@ -247,7 +262,7 @@ const Feedback = () => {
                             <div className={feedbackStyles.loading}>{t('feedback.loading')}</div>
                         ) : feedback.length === 0 ? (
                             <div className={feedbackStyles.emptyState}>
-                                <MingcuteCommentFill />
+                                <Mascot pose="sleep" size={96} />
                                 <p>{t('feedback.emptyState')}</p>
                             </div>
                         ) : (
@@ -297,21 +312,15 @@ const Feedback = () => {
                 </div>
 
                 <div className={feedbackStyles.supportSection}>
-                    <Image 
-                        src="/images/backgrounddark.png" 
-                        alt="Background" 
-                        fill 
-                        priority 
-                        style={{ objectFit: 'cover' }} 
-                    />
+                    <Mascot pose="cheer" size={64} />
                     <div className={feedbackStyles.supportContent}>
                         <h2>Keep the Feedback Coming!</h2>
                         <p>Your feedback helps us improve Hanbok for everyone. Thank you for being part of our community!</p>
                     </div>
                 </div>
             </div>
-            <Footer />
-        </ContentPage>
+            {isPublic && <Footer />}
+        </Shell>
     );
 };
 

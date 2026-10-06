@@ -1,10 +1,9 @@
 'use client';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Dashboard from '@/components/Dashboard';
 import TextInput from '@/components/TextInput';
-import Button from '@/components/Button';
+import Mascot from '@/components/Mascot';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -190,25 +189,14 @@ export default function ExtendedTextPage() {
         <Dashboard>
             <div className={styles.page}>
                 <section className={styles.hero}>
+                    <Mascot pose="point" size={92} motion="bob" className={styles.heroMascot} />
                     <div className={styles.heroCopy}>
                         <div className={styles.newBadge}>New!</div>
                         <h1>{t('extended_text.title')}</h1>
                         <p className={styles.description}>
                             {t('extended_text.description')}
                         </p>
-                        <div className={styles.heroHighlights}>
-                            <span>{t('extended_text.info_1')}</span>
-                            <span>{t('extended_text.info_2')}</span>
-                            <span>{t('extended_text.info_3')}</span>
-                        </div>
                     </div>
-                    <figure className={styles.heroArt}>
-                        <img
-                            src="/images/magnifying glass crop.png"
-                            alt="Magnifying glass"
-                            style={{ width: '100%', height: 'auto', borderRadius: '0.8rem' }}
-                        />
-                    </figure>
                 </section>
 
                 <div className={styles.languageControls}>
@@ -323,22 +311,29 @@ export default function ExtendedTextPage() {
                         </div>
 
                         <div className={styles.actions}>
-                            <Button
+                            <button
                                 type="submit"
+                                className={styles.submitButton}
                                 disabled={isLoading || !text.trim() || overCharLimit || !canSubmit}
-                                loading={isLoading}
                             >
                                 {isAuthenticated
                                     ? (isLoading ? t('extended_text.analyzing') : t('extended_text.analyze_button'))
                                     : t('extended_text.login_cta')}
-                            </Button>
+                            </button>
                         </div>
                     </form>
 
                     <aside className={styles.sidebar}>
-                        <Button
+                        <div className={styles.sidebarCard}>
+                            <h3>{t('extended_text.info_title')}</h3>
+                            <ol>
+                                <li>{t('extended_text.info_1')}</li>
+                                <li>{t('extended_text.info_2')}</li>
+                                <li>{t('extended_text.info_3')}</li>
+                            </ol>
+                        </div>
+                        <button
                             type="button"
-                            variant="secondary"
                             onClick={() => {
                                 setOnboardingSlide(0);
                                 setShowOnboarding(true);
@@ -346,15 +341,7 @@ export default function ExtendedTextPage() {
                             className={styles.walkthroughButton}
                         >
                             {t('extended_text.open_walkthrough') || 'View Tutorial'}
-                        </Button>
-                        <figure className={styles.sidebarArt}>
-                            <Image
-                                src="/images/extended-text-celebration.svg"
-                                alt="Celebratory illustration of a completed extended text analysis"
-                                width={360}
-                                height={280}
-                            />
-                        </figure>
+                        </button>
                     </aside>
                 </div>
 
@@ -406,8 +393,9 @@ export default function ExtendedTextPage() {
                                     ))}
                                 </div>
                                 <div className={styles.buttons}>
-                                    <Button
+                                    <button
                                         type="button"
+                                        className={styles.primaryButton}
                                         onClick={() => {
                                             if (onboardingSlide === onboardingSlides.length - 1) {
                                                 closeOnboarding();
@@ -419,24 +407,24 @@ export default function ExtendedTextPage() {
                                         {onboardingSlide === onboardingSlides.length - 1
                                             ? t('extended_text.onboarding_finish')
                                             : t('extended_text.onboarding_next')}
-                                    </Button>
+                                    </button>
                                     {!isAuthenticated && (
-                                    <Button
+                                    <button
                                         type="button"
-                                        variant="secondary"
+                                        className={styles.secondaryButton}
                                         onClick={() => router.push('/login')}
                                     >
                                         {t('extended_text.login_cta')}
-                                    </Button>
+                                    </button>
                                     )}
                                     {onboardingSlides[onboardingSlide].cta && (
-                                        <Button
+                                        <button
                                             type="button"
-                                            variant="secondary"
+                                            className={styles.secondaryButton}
                                             onClick={() => router.push('/pricing')}
                                         >
                                             {onboardingSlides[onboardingSlide].cta}
-                                        </Button>
+                                        </button>
                                     )}
                                 </div>
                             </div>

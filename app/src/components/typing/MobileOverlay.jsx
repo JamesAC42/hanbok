@@ -1,6 +1,7 @@
+import Link from 'next/link';
 import styles from '@/styles/components/typing/mobileoverlay.module.scss';
 import Dashboard from '@/components/Dashboard';
-import { MaterialSymbolsKeyboard } from '@/components/icons/Keyboard';
+import Mascot from '@/components/Mascot';
 
 export default function MobileOverlay() {
     return (
@@ -8,11 +9,11 @@ export default function MobileOverlay() {
             <div className={styles.overlay}>
                 <div className={styles.content}>
                     <div className={styles.icon}>
-                        <MaterialSymbolsKeyboard />
+                        <Mascot pose="point" size={96} motion="bob" />
                     </div>
                     <h1 className={styles.title}>Desktop Only</h1>
                     <p className={styles.message}>
-                        Korean typing practice is designed for desktop use only. 
+                        Korean typing practice is designed for desktop use only.
                         Please visit this page on a desktop or laptop computer to access the full typing practice experience.
                     </p>
                     <div className={styles.features}>
@@ -24,8 +25,11 @@ export default function MobileOverlay() {
                             <li>Progressive difficulty levels</li>
                         </ul>
                     </div>
+                    <Link href="/hangeul" className={styles.altButton}>
+                        Practice letters instead
+                    </Link>
                 </div>
             </div>
         </Dashboard>
     );
-} 
+}

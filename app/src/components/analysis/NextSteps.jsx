@@ -102,7 +102,7 @@ const KeepBox = ({ user, words, unsavedWords, savedLoading, addingAll, saveAll, 
     );
 };
 
-const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, saveAll, className = '', compact = false }) => {
+const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, saveAll, className = '', compact = false, showParagraphLink = true }) => {
     const { user } = useAuth();
     const savedCount = words.length - unsavedWords.length;
     // Refetch after saving words, since new cards change today's count.
@@ -146,13 +146,15 @@ const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, s
                     </span>
                 </Link>
             )}
-            <Link href="/extended-text" className={styles.alt}>
-                <span className={styles.altIcon}><Fa6SolidParagraph /></span>
-                <span>
-                    <b>Read a whole paragraph</b>
-                    <small>Paste the text around this sentence to read it in context.</small>
-                </span>
-            </Link>
+            {showParagraphLink && (
+                <Link href="/extended-text" className={styles.alt}>
+                    <span className={styles.altIcon}><Fa6SolidParagraph /></span>
+                    <span>
+                        <b>Read a whole paragraph</b>
+                        <small>Paste the text around this sentence to read it in context.</small>
+                    </span>
+                </Link>
+            )}
 
             {toast && <div className={styles.toast} role="status">{toast}</div>}
         </section>

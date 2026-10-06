@@ -44,11 +44,14 @@ export function LanguageProvider({ children }) {
 
     // Get translation string based on current native language
     const t = (path, replacements = {}) => {
+        // Some callers pass default text instead of replacements: t(key, 'Fallback').
+        const fallback = typeof replacements === 'string' ? replacements : path;
+        if (typeof replacements === 'string') replacements = {};
         const keys = path.split('.');
         let result = resources[nativeLanguage];
         
         for (const key of keys) {
-            if (result === undefined) return path; // Return path if translation not found
+            if (result === undefined) return fallback; // Return fallback if translation not found
             result = result[key];
         }
 
@@ -60,7 +63,7 @@ export function LanguageProvider({ children }) {
             }, result);
         }
 
-        return result || path; // Return path if translation not found
+        return result || fallback; // Return fallback if translation not found
     };
 
     const getIcon = (lang = language) => {

@@ -1,234 +1,208 @@
+@import "../../variables.module.scss";
+
 .modalOverlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
+    inset: 0;
+    background: rgba(10, 12, 24, .55);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
     padding: 1rem;
-    
+    font-family: var(--font-display);
+
     .modal {
-        background: var(--background);
-        border-radius: 1rem;
-        max-width: 42rem;
         width: 100%;
+        max-width: 44rem;
         max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
-        animation: modalAppear 0.3s ease-out;
-        
-        @keyframes modalAppear {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--background);
+        color: var(--foreground);
+        border: 2px solid var(--bp-line);
+        border-radius: 24px;
+        box-shadow: 0 6px 0 var(--bp-line);
+        animation: bp-pop-in .25s ease both;
     }
 }
 
 .header {
-    padding: 1.5rem 1.5rem 1rem;
-    border-bottom: 1px solid var(--shadow);
-    
+    flex: none;
+    padding: 1.5rem 1.5rem .5rem;
+
     .title {
+        @include bp-title;
         margin: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--foreground);
+        font-size: 1.8rem;
     }
 }
 
 .content {
-    padding: 1.5rem;
-    
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding: .5rem 1.5rem 1.5rem;
+
     .explanation {
-        font-size: 1.1rem;
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
+        margin: 0 0 1.25rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        line-height: 1.55;
         color: var(--foreground);
+
+        strong { font-weight: 800; }
     }
-    
+
     .whatIsIME {
-        margin-bottom: 2rem;
-        padding: 1rem;
-        background: var(--background-alt);
-        border-radius: 0.5rem;
-        border-left: 0.25rem solid var(--primary);
-        
+        margin-bottom: 1.5rem;
+        padding: 1rem 1.1rem;
+        border-radius: 16px;
+        background: var(--bp-purple-soft);
+        border: 2px solid var(--bp-purple-line);
+
         h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.1rem;
-            color: var(--foreground);
+            margin: 0 0 .4rem;
+            font-size: 1.05rem;
+            font-weight: 800;
         }
-        
+
         p {
             margin: 0;
+            font-weight: 600;
             line-height: 1.5;
-            color: var(--foreground-muted);
-        }
-    }
-    
-    .instructions {
-        h3 {
-            margin: 0 0 1rem 0;
-            font-size: 1.2rem;
             color: var(--foreground);
         }
     }
-    
+
+    .instructions h3 {
+        @include bp-title;
+        margin: 0 0 1rem;
+        font-size: 1.35rem;
+    }
+
     .osInstructions {
         display: grid;
-        gap: 1.5rem;
-        
+        gap: 1rem;
+
         @media (min-width: 768px) {
-            grid-template-columns: 1fr 1fr;
-        }
-        
-        @media (min-width: 1024px) {
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
     }
-    
+
     .osSection {
+        @include bp-card;
+        border-radius: 16px;
+        padding: .9rem 1rem;
+
         h4 {
-            margin: 0 0 0.75rem 0;
-            font-size: 1rem;
-            color: var(--foreground);
+            margin: 0 0 .6rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: .4rem;
+            font-size: 1rem;
+            font-weight: 800;
         }
-        
+
         ol {
             margin: 0;
-            padding-left: 1.25rem;
-            
+            padding-left: 1.2rem;
+
             li {
-                margin-bottom: 0.5rem;
-                line-height: 1.4;
-                color: var(--foreground-muted);
-                font-size: 0.9rem;
-                
-                &:last-child {
-                    margin-bottom: 0;
-                }
+                margin-bottom: .45rem;
+                font-size: .9rem;
+                font-weight: 600;
+                line-height: 1.45;
+                color: var(--bp-ink2);
+
+                &:last-child { margin-bottom: 0; }
             }
         }
-        
+
         kbd {
-            background: var(--background-alt);
-            border: 1px solid var(--shadow);
-            border-radius: 0.25rem;
-            padding: 0.125rem 0.375rem;
-            font-family: ui-monospace, monospace;
-            font-size: 0.8rem;
+            display: inline-block;
+            padding: .05rem .4rem;
+            border-radius: 6px;
+            border: 2px solid var(--bp-line);
+            box-shadow: 0 2px 0 var(--bp-line);
+            background: var(--bp-card);
+            font-family: var(--font-display);
+            font-size: .78rem;
+            font-weight: 800;
             color: var(--foreground);
         }
-        
+
         strong {
+            font-weight: 800;
             color: var(--foreground);
         }
     }
-    
+
     .note {
-        margin-top: 1.5rem;
-        padding: 1rem;
-        background: var(--info-background);
-        border: 1px solid var(--primary);
-        border-radius: 0.5rem;
-        
+        margin-top: 1.25rem;
+        padding: .85rem 1rem;
+        border-radius: 14px;
+        background: var(--bp-soft);
+
         p {
             margin: 0;
-            color: var(--info-foreground);
-            font-size: 0.9rem;
-            line-height: 1.4;
+            font-size: .92rem;
+            font-weight: 600;
+            line-height: 1.45;
+            color: var(--bp-ink2);
         }
-        
-        strong {
-            color: var(--info-foreground);
-        }
+
+        strong { color: var(--foreground); font-weight: 800; }
     }
 }
 
 .footer {
+    flex: none;
     padding: 1rem 1.5rem 1.5rem;
-    border-top: 1px solid var(--shadow);
+    border-top: 2px solid var(--bp-soft);
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
-    
-    @media (max-width: 480px) {
+
+    @media (max-width: 600px) {
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     .checkbox {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: .55rem;
+        min-height: 2.5rem;
         cursor: pointer;
-        color: var(--foreground-muted);
-        font-size: 0.9rem;
-        
+        font-size: .95rem;
+        font-weight: 700;
+        color: var(--bp-ink2);
+
         input[type="checkbox"] {
             margin: 0;
-        }
-        
-        @media (max-width: 480px) {
-            justify-content: center;
-            margin-bottom: 1rem;
+            width: 1.2rem;
+            height: 1.2rem;
+            accent-color: var(--bp-purple);
         }
     }
-    
+
     .buttons {
         display: flex;
-        gap: 0.75rem;
-        
-        @media (max-width: 480px) {
-            width: 100%;
-        }
-        
-        button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border: none;
-            
-            @media (max-width: 480px) {
-                flex: 1;
-            }
-        }
-        
-        .cancelButton {
-            background: var(--background-alt);
-            color: var(--foreground-muted);
-            border: 1px solid var(--shadow);
-            
-            &:hover {
-                background: var(--foreground-lighter);
-                color: var(--foreground);
-            }
-        }
-        
-        .continueButton {
-            background: var(--primary);
-            color: white;
-            
-            &:hover {
-                background: var(--primary-dark);
-                transform: translateY(-1px);
-            }
+        gap: .75rem;
+
+        @media (max-width: 600px) {
+            flex-direction: column-reverse;
         }
     }
-} 
+
+    .cancelButton {
+        @include bp-press-ghost(var(--bp-ink2));
+    }
+
+    .continueButton {
+        @include bp-press(var(--bp-purple), var(--bp-purple-d));
+        white-space: normal;
+    }
+}

@@ -1,163 +1,158 @@
 @import "../../variables.module.scss";
 
+// The practice card: the target letter (or paragraph) big in the middle.
+
 .typingArea {
-    background: var(--background);
-    border: 1px solid var(--foreground-lighter);
-    box-shadow: 0 10px 30px -24px var(--shadow);
-    border-radius: 1rem;
-    padding: 1.2rem;
-    height: 100%;
+    position: relative;
     width: 100%;
     min-width: 0;
-    min-height: 0;
-    box-sizing: border-box;
+    min-height: 17rem;
+    padding: 1.1rem 1.5rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .85rem;
+    background: var(--bp-card);
+    border: 2px solid var(--bp-line);
+    border-radius: 26px;
+    box-shadow: 0 6px 0 var(--bp-line);
+    font-family: var(--font-display);
+    color: var(--foreground);
     cursor: text;
-    
-    @include flex-center-column;
-    gap: 1.2rem;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    
-    &:hover {
-        border-color: var(--foreground-muted);
+    transition: border-color .15s ease, box-shadow .15s ease;
+
+    &:focus-within {
+        border-color: var(--bp-purple-line);
+        box-shadow: 0 6px 0 var(--bp-purple-line);
     }
-    
-    @media (max-width: 1200px) {
-        height: fit-content;
-    }
+}
+
+.faceLabel {
+    @include bp-label;
+    align-self: center;
+    padding: .3rem .8rem;
+    border-radius: 99px;
+    background: var(--bp-purple-soft);
+    color: color-mix(in srgb, var(--bp-purple) 72%, var(--foreground));
 }
 
 .textDisplay {
-    @include flex-center;
-    min-height: 3.5rem;
     width: 100%;
-    max-width: 100%;
-    position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
+    min-height: 7rem;
     flex: 1;
-    
-    @media (max-width: 1200px) {
-        flex: 0 0 auto;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-width: 0;
 }
 
-.paragraphText {
-    font-size: 1.43rem;
-    line-height: 1.8;
-    font-family: 'Noto Sans KR', sans-serif;
-    max-height: 100%;
-    max-width: 100%;
-    text-align: center;
-    word-wrap: break-word;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    overflow-y: auto;
-    padding-right: 0.25rem;
-    animation: fadeInUp 0.2s ease;
-    transition: all 0.2s ease;
+// Paragraph mode
 
-    @media (max-width: 1500px) {
-        font-size: 1.2rem;
-        line-height: 1.7;
-    }
-    
+.paragraphText {
+    width: 100%;
+    max-height: 16rem;
+    overflow-y: auto;
+    padding: .25rem .25rem .25rem 0;
+    font-family: var(--font-kr-sans);
+    font-size: 1.45rem;
+    font-weight: 500;
+    line-height: 1.85;
+    text-align: left;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    animation: bp-pop-in .25s ease both;
+
     @media (max-width: 1350px) {
-        font-size: 1rem;
-        line-height: 1.7;
+        font-size: 1.25rem;
     }
-    
-    @media (max-width: 768px) {
-        font-size: 0.9rem;
-        line-height: 1.6;
-    }
-    
+
     &.completed {
-        opacity: 0.9;
-        background: rgba(40, 167, 69, 0.05);
-        border-radius: 0.5rem;
-        padding: 1rem;
-        border: 1px solid rgba(40, 167, 69, 0.2);
-        animation: completedGlow 0.5s ease;
+        padding: .9rem 1rem;
+        border-radius: 16px;
+        background: var(--bp-und-soft);
+        border: 2px solid var(--bp-und-line);
     }
 }
 
 .char {
-    transition: all 0.3s ease;
-    padding: 0.1rem;
-    border-radius: 0.25rem;
-    
+    padding: .05rem .06rem;
+    border-radius: 6px;
+    transition: background .15s ease, color .15s ease;
+
     &.correct {
-        background-color: #d4edda;
-        color: #155724;
-        animation: correctPulse 0.2s ease;
+        background: var(--bp-und-soft);
+        color: color-mix(in srgb, var(--bp-und) 70%, var(--foreground));
     }
-    
+
     &.incorrect {
-        background-color: #f8d7da;
-        color: #721c24;
-        animation: incorrectShake 0.3s ease;
+        background: var(--bp-rev-soft);
+        color: color-mix(in srgb, var(--bp-rev) 78%, var(--foreground));
+        text-decoration: underline wavy var(--bp-rev);
+        text-underline-offset: .3em;
     }
-    
+
     &.inProgress {
-        background-color: #cce7ff;
-        color: #0066cc;
-        animation: inProgressPulse 1.5s infinite;
-        transform: scale(1.02);
+        background: var(--bp-read-soft);
+        color: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
     }
-    
+
     &.current {
-        background-color: #fff3cd;
-        color: #856404;
-        animation: currentGlow 2s infinite;
-        transform: scale(1.05);
+        background: var(--bp-purple-soft);
+        color: var(--foreground);
+        box-shadow: inset 0 -3px 0 var(--bp-purple);
+        font-weight: 800;
     }
-    
+
     &.pending {
-        color: var(--foreground-muted);
-        opacity: 0.7;
-        transition: opacity 0.3s ease;
+        color: var(--bp-ink2);
     }
 }
 
+// Letter modes
+
 .singleChar {
-    @include flex-center-column;
-    gap: 0.8rem;
-    animation: fadeInUp 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
 }
 
 .targetChar {
-    font-size: 3.85rem;
+    min-width: 7.75rem;
+    min-height: 7.75rem;
+    padding: 0 1rem;
+    display: grid;
+    place-items: center;
+    border-radius: 26px;
+    background: var(--bp-purple-soft);
+    border: 2px solid var(--bp-purple-line);
+    box-shadow: 0 5px 0 var(--bp-purple-line);
+    font-family: var(--font-kr-sans);
+    font-size: 4.75rem;
     font-weight: 700;
+    line-height: 1;
     color: var(--foreground);
-    font-family: 'Noto Sans KR', sans-serif;
-    text-align: center;
-    min-height: 4.2rem;
-    @include flex-center;
-    animation: scaleIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transition: all 0.2s ease;
+    animation: targetIn .28s cubic-bezier(.3, 1.4, .5, 1) both;
 }
 
 .userChar {
-    font-size: 1.87rem;
-    font-family: 'Noto Sans KR', sans-serif;
-    animation: slideInLeft 0.15s ease;
-    transition: all 0.15s ease;
-    
-    .correct {
-        color: #28a745;
-    }
-    
-    .incorrect {
-        color: #dc3545;
-    }
+    font-family: var(--font-kr-sans);
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+
+    .correct { color: var(--bp-und); }
+    .incorrect { color: var(--bp-rev); }
 }
+
+// What you typed
 
 .inputSection {
     width: 100%;
-    @include flex-center-column;
-    gap: 0.8rem;
-    animation: fadeInUp 0.2s ease 0.1s both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hiddenInput {
@@ -168,182 +163,72 @@
 
 .inputDisplay {
     width: 100%;
-    text-align: center;
-    transition: all 0.3s ease;
+    max-width: 30rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem;
+    padding: .55rem 1rem;
+    border-radius: 14px;
+    border: 2px dashed var(--bp-line);
+    background: var(--bp-soft);
 }
 
-@media (min-width: 769px) and (max-height: 900px) {
-    .inputDisplay {
-        display: none;
-    }
-
-    .instructions {
-        display: none;
-    }
-}
-
-@media (min-width: 769px) and (max-height: 900px) {
-    .textDisplay {
-        align-items: flex-start;
-    }
-
-    .paragraphText {
-        min-height: calc(1.8em + 0.5rem);
-    }
+.paragraphMode .inputDisplay {
+    max-width: none;
+    justify-content: flex-start;
 }
 
 .inputLabel {
-    font-size: 0.88rem;
-    color: var(--foreground-muted);
-    margin-bottom: 0.4rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    @media (max-width: 1350px) {
-        font-size:0.6rem;
-    }
+    @include bp-label;
+    flex: none;
 }
 
 .inputText {
-    font-size: 1.21rem;
-    font-family: 'Noto Sans KR', sans-serif;
+    min-width: 0;
+    min-height: 1.6rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-family: var(--font-kr-sans);
+    font-size: 1.2rem;
+    font-weight: 700;
     color: var(--foreground);
-    min-height: 1.3rem;
-    position: relative;
-    @include flex-center;
-    gap: 0.2rem;
-    transition: all 0.3s ease;
 }
 
 .placeholder {
-    color: var(--foreground-muted);
-    font-style: italic;
-    animation: fadeIn 0.5s ease;
-    @media (max-width: 1350px) {
-        font-size:0.8rem;
-    }
+    font-family: var(--font-display);
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
 }
-
 
 .instructions {
+    max-width: 44rem;
     text-align: center;
-    color: var(--foreground-muted);
-    font-size: 0.88rem;
-    line-height: 1.4;
-    animation: fadeInUp 0.2s ease 0.15s both;
-    transition: all 0.2s ease;
-    
-    p {
-        margin: 0;
-        transition: all 0.3s ease;
-    }
-    @media (max-width: 1350px) {
-        font-size:0.6rem;
+    font-size: .92rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--bp-ink2);
+
+    p { margin: 0; }
+
+    strong {
+        font-weight: 800;
+        color: var(--foreground);
     }
 }
 
-// Keyframe animations for smooth transitions and interactions
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
+@keyframes targetIn {
+    from { opacity: 0; transform: scale(.85); }
+    to { opacity: 1; transform: none; }
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(1.5rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+@media (prefers-reduced-motion: reduce) {
+    .targetChar,
+    .paragraphText {
+        animation: none;
     }
 }
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-2rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes correctPulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-        box-shadow: 0 0 0.5rem rgba(40, 167, 69, 0.4);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes incorrectShake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-0.2rem);
-    }
-    20%, 40%, 60%, 80% {
-        transform: translateX(0.2rem);
-    }
-}
-
-@keyframes inProgressPulse {
-    0%, 100% {
-        background-color: #cce7ff;
-        box-shadow: 0 0 0 rgba(0, 102, 204, 0.3);
-    }
-    50% {
-        background-color: #b3daff;
-        box-shadow: 0 0 0.5rem rgba(0, 102, 204, 0.5);
-    }
-}
-
-@keyframes currentGlow {
-    0%, 100% {
-        background-color: #fff3cd;
-        box-shadow: 0 0 0 rgba(255, 193, 7, 0.4);
-    }
-    50% {
-        background-color: #ffeaa7;
-        box-shadow: 0 0 0.8rem rgba(255, 193, 7, 0.6);
-    }
-}
-
-@keyframes completedGlow {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(40, 167, 69, 0.2);
-    }
-    50% {
-        transform: scale(1.01);
-        box-shadow: 0 0 1rem rgba(40, 167, 69, 0.4);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(40, 167, 69, 0.2);
-    }
-}
-
- 

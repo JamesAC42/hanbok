@@ -8,7 +8,11 @@ import styles from '@/styles/pages/lyricsuggestions.module.scss';
 import Link from 'next/link';
 import { BxsUpvote } from '@/components/icons/Upvote';
 import { MaterialSymbolsDelete } from '@/components/icons/Delete';
+import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import ContentPage from '@/components/ContentPage';
+import Dashboard from '@/components/Dashboard';
+import Mascot from '@/components/Mascot';
+import Image from 'next/image';
 
 import Footer from '@/components/Footer';
 
@@ -23,8 +27,14 @@ const genreOptions = [
   'K-Pop', 'J-Pop', 'Anime', 'Pop', 'Hip Hop', 'R&B', 'Rock', 'Ballad', 'Indie'
 ];
 
+// Signed-in readers get the app shell; visitors keep the public site header.
+// While auth is still loading, render a plain surface so neither shell flashes.
+const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
+
 const Suggestions = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const isPublic = !authLoading && !user;
+  const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
   const { isAdmin } = useAdmin();
   const { t } = useLanguage();
   
@@ -227,9 +237,18 @@ const Suggestions = () => {
   };
 
   return (
-    <ContentPage>
-      <div className={styles.suggestionsPage}>
+    <Shell>
+      <div className={`${styles.suggestionsPage} ${isPublic ? styles.publicPage : ''}`}>
+        {isPublic && (
+          <div className={styles.publicBand}>
+            <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
+          </div>
+        )}
         <div className={styles.suggestionsHero}>
+          <Link href="/lyrics" className={styles.backLink}>
+            <MaterialSymbolsArrowBackRounded />
+            {t('lyrics.detail.back')}
+          </Link>
           <h1 className={styles.heroTitle}>{t('lyrics.suggestions.title')}</h1>
           <p className={styles.heroSubtitle}>{t('lyrics.suggestions.subtitle')}</p>
         </div>
@@ -365,6 +384,7 @@ const Suggestions = () => {
               <div className={styles.error}>{error}</div>
             ) : suggestions.length === 0 ? (
               <div className={styles.emptyState}>
+                <Mascot pose="sleep" size={96} />
                 <p>{t('lyrics.suggestions.status.noSuggestions')}</p>
               </div>
             ) : (
@@ -459,8 +479,8 @@ const Suggestions = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </ContentPage>
+      {isPublic && <Footer />}
+    </Shell>
   );
 };
 

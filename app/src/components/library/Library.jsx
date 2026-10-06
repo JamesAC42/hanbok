@@ -142,7 +142,7 @@ export default function Library({ initialTab = 'history' }) {
     const empty = EMPTY_STATES[tab];
     return (
       <div className={styles.libraryEmpty}>
-        <Mascot pose="sleep" size={64} />
+        <Mascot pose="sleep" size={104} />
         <p>{empty.text}</p>
         {empty.href ? (
           <Link href={empty.href} className={styles.libraryEmptyAction}>{empty.action}</Link>
@@ -163,7 +163,7 @@ export default function Library({ initialTab = 'history' }) {
         <span className={styles.wordTranslation}>{word.translatedWord}</span>
       </div>
       {word.sentenceId && (
-        <Link href={`/sentence/${word.sentenceId}`} className={styles.wordSource}>From your sentence →</Link>
+        <Link href={`/sentence/${word.sentenceId}`} className={styles.wordSource}>See sentence</Link>
       )}
     </div>
   );
@@ -174,7 +174,8 @@ export default function Library({ initialTab = 'history' }) {
   };
 
   const renderPageSwitcher = () => {
-    if (totalPages <= 1) return null;
+    // The API may leave totalPages out when everything fits on one page.
+    if (!totalPages || totalPages <= 1) return null;
     
     return (              
       <div className={styles.pagination}>
@@ -251,18 +252,26 @@ export default function Library({ initialTab = 'history' }) {
         onClick={() => handleExtendedClick(item.textId)}
       >
         <div className={styles.extendedHeader}>
-          <p className={styles.extendedTitle}>{title}</p>
+          <p className={styles.extendedTitle} lang={item.originalLanguage}>{title}</p>
           <span className={styles.extendedBadge}>{safeLabel('history.extendedBadge', 'Extended text')}</span>
         </div>
         <p className={styles.sentenceTranslation}>{item.summary || safeLabel('history.extendedNoSummary', 'Open to view the full breakdown')}</p>
         <div className={styles.extendedMeta}>
           <span>{safeLabel('history.sentencesCount', '{count} sentences').replace('{count}', item.sentenceCount || 0)}</span>
-          <span>•</span>
-          <span>{item.originalLanguage?.toUpperCase()}</span>
+          {item.originalLanguage && (
+            <>
+              <span>•</span>
+              <span>{item.originalLanguage.toUpperCase()}</span>
+            </>
+          )}
+          {item.dateCreated && (
+            <>
+              <span>•</span>
+              <span>{t('history.createdOn')} {new Date(item.dateCreated).toLocaleDateString()}</span>
+            </>
+          )}
         </div>
-        <p className={styles.sentenceDate}>
-          {t('history.createdOn')} {item.dateCreated ? new Date(item.dateCreated).toLocaleString() : 'Unknown date'}
-        </p>
+        <span className={styles.rowChevron} aria-hidden="true">›</span>
       </div>
     );
   };
@@ -273,11 +282,14 @@ export default function Library({ initialTab = 'history' }) {
       key={sentence.sentenceId} 
       className={styles.sentenceItem}
     >
-      <p className={styles.sentenceText}>{sentence.text}</p>
+      <p className={styles.sentenceText} lang={sentence.originalLanguage}>{sentence.text}</p>
       <p className={styles.sentenceTranslation}>{sentence.translation || sentence.analysis?.sentence?.translation}</p>
-      <p className={styles.sentenceDate}>
-        {t('history.createdOn')} {sentence.dateCreated ? new Date(sentence.dateCreated).toLocaleString() : 'Unknown date'}
-      </p>
+      {sentence.dateCreated && (
+        <p className={styles.sentenceDate}>
+          {t('history.createdOn')} {new Date(sentence.dateCreated).toLocaleDateString()}
+        </p>
+      )}
+      <span className={styles.rowChevron} aria-hidden="true">›</span>
     </div>
   );
 
@@ -320,11 +332,12 @@ export default function Library({ initialTab = 'history' }) {
 
     return (
       <>
-        {renderPageSwitcher()}
-        {visibleItems.map(item => {
-          if (item.type === 'word') return renderWordItem(item);
-          return item.type === 'extended_text' ? renderExtendedTextItem(item) : renderSentenceItem(item);
-        })}
+        <div className={styles.itemList}>
+          {visibleItems.map(item => {
+            if (item.type === 'word') return renderWordItem(item);
+            return item.type === 'extended_text' ? renderExtendedTextItem(item) : renderSentenceItem(item);
+          })}
+        </div>
         {renderPageSwitcher()}
       </>
     );
@@ -336,20 +349,15 @@ export default function Library({ initialTab = 'history' }) {
   return (
     <Dashboard>
       <div className={styles.historyContainer}>
-        <h1 className={styles.pageTitle}>Library</h1>
-        {renderTabs()}
         <div className={styles.historyContent}>
-          <div className={styles.leftPanel}>
-            <div className={styles.imageCard}>
-              <img src="/images/bookshelf.jpg" alt="Library" />
-              <div className={styles.imageOverlay}>
-                <p>
-                  {TABS.find(x => x.key === tab).title}
-                  {totalCount !== null && tab === 'words' ? ` · ${totalCount}` : ''}
-                </p>
-              </div>
-            </div>
-          </div>
+          <header className={styles.libraryHeader}>
+            <h1 className={styles.pageTitle}>Library</h1>
+            <p className={styles.librarySubtitle}>
+              {TABS.find(x => x.key === tab).title}
+              {totalCount !== null && tab === 'words' ? ` · ${totalCount}` : ''}
+            </p>
+          </header>
+          {renderTabs()}
           <div className={styles.rightPanel}>
             <div className={styles.searchFilters}>
               <div className={styles.searchRow}>

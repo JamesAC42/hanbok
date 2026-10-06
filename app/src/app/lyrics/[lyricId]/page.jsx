@@ -10,7 +10,9 @@ import { supportedLanguages } from '@/translations';
 import Image from 'next/image';
 import Link from 'next/link';
 import ContentPage from '@/components/ContentPage';
+import Dashboard from '@/components/Dashboard';
 import Footer from '@/components/Footer';
+import Mascot from '@/components/Mascot';
 
 import { MaterialSymbolsRightPanelClose } from '@/components/icons/RightPanelClose';
 import { MingcuteDownFill } from '@/components/icons/DownCarat';
@@ -20,13 +22,20 @@ import { LineMdEmail } from '@/components/icons/Email';
 import { IcTwotoneDiscord } from '@/components/icons/DiscordIcon';
 import { MaterialSymbolsPublishRounded } from '@/components/icons/Publish';
 import { BasilEyeSolid } from '@/components/icons/Eye';
+import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsChatBubbleOutline } from '@/components/icons/ChatBubble';
 import { MaterialSymbolsFavorite, MaterialSymbolsFavoriteOutline } from '@/components/icons/Favorite';
 import LyricComments from '@/components/lyrics/LyricComments';
 
+// Signed-in readers get the app shell; visitors keep the public site header.
+// While auth is still loading, render a plain surface so neither shell flashes.
+const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
+
 const LyricsPage = () => {
     const { t } = useLanguage();
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
+    const isPublic = !authLoading && !user;
+    const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
     const { lyricId } = useParams();
     const [lyric, setLyric] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -440,32 +449,35 @@ const LyricsPage = () => {
 
     if (loading) {
         return (
-            <ContentPage>
-                <div className={styles.lyricsContainer}>
-                    <h1>{t('lyrics.detail.loading')}</h1>
+            <Shell>
+                <div className={`${styles.lyricsContainer} ${isPublic ? styles.publicPage : ''}`}>
+                    <div className={styles.statusCard}>
+                        <h1>{t('lyrics.detail.loading')}</h1>
+                    </div>
                 </div>
-            </ContentPage>
+            </Shell>
         );
     }
 
-    if (error) {
+    if (error || !lyric) {
         return (
-            <ContentPage>
-                <div className={styles.lyricsContainer}>
-                    <h1>{t('lyrics.detail.error')}</h1>
-                    <p>{error}</p>
+            <Shell>
+                <div className={`${styles.lyricsContainer} ${isPublic ? styles.publicPage : ''}`}>
+                    {isPublic && (
+                        <div className={styles.publicBand}>
+                            <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
+                        </div>
+                    )}
+                    <div className={styles.statusCard}>
+                        <Mascot pose="sleep" size={96} />
+                        <h1>{error ? t('lyrics.detail.error') : t('lyrics.detail.notFound')}</h1>
+                        {error && <p>{error}</p>}
+                        <Link href="/lyrics" className={styles.statusButton}>
+                            {t('lyrics.detail.back')}
+                        </Link>
+                    </div>
                 </div>
-            </ContentPage>
-        );
-    }
-
-    if (!lyric) {
-        return (
-            <ContentPage>
-                <div className={styles.lyricsContainer}>
-                    <h1>{t('lyrics.detail.notFound')}</h1>
-                </div>
-            </ContentPage>
+            </Shell>
         );
     }
 
@@ -477,10 +489,26 @@ const LyricsPage = () => {
 
     // Render the lyric information and analysis
     return (
-        <ContentPage>
-            <div className={styles.lyricsContainer}>
-                <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
+        <Shell>
+            <div className={`${styles.lyricsContainer} ${isPublic ? styles.publicPage : ''}`}>
+                {isPublic && (
+                    <div className={styles.publicBand}>
+                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
+                    </div>
+                )}
                 <div className={styles.lyricsHeader}>
+                    <div className={styles.backButton}>
+                        <Link href="/lyrics">
+                            <MaterialSymbolsArrowBackRounded />
+                            {t('lyrics.detail.back')}
+                        </Link>
+                        {user && (
+                            <Link href="/lyrics/favorites">
+                                {t('lyrics.detail.backToFavorites', 'Back to Favorites')}
+                            </Link>
+                        )}
+                    </div>
+
                     <h1>{lyric.title}</h1>
                     {lyric.artist && <h2>{t('lyrics.detail.by')}: {lyric.artist}</h2>}
                     <div className={styles.lyricTags}>
@@ -514,20 +542,6 @@ const LyricsPage = () => {
                             {isFavorited ? <MaterialSymbolsFavorite /> : <MaterialSymbolsFavoriteOutline />}
                             {favoritesLoading ? '...' : (isFavorited ? t('lyrics.detail.favorited', 'Favorited') : t('lyrics.detail.favorite', 'Favorite'))}
                         </button>
-                    </div>
-
-                    <div className={styles.backButton}>
-                        <Link href="/lyrics">
-                            {t('lyrics.detail.back')}
-                        </Link>
-                        {user && (
-                            <>
-                                <span className={styles.buttonSeparator}>|</span>
-                                <Link href="/lyrics/favorites">
-                                    {t('lyrics.detail.backToFavorites', 'Back to Favorites')}
-                                </Link>
-                            </>
-                        )}
                     </div>
 
                     {lyric.youtubeUrl && (
@@ -646,8 +660,8 @@ const LyricsPage = () => {
                 {/* Comments Section */}
                 <LyricComments lyricId={lyricId} />
             </div>
-            <Footer />
-        </ContentPage>
+            {isPublic && <Footer />}
+        </Shell>
     );
 };
 

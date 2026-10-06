@@ -1,227 +1,209 @@
-// Study Stats Display Styles
+@import "../variables.module.scss";
+
+// Study stats (deck page "Your Progress"), Bright Path.
 
 .statsContainer {
-  background-color: var(--background);
-  border: 1px solid var(--foreground-lighter);
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px -24px var(--shadow);
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  @include bp-card;
+  border-radius: 22px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1.5rem;
   width: 100%;
+  color: var(--foreground);
+  font-family: var(--font-display);
+
+  @media (max-width: 640px) {
+    padding: 1.1rem;
+  }
 }
 
 .statsTitle {
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  @include bp-title;
   margin: 0 0 1rem;
-  color: var(--foreground-muted);
-  font-family:var(--font-display);
+  font-size: 1.5rem;
 }
 
 .loading {
   padding: 1.5rem;
   text-align: center;
-  color: #666;
+  font-weight: 700;
+  color: var(--bp-ink2);
 }
 
 .error {
-  padding: 1.5rem;
+  padding: .9rem 1.1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 14px;
+  border: 2px solid var(--bp-rev-line);
+  background: var(--bp-rev-soft);
+  color: color-mix(in srgb, var(--bp-rev) 72%, var(--foreground));
+  font-weight: 700;
   text-align: center;
-  color: var(--error-foreground);
-  background-color: var(--error-background);
-  border-radius: 0.25rem;
 }
 
-// Streak section styles
+// ===== Streak =====
+
 .streakContainer {
-  margin-bottom: 2rem;
-  padding: 1.25rem;
-  background-color: var(--background-alt);
-  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .75rem 1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 .streakInfo {
-  display: flex;
-  gap: 2rem;
-  margin-bottom: 1rem;
-  color: var(--foreground);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(7.5rem, 1fr));
+  gap: .75rem;
+
+  @media (max-width: 640px) {
+    width: 100%;
+  }
 }
 
-.currentStreak, .maxStreak {
+.currentStreak,
+.maxStreak {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .75rem 1rem;
+  border-radius: 16px;
   text-align: center;
-  color: var(--foreground);
 }
 
 .currentStreak {
-  .streakValue {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--foreground);
-  }
+  background: var(--bp-flame-soft);
+  border: 2px solid var(--bp-flame-line);
+
+  .streakValue { color: color-mix(in srgb, var(--bp-flame) 72%, var(--foreground)); }
 }
 
 .maxStreak {
-  .streakValue {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--foreground);
-  }
+  background: var(--bp-soft);
+  border: 2px solid var(--bp-line);
+
+  .streakValue { color: var(--foreground); }
+}
+
+.streakValue {
+  font-family: var(--font-lilita);
+  font-size: 2.2rem;
+  line-height: 1.1;
 }
 
 .streakLabel {
-  font-size: 0.875rem;
-  color: var(--foreground);
-  margin-top: 0.25rem;
+  @include bp-label;
+  font-size: .72rem;
 }
 
 .encouragingMessage {
-  font-size: 1.125rem;
-  font-weight: 500;
-  text-align: center;
+  flex: 1;
+  min-width: 12rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
   color: var(--foreground);
-  padding: 0.5rem 0;
-  font-style: italic;
 }
 
 .noStreak {
-  text-align: center;
-  color: var(--foreground-light);
-  padding: 1rem;
-  font-style: italic;
+  margin-bottom: 1.5rem;
+  padding: .9rem 1.1rem;
+  border-radius: 14px;
+  background: var(--bp-flame-soft);
+  font-weight: 700;
+  color: var(--foreground);
 }
 
-// Heatmap section styles
+// ===== Heatmap =====
+
 .heatmapSection {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .sectionTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--foreground);
-  text-align: center;
+  @include bp-label;
+  margin: 0 0 .75rem;
 }
 
-// Original vertical heatmap styles
-.heatmapContainer {
-  display: flex;
-  flex-direction: column;
-  overflow-x: auto;
-}
-
-.dayLabels {
-  display: flex;
-  margin-left: 0.5rem; // Align with heatmap grid
-  margin-bottom: 0.25rem;
-}
-
-.dayLabel {
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  color: var(--foreground-light);
-  @media (max-width: 620px) {
-    width: 1rem;
-    height: 1rem;
-  }
-}
-
-.heatmap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.week {
-  display: flex;
-  gap: 0.25rem;
-}
-
-// New horizontal heatmap styles
 .heatmapContainerHorizontal {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   overflow-x: auto;
-  margin-bottom: 1rem;
+  max-width: 100%;
 }
 
 .heatmapTable {
   border-collapse: separate;
-  border-spacing: 0.25rem;
-  margin-bottom: 1rem;
-  width:fit-content;
+  border-spacing: .25rem;
+  width: fit-content;
+  margin-left: -.25rem;
 }
 
 .heatmapRow {
-  height: 1.75rem;
+  height: 1.6rem;
+
   @media (max-width: 620px) {
-    height:1rem;
+    height: 1rem;
   }
 }
 
 .dayLabelCell {
-  padding-right: 0.5rem;
+  padding-right: .4rem;
   text-align: right;
-  width: 2rem;
+  width: 2.4rem;
+
   @media (max-width: 620px) {
-    width: 1rem;
-    padding-right: 0.25rem;
+    width: 1.6rem;
+    padding-right: .15rem;
+  }
+}
+
+.dayLabel {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--bp-ink2);
+  white-space: nowrap;
+
+  @media (max-width: 620px) {
+    font-size: .6rem;
   }
 }
 
 .dayCell {
   padding: 0;
-  width: 1.75rem;
-  height: 1.75rem;
+  width: 1.6rem;
+  height: 1.6rem;
+
   @media (max-width: 620px) {
     width: 1rem;
     height: 1rem;
   }
 }
 
-// Common day styles for both layouts
+$lv1: color-mix(in srgb, var(--bp-und) 25%, var(--background));
+$lv2: color-mix(in srgb, var(--bp-und) 50%, var(--background));
+$lv3: color-mix(in srgb, var(--bp-und) 78%, var(--background));
+$lv4: var(--bp-und-d);
+
 .day {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 0.25rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 6px;
   position: relative;
-  background-color: var(--background);
-  
-  // Different activity levels
-  &.activityLevel0 {
-    background-color: var(--background);
-    border: 0.0625rem solid var(--foreground-light);
-  }
-  
-  &.activityLevel1 {
-    background-color: #c6f6d5;
-  }
-  
-  &.activityLevel2 {
-    background-color: #9ae6b4;
-  }
-  
-  &.activityLevel3 {
-    background-color: #68d391;
-  }
-  
-  &.activityLevel4 {
-    background-color: #38a169;
-  }
-  
-  &.today {
-    border: 2px solid #4299e1;
-  }
+  box-sizing: border-box;
+
+  &.activityLevel0 { background: var(--bp-soft); border: 2px solid var(--bp-line); }
+  &.activityLevel1 { background: $lv1; }
+  &.activityLevel2 { background: $lv2; }
+  &.activityLevel3 { background: $lv3; }
+  &.activityLevel4 { background: $lv4; }
+
+  &.today { box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--bp-read); }
+
   @media (max-width: 620px) {
     width: 1rem;
     height: 1rem;
+    border-radius: 4px;
   }
 }
 
@@ -230,107 +212,104 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 0.375rem;
-  height: 0.375rem;
+  width: .4rem;
+  height: .4rem;
   border-radius: 50%;
-  background-color: #4299e1;
+  background: var(--bp-read);
 }
 
 .emptyHeatmap {
-  padding: 2rem;
+  padding: 1.25rem;
+  border-radius: 14px;
+  background: var(--bp-soft);
+  font-weight: 700;
   text-align: center;
-  color: var(--foreground-light);
-  background-color: var(--background-alt);
-  border-radius: 0.25rem;
-  font-style: italic;
+  color: var(--bp-ink2);
 }
 
-// Heatmap legend
 .heatmapLegend {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: .4rem .9rem;
+  margin-top: .6rem;
 }
 
-.legendTitle {  
-  font-size: 0.75rem;
-  color: var(--foreground-light);
-  margin-bottom: 0.5rem;
+.legendTitle {
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--bp-ink2);
 }
 
 .legendItems {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: .4rem .8rem;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: .3rem;
 }
 
 .legendColor {
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.25rem;
-  
-  &.activityLevel0 { background-color: var(--background); }
-  &.activityLevel1 { background-color: #c6f6d5; }
-  &.activityLevel2 { background-color: #9ae6b4; }
-  &.activityLevel3 { background-color: #68d391; }
-  &.activityLevel4 { background-color: #38a169; }
+  width: .95rem;
+  height: .95rem;
+  border-radius: 4px;
+  box-sizing: border-box;
+
+  &.activityLevel0 { background: var(--bp-soft); border: 2px solid var(--bp-line); }
+  &.activityLevel1 { background: $lv1; }
+  &.activityLevel2 { background: $lv2; }
+  &.activityLevel3 { background: $lv3; }
+  &.activityLevel4 { background: $lv4; }
 }
 
 .legendLabel {
-  font-size: 0.75rem;
-  color: #718096;
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--bp-ink2);
 }
 
-// Summary section styles
+// ===== Totals =====
+
 .summarySection {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+
+  @media (max-width: 640px) {
+    gap: .5rem;
+  }
 }
 
 .summaryItem {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: .75rem .4rem;
+  border-radius: 14px;
+  background: var(--bp-soft);
   text-align: center;
-  padding: 1rem 0.5rem;
+  min-width: 0;
 }
 
 .summaryValue {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #4a5568;
+  font-family: var(--font-lilita);
+  font-size: 1.8rem;
+  line-height: 1.1;
+  color: var(--foreground);
 }
 
 .summaryLabel {
-  font-size: 0.875rem;
-  color: #718096;
-  margin-top: 0.25rem;
-}
+  @include bp-label;
+  font-size: .7rem;
+  line-height: 1.3;
 
-// Responsive styles
-@media (max-width: 640px) {
-  .statsContainer {
-    padding: 1rem;
+  @media (max-width: 400px) {
+    font-size: .62rem;
+    letter-spacing: .04em;
   }
-  
-  .streakInfo {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .summarySection {
-    flex-direction: column;
-  }
-  
-  .legendItems {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-} 
+}

@@ -9,6 +9,8 @@ import { MaterialSymbolsArrowBackRounded } from '@/components/icons/ArrowBack';
 import { MaterialSymbolsFavorite } from '@/components/icons/Favorite';
 import { BasilEyeSolid } from '@/components/icons/Eye';
 import ContentPage from '@/components/ContentPage';
+import Dashboard from '@/components/Dashboard';
+import Mascot from '@/components/Mascot';
 import Footer from '@/components/Footer';
 
 const FavoriteLyrics = () => {
@@ -137,21 +139,26 @@ const FavoriteLyrics = () => {
     if (!authLoading && !user) {
         return (
             <ContentPage>
-                <div className={lyricsStyles.lyricsPage}>
-                    <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
+                <div className={`${lyricsStyles.lyricsPage} ${lyricsStyles.publicPage}`}>
+                    <div className={lyricsStyles.publicBand}>
+                        <Image src="/images/background.png" alt="" fill priority style={{ objectFit: 'cover' }} />
+                    </div>
                     <div className={lyricsStyles.lyricsHero}>
-                        <h1 className={lyricsStyles.heroTitle}>
-                            {t('lyrics.favorites.title', 'My Favorite Lyrics')}
-                        </h1>
-                        <p className={lyricsStyles.heroSubtitle}>
-                            {t('lyrics.favorites.loginRequired', 'Sign in to save your favorite songs and access them quickly')}
-                        </p>
+                        <span className={lyricsStyles.heroIcon}><MaterialSymbolsFavorite /></span>
+                        <div>
+                            <h1 className={lyricsStyles.heroTitle}>
+                                {t('lyrics.favorites.title', 'My Favorite Lyrics')}
+                            </h1>
+                            <p className={lyricsStyles.heroSubtitle}>
+                                {t('lyrics.favorites.loginRequired', 'Sign in to save your favorite songs and access them quickly')}
+                            </p>
+                        </div>
                     </div>
 
                     <div className={lyricsStyles.lyricsHomeContainer}>
                         <div className={lyricsStyles.mainContent}>
                             <div className={lyricsStyles.loginPrompt}>
-                                <MaterialSymbolsFavorite />
+                                <Mascot pose="wave" size={104} />
                                 <h2>{t('lyrics.favorites.loginPrompt.title', 'Save Your Favorite Lyrics')}</h2>
                                 <p>{t('lyrics.favorites.loginPrompt.description', 'Create an account to save your favorite songs and build your personal collection.')}</p>
                                 <Link href="/login" className={lyricsStyles.loginButton}>
@@ -160,23 +167,25 @@ const FavoriteLyrics = () => {
                             </div>
                         </div>
                     </div>
-                    <Footer />
                 </div>
+                <Footer />
             </ContentPage>
         );
     }
 
     return (
-        <ContentPage>
+        <Dashboard>
             <div className={lyricsStyles.lyricsPage}>
-                <Image src="/images/background.png" alt="Background" fill priority style={{ objectFit: 'cover' }} />
                 <div className={lyricsStyles.lyricsHero}>
-                    <h1 className={lyricsStyles.heroTitle}>
-                        {t('lyrics.favorites.title', 'My Favorite Lyrics')}
-                    </h1>
-                    <p className={lyricsStyles.heroSubtitle}>
-                        {t('lyrics.favorites.description', 'Your personal collection of favorite songs')}
-                    </p>
+                    <span className={lyricsStyles.heroIcon}><MaterialSymbolsFavorite /></span>
+                    <div>
+                        <h1 className={lyricsStyles.heroTitle}>
+                            {t('lyrics.favorites.title', 'My Favorite Lyrics')}
+                        </h1>
+                        <p className={lyricsStyles.heroSubtitle}>
+                            {t('lyrics.favorites.description', 'Your personal collection of favorite songs')}
+                        </p>
+                    </div>
                 </div>
 
                 <div className={lyricsStyles.lyricsHomeContainer}>
@@ -189,7 +198,7 @@ const FavoriteLyrics = () => {
                                 </Link>
                                 <div className={lyricsStyles.favoritesCount}>
                                     <MaterialSymbolsFavorite />
-                                    {t('lyrics.favorites.count', '{count} favorites').replace('{count}', favorites.length)}
+                                    {favorites.length} {t('lyrics.favorites.count')}
                                 </div>
                             </div>
                         </div>
@@ -203,7 +212,7 @@ const FavoriteLyrics = () => {
                                 <div className={lyricsStyles.error}>{error}</div>
                             ) : favorites.length === 0 ? (
                                 <div className={lyricsStyles.noFavorites}>
-                                    <MaterialSymbolsFavorite />
+                                    <Mascot pose="sleep" size={110} />
                                     <h3>{t('lyrics.favorites.empty.title', 'No Favorites Yet')}</h3>
                                     <p>{t('lyrics.favorites.empty.description', 'Start exploring lyrics and add songs to your favorites!')}</p>
                                     <Link href="/lyrics" className={lyricsStyles.exploreButton}>
@@ -258,9 +267,8 @@ const FavoriteLyrics = () => {
                         </div>
                     </div>
                 </div>
-                <Footer />
             </div>
-        </ContentPage>
+        </Dashboard>
     );
 };
 

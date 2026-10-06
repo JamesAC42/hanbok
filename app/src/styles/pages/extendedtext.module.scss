@@ -1,35 +1,51 @@
 @import '../variables.module.scss';
 
+// Paragraphs (extended text) input page. Bright Path, purple = Paragraphs.
+// Purple text is pulled toward the theme's foreground so it reads on light
+// and dark themes alike.
+$purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
+
 .page {
     flex: 1;
     min-height: 100%;
-    padding: 3.5rem 4rem 4rem;
-    // background: linear-gradient(
-    //     135deg,
-    //     color-mix(in srgb, var(--primary) 8%, var(--background)),
-    //     var(--background)
-    // );
-    position: relative;
+    max-height: calc(100dvh - 4.3rem);
     overflow-y: auto;
+    padding: 2.25rem 3rem 4rem;
+    position: relative;
+    font-family: var(--font-display);
+    color: var(--foreground);
 
-    @media (max-width: 1024px) {
-        padding: 3rem 2.5rem;
+    > *:not(.onboardingOverlay) {
+        max-width: 68rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    @media (max-width: 768px) {
-        padding: 2.5rem 1.5rem 3rem;
+    @media (max-width: 725px) {
+        padding: 1.25rem 1rem 3rem;
     }
 }
 
-.hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 8.5rem;
-    align-items: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
+// Header
 
-    @media (max-width: 960px) {
-        grid-template-columns: 1fr;
+.hero {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+
+    @media (max-width: 560px) {
+        gap: .85rem;
+        align-items: flex-start;
+    }
+}
+
+.heroMascot {
+    flex: none;
+
+    @media (max-width: 560px) {
+        width: 64px;
+        height: auto;
     }
 }
 
@@ -37,124 +53,84 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
-    position: relative;
+    gap: .35rem;
+    min-width: 0;
 
     h1 {
+        @include bp-title;
         margin: 0;
-        font-family: var(--font-body);
-        font-size: 2.1rem;
-        font-weight: 700;
-        line-height: 1.2;
-        color: var(--foreground);
+        font-size: 2.2rem;
 
         @media (max-width: 725px) {
-            font-size: 1.6rem;
+            font-size: 1.65rem;
         }
-    }
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
     }
 }
 
 .newBadge {
     order: -1;
-    background: color-mix(in srgb, var(--primary) 12%, var(--background));
-    color: var(--primary);
-    padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    font-family: var(--font-display);
-    font-size: 0.7rem;
+    padding: .2rem .65rem;
+    border-radius: 99px;
+    background: var(--bp-purple-soft);
+    color: $purple-text;
+    font-size: .68rem;
     font-weight: 800;
-    letter-spacing: 0.05em;
+    letter-spacing: .07em;
     text-transform: uppercase;
 }
 
 .description {
     margin: 0;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: var(--foreground-muted);
-    max-width: 40rem;
+    max-width: 44rem;
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--bp-ink2);
 }
 
-.heroHighlights {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 1.25rem;
+// Language and plan facts: four small tiles in one row.
 
-    span {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: var(--foreground-muted);
-        font-family: var(--font-display);
-        font-size: 0.8rem;
-        font-weight: 600;
+.languageControls,
+.statsBar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .85rem;
+    margin-bottom: .85rem;
 
-        &::before {
-            content: '✓';
-            font-weight: 800;
-            color: var(--primary);
-        }
+    @media (max-width: 640px) {
+        grid-template-columns: 1fr;
     }
 }
 
-.heroArt {
-    width: 100%;
-    max-width: 8.5rem;
-    margin: 0;
-    justify-self: end;
-    border-radius: 1rem;
-    overflow: hidden;
-    border: 1px solid var(--foreground-lighter);
-
-    img {
-        width: 100%;
-        height: auto;
-        display: block;
-    }
-
-    @media (max-width: 960px) {
-        display:none;
-    }
-}
-
-.languageControls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+.statsBar {
     margin-bottom: 1.5rem;
+
+    @media (max-width: 640px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .6rem;
+    }
+}
+
+.languageCard,
+.statItem {
+    @include bp-card;
+    border-radius: 16px;
+    min-width: 0;
+    padding: .8rem 1.1rem;
 }
 
 .languageCard {
-    flex: 1;
-    min-width: 15rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
     flex-wrap: wrap;
-    padding: 0.75rem 1rem;
-    border-radius: 1rem;
-    background: var(--background);
-    border: 1px solid var(--foreground-lighter);
+    gap: .5rem 1rem;
+    min-height: 4.25rem;
 }
 
-.languageLabel {
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--foreground) 55%, var(--background));
-    font-weight: 700;
-    flex-shrink: 0;
-    min-width: 10rem;
+.languageLabel,
+.statLabel {
+    @include bp-label;
 }
 
 .languageSwitcherWrap {
@@ -164,121 +140,97 @@
 }
 
 .languageSwitcherWrap :global(.languageSwitcherOuter) {
-    transform: scale(0.8);
-    transform-origin: left center;
-}
-
-@media (max-width: 600px) {
-    .languageSwitcherWrap :global(.languageSwitcherOuter) {
-        transform: scale(1);
-    }
+    transform: scale(.85);
+    transform-origin: right center;
 }
 
 .languageValue {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--foreground);
-    margin-left: auto;
 }
 
 .translationValue {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-    font-weight: 600;
+    gap: .5rem;
+    font-size: 1.05rem;
+    font-weight: 800;
     color: var(--foreground);
-    margin-left: auto;
-}
-
-.translationIcon :global(svg) {
-    font-size: 1.5rem;
 }
 
 .translationIcon {
     display: flex;
     align-items: center;
-}
 
-@media (max-width: 600px) {
-    .languageCard {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .languageLabel {
-        min-width: 0;
-    }
-
-    .languageValue,
-    .translationValue {
-        margin-left: 0;
-    }
-}
-
-.statsBar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-
-    @media (max-width: 600px) {
-        flex-direction: column;
+    :global(svg) {
+        font-size: 1.5rem;
     }
 }
 
 .statItem {
-    flex: 1;
-    min-width: 14rem;
-    background: var(--background);
-    border-radius: 1rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid var(--foreground-lighter);
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
 }
 
-.statLabel {
-    font-family: var(--font-display);
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--foreground) 60%, var(--background));
-    font-weight: 700;
+@media (max-width: 640px) {
+    .statItem {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: .7rem .9rem;
+    }
 }
 
 .statValue {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1.05rem;
+    font-weight: 800;
     color: var(--foreground);
 }
 
+// Notices
+
 .notice,
-.noticeWarning {
-    padding: 1rem 1.25rem;
-    border-radius: 1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
+.noticeWarning,
+.error {
+    padding: .95rem 1.2rem;
+    border-radius: 16px;
+    border: 2px solid;
+    margin-bottom: 1.25rem;
+    font-size: .98rem;
+    font-weight: 700;
     line-height: 1.5;
+
+    p { margin: 0; }
 }
 
 .notice {
-    background: color-mix(in srgb, var(--background) 94%, var(--primary) 6%);
-    border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
-    color: color-mix(in srgb, var(--foreground) 70%, var(--background));
+    border-color: var(--bp-purple-line);
+    background: var(--bp-purple-soft);
+    color: var(--foreground);
 }
 
 .noticeWarning {
-    background: rgba(255, 206, 86, 0.18);
-    border: 1px solid rgba(255, 206, 86, 0.55);
-    color: color-mix(in srgb, var(--foreground) 80%, var(--background));
+    border-color: var(--bp-keep-line);
+    background: var(--bp-keep-soft);
+    color: var(--foreground);
 }
+
+.error {
+    border-color: var(--bp-rev-line);
+    background: var(--bp-rev-soft);
+    color: color-mix(in srgb, var(--bp-rev-d) 75%, var(--foreground));
+}
+
+// Form + sidebar
 
 .layout {
     display: grid;
     grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: 2.5rem;
+    gap: 1.5rem;
     align-items: start;
 
     @media (max-width: 1100px) {
@@ -287,295 +239,244 @@
 }
 
 .formCard {
-    background: var(--background);
-    border-radius: 1rem;
-    padding: 1.75rem;
-    border: 1px solid var(--foreground-lighter);
-    box-shadow: 0 10px 30px -24px var(--shadow);
+    @include bp-card;
+    border-color: var(--bp-purple-line);
+    box-shadow: 0 5px 0 var(--bp-purple-line);
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.35rem;
 
-    @media (max-width: 768px) {
-        padding: 1.25rem;
+    @media (max-width: 725px) {
+        padding: 1.1rem;
     }
 }
 
 .inputGroup {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: .55rem;
 
     label {
-        font-weight: 600;
-        color: color-mix(in srgb, var(--foreground) 90%, var(--background));
-        font-size: 0.95rem;
         display: flex;
-        justify-content: space-between;
         align-items: baseline;
-        gap: 1rem;
-    }
-
-    :global(.input) {
-        min-width: 0;
-        width: 100%;
-        border-radius: 0.9rem;
-        border: 2px solid color-mix(in srgb, var(--foreground) 15%, transparent);
-        background: var(--background);
-        padding: 0.9rem 1rem;
+        gap: .5rem;
         font-size: 1rem;
-        font-family: var(--font-body);
+        font-weight: 800;
         color: var(--foreground);
-        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+}
 
-        &:focus {
-            border-color: var(--primary);
-            background: var(--background);
-            box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
-        }
+// The title field is a TextInput (its own module classes), so it needs the
+// extra .formCard to win over them.
+.formCard .inputGroup textarea {
+    @include bp-input;
+    width: 100%;
+    min-width: 0;
+    font-size: 1.05rem;
+
+    &:focus {
+        border-color: var(--bp-purple);
+        box-shadow: 0 0 0 4px var(--bp-purple-soft);
+    }
+}
+
+.formCard .inputGroup textarea.textarea {
+    min-height: 220px;
+    height: 17rem;
+    padding: 1rem 1.1rem;
+    font-family: var(--font-kr-sans), var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 500;
+    line-height: 1.7;
+    resize: vertical;
+
+    @media (max-width: 725px) {
+        min-height: 180px;
+        height: 13rem;
     }
 }
 
 .optional {
-    font-weight: 500;
-    font-size: 0.85rem;
-    color: color-mix(in srgb, var(--foreground) 60%, var(--background));
-}
-
-.textarea {
-    width: 100%;
-    padding: 1.2rem 1.1rem;
-    border: 1px solid var(--foreground-lighter);
-    border-radius: 0.75rem;
-    font-size: 1rem;
-    font-family: inherit;
-    resize: vertical;
-    min-height: 220px;
-    background-color: var(--background);
-    color: var(--foreground);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    line-height: 1.6;
-
-    &:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 25%, transparent);
-        background-color: var(--background);
-    }
-
-    &::placeholder {
-        color: color-mix(in srgb, var(--foreground) 40%, var(--background));
-    }
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
 }
 
 .charInfo {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: .4rem;
 }
 
 .charCount {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: color-mix(in srgb, var(--foreground) 55%, var(--background));
+    @include bp-label;
+    align-self: flex-end;
 }
 
 .charMeter {
+    @include bp-bar(var(--bp-purple), 10px);
     width: 100%;
-    height: 0.45rem;
-    background: color-mix(in srgb, var(--foreground) 10%, transparent);
-    border-radius: 999px;
-    overflow: hidden;
-
-    span {
-        display: block;
-        height: 100%;
-        background: linear-gradient(90deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--secondary)));
-        border-radius: inherit;
-        transition: width 0.2s ease;
-    }
 }
 
 .charWarning {
-    font-size: 0.85rem;
-    color: #dc2626;
-    font-weight: 600;
-}
-
-.error {
-    padding: 1.1rem 1.2rem;
-    background-color: rgba(239, 68, 68, 0.12);
-    border: 1px solid rgba(239, 68, 68, 0.4);
-    border-radius: 1rem;
-    color: #dc2626;
-    font-size: 0.9rem;
-    font-weight: 600;
+    font-size: .9rem;
+    font-weight: 700;
+    color: color-mix(in srgb, var(--bp-rev-d) 75%, var(--foreground));
 }
 
 .actions {
     display: flex;
     justify-content: flex-end;
 
-    button {
-        min-width: 12rem;
-        font-size: 1rem;
-    }
-
     @media (max-width: 520px) {
         justify-content: stretch;
-
-        button {
-            width: 100%;
-        }
     }
+}
+
+.submitButton,
+.primaryButton {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 5px);
+    min-height: 52px;
+    padding: .9rem 2rem;
+    font-size: 1rem;
+
+    @media (max-width: 520px) {
+        width: 100%;
+    }
+}
+
+.primaryButton {
+    min-height: 48px;
+    padding: .8rem 1.5rem;
+}
+
+.secondaryButton,
+.walkthroughButton {
+    @include bp-press-ghost($purple-text, 4px);
+    min-height: 48px;
 }
 
 .sidebar {
     display: flex;
     flex-direction: column;
-    gap: 1.75rem;
+    gap: 1rem;
 }
 
 .walkthroughButton {
     width: 100%;
-    padding: 0.8rem !important;
-    font-size: 0.95rem !important;
-    font-weight: 700 !important;
-    background: var(--background) !important;
-    border: 1px solid var(--foreground-lighter) !important;
-    border-radius: 0.75rem !important;
-    box-shadow: none !important;
-    color: var(--foreground) !important;
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease;
-
-    &:hover {
-        transform: translateY(-1px);
-        border-color: var(--primary) !important;
-    }
-
-    &:active {
-        transform: translateY(0);
-    }
 }
 
 .sidebarCard {
-    background: var(--background);
-    border: 1px solid var(--foreground-lighter);
-    border-radius: 1rem;
-    padding: 2rem;
-    color: color-mix(in srgb, var(--foreground) 95%, var(--background));
-    box-shadow: 0 10px 30px -24px var(--shadow);
+    @include bp-card;
+    padding: 1.35rem 1.4rem;
 
     h3 {
-        font-size: 1.2rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        font-family: var(--font-display);
+        @include bp-title;
+        margin: 0 0 1rem;
+        font-size: 1.3rem;
     }
 
-    ul {
+    ol {
         list-style: none;
+        counter-reset: step;
         padding: 0;
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.9rem;
+        gap: .85rem;
 
         li {
+            counter-increment: step;
             display: flex;
             align-items: flex-start;
-            gap: 0.6rem;
-            line-height: 1.5;
-            font-weight: 500;
+            gap: .75rem;
+            font-size: .98rem;
+            font-weight: 600;
+            line-height: 1.45;
 
             &::before {
-                content: '';
-                width: 0.6rem;
-                height: 0.6rem;
+                content: counter(step);
+                flex: none;
+                width: 1.9rem;
+                height: 1.9rem;
+                display: grid;
+                place-items: center;
                 border-radius: 50%;
-                margin-top: 0.35rem;
-                background: var(--background);
-                box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+                background: var(--bp-purple-soft);
+                border: 2px solid var(--bp-purple-line);
+                color: $purple-text;
+                font-size: .85rem;
+                font-weight: 800;
             }
         }
     }
 }
 
-.sidebarArt {
-    margin: 0;
-    padding: 1rem;
-    background: var(--background-alt);
-    border-radius: 1rem;
-    border: 1px solid var(--foreground-lighter);
-
-    img {
-        width: 100%;
-        height: auto;
-        display: block;
-        &.watercolor {
-            border-radius:0.6rem;
-        }
-    }
-}
-
-figure.sidebarArt {
-    @media (max-width: 960px) {
-        display:none;
-    }
-}
+// Tutorial modal
 
 .onboardingOverlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(3px);
+    background: color-mix(in srgb, var(--foreground) 35%, transparent);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1300;
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .onboardingModal {
+    @include bp-card;
     position: relative;
     width: min(620px, 100%);
-    background: var(--background);
-    border-radius: 1.75rem;
-    padding: 2.5rem;
-    box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.18);
-    max-height: calc(100vh - 3rem);
+    max-height: calc(100dvh - 2rem);
     overflow-y: auto;
+    padding: 4rem 2rem 2rem;
+    border-radius: 24px;
+    box-shadow: 0 6px 0 var(--bp-line);
+    font-family: var(--font-display);
 
     @media (max-width: 600px) {
-        padding: 2rem 1.5rem;
+        padding: 3.85rem 1.15rem 1.5rem;
     }
 }
 
 .onboardingClose {
     position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
+    top: .9rem;
+    right: .9rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-card);
+    color: var(--bp-ink2);
+    font-size: 1.1rem;
+    font-weight: 800;
     cursor: pointer;
-    color: color-mix(in srgb, var(--foreground) 70%, var(--background));
+    z-index: 1;
+
+    &:hover {
+        background: var(--bp-soft);
+        color: var(--foreground);
+    }
 }
 
 .onboardingContent {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: .85rem;
 
     .onboardingMedia {
         width: 100%;
         max-height: min(52vh, 24rem);
-        border-radius: 1.1rem;
+        border-radius: 16px;
         overflow: hidden;
-        border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
-        background: color-mix(in srgb, var(--background) 92%, var(--primary) 8%);
-        box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.08);
+        border: 2px solid var(--bp-line);
+        background: var(--bp-soft);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -590,14 +491,16 @@ figure.sidebarArt {
     }
 
     h2 {
-        font-family: var(--font-display);
+        @include bp-title;
+        margin: .25rem 0 0;
         font-size: 1.6rem;
-        color: var(--foreground);
     }
 
     p {
-        color: color-mix(in srgb, var(--foreground) 75%, var(--background));
-        line-height: 1.6;
+        margin: 0;
+        font-weight: 600;
+        color: var(--bp-ink2);
+        line-height: 1.55;
     }
 
     ul {
@@ -606,19 +509,21 @@ figure.sidebarArt {
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: 0.6rem;
+        gap: .55rem;
 
         li {
-            padding-left: 1.2rem;
             position: relative;
-            color: color-mix(in srgb, var(--foreground) 70%, var(--background));
+            padding-left: 1.6rem;
+            font-weight: 600;
+            line-height: 1.45;
+            color: var(--foreground);
 
             &::before {
-                content: '•';
+                content: '✓';
                 position: absolute;
                 left: 0;
-                color: var(--primary);
-                font-weight: 700;
+                color: $purple-text;
+                font-weight: 800;
             }
         }
     }
@@ -628,32 +533,47 @@ figure.sidebarArt {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: 1rem;
+    margin-top: 1.75rem;
     flex-wrap: wrap;
 }
 
 .dots {
     display: flex;
-    gap: 0.5rem;
+    gap: .25rem;
 }
 
+// Visible dot is small; the button around it stays a 40px touch target.
 .dot {
-    width: 0.75rem;
-    height: 0.75rem;
-    border-radius: 50%;
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
     border: none;
-    background: color-mix(in srgb, var(--foreground) 30%, var(--background));
+    background: none;
     cursor: pointer;
+
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 50% auto auto 50%;
+        width: .8rem;
+        height: .8rem;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background: var(--bp-line-strong);
+    }
 }
 
-.activeDot {
-    background: var(--primary);
+.activeDot::after {
+    width: 1.6rem;
+    border-radius: 99px;
+    background: var(--bp-purple);
 }
 
 .buttons {
     display: flex;
-    gap: 0.75rem;
+    gap: .75rem;
+    flex-wrap: wrap;
 
     @media (max-width: 500px) {
         width: 100%;
