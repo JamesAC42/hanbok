@@ -3,10 +3,15 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import SubscriptionPromptPopup from '@/components/SubscriptionPromptPopup';
+import { captureAttribution } from '@/lib/analytics';
 
 function ClientLayoutWrapper({ children }) {
   const { user, loading } = useAuth();
   const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
+
+  useEffect(() => {
+    captureAttribution();
+  }, []);
 
   useEffect(() => {
     // Only run on the client

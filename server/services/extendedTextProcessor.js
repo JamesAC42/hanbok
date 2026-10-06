@@ -103,7 +103,7 @@ const processExtendedTextJob = async (job, { db, onProgress, onStatus, onComplet
             const promptWithContext = buildContextualPrompt(sentencePromptFactory, job, sentenceText);
             const sentenceResponse = await generateResponse(
                 promptWithContext,
-                'gemini'
+                'geminiAnalysis'
             );
 
             if (!sentenceResponse.isValid) {

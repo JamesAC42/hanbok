@@ -1,6 +1,8 @@
 'use client';
 import { useState } from 'react';
 import styles from '@/styles/components/emailauth.module.scss';
+import { track, getAttribution } from '@/lib/analytics';
+import HeardFromSelect from '@/components/HeardFromSelect';
 
 const RegisterForm = () => {
     const [formData, setFormData] = useState({
@@ -74,13 +76,15 @@ const RegisterForm = () => {
                 body: JSON.stringify({
                     name: formData.name.trim(),
                     email: formData.email.toLowerCase(),
-                    password: formData.password
+                    password: formData.password,
+                    attribution: getAttribution()
                 })
             });
 
             const data = await response.json();
 
             if (data.success) {
+                track('signup', { method: 'email' });
                 setSuccess(data.message);
                 // Reset form
                 setFormData({
@@ -193,6 +197,8 @@ const RegisterForm = () => {
                         placeholder="Confirm your password"
                     />
                 </div>
+
+                <HeardFromSelect disabled={loading} />
 
                 {error && (
                     <div className={styles.error}>

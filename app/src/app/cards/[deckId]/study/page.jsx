@@ -67,7 +67,12 @@ const StudyView = ({ params }) => {
 
     const [currentCard, setCurrentCard] = useState(null);
     const [showAnswer, setShowAnswer] = useState(false);
-    const [updatingCard, setUpdatingCard] = useState(false);
+    // Rating saves run in the background (chained in order) so they never
+    // block revealing the next card.
+    const saveQueueRef = useRef(Promise.resolve());
+    // Synchronous guard so a double click / key repeat can't rate twice
+    // before React re-renders.
+    const ratingLockRef = useRef(false);
     const [cardIndex, setCardIndex] = useState(0);
     const [muted, setMuted] = useState(false);
     const [audioError, setAudioError] = useState(false);
@@ -99,6 +104,7 @@ const StudyView = ({ params }) => {
         setCardFlipping(false);
         setShowCelebration(false);
         setRatingInProgress(null);
+        ratingLockRef.current = false;
     }, [currentCard]);
     
     // Audio player reference
@@ -272,9 +278,6 @@ const StudyView = ({ params }) => {
                 return;
             }
             
-            // If card is updating, don't process keyboard shortcuts
-            if (updatingCard) return;
-            
             // Handle show answer with space or enter
             if (!showAnswer && (e.key === ' ' || e.key === 'Enter')) {
                 e.preventDefault(); // Prevent page scrolling on space
@@ -315,12 +318,17 @@ const StudyView = ({ params }) => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [showAnswer, currentCard, updatingCard, fourButtons]);
+    }, [showAnswer, currentCard, cardFlipping, fourButtons]);
+
+    const flipTimerRef = useRef(null);
+    useEffect(() => () => clearTimeout(flipTimerRef.current), []);
 
     const handleShowAnswer = () => {
+        if (cardFlipping) return;
         setCardFlipping(true);
+        clearTimeout(flipTimerRef.current);
         // Small delay to sync with animation
-        setTimeout(() => {
+        flipTimerRef.current = setTimeout(() => {
             setShowAnswer(true);
             setCardFlipping(false);
         }, 150);
@@ -347,10 +355,10 @@ const StudyView = ({ params }) => {
     };
 
     const handleCardRating = async (rating) => {
-        if (!currentCard || updatingCard) return;
-        
+        if (!currentCard || ratingLockRef.current) return;
+        ratingLockRef.current = true;
+
         try {
-            setUpdatingCard(true);
             setRatingInProgress(rating);
             setReviewed(n => n + 1);
             if (rating !== 'again') setGot(n => n + 1);
@@ -429,32 +437,39 @@ const StudyView = ({ params }) => {
                 nextReviewDate: completeCardState.nextReviewDate
             });
             
-            // Send the updated card state to the server
-            const response = await fetch(`/api/decks/${deckId}/study`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    flashcardId: currentCard.flashcardId,
-                    updatedCardState: completeCardState
-                }),
+            // Persist in the background. The session manager has already
+            // advanced to the next card locally, so the UI must not wait on
+            // this request (previously the Show Answer button stayed disabled
+            // until the POST finished, making it seem unresponsive).
+            // Saves are chained so they reach the server in order.
+            const body = JSON.stringify({
+                flashcardId: currentCard.flashcardId,
+                updatedCardState: completeCardState
             });
-
-            const data = await response.json();
-
-            if (!data.success) {
-                console.error('Error updating card:', data.error);
-                setError(t('cards.study.errorUpdating'));
-                return;
-            }
-            
+            saveQueueRef.current = saveQueueRef.current.then(async () => {
+                try {
+                    const response = await fetch(`/api/decks/${deckId}/study`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body,
+                    });
+                    const data = await response.json();
+                    if (!data.success) {
+                        console.error('Error updating card:', data.error);
+                        setError(t('cards.study.errorUpdating'));
+                    }
+                } catch (err) {
+                    console.error('Error saving card rating:', err);
+                    setError(t('cards.study.errorUpdating'));
+                }
+            });
         } catch (err) {
             console.error('Error rating card:', err);
             setError(t('cards.study.errorUpdating'));
-        } finally {
-            setUpdatingCard(false);
             setRatingInProgress(null);
+            ratingLockRef.current = false;
         }
     };
 
@@ -577,7 +592,7 @@ const StudyView = ({ params }) => {
                 <div className={studyStyles.cardOuter}>
                     <div
                         className={`${studyStyles.flip} ${showAnswer ? studyStyles.flipped : ''} ${showCelebration ? studyStyles.celebration : ''}`}
-                        onClick={() => { if (!showAnswer && !updatingCard) handleShowAnswer(); }}
+                        onClick={() => { if (!showAnswer) handleShowAnswer(); }}
                     >
                         <div className={`${studyStyles.face} ${studyStyles.front}`} aria-hidden={showAnswer}>
                             <span className={studyStyles.faceLabel}>What does this mean?</span>
@@ -616,7 +631,7 @@ const StudyView = ({ params }) => {
                                         type="button"
                                         className={`${studyStyles.gradeButton} ${studyStyles[`g_${rating}`]} ${ratingInProgress === rating ? studyStyles.processing : ''}`}
                                         onClick={() => handleCardRating(rating)}
-                                        disabled={updatingCard}
+                                        disabled={ratingInProgress !== null}
                                     >
                                         {t(`cards.study.${key}`)} <kbd>{i + 1}</kbd>
                                     </button>
@@ -628,7 +643,7 @@ const StudyView = ({ params }) => {
                                     type="button"
                                     className={`${studyStyles.gradeButton} ${studyStyles.g_again}`}
                                     onClick={() => handleCardRating('again')}
-                                    disabled={updatingCard}
+                                    disabled={ratingInProgress !== null}
                                 >
                                     Missed it <kbd>1</kbd>
                                 </button>
@@ -636,7 +651,7 @@ const StudyView = ({ params }) => {
                                     type="button"
                                     className={`${studyStyles.gradeButton} ${studyStyles.g_good}`}
                                     onClick={() => handleCardRating('good')}
-                                    disabled={updatingCard}
+                                    disabled={ratingInProgress !== null}
                                 >
                                     Got it <kbd>2</kbd>
                                 </button>
@@ -647,7 +662,7 @@ const StudyView = ({ params }) => {
                             type="button"
                             className={studyStyles.showAnswerButton}
                             onClick={handleShowAnswer}
-                            disabled={updatingCard || cardFlipping}
+                            disabled={cardFlipping}
                         >
                             {t('cards.study.showAnswer')}
                         </button>
