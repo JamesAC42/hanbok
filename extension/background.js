@@ -22,10 +22,34 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
   const text = info.selectionText?.trim();
   if (info.menuItemId !== 'hanbokAnalyze' || !text || !tab?.id) return;
 
-  // The content script runs the analysis so it can show progress and the
-  // result in the page. It isn't present on chrome:// or store pages.
-  chrome.tabs.sendMessage(tab.id, { type: 'ANALYZE_SELECTION', text }).catch(() => {});
+  analyzeInTab(tab, text);
 });
+
+// The content script runs the analysis so it can show progress and the
+// result in the page.
+async function analyzeInTab(tab, text) {
+  const message = { type: 'ANALYZE_SELECTION', text };
+  try {
+    await chrome.tabs.sendMessage(tab.id, message);
+    return;
+  } catch {
+    // No content script: the tab was open before the extension was
+    // installed or reloaded. The menu click grants activeTab, so add it now.
+  }
+  try {
+    await chrome.scripting.insertCSS({ target: { tabId: tab.id }, files: ['content.css'] });
+    await chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      files: ['shared.js', 'highlight.js', 'ui-styles.js', 'content.js']
+    });
+    await chrome.tabs.sendMessage(tab.id, message);
+  } catch {
+    // Pages extensions can't run on (PDFs, chrome://, the Web Store):
+    // open the text on Hanbok instead.
+    const siteUrl = await getSiteUrl();
+    chrome.tabs.create({ url: `${siteUrl}/analyze?text=${encodeURIComponent(text)}`, index: tab.index + 1 });
+  }
+}
 
 async function getSettings() {
   const stored = await chrome.storage.sync.get(Object.keys(DEFAULT_SETTINGS));

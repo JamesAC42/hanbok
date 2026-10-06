@@ -343,8 +343,21 @@
   // ---------------------------------------------------------------------
   // Selection button and highlighted-word card
 
+  // After the extension is reloaded or updated, this copy can no longer
+  // reach it. Step aside so the fresh copy (injected on demand) takes over.
+  function orphaned() {
+    if (chrome.runtime?.id) return false;
+    document.removeEventListener('mouseup', onMouseUp, true);
+    document.removeEventListener('mousedown', onMouseDown, true);
+    document.removeEventListener('keydown', onKeyDown, true);
+    document.removeEventListener('click', onPageClick, true);
+    observer.disconnect();
+    host.remove();
+    return true;
+  }
+
   function onMouseUp(event) {
-    if (event.composedPath().includes(host)) return;
+    if (orphaned() || event.composedPath().includes(host)) return;
     // Let the selection settle (double-click, shift-click).
     setTimeout(() => {
       const selection = window.getSelection();
@@ -408,6 +421,7 @@
   }
 
   function onPageClick(event) {
+    if (orphaned()) return;
     const target = event.target;
     if (!(target instanceof Element) || !target.classList.contains(HIGHLIGHT_CLASS)) return;
     const surface = target.textContent;

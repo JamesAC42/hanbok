@@ -310,7 +310,7 @@ p { margin: 0; }
   color: var(--bp-ink2);
 }
 
-.loading, .error { display: flex; align-items: center; gap: 14px; padding: 18px 0; font-weight: 600; }
+.loading, .error { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 24px 0; font-weight: 600; text-align: center; }
 .error p { color: var(--bp-rev); }
 .spinner {
   width: 20px;

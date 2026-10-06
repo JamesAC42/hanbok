@@ -5,7 +5,9 @@
   "description": "Analyze sentences on any page with Hanbok, save words to your deck, and see the words you're learning highlighted as you browse.",
   "permissions": [
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "scripting",
+    "activeTab"
   ],
   "host_permissions": [
     "https://hanbokstudy.com/*",
