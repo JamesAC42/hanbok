@@ -72,6 +72,12 @@
             padding: .45rem .65rem;
             font-size: .72rem;
         }
+
+        @media screen and (max-width: 480px) {
+            padding: .45rem .5rem;
+            font-size: .68rem;
+            letter-spacing: .03em;
+        }
     }
 }
 
@@ -79,6 +85,10 @@
     display: flex;
     gap: .4rem;
     flex-shrink: 0;
+
+    @media screen and (max-width: 480px) {
+        gap: .2rem;
+    }
 }
 
 // Layout

@@ -74,3 +74,18 @@
 div[class*="theme-"] {
     color: var(--foreground);
 }
+
+// Keyboard focus: one clear ring everywhere, never on mouse clicks.
+:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--bp-read) 70%, transparent);
+    outline-offset: 2px;
+}
+
+::selection {
+    background: color-mix(in srgb, var(--bp-read) 22%, transparent);
+}
+
+// Thin scrollbars that follow the theme's line color.
+div[class*="theme-"] {
+    scrollbar-color: var(--bp-line-strong) transparent;
+}

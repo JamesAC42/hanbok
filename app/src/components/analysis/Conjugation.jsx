@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import styles from '@/styles/components/sentenceanalyzer/conjugation.module.scss';
 import { useLanguage } from '@/contexts/LanguageContext';
 import getFontClass from '@/lib/fontClass';
@@ -47,19 +48,21 @@ const Conjugation = ({
                             const explanation = typeof step === 'string' ? null : step.explanation;
 
                             return (
-                                <div key={index} className={styles.stepItem}>
-                                    <div className={styles.stepContent}>
-                                        <div className={styles.stepNumber}><span className={styles.stepNumberText}>{index + 1}</span></div>
-                                        <div className={styles.stepText}>{stepText}</div>
+                                <Fragment key={index}>
+                                    <div className={styles.stepItem}>
+                                        <div className={styles.stepContent}>
+                                            <div className={styles.stepNumber}><span className={styles.stepNumberText}>{index + 1}</span></div>
+                                            <div className={styles.stepText}>{stepText}</div>
+                                        </div>
+                                        {explanation && <div className={styles.stepExplanation}>{explanation}</div>}
                                     </div>
-                                    {explanation && <div className={styles.stepExplanation}>{explanation}</div>}
                                     {index < conjugation.steps.length - 1 && (
-                                        <div className={styles.arrow}>↓</div>
+                                        <div className={styles.arrow} aria-hidden="true">↓</div>
                                     )}
-                                </div>
+                                </Fragment>
                             );
                         })}
-                         <div className={styles.arrow}>↓</div>
+                         <div className={styles.arrow} aria-hidden="true">↓</div>
                          <div className={`${styles.stepItem} ${styles.finalResult}`}>
                             <div className={styles.stepContent}>
                                 <div className={styles.stepText}>{finalForm}</div>

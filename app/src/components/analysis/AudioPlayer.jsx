@@ -14,6 +14,7 @@ import styles from '@/styles/components/sentenceanalyzer/audioplayerslim.module.
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
+import Mascot from '@/components/Mascot';
 
 const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, voice2Slow, isLyric }) => {
 
@@ -435,14 +436,11 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
                 disabled={loadingAudio}
               >
                 {loadingAudio ? <SvgSpinnersRingResize /> : <MaterialSymbolsPlayArrowRounded />}
-                <span>
-                  {isQuotaBlocked
-                    ? t('audioPlayer.noCredits.title')
-                    : isLengthBlocked
-                      ? lengthLimitTitle
-                      : (isGenerationFailed && !loadingAudio)
-                        ? generationFailedTitle
-                        : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))}
+                {/* Keep the button label short; the note below explains a lock. */}
+                <span title={isQuotaBlocked ? t('audioPlayer.noCredits.title') : isLengthBlocked ? lengthLimitTitle : isGenerationFailed ? generationFailedTitle : undefined}>
+                  {(isGenerationFailed && !loadingAudio)
+                    ? t('audioPlayer.tryAgain', 'Try audio again')
+                    : (loadingAudio ? t('audioPlayer.generating') : t('audioPlayer.playAudio'))}
                 </span>
               </button>
             ) : (
@@ -489,12 +487,26 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
 
           {
             showPopup && (
-              <div className={styles.audioPlayerLockedPopup}>
-                <p>{popupTitle}</p>
-                <Link href={popupHref}>
-                  <span>{popupCta}</span>
-                  <MaterialSymbolsArrowCircleRightRounded />
-                </Link>
+              <div className={styles.audioPlayerLockedPopup} role="status">
+                <Mascot pose={popupType === 'slow-login' ? 'wave' : 'think'} size={56} className={styles.popupMascot} />
+                <div className={styles.popupBody}>
+                  <p>{popupTitle}</p>
+                  <Link
+                    href={popupHref}
+                    className={popupType === 'slow-login' ? styles.popupSignIn : styles.popupUpgrade}
+                  >
+                    <span>{popupCta}</span>
+                    <MaterialSymbolsArrowCircleRightRounded />
+                  </Link>
+                </div>
+                <button
+                  type="button"
+                  className={styles.popupClose}
+                  onClick={() => setShowPopup(false)}
+                  aria-label={t('common.close')}
+                >
+                  ×
+                </button>
               </div>
             )
           }

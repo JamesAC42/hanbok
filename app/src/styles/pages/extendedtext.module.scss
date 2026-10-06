@@ -418,7 +418,7 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
 .onboardingOverlay {
     position: fixed;
     inset: 0;
-    background: color-mix(in srgb, var(--foreground) 35%, transparent);
+    background: rgba(10, 14, 40, .45);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -452,16 +452,23 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
     place-items: center;
     border-radius: 12px;
     border: 2px solid var(--bp-line);
+    box-shadow: 0 3px 0 var(--bp-line);
     background: var(--bp-card);
     color: var(--bp-ink2);
     font-size: 1.1rem;
     font-weight: 800;
     cursor: pointer;
     z-index: 1;
+    transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
 
     &:hover {
         background: var(--bp-soft);
         color: var(--foreground);
+    }
+
+    &:active {
+        transform: translateY(3px);
+        box-shadow: none;
     }
 }
 
@@ -480,6 +487,23 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    // Kkachi on a soft purple disc for the slides without a video.
+    .onboardingArt {
+        align-self: center;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        width: 8rem;
+        height: 7rem;
+        margin-top: -1.75rem;
+        border-radius: 50% 50% 22px 22px;
+        background: var(--bp-purple-soft);
+
+        img {
+            margin-bottom: -.35rem;
+        }
     }
 
     .onboardingVideo {

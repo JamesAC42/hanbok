@@ -8,6 +8,7 @@ import resetStyles from '@/styles/components/passwordreset.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
 import ContentPage from '@/components/ContentPage';
+import Mascot from '@/components/Mascot';
 
 const ResetPassword = () => {
     const { t } = useLanguage();
@@ -86,16 +87,15 @@ const ResetPassword = () => {
                     
                     <div className={resetStyles.resetContainer}>
                         <div className={resetStyles.resetCard}>
+                            <Mascot pose="think" size={84} className={resetStyles.cardMascot} />
                             <h1 className={resetStyles.resetTitle}>Invalid Reset Link</h1>
                             <p className={resetStyles.resetSubtitle}>
                                 This password reset link is invalid or has expired.
                             </p>
                             
-                            <div className={resetStyles.backToLogin}>
-                                <Link href="/forgot-password">
-                                    Request a new reset link
-                                </Link>
-                            </div>
+                            <Link href="/forgot-password" className={resetStyles.resetButton}>
+                                Request a new reset link
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -112,6 +112,7 @@ const ResetPassword = () => {
                     <div className={resetStyles.resetCard}>
                         {!isSuccess ? (
                             <>
+                                <Mascot pose="wave" size={84} className={resetStyles.cardMascot} />
                                 <h1 className={resetStyles.resetTitle}>Set New Password</h1>
                                 <p className={resetStyles.resetSubtitle}>
                                     Enter a new password for your account.
@@ -125,7 +126,8 @@ const ResetPassword = () => {
                                             id="newPassword"
                                             value={newPassword}
                                             onChange={(e) => setNewPassword(e.target.value)}
-                                            placeholder="Enter new password (min. 8 characters)"
+                                            placeholder="At least 8 characters"
+                                            autoComplete="new-password"
                                             required
                                             disabled={isSubmitting}
                                             minLength={8}
@@ -139,7 +141,8 @@ const ResetPassword = () => {
                                             id="confirmPassword"
                                             value={confirmPassword}
                                             onChange={(e) => setConfirmPassword(e.target.value)}
-                                            placeholder="Confirm new password"
+                                            placeholder="Type it again"
+                                            autoComplete="new-password"
                                             required
                                             disabled={isSubmitting}
                                             minLength={8}
@@ -147,7 +150,7 @@ const ResetPassword = () => {
                                     </div>
 
                                     {error && (
-                                        <div className={resetStyles.errorMessage}>
+                                        <div className={resetStyles.errorMessage} role="alert">
                                             {error}
                                         </div>
                                     )}
@@ -168,25 +171,20 @@ const ResetPassword = () => {
                                 </div>
                             </>
                         ) : (
-                            <div className={resetStyles.successMessage}>
+                            <div className={resetStyles.successMessage} role="status">
+                                <Mascot pose="celebrate" size={96} motion="hop" className={resetStyles.cardMascot} />
                                 <h1 className={resetStyles.resetTitle}>Password Updated!</h1>
                                 <p className={resetStyles.resetSubtitle}>
                                     Your password has been successfully updated. You can now log in with your new password.
                                 </p>
                                 
-                                <div className={resetStyles.successIcon}>
-                                    ✅
-                                </div>
-                                
+                                <Link href="/login" className={resetStyles.resetButton}>
+                                    Go to Login
+                                </Link>
+
                                 <p className={resetStyles.helpText}>
                                     Redirecting you to the login page in 3 seconds...
                                 </p>
-
-                                <div className={resetStyles.backToLogin}>
-                                    <Link href="/login">
-                                        Go to Login →
-                                    </Link>
-                                </div>
                             </div>
                         )}
                     </div>

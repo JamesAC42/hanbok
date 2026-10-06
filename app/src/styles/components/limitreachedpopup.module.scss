@@ -1,104 +1,157 @@
+@import "../variables.module.scss";
+
+// Bright Path popup. This file is the shared popup look: the announcement,
+// subscription and promo popups @import it and add their own extras.
+// Dimmed backdrop, white card with a line shadow, a Kkachi pose on top,
+// a Lilita title, a sentence or two and one clear button.
+
 .overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    inset: 0;
+    z-index: 9999999;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 9999999;
-    animation: fadeIn 0.2s ease-out;
+    padding: 1rem;
+    background: rgba(10, 14, 40, .45);
+    animation: bpPopupFade .18s ease-out;
 }
 
 .popup {
-    background: white;
-    padding: 2rem;
-    border-radius: 0.5rem;
-    max-width: 28rem;
-    width: 90%;
-    box-shadow: 0 0.36rem 0.9rem -0.24rem color-mix(in srgb, var(--shadow) 45%, transparent);
-    border: 1px solid #000;
-    animation: slideUp 0.3s ease-out;
+    position: relative;
+    width: 100%;
+    max-width: 27rem;
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 1.75rem 1.75rem 1.75rem;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-display);
+    text-align: center;
+    border: 2px solid var(--bp-line);
+    border-radius: 24px;
+    box-shadow: 0 6px 0 var(--bp-line);
+    animation: bpPopupIn .22s cubic-bezier(.3, 1.4, .5, 1);
 
     h2 {
-        margin: 0 0 1rem;
-        font-family: var(--font-display);
+        @include bp-title;
+        margin: .85rem 0 .6rem;
+        font-size: 1.65rem;
+        text-wrap: balance;
     }
 
     p {
-        margin: 0.5rem 0;
-        line-height: 1.5;
-        color: var(--text-secondary);
-        color: var(--text-primary);
+        margin: 0 0 .6rem;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.55;
+        color: var(--foreground);
+        text-wrap: pretty;
+    }
+
+    @media (max-width: 480px) {
+        padding: 1.5rem 1.15rem 1.35rem;
+
+        h2 {
+            font-size: 1.45rem;
+        }
+    }
+}
+
+// Muted second sentence.
+.subText {
+    color: var(--bp-ink2) !important;
+    font-size: .94rem !important;
+}
+
+// Kkachi sits on a soft colored disc at the top of the card.
+.art {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 7.5rem;
+    height: 6.6rem;
+    margin: .25rem auto 0;
+    border-radius: 50% 50% 22px 22px;
+    background: var(--bp-purple-soft);
+
+    &.read { background: var(--bp-read-soft); }
+    &.und { background: var(--bp-und-soft); }
+    &.keep { background: var(--bp-keep-soft); }
+    &.flame { background: var(--bp-flame-soft); }
+
+    img {
+        margin-bottom: -.35rem;
     }
 }
 
 .closeButton {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
+    top: .85rem;
+    right: .85rem;
+    z-index: 2;
+    width: 2.6rem;
+    height: 2.6rem;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 3px 0 var(--bp-line);
+    background: var(--background);
+    color: var(--bp-ink2);
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1;
     cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    color: var(--text-secondary);
+    transition: transform .08s ease, box-shadow .08s ease, background .15s ease;
 
-    &:hover {
-        color: var(--text-primary);
-    }
+    &:hover { color: var(--foreground); background: var(--bp-soft); }
+    &:active { transform: translateY(3px); box-shadow: none; }
+    &:focus-visible { outline: 3px solid var(--bp-read-line); outline-offset: 2px; }
 }
 
 .buttons {
     display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
+    flex-direction: column;
+    gap: .75rem;
+    margin-top: 1.4rem;
 
-.upgradeButton, .cancelButton {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.25rem;
-    cursor: pointer;
-    font-family: var(--font-display);
-    transition: all 0.2s ease;
-}
-
-.upgradeButton {
-    background: #000;
-    color: white;
-    border: 1px solid #000;
-
-    &:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, var(--shadow) 45%, transparent);
+    button, a {
+        width: 100%;
+        min-height: 50px;
+        white-space: normal;
     }
+}
+
+// Upgrade = purple; sign in / everything else = blue.
+.upgradeButton {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 5px);
+    font-size: 1rem;
+}
+
+.primaryButton {
+    @include bp-press(var(--bp-read), var(--bp-read-d), #fff, 5px);
+    font-size: 1rem;
 }
 
 .cancelButton {
-    background: white;
-    color: #000;
-    border: 1px solid #000;
-
-    &:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0.18rem 0.45rem -0.12rem color-mix(in srgb, var(--shadow) 45%, transparent);
-    }
+    @include bp-press-ghost(var(--bp-ink2), 4px);
+    font-size: .9rem;
 }
 
-@keyframes fadeIn {
+@keyframes bpPopupFade {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(1rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-} 
+@keyframes bpPopupIn {
+    from { opacity: 0; transform: translateY(14px) scale(.97); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .overlay, .popup { animation: none; }
+}

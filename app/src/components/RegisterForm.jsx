@@ -146,6 +146,7 @@ const RegisterForm = () => {
                         type="text"
                         id="name"
                         name="name"
+                        autoComplete="username"
                         value={formData.name}
                         onChange={handleChange}
                         required
@@ -161,6 +162,7 @@ const RegisterForm = () => {
                         type="email"
                         id="email"
                         name="email"
+                        autoComplete="email"
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -175,6 +177,7 @@ const RegisterForm = () => {
                         type="password"
                         id="password"
                         name="password"
+                        autoComplete="new-password"
                         value={formData.password}
                         onChange={handleChange}
                         required
@@ -190,6 +193,7 @@ const RegisterForm = () => {
                         type="password"
                         id="confirmPassword"
                         name="confirmPassword"
+                        autoComplete="new-password"
                         value={formData.confirmPassword}
                         onChange={handleChange}
                         required
@@ -201,13 +205,13 @@ const RegisterForm = () => {
                 <HeardFromSelect disabled={loading} />
 
                 {error && (
-                    <div className={styles.error}>
+                    <div className={styles.error} role="alert">
                         {error}
                     </div>
                 )}
 
                 {success && (
-                    <div className={styles.success}>
+                    <div className={styles.success} role="status">
                         {success}
                         <div className={styles.resendContainer}>
                             <p>Didn't receive the email?</p>

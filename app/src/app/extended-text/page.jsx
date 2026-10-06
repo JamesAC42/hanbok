@@ -372,6 +372,11 @@ export default function ExtendedTextPage() {
                                         </video>
                                     </div>
                                 )}
+                                {onboardingSlide !== 0 && (
+                                    <div className={styles.onboardingArt}>
+                                        <Mascot pose={onboardingSlide === 1 ? 'teach' : 'celebrate'} size={104} />
+                                    </div>
+                                )}
                                 <h2>{onboardingSlides[onboardingSlide].title}</h2>
                                 <p>{onboardingSlides[onboardingSlide].description}</p>
                                 <ul>

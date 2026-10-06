@@ -1,121 +1,144 @@
-.settingsButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
+@import '@/styles/variables.module.scss';
+
+.settingsContainer {
     display: flex;
+}
+
+// Icon button in the analysis section bar.
+.settingsButton {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-    font-size: 1.5rem;
-    color: var(--foreground);
-    opacity: 0.5; 
-    transform:translate(-0.2rem, -0.3rem)
-
-    svg {
-        transform: scale(0.9);
-    }
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--bp-ink2);
+    font-size: 1.45rem;
+    cursor: pointer;
+    transition: background .12s ease, color .12s ease, border-color .12s ease;
 
     &:hover {
-        opacity: 1;
-        background: rgba(0, 0, 0, 0.05);
+        background: var(--bp-soft);
+        color: var(--foreground);
+    }
+
+    &:focus-visible {
+        outline: 3px solid var(--bp-read-line);
+        outline-offset: 2px;
     }
 
     &.active {
-        opacity: 1;
-        background: rgba(0, 0, 0, 0.05);
-    }
-
-    @media screen and (max-width: 725px) {
-        top: 0.5rem;
-        left: 0.5rem;
-        transform:translate(-0.2rem, -0rem);
-        font-size: 1.2rem;
-        svg {
-            transform: scale(0.9);
-        }
+        border-color: var(--bp-read-line);
+        background: var(--bp-read-soft);
+        color: var(--bp-read);
     }
 }
 
+@keyframes menuIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: none; }
+}
+
+// Menu card (rendered in a portal, positioned by the component).
 .settingsMenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    transform:translateX(-50%);
-    margin-top: 0rem;
-    color:var(--foreground);
-    background: var(--background);
-    border-radius: 0.5rem;
-    box-shadow: 0 0.25rem 0.5rem var(--shadow);
-    padding: 0.75rem;
-    min-width: 12rem;
-    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: max-content;
+    min-width: 16rem;
+    max-width: calc(100vw - 1rem);
+    padding: .5rem .4rem .4rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 16px;
+    background: var(--bp-card);
+    box-shadow: 0 4px 0 var(--bp-line);
+    color: var(--foreground);
+    font-family: var(--font-display);
+    animation: menuIn .14s ease-out;
+
+    @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+
+.menuTitle {
+    @include bp-label;
+    padding: .25rem .75rem .45rem;
 }
 
 .settingsMenuItem {
+    position: relative;
     display: flex;
     align-items: center;
-    padding: 0.5rem 0;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.9rem;
+    padding: .45rem .75rem;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+
+    &:hover { background: var(--bp-soft); }
+
+    // The real checkbox covers the row, invisible, so the whole row is the target.
+    input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    &:has(input:focus-visible) {
+        border-color: var(--bp-read-line);
+    }
+
+    &.on {
+        background: var(--bp-read-soft);
+
+        .settingsLabel { color: var(--bp-read); }
+
+        .toggleSlider {
+            background: var(--bp-read);
+            border-color: var(--bp-read-d);
+
+            &::before { transform: translateX(1.15rem); }
+        }
+    }
 }
 
 .settingsLabel {
-    margin-left: 0.75rem;
-    font-size: 0.875rem;
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--foreground);
 }
 
-.settingsToggle {
+// On/off switch.
+.toggleSlider {
     position: relative;
-    display: inline-block;
-    width: 2.5rem;
-    height: 1.25rem;
-    
-    input {
-        opacity: 0;
-        width: 0;
-        height: 0;
+    flex: none;
+    width: 2.9rem;
+    height: 1.75rem;
+    border-radius: 99px;
+    border: 2px solid var(--bp-line-strong);
+    background: var(--bp-line);
+    transition: background .15s ease, border-color .15s ease;
+    pointer-events: none;
 
-        & + .toggleSlider {
-            &:before {
-                transform: translate(-0.1rem);
-            }
-        }
-        
-        &:checked + .toggleSlider {
-            background-color: var(--color-primary, #4a90e2);
-            
-            &:before {
-                transform: translateX(.9rem);
-                background-color: white;
-                border: 1px solid rgba(0, 0, 0, 0.1);
-            }
-        }
-    }
-    
-    .toggleSlider {
+    &::before {
+        content: "";
         position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        transition: .4s;
-        width:1.95rem;
-        height:1.15rem;
-        border-radius: 1.25rem;
-        box-shadow: inset 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.1);
-        
-        &:before {
-            position: absolute;
-            content: "";
-            height:1rem;
-            width:1rem;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
+        top: 50%;
+        left: .15rem;
+        width: 1.15rem;
+        height: 1.15rem;
+        margin-top: -.575rem;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 2px 0 rgba(0, 0, 0, .18);
+        transition: transform .15s ease;
     }
-} 
+}

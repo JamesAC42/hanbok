@@ -70,6 +70,8 @@ const SaveButton = ({ sentenceId }) => {
             onClick={toggleSave}
             disabled={isLoading}
             title={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
+            aria-label={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
+            aria-pressed={isSaved}
         >
             {isSaved ? <MaterialSymbolsBookmarkSharp /> : <MaterialSymbolsBookmarkOutlineSharp />}
         </button>

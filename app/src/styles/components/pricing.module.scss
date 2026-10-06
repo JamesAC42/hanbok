@@ -1,617 +1,646 @@
 @import '../variables.module.scss';
 
+// Pricing, Bright Path. Plans read left to right as three plain cards:
+// Starter (gray), Plus (purple, the premium color the sidebar "Go unlimited"
+// button uses, marked with a pill) and Basic (read blue). Big Lilita names
+// and prices so they compare at a glance.
+
 .pricingPage {
-    min-height: 100vh;
-    background: #0f172a; /* Deep blue */
+    --plan-free: var(--bp-gray);
+    --plan-free-d: var(--bp-gray-d);
+    --plan-plus: var(--bp-purple);
+    --plan-plus-d: var(--bp-purple-d);
+    --plan-plus-line: var(--bp-purple-line);
+    --plan-plus-soft: var(--bp-purple-soft);
+    --plan-basic: var(--bp-read);
+    --plan-basic-d: var(--bp-read-d);
+    --plan-basic-line: var(--bp-read-line);
+    --plan-basic-soft: var(--bp-read-soft);
+    // Readable text tones of the stage colors (stay legible on dark themes).
+    --t-plus: color-mix(in srgb, var(--bp-purple) 75%, var(--foreground));
+    --t-basic: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
+    --t-und: color-mix(in srgb, var(--bp-und) 68%, var(--foreground));
+
     position: relative;
+    min-height: 100%;
+    // Full-bleed surface (themes paint it), content held to 72rem.
+    padding: 2.25rem max(2.25rem, calc((100% - 72rem) / 2)) 4rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    background: var(--background);
     overflow-x: hidden;
-    font-family: var(--font-serif); /* Default sans-serif for features */
+
+    @media screen and (max-width: 725px) {
+        padding: 1.25rem 1rem 3rem;
+    }
 }
+
+// Signed-out: content sits under the fixed public header.
+.publicPage {
+    padding-top: 7rem;
+    padding-bottom: 8rem; // room for the footer's overlapping Discord banner
+
+    @media screen and (max-width: 725px) {
+        padding-top: 6rem;
+    }
+}
+
+.publicBand {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5rem;
+    z-index: 999; // just under the public header (1000)
+    overflow: hidden;
+    background: #0d2a1c;
+
+    img {
+        filter: brightness(0.6);
+    }
+}
+
+// ===== Hero =====
 
 .pricingHero {
-    text-align: center;
-    padding: 6rem 2rem 3rem 2rem;
-    margin-top: 3rem;
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    max-width: 60rem;
+    margin: 0 auto 1.75rem;
+
     .heroTitle {
-        font-family: var(--font-lilita); /* Bold serif/display */
-        font-size: 3.5rem;
-        color: #fff;
-        margin-bottom: 1.5rem;
-        text-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
-        
-        @media screen and (max-width: 768px) {
-            font-size: 2.5rem;
-        }
+        @include bp-title;
+        margin: 0;
+        font-size: 2.3rem;
+        text-wrap: balance;
     }
-    
+
     .heroSubtitle {
-        font-family: var(--font-serif);
-        font-size: 1.25rem;
-        color: #cbd5e1; /* Lighter gray/blue */
-        max-width: 40rem;
-        margin: 0 auto;
-        line-height: 1.6;
-        
-        @media screen and (max-width: 768px) {
-            font-size: 1.1rem;
+        margin: 0.5rem 0 0;
+        font-size: 1.08rem;
+        font-weight: 600;
+        line-height: 1.55;
+        color: var(--bp-ink2);
+    }
+
+    @media screen and (max-width: 640px) {
+        gap: 0.9rem;
+        align-items: flex-start;
+
+        .heroMascot {
+            width: 70px;
+            height: auto;
+        }
+
+        .heroTitle {
+            font-size: 1.7rem;
+        }
+
+        .heroSubtitle {
+            font-size: 0.98rem;
         }
     }
 }
 
-// Billing Toggle Styles
+.heroMascot {
+    flex-shrink: 0;
+}
+
+// ===== Monthly / yearly segmented control =====
+
 .billingToggle {
     display: flex;
     justify-content: center;
-    padding: 0 2rem 4rem 2rem;
-    
-    .toggleContainer {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 3rem;
-        padding: 0.75rem 2rem;
-        border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-        
-        .toggleLabel {
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 1rem;
-            color: #94a3b8;
-            transition: all 0.2s ease;
-            position: relative;
-            
-            &.active {
-                color: #fff;
-                font-weight: 700;
-            }
-            
-            .saveBadge {
-                position: absolute;
-                top: -1.5rem;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #10b981; /* Emerald Green */
-                color: #fff;
-                font-size: 0.75rem;
-                font-weight: 700;
-                padding: 0.25rem 0.75rem;
-                border-radius: 1rem;
-                text-transform: uppercase;
-                white-space: nowrap;
-                box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-            }
-        }
-        
-        .toggleSwitch {
-            position: relative;
-            width: 3.5rem;
-            height: 1.75rem;
-            cursor: pointer;
-            
-            .toggleSlider {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: #334155;
-                border-radius: 1rem;
-                transition: all 0.3s ease;
-                
-                &.yearly {
-                    background: #10b981;
-                }
-                
-                .toggleButton {
-                    position: absolute;
-                    top: 0.125rem;
-                    left: 0.125rem;
-                    width: 1.5rem;
-                    height: 1.5rem;
-                    background: #fff;
-                    border-radius: 50%;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
-                }
-            }
-            
-            .toggleSlider.yearly .toggleButton {
-                transform: translateX(1.75rem);
-            }
-        }
+    margin-bottom: 2.75rem;
+}
+
+.toggleContainer {
+    display: inline-flex;
+    gap: 0.35rem;
+    padding: 0.35rem;
+    border-radius: 16px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-soft);
+}
+
+.toggleOption {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.9rem;
+    padding: 0.55rem 1.35rem;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: var(--bp-ink2);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+        color: var(--foreground);
+    }
+
+    &.active {
+        background: var(--background);
+        border-color: var(--plan-basic-line);
+        color: var(--t-basic);
+        box-shadow: 0 3px 0 var(--plan-basic-line);
+    }
+
+    @media screen and (max-width: 400px) {
+        padding: 0.5rem 0.9rem;
+        font-size: 0.95rem;
     }
 }
 
+.saveBadge {
+    padding: 0.2rem 0.55rem;
+    border-radius: 99px;
+    background: var(--bp-und-soft);
+    color: var(--t-und);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+// ===== Plan cards =====
+
 .mainPlansSection {
-    padding: 0 2rem 6rem 2rem;
-    
-    .mainPlansContainer {
-        max-width: 75rem;
+    margin-bottom: 3.5rem;
+    scroll-margin-top: 6rem;
+}
+
+.mainPlansContainer {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    // Rows shared by every card (header, features, button, footnote) so
+    // dividers and buttons line up across plans.
+    grid-template-rows: auto 1fr auto auto;
+    align-items: stretch;
+    column-gap: 1.25rem;
+
+    @media screen and (max-width: 1100px) {
+        grid-template-rows: none;
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 30rem;
         margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1fr 1.1fr 1fr; /* Middle column slightly wider */
-        align-items: center;
-        gap: 2rem;
-        
-        @media screen and (max-width: 1024px) {
-            grid-template-columns: 1fr;
-            max-width: 30rem;
-            gap: 3rem;
-        }
+        gap: 1.75rem;
     }
 }
 
 .planCard {
-    background: rgba(30, 41, 59, 0.7); /* Slate 800 with opacity */
-    border-radius: 1rem;
-    padding: 2rem;
     position: relative;
-    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    align-content: start;
+    padding: 1.75rem 1.5rem 1.5rem;
+    border-radius: 22px;
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 5px 0 var(--bp-line);
+    background: var(--background);
+
+    @media screen and (max-width: 1100px) {
+        display: flex;
+        flex-direction: column;
+        grid-row: auto;
+    }
+
+    @media screen and (max-width: 400px) {
+        padding: 1.5rem 1.15rem 1.25rem;
+    }
+}
+
+.planHeader {
+    text-align: center;
+    padding-bottom: 1.1rem;
+    margin-bottom: 1.1rem;
+    border-bottom: 2px solid var(--bp-line);
+}
+
+.planName {
+    @include bp-title;
+    margin: 0 0 0.35rem;
+    font-size: 2.1rem;
+}
+
+.planPrice {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.15rem;
+    color: var(--foreground);
+
+    .currency {
+        @include bp-title;
+        font-size: 1.7rem;
+        align-self: flex-start;
+        margin-top: 0.45rem;
+    }
+
+    .amount {
+        @include bp-title;
+        font-size: 3.9rem;
+        line-height: 1;
+    }
+
+    .period {
+        margin-left: 0.2rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--bp-ink2);
+        text-transform: lowercase;
+    }
+}
+
+.priceNote {
+    display: inline-block;
+    margin: 0.5rem 0 0;
+    padding: 0.2rem 0.65rem;
+    border-radius: 99px;
+    background: var(--bp-und-soft);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--t-und);
+}
+
+.subText {
+    margin: 0.5rem 0 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}
+
+.planFeatures {
+    flex-grow: 1;
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    
-    .planHeader {
-        text-align: center;
-        margin-bottom: 2rem;
-        
-        .planName {
-            font-family: var(--font-lilita);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: #fff;
-        }
-        
-        .planPrice {
-            display: flex;
-            align-items: baseline;
-            justify-content: center;
-            gap: 0.25rem;
-            color: #fff;
-            
-            .currency {
-                font-size: 1.25rem;
-                font-weight: 600;
-                opacity: 0.8;
-            }
-            
-            .amount {
-                font-size: 2.5rem;
-                font-weight: 900;
-                font-family: var(--font-lilita);
-            }
-            
-            .period {
-                font-size: 1rem;
-                opacity: 0.6;
-            }
-        }
-        
-        .subText {
-            font-size: 0.9rem;
-            color: #64748b; /* Slate 500 */
-            margin-top: 0.5rem;
-            font-style: italic;
-        }
-    }
-    
-    .planFeatures {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 2rem 0;
-        flex-grow: 1;
-        
-        li {
-            padding: 0.75rem 0;
-            border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
-            font-size: 1rem;
-            color: #cbd5e1; /* Slate 300 */
-            position: relative;
-            padding-left: 1.75rem;
-            text-align: left;
-            
-            &:before {
-                content: '✓';
-                position: absolute;
-                left: 0;
-                color: #94a3b8; /* Slate 400 */
-                font-weight: bold;
-            }
-            
-            &:last-child {
-                border-bottom: none;
-            }
-            
-            strong {
-                color: #fff;
-                font-weight: 700;
-            }
-        }
-    }
-    
-    .planButton {
-        width: 100%;
-        padding: 0.875rem 1.5rem;
-        border: none;
-        border-radius: 0.5rem;
-        font-family: var(--font-display);
-        font-weight: 700;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        
-        &:hover {
-            transform: translateY(-0.125rem);
-        }
-        
-        &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-    }
-    
-    .guaranteeText {
-        font-size: 0.75rem;
-        color: #64748b;
-        text-align: center;
-        margin-top: 0.75rem;
-    }
-}
+    gap: 0.8rem;
 
-/* Free Plan (Anchor) */
-.freePlan {
-    background: rgba(15, 23, 42, 0.5); /* Darker */
-    border: 0.0625rem solid rgba(255, 255, 255, 0.05);
-    
-    .planName {
-        color: #94a3b8;
-    }
-    
-    .planPrice .amount {
-        color: #94a3b8;
-    }
-    
-    .freeButton {
-        background: transparent;
-        border: 0.125rem solid #475569;
-        color: #94a3b8;
-        
-        &:hover {
-            border-color: #94a3b8;
-            color: #fff;
-        }
-    }
-    
-    .planFeatures li:before {
-        color: #64748b; /* Dim checkmark */
-    }
-}
-
-/* Plus Plan (Hero) */
-.plusPlan {
-    background: #fff; /* Light background for high contrast */
-    color: #0f172a;
-    transform: scale(1.05);
-    z-index: 10;
-    box-shadow: 0 0 4rem rgba(249, 115, 22, 0.15); /* Orange glow */
-    border: 0.125rem solid #f97316; /* Orange border */
-    padding: 2.5rem;
-    
-    @media screen and (max-width: 1024px) {
-        transform: scale(1);
-    }
-
-    .planHeader {
-        .planName {
-            color: #0f172a;
-            font-size: 2rem;
-        }
-        
-        .planPrice {
-            color: #0f172a;
-            
-            .currency, .period {
-                color: #64748b;
-            }
-            
-            .amount {
-                font-size: 3.5rem;
-                color: #0f172a;
-            }
-        }
-        
-        .subText {
-            color: #475569;
-            font-weight: 500;
-        }
-    }
-    
-    .planFeatures li {
-        color: #334155;
-        border-bottom-color: #e2e8f0;
-        
-        &:before {
-            color: #10b981; /* Green checkmark */
-            font-size: 1.2rem;
-        }
-        
-        strong {
-            color: #0f172a;
-        }
-    }
-    
-    .plusButton {
-        background: #f97316; /* Vibrant Orange */
-        color: #fff;
-        font-size: 1.125rem;
-        padding: 1rem;
-        box-shadow: 0 0.25rem 1rem rgba(249, 115, 22, 0.3);
-        
-        &:hover {
-            background: #ea580c;
-            box-shadow: 0 0.5rem 1.5rem rgba(249, 115, 22, 0.4);
-        }
-    }
-    
-    .guaranteeText {
-        color: #10b981; /* Green text */
+    li {
+        position: relative;
+        padding-left: 2.2rem;
+        font-size: 1.05rem;
         font-weight: 600;
+        line-height: 1.45;
+        color: var(--foreground);
+        text-align: left;
+
+        &::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0.05rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: var(--bp-ink2);
+            background: var(--bp-soft);
+            border: 2px solid var(--bp-line);
+            box-sizing: border-box;
+        }
+
+        strong {
+            font-weight: 800;
+        }
     }
+}
+
+.planButton {
+    width: 100%;
+    min-height: 3.4rem;
+    font-size: 1rem;
+}
+
+.guaranteeText {
+    margin: 0.9rem 0 0;
+    text-align: center;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--t-und);
+}
+
+// Starter: quiet gray.
+.freePlan {
+    .planName { color: var(--bp-ink2); }
+    .planPrice .amount { color: var(--bp-ink2); }
+}
+
+.freeButton {
+    @include bp-press-ghost(var(--foreground), 4px);
+    font-size: 1rem;
+}
+
+// Plus: the recommended plan.
+.plusPlan {
+    border-width: 3px;
+    border-color: var(--plan-plus-line);
+    box-shadow: 0 6px 0 var(--plan-plus-line);
+    padding-top: 2.25rem;
+
+    .planName { color: var(--t-plus); }
+    .planHeader { border-bottom-color: var(--plan-plus-line); }
+
+    .planFeatures li::before {
+        color: #fff;
+        background: var(--plan-plus);
+        border-color: var(--plan-plus);
+    }
+}
+
+.plusButton {
+    @include bp-press(var(--plan-plus), var(--plan-plus-d), #fff, 5px);
+    font-size: 1.05rem;
 }
 
 .popularBadge {
     position: absolute;
-    top: -0.75rem;
+    top: -1rem;
     left: 50%;
     transform: translateX(-50%);
-    background: #f97316;
+    padding: 0.4rem 1rem;
+    border-radius: 99px;
+    background: var(--plan-plus);
     color: #fff;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.875rem;
-    padding: 0.5rem 1.5rem;
-    border-radius: 1rem;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    box-shadow: 0 0.25rem 0.5rem rgba(249, 115, 22, 0.3);
+    white-space: nowrap;
+    box-shadow: 0 3px 0 var(--plan-plus-d);
 }
 
-/* Basic Plan */
+// Basic: read blue.
 .basicPlan {
-    border: 0.0625rem solid #3b82f6; /* Blue border */
-    
-    .planName {
-        color: #3b82f6;
-    }
-    
-    .planPrice .amount {
-        color: #3b82f6;
-    }
-    
-    .basicButton {
-        background: #3b82f6;
-        color: #fff;
-        
-        &:hover {
-            background: #2563eb;
-        }
-    }
-    
-    .planFeatures li:before {
-        color: #3b82f6;
+    border-color: var(--plan-basic-line);
+    box-shadow: 0 5px 0 var(--plan-basic-line);
+
+    .planName { color: var(--t-basic); }
+
+    .planFeatures li::before {
+        color: var(--t-basic);
+        background: var(--plan-basic-soft);
+        border-color: var(--plan-basic-line);
     }
 }
 
-/* Why Upgrade Section */
+.basicButton {
+    @include bp-press(var(--plan-basic), var(--plan-basic-d), #fff, 4px);
+}
+
+// ===== Sections below the plans =====
+
+.sectionTitle {
+    @include bp-title;
+    margin: 0 0 1.1rem;
+    font-size: 1.6rem;
+    text-align: center;
+
+    @media screen and (max-width: 640px) {
+        font-size: 1.4rem;
+    }
+}
+
 .whyUpgradeSection {
-    padding: 4rem 2rem;
-    max-width: 75rem;
-    margin: 0 auto;
-    
-    .whyUpgradeTitle {
-        text-align: center;
-        font-family: var(--font-lilita);
-        font-size: 2.5rem;
-        color: #fff;
-        margin-bottom: 3rem;
-    }
-    
-    .whyUpgradeGrid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-        
-        @media screen and (max-width: 768px) {
-            grid-template-columns: 1fr;
-        }
-    }
-    
-    .whyUpgradeCard {
-        text-align: center;
-        background: rgba(255, 255, 255, 0.03);
-        padding: 2rem;
-        border-radius: 1rem;
-        border: 0.0625rem solid rgba(255, 255, 255, 0.05);
-        transition: transform 0.3s ease;
-        
-        &:hover {
-            transform: translateY(-0.25rem);
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .whyUpgradeIcon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        h3 {
-            color: #fff;
-            font-size: 1.25rem;
-            margin-bottom: 0.75rem;
-            font-family: var(--font-display);
-        }
-        
-        p {
-            color: #94a3b8;
-            line-height: 1.6;
-        }
+    margin-bottom: 3rem;
+}
+
+.whyUpgradeGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 30rem;
+        margin: 0 auto;
     }
 }
 
-/* Reviews Section */
+.whyUpgradeCard {
+    @include bp-card;
+    padding: 1.25rem 1.3rem;
+
+    --tile: var(--bp-read-soft);
+    --tile-line: var(--bp-read-line);
+
+    &.tintRead { --tile: var(--bp-read-soft); --tile-line: var(--bp-read-line); }
+    &.tintUnd { --tile: var(--bp-und-soft); --tile-line: var(--bp-und-line); }
+    &.tintKeep { --tile: var(--bp-keep-soft); --tile-line: var(--bp-keep-line); }
+
+    h3 {
+        @include bp-title;
+        margin: 0.8rem 0 0.3rem;
+        font-size: 1.3rem;
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--bp-ink2);
+    }
+}
+
+.whyUpgradeIcon {
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    border-radius: 14px;
+    background: var(--tile);
+    border: 2px solid var(--tile-line);
+}
+
 .reviewsSection {
-    padding: 4rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
+    margin-bottom: 3rem;
 }
 
 .reviewBubbles {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-    max-width: 75rem;
-    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: 30rem;
+        margin: 0 auto;
+    }
 }
 
 .reviewBubble {
-    background: rgba(255, 255, 255, 0.05);
-    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-    border-radius: 1rem;
-    padding: 2rem;
-    max-width: 22rem;
-    flex: 1 1 18rem;
-    
-    .reviewStars {
-        margin-bottom: 1rem;
-        color: #fbbf24; /* Amber/Gold */
-        font-size: 1.25rem;
-    }
-    
-    .reviewText {
-        color: #e2e8f0;
-        font-size: 1.1rem;
-        line-height: 1.5;
-        margin-bottom: 1rem;
-        font-style: italic;
-    }
-    
-    .reviewAuthor {
-        color: #94a3b8;
-        font-size: 0.9rem;
-        font-weight: 600;
+    @include bp-card;
+    display: flex;
+    flex-direction: column;
+    padding: 1.15rem 1.3rem;
+    background: var(--bp-soft);
+}
+
+.reviewStars {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+}
+
+.star {
+    color: var(--bp-line-strong);
+
+    &.filled {
+        color: var(--bp-keep);
     }
 }
 
-/* FAQ Section */
+.reviewText {
+    flex: 1;
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.55;
+    color: var(--foreground);
+}
+
+.reviewAuthor {
+    @include bp-label;
+    margin: 0;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.85rem;
+}
+
+// FAQ
 .faqSection {
-    padding: 6rem 2rem;
-    max-width: 50rem;
-    margin: 0 auto;
-}
-
-.faqTitle {
-    font-family: var(--font-lilita);
-    font-size: 2.5rem;
-    color: #fff;
-    text-align: center;
-    margin-bottom: 3rem;
+    max-width: 46rem;
+    margin: 0 auto 3rem;
 }
 
 .faqContainer {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .faqItem {
-    background: rgba(255, 255, 255, 0.03);
-    border: 0.0625rem solid rgba(255, 255, 255, 0.05);
-    border-radius: 0.75rem;
+    @include bp-card;
     overflow: hidden;
-    
-    .faqQuestion {
-        width: 100%;
-        background: none;
-        border: none;
-        padding: 1.5rem;
-        color: #fff;
-        font-size: 1.125rem;
+
+    &.open {
+        border-color: var(--plan-basic-line);
+    }
+}
+
+.faqQuestion {
+    width: 100%;
+    min-height: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1.2rem;
+    border: none;
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--foreground);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+        background: var(--bp-soft);
+    }
+
+    &.active {
+        color: var(--t-basic);
+    }
+}
+
+.faqToggle {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 2px solid var(--bp-line);
+    font-size: 1.2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--bp-ink2);
+
+    .active & {
+        border-color: var(--plan-basic-line);
+        background: var(--plan-basic-soft);
+        color: var(--t-basic);
+    }
+}
+
+.faqAnswer {
+    padding: 0 1.2rem 1.1rem;
+
+    p {
+        margin: 0;
+        font-size: 1rem;
         font-weight: 600;
-        text-align: left;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-family: var(--font-display);
-        transition: background 0.2s ease;
-        
-        &:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        &.active {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f97316; /* Highlight active question */
-        }
-    }
-    
-    .faqToggle {
-        font-size: 1.5rem;
-        color: #94a3b8;
-    }
-    
-    .faqAnswer {
-        padding: 0 1.5rem 1.5rem 1.5rem;
-        color: #cbd5e1;
-        margin-top:1.5rem;
         line-height: 1.6;
-        
-        p {
-            margin: 0;
+        color: var(--bp-ink2);
+    }
+}
+
+// Final call to action
+.finalCtaSection {
+    max-width: 46rem;
+    margin: 0 auto;
+}
+
+.finalCtaContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1.75rem 1.5rem;
+    border-radius: 22px;
+    border: 2px solid var(--plan-plus-line);
+    box-shadow: 0 5px 0 var(--plan-plus-line);
+    background: var(--plan-plus-soft);
+    text-align: center;
+
+    h2 {
+        @include bp-title;
+        margin: 0;
+        font-size: 1.7rem;
+
+        @media screen and (max-width: 640px) {
+            font-size: 1.4rem;
         }
     }
 }
 
-/* Final CTA Section */
-.finalCtaSection {
-    padding: 6rem 2rem;
-    text-align: center;
-    background: linear-gradient(to top, rgba(15, 23, 42, 1), rgba(15, 23, 42, 0));
-    
-    .finalCtaContent {
-        max-width: 40rem;
-        margin: 0 auto;
-        
-        h2 {
-            font-family: var(--font-lilita);
-            font-size: 3rem;
-            color: #fff;
-            margin-bottom: 2rem;
-            text-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.3);
-        }
-        
-        .finalCtaButton {
-            background: #f97316;
-            color: #fff;
-            border: none;
-            padding: 1.25rem 3rem;
-            font-size: 1.25rem;
-            font-weight: 700;
-            border-radius: 3rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0.5rem 1.5rem rgba(249, 115, 22, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            
-            &:hover {
-                transform: translateY(-0.25rem);
-                box-shadow: 0 1rem 2rem rgba(249, 115, 22, 0.5);
-                background: #ea580c;
-            }
-        }
+.finalCtaMascot {
+    @media screen and (max-width: 640px) {
+        width: 72px;
+        height: auto;
     }
+}
+
+.finalCtaButton {
+    @include bp-press(var(--plan-plus), var(--plan-plus-d), #fff, 5px);
+    min-height: 3.2rem;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
 }

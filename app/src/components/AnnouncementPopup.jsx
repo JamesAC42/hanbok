@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/announcementpopup.module.scss';
 import { LogosDiscord } from '@/components/icons/DiscordLogo';
+import Mascot from '@/components/Mascot';
 
 const AnnouncementPopup = ({ onClose, announcementId, content }) => {
     const router = useRouter();
@@ -40,59 +41,71 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
     return (
         <div className={styles.overlay} onClick={onClose}>
             <div 
-                className={styles.popup} 
+                className={`${styles.popup} ${styles.wide}`} 
                 onClick={e => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="announcement-title"
             >
                 <button className={styles.closeButton} onClick={onClose} aria-label={t('common.close')}>×</button>
                 <div className={styles.header}>
-                    <h2>{t('announcement.newFeatures')}</h2>
+                    <div className={`${styles.art} ${styles.read}`}>
+                        <Mascot pose="speak" size={92} />
+                    </div>
                     <div className={styles.badge}>{t('announcement.new')}</div>
+                    <h2 id="announcement-title">{t('announcement.newFeatures')}</h2>
                 </div>
                 
                 <div className={styles.content}>
-                    <h3 className={styles.highlight}>{t('announcement.extendedTextTitle')}</h3>
-                    <p>{t('announcement.extendedTextDesc')}</p>
-                    <p>{t('announcement.extendedTextFeatures')}</p>
-                    <button 
-                        className={styles.lyricsButton}
-                        onClick={() => {
-                            router.push('/extended-text');
-                            onClose();
-                        }}
-                        aria-label={t('announcement.tryExtendedText')}
-                    >
-                        <span className={styles.buttonText}>{t('announcement.tryExtendedText')}</span>
-                    </button>
+                    <section className={`${styles.feature} ${styles.featurePurple}`}>
+                        <h3 className={styles.highlight}>{t('announcement.extendedTextTitle')}</h3>
+                        <p>{t('announcement.extendedTextDesc')}</p>
+                        <p>{t('announcement.extendedTextFeatures')}</p>
+                        <button 
+                            className={styles.lyricsButton}
+                            onClick={() => {
+                                router.push('/extended-text');
+                                onClose();
+                            }}
+                            aria-label={t('announcement.tryExtendedText')}
+                        >
+                            <span className={styles.buttonText}>{t('announcement.tryExtendedText')}</span>
+                        </button>
+                    </section>
 
-                    <h3>{t('announcement.themesTitle')}</h3>
-                    <p>{t('announcement.themesDesc')}</p>
-                    <p>{t('announcement.themesHint')}</p>
-                    <button 
-                        className={styles.lyricsButton}
-                        onClick={() => {
-                            router.push('/');
-                            onClose();
-                        }}
-                        aria-label={t('announcement.pickTheme')}
-                    >
-                        <span className={styles.buttonText}>{t('announcement.pickTheme')}</span>
-                    </button>
+                    <section className={styles.feature}>
+                        <h3>{t('announcement.themesTitle')}</h3>
+                        <p>{t('announcement.themesDesc')}</p>
+                        <p>{t('announcement.themesHint')}</p>
+                        <button 
+                            className={styles.ghostButton}
+                            onClick={() => {
+                                router.push('/');
+                                onClose();
+                            }}
+                            aria-label={t('announcement.pickTheme')}
+                        >
+                            <span className={styles.buttonText}>{t('announcement.pickTheme')}</span>
+                        </button>
+                    </section>
 
-                    <h3>{t('announcement.upcomingTitle')}</h3>
-                    <ul className={styles.featureList}>
-                        <li>{t('announcement.upcomingGrammar')}</li>
-                        <li>{t('announcement.upcomingQuizzes')}</li>
-                    </ul>
+                    <section className={styles.feature}>
+                        <h3>{t('announcement.upcomingTitle')}</h3>
+                        <ul className={styles.featureList}>
+                            <li>{t('announcement.upcomingGrammar')}</li>
+                            <li>{t('announcement.upcomingQuizzes')}</li>
+                        </ul>
+                    </section>
 
                     <div className={styles.communitySection}>
                         <h3>{t('announcement.communityTitle')}</h3>
                         <p>{t('announcement.communityDesc')}</p>
                         
                         <div className={styles.discordPromo}>
-                            <p className={styles.discordMessage}>{t('announcement.discordInvite')}</p>
                             <div className={styles.discordLogoContainer}>
                                 <LogosDiscord className={styles.discordLogo} />
                             </div>
+                            <p className={styles.discordMessage}>{t('announcement.discordInvite')}</p>
                         </div>
                         
                         <div className={styles.buttons}>
@@ -103,20 +116,22 @@ const AnnouncementPopup = ({ onClose, announcementId, content }) => {
                             >
                                 <span className={styles.buttonText}>{t('announcement.joinDiscord')}</span>
                             </button>
-                            <button 
-                                className={styles.shareButton}
-                                onClick={handleShareClick}
-                                aria-label={t('announcement.shareWebsite')}
-                            >
-                                <span className={styles.buttonText}>{t('announcement.shareWebsite')}</span>
-                            </button>
-                            <button 
-                                className={styles.feedbackButton}
-                                onClick={handleFeedbackClick}
-                                aria-label={t('announcement.leaveFeedback')}
-                            >
-                                <span className={styles.buttonText}>{t('announcement.leaveFeedback')}</span>
-                            </button>
+                            <div className={styles.buttonRow}>
+                                <button 
+                                    className={styles.shareButton}
+                                    onClick={handleShareClick}
+                                    aria-label={t('announcement.shareWebsite')}
+                                >
+                                    <span className={styles.buttonText}>{t('announcement.shareWebsite')}</span>
+                                </button>
+                                <button 
+                                    className={styles.feedbackButton}
+                                    onClick={handleFeedbackClick}
+                                    aria-label={t('announcement.leaveFeedback')}
+                                >
+                                    <span className={styles.buttonText}>{t('announcement.leaveFeedback')}</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

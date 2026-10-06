@@ -19,12 +19,14 @@ const LyricalDevices = ({analysis}) => {
             {
                 lyricalDevices.map((device, index) => (
                     <div key={index} className={styles.lyricalDevice}>
-                        <div className={styles.lyricalDeviceIcon}>
+                        <div className={styles.lyricalDeviceIcon} aria-hidden="true">
                             <HugeiconsMusicNote02 />
                         </div>
-                        <h3>{capitalize(device.type)}</h3>
-                        <p>{device.explanation}</p>
-                        <p>{device.effect}</p>
+                        <div className={styles.lyricalDeviceText}>
+                            <h3>{capitalize(device.type)}</h3>
+                            <p>{device.explanation}</p>
+                            {device.effect && <p className={styles.effect}>{device.effect}</p>}
+                        </div>
                     </div>
                 ))
             }

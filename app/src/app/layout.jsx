@@ -11,6 +11,7 @@ import Image from 'next/image';
 import ClientLayoutWrapper from '@/components/ClientLayoutWrapper';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import RedditPixel from '@/components/RedditPixel';
+import { LoadingScreen } from '@/components/StatusScreen';
 
 export const metadata = {
   title: "Hanbok - Multi-Language Learning Tool",
@@ -72,7 +73,7 @@ export default function RootLayout({ children }) {
                     />
                     <script defer src="https://umami.fukuin.dev/script.js" data-website-id="ef4f8c80-9b1d-4d10-87f3-8b3f5c3963e8"></script>
                     <RedditPixel />                    
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<LoadingScreen />}>
                       {children}
                     </Suspense>
                   </ClientLayoutWrapper>

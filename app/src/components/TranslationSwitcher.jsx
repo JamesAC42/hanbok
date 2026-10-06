@@ -30,27 +30,27 @@ const TranslationSwitcher = ({
                 <div className={styles.languageSwitcherOuter}>
                     <LanguageSwitcher analysis={analysis}/>
                 </div>
-                <div className={styles.translationSwitcherInner}>
-                    <div 
-                        className={styles.translationSwitcherBar}
-                        style={{
-                            transform: `translateX(${translationMode ? '22rem' : '0%'})`
-                        }}
-                    ></div>
-                    <div
+                <div className={styles.translationSwitcherInner} role="tablist">
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={!translationMode}
                         onClick={() => setTranslationMode(false)} 
                         className={`${styles.translateSwitcherItem} ${!translationMode ? styles.active : ''}`}>
-                        <div className={styles.itemText}>
+                        <span className={styles.itemText}>
                             {t('sentenceForm.translateMode.analysis').replace('{language}', languageName)}
-                        </div>
-                    </div>
-                    <div 
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        role="tab"
+                        aria-selected={translationMode}
                         onClick={() => setTranslationMode(true)} 
                         className={`${styles.translateSwitcherItem} ${translationMode ? styles.active : ''}`}>
-                        <div className={styles.itemText}>
+                        <span className={styles.itemText}>
                             {t('sentenceForm.translateMode.translate')}
-                        </div>
-                    </div>
+                        </span>
+                    </button>
                 </div>
             </div>
         </div>

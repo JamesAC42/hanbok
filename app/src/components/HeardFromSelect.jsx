@@ -28,7 +28,10 @@ const HeardFromSelect = ({ disabled }) => {
 
     return (
         <div className={styles.formGroup}>
-            <label htmlFor="heardFrom">How did you hear about Hanbok? (optional)</label>
+            <label htmlFor="heardFrom">
+                How did you hear about Hanbok?{' '}
+                <span className={styles.optional}>(optional)</span>
+            </label>
             <select id="heardFrom" name="heardFrom" value={value} onChange={handleChange} disabled={disabled}>
                 <option value="">Choose one</option>
                 {OPTIONS.map((option) => (

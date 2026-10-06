@@ -1,57 +1,57 @@
+@import '../variables.module.scss';
 
+// Community numbers row (sentences analyzed, words learned, learners).
 .statsContainer {
     display: flex;
-    gap: 2rem;
-    justify-content: flex-start;
-    margin-top: 0rem;
-    padding: 0.5rem;
-    border-radius: 0.2rem;
-    background: rgba(255, 255, 255, 0.336);
-    border:1px solid #6f81df;
-    backdrop-filter: blur(2px);
-    margin-bottom:1rem;
-    border-radius:0.5rem;
-    width:fit-content;
+    gap: .75rem;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
 
     .statItem {
+        @include bp-card;
         display: flex;
         flex-direction: column;
         align-items: center;
         min-width: 8rem;
-        padding: 0.5rem;
+        padding: .75rem 1rem;
+        border-radius: 16px;
     }
-    
+
     .statNumber {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: #392f2c;
+        font-family: var(--font-lilita);
+        font-size: 1.6rem;
+        line-height: 1.1;
+        color: var(--bp-read);
     }
-    
+
     .statLabel {
-        font-size: 1rem;
-        color: rgba(114, 88, 88, 0.886);
+        @include bp-label;
+        margin-top: .2rem;
         text-align: center;
     }
 
     &.statsContainerWithAnalysis {
-        display:none;
+        display: none;
     }
 
-    @media screen and (max-width:725px) {
-        margin-bottom:2rem;
-        gap:0rem;
-        justify-content:space-around;
-        width:100%;
+    @media screen and (max-width: 725px) {
+        width: 100%;
+        gap: .5rem;
+
         .statItem {
-            padding:0.2rem;
-            min-width:5rem;
+            flex: 1;
+            min-width: 0;
+            padding: .6rem .4rem;
         }
+
         .statNumber {
-            font-size:1.2rem;
+            font-size: 1.25rem;
         }
+
         .statLabel {
-            font-size:0.7rem;
-            max-width:3rem;
+            font-size: .62rem;
         }
     }
 }
