@@ -443,16 +443,7 @@ app.get('/api/lyrics/recent', async (req, res) => {
     getRecentLyrics(req, res);
 });
 
-// SEO routes
-app.get('/api/sitemap/lyrics', async (req, res) => {
-    const { generateLyricsSitemap } = require('./controllers/seo/sitemap');
-    generateLyricsSitemap(req, res);
-});
-
-app.get('/robots.txt', async (req, res) => {
-    const { generateRobotsTxt } = require('./controllers/seo/sitemap');
-    generateRobotsTxt(req, res);
-});
+// The sitemap and robots.txt are served by the Next app (app/src/app/sitemap.js, robots.js).
 
 // Lyric suggestions routes
 app.get('/api/lyrics/suggestions', async (req, res) => {

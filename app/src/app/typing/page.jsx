@@ -127,8 +127,6 @@ export default function TypingPractice() {
     const inputRef = useRef(null);
     
     useEffect(() => {
-        document.title = 'Hanbok - Korean Typing Practice';
-        
         const checkMobile = () => {
             setIsMobile(window.innerWidth <= 768);
         };

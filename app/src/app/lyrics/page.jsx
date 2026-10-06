@@ -58,7 +58,6 @@ const Lyrics = () => {
     ];
     
     useEffect(() => {
-        document.title = t('lyrics.pageTitle');
         fetchRecentLyrics();
     }, [t]);
 

@@ -14,7 +14,11 @@ import RedditPixel from '@/components/RedditPixel';
 import { LoadingScreen } from '@/components/StatusScreen';
 
 export const metadata = {
-  title: "Hanbok - Multi-Language Learning Tool",
+  metadataBase: new URL('https://hanbokstudy.com'),
+  title: {
+    default: "Hanbok - Learn Korean, Japanese & Chinese from Real Sentences",
+    template: "%s | Hanbok",
+  },
   description: "Learn Korean, Chinese, Japanese, Spanish, and more languages with AI-powered sentence analysis, vocabulary tools, and cultural insights.",
   keywords: "language learning, Korean, Chinese, Japanese, Spanish, Italian, French, German, Dutch, Russian, Turkish, vocabulary, grammar, translation",
   icons: {
