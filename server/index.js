@@ -46,6 +46,7 @@ const getSentence = require('./controllers/auth/getSentence');
 const submitExtendedText = require('./controllers/auth/submitExtendedText');
 const getExtendedText = require('./controllers/auth/getExtendedText');
 const streamExtendedTextProgress = require('./controllers/auth/streamExtendedTextProgress');
+const analyzeExtendedTextSentence = require('./controllers/auth/analyzeExtendedTextSentence');
 const saveExtendedText = require('./controllers/auth/saveExtendedText');
 const unsaveExtendedText = require('./controllers/auth/unsaveExtendedText');
 const checkSavedExtendedText = require('./controllers/auth/checkSavedExtendedText');
@@ -235,6 +236,10 @@ app.get('/api/extended-text/:textId', isAuthenticated, async (req, res) => {
 
 app.get('/api/extended-text/progress/:jobId', isAuthenticated, async (req, res) => {
     streamExtendedTextProgress(req, res);
+});
+
+app.post('/api/extended-text/:textId/sentences/:index/analysis', isAuthenticated, async (req, res) => {
+    analyzeExtendedTextSentence(req, res);
 });
 
 app.post('/api/extended-text/:textId/save', isAuthenticated, async (req, res) => {

@@ -1,29 +1,8 @@
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
 const { checkExtendedTextRateLimits } = require('./extendedTextRateLimits');
+const { splitIntoParagraphs, TIER_CHARACTER_LIMITS } = require('../../lib/extendedTextSplit');
 
-// Split text into sentences.
-// - Line breaks always end a sentence (pasted paragraphs, dialogue, lyrics often
-//   have no terminal punctuation on each line).
-// - Full-width CJK terminators (。！？) end a sentence even with no following space,
-//   since Japanese/Chinese text is normally written without spaces — unless the
-//   terminator is followed by a closing quote/bracket (e.g. 「行こう。」と言った).
-// - ASCII terminators (.!?) end a sentence only when followed by whitespace, so
-//   decimals, abbreviations and URLs are left intact.
-// Previously only "terminator + whitespace" split, so newline-separated or CJK text
-// collapsed into one huge "sentence" that the per-sentence analyzer then only
-// partially broke down.
-const CJK_BOUNDARY = /(?<=[。！？])(?![。！？」』）)"'”’\s])/;
-const ASCII_BOUNDARY = /(?<=[.!?。！？])\s+/;
-
-const splitIntoSentences = (text) => {
-    return text
-        .split(/\r?\n+/)
-        .flatMap((line) => line.split(ASCII_BOUNDARY))
-        .flatMap((part) => part.split(CJK_BOUNDARY))
-        .map((s) => s.trim())
-        .filter((s) => s.length > 0);
-};
 
 const submitExtendedText = async (req, res) => {
     let { text, originalLanguage = 'ko', translationLanguage = 'en', title = null } = req.body;
@@ -83,8 +62,7 @@ const submitExtendedText = async (req, res) => {
         title = null;
     }
 
-    // Split text into sentences
-    const sentences = splitIntoSentences(text);
+    const { sentences, paragraphs } = splitIntoParagraphs(text);
 
     if (sentences.length === 0) {
         return res.json({
@@ -125,13 +103,7 @@ const submitExtendedText = async (req, res) => {
             });
         }
 
-        const tierCharacterLimits = {
-            0: 500,
-            1: 2000,
-            2: 5000
-        };
-
-        const maxCharacters = tierCharacterLimits[user.tier] ?? tierCharacterLimits[0];
+        const maxCharacters = TIER_CHARACTER_LIMITS[user.tier] ?? TIER_CHARACTER_LIMITS[0];
         if (text.length > maxCharacters) {
             return res.json({
                 message: {
@@ -179,6 +151,8 @@ const submitExtendedText = async (req, res) => {
             userId,
             text,
             sentences,
+            paragraphs,
+            pipelineVersion: 2,
             sentenceCount: sentences.length,
             originalLanguage,
             translationLanguage,

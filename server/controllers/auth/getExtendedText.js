@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { readerFromAnalyses } = require('../../lib/extendedTextReader');
 
 const normalizeId = (raw) => {
     if (raw == null) {
@@ -57,58 +58,43 @@ const getExtendedText = async (req, res) => {
             textId: extendedText.textId
         });
 
-        if (!sentenceGroup) {
-            if (extendedText.analysis && extendedText.analysis.sentences) {
-                return res.json({
-                    success: true,
-                    extendedText
-                });
-            }
+        const refs = [...(sentenceGroup?.sentences || [])].sort((a, b) => a.order - b.order);
+        const sentenceDocs = refs.length > 0
+            ? await db.collection('sentences').find({ sentenceId: { $in: refs.map((ref) => ref.sentenceId) } }).toArray()
+            : [];
+        const docsById = new Map(sentenceDocs.map((doc) => [doc.sentenceId, doc]));
 
+        // Full breakdowns made so far, by sentence index.
+        const analyses = {};
+        for (const ref of refs) {
+            const doc = docsById.get(ref.sentenceId);
+            if (!doc) continue;
+            analyses[ref.order] = {
+                sentenceId: doc.sentenceId,
+                analysis: doc.analysis,
+                voice1Key: doc.voice1Key || null,
+                voice2Key: doc.voice2Key || null,
+                voice1SlowKey: doc.voice1SlowKey || null,
+                voice2SlowKey: doc.voice2SlowKey || null
+            };
+        }
+
+        const reader = Array.isArray(extendedText.reading)
+            ? extendedText.reading.map((item, index) => ({ index, ...item }))
+            : readerFromAnalyses(refs, docsById, extendedText.text);
+
+        if (reader.length === 0) {
             return res.status(404).json({
                 success: false,
                 error: "Sentence group not found for this text"
             });
         }
 
-        const orderedSentenceRefs = [...(sentenceGroup.sentences || [])].sort((a, b) => a.order - b.order);
-        const sentenceIds = orderedSentenceRefs.map(ref => ref.sentenceId);
-
-        let analysisSentences = [];
-        if (sentenceIds.length > 0) {
-            const sentences = await db.collection('sentences').find({
-                sentenceId: { $in: sentenceIds }
-            }).toArray();
-
-            const sentenceMap = sentences.reduce((map, sentence) => {
-                map[sentence.sentenceId] = sentence;
-                return map;
-            }, {});
-
-            analysisSentences = orderedSentenceRefs
-                .map(ref => {
-                    const sentenceDoc = sentenceMap[ref.sentenceId];
-                    if (!sentenceDoc) {
-                        return null;
-                    }
-
-                    return {
-                        sentenceId: sentenceDoc.sentenceId,
-                        text: sentenceDoc.text,
-                        analysis: sentenceDoc.analysis,
-                        voice1Key: sentenceDoc.voice1Key || null,
-                        voice2Key: sentenceDoc.voice2Key || null,
-                        voice1SlowKey: sentenceDoc.voice1SlowKey || null,
-                        voice2SlowKey: sentenceDoc.voice2SlowKey || null
-                    };
-                })
-                .filter(Boolean);
-        }
-
-        extendedText.analysis = {
-            sentences: analysisSentences,
-            overallAnalysis: extendedText.overallAnalysis || null
-        };
+        delete extendedText.reading;
+        delete extendedText._id;
+        extendedText.reader = reader;
+        extendedText.analyses = analyses;
+        extendedText.overallAnalysis = extendedText.overallAnalysis || {};
 
         res.json({
             success: true,
