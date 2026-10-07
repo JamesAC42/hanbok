@@ -12,6 +12,7 @@ import { MaterialSymbolsVolumeOff } from '@/components/icons/VolumeOff';
 import { use } from 'react';
 import getFontClass from '@/lib/fontClass';
 import Dashboard from '@/components/Dashboard';
+import GrammarReviewCard from '@/components/grammar/GrammarReviewCard';
 import SourceSentence from '@/components/cards/SourceSentence';
 // Import our new study session manager
 import studySessionManager from '@/lib/studySessionManager';
@@ -283,6 +284,8 @@ const StudyView = ({ params }) => {
             if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
                 return;
             }
+            // Grammar cards have their own buttons and Enter handling
+            if (currentCard?.contentType === 'grammar') return;
             
             // Handle show answer with space or enter
             if (!showAnswer && (e.key === ' ' || e.key === 'Enter')) {
@@ -595,6 +598,15 @@ const StudyView = ({ params }) => {
                     />
                 )}
 
+                {currentCard.contentType === 'grammar' ? (
+                    <GrammarReviewCard
+                        key={currentCard.flashcardId}
+                        card={currentCard}
+                        onRate={handleCardRating}
+                        disabled={ratingInProgress !== null}
+                    />
+                ) : (
+                <>
                 <div className={studyStyles.cardOuter}>
                     <div
                         className={`${studyStyles.flip} ${showAnswer ? studyStyles.flipped : ''} ${showCelebration ? studyStyles.celebration : ''}`}
@@ -677,6 +689,8 @@ const StudyView = ({ params }) => {
                         {fourButtons ? 'Prefer two buttons? Switch to Missed it / Got it.' : 'Prefer Again, Hard, Good and Easy? Switch to four buttons.'}
                     </button>
                 </div>
+                </>
+                )}
             </div>
         );
     };

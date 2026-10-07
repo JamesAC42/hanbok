@@ -5,6 +5,7 @@ import { MaterialSymbolsLightKidStarOutline } from '@/components/icons/StarOutli
 import { useLanguage } from '@/contexts/LanguageContext';
 import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
+import SaveGrammarRow, { useSavedGrammar } from '@/components/grammar/SaveGrammarRow';
 
 // Examples are one short sentence each. Now and then the model runs away and
 // writes hundreds of sentences into one field; drop those rather than let
@@ -15,8 +16,9 @@ const usableExamples = (examples) => (Array.isArray(examples) ? examples : [])
     .filter(e => e && typeof e.original === 'string' && e.original.trim() && e.original.length <= MAX_EXAMPLE_CHARS)
     .slice(0, MAX_EXAMPLES);
 
-const GrammarPoints = ({analysis, language, showPronunciation}) => {
+const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, showPronunciation}) => {
     const { t } = useLanguage();
+    const savedGrammar = useSavedGrammar(sentenceId);
     
     const renderLessonDifficulty = (difficulty) => {
         return renderStars(difficulty, 5);
@@ -111,6 +113,15 @@ const GrammarPoints = ({analysis, language, showPronunciation}) => {
                             </div>
                         </div>
                     )}
+
+                    <SaveGrammarRow
+                        point={lesson}
+                        language={language}
+                        translationLanguage={translationLanguage}
+                        sentenceId={sentenceId}
+                        examples={usableExamples(lesson.examples)}
+                        state={savedGrammar}
+                    />
                 </div>
             );
         });

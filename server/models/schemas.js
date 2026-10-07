@@ -1531,6 +1531,114 @@ const collections = {
         name: "extended_text_jobs_status"
       }
     ]
+  },
+  // Grammar review: see server/grammar/. One shared catalog entry per grammar
+  // point per learning language; learners save points from it.
+  grammar_catalog: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["grammarId", "language", "key", "form", "name"],
+        properties: {
+          grammarId: { bsonType: "int" },
+          language: { bsonType: "string" },
+          key: { bsonType: "string" },
+          form: { bsonType: "string" },
+          name: { bsonType: "string" },
+          level: { bsonType: ["int", "null"] },
+          formKeys: { bsonType: ["array", "null"], items: { bsonType: "string" } },
+          aliases: { bsonType: ["array", "null"], items: { bsonType: "string" } },
+          saves: { bsonType: ["int", "null"] }
+        }
+      }
+    },
+    indexes: [
+      { key: { grammarId: 1 }, unique: true, name: "grammar_catalog_id" },
+      { key: { language: 1, key: 1 }, unique: true, name: "grammar_catalog_key" },
+      { key: { language: 1, aliases: 1 }, name: "grammar_catalog_aliases" },
+      { key: { language: 1, formKeys: 1 }, name: "grammar_catalog_forms" },
+      { key: { language: 1, saves: -1 }, name: "grammar_catalog_popular" }
+    ]
+  },
+  saved_grammar: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "grammarId", "language", "dateSaved"],
+        properties: {
+          userId: { bsonType: "int" },
+          grammarId: { bsonType: "int" },
+          language: { bsonType: "string" },
+          uiLanguage: { bsonType: ["string", "null"] },
+          pattern: { bsonType: ["string", "null"] },
+          explanation: { bsonType: ["string", "null"] },
+          examples: { bsonType: ["array", "null"] },
+          sources: { bsonType: ["array", "null"] },
+          flashcardId: { bsonType: ["int", "null"] },
+          lessonDone: { bsonType: ["bool", "null"] },
+          dateSaved: { bsonType: "date" }
+        }
+      }
+    },
+    indexes: [
+      { key: { userId: 1, grammarId: 1 }, unique: true, name: "saved_grammar_user_point" },
+      { key: { userId: 1, dateSaved: -1 }, name: "saved_grammar_user_date" },
+      { key: { userId: 1, "sources.sentenceId": 1 }, name: "saved_grammar_source_sentence" }
+    ]
+  },
+  grammar_lessons: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["grammarId", "uiLanguage", "lesson"],
+        properties: {
+          grammarId: { bsonType: "int" },
+          uiLanguage: { bsonType: "string" },
+          lesson: { bsonType: "object" }
+        }
+      }
+    },
+    indexes: [
+      { key: { grammarId: 1, uiLanguage: 1 }, unique: true, name: "grammar_lessons_point_language" }
+    ]
+  },
+  grammar_quiz_items: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "grammarId", "type", "sentence", "answer"],
+        properties: {
+          userId: { bsonType: "int" },
+          grammarId: { bsonType: "int" },
+          type: { bsonType: "string" },
+          sentence: { bsonType: "string" },
+          answer: { bsonType: "string" },
+          usedAt: { bsonType: ["date", "null"] }
+        }
+      }
+    },
+    indexes: [
+      { key: { userId: 1, grammarId: 1, usedAt: 1 }, name: "grammar_quiz_items_bank" }
+    ]
+  },
+  grammar_practice_log: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["userId", "kind", "date"],
+        properties: {
+          userId: { bsonType: "int" },
+          grammarId: { bsonType: ["int", "null"] },
+          kind: { bsonType: "string", description: "'question' or 'lesson'" },
+          quiz: { bsonType: ["bool", "null"] },
+          correct: { bsonType: ["bool", "null"] },
+          date: { bsonType: "date" }
+        }
+      }
+    },
+    indexes: [
+      { key: { userId: 1, kind: 1, date: -1 }, name: "grammar_practice_log_user" }
+    ]
   }
 };
 

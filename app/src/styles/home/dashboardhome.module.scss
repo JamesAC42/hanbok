@@ -854,6 +854,28 @@
     }
 }
 
+.grammarCard {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    background: color-mix(in srgb, var(--bp-und) 7%, var(--background));
+    border-color: var(--bp-und-line);
+
+    p {
+        margin: .3rem 0 .85rem;
+        font-size: .92rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+    }
+}
+
+.grammarButton {
+    @include bp-press(var(--bp-und), var(--bp-und-d));
+    font-size: .82rem;
+    padding: .6rem 1rem;
+}
+
 .tutorButton {
     @include bp-press(var(--bp-flame), var(--bp-flame-d));
     font-size: .82rem;
