@@ -16,7 +16,6 @@ const stubModule = (relPath, exportsObj) => {
     require.cache[file] = { id: file, filename: file, loaded: true, exports: exportsObj };
 };
 
-stubModule('anthropic.js', { prompt_anthropic: fakeProvider });
 stubModule('gemini.js', { prompt_gemini: fakeProvider, prompt_gemini_analysis: fakeProvider, ANALYSIS_MODEL: 'test-model' });
 stubModule('openai.js', { prompt_openai: fakeProvider });
 stubModule('geminiThinking.js', { prompt_geminiThinking: fakeProvider });
@@ -100,7 +99,7 @@ describe('generateResponse', () => {
     test('throws with the last error after five bad responses', async () => {
         queuedResponses.push(...Array(5).fill('not json'));
         await assert.rejects(
-            generateResponse('prompt', 'anthropic'),
+            generateResponse('prompt', 'gemini'),
             /Could not generate valid response\. Last error: .*JSON/
         );
         assert.equal(queuedResponses.length, 0);

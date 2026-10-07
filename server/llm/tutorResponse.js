@@ -1,4 +1,3 @@
-const {prompt_anthropic} = require('./anthropic');
 const {prompt_gemini} = require('./gemini');
 const {prompt_openai} = require('./openai');
 const {prompt_geminiThinking} = require('./geminiThinking');
@@ -6,7 +5,6 @@ const { TUTOR_PROMPT } = require('./prompt_tutor');
 const { isChinese } = require('./chineseScript');
 
 const models = {
-    anthropic: prompt_anthropic,
     gemini: prompt_gemini,
     openai: prompt_openai,
     geminiThinking: prompt_geminiThinking
@@ -18,7 +16,7 @@ const models = {
  * @param {string} targetLanguage - Language being learned (ko, ja, zh, etc.)
  * @param {string} responseLanguage - Language for the response (en, etc.)
  * @param {Object} context - Optional conversation context
- * @param {string} model - AI model to use (anthropic, gemini, openai, geminiThinking)
+ * @param {string} model - AI model to use (gemini, openai, geminiThinking)
  * @param {Array} conversationHistory - Previous messages for context (optional)
  * @returns {Promise<string>} - Generated response in markdown format
  */

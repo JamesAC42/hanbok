@@ -1,10 +1,8 @@
-const {prompt_anthropic} = require('./anthropic');
 const {prompt_gemini, prompt_gemini_analysis, ANALYSIS_MODEL} = require('./gemini');
 const {prompt_openai} = require('./openai');
 const {prompt_geminiThinking} = require('./geminiThinking');
 
 const models = {
-    anthropic: prompt_anthropic,
     gemini: prompt_gemini,
     geminiAnalysis: prompt_gemini_analysis,
     openai: prompt_openai,
@@ -12,7 +10,6 @@ const models = {
 }
 
 const modelLabels = {
-    anthropic: 'anthropic/claude-sonnet-4-5',
     gemini: 'gemini/gemini-flash-lite-latest',
     geminiAnalysis: `gemini/${ANALYSIS_MODEL}`,
     openai: 'openai/gpt-4.1',

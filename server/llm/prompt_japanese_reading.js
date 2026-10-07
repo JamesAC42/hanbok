@@ -1,12 +1,10 @@
 const SupportedLanguages = require('../supported_languages');
 const { prompt_openai } = require('./openai');
-const { prompt_anthropic } = require('./anthropic');
 const { prompt_gemini } = require('./gemini');
 
 // Function to generate text responses (not JSON)
 const generateTextResponse = async (text, model = 'openai') => {
   const models = {
-    anthropic: prompt_anthropic,
     gemini: prompt_gemini,
     openai: prompt_openai
   };
