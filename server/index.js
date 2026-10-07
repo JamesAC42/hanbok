@@ -113,6 +113,7 @@ const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
+const { getSnapshot, requireMetricsToken } = require('./controllers/admin/snapshot');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -453,6 +454,8 @@ app.get('/api/admin/stats/feed', isAuthenticated, requireAdmin, adminStats.getFe
 app.get('/api/admin/stats/revenue', isAuthenticated, requireAdmin, getRevenue);
 app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
+// Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
+app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 
 app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
     searchWordAudio(req, res);

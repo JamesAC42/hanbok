@@ -105,7 +105,7 @@ const optional = (promise) => promise.catch((error) => {
     return null;
 });
 
-const buildTraffic = async ({ days, tz, now = new Date() }) => {
+const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12 }) => {
     const c = config();
     const from = new Date(now.getTime() - days * DAY);
     const prevFrom = new Date(now.getTime() - 2 * days * DAY);
@@ -120,7 +120,7 @@ const buildTraffic = async ({ days, tz, now = new Date() }) => {
     ]);
     const [series, pages, referrers, countries, devices, events, active] = await Promise.all([
         optional(umamiGet(`${site}/pageviews`, { ...range, unit: 'day', timezone: tz }, c)),
-        optional(metric(c, range, ['path', 'url'], 12)),
+        optional(metric(c, range, ['path', 'url'], pageLimit)),
         optional(metric(c, range, ['referrer'], 10)),
         optional(metric(c, range, ['country'], 8)),
         optional(metric(c, range, ['device'], 5)),
@@ -164,4 +164,4 @@ const getTraffic = async (req, res) => {
     }
 };
 
-module.exports = { getTraffic, buildTraffic, normalizeStats, toDailySeries, toList };
+module.exports = { getTraffic, buildTraffic, isConfigured, normalizeStats, toDailySeries, toList };
