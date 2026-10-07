@@ -10,12 +10,17 @@ import * as futureTense from './korean-future-tense-eul-geoyeyo';
 import * as wantTo from './korean-go-sipda-want-to';
 import * as negation from './korean-negation-an-vs-mot';
 import * as eVsEseo from './korean-e-vs-eseo';
+import * as because from './korean-aseo-eoseo-because';
+import * as but from './korean-jiman-but';
+import * as ifWhen from './korean-myeon-if';
+import * as numbers from './korean-numbers-native-vs-sino';
 
 // In reading order: the hub lists them this way and each article's "Keep going"
 // suggests the ones after it.
 export const articles = [
     sentenceStructure, particles, presentTense, pastTense, futureTense,
-    negation, wantTo, eVsEseo, speechLevels, kdramaWords,
+    negation, wantTo, eVsEseo, because, but, ifWhen,
+    speechLevels, numbers, kdramaWords,
 ];
 
 export const getArticle = (slug) => articles.find((a) => a.meta.slug === slug) || null;
