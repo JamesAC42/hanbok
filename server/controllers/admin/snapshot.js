@@ -97,6 +97,8 @@ const buildChannels = async (db, now) => {
             _id: {
                 source: { $ifNull: ['$attribution.utm_source', null] },
                 campaign: { $ifNull: ['$attribution.utm_campaign', null] },
+                // Outbox posts put the post id here, so signups can be joined to posts.csv.
+                content: { $ifNull: ['$attribution.utm_content', null] },
                 heardFrom: { $ifNull: ['$attribution.heardFrom', null] },
             },
             users: { $sum: 1 },
