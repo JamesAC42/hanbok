@@ -59,7 +59,7 @@ const StudyNotes = ({ lyric }) => {
 
             <div className={styles.cta}>
                 <p>Have a line from another song stuck in your head?</p>
-                <Link href="/analyze" className={styles.ctaButton}>Break down any sentence</Link>
+                <Link href={lyric.language === 'ko' ? '/korean-sentence-analyzer' : '/analyze'} className={styles.ctaButton}>Break down any sentence</Link>
             </div>
         </section>
     );
