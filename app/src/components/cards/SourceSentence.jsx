@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import getFontClass from '@/lib/fontClass';
 import styles from '@/styles/components/study.module.scss';
+import { sentenceHref } from '@/lib/sentenceLink';
 
 // Splits text around the first occurrence of the word so it can be marked.
 const highlight = (text, surface) => {
@@ -26,7 +27,7 @@ const SourceSentence = ({ source, language }) => {
             </div>
             {source.translation && <div className={styles.sourceTranslation}>{source.translation}</div>}
             <Link
-                href={`/sentence/${source.sentenceId}`}
+                href={sentenceHref(source)}
                 target="_blank"
                 rel="noopener"
                 className={styles.sourceLink}

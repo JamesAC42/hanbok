@@ -53,6 +53,13 @@ async function connectToDatabase() {
     await db.collection('sentences').createIndex({ userId: 1, 'analysis.components.dictionary_form': 1 });
     await db.collection('words').createIndex({ userId: 1, dateSaved: -1 });
     await db.collection('sentences').createIndex({ sentenceId: 1 }, { unique: true });
+    // Random ids for /sentence/ links; older sentences have none.
+    await db.collection('sentences').createIndex(
+      { publicId: 1 },
+      { unique: true, partialFilterExpression: { publicId: { $type: 'string' } }, name: 'sentence_public_id' }
+    );
+    await db.collection('sentences').createIndex({ userId: 1, hiddenAt: 1, dateCreated: -1 });
+    await db.collection('savedSentences').createIndex({ userId: 1, folderId: 1, dateSaved: -1 });
     await db.collection('savedSentences').createIndex(
       { userId: 1, sentenceId: 1 }, 
       { unique: true }

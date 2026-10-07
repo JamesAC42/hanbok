@@ -17,7 +17,7 @@ const getUserSentences = async (req, res) => {
     try {
         const db = getDb();
         
-        const matchCriteria = { userId };
+        const matchCriteria = { userId, hiddenAt: null };
         if (language) {
             matchCriteria.originalLanguage = language;
         }
@@ -32,6 +32,7 @@ const getUserSentences = async (req, res) => {
             .limit(limit)
             .project({
                 sentenceId: 1,
+                publicId: 1,
                 text: 1,
                 analysis: 1,
                 originalLanguage: 1,

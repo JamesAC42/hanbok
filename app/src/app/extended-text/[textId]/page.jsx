@@ -496,6 +496,7 @@ function ExtendedTextReader() {
                                 originalLanguage={language}
                                 translationLanguage={translationLanguage}
                                 sentenceId={currentAnalysis.sentenceId}
+                                shareKey={currentAnalysis.publicId || currentAnalysis.sentenceId}
                                 voice1={currentAnalysis.voice1Key}
                                 voice2={currentAnalysis.voice2Key}
                                 voice1Slow={currentAnalysis.voice1SlowKey}

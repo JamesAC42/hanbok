@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -8,12 +8,15 @@ import LanguageFilter from '@/components/LanguageFilter';
 import Link from 'next/link';
 import Mascot from '@/components/Mascot';
 import styles from '@/styles/pages/history.module.scss';
+import { sentenceHref, sentenceKey } from '@/lib/sentenceLink';
+import FolderPicker, { FolderIcon } from '@/components/library/FolderPicker';
+import { fetchFolders, createFolder, renameFolder, deleteFolder } from '@/lib/libraryFolders';
 
 // History (everything analyzed), Saved (bookmarked) and Words (saved for
 // flashcards) used to be separate pages; they share this one now.
 const TABS = [
   { key: 'history', label: 'History', title: 'Everything you analyzed' },
-  { key: 'saved', label: 'Saved', title: 'Sentences you bookmarked' },
+  { key: 'saved', label: 'Saved', title: 'Sentences and paragraphs you saved, in folders' },
   { key: 'words', label: 'Words', title: 'Words in your flashcards' },
 ];
 
@@ -60,6 +63,22 @@ export default function Library({ initialTab = 'history' }) {
   const [confirmRemove, setConfirmRemove] = useState(null);
   const [removingWord, setRemovingWord] = useState(null);
   const [removeError, setRemoveError] = useState(null);
+  // History: remove one item (two taps) or clear it all. Both only hide items.
+  const [confirmHide, setConfirmHide] = useState(null);
+  const [hiding, setHiding] = useState(null);
+  const [hideError, setHideError] = useState(null);
+  const [confirmClear, setConfirmClear] = useState(false);
+  const [clearing, setClearing] = useState(false);
+  const [clearError, setClearError] = useState(null);
+  // Saved: folders. activeFolder is 'all', 'unfiled' or a folderId.
+  const [folderData, setFolderData] = useState(null);
+  const [activeFolder, setActiveFolder] = useState('all');
+  const [pickerFor, setPickerFor] = useState(null);
+  const [renaming, setRenaming] = useState(false);
+  const [renameValue, setRenameValue] = useState('');
+  const [confirmDeleteFolder, setConfirmDeleteFolder] = useState(false);
+  const [folderError, setFolderError] = useState(null);
+  const [itemsVersion, setItemsVersion] = useState(0);
 
   const safeLabel = (key, fallback) => {
     const value = t(key);
@@ -85,7 +104,8 @@ export default function Library({ initialTab = 'history' }) {
           endpoint = `/api/words?page=${page}&limit=${limit}${selectedLanguage ? `&originalLanguage=${selectedLanguage}` : ''}`;
         } else {
           const typesParam = typeFilter === 'all' ? 'sentences,extended' : typeFilter === 'sentences' ? 'sentences' : 'extended';
-          endpoint = `${ENDPOINTS[tab]}?page=${page}&limit=${limit}${selectedLanguage ? `&language=${selectedLanguage}` : ''}&types=${typesParam}`;
+          const folderParam = tab === 'saved' && activeFolder !== 'all' ? `&folder=${activeFolder}` : '';
+          endpoint = `${ENDPOINTS[tab]}?page=${page}&limit=${limit}${selectedLanguage ? `&language=${selectedLanguage}` : ''}&types=${typesParam}${folderParam}`;
         }
         const response = await fetch(endpoint);
         const data = await response.json();
@@ -107,10 +127,138 @@ export default function Library({ initialTab = 'history' }) {
       }
     }
     fetchSentences();
-  }, [page, limit, selectedLanguage, typeFilter, tab, t]);
+  }, [page, limit, selectedLanguage, typeFilter, tab, t, activeFolder, itemsVersion]);
 
-  const handleSentenceClick = (sentenceId) => {
-    router.replace(`/sentence/${sentenceId}`);
+  const loadFolders = async () => {
+    try {
+      setFolderData(await fetchFolders());
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (tab === 'saved' && isAuthenticated) loadFolders();
+  }, [tab, isAuthenticated]);
+
+  const itemKey = (item) => (item.type === 'extended_text' ? `t-${item.textId}` : `s-${item.sentenceId}`);
+
+  // Drops an item from the current page; steps back a page if that empties it.
+  const dropItem = (key) => {
+    const remaining = items.filter(item => itemKey(item) !== key);
+    setItems(remaining);
+    setTotalCount(count => (count === null ? null : Math.max(0, count - 1)));
+    if (remaining.length === 0) {
+      if (page > 1) setPage(page - 1);
+      else setItemsVersion(v => v + 1);
+    }
+  };
+
+  // Removing from history hides the item; it stays saved, in flashcards and in grammar.
+  const hideItem = async (item) => {
+    const key = itemKey(item);
+    setHiding(key);
+    setHideError(null);
+    try {
+      const url = item.type === 'extended_text'
+        ? `/api/user/history/extended-texts/${item.textId}`
+        : `/api/user/history/sentences/${item.sentenceId}`;
+      const response = await fetch(url, { method: 'DELETE' });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.error);
+      setConfirmHide(null);
+      dropItem(key);
+    } catch (err) {
+      console.error(err);
+      setHideError(key);
+    } finally {
+      setHiding(null);
+    }
+  };
+
+  const clearHistory = async () => {
+    setClearing(true);
+    setClearError(null);
+    try {
+      const response = await fetch('/api/user/history/clear', { method: 'POST' });
+      const data = await response.json();
+      if (!data.success) throw new Error(data.error);
+      setConfirmClear(false);
+      setItems([]);
+      setTotalCount(0);
+      setTotalPages(1);
+      setPage(1);
+    } catch (err) {
+      console.error(err);
+      setClearError("Couldn't clear your history. Try again.");
+    } finally {
+      setClearing(false);
+    }
+  };
+
+  const chooseFolder = (folder) => {
+    setActiveFolder(folder);
+    setPage(1);
+    setRenaming(false);
+    setConfirmDeleteFolder(false);
+    setFolderError(null);
+  };
+
+  // Keeps the folder counts right after an item moves, and takes it off the
+  // page when it no longer belongs to the folder being shown.
+  const handleMoved = (item, folderId) => {
+    const from = item.folderId ?? null;
+    setFolderData(data => {
+      if (!data) return data;
+      const bump = (id, delta) => (f) => (f.folderId === id ? { ...f, count: Math.max(0, f.count + delta) } : f);
+      let folders = data.folders;
+      if (from !== null) folders = folders.map(bump(from, -1));
+      if (folderId !== null) folders = folders.map(bump(folderId, 1));
+      const unfiledCount = data.unfiledCount + (from === null ? -1 : 0) + (folderId === null ? 1 : 0);
+      return { ...data, folders, unfiledCount };
+    });
+    const key = itemKey(item);
+    const stillShown = activeFolder === 'all' || (activeFolder === 'unfiled' ? folderId === null : activeFolder === folderId);
+    if (stillShown) {
+      setItems(list => list.map(x => (itemKey(x) === key ? { ...x, folderId } : x)));
+    } else {
+      dropItem(key);
+    }
+  };
+
+  const handleFolderCreated = (folder) => {
+    setFolderData(data => (!data || data.folders.some(f => f.folderId === folder.folderId)
+      ? data
+      : { ...data, folders: [...data.folders, { ...folder, count: 0 }].sort((a, b) => a.name.localeCompare(b.name)) }));
+  };
+
+  const submitRename = async (event) => {
+    event.preventDefault();
+    const name = renameValue.trim();
+    if (!name) return;
+    setFolderError(null);
+    try {
+      const folder = await renameFolder(activeFolder, name);
+      setFolderData(data => ({ ...data, folders: data.folders.map(f => (f.folderId === folder.folderId ? { ...f, name: folder.name } : f)).sort((a, b) => a.name.localeCompare(b.name)) }));
+      setRenaming(false);
+    } catch (err) {
+      setFolderError(err.message);
+    }
+  };
+
+  const removeFolder = async () => {
+    setFolderError(null);
+    try {
+      await deleteFolder(activeFolder);
+      chooseFolder('all');
+      loadFolders();
+    } catch (err) {
+      setFolderError(err.message);
+    }
+  };
+
+  const handleSentenceClick = (sentence) => {
+    router.replace(sentenceHref(sentence));
   }
 
   const handleExtendedClick = (textId) => {
@@ -123,6 +271,10 @@ export default function Library({ initialTab = 'history' }) {
     setPage(1);
     setItems([]);
     setTotalCount(null);
+    setActiveFolder('all');
+    setConfirmHide(null);
+    setConfirmClear(false);
+    setPickerFor(null);
     // Keep the address shareable without a full navigation.
     window.history.replaceState(null, '', `/library?tab=${nextTab}`);
   };
@@ -209,7 +361,7 @@ export default function Library({ initialTab = 'history' }) {
         ) : (
           <div className={styles.wordActions}>
             {word.sentenceId && (
-              <Link href={`/sentence/${word.sentenceId}`} className={styles.wordSource}>See sentence</Link>
+              <Link href={sentenceHref(word)} className={styles.wordSource}>See sentence</Link>
             )}
             <button
               className={styles.wordRemove}
@@ -300,13 +452,81 @@ export default function Library({ initialTab = 'history' }) {
     </div>
   );
 
+  const folderName = (folderId) => folderData?.folders.find(f => f.folderId === folderId)?.name;
+
+  // Buttons under a row: remove (History) or file in a folder (Saved).
+  const renderRowActions = (item) => {
+    const key = itemKey(item);
+    const stop = (event) => event.stopPropagation();
+
+    if (tab === 'history') {
+      if (confirmHide === key) {
+        return (
+          <div className={`${styles.rowActions} ${styles.rowConfirm}`} onClick={stop}>
+            <span className={styles.wordConfirmText}>Remove from your history?</span>
+            <button className={styles.wordRemoveConfirm} onClick={() => hideItem(item)} disabled={hiding === key}>
+              {hiding === key ? 'Removing…' : 'Remove'}
+            </button>
+            <button className={styles.wordCancel} onClick={() => setConfirmHide(null)} disabled={hiding === key}>Cancel</button>
+            {hideError === key && <span className={styles.wordError} role="alert">Couldn&apos;t remove it. Try again.</span>}
+          </div>
+        );
+      }
+      return (
+        <div className={styles.rowActions} onClick={stop}>
+          <button
+            className={styles.rowRemove}
+            onClick={() => { setConfirmHide(key); setHideError(null); }}
+            title="Remove from history"
+          >
+            Remove
+          </button>
+        </div>
+      );
+    }
+
+    if (tab === 'saved') {
+      const name = folderName(item.folderId);
+      const id = item.type === 'extended_text' ? item.textId : sentenceKey(item);
+      return (
+        <div className={styles.rowActions} onClick={stop}>
+          <div className={styles.folderAnchor}>
+            <button
+              className={`${styles.folderButton} ${name ? styles.filed : ''}`}
+              onMouseDown={stop}
+              onTouchStart={stop}
+              onClick={() => setPickerFor(pickerFor === key ? null : key)}
+              aria-expanded={pickerFor === key}
+            >
+              <FolderIcon />
+              <span>{name || 'Add to folder'}</span>
+            </button>
+            {pickerFor === key && (
+              <FolderPicker
+                type={item.type === 'extended_text' ? 'extended_text' : 'sentence'}
+                itemId={id}
+                align="left"
+                currentFolderId={name ? item.folderId : null}
+                folders={folderData?.folders}
+                onMoved={(folderId) => handleMoved(item, folderId)}
+                onFolderCreated={handleFolderCreated}
+                onClose={() => setPickerFor(null)}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const renderExtendedTextItem = (item) => {
     const title = item.title || safeLabel('history.untitledExtendedText', 'Untitled extended text');
     return (
       <div
         key={`extended-${item.textId}`}
-        className={`${styles.sentenceItem} ${styles.extendedItem}`}
-        onClick={() => handleExtendedClick(item.textId)}
+        className={`${styles.sentenceItem} ${styles.extendedItem} ${confirmHide === itemKey(item) ? styles.wordConfirming : ''} ${pickerFor === itemKey(item) ? styles.pickerOpen : ''}`}
+        onClick={() => confirmHide !== itemKey(item) && handleExtendedClick(item.textId)}
       >
         <div className={styles.extendedHeader}>
           <p className={styles.extendedTitle} lang={item.originalLanguage}>{title}</p>
@@ -328,6 +548,7 @@ export default function Library({ initialTab = 'history' }) {
             </>
           )}
         </div>
+        {renderRowActions(item)}
         <span className={styles.rowChevron} aria-hidden="true">›</span>
       </div>
     );
@@ -335,9 +556,9 @@ export default function Library({ initialTab = 'history' }) {
 
   const renderSentenceItem = (sentence) => (
     <div
-      onClick={() => handleSentenceClick(sentence.sentenceId)}
+      onClick={() => confirmHide !== itemKey(sentence) && handleSentenceClick(sentence)}
       key={sentence.sentenceId} 
-      className={styles.sentenceItem}
+      className={`${styles.sentenceItem} ${confirmHide === itemKey(sentence) ? styles.wordConfirming : ''} ${pickerFor === itemKey(sentence) ? styles.pickerOpen : ''}`}
     >
       <p className={styles.sentenceText} lang={sentence.originalLanguage}>{sentence.text}</p>
       <p className={styles.sentenceTranslation}>{sentence.translation || sentence.analysis?.sentence?.translation}</p>
@@ -346,9 +567,106 @@ export default function Library({ initialTab = 'history' }) {
           {t('history.createdOn')} {new Date(sentence.dateCreated).toLocaleDateString()}
         </p>
       )}
+      {renderRowActions(sentence)}
       <span className={styles.rowChevron} aria-hidden="true">›</span>
     </div>
   );
+
+  const renderFolderBar = () => {
+    if (tab !== 'saved' || !folderData) return null;
+    const active = typeof activeFolder === 'number' ? folderData.folders.find(f => f.folderId === activeFolder) : null;
+    const chip = (key, label, count, extra = '') => (
+      <button
+        key={key}
+        className={`${styles.folderChip} ${activeFolder === key ? styles.active : ''} ${extra}`}
+        onClick={() => chooseFolder(key)}
+        aria-pressed={activeFolder === key}
+      >
+        {typeof key === 'number' && <FolderIcon />}
+        <span className={styles.folderChipName}>{label}</span>
+        <span className={styles.folderCount}>{count}</span>
+      </button>
+    );
+    return (
+      <div className={styles.folderBar}>
+        <div className={styles.folderChips} role="group" aria-label="Folders">
+          {chip('all', 'All saved', folderData.totalCount)}
+          {folderData.folders.length > 0 && chip('unfiled', 'Not in a folder', folderData.unfiledCount)}
+          {folderData.folders.map(f => chip(f.folderId, f.name, f.count))}
+          <div className={styles.folderAnchor}>
+            <button
+              className={styles.newFolderChip}
+              onMouseDown={(e) => e.stopPropagation()}
+              onTouchStart={(e) => e.stopPropagation()}
+              onClick={() => setPickerFor(pickerFor === 'new-folder' ? null : 'new-folder')}
+            >
+              + New folder
+            </button>
+            {pickerFor === 'new-folder' && (
+              <NewFolderForm
+                onCreated={(folder) => { handleFolderCreated(folder); setPickerFor(null); chooseFolder(folder.folderId); }}
+                onClose={() => setPickerFor(null)}
+              />
+            )}
+          </div>
+        </div>
+        {active && (
+          <div className={styles.folderTools}>
+            {renaming ? (
+              <form className={styles.renameForm} onSubmit={submitRename}>
+                <input
+                  value={renameValue}
+                  onChange={(e) => setRenameValue(e.target.value)}
+                  maxLength={60}
+                  aria-label="Folder name"
+                  autoFocus
+                />
+                <button type="submit" className={styles.wordRemoveConfirmKeep} disabled={!renameValue.trim()}>Save</button>
+                <button type="button" className={styles.wordCancel} onClick={() => setRenaming(false)}>Cancel</button>
+              </form>
+            ) : confirmDeleteFolder ? (
+              <>
+                <span className={styles.wordConfirmText}>Delete “{active.name}”? Its {active.count === 1 ? 'item stays' : 'items stay'} saved.</span>
+                <button className={styles.wordRemoveConfirm} onClick={removeFolder}>Delete folder</button>
+                <button className={styles.wordCancel} onClick={() => setConfirmDeleteFolder(false)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <button className={styles.wordCancel} onClick={() => { setRenaming(true); setRenameValue(active.name); }}>Rename</button>
+                <button className={styles.wordCancel} onClick={() => setConfirmDeleteFolder(true)}>Delete folder</button>
+              </>
+            )}
+            {folderError && <span className={styles.wordError} role="alert">{folderError}</span>}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderClearHistory = () => {
+    if (tab !== 'history' || (items.length === 0 && !confirmClear)) return null;
+    if (!confirmClear) {
+      return (
+        <button className={styles.clearHistory} onClick={() => { setConfirmClear(true); setClearError(null); }}>
+          Clear history
+        </button>
+      );
+    }
+    return (
+      <div className={styles.clearConfirm} role="alertdialog" aria-label="Clear history">
+        <span className={styles.wordConfirmText}>
+          Clear everything from your history? Saved sentences, flashcards and grammar stay.
+        </span>
+        <div className={styles.clearConfirmButtons}>
+          <button className={styles.wordRemoveConfirm} onClick={clearHistory} disabled={clearing}>
+            {clearing ? 'Clearing…' : 'Clear history'}
+          </button>
+          <button className={styles.wordCancel} onClick={() => setConfirmClear(false)} disabled={clearing}>Cancel</button>
+        </div>
+        {clearError && <span className={styles.wordError} role="alert">{clearError}</span>}
+      </div>
+    );
+  };
 
   const renderContent = () => {
     if (loadingContent) {
@@ -360,6 +678,15 @@ export default function Library({ initialTab = 'history' }) {
     }
 
     if (items.length === 0) {
+      if (tab === 'saved' && activeFolder !== 'all') {
+        return (
+          <div className={styles.noSentences}>
+            <p>{activeFolder === 'unfiled'
+              ? 'Everything you saved is in a folder.'
+              : 'Nothing in this folder yet. Use “Add to folder” on anything you saved to file it here.'}</p>
+          </div>
+        );
+      }
       return renderEmptyState();
     }
 
@@ -430,7 +757,13 @@ export default function Library({ initialTab = 'history' }) {
                   onSelectLanguage={handleLanguageChange}
                 />
               </div>
-              {tab !== 'words' && renderTypeSelector()}
+              {tab !== 'words' && (
+                <div className={styles.filterRow}>
+                  {renderTypeSelector()}
+                  {renderClearHistory()}
+                </div>
+              )}
+              {renderFolderBar()}
             </div>
             
             {renderContent()}
@@ -438,5 +771,58 @@ export default function Library({ initialTab = 'history' }) {
         </div>
       </div>
     </Dashboard>
+  );
+}
+
+// The "+ New folder" chip's small form.
+function NewFolderForm({ onCreated, onClose }) {
+  const [name, setName] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState(null);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const onPointer = (event) => { if (ref.current && !ref.current.contains(event.target)) onClose(); };
+    const onKey = (event) => { if (event.key === 'Escape') onClose(); };
+    document.addEventListener('mousedown', onPointer);
+    document.addEventListener('touchstart', onPointer);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onPointer);
+      document.removeEventListener('touchstart', onPointer);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [onClose]);
+
+  const submit = async (event) => {
+    event.preventDefault();
+    if (!name.trim()) return;
+    setBusy(true);
+    setError(null);
+    try {
+      onCreated(await createFolder(name));
+    } catch (err) {
+      setError(err.message);
+      setBusy(false);
+    }
+  };
+
+  return (
+    <form ref={ref} className={styles.newFolderForm} onSubmit={submit}>
+      <label className={styles.newFolderLabel} htmlFor="new-folder-name">New folder</label>
+      <div className={styles.newFolderRow}>
+        <input
+          id="new-folder-name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="e.g. Drama lines"
+          maxLength={60}
+          autoFocus
+          disabled={busy}
+        />
+        <button type="submit" className={styles.wordRemoveConfirmKeep} disabled={busy || !name.trim()}>Add</button>
+      </div>
+      {error && <span className={styles.wordError} role="alert">{error}</span>}
+    </form>
   );
 }

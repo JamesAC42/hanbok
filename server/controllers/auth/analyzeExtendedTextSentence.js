@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { newPublicId } = require('../../lib/sentenceKeys');
 const generateResponse = require('../../llm/generateResponse');
 const { ANALYSIS_TIMEOUT_MS } = require('../../llm/gemini');
 const basicPrompt = require('../../llm/prompt');
@@ -81,6 +82,7 @@ const pending = new Map(); // `${textId}:${index}` -> Promise<sentence doc>
 
 const toPayload = (doc) => ({
     sentenceId: doc.sentenceId,
+    publicId: doc.publicId || null,
     text: doc.text,
     analysis: doc.analysis,
     voice1Key: doc.voice1Key || null,
@@ -118,6 +120,7 @@ const analyzeSentence = async (db, extendedText, index) => {
     );
     const sentenceDoc = {
         sentenceId: counter.seq,
+        publicId: newPublicId(),
         userId: extendedText.userId,
         text: sentenceText,
         analysis: response.analysis,

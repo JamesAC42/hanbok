@@ -9,6 +9,7 @@ import Stars, { STAGE_NAMES } from '@/components/grammar/Stars';
 import getFontClass from '@/lib/fontClass';
 import { useGrammarGuides, findGuide } from '@/lib/grammarGuides';
 import styles from '@/styles/components/grammar.module.scss';
+import { sentenceHref } from '@/lib/sentenceLink';
 
 const LEVEL_STEPS = [
     { name: 'Learned', how: 'Do the lesson or get one question right' },
@@ -135,7 +136,7 @@ const GrammarPoint = () => {
                                     <h2 className={styles.label} style={{ marginTop: 0 }}>Where you found it</h2>
                                     <ul className={styles.sources}>
                                         {point.sources.map((s, i) => {
-                                            const href = s.sentenceId ? `/sentence/${s.sentenceId}` : s.textId ? `/extended-text/${s.textId}` : null;
+                                            const href = s.sentenceId ? sentenceHref(s) : s.textId ? `/extended-text/${s.textId}` : null;
                                             const body = (
                                                 <>
                                                     <span className={`${styles.sourceText} ${font}`} lang={point.language}>{s.text || s.title || 'A passage you read'}</span>

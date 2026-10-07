@@ -14,6 +14,7 @@ import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { stagesToday } from '@/lib/todayLoop';
 import { CHROME_EXTENSION_URL, isDesktopChrome, useExtensionInstalled } from '@/lib/extension';
 import styles from '@/styles/home/dashboardhome.module.scss';
+import { sentenceHref } from '@/lib/sentenceLink';
 
 const SECONDS_PER_CARD = 8;
 
@@ -118,7 +119,7 @@ const useTodayPath = ({ progress, cardsToday, recent, grammarDue = 0 }) => {
 
     const today = progress?.days?.[progress.days.length - 1];
     const lastSentence = recent?.find(item => item.type === 'sentence');
-    const sentenceHref = lastSentence ? `/sentence/${lastSentence.sentenceId}` : '/analyze';
+    const sentenceHref = lastSentence ? sentenceHref(lastSentence) : '/analyze';
     const read = !!today?.analyzed;
     const minutes = Math.max(1, Math.round((cardsToday * SECONDS_PER_CARD) / 60));
     // Grammar cards sit in the same decks, so they are part of cardsToday.
@@ -292,7 +293,7 @@ const RecentWork = ({ items }) => (
             <ul className={styles.recentList}>
                 {items.map(item => {
                     const isSentence = item.type === 'sentence';
-                    const href = isSentence ? `/sentence/${item.sentenceId}` : `/extended-text/${item.textId}`;
+                    const href = isSentence ? sentenceHref(item) : `/extended-text/${item.textId}`;
                     return (
                         <li key={`${item.type}-${item.sentenceId || item.textId}`}>
                             <Link href={href} className={styles.recentItem}>

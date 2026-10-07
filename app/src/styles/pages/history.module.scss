@@ -503,3 +503,217 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
 
     .wordConfirmText { flex-basis: 100%; }
 }
+
+// Type filters with "Clear history" on the right.
+.filterRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .6rem;
+}
+
+.clearHistory {
+    @include bp-press-ghost(var(--bp-ink2), 3px);
+    min-height: 40px;
+    padding: .45rem 1rem;
+    font-size: .76rem;
+
+    &:hover { color: color-mix(in srgb, var(--bp-rev) 80%, var(--foreground)); }
+}
+
+.clearConfirm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+    width: 100%;
+    padding: .85rem 1rem;
+    border: 2px solid var(--bp-rev-line);
+    border-radius: 16px;
+    background: var(--bp-rev-soft);
+}
+
+.clearConfirmButtons {
+    display: flex;
+    gap: .5rem;
+}
+
+// Buttons under a History or Saved row. They sit in the flow of the row so
+// they never cover its text or the chevron.
+.rowActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .7rem;
+}
+
+.rowRemove {
+    @include bp-press-ghost(var(--bp-ink2), 2px);
+    min-height: 36px;
+    padding: .35rem .85rem;
+    font-size: .72rem;
+
+    &:hover { color: color-mix(in srgb, var(--bp-rev) 80%, var(--foreground)); }
+}
+
+.folderAnchor {
+    position: relative;
+    display: inline-flex;
+}
+
+.folderButton {
+    @include bp-press-ghost(var(--bp-ink2), 2px);
+    min-height: 36px;
+    max-width: 16rem;
+    padding: .35rem .85rem;
+    font-size: .72rem;
+
+    span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    svg { color: var(--bp-keep-d); }
+
+    &.filed {
+        border-color: var(--bp-keep-line);
+        background: var(--bp-keep-soft);
+        box-shadow: 0 2px 0 var(--bp-keep-line);
+        color: #{$keep-text};
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: .86rem;
+    }
+}
+
+// Folder chips on the Saved tab.
+.folderBar {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+.folderChips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .45rem;
+}
+
+.folderChip {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 40px;
+    max-width: 15rem;
+    padding: .4rem .85rem;
+    border-radius: 12px;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-card);
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: .92rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .12s ease, border-color .12s ease;
+
+    svg { color: var(--bp-keep-d); }
+
+    &:hover { background: var(--bp-soft); }
+
+    &.active {
+        border-color: var(--bp-keep-line);
+        background: var(--bp-keep-soft);
+        color: #{$keep-text};
+    }
+}
+
+.folderChipName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.folderCount {
+    font-size: .78rem;
+    font-weight: 800;
+    color: var(--bp-ink2);
+}
+
+.newFolderChip {
+    @include bp-press-ghost(#{$keep-text}, 2px);
+    min-height: 40px;
+    padding: .4rem .9rem;
+    font-size: .74rem;
+    border-style: dashed;
+    box-shadow: none;
+}
+
+.newFolderForm {
+    @include bp-card;
+    position: absolute;
+    z-index: 40;
+    top: calc(100% + .5rem);
+    left: 0;
+    width: min(19rem, calc(100vw - 2rem));
+    padding: .85rem;
+    box-shadow: 0 4px 0 var(--bp-line), 0 18px 40px rgba(0, 0, 0, .14);
+
+    @media screen and (max-width: 560px) {
+        position: fixed;
+        top: auto;
+        left: .75rem;
+        right: .75rem;
+        bottom: calc(.75rem + env(safe-area-inset-bottom));
+        width: auto;
+    }
+}
+
+.newFolderLabel {
+    @include bp-label;
+    display: block;
+    margin-bottom: .5rem;
+}
+
+.newFolderRow,
+.renameForm {
+    display: flex;
+    gap: .45rem;
+
+    input {
+        @include bp-input;
+        flex: 1;
+        min-width: 0;
+        padding: .55rem .8rem;
+        font-size: .95rem;
+    }
+}
+
+.renameForm { flex-wrap: wrap; }
+
+.wordRemoveConfirmKeep {
+    @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px);
+    min-height: 40px;
+    padding: .5rem 1rem;
+    font-size: .76rem;
+}
+
+.folderTools {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+// Keep an open folder menu above the rows that follow it. The row's press
+// effect is off while it's open: a transform would re-anchor the phone sheet
+// to the row and make it jump under the finger.
+.pickerOpen {
+    z-index: 30;
+
+    &:active {
+        transform: none;
+    }
+}

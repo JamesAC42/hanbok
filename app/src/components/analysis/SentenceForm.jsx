@@ -18,6 +18,7 @@ import { Upload } from '@/components/icons/Upload';
 import { useTheme } from '@/contexts/ThemeContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
+import { sentenceHref } from '@/lib/sentenceLink';
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -442,7 +443,7 @@ const SentenceForm = ({
                 
                 // If originalLanguage or sentenceId is in the response, add them to query params
                 if (data.originalLanguage && data.sentenceId) {
-                    router.push(`/sentence/${data.sentenceId}`);
+                    router.push(sentenceHref(data));
                 }
             } else {
                 track('analyze_error', { reason: data.message.error?.type || 'other' });

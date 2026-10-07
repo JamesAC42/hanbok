@@ -6,11 +6,15 @@ import styles from '@/styles/components/sentenceanalyzer/savebutton.module.scss'
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import FolderPicker from '@/components/library/FolderPicker';
+import { fetchFolders } from '@/lib/libraryFolders';
 import { track } from '@/lib/analytics';
 
 const SaveButton = ({ sentenceId }) => {
     const [isSaved, setIsSaved] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    // After saving, people who use folders get asked where to file it.
+    const [offerFolders, setOfferFolders] = useState(null);
     const { isAuthenticated } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const { t } = useLanguage();
@@ -37,6 +41,15 @@ const SaveButton = ({ sentenceId }) => {
         }
     };
 
+    const offerFolderChoice = async () => {
+        try {
+            const { folders } = await fetchFolders();
+            if (folders.length > 0) setOfferFolders(folders);
+        } catch {
+            // Folders are optional; the save itself already worked.
+        }
+    };
+
     const toggleSave = async (event) => {
         if (!isAuthenticated) {
             showLoginRequiredPopup('sentences');
@@ -58,6 +71,8 @@ const SaveButton = ({ sentenceId }) => {
             if (data.success) {
                 if (!isSaved) track('sentence_save');
                 setIsSaved(!isSaved);
+                if (!isSaved) offerFolderChoice();
+                else setOfferFolders(null);
             }
         } catch (error) {
             console.error('Error toggling save:', error);
@@ -67,16 +82,27 @@ const SaveButton = ({ sentenceId }) => {
     };
 
     return (
-        <button 
-            className={`${styles.saveButton} ${isSaved ? styles.saved : ''} ${isLoading ? styles.loading : ''}`}
-            onClick={toggleSave}
-            disabled={isLoading}
-            title={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
-            aria-label={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
-            aria-pressed={isSaved}
-        >
-            {isSaved ? <MaterialSymbolsBookmarkSharp /> : <MaterialSymbolsBookmarkOutlineSharp />}
-        </button>
+        <span className={styles.wrap}>
+            <button 
+                className={`${styles.saveButton} ${isSaved ? styles.saved : ''} ${isLoading ? styles.loading : ''}`}
+                onClick={toggleSave}
+                disabled={isLoading}
+                title={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
+                aria-label={isSaved ? t('analysis.saveButton.remove') : t('analysis.saveButton.save')}
+                aria-pressed={isSaved}
+            >
+                {isSaved ? <MaterialSymbolsBookmarkSharp /> : <MaterialSymbolsBookmarkOutlineSharp />}
+            </button>
+            {offerFolders && (
+                <FolderPicker
+                    type="sentence"
+                    itemId={sentenceId}
+                    heading="Saved. Add it to a folder?"
+                    folders={offerFolders}
+                    onClose={() => setOfferFolders(null)}
+                />
+            )}
+        </span>
     );
 };
 

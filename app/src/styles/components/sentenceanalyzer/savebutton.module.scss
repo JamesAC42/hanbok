@@ -48,3 +48,9 @@
         opacity: .45;
     }
 }
+
+// Holds the folder menu that opens under the button after saving.
+.wrap {
+    position: relative;
+    display: inline-flex;
+}
