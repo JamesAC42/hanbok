@@ -9,6 +9,8 @@ const {RedisStore} = require('connect-redis');
 
 // Import Bull queue and cleanup function
 const { analysisQueue } = require('./jobs/queue');
+const { startLyricAnalysisConsumer } = require('./jobs/lyricAnalysisConsumer');
+const { processLyricAnalysis, shutdown: shutdownLyricProcessor } = require('./jobs/lyricAnalysisProcessor');
 const { cleanupRedisConnections } = require('./controllers/lyrics/generateLyricAnalysis');
 
 // Create Redis client with configuration
@@ -797,6 +799,8 @@ async function startServer() {
     analysisQueue.on('failed', (job, error) => {
       console.error(`Job ${job.id} failed with error:`, error);
     });
+
+    startLyricAnalysisConsumer(analysisQueue, processLyricAnalysis);
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
@@ -819,6 +823,7 @@ function setupGracefulShutdown() {
       // Close Bull queue
       console.log('Closing Bull queue...');
       await analysisQueue.close();
+      await shutdownLyricProcessor();
       
       // Clean up Redis connections in generateLyricAnalysis
       console.log('Cleaning up Redis connections...');
