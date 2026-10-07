@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { findSentenceByKey } = require('../../lib/sentenceKeys');
 
 const saveSentence = async (req, res) => {
     const { sentenceId } = req.params;
@@ -24,10 +25,9 @@ const saveSentence = async (req, res) => {
             }
         }
 
-        // Verify sentence exists
-        const sentence = await db.collection('sentences').findOne({ 
-            sentenceId: parseInt(sentenceId)
-        });
+        // The key is a publicId or an old numeric id; only sentences this user can
+        // open can be saved, so the save route can't be used to read other people's.
+        const sentence = await findSentenceByKey(db, sentenceId, { userId });
 
         if (!sentence) {
             return res.status(404).json({
@@ -39,7 +39,7 @@ const saveSentence = async (req, res) => {
         // Save the sentence
         await db.collection('savedSentences').insertOne({
             userId,
-            sentenceId: parseInt(sentenceId),
+            sentenceId: sentence.sentenceId,
             dateSaved: new Date()
         });
 

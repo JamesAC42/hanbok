@@ -1,5 +1,6 @@
 const { getDb } = require('../../database');
 const { allowanceFor, stageFor } = require('../../grammar/limits');
+const { attachPublicIds } = require('../../lib/sentenceKeys');
 
 const positiveInt = (v) => (Number.isInteger(Number(v)) && Number(v) > 0 ? Number(v) : null);
 
@@ -89,12 +90,13 @@ const getGrammarPoint = async (req, res) => {
             db.collection('users').findOne({ userId }, { projection: { userId: 1, tier: 1 } }),
             db.collection('grammar_lessons').countDocuments({ grammarId, uiLanguage: point._saved.uiLanguage || 'en' }),
         ]);
+        const sources = await attachPublicIds(db, (point._saved.sources || []).slice(-10).reverse().map((src) => ({ ...src })));
         res.json({
             success: true,
             point: {
                 ...publicPoint(point),
                 examples: point._saved.examples || [],
-                sources: (point._saved.sources || []).slice(-10).reverse(),
+                sources,
                 lessonReady: lessonReady > 0,
             },
             allowance: await allowanceFor(db, user),

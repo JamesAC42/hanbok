@@ -18,8 +18,18 @@ const parseTypes = (raw) => {
     return { includeSentences, includeExtendedTexts };
 };
 
-const buildSavedSentencesPipeline = (userId, language) => {
-    const matchStage = { userId };
+// ?folder=<folderId> or ?folder=unfiled narrows the list to one Library folder.
+const parseFolder = (raw) => {
+    if (raw === undefined || raw === null || raw === '' || raw === 'all') return undefined;
+    if (raw === 'unfiled') return null;
+    const id = parseInt(raw, 10);
+    return Number.isInteger(id) ? id : undefined;
+};
+
+const ownerMatch = (userId, folder) => (folder === undefined ? { userId } : { userId, folderId: folder });
+
+const buildSavedSentencesPipeline = (userId, language, folder) => {
+    const matchStage = ownerMatch(userId, folder);
 
     const pipeline = [
         { $match: matchStage },
@@ -42,12 +52,14 @@ const buildSavedSentencesPipeline = (userId, language) => {
         $project: {
             type: { $literal: 'sentence' },
             sentenceId: '$sentenceId',
+            publicId: '$sentence.publicId',
             text: '$sentence.text',
             translation: '$sentence.analysis.sentence.translation',
             originalLanguage: '$sentence.originalLanguage',
             translationLanguage: '$sentence.translationLanguage',
             dateCreated: '$sentence.dateCreated',
             dateSaved: '$dateSaved',
+            folderId: { $ifNull: ['$folderId', null] },
             sortDate: '$dateSaved'
         }
     });
@@ -55,9 +67,9 @@ const buildSavedSentencesPipeline = (userId, language) => {
     return pipeline;
 };
 
-const buildSavedExtendedTextsPipeline = (userId, language) => {
+const buildSavedExtendedTextsPipeline = (userId, language, folder) => {
     const pipeline = [
-        { $match: { userId } },
+        { $match: ownerMatch(userId, folder) },
         {
             $lookup: {
                 from: 'extended_texts',
@@ -86,6 +98,7 @@ const buildSavedExtendedTextsPipeline = (userId, language) => {
             tone: '$extendedText.overallAnalysis.tone',
             dateCreated: '$extendedText.dateCreated',
             dateSaved: '$dateSaved',
+            folderId: { $ifNull: ['$folderId', null] },
             sortDate: '$dateSaved'
         }
     });
@@ -93,14 +106,14 @@ const buildSavedExtendedTextsPipeline = (userId, language) => {
     return pipeline;
 };
 
-const countSavedSentences = async (db, userId, language) => {
+const countSavedSentences = async (db, userId, language, folder) => {
     if (!language) {
-        return db.collection('savedSentences').countDocuments({ userId });
+        return db.collection('savedSentences').countDocuments(ownerMatch(userId, folder));
     }
 
     const result = await db.collection('savedSentences')
         .aggregate([
-            { $match: { userId } },
+            { $match: ownerMatch(userId, folder) },
             {
                 $lookup: {
                     from: 'sentences',
@@ -118,14 +131,14 @@ const countSavedSentences = async (db, userId, language) => {
     return result[0]?.total || 0;
 };
 
-const countSavedExtendedTexts = async (db, userId, language) => {
+const countSavedExtendedTexts = async (db, userId, language, folder) => {
     if (!language) {
-        return db.collection('savedExtendedTexts').countDocuments({ userId });
+        return db.collection('savedExtendedTexts').countDocuments(ownerMatch(userId, folder));
     }
 
     const result = await db.collection('savedExtendedTexts')
         .aggregate([
-            { $match: { userId } },
+            { $match: ownerMatch(userId, folder) },
             {
                 $lookup: {
                     from: 'extended_texts',
@@ -149,6 +162,7 @@ const getSavedItems = async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 10;
     const language = req.query.language;
     const { includeSentences, includeExtendedTexts } = parseTypes(req.query.types);
+    const folder = parseFolder(req.query.folder);
     const skip = (page - 1) * limit;
 
     if (!userId) {
@@ -173,10 +187,10 @@ const getSavedItems = async (req, res) => {
         const db = getDb();
 
         const sentenceCountPromise = includeSentences
-            ? countSavedSentences(db, userId, language)
+            ? countSavedSentences(db, userId, language, folder)
             : Promise.resolve(0);
         const extendedCountPromise = includeExtendedTexts
-            ? countSavedExtendedTexts(db, userId, language)
+            ? countSavedExtendedTexts(db, userId, language, folder)
             : Promise.resolve(0);
 
         const [sentenceCount, extendedCount] = await Promise.all([
@@ -192,19 +206,19 @@ const getSavedItems = async (req, res) => {
 
         if (includeSentences) {
             initialCollection = 'savedSentences';
-            pipeline = buildSavedSentencesPipeline(userId, language);
+            pipeline = buildSavedSentencesPipeline(userId, language, folder);
 
             if (includeExtendedTexts) {
                 pipeline.push({
                     $unionWith: {
                         coll: 'savedExtendedTexts',
-                        pipeline: buildSavedExtendedTextsPipeline(userId, language)
+                        pipeline: buildSavedExtendedTextsPipeline(userId, language, folder)
                     }
                 });
             }
         } else {
             initialCollection = 'savedExtendedTexts';
-            pipeline = buildSavedExtendedTextsPipeline(userId, language);
+            pipeline = buildSavedExtendedTextsPipeline(userId, language, folder);
         }
 
         pipeline.push(

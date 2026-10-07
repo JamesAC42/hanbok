@@ -1,4 +1,5 @@
 const generateResponse = require('../../llm/generateResponse');
+const { newPublicId } = require('../../lib/sentenceKeys');
 const { ANALYSIS_TIMEOUT_MS } = require('../../llm/gemini');
 const basicPrompt = require('../../llm/prompt');
 const chinesePrompt = require('../../llm/prompt_chinese');
@@ -544,6 +545,7 @@ const submitSentence = async (req, res) => {
         // Create sentence document
         const sentenceDoc = {
             sentenceId: counterDoc.seq,
+            publicId: newPublicId(),
             userId: userId ? userId : null,
             text: text,
             analysis: analysis,
@@ -627,6 +629,7 @@ const submitSentence = async (req, res) => {
             originalLanguage: originalLanguage,
             translationLanguage: translationLanguage,
             sentenceId: sentenceDoc.sentenceId,
+            publicId: sentenceDoc.publicId,
             extractedFromImage: isImageSubmission,
             ...rateLimit,
             ...analysisUsage,

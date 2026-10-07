@@ -34,6 +34,7 @@ const Analysis = ({
     voice2Slow,
     showTransition,
     sentenceId,
+    shareKey,
     doNotCache,
     onCacheStatusChange,
     isLyric,
@@ -226,8 +227,8 @@ const Analysis = ({
                     <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
                 </div>
                 <div className={styles.embeddedControls}>
-                    <ShareButton sentenceId={sentenceId} sentence={analysis.sentence.original} />
-                    <SaveButton sentenceId={sentenceId} />
+                    <ShareButton sentenceId={shareKey || sentenceId} sentence={analysis.sentence.original} />
+                    <SaveButton sentenceId={shareKey || sentenceId} />
                     <SettingsButton 
                         showPronunciation={showPronunciation} 
                         setShowPronunciation={setShowPronunciation} 

@@ -45,6 +45,8 @@ const getQuota = require('./controllers/auth/getQuota');
 const getAudioURL = require('./controllers/auth/getAudioURL');
 const generateAudio = require('./controllers/auth/generateAudio');
 const getSentence = require('./controllers/auth/getSentence');
+const { hideHistorySentence, hideHistoryExtendedText, clearHistory } = require('./controllers/auth/hideHistory');
+const { listFolders, createFolder, renameFolder, deleteFolder, moveSavedItem } = require('./controllers/auth/libraryFolders');
 const submitExtendedText = require('./controllers/auth/submitExtendedText');
 const getExtendedText = require('./controllers/auth/getExtendedText');
 const streamExtendedTextProgress = require('./controllers/auth/streamExtendedTextProgress');
@@ -303,6 +305,11 @@ app.get('/api/user/history', isAuthenticated, async (req, res) => {
     getUserHistory(req, res);
 });
 
+// Removing from history hides the item; nothing is deleted.
+app.delete('/api/user/history/sentences/:id', isAuthenticated, hideHistorySentence);
+app.delete('/api/user/history/extended-texts/:id', isAuthenticated, hideHistoryExtendedText);
+app.post('/api/user/history/clear', isAuthenticated, clearHistory);
+
 app.post('/api/sentences/:sentenceId/save', isAuthenticated, async (req, res) => {
     saveSentence(req, res);
 });
@@ -322,6 +329,13 @@ app.get('/api/saved-sentences', isAuthenticated, async (req, res) => {
 app.get('/api/saved-items', isAuthenticated, async (req, res) => {
     getSavedItems(req, res);
 });
+
+// Library folders for saved sentences and paragraphs
+app.get('/api/folders', isAuthenticated, listFolders);
+app.post('/api/folders', isAuthenticated, createFolder);
+app.patch('/api/folders/:folderId', isAuthenticated, renameFolder);
+app.delete('/api/folders/:folderId', isAuthenticated, deleteFolder);
+app.put('/api/saved-items/folder', isAuthenticated, moveSavedItem);
 
 // Word routes
 app.post('/api/words', isAuthenticated, async (req, res) => {

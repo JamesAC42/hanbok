@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { resolveSentenceId } = require('../../lib/sentenceKeys');
 
 const checkSavedSentence = async (req, res) => {
     const { sentenceId } = req.params;
@@ -6,10 +7,11 @@ const checkSavedSentence = async (req, res) => {
 
     try {
         const db = getDb();
+        const id = await resolveSentenceId(db, sentenceId);
         
         const savedSentence = await db.collection('savedSentences').findOne({
             userId,
-            sentenceId: parseInt(sentenceId)
+            sentenceId: id
         });
 
         res.json({

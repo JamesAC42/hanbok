@@ -14,6 +14,7 @@ import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { stagesToday } from '@/lib/todayLoop';
 import { CHROME_EXTENSION_URL, isDesktopChrome, useExtensionInstalled } from '@/lib/extension';
 import styles from '@/styles/home/dashboardhome.module.scss';
+import { sentenceHref } from '@/lib/sentenceLink';
 
 const SECONDS_PER_CARD = 8;
 
@@ -118,7 +119,7 @@ const useTodayPath = ({ progress, cardsToday, recent, grammarDue = 0 }) => {
 
     const today = progress?.days?.[progress.days.length - 1];
     const lastSentence = recent?.find(item => item.type === 'sentence');
-    const sentenceHref = lastSentence ? `/sentence/${lastSentence.sentenceId}` : '/analyze';
+    const lastSentenceHref = lastSentence ? sentenceHref(lastSentence) : '/analyze';
     const read = !!today?.analyzed;
     const minutes = Math.max(1, Math.round((cardsToday * SECONDS_PER_CARD) / 60));
     // Grammar cards sit in the same decks, so they are part of cardsToday.
@@ -144,12 +145,12 @@ const useTodayPath = ({ progress, cardsToday, recent, grammarDue = 0 }) => {
             name: 'Understand',
             caption: 'Tap the words',
             done: !!local.understand || (read && !!today?.wordsSaved),
-            href: sentenceHref,
+            href: lastSentenceHref,
             next: {
                 title: 'Study your sentence',
                 detail: 'Open it and tap each word to see what it means and how it is built.',
                 action: lastSentence ? 'Open my sentence' : 'Open the analyzer',
-                href: sentenceHref,
+                href: lastSentenceHref,
             },
         },
         {
@@ -157,12 +158,12 @@ const useTodayPath = ({ progress, cardsToday, recent, grammarDue = 0 }) => {
             name: 'Keep',
             caption: today?.wordsSaved ? `${plural(today.wordsSaved, 'word')} saved` : 'Save new words',
             done: !!today?.wordsSaved,
-            href: sentenceHref,
+            href: lastSentenceHref,
             next: {
                 title: 'Keep the new words',
                 detail: 'Save the words you want to remember. They turn into flashcards for you.',
                 action: lastSentence ? 'Save words' : 'Open the analyzer',
-                href: sentenceHref,
+                href: lastSentenceHref,
             },
         },
         {
@@ -292,7 +293,7 @@ const RecentWork = ({ items }) => (
             <ul className={styles.recentList}>
                 {items.map(item => {
                     const isSentence = item.type === 'sentence';
-                    const href = isSentence ? `/sentence/${item.sentenceId}` : `/extended-text/${item.textId}`;
+                    const href = isSentence ? sentenceHref(item) : `/extended-text/${item.textId}`;
                     return (
                         <li key={`${item.type}-${item.sentenceId || item.textId}`}>
                             <Link href={href} className={styles.recentItem}>

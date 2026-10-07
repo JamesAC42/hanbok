@@ -19,8 +19,9 @@ const parseTypes = (raw) => {
     return { includeSentences, includeExtendedTexts };
 };
 
+// Items the learner removed from their history keep their data but get hiddenAt.
 const buildSentencePipeline = (userId, language) => {
-    const match = { userId };
+    const match = { userId, hiddenAt: null };
     if (language) {
         match.originalLanguage = language;
     }
@@ -31,6 +32,7 @@ const buildSentencePipeline = (userId, language) => {
             $project: {
                 type: { $literal: 'sentence' },
                 sentenceId: 1,
+                publicId: 1,
                 text: 1,
                 translation: '$analysis.sentence.translation',
                 originalLanguage: 1,
@@ -43,7 +45,7 @@ const buildSentencePipeline = (userId, language) => {
 };
 
 const buildExtendedTextPipeline = (userId, language) => {
-    const match = { userId };
+    const match = { userId, hiddenAt: null };
     if (language) {
         match.originalLanguage = language;
     }
@@ -100,6 +102,7 @@ const getUserHistory = async (req, res) => {
         const sentenceCountPromise = includeSentences
             ? db.collection('sentences').countDocuments({
                 userId,
+                hiddenAt: null,
                 ...(language ? { originalLanguage: language } : {})
             })
             : Promise.resolve(0);
@@ -107,6 +110,7 @@ const getUserHistory = async (req, res) => {
         const extendedCountPromise = includeExtendedTexts
             ? db.collection('extended_texts').countDocuments({
                 userId,
+                hiddenAt: null,
                 ...(language ? { originalLanguage: language } : {})
             })
             : Promise.resolve(0);

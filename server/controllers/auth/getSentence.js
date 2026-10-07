@@ -1,28 +1,29 @@
 const { getDb } = require('../../database');
 const { isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
+const { findSentenceByKey } = require('../../lib/sentenceKeys');
+const ADMIN_EMAILS = require('../../lib/adminEmails');
 
 const getSentence = async (req, res) => {
     const { sentenceId } = req.params;
-    //const userId = req.session.user.userId;
 
     try {
         const db = getDb();
         const userId = req.session?.user?.userId || null;
-        const sentence = await db.collection('sentences').findOne({ 
-            sentenceId: parseInt(sentenceId),
-            //userId: userId
-        });
+
+        let user = null;
+        if (userId !== null) {
+            user = await db.collection('users').findOne({ userId });
+        }
+        const isAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase());
+
+        // sentenceId here is whatever the link carried: a publicId or an old numeric id.
+        const sentence = await findSentenceByKey(db, sentenceId, { userId, isAdmin });
 
         if (!sentence) {
             return res.status(404).json({ 
                 success: false,
                 error: 'Sentence not found or unauthorized'
             });
-        }
-
-        let user = null;
-        if (userId !== null) {
-            user = await db.collection('users').findOne({ userId });
         }
 
         const responseSentence = isLongSentenceAudioRestricted(sentence.text, user)

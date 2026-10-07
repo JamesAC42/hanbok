@@ -27,6 +27,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
     const [voice1Slow, setVoice1Slow] = useState(null);
     const [voice2Slow, setVoice2Slow] = useState(null);
     const [doNotCache, setDoNotCache] = useState(false);
+    // The link may carry a random publicId; API calls below use the numeric id.
+    const [loadedIds, setLoadedIds] = useState(null);
     const [showTransition, setShowTransition] = useState(false);
     const [error, setError] = useState(null);
 
@@ -47,6 +49,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
         setVoice1Slow(null);
         setVoice2Slow(null);
         setDoNotCache(false);
+        setLoadedIds(null);
     }
     
     useEffect(() => {
@@ -111,6 +114,7 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             setVoice1Slow(result.sentence.voice1SlowKey);
             setVoice2Slow(result.sentence.voice2SlowKey);
             setDoNotCache(result.sentence.doNotCache === true);
+            setLoadedIds({ sentenceId: result.sentence.sentenceId, publicId: result.sentence.publicId || null });
             setShowTransition(false); // Reset transition when loading saved sentence
         } else {
             setError(result.error);
@@ -195,7 +199,8 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                     originalLanguage={originalLanguage}
                     translationLanguage={translationLanguage}
                     showTransition={showTransition}
-                    sentenceId={propSentenceId || searchParams.get('id')}
+                    sentenceId={loadedIds?.sentenceId ?? null}
+                    shareKey={loadedIds ? (loadedIds.publicId || loadedIds.sentenceId) : null}
                     doNotCache={doNotCache}
                     onCacheStatusChange={setDoNotCache} />
                 </>
@@ -203,9 +208,9 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             }
 
             {/* Floating Chat Button */}
-            {analysis && (propSentenceId || searchParams.get('id')) && (
+            {analysis && loadedIds && (
                 <Link 
-                    href={`/tutor?sentenceId=${propSentenceId || searchParams.get('id')}`}
+                    href={`/tutor?sentenceId=${loadedIds.publicId || loadedIds.sentenceId}`}
                     className={styles.floatingChatButton}
                     title={t('sentenceForm.askAIHelp')}
                 >

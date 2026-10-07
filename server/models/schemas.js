@@ -132,6 +132,14 @@ const collections = {
           text: {
             bsonType: "string"
           },
+          publicId: {
+            bsonType: "string",
+            description: "Random id used in /sentence/ links (sentences created before it existed have none)"
+          },
+          hiddenAt: {
+            bsonType: ["date", "null"],
+            description: "When the owner removed this sentence from their history"
+          },
           analysis: {
             bsonType: "object"
           },
@@ -200,6 +208,10 @@ const collections = {
           },
           dateSaved: {
             bsonType: "date"
+          },
+          folderId: {
+            bsonType: ["int", "null"],
+            description: "Library folder this save is filed in (null = no folder)"
           }
         }
       }
@@ -228,6 +240,10 @@ const collections = {
           dateSaved: {
             bsonType: "date",
             description: "When the extended text was saved"
+          },
+          folderId: {
+            bsonType: ["int", "null"],
+            description: "Library folder this save is filed in (null = no folder)"
           }
         }
       }
@@ -1269,6 +1285,10 @@ const collections = {
             bsonType: "int",
             description: "Unique identifier for the extended text"
           },
+          hiddenAt: {
+            bsonType: ["date", "null"],
+            description: "When the owner removed this text from their history"
+          },
           userId: {
             bsonType: "int",
             description: "User ID who submitted this text"
@@ -1575,6 +1595,24 @@ const collections = {
       { key: { language: 1, aliases: 1 }, name: "grammar_catalog_aliases" },
       { key: { language: 1, formKeys: 1 }, name: "grammar_catalog_forms" },
       { key: { language: 1, saves: -1 }, name: "grammar_catalog_popular" }
+    ]
+  },
+  library_folders: {
+    validator: {
+      $jsonSchema: {
+        bsonType: "object",
+        required: ["folderId", "userId", "name", "dateCreated"],
+        properties: {
+          folderId: { bsonType: "int" },
+          userId: { bsonType: "int" },
+          name: { bsonType: "string", maxLength: 60 },
+          dateCreated: { bsonType: "date" }
+        }
+      }
+    },
+    indexes: [
+      { key: { folderId: 1 }, unique: true, name: "library_folder_id" },
+      { key: { userId: 1, name: 1 }, name: "library_folder_user_name" }
     ]
   },
   saved_grammar: {

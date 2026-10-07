@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { resolveSentenceId } = require('../../lib/sentenceKeys');
 
 const unsaveSentence = async (req, res) => {
     const { sentenceId } = req.params;
@@ -6,10 +7,11 @@ const unsaveSentence = async (req, res) => {
 
     try {
         const db = getDb();
+        const id = await resolveSentenceId(db, sentenceId);
         
         const result = await db.collection('savedSentences').deleteOne({
             userId,
-            sentenceId: parseInt(sentenceId)
+            sentenceId: id
         });
 
         if (result.deletedCount === 0) {

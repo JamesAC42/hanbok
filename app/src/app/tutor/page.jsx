@@ -11,6 +11,7 @@ import Tiger from '@/components/Tiger';
 import { MaterialSymbolsDelete } from '@/components/icons/Delete';
 import { MaterialSymbolsHistory } from '@/components/icons/History';
 import { track } from '@/lib/analytics';
+import { sentenceHref } from '@/lib/sentenceLink';
 
 export default function TutorPage() {
   const router = useRouter();
@@ -84,13 +85,17 @@ export default function TutorPage() {
         credentials: 'include'
       });
       
+      // The link may carry a publicId; conversations use the numeric id.
+      let numericId = /^\d+$/.test(String(sentenceId)) ? sentenceId : null;
       if (sentenceResponse.ok) {
         const sentenceData = await sentenceResponse.json();
         setLinkedSentence(sentenceData.sentence);
+        numericId = sentenceData.sentence?.sentenceId ?? numericId;
       }
+      if (!numericId) return;
 
       // Fetch conversation count for this sentence
-      const countResponse = await fetch(`/api/sentences/${sentenceId}/conversations/count`, {
+      const countResponse = await fetch(`/api/sentences/${numericId}/conversations/count`, {
         credentials: 'include'
       });
       
@@ -336,7 +341,7 @@ export default function TutorPage() {
   const sendMessage = async (content) => {
     // Get sentence ID from URL if available
     const urlParams = new URLSearchParams(window.location.search);
-    const sentenceId = urlParams.get('sentenceId');
+    const sentenceId = urlParams.get('sentenceId') ? (linkedSentence?.sentenceId ?? urlParams.get('sentenceId')) : null;
     
     // Check if user can create new conversations when sentence is linked
     if (!currentConversation && sentenceId && conversationCount && !conversationCount.canCreateMore) {
@@ -803,7 +808,7 @@ export default function TutorPage() {
                   <div className={styles.activeSentenceHeader}>
                     <span className={styles.contextLabel}>{t('tutor.activeSentence.discussing')}</span>
                     <Link 
-                      href={`/sentence/${currentConversation.sentenceId}`}
+                      href={sentenceHref({ publicId: currentConversation.sentence?.publicId, sentenceId: currentConversation.sentenceId })}
                       className={styles.viewAnalysisLink}
                     >
                       {t('tutor.activeSentence.viewAnalysis')}

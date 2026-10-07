@@ -5,7 +5,7 @@ import { apiGet } from '@/lib/seo';
 
 // One fetch per request even though generateMetadata and the image both ask.
 export const getSharedSentence = cache(async (sentenceId) => {
-    if (!/^\d+$/.test(String(sentenceId))) return null;
+    if (!/^(\d+|[A-Za-z0-9_-]{12})$/.test(String(sentenceId))) return null;
     const data = await apiGet(`/api/sentences/${sentenceId}`, { revalidate: 3600 });
     const sentence = data?.success ? data.sentence : null;
     const original = sentence?.analysis?.sentence?.original;

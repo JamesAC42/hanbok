@@ -1,5 +1,6 @@
 const { getDb } = require('../../database');
 const SupportedLanguages = require('../../supported_languages');
+const { attachPublicIds } = require('../../lib/sentenceKeys');
 
 const getUserWords = async (req, res) => {
     const userId = req.session.user.userId;
@@ -33,6 +34,7 @@ const getUserWords = async (req, res) => {
             .skip(skip)
             .limit(limit)
             .toArray();
+        await attachPublicIds(db, words);
 
         res.json({
             success: true,
