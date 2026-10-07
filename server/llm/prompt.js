@@ -151,6 +151,7 @@ Important notes for the response:
 11. DO NOT INCLUDE PUNCTUATION IN THE COMPONENTS.
 
 ${originalLanguage === 'ja' ? 'Important note for Japanese analysis:\n1. Always include the reading field for each component with the proper hiragana/katakana showing on/kunyomi reading based on context.\n2. The reading should reflect the actual pronunciation in the given context, not just the dictionary form reading.\n' : ''}
+${originalLanguage === 'ko' ? 'Important note for Korean analysis:\n1. When a verb or adjective carries the honorific -(으)시- (for example 세요 = 시 + 어요, 셨어요 = 시 + 었어요, 십니다 = 시 + ㅂ니다), name the -(으)시- honorific infix explicitly in the conjugation steps, explain that it shows respect to the subject of the sentence (the person doing the action or in the state), and explain the ending it combines with. Never describe 세요 only as "used instead of 요".\n' : ''}
 ${isChinese(originalLanguage) ? 'Important note for Chinese analysis:\n1. Always include the reading field for each component with the correct pinyin including proper tone marks.\n2. Ensure tone marks are accurate and reflect the pronunciation in context.\n' : ''}
 
 ${SupportedLanguages[originalLanguage]} text to analyze: `;

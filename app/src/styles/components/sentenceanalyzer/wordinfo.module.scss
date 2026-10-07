@@ -35,7 +35,8 @@
 
     .wordInfoContainerInner .type {
         background-color: color-mix(in srgb, var(--type-color) 14%, var(--background));
-        color: color-mix(in srgb, var(--type-color) 75%, var(--foreground));
+        // 45% keeps the small type label at 4.5:1 or better on its tinted pill (WCAG AA).
+        color: color-mix(in srgb, var(--type-color) 45%, var(--foreground));
     }
 
     .mobileHandle {
