@@ -32,6 +32,8 @@ export const metadata = {
     shortcut: ['/favicon.ico'],
   },
   manifest: '/manifest.json',
+  // Pinterest site claim for @hanbokstudy.
+  other: { 'p:domain_verify': '8b4f1aa35aeb1711d14be903f2dea85c' },
   openGraph: {
     type: 'website',
     locale: 'en_US',
