@@ -146,6 +146,54 @@ const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12 }) => {
     };
 };
 
+
+// How often one custom event fired, split by one of its properties, in equal
+// time buckets. Used by the metrics query endpoint for questions like "which
+// analyze_error reasons fired before and after a fix".
+const MAX_BUCKETS = 96;
+const buildEventBreakdown = async ({ event, property, from, to, bucketHours }) => {
+    const c = config();
+    const site = `/websites/${c.websiteId}`;
+    const step = bucketHours ? bucketHours * 60 * 60 * 1000 : to.getTime() - from.getTime();
+    const starts = [];
+    for (let t = from.getTime(); t < to.getTime() && starts.length < MAX_BUCKETS; t += step) starts.push(t);
+
+    const bucket = async (start) => {
+        const end = Math.min(start + step, to.getTime());
+        const range = { startAt: start, endAt: end };
+        const [events, values] = await Promise.all([
+            optional(metric(c, range, ['event'], 50)),
+            property
+                ? optional(umamiGet(`${site}/event-data/values`, { ...range, event, eventName: event, propertyName: property }, c))
+                : Promise.resolve(null),
+        ]);
+        const rows = Array.isArray(values) ? values : values?.data || [];
+        return {
+            from: new Date(start),
+            to: new Date(end),
+            count: (events || []).find((e) => e.label === event)?.value || 0,
+            values: rows
+                .map((row) => ({ value: String(row.value ?? row.x ?? ''), count: Number(row.total ?? row.y ?? row.count) || 0 }))
+                .filter((row) => row.count > 0),
+        };
+    };
+
+    const buckets = await Promise.all(starts.map(bucket));
+    const totals = new Map();
+    for (const b of buckets) for (const v of b.values) totals.set(v.value, (totals.get(v.value) || 0) + v.count);
+    return {
+        event,
+        property: property || null,
+        from,
+        to,
+        bucketHours: bucketHours || null,
+        truncated: starts.length === MAX_BUCKETS && starts[starts.length - 1] + step < to.getTime(),
+        total: buckets.reduce((sum, b) => sum + b.count, 0),
+        byValue: [...totals.entries()].map(([value, count]) => ({ value, count })).sort((a, b) => b.count - a.count),
+        buckets,
+    };
+};
+
 const trafficCache = createTtlCache(10 * 60 * 1000);
 
 const getTraffic = async (req, res) => {
@@ -164,4 +212,4 @@ const getTraffic = async (req, res) => {
     }
 };
 
-module.exports = { getTraffic, buildTraffic, isConfigured, normalizeStats, toDailySeries, toList };
+module.exports = { getTraffic, buildTraffic, buildEventBreakdown, isConfigured, normalizeStats, toDailySeries, toList };

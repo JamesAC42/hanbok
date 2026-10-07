@@ -106,6 +106,7 @@ const getSession = async (req, res) => {
             maxSavedSentences: user.maxSavedSentences ? user.maxSavedSentences : 0,
             maxSavedWords: user.maxSavedWords ? user.maxSavedWords : 0,
             feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
+            heardFrom: user.attribution?.heardFrom || null,
             remainingImageExtracts: user.remainingImageExtracts ? user.remainingImageExtracts : 0,
             remainingSentenceAnalyses: user.remainingSentenceAnalyses ? user.remainingSentenceAnalyses : 0,
             hasUsedFreeTrial: user.hasUsedFreeTrial || false,

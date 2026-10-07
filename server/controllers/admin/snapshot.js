@@ -7,7 +7,7 @@ const { getDb } = require('../../database');
 const { createTtlCache } = require('../../lib/ttlCache');
 const { buildOverview, buildEngagement } = require('./stats');
 const { buildRevenue } = require('./revenue');
-const { buildTraffic, isConfigured: umamiConfigured } = require('./traffic');
+const { buildTraffic, buildEventBreakdown, isConfigured: umamiConfigured } = require('./traffic');
 
 const DAY = 24 * 60 * 60 * 1000;
 const SCHEMA_VERSION = 1;
@@ -160,6 +160,31 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
     };
 };
 
+
+// GET /api/metrics/event?event=analyze_error&property=reason&from=ISO&to=ISO&bucketHours=1
+// Same token as the snapshot. Answers one-off questions about a custom
+// Umami event without anyone logging in to Umami.
+const NAME = /^[a-z0-9_]{1,64}$/i;
+const getEventBreakdown = async (req, res) => {
+    if (!umamiConfigured()) return res.status(503).json({ success: false, error: 'Umami is not configured' });
+    const { event, property } = req.query;
+    const to = req.query.to ? new Date(req.query.to) : new Date();
+    const from = req.query.from ? new Date(req.query.from) : new Date(to.getTime() - 7 * DAY);
+    const bucketHours = req.query.bucketHours ? Number(req.query.bucketHours) : null;
+    if (!NAME.test(event || '') || (property && !NAME.test(property))
+        || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime()) || from >= to
+        || to.getTime() - from.getTime() > 90 * DAY
+        || (bucketHours !== null && !(bucketHours >= 1 && bucketHours <= 24 * 30))) {
+        return res.status(400).json({ success: false, error: 'Bad query' });
+    }
+    try {
+        res.json({ success: true, ...(await buildEventBreakdown({ event, property, from, to, bucketHours })) });
+    } catch (error) {
+        console.error('Metrics event query failed:', error.message);
+        res.status(502).json({ success: false, error: 'Could not reach Umami' });
+    }
+};
+
 const snapshotCache = createTtlCache(10 * 60 * 1000);
 
 const getSnapshot = async (req, res) => {
@@ -172,4 +197,4 @@ const getSnapshot = async (req, res) => {
     }
 };
 
-module.exports = { getSnapshot, requireMetricsToken, buildSnapshot, seoFrom, revenueFrom };
+module.exports = { getSnapshot, getEventBreakdown, requireMetricsToken, buildSnapshot, seoFrom, revenueFrom };

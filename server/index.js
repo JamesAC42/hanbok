@@ -113,7 +113,8 @@ const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
-const { getSnapshot, requireMetricsToken } = require('./controllers/admin/snapshot');
+const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./controllers/admin/snapshot');
+const { setHeardFrom } = require('./controllers/auth/setHeardFrom');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -261,6 +262,9 @@ app.get('/api/sentences/:sentenceId', async (req, res) => {
 });
 
 // Extended text routes
+// One-tap "How did you find Hanbok?" answer from new learners.
+app.post('/api/user/heard-from', isAuthenticated, setHeardFrom);
+
 app.post('/api/extended-text/submit', isAuthenticated, async (req, res) => {
     submitExtendedText(req, res);
 });
@@ -456,6 +460,7 @@ app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
+app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);
 
 app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
     searchWordAudio(req, res);
