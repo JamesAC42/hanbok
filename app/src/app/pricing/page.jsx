@@ -76,6 +76,7 @@ const FAQ_ITEMS = [
         answer: "Yes, you can cancel your subscription at any time. You will continue to have access to premium features until the end of your billing period."
     },
     {
+        id: 'student',
         question: "Do you offer student discounts?",
         answer: "We keep our prices as low as possible to be accessible to everyone, so we don't offer additional discounts at this time."
     }
@@ -87,7 +88,9 @@ const Pricing = () => {
     const Shell = authLoading ? BlankShell : (user ? Dashboard : ContentPage);
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [isYearly, setIsYearly] = useState(false);
+    // Yearly is the better deal for anyone who sticks with it, so it's shown first.
+    const [isYearly, setIsYearly] = useState(true);
+    const [studentOffer, setStudentOffer] = useState(null);
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const { t } = useLanguage();
     // Newer lines fall back to English until they're translated.
@@ -100,6 +103,18 @@ const Pricing = () => {
     useEffect(() => {
         track('pricing_view');
     }, []);
+
+    useEffect(() => {
+        if (authLoading) return;
+        fetch('/api/pricing/offer', { credentials: 'include' })
+            .then((res) => res.json())
+            .then((data) => setStudentOffer(data?.student?.enabled ? data.student : null))
+            .catch(() => setStudentOffer(null));
+    }, [authLoading, user]);
+
+    const faqItems = FAQ_ITEMS.map((item) => item.id === 'student' && studentOffer
+        ? { ...item, answer: `Yes. Sign in with your school email (one ending in .edu, .ac.uk, .ac.kr, .edu.au and so on) and ${studentOffer.percent}% off is applied automatically at checkout, on monthly and yearly plans.` }
+        : item);
 
     const handlePurchase = async (priceId) => {
         track('checkout_start', { plan: PLAN_BY_PRICE_ID[priceId] || 'unknown', loggedIn: !!user });
@@ -175,9 +190,14 @@ const Pricing = () => {
                     <span className={pricingStyles.period}>{isYearly ? '/year' : '/month'}</span>
                 </div>
                 {isYearly && info && (
-                    <p className={pricingStyles.priceNote}>
-                        {`${t('pricing.badges.save')} ${t('pricing.pricing.currency')}${info.savings}`}
-                    </p>
+                    <>
+                        <p className={pricingStyles.perMonth}>
+                            {`${t('pricing.pricing.currency')}${(info.yearlyTotal / 12).toFixed(2)} a month, billed once a year`}
+                        </p>
+                        <p className={pricingStyles.priceNote}>
+                            {`${t('pricing.badges.save')} ${t('pricing.pricing.currency')}${info.savings}`}
+                        </p>
+                    </>
                 )}
             </>
         );
@@ -218,6 +238,17 @@ const Pricing = () => {
                         </button>
                     </div>
                 </div>
+
+                {studentOffer?.eligible && (
+                    <p className={pricingStyles.studentBanner} role="status">
+                        <strong>Student price:</strong> {studentOffer.percent}% off any plan, applied at checkout.
+                    </p>
+                )}
+                {studentOffer && !studentOffer.eligible && studentOffer.schoolEmail && (
+                    <p className={pricingStyles.studentBanner} role="status">
+                        Verify your school email to get {studentOffer.percent}% off as a student.
+                    </p>
+                )}
 
                 {/* Main Subscription Plans */}
                 <section id="pricing-plans" className={pricingStyles.mainPlansSection}>
@@ -341,7 +372,7 @@ const Pricing = () => {
                 <section className={pricingStyles.faqSection}>
                     <h2 className={pricingStyles.sectionTitle}>Frequently Asked Questions</h2>
                     <div className={pricingStyles.faqContainer}>
-                        {FAQ_ITEMS.map((item, index) => (
+                        {faqItems.map((item, index) => (
                             <div key={index} className={`${pricingStyles.faqItem} ${openFaqIndex === index ? pricingStyles.open : ''}`}>
                                 <button
                                     className={`${pricingStyles.faqQuestion} ${openFaqIndex === index ? pricingStyles.active : ''}`}

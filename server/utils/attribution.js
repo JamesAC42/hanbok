@@ -10,6 +10,8 @@ const HEARD_FROM_OPTIONS = [
     'tiktok', 'instagram', 'youtube', 'reddit', 'search', 'friend', 'discord', 'other'
 ];
 
+const { normalizeCode } = require('../lib/affiliates');
+
 const sanitizeAttribution = (raw) => {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
     const clean = {};
@@ -19,6 +21,9 @@ const sanitizeAttribution = (raw) => {
             clean[key] = value.trim().slice(0, MAX_LENGTH);
         }
     }
+    // Creator affiliate code from a ?ref= link.
+    const ref = normalizeCode(raw.ref);
+    if (ref) clean.ref = ref;
     if (HEARD_FROM_OPTIONS.includes(raw.heardFrom)) {
         clean.heardFrom = raw.heardFrom;
     }

@@ -115,6 +115,7 @@ const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
 const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./controllers/admin/snapshot');
 const { setHeardFrom } = require('./controllers/auth/setHeardFrom');
+const lifecycleEmails = require('./services/lifecycleEmails');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -403,6 +404,14 @@ app.get('/api/progress', isAuthenticated, async (req, res) => {
 
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
+app.get('/api/pricing/offer', require('./controllers/pricingOffer'));
+
+// Creator affiliates
+const affiliates = require('./controllers/affiliates');
+app.get('/api/admin/affiliates', isAuthenticated, requireAdmin, affiliates.listAffiliates);
+app.post('/api/admin/affiliates', isAuthenticated, requireAdmin, affiliates.createAffiliate);
+app.post('/api/admin/affiliates/:code/payouts', isAuthenticated, requireAdmin, affiliates.recordPayout);
+app.get('/api/partners/stats', affiliates.getPartnerStats);
 
 // Add this with other route definitions
 app.get('/api/stats', async (req, res) => {
@@ -461,6 +470,19 @@ app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminSt
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);
+
+// Lifecycle (upgrade) emails: who would get them now, without sending anything
+app.get('/api/admin/lifecycle-emails/preview', isAuthenticated, requireAdmin, async (req, res) => {
+    try {
+        res.json({ success: true, ...(await lifecycleEmails.previewLifecycleEmails()) });
+    } catch (error) {
+        console.error('Lifecycle email preview failed:', error);
+        res.status(500).json({ success: false, error: 'Preview failed' });
+    }
+});
+// Unsubscribe link in lifecycle emails (GET) and one-click List-Unsubscribe (POST)
+app.get('/api/email/unsubscribe', lifecycleEmails.handleUnsubscribe);
+app.post('/api/email/unsubscribe', lifecycleEmails.handleUnsubscribe);
 
 app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
     searchWordAudio(req, res);
@@ -826,6 +848,9 @@ async function startServer() {
     });
 
     startLyricAnalysisConsumer(analysisQueue, processLyricAnalysis);
+
+    // Hourly lifecycle emails; does nothing unless LIFECYCLE_EMAILS_ENABLED=true
+    lifecycleEmails.startLifecycleEmailScheduler();
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

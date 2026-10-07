@@ -1,5 +1,21 @@
 const nodemailer = require('nodemailer');
 
+// Create transporter for privateemail (Namecheap). Shared by the account
+// emails below and the lifecycle emails (services/lifecycleEmails.js).
+const createTransporter = () => nodemailer.createTransport({
+    host: process.env.EMAIL_HOST, // Usually mail.privateemail.com
+    port: parseInt(process.env.EMAIL_PORT) || 587, // 587 for TLS, 465 for SSL
+    secure: process.env.EMAIL_SECURE === 'true', // true for SSL (port 465), false for TLS (port 587)
+    auth: {
+        user: process.env.EMAIL_USER, // Your full email: admin@hanbokstudy.com
+        pass: process.env.EMAIL_PASS  // Your email password
+    },
+    tls: {
+        // Don't fail on invalid certs for privateemail
+        rejectUnauthorized: false
+    }
+});
+
 const sendVerificationEmail = async (email, verificationUrl, username) => {
     try {
         // Check if email is enabled
@@ -15,20 +31,7 @@ const sendVerificationEmail = async (email, verificationUrl, username) => {
             return { success: true };
         }
 
-        // Create transporter for privateemail (Namecheap)
-        const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST, // Usually mail.privateemail.com
-            port: parseInt(process.env.EMAIL_PORT) || 587, // 587 for TLS, 465 for SSL
-            secure: process.env.EMAIL_SECURE === 'true', // true for SSL (port 465), false for TLS (port 587)
-            auth: {
-                user: process.env.EMAIL_USER, // Your full email: admin@hanbokstudy.com
-                pass: process.env.EMAIL_PASS  // Your email password
-            },
-            tls: {
-                // Don't fail on invalid certs for privateemail
-                rejectUnauthorized: false
-            }
-        });
+        const transporter = createTransporter();
 
         // Verify connection configuration
         await transporter.verify();
@@ -115,19 +118,7 @@ const sendPasswordResetEmail = async (email, username, resetToken) => {
             return { success: true };
         }
 
-        // Create transporter for privateemail (Namecheap)
-        const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST,
-            port: parseInt(process.env.EMAIL_PORT) || 587,
-            secure: process.env.EMAIL_SECURE === 'true',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            },
-            tls: {
-                rejectUnauthorized: false
-            }
-        });
+        const transporter = createTransporter();
 
         // Verify connection configuration
         await transporter.verify();
@@ -204,6 +195,7 @@ const sendPasswordResetEmail = async (email, username, resetToken) => {
 };
 
 module.exports = {
+    createTransporter,
     sendVerificationEmail,
     sendPasswordResetEmail
 }; 

@@ -95,6 +95,23 @@ const collections = {
               customerId: { bsonType: "string" }
             },
             required: ["status", "startDate"]
+          },
+          emailPrefs: {
+            bsonType: ["object", "null"],
+            description: "Email preferences; marketing=false means unsubscribed from lifecycle emails",
+            properties: {
+              marketing: { bsonType: ["bool", "null"] },
+              updatedAt: { bsonType: ["date", "null"] }
+            }
+          },
+          lifecycleEmails: {
+            bsonType: ["object", "null"],
+            description: "When each lifecycle email (limit, day3, winback) was last sent",
+            properties: {
+              limit: { bsonType: ["date", "null"] },
+              day3: { bsonType: ["date", "null"] },
+              winback: { bsonType: ["date", "null"] }
+            }
           }
         }
       }
