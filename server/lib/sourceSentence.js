@@ -21,7 +21,7 @@ const surfaceForm = (sentence, dictionaryForm) => {
 
 const toSource = (sentence, word) => sentence ? {
     sentenceId: sentence.sentenceId,
-    publicId: sentence.publicId || null,
+    ...(sentence.publicId ? { publicId: sentence.publicId } : {}),
     text: sentence.text,
     translation: sentence.analysis?.sentence?.translation || null,
     surface: surfaceForm(sentence, word.originalWord),
