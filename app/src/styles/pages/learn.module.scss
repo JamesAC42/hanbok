@@ -416,6 +416,8 @@
 .tryItBody {
     flex: 1;
     min-width: 0;
+    // Stacked on phones: fill the card instead of sizing to the longest line.
+    align-self: stretch;
 }
 
 .tryItTitle {
@@ -432,6 +434,8 @@
 .tryItInput {
     @include bp-input;
     flex: 1 1 14rem;
+    min-width: 0;
+    box-sizing: border-box;
     font-family: var(--font-kr-sans);
 }
 

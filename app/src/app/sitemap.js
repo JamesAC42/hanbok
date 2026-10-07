@@ -8,6 +8,7 @@ export const revalidate = 3600;
 const STATIC_PAGES = [
     { path: '/', changeFrequency: 'weekly', priority: 1 },
     { path: '/analyze', changeFrequency: 'monthly', priority: 0.9 },
+    { path: '/korean-sentence-analyzer', changeFrequency: 'monthly', priority: 0.9 },
     { path: '/lyrics', changeFrequency: 'daily', priority: 0.9 },
     { path: '/learn', changeFrequency: 'weekly', priority: 0.9 },
     { path: '/hangeul', changeFrequency: 'monthly', priority: 0.7 },

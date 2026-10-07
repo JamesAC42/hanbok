@@ -3,10 +3,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Mascot from '@/components/Mascot';
+import { track } from '@/lib/analytics';
 import styles from '@/styles/pages/learn.module.scss';
 
-// "Try it on your own sentence": hands the text to the analyzer.
-const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw today' }) => {
+// "Try it on your own sentence": hands the text to the analyzer. With `run`,
+// the analyzer starts the breakdown right away instead of only filling its input.
+const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw today', run = false, source, id = 'learn-try-it' }) => {
     const router = useRouter();
     const { setLanguage } = useLanguage();
     const [text, setText] = useState('');
@@ -17,7 +19,11 @@ const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw
         if (!value) return;
         setLanguage(lang);
         // The analyze page picks this up and fills its input.
-        localStorage.setItem('pendingAnalysis', value);
+        try {
+            localStorage.setItem('pendingAnalysis', value);
+            if (run) localStorage.setItem('pendingAnalysisRun', '1');
+        } catch { /* private mode: the analyzer just opens empty */ }
+        if (source) track('seo_try', { source });
         router.push('/analyze');
     };
 
@@ -25,11 +31,11 @@ const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw
         <form className={styles.tryIt} onSubmit={submit}>
             <Mascot pose="teach" size={84} />
             <div className={styles.tryItBody}>
-                <label htmlFor="learn-try-it" className={styles.tryItTitle}>{title}</label>
+                <label htmlFor={id} className={styles.tryItTitle}>{title}</label>
                 <p>Paste a line from a song, a drama or a text message. Hanbok marks every particle and explains each word.</p>
                 <div className={styles.tryItRow}>
                     <input
-                        id="learn-try-it"
+                        id={id}
                         lang={lang}
                         value={text}
                         onChange={(e) => setText(e.target.value)}
