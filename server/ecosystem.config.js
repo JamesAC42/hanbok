@@ -5,6 +5,9 @@ module.exports = {
       script: 'index.js',
       env: {
         NODE_ENV: 'production',
+        // The API processes lyric jobs itself unless this is set; this file
+        // runs the worker below, so leave the queue to it.
+        LYRICS_WORKER: 'separate',
       },
       max_memory_restart: '1G',
       watch: false,
