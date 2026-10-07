@@ -114,6 +114,7 @@ const adminStats = require('./controllers/admin/stats');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
 const { getSnapshot, requireMetricsToken } = require('./controllers/admin/snapshot');
+const lifecycleEmails = require('./services/lifecycleEmails');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -464,6 +465,19 @@ app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
+
+// Lifecycle (upgrade) emails: who would get them now, without sending anything
+app.get('/api/admin/lifecycle-emails/preview', isAuthenticated, requireAdmin, async (req, res) => {
+    try {
+        res.json({ success: true, ...(await lifecycleEmails.previewLifecycleEmails()) });
+    } catch (error) {
+        console.error('Lifecycle email preview failed:', error);
+        res.status(500).json({ success: false, error: 'Preview failed' });
+    }
+});
+// Unsubscribe link in lifecycle emails (GET) and one-click List-Unsubscribe (POST)
+app.get('/api/email/unsubscribe', lifecycleEmails.handleUnsubscribe);
+app.post('/api/email/unsubscribe', lifecycleEmails.handleUnsubscribe);
 
 app.get('/api/admin/word-audio', isAuthenticated, async (req, res) => {
     searchWordAudio(req, res);
@@ -829,6 +843,9 @@ async function startServer() {
     });
 
     startLyricAnalysisConsumer(analysisQueue, processLyricAnalysis);
+
+    // Hourly lifecycle emails; does nothing unless LIFECYCLE_EMAILS_ENABLED=true
+    lifecycleEmails.startLifecycleEmailScheduler();
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
