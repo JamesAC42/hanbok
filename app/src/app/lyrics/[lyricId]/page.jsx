@@ -1,4 +1,5 @@
 import LyricPageClient from './LyricPageClient';
+import StudyNotes from '@/components/lyrics/StudyNotes';
 import { getPublicLyric, languageName, songLabel, JsonLd, SITE_URL, SITE_NAME } from '@/lib/seo';
 
 export async function generateMetadata({ params }) {
@@ -9,9 +10,8 @@ export async function generateMetadata({ params }) {
     }
 
     const language = languageName(lyric.language);
-    const song = songLabel(lyric);
-    const title = `${song}: Lyrics Meaning & ${language} Breakdown`;
-    const description = `Line-by-line English translation of "${lyric.title}"${lyric.artist ? ` by ${lyric.artist}` : ''}. Tap any line to see every ${language} word and grammar point explained, then save the words to your flashcards.`;
+    const title = `${lyric.title}${lyric.artist ? ` (${lyric.artist})` : ''} Lyrics: English Translation & Meaning`;
+    const description = `${lyric.title}${lyric.artist ? ` by ${lyric.artist}` : ''}: full lyrics with a line-by-line English translation, plus study notes on the key ${language} words and grammar. Tap any line for a full breakdown.`;
     const url = `/lyrics/${lyric.lyricId}`;
 
     return {
@@ -57,7 +57,7 @@ export default async function LyricPage({ params }) {
     return (
         <>
             {structuredData && <JsonLd data={structuredData} />}
-            <LyricPageClient initialLyric={lyric} />
+            <LyricPageClient initialLyric={lyric} studyNotes={lyric && <StudyNotes lyric={lyric} />} />
         </>
     );
 }
