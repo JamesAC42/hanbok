@@ -399,6 +399,7 @@ app.get('/api/progress', isAuthenticated, async (req, res) => {
 
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
+app.get('/api/pricing/offer', require('./controllers/pricingOffer'));
 
 // Add this with other route definitions
 app.get('/api/stats', async (req, res) => {

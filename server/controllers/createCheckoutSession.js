@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { getDb } = require('../database');
+const { isStudentEligible, studentCouponId } = require('../utils/studentDiscount');
 
 const createCheckoutSession = async (req, res) => {
     const { priceId } = req.body;
@@ -59,6 +60,18 @@ const createCheckoutSession = async (req, res) => {
             // console.log('Applying 7-day free trial to checkout session');
         } else if (isSubscription && isMonthlySubscription && userHasUsedTrial) {
             console.log('User has already used free trial, no trial applied');
+        }
+
+        // Students get their coupon applied automatically. Stripe allows either a
+        // discount or the promo-code box, not both.
+        if (isSubscription) {
+            const db = getDb();
+            const user = await db.collection('users').findOne({ userId });
+            if (isStudentEligible(user)) {
+                sessionConfig.discounts = [{ coupon: studentCouponId() }];
+                delete sessionConfig.allow_promotion_codes;
+                sessionConfig.metadata.student = 'true';
+            }
         }
 
         const session = await stripe.checkout.sessions.create(sessionConfig);

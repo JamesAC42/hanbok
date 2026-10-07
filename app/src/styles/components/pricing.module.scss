@@ -630,3 +630,24 @@
     padding: 0.85rem 2rem;
     font-size: 1rem;
 }
+
+.perMonth {
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+// Shown to signed-in students above the plans.
+.studentBanner {
+    max-width: 40rem;
+    margin: -1.5rem auto 2rem;
+    padding: 0.75rem 1.1rem;
+    border: 2px solid var(--bp-und-line);
+    border-radius: 16px;
+    background: var(--bp-und-soft);
+    color: var(--t-und);
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
