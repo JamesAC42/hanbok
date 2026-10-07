@@ -4,6 +4,7 @@ import LimitReachedPopup from '@/components/LimitReachedPopup';
 import LoginRequiredPopup from '@/components/LoginRequiredPopup';
 import AnnouncementPopup from '@/components/AnnouncementPopup';
 import PromoPopup from '@/components/PromoPopup';
+import HeardFromPrompt from '@/components/HeardFromPrompt';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -120,6 +121,7 @@ export function PopupProvider({ children }) {
     return (
         <PopupContext.Provider value={{ showLimitReachedPopup, showLoginRequiredPopup, showPromoPopup, hidePopup }}>
             {children}
+            {!popupState.show && <HeardFromPrompt />}
             {popupState.show && popupState.variant === 'limit' && (
                 <LimitReachedPopup 
                     onClose={hidePopup}
