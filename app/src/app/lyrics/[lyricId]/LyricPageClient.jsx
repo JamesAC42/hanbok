@@ -33,7 +33,7 @@ const BlankShell = ({ children }) => <div style={{ minHeight: '100dvh', backgrou
 
 // initialLyric is the English-translation lyric the server page fetched, so the
 // first render already has the song instead of a loading card.
-const LyricPageClient = ({ initialLyric = null }) => {
+const LyricPageClient = ({ initialLyric = null, studyNotes = null }) => {
     const { t } = useLanguage();
     const { user, loading: authLoading } = useAuth();
     const isPublic = !authLoading && !user;
@@ -649,6 +649,8 @@ const LyricPageClient = ({ initialLyric = null }) => {
                         ) : null}
                     </div>
                 )}
+
+                {studyNotes}
 
                 {/* Comments Section */}
                 <LyricComments lyricId={lyricId} />
