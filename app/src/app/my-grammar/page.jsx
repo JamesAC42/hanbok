@@ -11,8 +11,57 @@ import Stars from '@/components/grammar/Stars';
 import styles from '@/styles/components/grammar.module.scss';
 
 const LEVEL_NAMES = { 1: 'Beginner', 2: 'Elementary', 3: 'Intermediate', 4: 'Upper intermediate', 5: 'Advanced' };
-// Zigzag offsets so the path winds like a trail.
-const SHIFTS = ['0rem', '-4.5rem', '-6rem', '-3rem', '1.5rem', '5rem', '6rem', '3rem'];
+// Zigzag offsets (percent of the trail's width) so the path winds.
+const SHIFTS = [0, -20, -28, -14, 6, 22, 28, 12];
+const ROW = 120; // px between node centres
+
+// One level's nodes on a winding trail. The trail is an SVG drawn through
+// the node centres; a stretch turns green once both of its ends are learned.
+const Trail = ({ group, hereId, font }) => {
+    const points = group.map((p, i) => ({ x: 50 + SHIFTS[i % SHIFTS.length], y: i * ROW + ROW / 2 }));
+    const height = group.length * ROW;
+    return (
+        <div className={styles.trail} style={{ height }}>
+            <svg className={styles.trailLine} viewBox={`0 0 100 ${height}`} preserveAspectRatio="none" aria-hidden="true">
+                {points.slice(1).map((b, i) => {
+                    const a = points[i];
+                    const done = group[i].stage > 0 && group[i + 1].stage > 0;
+                    return (
+                        <path
+                            key={i}
+                            d={`M${a.x} ${a.y} C${a.x} ${a.y + ROW / 2} ${b.x} ${b.y - ROW / 2} ${b.x} ${b.y}`}
+                            className={done ? styles.trailDone : undefined}
+                            vectorEffect="non-scaling-stroke"
+                        />
+                    );
+                })}
+            </svg>
+            {group.map((p, i) => {
+                const { x, y } = points[i];
+                const isHere = p.grammarId === hereId;
+                const side = x > 50 ? styles.labelLeft : styles.labelRight;
+                return (
+                    <Link
+                        key={p.grammarId}
+                        href={`/my-grammar/${p.grammarId}`}
+                        className={`${styles.node} ${styles[`stage${p.stage}`]} ${isHere ? styles.nodeHere : ''} ${p.due ? styles.nodeDue : ''}`}
+                        style={{ left: `${x}%`, top: y }}
+                        aria-current={isHere ? 'step' : undefined}
+                    >
+                        {isHere && <span className={styles.hereBubble}>{p.due ? 'Review' : p.stage === 0 ? 'Start' : 'Next'}</span>}
+                        <span className={`${styles.disc} ${p.form.length > 6 ? styles.discLong : ''} ${font}`} lang={p.language}>{p.form}</span>
+                        <span className={`${styles.nodeLabel} ${side}`}>
+                            <span className={styles.nodeName}>{p.name}</span>
+                            <Stars stage={p.stage} />
+                            {p.due ? <span className={styles.nodeTag}>Due in Review</span>
+                                : p.stage === 0 ? <span className={`${styles.nodeTag} ${styles.nodeTagNew}`}>Start lesson</span> : null}
+                        </span>
+                    </Link>
+                );
+            })}
+        </div>
+    );
+};
 
 const plural = (n, word, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
 
@@ -93,7 +142,6 @@ const MyGrammar = () => {
 
     if (loading || !isAuthenticated) return null;
 
-    let index = 0;
     return (
         <Dashboard>
             <div className={styles.page}>
@@ -140,31 +188,22 @@ const MyGrammar = () => {
                             <PlanNote allowance={data.allowance} />
 
                             <div className={styles.path}>
-                                {byLevel.map(([level, group]) => (
-                                    <div key={level} style={{ display: 'contents' }}>
-                                        <span className={styles.levelHeading}>Level {level} · {LEVEL_NAMES[level] || ''}</span>
-                                        {group.map((p) => {
-                                            const shift = SHIFTS[index++ % SHIFTS.length];
-                                            const isHere = p.grammarId === hereId;
-                                            return (
-                                                <div key={p.grammarId} className={styles.pathRow}>
-                                                    <Link
-                                                        href={`/my-grammar/${p.grammarId}`}
-                                                        className={`${styles.node} ${styles[`stage${p.stage}`]} ${isHere ? styles.nodeHere : ''} ${p.due ? styles.nodeDue : ''}`}
-                                                        style={{ '--shift': shift }}
-                                                        aria-current={isHere ? 'step' : undefined}
-                                                    >
-                                                        <span className={`${styles.disc} ${font}`} lang={p.language}>{p.form}</span>
-                                                        <span className={styles.nodeName}>{p.name}</span>
-                                                        <Stars stage={p.stage} />
-                                                        {p.due ? <span className={styles.nodeTag}>Due in Review</span>
-                                                            : p.stage === 0 ? <span className={`${styles.nodeTag} ${styles.nodeTagNew}`}>Start lesson</span> : null}
-                                                    </Link>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                ))}
+                                {byLevel.map(([level, group]) => {
+                                    const learned = group.filter((p) => p.stage > 0).length;
+                                    return (
+                                        <section key={level} className={styles.levelSection} aria-label={`Level ${level}`}>
+                                            <header className={styles.levelBanner}>
+                                                <span className={styles.levelNumber}>{level}</span>
+                                                <span className={styles.levelTitle}>
+                                                    <b>Level {level}</b>
+                                                    {LEVEL_NAMES[level] || ''}
+                                                </span>
+                                                <span className={styles.levelCount}>{learned} of {group.length} learned</span>
+                                            </header>
+                                            <Trail group={group} hereId={hereId} font={font} />
+                                        </section>
+                                    );
+                                })}
                             </div>
                         </>
                     )}

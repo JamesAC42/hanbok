@@ -165,73 +165,146 @@
 // ===== The path =====
 
 .path {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    padding: .5rem 0 2rem;
+}
+
+.levelSection {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem 0 2rem;
 }
 
-.pathRow {
-    position: relative;
+.levelBanner {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    gap: .85rem;
     width: 100%;
-    max-width: 30rem;
-    padding: .6rem 0;
+    padding: .8rem 1.1rem;
+    border-radius: 18px;
+    background: var(--bp-und);
+    color: #fff;
+    box-shadow: 0 4px 0 var(--bp-und-d);
 }
 
-.levelHeading {
-    @include bp-label;
-    margin: 1.2rem 0 .4rem;
-    padding: .3rem .8rem;
+.levelNumber {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .22);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 900;
+}
+
+.levelTitle {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    font-size: .9rem;
+    opacity: .95;
+
+    b {
+        @include bp-label;
+        color: inherit;
+        font-size: .72rem;
+        opacity: .85;
+    }
+}
+
+.levelCount {
+    flex: none;
+    padding: .3rem .7rem;
     border-radius: 99px;
-    background: var(--bp-soft);
+    background: rgba(255, 255, 255, .22);
+    font-weight: 800;
+    font-size: .78rem;
+}
+
+.trail {
+    position: relative;
+    width: 100%;
+    max-width: 26rem;
+    margin-top: .6rem;
+}
+
+.trailLine {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+
+    path {
+        fill: none;
+        stroke: var(--bp-line);
+        stroke-width: 10px;
+        stroke-linecap: round;
+    }
+
+    .trailDone { stroke: var(--bp-und-line); }
 }
 
 .node {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .35rem;
-    width: 10rem;
+    position: absolute;
+    width: 0;
+    height: 0;
     text-decoration: none;
     color: var(--foreground);
-    transform: translateX(var(--shift, 0));
-    text-align: center;
-    border-radius: 18px;
-    padding: .25rem;
 
-    &:hover .disc { filter: brightness(1.06); }
-    &:active .disc { transform: translateY(4px); box-shadow: 0 0 0 var(--node-d); }
+    &:hover .disc { filter: brightness(1.05); }
+    &:active .disc { transform: translate(-50%, -50%) scale(.96); }
+    &:focus-visible { outline: none; }
+    &:focus-visible .disc { outline: 3px solid var(--bp-read); outline-offset: 10px; }
 }
 
+// A true circle: the 3D depth sits inside the circle (inset shadow) so the
+// outside is round and any ring around it stays centred.
 .disc {
     --node: var(--bp-und);
     --node-d: var(--bp-und-d);
-    width: 4.6rem;
-    height: 4.6rem;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4.75rem;
+    height: 4.75rem;
+    transform: translate(-50%, -50%);
     border-radius: 50%;
     display: grid;
     place-items: center;
-    padding: .3rem;
+    padding: .55rem;
     background: var(--node);
     color: #fff;
-    box-shadow: 0 5px 0 var(--node-d);
+    box-shadow:
+        inset 0 -6px 0 var(--node-d),
+        inset 0 3px 0 rgba(255, 255, 255, .25);
     font-family: var(--font-kr-sans), var(--font-display);
     font-weight: 900;
     font-size: 1rem;
     line-height: 1.1;
-    overflow: hidden;
+    text-align: center;
     word-break: keep-all;
-    transition: transform .08s ease, box-shadow .08s ease;
+    overflow-wrap: anywhere;
+    transition: transform .08s ease, filter .12s ease;
+    z-index: 1;
 }
+
+.discLong { font-size: .82rem; }
 
 .stage0 .disc {
     --node-d: var(--bp-line-strong);
-    background: var(--bp-soft);
+    background: var(--background);
     color: var(--bp-ink2);
-    border: 2px solid var(--bp-line-strong);
+    box-shadow:
+        inset 0 0 0 3px var(--bp-line-strong),
+        inset 0 -7px 0 var(--bp-line-strong);
 }
 
 .stage4 .disc {
@@ -240,20 +313,90 @@
     color: var(--bp-keep-ink);
 }
 
-.nodeHere .disc {
-    outline: 4px solid var(--bp-und-line);
-    outline-offset: 4px;
-    animation: bp-bob 2.4s ease-in-out infinite;
-}
-
 .nodeDue .disc {
     --node: var(--bp-rev);
     --node-d: var(--bp-rev-d);
+    color: #fff;
+    box-shadow:
+        inset 0 -6px 0 var(--node-d),
+        inset 0 3px 0 rgba(255, 255, 255, .25);
+    background: var(--node);
 }
+
+// Ring around the current node, centred on the same point as the disc.
+.nodeHere::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 6.1rem;
+    height: 6.1rem;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 5px solid var(--bp-und-line);
+    background: var(--background);
+}
+
+.hereBubble {
+    position: absolute;
+    left: 0;
+    top: -4.7rem;
+    transform: translateX(-50%);
+    padding: .3rem .8rem;
+    border-radius: 10px;
+    border: 2px solid var(--bp-line);
+    background: var(--background);
+    color: var(--bp-und-d);
+    @include bp-label;
+    font-size: .72rem;
+    white-space: nowrap;
+    box-shadow: 0 3px 0 var(--bp-line);
+    animation: bp-bob 2.4s ease-in-out infinite;
+    z-index: 2;
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -7px;
+        width: 10px;
+        height: 10px;
+        transform: translateX(-50%) rotate(45deg);
+        background: var(--background);
+        border-right: 2px solid var(--bp-line);
+        border-bottom: 2px solid var(--bp-line);
+    }
+}
+
+.nodeLabel {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    width: max-content;
+    max-width: min(11rem, 40vw);
+    transform: translateY(-50%);
+}
+
+.labelRight {
+    left: 3.6rem;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.labelLeft {
+    right: 3.6rem;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.nodeHere .labelRight { left: 4rem; }
+.nodeHere .labelLeft { right: 4rem; }
 
 .nodeName {
     font-weight: 800;
-    font-size: .82rem;
+    font-size: .88rem;
     line-height: 1.25;
     color: var(--foreground);
 }
@@ -261,7 +404,7 @@
 .stars {
     display: inline-flex;
     gap: 1px;
-    font-size: .8rem;
+    font-size: .85rem;
     letter-spacing: 1px;
     color: var(--bp-line-strong);
 
@@ -283,7 +426,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .nodeHere .disc { animation: none; }
+    .hereBubble { animation: none; }
 }
 
 .empty {
