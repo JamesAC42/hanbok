@@ -57,13 +57,24 @@ export const identifyUser = (user) => {
 export const captureAttribution = () => {
     if (typeof window === 'undefined') return;
     try {
-        if (localStorage.getItem(ATTRIBUTION_KEY)) return;
         const params = new URLSearchParams(window.location.search);
+        const stored = localStorage.getItem(ATTRIBUTION_KEY);
+        if (stored) {
+            // A creator's ?ref= link still counts for a visitor we've seen before,
+            // as long as no other creator got there first.
+            const ref = params.get('ref');
+            const existing = JSON.parse(stored);
+            if (ref && !existing.ref) {
+                localStorage.setItem(ATTRIBUTION_KEY, JSON.stringify({ ...existing, ref }));
+            }
+            return;
+        }
         const attribution = {};
         UTM_KEYS.forEach((key) => {
             const value = params.get(key);
             if (value) attribution[key] = value;
         });
+        if (params.get('ref')) attribution.ref = params.get('ref');
         const referrer = document.referrer;
         if (referrer && !referrer.startsWith(window.location.origin)) {
             attribution.referrer = referrer;

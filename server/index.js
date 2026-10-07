@@ -401,6 +401,13 @@ app.get('/api/progress', isAuthenticated, async (req, res) => {
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
 app.get('/api/pricing/offer', require('./controllers/pricingOffer'));
 
+// Creator affiliates
+const affiliates = require('./controllers/affiliates');
+app.get('/api/admin/affiliates', isAuthenticated, requireAdmin, affiliates.listAffiliates);
+app.post('/api/admin/affiliates', isAuthenticated, requireAdmin, affiliates.createAffiliate);
+app.post('/api/admin/affiliates/:code/payouts', isAuthenticated, requireAdmin, affiliates.recordPayout);
+app.get('/api/partners/stats', affiliates.getPartnerStats);
+
 // Add this with other route definitions
 app.get('/api/stats', async (req, res) => {
     getSiteStats(req, res);
