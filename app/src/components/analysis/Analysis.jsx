@@ -9,6 +9,7 @@ import SentenceNotes from '@/components/analysis/SentenceNotes';
 import Variants from '@/components/analysis/Variants';
 import CulturalNotes from '@/components/analysis/CulturalNotes';
 import SaveButton from '@/components/analysis/SaveButton';
+import ShareButton from '@/components/analysis/ShareButton';
 import SettingsButton from '@/components/analysis/SettingsButton';
 import LyricalDevices from '@/components/analysis/LyricalDevices';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -225,6 +226,7 @@ const Analysis = ({
                     <button onClick={() => scrollToSection('grammar')} className={activeSection === 'grammar' ? styles.active : ''}>Grammar</button>
                 </div>
                 <div className={styles.embeddedControls}>
+                    <ShareButton sentenceId={sentenceId} sentence={analysis.sentence.original} />
                     <SaveButton sentenceId={sentenceId} />
                     <SettingsButton 
                         showPronunciation={showPronunciation} 
