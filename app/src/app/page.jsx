@@ -6,6 +6,7 @@ import Mascot from '@/components/Mascot';
 import Tiger from '@/components/Tiger';
 import HeroDemo from '@/components/landing/HeroDemo';
 import HeroTry from '@/components/landing/HeroTry';
+import HeroArt from '@/components/landing/HeroArt';
 import PromoVideo from '@/components/landing/PromoVideo';
 import SignedInRedirect from '@/components/landing/SignedInRedirect';
 import { apiGet, JsonLd, SITE_NAME, SITE_URL } from '@/lib/seo';
@@ -132,6 +133,8 @@ export default async function Home() {
 
             <main className={styles.landing}>
                 {/* ---------- Hero ---------- */}
+                <div className={styles.heroStage}>
+                <HeroArt />
                 <section className={styles.hero}>
                     <div className={styles.heroCopy}>
                         <span className={styles.eyebrow}>Free to try · no account needed</span>
@@ -152,6 +155,7 @@ export default async function Home() {
                         <HeroDemo />
                     </div>
                 </section>
+                </div>
 
                 {/* ---------- Proof ---------- */}
                 <section className={styles.proof} aria-label="Hanbok in numbers">
