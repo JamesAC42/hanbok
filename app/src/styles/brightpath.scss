@@ -81,6 +81,13 @@ div[class*="theme-"] {
     outline-offset: 2px;
 }
 
+// Text fields already show focus by recoloring their own border or their
+// box's border, so the ring would be a second outline inside it. Browsers
+// count a clicked text field as focus-visible too, so it showed on clicks.
+:is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="button"], [type="submit"], [type="reset"], [type="color"], [type="file"]), textarea, [contenteditable="true"]):focus-visible {
+    outline: none;
+}
+
 ::selection {
     background: color-mix(in srgb, var(--bp-read) 22%, transparent);
 }
