@@ -175,6 +175,7 @@ Important note for Russian analysis:
 3. For verbs, always specify the aspect (perfective or imperfective) and conjugation type.
 4. For nouns and adjectives, always specify the case, number, and gender.
 5. For words with multiple possible meanings, choose the correct one based on context.
+6. Numerals and noun case: after один (and compounds ending in 1, like двадцать один) the noun is nominative singular; after два/две, три, четыре (and compounds ending in 2-4, like двадцать два) the noun is genitive SINGULAR; after пять and higher (and 11-14) the noun is genitive PLURAL. Adjectives after 2-4 usually take genitive plural (or nominative plural for feminine nouns). Explain this rule correctly when a numeral appears.
 
 ${SupportedLanguages[originalLanguage]} text to analyze: `;
 

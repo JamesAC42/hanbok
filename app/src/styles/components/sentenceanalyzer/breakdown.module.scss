@@ -105,7 +105,9 @@
     font-size: 1.85rem;
     line-height: 1.25;
     font-weight: 700;
-    color: color-mix(in srgb, var(--type-color) 82%, var(--foreground));
+    // 62% keeps every part-of-speech color at 3:1 or better for this large bold text
+    // in light and dark themes (WCAG AA large text).
+    color: color-mix(in srgb, var(--type-color) 62%, var(--foreground));
     white-space: nowrap;
 
     &:global(.korean) {

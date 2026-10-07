@@ -294,7 +294,7 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose
 
                     {/* Chinese-specific aspect information */}
                     {
-                        (language === 'zh' || language === 'zh-TW') && wordInfo.grammar?.aspect &&
+                        (language === 'zh' || language === 'zh-TW') && wordInfo.grammar?.aspect?.type &&
                         <div className={styles.aspectInfo}>
                             {t('analysis.wordInfo.aspect')} <span className={styles.wordAspect}>{wordInfo.grammar.aspect.type}</span><br/>
                             {t('analysis.wordInfo.notes')}: {wordInfo.grammar.aspect.explanation}
