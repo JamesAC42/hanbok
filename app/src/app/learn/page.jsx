@@ -30,6 +30,10 @@ export default function LearnIndex() {
                     <p className={styles.dek}>
                         Short guides with Horangi. Every example is a real Hanbok breakdown: tap a word, save it, then check yourself.
                     </p>
+                    <p className={styles.dek}>
+                        Stuck on a sentence of your own? Paste it into the{' '}
+                        <Link href="/korean-sentence-analyzer">free Korean sentence analyzer</Link>.
+                    </p>
                 </div>
             </header>
             <ul className={styles.cards}>
