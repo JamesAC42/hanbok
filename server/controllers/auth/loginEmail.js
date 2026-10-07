@@ -150,6 +150,7 @@ const loginEmail = async (req, res, redisClient) => {
                 maxSavedSentences: user.maxSavedSentences,
                 maxSavedWords: user.maxSavedWords,
                 feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
+                heardFrom: user.attribution?.heardFrom || null,
                 remainingImageExtracts: user.remainingImageExtracts,
                 remainingSentenceAnalyses: user.remainingSentenceAnalyses || 0,
                 hasUsedFreeTrial: user.hasUsedFreeTrial || false,

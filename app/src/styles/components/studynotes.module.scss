@@ -1,0 +1,146 @@
+@import '../variables.module.scss';
+
+// Study notes under a song's lyrics, Bright Path. Understand teal for the
+// heading, Keep amber for words, Read blue for "go deeper" links.
+
+@mixin notes-heading {
+    @include bp-title;
+    font-family: var(--font-lilita), var(--font-kr-sans);
+    font-weight: 900;
+    font-synthesis: none;
+    word-break: keep-all;
+}
+
+.notes {
+    @include bp-card;
+    max-width: 64rem;
+    width: 100%;
+    margin: 0 auto 2rem;
+    padding: 1.75rem 2rem 2rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+
+    @media screen and (max-width: 725px) {
+        padding: 1.25rem 1rem 1.5rem;
+    }
+}
+
+.head {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: .5rem;
+
+    @media screen and (max-width: 725px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: .5rem;
+    }
+}
+
+.label {
+    @include bp-label;
+    color: var(--bp-und);
+    margin: 0 0 .3rem;
+}
+
+.title {
+    @include notes-heading;
+    font-size: 2rem;
+    margin: 0 0 .5rem;
+
+    @media screen and (max-width: 725px) {
+        font-size: 1.6rem;
+    }
+}
+
+.dek {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: var(--bp-ink2);
+    margin: 0;
+    max-width: 44rem;
+}
+
+.sectionTitle {
+    @include notes-heading;
+    font-size: 1.45rem;
+    margin: 2rem 0 .35rem;
+}
+
+.hint {
+    color: var(--bp-ink2);
+    margin: 0 0 1rem;
+}
+
+.grammarList {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: grid;
+    gap: 1rem;
+}
+
+.grammarItem {
+    border: 2px solid var(--bp-line);
+    border-left: 6px solid var(--bp-und);
+    border-radius: 16px;
+    padding: 1rem 1.25rem;
+}
+
+.pattern {
+    font-weight: 800;
+    font-size: 1.15rem;
+    margin: 0 0 .35rem;
+
+    &:lang(ko) { font-family: var(--font-display), var(--font-kr-sans); }
+}
+
+.explanation {
+    font-family: var(--font-body);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    margin: 0 0 .75rem;
+}
+
+.line {
+    margin: 0 0 .5rem;
+    padding: .6rem .9rem;
+    border-radius: 12px;
+    background: var(--bp-und-soft);
+
+    p { margin: 0; font-weight: 700; }
+}
+
+.lineTranslation {
+    font-weight: 500 !important;
+    color: var(--bp-ink2);
+    margin-top: .2rem !important;
+}
+
+.guideLink {
+    display: inline-block;
+    font-weight: 800;
+    color: var(--bp-read);
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .75rem 1rem;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--bp-line);
+
+    p { margin: 0; font-weight: 700; }
+}
+
+.ctaButton {
+    @include bp-press(var(--bp-read), var(--bp-read-d));
+    text-decoration: none;
+}
