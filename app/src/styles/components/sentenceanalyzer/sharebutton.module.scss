@@ -1,0 +1,24 @@
+@import '@/styles/variables.module.scss';
+
+// Sits next to the bookmark button and borrows its look; this only adds the
+// "Link copied" bubble.
+.wrap {
+    position: relative;
+    display: inline-flex;
+}
+
+.copied {
+    position: absolute;
+    top: calc(100% + .4rem);
+    right: 0;
+    z-index: 5;
+    padding: .35rem .7rem;
+    border-radius: 10px;
+    background: var(--bp-und-d);
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-size: .78rem;
+    font-weight: 800;
+    white-space: nowrap;
+    pointer-events: none;
+}
