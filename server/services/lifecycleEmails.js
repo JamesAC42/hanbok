@@ -400,7 +400,7 @@ const handleUnsubscribe = async (req, res) => {
     const userId = parseInt(source.u, 10);
     const secret = getUnsubscribeSecret();
     if (!Number.isInteger(userId) || !verifyUnsubscribeToken(userId, source.t, secret)) {
-        return res.status(400).type('html').send(unsubscribePage('This unsubscribe link is not valid. Please email us and we will remove you by hand.'));
+        return res.status(400).type('html').send(unsubscribePage('This unsubscribe link is not valid. Please email admin@hanbokstudy.com and we will remove you by hand.'));
     }
     try {
         await getDb().collection('users').updateOne(
