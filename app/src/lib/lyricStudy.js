@@ -2,6 +2,7 @@
 // learning and the grammar the song uses, each tied to the line it came from.
 // Runs on the server, so the notes are in the HTML search engines read.
 import { articlesForGrammar } from '@/content/learn';
+import { phraseForWord, phraseHref } from '@/content/phrases';
 
 const SKIP_TYPES = /particle|punctuation|symbol|interjection|onomatopoeia|suffix|ending/i;
 const HANGUL = /[가-힣ㄱ-ㅎ]/;
@@ -28,6 +29,7 @@ const guideFor = (pattern, language) => {
 };
 
 export function buildStudyNotes(lyric, { maxWords = 12, maxGrammar = 8 } = {}) {
+    const isKorean = lyric.language === 'ko';
     const groups = lineGroups(lyric);
     const words = new Map();
     const grammar = new Map();
@@ -62,6 +64,7 @@ export function buildStudyNotes(lyric, { maxWords = 12, maxGrammar = 8 } = {}) {
         rom,
         en,
         note: [seen && seen !== ko ? `In the song: ${seen}` : '', count > 1 ? `Appears ${count} times` : ''].filter(Boolean).join(' · '),
+        ...(isKorean && phraseForWord(ko) && { href: phraseHref(phraseForWord(ko)) }),
     }));
     // Points with a Learn guide first, so readers can go deeper.
     const points = [...grammar.values()].sort((a, b) => (!!b.guide - !!a.guide) || byCount(a, b)).slice(0, maxGrammar);
