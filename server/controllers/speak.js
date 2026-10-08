@@ -7,13 +7,13 @@ const crypto = require('crypto');
 const { getDb } = require('../database');
 const SupportedLanguages = require('../supported_languages');
 const { SCENARIOS, LEVELS, findScenario, publicScenario } = require('../speak/scenarios');
-const { buildInstructions, TOOLS, nameOf } = require('../speak/prompt');
-const { allowanceFor, planFor, MAX_SESSION_SECONDS, MIN_START_SECONDS } = require('../speak/limits');
+const { buildInstructions, toolsFor, characterFor, ASSISTS, defaultAssist, assistSwitchNote, nameOf } = require('../speak/prompt');
+const { allowanceFor, planFor, planTable, MAX_SESSION_SECONDS, MIN_START_SECONDS } = require('../speak/limits');
 
 const OPENAI_URL = 'https://api.openai.com/v1/realtime/calls';
-const VOICE = process.env.SPEAK_VOICE || 'cedar';
 const TRANSLATE_MODEL = process.env.SPEAK_TRANSLATE_MODEL || 'gpt-4.1';
 const hangupTimers = new Map();
+const NON_LATIN = new Set(['ko', 'ja', 'zh', 'zh-TW', 'ru', 'hi']);
 
 const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const langOr = (code, fallback) => (SupportedLanguages[code] ? code : fallback);
@@ -53,13 +53,14 @@ const closeSession = async (db, session, reason) => {
 const overview = async (req, res) => {
     const language = langOr(req.query.language, 'ko');
     const scenarios = SCENARIOS.map((s) => publicScenario(s, language));
-    if (!req.session?.user) return res.json({ success: true, scenarios, levels: LEVELS, allowance: null });
+    const plans = planTable();
+    if (!req.session?.user) return res.json({ success: true, scenarios, levels: LEVELS, plans, allowance: null });
     try {
         const db = getDb();
         const user = await loadUser(db, req);
         const allowance = user ? await allowanceFor(db, user) : null;
         if (allowance) delete allowance.model;
-        res.json({ success: true, scenarios, levels: LEVELS, allowance });
+        res.json({ success: true, scenarios, levels: LEVELS, plans, allowance });
     } catch (e) {
         console.error('speak overview', e);
         res.status(500).json({ success: false, error: 'Could not load Speak' });
@@ -72,6 +73,7 @@ const startSession = async (req, res) => {
     const level = LEVELS.includes(req.body?.level) ? req.body.level : 'beginner';
     const language = langOr(req.body?.language, 'ko');
     const nativeLanguage = langOr(req.body?.nativeLanguage, 'en');
+    const assist = ASSISTS.includes(req.body?.assist) ? req.body.assist : defaultAssist(level);
     const sdp = typeof req.body?.sdp === 'string' ? req.body.sdp : '';
     if (!scenario) return res.status(400).json({ success: false, error: 'Unknown scene' });
     if (!sdp.startsWith('v=0') || sdp.length > 20000) return res.status(400).json({ success: false, error: 'Bad connection offer' });
@@ -101,23 +103,29 @@ const startSession = async (req, res) => {
         ]);
 
         const instructions = buildInstructions({
-            scenario, level, language, nativeLanguage, words, grammar,
+            scenario, level, assist, language, nativeLanguage, words, grammar,
             userName: str(user.name, 40).split(' ')[0],
         });
         const model = planFor(user.tier || 0).model;
+        const character = characterFor(scenario.character);
         const session = {
             type: 'realtime',
             model,
             instructions,
-            tools: TOOLS,
+            tools: toolsFor(character.id, nativeLanguage),
             tool_choice: 'auto',
             audio: {
                 input: {
                     noise_reduction: { type: 'near_field' },
-                    transcription: { model: 'gpt-4o-mini-transcribe' },
+                    // Captions only (the model hears the audio itself). The prompt
+                    // keeps mixed learner speech from being read as another language.
+                    transcription: {
+                        model: process.env.SPEAK_TRANSCRIBE_MODEL || 'gpt-4o-transcribe',
+                        prompt: `A ${nameOf(nativeLanguage)} speaker practicing ${nameOf(language)}. They speak ${nameOf(language)} or ${nameOf(nativeLanguage)}, sometimes mixed in one sentence, with a learner's accent. Write ${nameOf(language)} words in ${nameOf(language)} script.`,
+                    },
                     turn_detection: { type: 'semantic_vad', eagerness: 'low' },
                 },
-                output: { voice: VOICE },
+                output: { voice: character.voice },
             },
         };
 
@@ -138,7 +146,7 @@ const startSession = async (req, res) => {
 
         const sessionId = crypto.randomBytes(12).toString('hex');
         await db.collection('speak_sessions').insertOne({
-            sessionId, userId: user.userId, callId, scenarioId: scenario.id, level, language, nativeLanguage,
+            sessionId, userId: user.userId, callId, scenarioId: scenario.id, character: character.id, level, assist, language, nativeLanguage,
             model, tier: user.tier || 0, maxSeconds, startedAt: new Date(),
             savedWordsUsed: words.length, savedGrammarUsed: grammar.length,
         });
@@ -149,7 +157,8 @@ const startSession = async (req, res) => {
             if (s && !s.endedAt) await closeSession(db, s, 'time');
         }, (maxSeconds + 5) * 1000));
 
-        res.json({ success: true, sessionId, answer, maxSeconds, leftSeconds: allowance.leftSeconds });
+        const assistNotes = Object.fromEntries(ASSISTS.map((a) => [a, assistSwitchNote(a, language, nativeLanguage)]));
+        res.json({ success: true, sessionId, answer, maxSeconds, leftSeconds: allowance.leftSeconds, tier: user.tier || 0, assist, assistNotes });
     } catch (e) {
         console.error('speak start', e);
         res.status(500).json({ success: false, error: 'Could not start the call' });
@@ -205,22 +214,31 @@ const translate = async (req, res) => {
         if (!s || Date.now() - new Date(s.startedAt).getTime() > 2 * 60 * 60 * 1000) {
             return res.status(403).json({ success: false, error: 'No active call' });
         }
+        const target = nameOf(s.language);
+        const native = nameOf(s.nativeLanguage);
+        const romanize = NON_LATIN.has(s.language);
         const r = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 model: TRANSLATE_MODEL,
                 temperature: 0,
-                max_tokens: 300,
+                max_tokens: 500,
+                response_format: { type: 'json_object' },
                 messages: [
-                    { role: 'system', content: `Translate the ${nameOf(s.language)} parts of the line into natural ${nameOf(s.nativeLanguage)}. Keep any ${nameOf(s.nativeLanguage)} parts as they are. Reply with the translation only.` },
+                    {
+                        role: 'system',
+                        content: `You caption a ${target} lesson. Reply with JSON: {"translation": the whole line in natural ${native} (translate the ${target} parts, keep ${native} parts as they are)${romanize ? `, "romanization": the ${target} parts only, romanized for a beginner (e.g. Revised Romanization for Korean, Hepburn for Japanese, pinyin with tone marks for Chinese), joined in order, or "" if there are none` : ''}}.`,
+                    },
                     { role: 'user', content: text },
                 ],
             }),
         });
         const out = await r.json();
         if (!r.ok) throw new Error(out?.error?.message || `HTTP ${r.status}`);
-        res.json({ success: true, translation: str(out.choices?.[0]?.message?.content, 800) });
+        let parsed = {};
+        try { parsed = JSON.parse(out.choices?.[0]?.message?.content || '{}'); } catch { /* empty captions */ }
+        res.json({ success: true, translation: str(parsed.translation, 800), romanization: str(parsed.romanization, 800) });
     } catch (e) {
         console.error('speak translate', e.message);
         res.status(500).json({ success: false, error: 'Translation failed' });

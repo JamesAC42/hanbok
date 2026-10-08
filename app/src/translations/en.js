@@ -765,7 +765,16 @@ export const en = {
         redesignCta: 'See what\'s new',
         redesignDismiss: 'Take me to Hanbok',
         redesignFeedback: 'Something look off or missing?',
-        redesignFeedbackLink: 'Tell us'
+        redesignFeedbackLink: 'Tell us',
+        speakBadge: 'New',
+        speakTitle: 'Practice speaking with Horang and Sora',
+        speakBody: 'Have real conversations in Korean out loud, in everyday scenes like a café or a taxi ride.',
+        speakRolePlay: 'Role-play real situations out loud',
+        speakHelp: 'Get help in English whenever you\'re stuck',
+        speakWords: 'Your saved words come up in conversation',
+        speakCta: 'Try a 5-minute call',
+        speakDismiss: 'Maybe later',
+        speakReadMore: 'Read the update'
     },
     subscriptionPrompt: {
         title: 'Support Hanbok Development!',

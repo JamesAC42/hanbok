@@ -1,17 +1,16 @@
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/announcementpopup.module.scss';
-import Mascot from '@/components/Mascot';
 
-// One-time "Hanbok has a new look" note for people who used the old design.
-// PopupContext decides who sees it; the full story is the /updates post.
+// One-time "Speak is here" note. PopupContext decides who sees it and when;
+// the full story is the /updates/speak post.
 const AnnouncementPopup = ({ onClose }) => {
     const { t } = useLanguage();
 
     const highlights = [
-        { tone: styles.dotUnd, text: t('announcement.redesignPath') },
-        { tone: styles.dotRev, text: t('announcement.redesignReview') },
-        { tone: styles.dotKeep, text: t('announcement.redesignLibrary') },
+        { tone: styles.dotRead, text: t('announcement.speakRolePlay') },
+        { tone: styles.dotUnd, text: t('announcement.speakHelp') },
+        { tone: styles.dotKeep, text: t('announcement.speakWords') },
     ];
 
     return (
@@ -24,12 +23,15 @@ const AnnouncementPopup = ({ onClose }) => {
                 aria-labelledby="announcement-title"
             >
                 <button className={styles.closeButton} onClick={onClose} aria-label={t('common.close')}>×</button>
-                <div className={`${styles.art} ${styles.und}`}>
-                    <Mascot pose="celebrate" size={96} />
+                <div className={styles.speakArt} aria-hidden="true">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/speak/horang/happy.webp" alt="" />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/images/speak/sora/happy.webp" alt="" />
                 </div>
-                <div className={styles.badge}>{t('announcement.redesignBadge')}</div>
-                <h2 id="announcement-title">{t('announcement.redesignTitle')}</h2>
-                <p>{t('announcement.redesignBody')}</p>
+                <div className={styles.badge}>{t('announcement.speakBadge')}</div>
+                <h2 id="announcement-title">{t('announcement.speakTitle')}</h2>
+                <p>{t('announcement.speakBody')}</p>
 
                 <ul className={styles.highlights}>
                     {highlights.map(h => (
@@ -38,16 +40,15 @@ const AnnouncementPopup = ({ onClose }) => {
                 </ul>
 
                 <div className={styles.buttons}>
-                    <Link href="/updates/new-hanbok" className={styles.primaryButton} onClick={onClose}>
-                        {t('announcement.redesignCta')}
+                    <Link href="/speak" className={styles.primaryButton} onClick={onClose}>
+                        {t('announcement.speakCta')}
                     </Link>
                     <button className={styles.cancelButton} onClick={onClose}>
-                        {t('announcement.redesignDismiss')}
+                        {t('announcement.speakDismiss')}
                     </button>
                 </div>
                 <p className={styles.feedbackNote}>
-                    {t('announcement.redesignFeedback')}{' '}
-                    <Link href="/feedback" onClick={onClose}>{t('announcement.redesignFeedbackLink')}</Link>
+                    <Link href="/updates/speak" onClick={onClose}>{t('announcement.speakReadMore')}</Link>
                 </p>
             </div>
         </div>

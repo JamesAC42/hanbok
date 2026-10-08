@@ -269,6 +269,7 @@ const Pricing = () => {
                                 <li>{t('pricing.features.free.conversations')}</li>
                                 <li>{t('pricing.features.free.limitations')}</li>
                                 <li>{tl('pricing.features.free.grammar', 'Save 20 grammar points, 5 practice questions a day')}</li>
+                                <li>{tl('pricing.features.free.speak', '5 minutes a week of speaking practice with Horang and Sora')}</li>
                                 <li>{t('pricing.features.free.support')}</li>
                             </ul>
                             <button
@@ -292,6 +293,7 @@ const Pricing = () => {
                             <ul className={pricingStyles.planFeatures}>
                                 <li><strong>{t('pricing.features.plus.unlimited')}</strong></li>
                                 <li>{tl('pricing.features.plus.grammar', 'Unlimited grammar practice and Horangi lessons')}</li>
+                                <li>{tl('pricing.features.plus.speak', '120 minutes a month of speaking practice')}</li>
                                 <li>{t('pricing.features.plus.audio')}</li>
                                 <li>{t('pricing.features.plus.image')}</li>
                                 <li>{t('pricing.features.plus.support')}</li>
@@ -318,6 +320,7 @@ const Pricing = () => {
                                 <li>{t('pricing.features.basic.conversations')}</li>
                                 <li>{t('pricing.features.basic.saves')}</li>
                                 <li>{tl('pricing.features.basic.grammar', 'Unlimited grammar practice and Horangi lessons')}</li>
+                                <li>{tl('pricing.features.basic.speak', '60 minutes a month of speaking practice')}</li>
                                 <li>{t('pricing.features.basic.support')}</li>
                             </ul>
                             <button

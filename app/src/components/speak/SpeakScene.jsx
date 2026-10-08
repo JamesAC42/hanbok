@@ -1,42 +1,63 @@
 'use client';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Link from 'next/link';
 import { SpeakCall } from '@/lib/speakClient';
 import { track } from '@/lib/analytics';
+import { characterOf, spriteSrc, ASSISTS } from '@/components/speak/characters';
 import styles from '@/styles/pages/speak.module.scss';
-
-const MOODS = ['neutral', 'happy', 'amused', 'encouraging', 'explaining', 'thinking', 'shocked', 'exasperated', 'apologetic', 'proud', 'smug', 'serious'];
-const horangSrc = (mood, talking) => `/images/speak/horang/${MOODS.includes(mood) ? mood : 'happy'}${talking ? '_talk' : ''}.webp`;
 
 const fmt = (s) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.max(0, Math.floor(s)) % 60).padStart(2, '0')}`;
 
 const Icon = {
     close: <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>,
-    mic: <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M19 11a7 7 0 0 1-14 0" /><path d="M12 18v3" /></svg>,
-    micOff: <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M15 9.3V6a3 3 0 0 0-5.7-1.3" /><path d="M9 9v2a3 3 0 0 0 5 2.2" /><path d="M19 11a7 7 0 0 1-11.6 5.3M5 11a7 7 0 0 0 .6 2.8" /><path d="M12 18v3M3 3l18 18" /></svg>,
+    mic: <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M19 11a7 7 0 0 1-14 0" /><path d="M12 18v3" /></svg>,
+    micOff: <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M15 9.3V6a3 3 0 0 0-5.7-1.3" /><path d="M9 9v2a3 3 0 0 0 5 2.2" /><path d="M19 11a7 7 0 0 1-11.6 5.3M5 11a7 7 0 0 0 .6 2.8" /><path d="M12 18v3M3 3l18 18" /></svg>,
     help: <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><circle cx="12" cy="12" r="9" /><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14" /><path d="M12 17.5h.01" /></svg>,
     script: <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M4 6h16M4 12h16M4 18h10" /></svg>,
     slow: <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M11 5 6 9H2v6h4l5 4V5z" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /></svg>,
     check: <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round"><path d="M5 12l5 5 9-10" /></svg>,
+    tune: <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" /><circle cx="16" cy="7" r="2" /><circle cx="10" cy="17" r="2" /></svg>,
 };
 
-export default function SpeakScene({ scenario, level, language, nativeLanguage, nativeName, onDone, onLimit }) {
+// Long lines get a smaller size so they fit without scrolling.
+const lineSize = (text) => (text.length > 110 ? styles.lineSmall : text.length > 60 ? styles.lineMedium : '');
+
+export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, onDone, onLimit }) {
+    const ch = characterOf(scenario.character);
     const callRef = useRef(null);
-    const [status, setStatus] = useState('connecting'); // connecting | live | error
+    const micRingRef = useRef(null);
+    const [status, setStatus] = useState('ready'); // ready | connecting | live | error
     const [error, setError] = useState('');
     const [speaking, setSpeaking] = useState(false);
     const [listening, setListening] = useState(false);
     const [muted, setMuted] = useState(false);
-    const [mood, setMood] = useState('happy');
+    const [mood, setMood] = useState(ch.rest);
     const [line, setLine] = useState({ id: null, text: '' });
-    const [translations, setTranslations] = useState({});
-    const [showEnglish, setShowEnglish] = useState(true);
+    const [captions, setCaptions] = useState({});
+    const [showNative, setShowNative] = useState(true);
+    const [showRoman, setShowRoman] = useState(level === 'beginner');
     const [youLine, setYouLine] = useState('');
     const [goals, setGoals] = useState(() => scenario.goals.map(() => false));
-    const [cards, setCards] = useState([]); // tips and phrases, newest first
+    const [cards, setCards] = useState([]);
+    const [suggestion, setSuggestion] = useState(null);
     const [transcript, setTranscript] = useState([]);
-    const [showScript, setShowScript] = useState(false);
+    const [sheet, setSheet] = useState(null); // 'script' | 'assist'
+    const [assist, setAssist] = useState(initialAssist);
     const [timeLeft, setTimeLeft] = useState(null);
-    const state = useRef({ goals: [], transcript: [], phrases: [], tips: [], summary: '', startedAt: 0, finished: false });
+    const state = useRef({ goals: [], transcript: [], phrases: [], tips: [], summary: '', startedAt: 0, finished: false, notes: {} });
+
+    const caption = useCallback(async (key, text) => {
+        if (!text || !callRef.current?.sessionId) return null;
+        try {
+            const r = await fetch('/api/speak/translate', {
+                method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sessionId: callRef.current.sessionId, text }),
+            });
+            const d = await r.json();
+            if (d.success) setCaptions((c) => ({ ...c, [key]: { native: d.translation, roman: d.romanization } }));
+            return d;
+        } catch { return null; }
+    }, []);
 
     const finish = useCallback(async (reason = 'user') => {
         const s = state.current;
@@ -47,30 +68,18 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
         track('speak_end', { scenario: scenario.id, seconds, goals: goalsDone, reason });
         const result = await callRef.current?.end({ goalsDone, transcript: s.transcript, reason });
         onDone({
+            character: ch.id,
             goals: scenario.goals.map((g, i) => ({ text: g, done: !!s.goals[i] })),
             phrases: s.phrases, tips: s.tips, summary: s.summary, seconds,
             allowance: result?.allowance || null,
         });
-    }, [onDone, scenario]);
+    }, [onDone, scenario, ch.id]);
 
-    useEffect(() => {
-        state.current.goals = goals;
-    }, [goals]);
+    useEffect(() => { state.current.goals = goals; }, [goals]);
 
-    useEffect(() => {
+    const start = () => {
         const s = state.current;
-        const translate = async (id, text) => {
-            if (!text || !callRef.current?.sessionId) return;
-            try {
-                const r = await fetch('/api/speak/translate', {
-                    method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sessionId: callRef.current.sessionId, text }),
-                });
-                const d = await r.json();
-                if (d.translation) setTranslations((t) => ({ ...t, [id]: d.translation }));
-            } catch { /* captions are a bonus */ }
-        };
-        // Tip and phrase cards float over the scene for a few seconds.
+        setStatus('connecting');
         const showCard = (card) => {
             setCards((c) => [card, ...c].slice(0, 2));
             setTimeout(() => setCards((c) => c.filter((x) => x.key !== card.key)), 9000);
@@ -83,12 +92,13 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
                 if (done) {
                     s.transcript = [...s.transcript, { who: 'horang', text }];
                     setTranscript(s.transcript);
-                    translate(id, text);
+                    caption(id, text);
                 }
             },
             onYouText: ({ text }) => {
                 if (!text.trim()) return;
                 setYouLine(text);
+                setSuggestion(null);
                 s.transcript = [...s.transcript, { who: 'you', text }];
                 setTranscript(s.transcript);
             },
@@ -97,10 +107,15 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
                 if (name === 'complete_goal') {
                     const i = Number(args.goal) - 1;
                     setGoals((g) => g.map((v, j) => (j === i ? true : v)));
-                    setMood('proud');
+                    setMood(ch.celebrate);
+                }
+                if (name === 'suggest_reply' && args.phrase) {
+                    const key = `s${Date.now()}`;
+                    setSuggestion({ key, phrase: args.phrase, meaning: args.meaning || '' });
+                    caption(key, args.phrase);
                 }
                 if (name === 'pronunciation_tip' && args.word) {
-                    const card = { kind: args.good ? 'good' : 'tip', word: args.word, text: args.tip, key: `${Date.now()}` };
+                    const card = { kind: args.good ? 'good' : 'tip', word: args.word, text: args.tip, key: `${Date.now()}t` };
                     s.tips = [...s.tips, card];
                     showCard(card);
                 }
@@ -111,31 +126,40 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
                 }
                 if (name === 'end_scene') {
                     s.summary = args.summary || '';
-                    // Let the goodbye finish before hanging up.
-                    setTimeout(() => finish('complete'), 3500);
+                    setTimeout(() => finish('complete'), 3500); // let the goodbye finish
                 }
             },
             onDrop: () => { if (!s.finished) { setError('The call dropped.'); finish('dropped'); } },
         });
         callRef.current = call;
-        call.start({ scenarioId: scenario.id, level, language, nativeLanguage })
+        call.start({ scenarioId: scenario.id, level, assist, language, nativeLanguage })
             .then((data) => {
                 s.startedAt = Date.now();
+                s.notes = data.assistNotes || {};
                 setTimeLeft(data.maxSeconds);
                 setStatus('live');
-                track('speak_start', { scenario: scenario.id, level });
+                track('speak_start', { scenario: scenario.id, level, assist, character: ch.id });
             })
             .catch((e) => {
                 if (e.reachedLimit) { onLimit?.(e.allowance); return; }
                 setStatus('error');
                 setError(e.name === 'NotAllowedError'
-                    ? 'Hanbok needs your microphone to talk with Horang. Allow it in your browser and try again.'
+                    ? 'Hanbok needs your microphone for this. Allow it in your browser (the icon next to the address bar) and try again.'
                     : (e.message || 'Could not start the call.'));
             });
-        const leave = () => { if (!s.finished && callRef.current?.sessionId) { s.finished = true; callRef.current.end({ beacon: true, reason: 'left', goalsDone: s.goals.filter(Boolean).length, transcript: s.transcript }); } };
+    };
+
+    // Leaving the page ends the call.
+    useEffect(() => {
+        const s = state.current;
+        const leave = () => {
+            if (!s.finished && callRef.current?.sessionId) {
+                s.finished = true;
+                callRef.current.end({ beacon: true, reason: 'left', goalsDone: s.goals.filter(Boolean).length, transcript: s.transcript });
+            }
+        };
         window.addEventListener('pagehide', leave);
-        return () => { window.removeEventListener('pagehide', leave); leave(); call.stopLocal(); };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        return () => { window.removeEventListener('pagehide', leave); leave(); callRef.current?.stopLocal(); };
     }, []);
 
     // Countdown; the server hangs up at zero as well.
@@ -148,21 +172,59 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
 
     useEffect(() => { callRef.current?.setMuted(muted); }, [muted]);
 
-    // Load both mouth frames for the current mood so talking never flickers.
+    // Mic level ring: shows the learner their voice is getting through.
     useEffect(() => {
-        [mood, 'proud'].forEach((m) => { [false, true].forEach((t) => { const img = new Image(); img.src = horangSrc(m, t); }); });
-    }, [mood]);
+        if (status !== 'live') return undefined;
+        let raf;
+        const tick = () => {
+            const v = callRef.current?.level() || 0;
+            if (micRingRef.current) micRingRef.current.style.setProperty('--level', String(v));
+            raf = requestAnimationFrame(tick);
+        };
+        raf = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(raf);
+    }, [status]);
 
-    const help = () => callRef.current?.nudge(`(The learner tapped the Help button. In ${nativeName}, in one or two short sentences, tell them what they could say next and give the phrase, then wait for them to try.)`);
+    // Both mouth frames for the current mood, so talking never flickers.
+    useEffect(() => {
+        [mood, ch.celebrate].forEach((m) => [false, true].forEach((t) => { const img = new Image(); img.src = spriteSrc(ch.id, m, t); }));
+    }, [mood, ch]);
+
+    const help = () => {
+        const how = {
+            guided: `tell them in ${nativeName} exactly what to say next, call suggest_reply with it, and wait for them to try`,
+            hints: `give a short hint in ${nativeName} (a key word or the first part), not the whole answer`,
+            immersion: 'rephrase what you said more simply, or offer two choices',
+        }[assist];
+        callRef.current?.nudge(`(The learner tapped Help. Briefly ${how}.)`);
+        track('speak_help', { assist });
+    };
     const slower = () => callRef.current?.nudge('(The learner tapped "Again, slower". Repeat your last line slowly and clearly, then wait.)');
+    const changeAssist = (a) => {
+        setAssist(a);
+        setSheet(null);
+        if (a !== assist && state.current.notes[a]) callRef.current?.nudge(state.current.notes[a]);
+        try { localStorage.setItem('speakAssist', a); } catch { /* private mode */ }
+        track('speak_assist', { assist: a });
+    };
 
-    const translation = line.id ? translations[line.id] : '';
+    const cap = line.id ? captions[line.id] : null;
+    const sugCap = suggestion ? captions[suggestion.key] : null;
+    const assistLabel = ASSISTS.find((a) => a.id === assist)?.label;
+    const sceneStyle = { backgroundImage: `url(/images/speak/bg/${scenario.background}.webp)`, '--accent': ch.color, '--accent-soft': ch.soft };
 
     return (
-        <div className={styles.scene} style={{ backgroundImage: `url(/images/speak/bg/${scenario.background}.webp)` }}>
+        <div className={styles.scene} style={sceneStyle}>
+            <img
+                key={`${mood}-${speaking}`}
+                className={`${styles.sprite} ${ch.side === 'left' ? styles.spriteLeft : styles.spriteRight} ${speaking ? styles.spriteTalk : ''}`}
+                src={spriteSrc(ch.id, mood, speaking)}
+                alt={`${ch.name} looks ${mood}`}
+            />
+
             <div className={styles.sceneTop}>
                 <div className={styles.topRow}>
-                    <button type="button" className={styles.iconBtn} onClick={() => finish('user')} aria-label="End the conversation">{Icon.close}</button>
+                    <button type="button" className={styles.iconBtn} onClick={() => (status === 'live' ? finish('user') : onDone(null))} aria-label="End the conversation">{Icon.close}</button>
                     <div className={styles.titleCard}>
                         <div className={styles.sceneTitle}>{scenario.title}</div>
                         <div className={styles.progress}><div style={{ width: `${(goals.filter(Boolean).length / goals.length) * 100}%` }} /></div>
@@ -174,6 +236,12 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
                         <li key={g} className={goals[i] ? styles.goalDone : ''}>{goals[i] && Icon.check}{g}</li>
                     ))}
                 </ul>
+                {status === 'live' && timeLeft !== null && timeLeft <= 60 && timeLeft > 0 && (
+                    <div className={styles.lowTime}>
+                        {fmt(timeLeft)} left in this call.
+                        {tier < 1 && <> <Link href="/pricing">Basic gets 60 minutes a month</Link></>}
+                    </div>
+                )}
                 <div className={styles.cards} aria-live="polite">
                     {cards.map((c) => (
                         <div key={c.key} className={`${styles.card} ${styles[`card_${c.kind}`]}`}>
@@ -185,75 +253,112 @@ export default function SpeakScene({ scenario, level, language, nativeLanguage, 
                 </div>
             </div>
 
-            <img
-                key={`${mood}-${speaking}`}
-                className={`${styles.horang} ${speaking ? styles.horangTalk : ''}`}
-                src={horangSrc(mood, speaking)}
-                alt={`Horang looks ${mood}`}
-            />
-
-            <div className={styles.dialogue}>
-                {status === 'connecting' && <p className={styles.connecting}>Calling Horang…</p>}
-                {status === 'error' && (
-                    <div className={styles.errorBox}>
-                        <p>{error}</p>
-                        <button type="button" className={styles.primaryBtn} onClick={() => onDone(null)}>Back to scenes</button>
+            <div className={styles.sceneBottom}>
+                {status === 'ready' && (
+                    <div className={styles.readyCard}>
+                        <p className={styles.readyKicker}>With {ch.name}</p>
+                        <h2 className={styles.readyTitle}>{scenario.title}</h2>
+                        <p className={styles.readyText}>
+                            {ch.name} will start talking. Answer out loud, there&apos;s nothing to press. Tap <strong>Help</strong> anytime and {ch.name} will help in {nativeName}.
+                        </p>
+                        <div className={styles.assistPick} role="radiogroup" aria-label="How much help">
+                            {ASSISTS.map((a) => (
+                                <button key={a.id} type="button" role="radio" aria-checked={assist === a.id}
+                                    className={assist === a.id ? styles.assistOn : ''} onClick={() => setAssist(a.id)}>
+                                    <span>{a.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <p className={styles.assistBlurb}>{ASSISTS.find((a) => a.id === assist)?.blurb}</p>
+                        <button type="button" className={styles.startBtn} onClick={start}>{Icon.mic} Start talking</button>
+                        <p className={styles.readyNote}>Headphones help {ch.name} hear you clearly.</p>
                     </div>
                 )}
+
+                {status === 'connecting' && <div className={styles.dialogue}><p className={styles.connecting}>Calling {ch.name}…</p></div>}
+
+                {status === 'error' && (
+                    <div className={styles.dialogue}>
+                        <p className={styles.errorText}>{error}</p>
+                        <button type="button" className={styles.startBtn} onClick={() => onDone(null)}>Back to scenes</button>
+                    </div>
+                )}
+
                 {status === 'live' && (
                     <>
-                        {youLine && <p className={styles.youLine}><span>You</span> <span lang={language}>{youLine}</span></p>}
-                        <p lang={language} className={styles.lineTarget}>{line.text || '…'}</p>
-                        {showEnglish && translation && <p className={styles.lineNative}>{translation}</p>}
-                        <div className={styles.lineTools}>
-                            <button type="button" onClick={slower}>{Icon.slow}Again, slower</button>
-                            <button type="button" onClick={() => setShowEnglish((v) => !v)}>{showEnglish ? `Hide ${nativeName}` : `Show ${nativeName}`}</button>
+                        {suggestion && (
+                            <div className={styles.suggest}>
+                                <span className={styles.suggestLabel}>Try saying</span>
+                                <span lang={language} className={styles.suggestPhrase}>{suggestion.phrase}</span>
+                                {sugCap?.roman && <span className={styles.suggestRoman}>{sugCap.roman}</span>}
+                                {suggestion.meaning && <span className={styles.suggestMeaning}>{suggestion.meaning}</span>}
+                            </div>
+                        )}
+                        <div className={styles.dialogue}>
+                            {youLine && <p className={styles.youLine}><span>You</span> <span lang={language}>{youLine}</span></p>}
+                            <p lang={language} className={`${styles.lineTarget} ${lineSize(line.text || '')}`}>{line.text || '…'}</p>
+                            {showRoman && cap?.roman && <p className={styles.lineRoman}>{cap.roman}</p>}
+                            {showNative && cap?.native && cap.native !== line.text && <p className={styles.lineNative}>{cap.native}</p>}
+                            <div className={styles.lineTools}>
+                                <button type="button" onClick={slower}>{Icon.slow}Slower</button>
+                                <button type="button" aria-pressed={showRoman} className={showRoman ? styles.toolOn : ''} onClick={() => setShowRoman((v) => !v)}>Aa</button>
+                                <button type="button" aria-pressed={showNative} className={showNative ? styles.toolOn : ''} onClick={() => setShowNative((v) => !v)}>{nativeName}</button>
+                                <button type="button" onClick={() => setSheet('script')}>Script</button>
+                            </div>
                         </div>
+                        <div className={styles.controls}>
+                            <button type="button" className={styles.sideBtn} onClick={help}>{Icon.help}Help</button>
+                            <button
+                                ref={micRingRef}
+                                type="button"
+                                className={`${styles.micBtn} ${muted ? styles.micMuted : ''} ${listening ? styles.micHearing : ''}`}
+                                onClick={() => setMuted((m) => !m)}
+                                aria-pressed={muted}
+                                aria-label={muted ? 'Unmute your microphone' : 'Mute your microphone'}
+                            >
+                                {muted ? Icon.micOff : Icon.mic}
+                            </button>
+                            <button type="button" className={styles.sideBtn} onClick={() => setSheet('assist')}>{Icon.tune}{assistLabel}</button>
+                        </div>
+                        <p className={styles.status}>
+                            {muted ? 'Muted. Tap the mic to talk again.' : speaking ? `${ch.name} is talking. You can cut in anytime.` : listening ? 'Listening…' : 'Your turn. Just talk.'}
+                        </p>
                     </>
                 )}
             </div>
 
-            {status === 'live' && (
-                <div className={styles.controls}>
-                    {scenario.phrases?.length > 0 && (
-                        <div className={styles.hints}>
-                            {scenario.phrases.map((p) => <span key={p} lang={language}>{p}</span>)}
-                        </div>
-                    )}
-                    <div className={styles.buttons}>
-                        <button type="button" className={styles.sideBtn} onClick={help}>{Icon.help}Help</button>
-                        <button
-                            type="button"
-                            className={`${styles.micBtn} ${muted ? styles.micMuted : ''} ${listening ? styles.micHearing : ''}`}
-                            onClick={() => setMuted((m) => !m)}
-                            aria-pressed={muted}
-                            aria-label={muted ? 'Unmute your microphone' : 'Mute your microphone'}
-                        >
-                            {muted ? Icon.micOff : Icon.mic}
-                        </button>
-                        <button type="button" className={styles.sideBtn} onClick={() => setShowScript(true)}>{Icon.script}Script</button>
-                    </div>
-                    <p className={styles.status}>
-                        {muted ? 'Muted. Tap the mic to talk again.' : speaking ? 'Horang is talking. You can cut in anytime.' : listening ? 'Listening…' : 'Your turn. Just talk.'}
-                    </p>
-                </div>
-            )}
-
-            {showScript && (
+            {sheet === 'script' && (
                 <div className={styles.sheet} role="dialog" aria-label="Conversation so far">
                     <div className={styles.sheetHead}>
                         <h2>Conversation</h2>
-                        <button type="button" className={styles.iconBtn} onClick={() => setShowScript(false)} aria-label="Close">{Icon.close}</button>
+                        <button type="button" className={styles.iconBtn} onClick={() => setSheet(null)} aria-label="Close">{Icon.close}</button>
                     </div>
                     <ol className={styles.script}>
                         {transcript.map((m, i) => (
-                            <li key={i} className={m.who === 'you' ? styles.scriptYou : styles.scriptHorang}>
-                                <span className={styles.scriptWho}>{m.who === 'you' ? 'You' : 'Horang'}</span>
+                            <li key={i} className={m.who === 'you' ? styles.scriptYou : styles.scriptChar}>
+                                <span className={styles.scriptWho}>{m.who === 'you' ? 'You' : ch.name}</span>
                                 <span lang={language}>{m.text}</span>
                             </li>
                         ))}
                         {!transcript.length && <li className={styles.scriptEmpty}>Nothing yet.</li>}
                     </ol>
+                </div>
+            )}
+
+            {sheet === 'assist' && (
+                <div className={styles.sheet} role="dialog" aria-label="How much help">
+                    <div className={styles.sheetHead}>
+                        <h2>How much help?</h2>
+                        <button type="button" className={styles.iconBtn} onClick={() => setSheet(null)} aria-label="Close">{Icon.close}</button>
+                    </div>
+                    <div className={styles.assistList}>
+                        {ASSISTS.map((a) => (
+                            <button key={a.id} type="button" className={`${styles.assistRow} ${assist === a.id ? styles.assistRowOn : ''}`} onClick={() => changeAssist(a.id)}>
+                                <strong>{a.label}</strong>
+                                <span>{a.blurb}</span>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
         </div>

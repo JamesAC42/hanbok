@@ -25,8 +25,9 @@ usage reported by the browser).
 | `SPEAK_FREE_MINUTES` | 5 | per 7 days |
 | `SPEAK_BASIC_MINUTES` | 60 | per 30 days |
 | `SPEAK_PLUS_MINUTES` | 120 | per 30 days |
-| `SPEAK_MODEL_FREE` / `_BASIC` | gpt-realtime-2.1-mini | |
-| `SPEAK_MODEL_PLUS` | gpt-realtime-2.1 | |
+| `SPEAK_MODEL_FREE` / `_BASIC` / `_PLUS` | gpt-realtime-2.1 | the mini model sounded off in testing, so every plan uses the full one |
 | `SPEAK_MAX_SESSION_SECONDS` | 600 | longest single call |
-| `SPEAK_VOICE` | cedar | Horang's voice |
-| `SPEAK_TRANSLATE_MODEL` | gpt-4.1 | captions under Horang's lines |
+| `SPEAK_VOICE_HORANG` (or `SPEAK_VOICE`) | cedar | Horang's voice |
+| `SPEAK_VOICE_SORA` | marin | Sora's voice |
+| `SPEAK_TRANSCRIBE_MODEL` | gpt-4o-transcribe | captions of what the learner says, with a mixed-language hint |
+| `SPEAK_TRANSLATE_MODEL` | gpt-4.1 | translation and romanization under the character's lines |

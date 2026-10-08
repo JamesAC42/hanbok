@@ -321,6 +321,7 @@ $read-text: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
     border-radius: 50%;
 }
 
+.dotRead { background: var(--bp-read); }
 .dotUnd { background: var(--bp-und); }
 .dotRev { background: var(--bp-rev); }
 .dotKeep { background: var(--bp-keep); }
@@ -342,5 +343,28 @@ $read-text: color-mix(in srgb, var(--bp-read) 75%, var(--foreground));
         font-weight: 800;
         text-decoration: underline;
         text-underline-offset: 2px;
+    }
+}
+
+// Speak announcement: Horang and Sora side by side, head and shoulders,
+// fading out at the bottom so there is no hard edge.
+.speakArt {
+    display: flex;
+    justify-content: center;
+    gap: .25rem;
+    margin: .25rem auto 0;
+
+    img {
+        width: 7rem;
+        height: 7.5rem;
+        object-fit: cover;
+        object-position: 50% 10%;
+        -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+
+        @media (max-width: 420px) {
+            width: 5.75rem;
+            height: 6.25rem;
+        }
     }
 }

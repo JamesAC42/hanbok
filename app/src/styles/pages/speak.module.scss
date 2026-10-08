@@ -1,8 +1,8 @@
 @import '../variables.module.scss';
 
-// Speak: voice role-play with Horang. Stage color purple. The live call is a
-// visual-novel scene (painted background, Horang's sprite, a dialogue box
-// outlined in his orange) that matches the lesson videos on TikTok.
+// Speak: voice role-play with Horang and Sora. Stage color purple. The live
+// call is a visual-novel scene (painted background, the character's sprite, a
+// dialogue box outlined in their color) that matches the lesson videos.
 
 $horang: #FF8A00;
 
@@ -19,24 +19,34 @@ $horang: #FF8A00;
 .hero {
     display: flex;
     align-items: flex-end;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
-    @media screen and (max-width: 725px) { align-items: center; gap: .75rem; }
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    @media screen and (max-width: 725px) { flex-direction: column; align-items: stretch; gap: 0; }
 }
 
-.heroArt {
-    width: 150px;
-    height: auto;
+// Both characters, faded out at the edges so the art has no hard borders.
+.heroCast {
+    position: relative;
     flex-shrink: 0;
-    animation: bp-bob 3s ease-in-out infinite;
-    @media screen and (max-width: 725px) { width: 96px; }
+    width: 300px;
+    height: 220px;
+    $fade-y: linear-gradient(#000 62%, transparent 96%);
+    $fade-x: linear-gradient(90deg, transparent, #000 10%, #000 88%, transparent);
+    -webkit-mask-image: $fade-y, $fade-x;
+    -webkit-mask-composite: source-in;
+    mask-image: $fade-y, $fade-x;
+    mask-composite: intersect;
+    background: radial-gradient(ellipse at 50% 60%, var(--bp-purple-soft), transparent 70%);
+    img { position: absolute; bottom: -20px; height: 250px; width: auto; }
+    @media screen and (max-width: 725px) { width: 100%; max-width: 340px; height: 190px; margin: 0 auto; img { height: 215px; } }
 }
+.heroSora { left: 0; animation: bp-bob 3.2s ease-in-out infinite; }
+.heroHorang { right: 0; animation: bp-bob 3s ease-in-out .4s infinite; }
 
 .heroText { display: flex; flex-direction: column; gap: .5rem; align-items: flex-start; }
 .label { @include bp-label; color: var(--bp-purple-d); margin: 0; }
 .title { @include bp-title; font-size: 2.4rem; margin: 0; @media screen and (max-width: 725px) { font-size: 1.8rem; } }
 .dek { margin: 0; font-size: 1.05rem; line-height: 1.55; color: var(--bp-ink2); max-width: 60ch; font-weight: 500; }
-.minutes { margin: .25rem 0 0; font-weight: 700; color: var(--bp-purple-d); background: var(--bp-purple-soft); padding: .35rem .75rem; border-radius: 999px; font-size: .9rem; }
 
 .primaryBtn { @include bp-press(var(--bp-purple), var(--bp-purple-d)); }
 
@@ -50,7 +60,6 @@ $horang: #FF8A00;
     border-radius: 16px;
     background: var(--bp-soft);
     border: 2px solid var(--bp-line);
-    margin: .5rem 0 1.25rem;
 }
 
 .levelBtn {
@@ -60,8 +69,9 @@ $horang: #FF8A00;
     border: 0;
     border-radius: 12px;
     flex: 1;
-    padding: .6rem .4rem;
+    padding: .55rem .3rem;
     min-height: 44px;
+    @media screen and (max-width: 400px) { font-size: .85rem; }
     cursor: pointer;
 }
 .levelOn { background: var(--bp-purple); color: #fff; }
@@ -90,7 +100,7 @@ $horang: #FF8A00;
     font: inherit;
     box-shadow: 0 4px 0 var(--bp-line);
     transition: transform .1s ease, box-shadow .1s ease;
-    &:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--bp-purple-line); }
+    &:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--accent, var(--bp-purple-line)); }
     &:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--bp-line); }
 }
 
@@ -102,9 +112,47 @@ $horang: #FF8A00;
 }
 
 .sceneInfo { display: flex; flex-direction: column; gap: .3rem; padding: .85rem 1rem 1rem; }
-.sceneLevel { @include bp-label; color: var(--bp-purple-d); }
+.sceneLevel { @include bp-label; color: var(--bp-purple-d); text-transform: capitalize; }
 .sceneName { @include bp-title; font-size: 1.3rem; }
 .sceneBlurb { font-size: .95rem; line-height: 1.45; color: var(--bp-ink2); font-weight: 500; }
+
+// Minutes left and what each plan gets.
+.planCard {
+    @include bp-card;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.25rem;
+}
+.meterBlock { flex: 1 1 260px; display: flex; flex-direction: column; gap: .5rem; align-items: flex-start; }
+.meterHead { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .75rem;
+    strong { font-family: var(--font-lilita); font-weight: 400; font-size: 1.35rem; }
+    span { font-weight: 700; font-size: .85rem; color: var(--bp-ink2); } }
+.meter { width: 100%; height: 12px; border-radius: 8px; background: var(--bp-purple-soft); overflow: hidden;
+    div { height: 100%; background: var(--bp-purple); border-radius: 8px; transition: width .4s ease; } }
+.meterNote { margin: 0; font-size: .9rem; color: var(--bp-ink2); font-weight: 600; line-height: 1.45; }
+.planList { list-style: none; margin: 0; padding: 0; display: flex; gap: .5rem;
+    li { display: flex; flex-direction: column; align-items: center; min-width: 74px; padding: .5rem .6rem; border-radius: 14px; border: 2px solid var(--bp-line); background: var(--bp-soft); }
+    .planOn { border-color: var(--bp-purple); background: var(--bp-purple-soft); } }
+.planName { @include bp-label; font-size: .7rem; }
+.planMinutes { font-family: var(--font-lilita); font-size: 1.25rem; }
+.planPer { font-size: .75rem; font-weight: 700; color: var(--bp-ink2); }
+.upgradeLink { @include bp-press(var(--bp-purple), var(--bp-purple-d)); white-space: nowrap; }
+
+.settings { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-bottom: 1.5rem; }
+.setting { flex: 1 1 300px; max-width: 480px; display: flex; flex-direction: column; gap: .4rem; }
+.settingLabel { @include bp-label; }
+.settingHint { font-size: .88rem; color: var(--bp-ink2); font-weight: 600; line-height: 1.4; }
+
+.castGroup { margin-bottom: 1.75rem; }
+.castHead { display: flex; align-items: center; gap: .75rem; margin-bottom: .75rem; }
+.castFace { --size: 56px; width: var(--size); height: var(--size); border-radius: 50%; overflow: hidden; flex-shrink: 0; background: var(--accent-soft); border: 3px solid var(--accent); box-sizing: border-box;
+    // Zoom the full-body art onto the head.
+    img { display: block; width: 190%; max-width: none; margin-top: 2%; margin-left: calc(50% - var(--face) * 1.9%); } }
+.castName { @include bp-title; margin: 0; font-size: 1.5rem; }
+.castTag { margin: 0; font-size: .92rem; color: var(--bp-ink2); font-weight: 600; }
 
 .footNote { margin-top: 1.5rem; font-size: .88rem; color: var(--bp-ink2); line-height: 1.5; }
 
@@ -121,7 +169,13 @@ $horang: #FF8A00;
     h2 { @include bp-title; margin: 0; font-size: 1.6rem; }
     p { margin: 0; line-height: 1.5; }
 }
-.resultTitle { color: var(--bp-purple-d) !important; }
+.result { border-color: var(--accent); background: var(--accent-soft); }
+.resultHead { display: flex; align-items: center; gap: .9rem; }
+.resultFace { --size: 84px; background: #fff; }
+.resultTitle { color: var(--bp-ink) !important; }
+.resultRow { display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: .5rem; .resultSub { margin: 0; } }
+.linkBtn { background: none; border: 0; padding: .25rem; font: 800 .9rem var(--font-display); color: var(--bp-purple-d); cursor: pointer; text-decoration: underline; }
+.resultUpsell { margin-top: .4rem !important; font-weight: 600; a { color: var(--bp-purple-d); font-weight: 800; } }
 .resultSummary { font-size: 1.05rem; font-weight: 600; span { color: var(--bp-ink2); font-weight: 700; font-size: .9rem; } }
 .resultSub { @include bp-label; margin: .5rem 0 0; }
 .resultGoals { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem;
@@ -136,6 +190,9 @@ $horang: #FF8A00;
 .tipList li { line-height: 1.5; span { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; margin-right: .35rem; } }
 
 // ===== Live scene =====
+// A flex column so the dialogue grows upward and nothing overlaps or scrolls:
+// top bar and goals, empty stage (the sprite stands behind it), then the
+// dialogue and controls. Colors come from the character (--accent).
 
 .callShell {
     position: fixed;
@@ -147,6 +204,8 @@ $horang: #FF8A00;
 }
 
 .scene {
+    --accent: #FF8A00;
+    --accent-soft: #FFF1DD;
     position: relative;
     width: 100%;
     max-width: 560px;
@@ -157,16 +216,41 @@ $horang: #FF8A00;
     background-position: center top;
     font-family: var(--font-display);
     color: #1F2340;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sprite {
+    position: absolute;
+    z-index: 1;
+    bottom: 150px;
+    width: 88%;
+    max-width: 460px;
+    max-height: 70dvh;
+    object-fit: contain;
+    object-position: bottom;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .18));
+    @media (max-height: 700px) { width: 74%; bottom: 140px; }
+}
+.spriteRight { right: -8%; }
+.spriteLeft { left: -8%; }
+.spriteTalk { animation: sprite-bounce .18s ease-out; }
+@keyframes sprite-bounce {
+    0% { transform: translateY(0); }
+    45% { transform: translateY(-6px); }
+    100% { transform: translateY(0); }
 }
 
 .sceneTop {
-    position: absolute;
+    position: relative;
     z-index: 3;
-    left: 0; right: 0; top: 0;
-    padding: max(14px, env(safe-area-inset-top)) 16px 0;
+    padding: max(14px, env(safe-area-inset-top)) 14px 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 .topRow { display: flex; align-items: center; gap: 10px; }
 .iconBtn {
@@ -178,43 +262,20 @@ $horang: #FF8A00;
     cursor: pointer;
 }
 .titleCard { flex: 1; min-width: 0; background: rgba(255, 255, 255, .94); border-radius: 14px; padding: 8px 12px; box-shadow: 0 2px 0 rgba(0, 0, 0, .12); }
-.sceneTitle { font-family: var(--font-lilita); font-size: 17px; color: #6B4BD0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sceneTitle { font-family: var(--font-lilita); font-size: 17px; color: #1F2340; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .progress { height: 8px; border-radius: 6px; background: #E6E1F8; margin-top: 6px; overflow: hidden;
-    div { height: 100%; background: #8E6CF0; border-radius: 6px; transition: width .4s ease; } }
+    div { height: 100%; background: #13B5A6; border-radius: 6px; transition: width .4s ease; } }
 .timer { background: rgba(255, 255, 255, .94); border-radius: 14px; padding: 0 10px; height: 44px; display: flex; align-items: center; font-weight: 800; font-variant-numeric: tabular-nums; box-shadow: 0 2px 0 rgba(0, 0, 0, .12); }
 .timerLow { color: #D63A40; }
 
 .goals { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px;
-    li { display: flex; align-items: center; gap: 4px; background: rgba(255, 255, 255, .94); font-weight: 700; font-size: 13px; padding: 6px 10px; border-radius: 999px; border: 2px dashed #8E6CF0; }
+    li { display: flex; align-items: center; gap: 4px; background: rgba(255, 255, 255, .94); font-weight: 700; font-size: 13px; line-height: 1.25; padding: 5px 10px; border-radius: 999px; border: 2px dashed #8E6CF0; }
     .goalDone { background: #13B5A6; color: #fff; border: 2px solid #13B5A6; animation: bp-pop-in .3s ease; }
 }
+.lowTime { align-self: flex-start; background: #FFF4E5; border: 2px solid #FFB74D; border-radius: 12px; padding: 6px 10px; font-size: 13px; font-weight: 700;
+    a { color: #6B4BD0; font-weight: 800; } }
 
-.horang {
-    position: absolute;
-    z-index: 1;
-    right: -6%;
-    bottom: 230px;
-    width: 92%;
-    max-width: 470px;
-    height: auto;
-    pointer-events: none;
-    user-select: none;
-    animation: horang-bounce .18s ease-out;
-    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .18));
-    @media (max-height: 700px) { bottom: 210px; width: 78%; }
-}
-@keyframes horang-bounce {
-    0% { transform: translateY(0); }
-    45% { transform: translateY(-6px); }
-    100% { transform: translateY(0); }
-}
-
-.cards {
-    width: 62%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+.cards { width: 66%; display: flex; flex-direction: column; gap: 8px; }
 .card {
     display: flex; flex-direction: column; gap: 2px;
     background: #fff; border-radius: 14px; padding: 8px 12px;
@@ -227,65 +288,112 @@ $horang: #FF8A00;
 .cardWord { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; font-size: 18px; }
 .cardText { font-size: 13px; font-weight: 600; line-height: 1.35; color: #3A3F58; }
 
-.dialogue {
-    position: absolute;
+.sceneBottom {
+    position: relative;
     z-index: 2;
-    left: 12px; right: 12px;
-    bottom: 222px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 12px max(14px, env(safe-area-inset-bottom));
+    &::before { // soft white floor so the controls read over any background
+        content: '';
+        position: absolute;
+        z-index: -1;
+        left: 0; right: 0; bottom: 0;
+        height: 150px;
+        background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, .96) 40%);
+    }
+}
+
+// What to say next, from suggest_reply.
+.suggest {
+    align-self: flex-end;
+    max-width: 88%;
+    display: flex; flex-direction: column; gap: 1px;
+    background: #EAF8F6; border: 2px solid #13B5A6; border-radius: 16px 16px 4px 16px;
+    padding: 8px 12px;
+    box-shadow: 0 3px 0 rgba(0, 0, 0, .1);
+    animation: bp-pop-in .25s ease;
+}
+.suggestLabel { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #0E8C80; }
+.suggestPhrase { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; font-size: 20px; line-height: 1.3; word-break: keep-all; }
+.suggestRoman { font-size: 13px; font-weight: 700; color: #0E8C80; }
+.suggestMeaning { font-size: 13px; font-weight: 600; color: #3A3F58; }
+
+.dialogue {
     background: #fff;
-    border: 4px solid $horang;
+    border: 4px solid var(--accent);
     border-radius: 20px;
-    padding: 16px 18px 14px;
+    padding: 12px 16px 10px;
     box-shadow: 0 4px 0 rgba(0, 0, 0, .15);
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    max-height: 34dvh;
-    overflow-y: auto;
+    gap: 4px;
 }
-.lineTarget { margin: 0; font-family: var(--font-kr-sans), var(--font-display); font-weight: 700; font-size: 22px; line-height: 1.4; word-break: keep-all; }
-.lineNative { margin: 0; font-size: 15px; color: #5A5F78; font-weight: 600; line-height: 1.4; }
-.lineTools { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;
-    button { min-height: 36px; padding: 0 12px; border-radius: 10px; border: 2px solid #E6E1F8; background: #fff; font: 700 13px var(--font-display); color: #1F2340; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.youLine { margin: 0 0 2px; align-self: flex-start; max-width: 100%; box-sizing: border-box; font-size: 14px; font-weight: 600; color: #2645B8; background: #EAF0FF; border-radius: 12px; padding: 5px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    span:first-child { font-weight: 800; margin-right: 4px; } }
+.lineTarget {
+    margin: 0;
+    font-family: var(--font-kr-sans), var(--font-display);
+    font-weight: 700; font-size: 22px; line-height: 1.35;
+    word-break: keep-all;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.lineMedium { font-size: 19px; }
+.lineSmall { font-size: 16px; -webkit-line-clamp: 4; }
+.lineRoman { margin: 0; font-size: 14px; font-weight: 700; color: var(--accent); filter: brightness(.8); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lineNative { margin: 0; font-size: 15px; color: #5A5F78; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.lineTools { display: flex; gap: 6px; margin-top: 4px;
+    button { flex: 1; min-height: 36px; padding: 0 6px; border-radius: 10px; border: 2px solid #E6E1F8; background: #fff; font: 700 13px var(--font-display); color: #1F2340; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .toolOn { background: var(--accent-soft); border-color: var(--accent); }
 }
 .connecting { margin: 0; font-weight: 700; font-size: 18px; }
-.errorBox { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; p { margin: 0; font-weight: 600; line-height: 1.45; } }
+.errorText { margin: 0 0 8px; font-weight: 600; line-height: 1.45; }
 
-.controls {
-    position: absolute;
-    z-index: 2;
-    left: 0; right: 0; bottom: 0;
-    height: 214px;
-    box-sizing: border-box;
-    padding: 10px 16px max(16px, env(safe-area-inset-bottom));
-    background: linear-gradient(rgba(255, 255, 255, .0), #fff 22%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
+// Before the call: who you're talking to, the goals, and how much help.
+.readyCard {
+    background: #fff;
+    border: 4px solid var(--accent);
+    border-radius: 22px;
+    padding: 16px 16px 14px;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, .15);
+    display: flex; flex-direction: column; gap: 8px;
 }
-.youLine { margin: 0 0 2px; align-self: flex-start; max-width: 100%; box-sizing: border-box; font-size: 14px; font-weight: 600; color: #2645B8; background: #EAF0FF; border-radius: 12px; padding: 6px 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    span:first-child { font-weight: 800; margin-right: 4px; } }
-.hints { display: flex; gap: 6px; max-width: 100%; overflow-x: auto; scrollbar-width: none;
-    span { white-space: nowrap; flex-shrink: 0; font-family: var(--font-kr-sans), var(--font-display); font-size: 13px; font-weight: 700; color: #6B4BD0; background: #F1ECFF; padding: 6px 10px; border-radius: 999px; } }
-.buttons { display: flex; align-items: center; justify-content: center; gap: 22px; }
+.readyKicker { margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); filter: brightness(.85); }
+.readyTitle { margin: 0; font-family: var(--font-lilita); font-weight: 400; font-size: 26px; line-height: 1.1; }
+.readyText { margin: 0; font-size: 15px; line-height: 1.45; font-weight: 600; color: #3A3F58; }
+.assistPick { display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: #F4F2FA;
+    button { flex: 1; min-height: 40px; border: 0; border-radius: 10px; background: transparent; font: 800 14px var(--font-display); color: #1F2340; cursor: pointer; }
+    .assistOn { background: var(--accent); color: #fff; } }
+.assistBlurb { margin: 0; font-size: 13px; font-weight: 600; color: #5A5F78; min-height: 2.6em; }
+.startBtn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 56px; border: 0; border-radius: 16px;
+    background: #8E6CF0; color: #fff; box-shadow: 0 5px 0 #6B4BD0;
+    font: 400 22px var(--font-lilita); cursor: pointer;
+    svg { width: 26px; height: 26px; }
+    &:active { transform: translateY(3px); box-shadow: 0 2px 0 #6B4BD0; }
+}
+.readyNote { margin: 0; text-align: center; font-size: 12px; font-weight: 700; color: #6A6F88; }
+
+.controls { display: flex; align-items: center; justify-content: center; gap: 22px; padding-top: 4px; }
 .sideBtn {
-    width: 68px; height: 58px; border-radius: 16px; border: 0;
+    width: 84px; height: 58px; border-radius: 16px; border: 0;
     background: #F1ECFF; color: #6B4BD0;
     font: 800 12px var(--font-display);
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
     cursor: pointer;
 }
 .micBtn {
-    width: 88px; height: 88px; border-radius: 50%; border: 0;
+    --level: 0;
+    width: 80px; height: 80px; border-radius: 50%; border: 0; flex-shrink: 0;
     background: #8E6CF0; color: #fff;
-    box-shadow: 0 6px 0 #6B4BD0, 0 0 0 10px rgba(142, 108, 240, .22);
+    box-shadow: 0 6px 0 #6B4BD0, 0 0 0 calc(6px + var(--level) * 18px) rgba(142, 108, 240, .25);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    transition: box-shadow .2s ease, background .2s ease;
+    transition: background .2s ease;
 }
-.micHearing { box-shadow: 0 6px 0 #6B4BD0, 0 0 0 16px rgba(19, 181, 166, .35); }
+.micHearing { box-shadow: 0 6px 0 #6B4BD0, 0 0 0 calc(8px + var(--level) * 18px) rgba(19, 181, 166, .4); }
 .micMuted { background: #8A8FA8; box-shadow: 0 6px 0 #6A6F88; }
 .status { margin: 0; font-size: 13px; font-weight: 700; color: #5A5F78; text-align: center; }
 
@@ -306,11 +414,15 @@ $horang: #FF8A00;
 .script { list-style: none; margin: 0; padding: 6px 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
 .script li { display: flex; flex-direction: column; gap: 2px; max-width: 88%; padding: 8px 12px; border-radius: 14px; line-height: 1.4;
     span[lang] { font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; font-size: 16px; } }
-.scriptHorang { align-self: flex-start; background: #FFF1DD; }
+.scriptChar { align-self: flex-start; background: var(--accent-soft); }
 .scriptYou { align-self: flex-end; background: #EAF0FF; }
 .scriptWho { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #6A6F88; }
 .scriptEmpty { color: #6A6F88; }
+.assistList { display: flex; flex-direction: column; gap: 8px; padding: 6px 16px max(20px, env(safe-area-inset-bottom)); }
+.assistRow { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 2px solid #E6E1F8; background: #fff; cursor: pointer; font-family: var(--font-display); color: #1F2340;
+    strong { font-size: 16px; } span { font-size: 13px; font-weight: 600; color: #5A5F78; } }
+.assistRowOn { border-color: var(--accent); background: var(--accent-soft); }
 
 @media (prefers-reduced-motion: reduce) {
-    .horang, .heroArt, .card, .goals .goalDone { animation: none; }
+    .spriteTalk, .heroSora, .heroHorang, .card, .suggest, .goals .goalDone { animation: none; }
 }

@@ -27,10 +27,27 @@ export class SpeakCall {
         try { this.h[name]?.(...args); } catch (e) { console.error(e); }
     }
 
-    async start({ scenarioId, level, language, nativeLanguage }) {
+    // Microphone loudness 0..1 for the level ring around the mic button.
+    level() {
+        if (!this.analyser || this.muted) return 0;
+        this.analyser.getByteTimeDomainData(this.levelBuf);
+        let sum = 0;
+        for (let i = 0; i < this.levelBuf.length; i += 1) { const v = (this.levelBuf[i] - 128) / 128; sum += v * v; }
+        return Math.min(1, Math.sqrt(sum / this.levelBuf.length) * 4);
+    }
+
+    async start({ scenarioId, level, assist, language, nativeLanguage }) {
         this.mic = await navigator.mediaDevices.getUserMedia({
             audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
         });
+        try {
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            this.ctx = new Ctx();
+            this.analyser = this.ctx.createAnalyser();
+            this.analyser.fftSize = 512;
+            this.ctx.createMediaStreamSource(this.mic).connect(this.analyser);
+            this.levelBuf = new Uint8Array(this.analyser.fftSize);
+        } catch { /* the level meter is optional */ }
         const pc = new RTCPeerConnection();
         this.pc = pc;
         this.audio = new Audio();
@@ -56,7 +73,7 @@ export class SpeakCall {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ scenarioId, level, language, nativeLanguage, sdp: pc.localDescription.sdp }),
+            body: JSON.stringify({ scenarioId, level, assist, language, nativeLanguage, sdp: pc.localDescription.sdp }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.success) {
@@ -82,6 +99,7 @@ export class SpeakCall {
     }
 
     setMuted(muted) {
+        this.muted = muted;
         this.mic?.getAudioTracks().forEach((t) => { t.enabled = !muted; });
     }
 
@@ -155,6 +173,7 @@ export class SpeakCall {
         try { this.pc?.close(); } catch { /* closed */ }
         this.mic?.getTracks().forEach((t) => t.stop());
         if (this.audio) { this.audio.srcObject = null; }
+        if (this.ctx && this.ctx.state !== 'closed') this.ctx.close().catch(() => {});
     }
 
     // Hang up and tell the server how it went. `beacon` is for page unload.

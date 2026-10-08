@@ -1,11 +1,12 @@
 // Speaking minutes per plan. Voice is billed per minute by OpenAI, so every
-// plan has a cap; the numbers can be tuned from the server .env.
+// plan has a cap; the numbers can be tuned from the server .env. Every plan
+// uses the full voice model by default: the mini model sounded off in testing.
 const DAY_MS = 24 * 60 * 60 * 1000;
 const num = (v, d) => (Number.isFinite(Number(v)) && v !== '' && v !== undefined ? Number(v) : d);
 
 const PLANS = {
-    0: { minutes: num(process.env.SPEAK_FREE_MINUTES, 5), windowDays: 7, model: process.env.SPEAK_MODEL_FREE || 'gpt-realtime-2.1-mini' },
-    1: { minutes: num(process.env.SPEAK_BASIC_MINUTES, 60), windowDays: 30, model: process.env.SPEAK_MODEL_BASIC || 'gpt-realtime-2.1-mini' },
+    0: { minutes: num(process.env.SPEAK_FREE_MINUTES, 5), windowDays: 7, model: process.env.SPEAK_MODEL_FREE || 'gpt-realtime-2.1' },
+    1: { minutes: num(process.env.SPEAK_BASIC_MINUTES, 60), windowDays: 30, model: process.env.SPEAK_MODEL_BASIC || 'gpt-realtime-2.1' },
     2: { minutes: num(process.env.SPEAK_PLUS_MINUTES, 120), windowDays: 30, model: process.env.SPEAK_MODEL_PLUS || 'gpt-realtime-2.1' },
 };
 const MAX_SESSION_SECONDS = num(process.env.SPEAK_MAX_SESSION_SECONDS, 600);
@@ -42,4 +43,7 @@ const allowanceFor = async (db, user) => {
     };
 };
 
-module.exports = { PLANS, MAX_SESSION_SECONDS, MIN_START_SECONDS, planFor, allowanceFor, secondsUsed };
+// What each plan gets, for the plan table on /speak.
+const planTable = () => [0, 1, 2].map((tier) => ({ tier, minutes: PLANS[tier].minutes, windowDays: PLANS[tier].windowDays }));
+
+module.exports = { planTable, PLANS, MAX_SESSION_SECONDS, MIN_START_SECONDS, planFor, allowanceFor, secondsUsed };

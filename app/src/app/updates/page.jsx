@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import UpdatesShell from '@/components/updates/UpdatesShell';
 import Mascot from '@/components/Mascot';
-import { updates } from '@/content/updates';
+import { updates, changelog, formatChangelogDate } from '@/content/updates';
 import styles from '@/styles/pages/updates.module.scss';
 
 export const metadata = {
@@ -37,6 +37,27 @@ export default function UpdatesIndex() {
                         </li>
                     ))}
                 </ul>
+
+                <section className={styles.changelog} aria-labelledby="changelog-heading">
+                    <h2 id="changelog-heading" className={styles.changelogTitle}>Changelog</h2>
+                    <p className={styles.changelogDek}>Smaller things we shipped recently.</p>
+                    <ol className={styles.changelogDays}>
+                        {changelog.map(day => (
+                            <li key={day.date} className={styles.changelogDay}>
+                                <time dateTime={day.date} className={styles.changelogDate}>
+                                    {formatChangelogDate(day.date)}
+                                </time>
+                                <ul className={styles.changelogItems}>
+                                    {day.items.map(item => (
+                                        <li key={item.text}>
+                                            {item.href ? <Link href={item.href}>{item.text}</Link> : item.text}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
             </div>
         </UpdatesShell>
     );
