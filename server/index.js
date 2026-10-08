@@ -119,6 +119,7 @@ const { getTraffic } = require('./controllers/admin/traffic');
 const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./controllers/admin/snapshot');
 const { setHeardFrom } = require('./controllers/auth/setHeardFrom');
 const lifecycleEmails = require('./services/lifecycleEmails');
+const streakEmails = require('./services/streakEmails');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -421,6 +422,11 @@ app.get('/api/progress', isAuthenticated, async (req, res) => {
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
 app.get('/api/pricing/offer', require('./controllers/pricingOffer'));
+app.get('/api/daily-sentence', (req, res) => {
+    const { text, gist, date } = require('./utils/dailySentence').dailySentence();
+    res.set('Cache-Control', 'public, max-age=600');
+    res.json({ success: true, text, gist, date, language: 'ko' });
+});
 
 // Creator affiliates
 const affiliates = require('./controllers/affiliates');
@@ -867,6 +873,8 @@ async function startServer() {
 
     // Hourly lifecycle emails; does nothing unless LIFECYCLE_EMAILS_ENABLED=true
     lifecycleEmails.startLifecycleEmailScheduler();
+    // Evening streak reminders; does nothing unless STREAK_EMAILS_ENABLED=true
+    streakEmails.startStreakEmailScheduler();
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

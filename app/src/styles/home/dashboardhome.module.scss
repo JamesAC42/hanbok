@@ -930,3 +930,32 @@
     cursor: pointer;
     &:hover { color: var(--foreground); text-decoration: underline; }
 }
+
+// Sentence of the day
+.dailyCard {
+    border-color: var(--bp-read-line);
+    background: color-mix(in srgb, var(--bp-read) 6%, var(--background));
+}
+
+.dailyText {
+    margin: .6rem 0 .2rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--foreground);
+    word-break: keep-all;
+}
+
+.dailyGist {
+    margin: 0 0 .9rem;
+    color: var(--bp-ink2);
+    font-weight: 600;
+}
+
+.dailyBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem 1rem;
+    flex-wrap: wrap;
+}

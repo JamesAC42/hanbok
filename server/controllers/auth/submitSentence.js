@@ -15,6 +15,7 @@ const { isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
 const SupportedLanguages = require('../../supported_languages');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { weeklySentenceQuota, quotaExceededMessage } = require('../../utils/sentenceQuota');
+const { isDailySentence } = require('../../utils/dailySentence');
 
 const { extractTextFromImage } = require('../../llm/analyzeImage');
 
@@ -318,8 +319,11 @@ const submitSentence = async (req, res) => {
         notification: null
     };
     
+    // The sentence of the day is free for everyone
+    const freeDailySentence = !translate && originalLanguage === 'ko' && isDailySentence(text);
+
     // Check rate limits for free users and non-logged in users
-    if(!user || user.tier === 0) {
+    if((!user || user.tier === 0) && !freeDailySentence) {
         rateLimitCheck = await checkRateLimits(req, db);
         if (!rateLimitCheck.hasQuota) {
             return res.json({
@@ -579,7 +583,7 @@ const submitSentence = async (req, res) => {
         let notification = null;
         
         // Increment rate limit counter for non-premium users only
-        if (!user || user.tier === 0) {
+        if ((!user || user.tier === 0) && !freeDailySentence) {
             const identifier = userId !== null ? userId.toString() : (req.headers['x-forwarded-for'] || req.socket.remoteAddress);
             const identifierType = userId !== null ? 'userId' : 'ipAddress';
             // Increment counters and check for new notifications
