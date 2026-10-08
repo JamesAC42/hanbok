@@ -82,7 +82,7 @@ export default function SpeakPost() {
                         <h2 id="cast-heading">Meet Horang and Sora</h2>
                         <p>
                             Horang is a patient tutor with tiger ears who keeps things clear and simple. Sora is a
-                            bubbly friend who loves K-pop and talks like someone your age. Pick whoever fits your mood.
+                            countryside girl who just moved to Seoul and is figuring out the city right alongside you. Pick whoever fits your mood.
                         </p>
                     </div>
                 </section>

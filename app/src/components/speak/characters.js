@@ -23,7 +23,7 @@ export const CHARACTERS = {
         rest: 'happy',
         celebrate: 'excited',
         face: 38,
-        tagline: 'Your friend from Seoul. K-pop, street food, big reactions.',
+        tagline: 'A countryside girl who just moved to Seoul. Learning the city with you.',
     },
 };
 
