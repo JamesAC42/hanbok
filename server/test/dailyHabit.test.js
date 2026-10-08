@@ -6,6 +6,13 @@ const { renderEmail } = require('../services/lifecycleEmails');
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
+test('there are at least a year of unique daily sentences, each with a gist', () => {
+    const sentences = require('../data/dailySentences');
+    assert.ok(sentences.length >= 365, `only ${sentences.length} daily sentences`);
+    assert.strictEqual(new Set(sentences.map((s) => s.text)).size, sentences.length);
+    sentences.forEach((s) => assert.ok(s.text && s.gist, JSON.stringify(s)));
+});
+
 test('everyone gets the same sentence on a UTC day, and it changes the next day', () => {
     const morning = new Date('2026-10-08T01:00:00Z');
     const evening = new Date('2026-10-08T23:00:00Z');
