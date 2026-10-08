@@ -24,6 +24,7 @@ import { CuidaSidebarCollapseOutline } from "./icons/Collapse";
 import { IcBaselinePerson } from "./icons/Profile";
 import { MaterialSymbolsHistory } from "./icons/History";
 import { MaterialSymbolsKeyboard } from "./icons/Keyboard";
+import { MaterialSymbolsMicRounded } from "./icons/Mic";
 import { TablerAlphabetKorean } from "./icons/Korean";
 import { MaterialSymbolsSettingsRounded } from "./icons/Settings";
 import { MaterialSymbolsMenuBook } from "./icons/MenuBook";
@@ -169,6 +170,7 @@ function Sidebar() {
             header: label('sidebar.practice', 'Practice'),
             items: [
                 { path: "/learn", match: ["/learn"], label: label('sidebar.learn', 'Learn'), color: 'var(--bp-read)', icon: <MaterialSymbolsMenuBook /> },
+                { path: "/speak", match: ["/speak"], label: label('sidebar.speak', 'Speak'), color: 'var(--bp-purple)', icon: <MaterialSymbolsMicRounded /> },
                 { path: "/tutor", match: ["/tutor"], label: t('sidebar.tutor'), color: 'var(--bp-flame)', icon: <IcSharpSchool /> },
                 { path: "/typing", match: ["/typing"], label: t('sidebar.koreanTyping'), color: 'var(--bp-purple)', icon: <MaterialSymbolsKeyboard /> },
                 { path: "/hangeul", match: ["/hangeul"], label: t('sidebar.learnHangeul'), color: 'var(--bp-und)', icon: <TablerAlphabetKorean /> },
