@@ -17,6 +17,16 @@ function generateLyricId(artist, title) {
   return `${cleanArtist}-${cleanTitle}`;
 }
 
+// Two songs with the same artist and title would share a lyricId, which is unique.
+function duplicateSong(existing) {
+  const name = existing.artist ? `${existing.title} by ${existing.artist}` : existing.title;
+  return {
+    success: false,
+    message: `${name} is already in the library${existing.published ? '' : ' as a draft'}. Open that song instead, or change the title.`,
+    existingId: existing._id
+  };
+}
+
 // Check if the user is an admin
 async function isAdmin(req) {
   try {
@@ -47,7 +57,7 @@ async function isAdmin(req) {
 // Get all lyrics (admin only)
 async function getAllLyrics(req, res) {
   try {
-    if (!isAdmin(req)) {
+    if (!await isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
@@ -92,7 +102,7 @@ async function getAllLyrics(req, res) {
 // Add new lyrics (admin only)
 async function addLyrics(req, res) {
   try {
-    if (!isAdmin(req)) {
+    if (!await isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
@@ -113,6 +123,11 @@ async function addLyrics(req, res) {
     
     // Generate URL-friendly ID
     const lyricId = generateLyricId(artist, title);
+
+    const existing = await db.collection('lyrics').findOne({ lyricId });
+    if (existing) {
+      return res.status(409).json(duplicateSong(existing));
+    }
     
     // Create new lyrics document
     const newLyric = {
@@ -139,6 +154,9 @@ async function addLyrics(req, res) {
       lyric: newLyric
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ success: false, message: 'A song with this artist and title is already in the library.' });
+    }
     console.error('Error adding lyrics:', error);
     return res.status(500).json({
       success: false,
@@ -151,7 +169,7 @@ async function addLyrics(req, res) {
 // Update lyrics (admin only)
 async function updateLyrics(req, res) {
   try {
-    if (!isAdmin(req)) {
+    if (!await isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
@@ -173,6 +191,11 @@ async function updateLyrics(req, res) {
     
     // Generate new URL-friendly ID if title or artist changed
     const newLyricId = generateLyricId(artist, title);
+
+    const clash = await db.collection('lyrics').findOne({ lyricId: newLyricId, _id: { $ne: new ObjectId(lyricId) } });
+    if (clash) {
+      return res.status(409).json(duplicateSong(clash));
+    }
     
     const updateResult = await db.collection('lyrics').updateOne(
       { _id: new ObjectId(lyricId) },
@@ -216,7 +239,7 @@ async function updateLyrics(req, res) {
 // Delete lyrics (admin only)
 async function deleteLyrics(req, res) {
   try {
-    if (!isAdmin(req)) {
+    if (!await isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
@@ -269,7 +292,7 @@ async function deleteLyrics(req, res) {
 // Toggle published status (admin only)
 async function togglePublished(req, res) {
   try {
-    if (!isAdmin(req)) {
+    if (!await isAdmin(req)) {
       return res.status(403).json({
         success: false,
         message: 'Unauthorized: Admin access required'
