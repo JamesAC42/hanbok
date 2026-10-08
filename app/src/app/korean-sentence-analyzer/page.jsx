@@ -22,7 +22,7 @@ export const metadata = {
 const faq = [
     {
         q: 'Is the Korean sentence analyzer free?',
-        a: 'Yes. You can break down 10 sentences a week for free, and you don\'t need an account to try it. Basic and Plus plans give you unlimited breakdowns.',
+        a: 'Yes. You can try a few breakdowns without an account, and a free account gives you 10 a week. Basic and Plus plans give you unlimited breakdowns.',
     },
     {
         q: 'How is this different from Google Translate or Papago?',

@@ -533,6 +533,12 @@ app.get('/api/lyrics/filters', async (req, res) => {
     getFilterOptions(req, res);
 });
 
+// Song lines that use a Korean phrase, for the public /phrases pages.
+app.get('/api/lyrics/lines', async (req, res) => {
+    const { getPhraseLines } = require('./controllers/lyrics/phraseLines');
+    getPhraseLines(req, res);
+});
+
 app.get('/api/lyrics/recent', async (req, res) => {
     const { getRecentLyrics } = require('./controllers/lyrics/publicLyrics');
     getRecentLyrics(req, res);

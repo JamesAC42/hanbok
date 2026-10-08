@@ -1,0 +1,8333 @@
+[
+ {
+  "slug": "aigoo",
+  "ko": "아이고",
+  "roman": "aigoo",
+  "aka": [
+   "aigo",
+   "aigu",
+   "aygo",
+   "ahigo"
+  ],
+  "meaning": "Oh dear! / Oh my!",
+  "category": "reaction",
+  "register": "any",
+  "intro": "아이고 (aigoo) is a Korean exclamation that means \"Oh dear!\", \"Oh my!\" or \"Ugh!\". People say it when they are tired, surprised, frustrated, in pain, or even touched. The exact feeling comes from the tone of voice.",
+  "literal": "아이고 is an interjection, so it has no word-for-word meaning. You will also hear it as 아이구 or the shorter 에구.",
+  "usage": [
+   "You hear 아이고 everywhere: when someone stands up with a sore back, drops something, hears sad news, or sees a cute baby. A long, sighing 아이고 sounds tired or sad, while a quick, bright one sounds surprised or affectionate.",
+   "It is linked in many people's minds with grandparents and middle-aged adults, but people of all ages say it. It is a sound you make rather than something you say to someone, so it is not rude to say it around older people.",
+   "Learners sometimes use it as a general \"oh\" for everything. It works best when there is a feeling behind it, such as sympathy, tiredness or exasperation."
+  ],
+  "forms": [
+   {
+    "ko": "아이구",
+    "en": "Oh dear",
+    "note": "Very common variant spelling and pronunciation."
+   },
+   {
+    "ko": "에구",
+    "en": "Oh dear",
+    "note": "Shorter and softer, often typed in texts."
+   },
+   {
+    "ko": "아이고 깜짝이야",
+    "en": "Oh, you startled me!",
+    "note": "Said when someone or something gives you a fright."
+   },
+   {
+    "ko": "아이고 허리야",
+    "en": "Oh, my back!",
+    "note": "아이고 plus a body part and 야 is a classic complaint about aches."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Standing up after sitting for a long time",
+    "chips": [
+     [
+      {
+       "t": "아이고",
+       "g": "oh dear"
+      }
+     ],
+     [
+      {
+       "t": "허리",
+       "g": "back (waist)"
+      },
+      {
+       "t": "야",
+       "g": "exclamation ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh, my back!"
+   },
+   {
+    "context": "A friend jumps out and scares you",
+    "chips": [
+     [
+      {
+       "t": "아이고",
+       "g": "oh my"
+      }
+     ],
+     [
+      {
+       "t": "깜짝",
+       "g": "startled"
+      },
+      {
+       "t": "이야",
+       "g": "exclamation ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh, you scared me!"
+   },
+   {
+    "context": "A grandmother praising her grandchild",
+    "chips": [
+     [
+      {
+       "t": "아이고",
+       "g": "aww"
+      }
+     ],
+     [
+      {
+       "t": "잘했",
+       "g": "did well",
+       "base": "잘하다"
+      },
+      {
+       "t": "네",
+       "g": "exclamation ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Aww, you did so well!"
+   }
+  ],
+  "related": [
+   "omo",
+   "eotteokhae",
+   "heol"
+  ],
+  "faq": [
+   {
+    "q": "Is aigoo only said by old people?",
+    "a": "No. It is strongly associated with grandparents and middle-aged adults, but younger people say it too, especially when tired or sympathetic."
+   },
+   {
+    "q": "Is aigoo rude?",
+    "a": "No. It is an exclamation, not something aimed at a person, so it is fine to say around anyone. The tone can show annoyance, though, so a heavy sigh of 아이고 at someone can come across as exasperated."
+   },
+   {
+    "q": "What is the difference between aigoo and omo?",
+    "a": "아이고 often carries tiredness, pain or sympathy. 어머 (omo) is more about sudden surprise."
+   }
+  ]
+ },
+ {
+  "slug": "daebak",
+  "ko": "대박",
+  "roman": "daebak",
+  "aka": [
+   "dae bak",
+   "daebakk",
+   "dae-bak"
+  ],
+  "meaning": "Awesome! / No way!",
+  "category": "reaction",
+  "register": "casual",
+  "intro": "대박 (daebak) is Korean slang that means \"Awesome!\", \"Amazing!\" or \"No way!\". People say it when something is surprisingly great, or just surprising. It works a lot like \"Wow!\" in English.",
+  "literal": "As a noun, 대박 means a huge success or a jackpot, as in 대박이 나다 (to be a big hit). Its exact origin is debated, so it is best not to rely on the popular stories about it.",
+  "usage": [
+   "Use 대박 as a one-word reaction to good news, a great performance, delicious food or anything impressive. It is very common among friends and in texts.",
+   "It can also react to surprising bad news, like \"Seriously?!\" For example, hearing that a friend lost their phone again, you might say 대박... in a disbelieving tone.",
+   "On its own, 대박 is casual slang, so avoid saying it as a reaction to your boss or teacher. The set phrase 대박 나세요, however, is a polite and friendly way to wish someone great success."
+  ],
+  "forms": [
+   {
+    "ko": "대박이다",
+    "en": "That's amazing",
+    "note": "Casual sentence form."
+   },
+   {
+    "ko": "대박이네",
+    "en": "Wow, that's amazing",
+    "note": "Adds a sense of just realizing it."
+   },
+   {
+    "ko": "대박 나세요",
+    "en": "Wishing you huge success",
+    "note": "Polite blessing, often said to business owners or at New Year."
+   },
+   {
+    "ko": "대박 나다",
+    "en": "to be a big hit",
+    "note": "Dictionary-style phrase used for hit shows, products and shops."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting a friend who got concert tickets",
+    "chips": [
+     [
+      {
+       "t": "와",
+       "g": "wow"
+      }
+     ],
+     [
+      {
+       "t": "대박",
+       "g": "awesome"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Wow, awesome!"
+   },
+   {
+    "context": "Talking about a movie you just watched",
+    "chips": [
+     [
+      {
+       "t": "이",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "영화",
+       "g": "movie"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "대박",
+       "g": "amazing"
+      },
+      {
+       "t": "이야",
+       "g": "casual 'is' ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This movie is really amazing"
+   },
+   {
+    "context": "Congratulating someone opening a new shop",
+    "chips": [
+     [
+      {
+       "t": "대박",
+       "g": "big success"
+      }
+     ],
+     [
+      {
+       "t": "나",
+       "g": "happen",
+       "base": "나다"
+      },
+      {
+       "t": "세요",
+       "g": "polite ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I wish you great success!"
+   }
+  ],
+  "related": [
+   "heol",
+   "jinjja",
+   "jjang",
+   "michyeosseo"
+  ],
+  "faq": [
+   {
+    "q": "Is daebak rude?",
+    "a": "It is not rude, but it is casual slang. Say it with friends, and use 대박 나세요 when wishing success to someone older."
+   },
+   {
+    "q": "Can daebak mean something bad?",
+    "a": "Yes. It mainly means \"amazing\", but it can also mean \"unbelievable\" when reacting to surprising bad news."
+   },
+   {
+    "q": "How do you spell daebak in Korean?",
+    "a": "It is written 대박."
+   }
+  ]
+ },
+ {
+  "slug": "heol",
+  "ko": "헐",
+  "roman": "heol",
+  "aka": [
+   "hul",
+   "hull",
+   "heul"
+  ],
+  "meaning": "OMG / What?!",
+  "category": "reaction",
+  "register": "casual",
+  "intro": "헐 (heol) is a Korean slang exclamation that means \"OMG\", \"What?!\" or \"No way\". It shows shock or disbelief, and it is especially common in texting.",
+  "literal": "헐 is a sound word with no literal meaning, a bit like a gasp. It spread widely through online chat and texting.",
+  "usage": [
+   "Say 헐 when you hear something shocking, whether it is good, bad or just strange. It is often followed by another reaction, such as 헐 대박 or 헐 진짜?",
+   "It is casual slang. It is great with friends and people your age, but it sounds childish or careless with teachers, bosses or older people.",
+   "The tone and length change the feeling. A short 헐 is quick surprise, while 헐... with trailing dots in a text sounds speechless or let down."
+  ],
+  "forms": [
+   {
+    "ko": "헐 대박",
+    "en": "OMG, no way",
+    "note": "Shock plus excitement."
+   },
+   {
+    "ko": "헐 진짜?",
+    "en": "What, really?",
+    "note": "Asking if something is true."
+   },
+   {
+    "ko": "헐...",
+    "en": "Wow... (speechless)",
+    "note": "Trailing dots in texts show disbelief or disappointment."
+   }
+  ],
+  "examples": [
+   {
+    "context": "A friend tells you surprising gossip",
+    "chips": [
+     [
+      {
+       "t": "헐",
+       "g": "OMG"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "What, really?"
+   },
+   {
+    "context": "Seeing a surprise announcement online",
+    "chips": [
+     [
+      {
+       "t": "헐",
+       "g": "OMG"
+      }
+     ],
+     [
+      {
+       "t": "대박",
+       "g": "no way"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "OMG, no way!"
+   },
+   {
+    "context": "Realizing your wallet is gone",
+    "chips": [
+     [
+      {
+       "t": "헐",
+       "g": "OMG"
+      }
+     ],
+     [
+      {
+       "t": "지갑",
+       "g": "wallet"
+      }
+     ],
+     [
+      {
+       "t": "잃어버렸",
+       "g": "lost",
+       "base": "잃어버리다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh no, I lost my wallet"
+   }
+  ],
+  "related": [
+   "daebak",
+   "omo",
+   "jinjja",
+   "mwoya"
+  ],
+  "faq": [
+   {
+    "q": "Is heol rude?",
+    "a": "It is not offensive, but it is casual slang. Avoid it with teachers, bosses and older people."
+   },
+   {
+    "q": "Is heol the same as daebak?",
+    "a": "Not quite. 헐 is pure shock or disbelief, while 대박 usually leans toward \"amazing\". People often say them together: 헐 대박."
+   },
+   {
+    "q": "How do you pronounce heol?",
+    "a": "It sounds roughly like \"hull\" with a short, open vowel."
+   }
+  ]
+ },
+ {
+  "slug": "omo",
+  "ko": "어머",
+  "roman": "omo",
+  "aka": [
+   "eomeo",
+   "omona",
+   "omo omo"
+  ],
+  "meaning": "Oh my!",
+  "category": "reaction",
+  "register": "any",
+  "intro": "어머 (omo) is a Korean exclamation that means \"Oh my!\" or \"Oh!\". People say it when they are suddenly surprised, delighted or a little shocked.",
+  "literal": "어머 is an interjection with no word-for-word meaning. The longer form is 어머나, and people often repeat it as 어머머.",
+  "usage": [
+   "Use 어머 for sudden surprise: seeing an old friend by chance, spotting something cute, or hearing unexpected news. It can sound pleased or a little scandalized depending on the tone.",
+   "It is strongly associated with women, especially middle-aged women, and K-dramas often use it that way. Men do say it, but it can come across as playful or exaggerated.",
+   "Like 아이고, it is a reaction rather than something aimed at a person, so it is not rude around older people."
+  ],
+  "forms": [
+   {
+    "ko": "어머나",
+    "en": "Oh my!",
+    "note": "Longer version, a bit more dramatic."
+   },
+   {
+    "ko": "어머머",
+    "en": "Oh my, oh my",
+    "note": "Repeated for extra surprise."
+   },
+   {
+    "ko": "어머 세상에",
+    "en": "Oh my goodness",
+    "note": "세상에 literally means \"in the world\"."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Someone surprises you from behind",
+    "chips": [
+     [
+      {
+       "t": "어머",
+       "g": "oh my"
+      }
+     ],
+     [
+      {
+       "t": "깜짝",
+       "g": "startled"
+      },
+      {
+       "t": "이야",
+       "g": "exclamation ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh my, you startled me!"
+   },
+   {
+    "context": "Seeing a friend's new dress",
+    "chips": [
+     [
+      {
+       "t": "어머",
+       "g": "oh my"
+      }
+     ],
+     [
+      {
+       "t": "너무",
+       "g": "so"
+      }
+     ],
+     [
+      {
+       "t": "예쁘",
+       "g": "pretty",
+       "base": "예쁘다"
+      },
+      {
+       "t": "다",
+       "g": "exclamation ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh my, it's so pretty!"
+   },
+   {
+    "context": "Hearing surprising news",
+    "chips": [
+     [
+      {
+       "t": "어머",
+       "g": "oh my"
+      }
+     ],
+     [
+      {
+       "t": "세상",
+       "g": "world"
+      },
+      {
+       "t": "에",
+       "g": "in (location particle)",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh my goodness!"
+   }
+  ],
+  "related": [
+   "aigoo",
+   "heol",
+   "daebak"
+  ],
+  "faq": [
+   {
+    "q": "Do men say omo?",
+    "a": "Some do, but it is mainly associated with women. When a man says it, it often sounds playful or exaggerated."
+   },
+   {
+    "q": "What is the difference between omo and aigoo?",
+    "a": "어머 is mostly sudden surprise. 아이고 often carries tiredness, pain or sympathy."
+   },
+   {
+    "q": "Is omo the same as eomma (mom)?",
+    "a": "No. They sound a little alike, but 어머 is an exclamation and 엄마 means \"mom\"."
+   }
+  ]
+ },
+ {
+  "slug": "jinjja",
+  "ko": "진짜",
+  "roman": "jinjja",
+  "aka": [
+   "jinja",
+   "jincha"
+  ],
+  "meaning": "Really / Seriously",
+  "category": "reaction",
+  "register": "casual",
+  "intro": "진짜 (jinjja) means \"really\", \"seriously\" or \"real\" in Korean. On its own with a rising tone, 진짜? means \"Really?\", and before a word it adds emphasis, like \"really good\".",
+  "literal": "As a noun, 진짜 means \"the real thing\", the opposite of 가짜 (fake). It is also used as an adverb meaning \"really\".",
+  "usage": [
+   "Say 진짜? when you can hardly believe something, and 진짜! to insist something is true. Put it before adjectives for emphasis: 진짜 맛있어 (It's really tasty).",
+   "진짜 by itself is casual. Add 요 to ask politely: 진짜요? The word 정말 means the same thing and sounds a little more neutral, so it is a safe choice in polite speech too.",
+   "People also sigh 아 진짜... when annoyed, a bit like \"Oh, come on...\"."
+  ],
+  "forms": [
+   {
+    "ko": "진짜요?",
+    "en": "Really?",
+    "note": "Polite question form."
+   },
+   {
+    "ko": "진짜로",
+    "en": "for real",
+    "note": "Adverb form, stresses that you mean it."
+   },
+   {
+    "ko": "정말",
+    "en": "really",
+    "note": "Near synonym, slightly more neutral."
+   },
+   {
+    "ko": "ㅈㅉ",
+    "en": "rly",
+    "note": "Typed shorthand using the first consonants."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Tasting your friend's cooking",
+    "chips": [
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "맛있",
+       "g": "tasty",
+       "base": "맛있다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "It's really good!"
+   },
+   {
+    "context": "A coworker shares surprising news",
+    "chips": [
+     [
+      {
+       "t": "아",
+       "g": "oh"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      },
+      {
+       "t": "요",
+       "g": "polite ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh, really?"
+   },
+   {
+    "context": "Texting a close friend who moved away",
+    "chips": [
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "see",
+       "base": "보다"
+      },
+      {
+       "t": "고",
+       "g": "connecting ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "싶",
+       "g": "want",
+       "base": "싶다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I really miss you"
+   }
+  ],
+  "related": [
+   "daebak",
+   "heol",
+   "mwoya"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between jinjja and jeongmal?",
+    "a": "Both mean \"really\". 진짜 is more casual and conversational, while 정말 sounds a bit more neutral."
+   },
+   {
+    "q": "Is jinjja polite?",
+    "a": "On its own it is casual. Say 진짜요? to someone you should be polite to."
+   },
+   {
+    "q": "What does \"ah jinjja\" mean?",
+    "a": "아 진짜 said with a sigh means something like \"Oh, come on\" or \"Seriously...\", showing annoyance."
+   }
+  ]
+ },
+ {
+  "slug": "mwoya",
+  "ko": "뭐야",
+  "roman": "mwoya",
+  "aka": [
+   "moya",
+   "mwo ya"
+  ],
+  "meaning": "What is it? / What the...?",
+  "category": "reaction",
+  "register": "casual",
+  "intro": "뭐야 (mwoya) means \"What is it?\" or \"What?\" in casual Korean. As a reaction, it works like \"What the...?\" or \"What's going on?\" when something is surprising or annoying.",
+  "literal": "뭐 means \"what\" (short for 무엇), and 야 is a casual ending meaning \"is\". Together they literally mean \"What is (it)?\"",
+  "usage": [
+   "Use 뭐야? as a real question, as in 이게 뭐야? (What is this?), or as a reaction to something unexpected.",
+   "The tone matters a lot. Said softly it is curious, but said sharply to a person it can sound annoyed or confrontational, like \"What's your problem?\"",
+   "It is casual, so use the polite form 뭐예요? with people you don't know well or who are older than you."
+  ],
+  "forms": [
+   {
+    "ko": "뭐예요?",
+    "en": "What is it?",
+    "note": "Polite form."
+   },
+   {
+    "ko": "이게 뭐야?",
+    "en": "What is this?",
+    "note": "Very common full question."
+   },
+   {
+    "ko": "뭐지?",
+    "en": "What is it? (wondering)",
+    "note": "Said to yourself when puzzled."
+   },
+   {
+    "ko": "뭐야 진짜",
+    "en": "What the heck",
+    "note": "Annoyed or disbelieving."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Opening a strange package",
+    "chips": [
+     [
+      {
+       "t": "이게",
+       "g": "this (thing)"
+      }
+     ],
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      },
+      {
+       "t": "야",
+       "g": "casual 'is' ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "What is this?"
+   },
+   {
+    "context": "Finding your friend at your door unexpectedly",
+    "chips": [
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      },
+      {
+       "t": "야",
+       "g": "casual 'is' ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "왜",
+       "g": "why"
+      }
+     ],
+     [
+      {
+       "t": "여기",
+       "g": "here"
+      }
+     ],
+     [
+      {
+       "t": "있",
+       "g": "be (somewhere)",
+       "base": "있다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "What? Why are you here?"
+   },
+   {
+    "context": "Trying a game you expected to be boring",
+    "chips": [
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      },
+      {
+       "t": "야",
+       "g": "casual 'is' ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "재밌",
+       "g": "fun",
+       "base": "재밌다"
+      },
+      {
+       "t": "네",
+       "g": "realization ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Huh, this is actually fun"
+   }
+  ],
+  "related": [
+   "wae",
+   "heol",
+   "jinjja"
+  ],
+  "faq": [
+   {
+    "q": "Is mwoya rude?",
+    "a": "Not by itself, but it is casual. Said sharply to someone's face it can sound like \"What's your problem?\""
+   },
+   {
+    "q": "How do you say mwoya politely?",
+    "a": "Use 뭐예요? It is the polite form and is spelled with 예, not 에."
+   },
+   {
+    "q": "What does \"mwoya jinjja\" mean?",
+    "a": "뭐야 진짜 means something like \"What the heck, seriously\". It shows annoyance or disbelief."
+   }
+  ]
+ },
+ {
+  "slug": "eotteokhae",
+  "ko": "어떡해",
+  "roman": "eotteokhae",
+  "aka": [
+   "otoke",
+   "eottokhae",
+   "eotteokae",
+   "ottoke"
+  ],
+  "meaning": "What do I do? / Oh no!",
+  "category": "reaction",
+  "register": "casual",
+  "intro": "어떡해 (eotteokhae) means \"What do I do?\" or \"Oh no!\" in Korean. People say it when they are worried, panicking, or so overwhelmed (even by cuteness) that they don't know what to do.",
+  "literal": "어떡해 is a shortened form of 어떻게 해, literally \"how (do I) do (it)?\" The dictionary verb is 어떡하다.",
+  "usage": [
+   "Use 어떡해 when something goes wrong, like being late or breaking something. It also shows sympathy when a friend tells you bad news, like \"Oh no, what are you going to do?\"",
+   "It is also used for happy overload. Seeing something adorable, people squeal 어떡해 너무 귀여워! (Oh my gosh, it's too cute!)",
+   "A very common spelling mistake is writing 어떻해 or using 어떻게 at the end of a sentence. 어떻게 means \"how\"; 어떡해 means \"what do I do\". Add 요 for the polite form: 어떡해요."
+  ],
+  "forms": [
+   {
+    "ko": "어떡해요",
+    "en": "What do I do?",
+    "note": "Polite form."
+   },
+   {
+    "ko": "어떡하지?",
+    "en": "What should I do?",
+    "note": "Thinking out loud."
+   },
+   {
+    "ko": "어떻게 해",
+    "en": "What do I do?",
+    "note": "The full, unshortened form."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Waking up after your alarm didn't go off",
+    "chips": [
+     [
+      {
+       "t": "어떡해",
+       "g": "oh no (what do I do)",
+       "base": "어떡하다"
+      }
+     ],
+     [
+      {
+       "t": "나",
+       "g": "I"
+      }
+     ],
+     [
+      {
+       "t": "늦었",
+       "g": "was late",
+       "base": "늦다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh no, I'm late!"
+   },
+   {
+    "context": "Seeing a tiny puppy",
+    "chips": [
+     [
+      {
+       "t": "어떡해",
+       "g": "oh my gosh",
+       "base": "어떡하다"
+      }
+     ],
+     [
+      {
+       "t": "너무",
+       "g": "so"
+      }
+     ],
+     [
+      {
+       "t": "귀여워",
+       "g": "cute",
+       "base": "귀엽다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oh my gosh, it's so cute!"
+   },
+   {
+    "context": "Missing the last train with a coworker",
+    "chips": [
+     [
+      {
+       "t": "이제",
+       "g": "now"
+      }
+     ],
+     [
+      {
+       "t": "어떡해",
+       "g": "what to do",
+       "base": "어떡하다"
+      },
+      {
+       "t": "요",
+       "g": "polite ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "What do we do now?"
+   }
+  ],
+  "related": [
+   "aigoo",
+   "omo",
+   "jebal"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between eotteokhae and eotteoke?",
+    "a": "어떡해 means \"What do I do?\" and ends a sentence. 어떻게 means \"how\" and goes before a verb, as in 어떻게 가요? (How do I get there?)"
+   },
+   {
+    "q": "Is eotteokhae sad or cute?",
+    "a": "Both. It can express panic or sympathy, and it can also be a squeal when something is overwhelmingly cute."
+   },
+   {
+    "q": "How do you say it politely?",
+    "a": "Add 요: 어떡해요?"
+   }
+  ]
+ },
+ {
+  "slug": "jjajeungna",
+  "ko": "짜증나",
+  "roman": "jjajeungna",
+  "aka": [
+   "jjajeung na",
+   "jajeungna",
+   "jjajeungnae"
+  ],
+  "meaning": "So annoying / I'm annoyed",
+  "category": "reaction",
+  "register": "casual",
+  "intro": "짜증나 (jjajeungna) means \"I'm annoyed\" or \"That's so annoying\" in casual Korean. People say it about anything irritating, from bad traffic to a slow phone.",
+  "literal": "짜증 means \"irritation\" and 나 comes from 나다 (to arise), so it literally means \"irritation arises\". Dictionaries space it as 짜증 나, but 짜증나 written together is what you will usually see in texts.",
+  "usage": [
+   "Use it about situations: missing the bus, a broken app, or the weather. It is very common as a short outburst, like \"Ugh!\"",
+   "Be careful saying it directly to someone, as in 너 짜증나 (You're annoying). That is hurtful, not a light complaint.",
+   "Do not mix it up with 짜증 내다, which means to snap at someone or act irritated. Add 요 for the polite form: 짜증나요."
+  ],
+  "forms": [
+   {
+    "ko": "짜증나요",
+    "en": "It's annoying",
+    "note": "Polite form."
+   },
+   {
+    "ko": "짜증나 죽겠어",
+    "en": "I'm so annoyed I could die",
+    "note": "Exaggerated, very casual."
+   },
+   {
+    "ko": "짜증 내다",
+    "en": "to snap at someone",
+    "note": "Showing your irritation toward someone."
+   },
+   {
+    "ko": "짜증 내지 마",
+    "en": "Don't get snappy",
+    "note": "Casual request."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Your phone freezes again",
+    "chips": [
+     [
+      {
+       "t": "아",
+       "g": "ugh"
+      }
+     ],
+     [
+      {
+       "t": "짜증",
+       "g": "irritation"
+      },
+      {
+       "t": "나",
+       "g": "arises",
+       "base": "나다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Ugh, so annoying!"
+   },
+   {
+    "context": "Texting a friend after missing the bus",
+    "chips": [
+     [
+      {
+       "t": "버스",
+       "g": "bus"
+      }
+     ],
+     [
+      {
+       "t": "또",
+       "g": "again"
+      }
+     ],
+     [
+      {
+       "t": "놓쳤",
+       "g": "missed",
+       "base": "놓치다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "짜증",
+       "g": "irritation"
+      },
+      {
+       "t": "나",
+       "g": "arises",
+       "base": "나다"
+      }
+     ]
+    ],
+    "en": "Missed the bus again, so annoying"
+   },
+   {
+    "context": "Complaining politely to a coworker about traffic",
+    "chips": [
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "짜증",
+       "g": "irritation"
+      },
+      {
+       "t": "나요",
+       "g": "arises (polite)",
+       "base": "나다"
+      }
+     ]
+    ],
+    "en": "It's really annoying"
+   }
+  ],
+  "related": [
+   "michyeosseo",
+   "aigoo",
+   "wae"
+  ],
+  "faq": [
+   {
+    "q": "Is jjajeungna rude?",
+    "a": "Saying it about a situation is fine among friends. Saying it about a person, like 너 짜증나, is hurtful."
+   },
+   {
+    "q": "What is the difference between jjajeungna and jjajeung nae?",
+    "a": "짜증나 means you feel annoyed. 짜증 내다 means you take it out on someone, like snapping at them."
+   },
+   {
+    "q": "How do you say it politely?",
+    "a": "짜증나요. It is still a complaint, so think twice before saying it to a boss."
+   }
+  ]
+ },
+ {
+  "slug": "oppa",
+  "ko": "오빠",
+  "roman": "oppa",
+  "aka": [
+   "opa",
+   "oppah",
+   "obba"
+  ],
+  "meaning": "Older brother (said by females)",
+  "category": "people",
+  "register": "casual",
+  "intro": "오빠 (oppa) means \"older brother\" and is used by girls and women to talk to or about an older male. It can mean a real older brother, but women also use it for older male friends, boyfriends, and male idols they admire.",
+  "literal": "오빠 is a native Korean family word. The older, more formal form is 오라버니, which you mostly hear today in historical dramas.",
+  "usage": [
+   "Only females say 오빠. A man talking to an older man uses 형 (hyung) instead. You can use it on its own as a name, like \"Oppa, wait!\", or add it after a first name, like 민호 오빠.",
+   "Outside the family, 오빠 shows closeness. A woman usually starts calling an older man 오빠 once they are friendly, so it can sound warm or even a little flirty depending on the situation. Between couples it is very common for a girlfriend to call her older boyfriend 오빠.",
+   "Do not use 오빠 for someone much older, like a man your father's age, or in a formal setting such as work. There, a title or 선배 (sunbae) fits better."
+  ],
+  "forms": [
+   {
+    "ko": "오빠야",
+    "en": "Oppa! (calling)",
+    "note": "Affectionate calling form, common in southeastern dialects and in cute speech."
+   },
+   {
+    "ko": "친오빠",
+    "en": "my biological older brother",
+    "note": "Used to make clear you mean a real brother."
+   },
+   {
+    "ko": "오빠들",
+    "en": "older brothers / oppas",
+    "note": "Plural. Fans often use it for a whole group."
+   },
+   {
+    "ko": "오라버니",
+    "en": "older brother (old-fashioned)",
+    "note": "Formal, old-style form heard in historical dramas."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Calling an older boyfriend who is running late",
+    "chips": [
+     [
+      {
+       "t": "오빠",
+       "g": "older brother"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "어디",
+       "g": "where"
+      },
+      {
+       "t": "야",
+       "g": "is (casual)",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Oppa, where are you?"
+   },
+   {
+    "context": "Telling a coworker about your family",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "my (lit. our)"
+      }
+     ],
+     [
+      {
+       "t": "오빠",
+       "g": "older brother"
+      },
+      {
+       "t": "는",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "군인",
+       "g": "soldier"
+      },
+      {
+       "t": "이에요",
+       "g": "is (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "My older brother is a soldier."
+   },
+   {
+    "context": "Thanking an older male friend who gave you a ride",
+    "chips": [
+     [
+      {
+       "t": "오빠",
+       "g": "older brother"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "고마워",
+       "g": "thanks (casual)",
+       "base": "고맙다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Thanks, oppa!"
+   }
+  ],
+  "related": [
+   "unnie",
+   "hyung",
+   "noona",
+   "jagiya"
+  ],
+  "faq": [
+   {
+    "q": "Can a guy say oppa?",
+    "a": "No. 오빠 is only used by females. Boys and men call an older male 형 (hyung)."
+   },
+   {
+    "q": "Does oppa mean boyfriend?",
+    "a": "Not literally. It means older brother, but many women call their older boyfriend 오빠, so in a dating context it often refers to a boyfriend."
+   },
+   {
+    "q": "Can I call my favorite idol oppa?",
+    "a": "Yes, if you are female and he is older than you. Fans do this all the time, and it is friendly rather than rude."
+   }
+  ]
+ },
+ {
+  "slug": "unnie",
+  "ko": "언니",
+  "roman": "unnie",
+  "aka": [
+   "unni",
+   "eonni",
+   "onni"
+  ],
+  "meaning": "Older sister (said by females)",
+  "category": "people",
+  "register": "casual",
+  "intro": "언니 (unnie) means \"older sister\" and is used by girls and women to talk to or about an older female. Besides real sisters, women use it for older female friends, coworkers they are close to, and female idols.",
+  "literal": "언니 is a native Korean family word with no smaller parts. The official romanization is \"eonni\", but \"unnie\" is the spelling most fans use.",
+  "usage": [
+   "Only females say 언니. A boy or man calls an older female 누나 (noona). You can use 언니 by itself or after a first name, like 지수 언니.",
+   "It sounds friendly and warm. Women often switch to 언니 once they feel close to an older woman, even if they met only recently. Some women also call female shop or restaurant staff 언니 in a casual, friendly way.",
+   "Avoid it in formal settings or with someone much older, such as a woman your mother's age."
+  ],
+  "forms": [
+   {
+    "ko": "언니야",
+    "en": "Unnie! (calling)",
+    "note": "Affectionate calling form."
+   },
+   {
+    "ko": "친언니",
+    "en": "my biological older sister",
+    "note": "Used to make clear you mean a real sister."
+   },
+   {
+    "ko": "큰언니",
+    "en": "oldest sister",
+    "note": "For the eldest of several sisters."
+   },
+   {
+    "ko": "언니들",
+    "en": "older sisters / unnies",
+    "note": "Plural."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Shopping with an older friend",
+    "chips": [
+     [
+      {
+       "t": "언니",
+       "g": "older sister"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "이거",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "예뻐요",
+       "g": "pretty (polite)",
+       "base": "예쁘다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Unnie, is this pretty?"
+   },
+   {
+    "context": "Telling a friend your weekend plans",
+    "chips": [
+     [
+      {
+       "t": "언니",
+       "g": "older sister"
+      },
+      {
+       "t": "랑",
+       "g": "with",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "같이",
+       "g": "together"
+      }
+     ],
+     [
+      {
+       "t": "가요",
+       "g": "go (polite)",
+       "base": "가다"
+      }
+     ]
+    ],
+    "en": "I'm going with my older sister."
+   },
+   {
+    "context": "Bragging about your sister",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "my (lit. our)"
+      }
+     ],
+     [
+      {
+       "t": "언니",
+       "g": "older sister"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "착해",
+       "g": "kind (casual)",
+       "base": "착하다"
+      }
+     ]
+    ],
+    "en": "My sister is really kind."
+   }
+  ],
+  "related": [
+   "oppa",
+   "noona",
+   "hyung",
+   "chingu"
+  ],
+  "faq": [
+   {
+    "q": "Can a guy say unnie?",
+    "a": "No. Males call an older female 누나 (noona). 언니 is only used by females."
+   },
+   {
+    "q": "Is it unnie or eonni?",
+    "a": "Both spell the same word, 언니. \"Eonni\" follows official romanization, while \"unnie\" and \"unni\" are the spellings fans see most."
+   },
+   {
+    "q": "Can I call a stranger unnie?",
+    "a": "Some women call female staff 언니 in casual places, but with strangers it is safer to use polite speech without a family title."
+   }
+  ]
+ },
+ {
+  "slug": "hyung",
+  "ko": "형",
+  "roman": "hyung",
+  "aka": [
+   "hyeong",
+   "hyungie",
+   "hyeung"
+  ],
+  "meaning": "Older brother (said by males)",
+  "category": "people",
+  "register": "casual",
+  "intro": "형 (hyung) means \"older brother\" and is used by boys and men to talk to or about an older male. Guys use it for real brothers and also for older male friends, teammates, and coworkers they are close to.",
+  "literal": "형 comes from the Chinese character 兄, meaning older brother. The honorific form is 형님.",
+  "usage": [
+   "Only males say 형 in everyday speech. A woman calling an older man uses 오빠 (oppa) instead. You can say 형 on its own or after a name, like 준호 형.",
+   "It shows friendly respect: you are close, but you still recognize the age difference. In K-pop groups, younger members call older members 형 all the time.",
+   "형님 is more respectful and is used for an older brother-in-law, for someone you look up to, or in a rough, gangster-movie style. Plain 형 is the normal choice among friends."
+  ],
+  "forms": [
+   {
+    "ko": "형님",
+    "en": "older brother (respectful)",
+    "note": "Honorific form. Also used for an older brother-in-law."
+   },
+   {
+    "ko": "형아",
+    "en": "big bro",
+    "note": "Childlike form, used by little kids or as a cute joke."
+   },
+   {
+    "ko": "친형",
+    "en": "my biological older brother",
+    "note": "Makes clear you mean a real brother."
+   },
+   {
+    "ko": "형들",
+    "en": "older brothers / hyungs",
+    "note": "Plural."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Checking on an older friend",
+    "chips": [
+     [
+      {
+       "t": "형",
+       "g": "older brother"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "밥",
+       "g": "meal (lit. rice)"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "었어",
+       "g": "past tense, casual",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hyung, did you eat?"
+   },
+   {
+    "context": "Cheering for an older teammate",
+    "chips": [
+     [
+      {
+       "t": "형",
+       "g": "older brother"
+      },
+      {
+       "t": "이",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "최고",
+       "g": "the best"
+      },
+      {
+       "t": "야",
+       "g": "is (casual)",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hyung, you're the best!"
+   },
+   {
+    "context": "Introducing your family",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "my (lit. our)"
+      }
+     ],
+     [
+      {
+       "t": "형",
+       "g": "older brother"
+      },
+      {
+       "t": "은",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "회사원",
+       "g": "office worker"
+      },
+      {
+       "t": "이에요",
+       "g": "is (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "My older brother is an office worker."
+   }
+  ],
+  "related": [
+   "oppa",
+   "noona",
+   "sunbae",
+   "maknae"
+  ],
+  "faq": [
+   {
+    "q": "Can girls say hyung?",
+    "a": "Normally no. Women call older men 오빠 (oppa). You may occasionally hear a woman use 형 in a joking or tomboyish way, but it is unusual."
+   },
+   {
+    "q": "What is the difference between hyung and hyungnim?",
+    "a": "형님 is the more respectful version. Friends say 형, while 형님 is for someone you want to show extra respect to, such as an older brother-in-law."
+   }
+  ]
+ },
+ {
+  "slug": "noona",
+  "ko": "누나",
+  "roman": "noona",
+  "aka": [
+   "nuna",
+   "noonah"
+  ],
+  "meaning": "Older sister (said by males)",
+  "category": "people",
+  "register": "casual",
+  "intro": "누나 (noona) means \"older sister\" and is used by boys and men to talk to or about an older female. Besides real sisters, guys use it for older female friends, coworkers they are close to, and older female fans or celebrities.",
+  "literal": "누나 is a native Korean family word. The respectful form is 누님.",
+  "usage": [
+   "Only males say 누나. A girl or woman calls an older female 언니 (unnie). You can use 누나 alone or after a name, like 수진 누나.",
+   "It sounds friendly and a little affectionate. Younger male idols often call older fans 누나, and a man dating an older woman may call her 누나.",
+   "Do not use it for a woman much older than you, such as someone your mother's age, or in formal situations."
+  ],
+  "forms": [
+   {
+    "ko": "누나야",
+    "en": "Noona! (calling)",
+    "note": "Affectionate calling form."
+   },
+   {
+    "ko": "누님",
+    "en": "older sister (respectful)",
+    "note": "Honorific form, sometimes used playfully."
+   },
+   {
+    "ko": "친누나",
+    "en": "my biological older sister",
+    "note": "Makes clear you mean a real sister."
+   },
+   {
+    "ko": "누나들",
+    "en": "older sisters / noonas",
+    "note": "Plural."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Asking an older friend for help",
+    "chips": [
+     [
+      {
+       "t": "누나",
+       "g": "older sister"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "도와줘",
+       "g": "help me (casual)",
+       "base": "도와주다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Noona, help me!"
+   },
+   {
+    "context": "Seeing an older coworker leave",
+    "chips": [
+     [
+      {
+       "t": "누나",
+       "g": "older sister"
+      },
+      {
+       "t": "는",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "어디",
+       "g": "where"
+      }
+     ],
+     [
+      {
+       "t": "가요",
+       "g": "go (polite)",
+       "base": "가다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Where are you going, noona?"
+   },
+   {
+    "context": "Sharing family news",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "my (lit. our)"
+      }
+     ],
+     [
+      {
+       "t": "누나",
+       "g": "older sister"
+      }
+     ],
+     [
+      {
+       "t": "결혼해요",
+       "g": "get married (polite)",
+       "base": "결혼하다"
+      }
+     ]
+    ],
+    "en": "My older sister is getting married."
+   }
+  ],
+  "related": [
+   "unnie",
+   "hyung",
+   "oppa",
+   "maknae"
+  ],
+  "faq": [
+   {
+    "q": "Can a girl say noona?",
+    "a": "No. Females call an older female 언니 (unnie). 누나 is only used by males."
+   },
+   {
+    "q": "Is noona romantic?",
+    "a": "Not by itself. It just means older sister. But a man dating an older woman often calls her 누나, so the context decides."
+   }
+  ]
+ },
+ {
+  "slug": "sunbae",
+  "ko": "선배",
+  "roman": "sunbae",
+  "aka": [
+   "seonbae",
+   "sunbaenim",
+   "sunbe"
+  ],
+  "meaning": "Senior (at school or work)",
+  "category": "people",
+  "register": "any",
+  "intro": "선배 (sunbae) means \"senior,\" someone who started at your school, club, or workplace before you did. Koreans use it both to describe that person and as a respectful way to address them.",
+  "literal": "선배 comes from Chinese characters: 先 (first, before) and 輩 (group or generation). So it means someone from an earlier group.",
+  "usage": [
+   "선배 is about who joined first, not strictly about age. A person who entered university a year before you is your 선배, even if you are the same age. The person who joined after you is your 후배 (hoobae).",
+   "To address a senior politely, add 님: 선배님. This is safest at work or with seniors you do not know well. Close friends from school often drop the 님 and just say 선배.",
+   "You also hear it in entertainment, where younger actors and idols call those who debuted earlier 선배님."
+  ],
+  "forms": [
+   {
+    "ko": "선배님",
+    "en": "senior (respectful)",
+    "note": "The polite way to address a senior."
+   },
+   {
+    "ko": "선배들",
+    "en": "seniors",
+    "note": "Plural."
+   },
+   {
+    "ko": "학교 선배",
+    "en": "senior at school",
+    "note": "Someone ahead of you at school."
+   },
+   {
+    "ko": "직장 선배",
+    "en": "senior at work",
+    "note": "Someone who joined the company before you."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Greeting a senior at the office",
+    "chips": [
+     [
+      {
+       "t": "선배",
+       "g": "senior"
+      },
+      {
+       "t": "님",
+       "g": "honorific title",
+       "p": true
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "안녕하세요",
+       "g": "hello (polite)",
+       "base": "안녕하다"
+      }
+     ]
+    ],
+    "en": "Hello, sunbae."
+   },
+   {
+    "context": "Offering a drink to a senior you're close to",
+    "chips": [
+     [
+      {
+       "t": "선배",
+       "g": "senior"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "커피",
+       "g": "coffee"
+      }
+     ],
+     [
+      {
+       "t": "드실래요",
+       "g": "would you like to have",
+       "base": "드시다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Sunbae, would you like some coffee?"
+   },
+   {
+    "context": "Introducing someone to a friend",
+    "chips": [
+     [
+      {
+       "t": "제",
+       "g": "my (humble)"
+      }
+     ],
+     [
+      {
+       "t": "대학",
+       "g": "college"
+      }
+     ],
+     [
+      {
+       "t": "선배",
+       "g": "senior"
+      },
+      {
+       "t": "예요",
+       "g": "is (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This is my senior from college."
+   }
+  ],
+  "related": [
+   "hoobae",
+   "hyung",
+   "unnie",
+   "kkondae"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between sunbae and hoobae?",
+    "a": "선배 is someone who started before you, and 후배 is someone who started after you. They are a pair."
+   },
+   {
+    "q": "Should I say sunbae or sunbaenim?",
+    "a": "선배님 is more polite and is the safe choice at work or with someone you are not close to. Plain 선배 is fine with seniors you know well."
+   }
+  ]
+ },
+ {
+  "slug": "hoobae",
+  "ko": "후배",
+  "roman": "hoobae",
+  "aka": [
+   "hubae",
+   "hoobe",
+   "hoobaenim"
+  ],
+  "meaning": "Junior (at school or work)",
+  "category": "people",
+  "register": "any",
+  "intro": "후배 (hoobae) means \"junior,\" someone who started at your school, club, or workplace after you did. It is the opposite of 선배 (sunbae), the senior.",
+  "literal": "후배 comes from Chinese characters: 後 (after, later) and 輩 (group or generation). So it means someone from a later group.",
+  "usage": [
+   "Like 선배, it is about who joined first, not about age. You use 후배 mostly to describe someone, as in \"she's my 후배 from college.\"",
+   "Unlike 선배, 후배 is not normally used as a title to call someone. To get a junior's attention you just use their name, often with 씨 at work.",
+   "In Korean culture seniors often look after their juniors, for example by paying for meals, and juniors show respect in return."
+  ],
+  "forms": [
+   {
+    "ko": "후배들",
+    "en": "juniors",
+    "note": "Plural."
+   },
+   {
+    "ko": "학교 후배",
+    "en": "junior at school",
+    "note": "Someone behind you at school."
+   },
+   {
+    "ko": "직장 후배",
+    "en": "junior at work",
+    "note": "Someone who joined the company after you."
+   },
+   {
+    "ko": "후배님",
+    "en": "junior (polite)",
+    "note": "Occasionally used, often in a polite or playful way."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Introducing a younger colleague",
+    "chips": [
+     [
+      {
+       "t": "제",
+       "g": "my (humble)"
+      }
+     ],
+     [
+      {
+       "t": "후배",
+       "g": "junior"
+      },
+      {
+       "t": "예요",
+       "g": "is (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This is my junior."
+   },
+   {
+    "context": "Telling a friend about lunch",
+    "chips": [
+     [
+      {
+       "t": "후배",
+       "g": "junior"
+      },
+      {
+       "t": "가",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "밥",
+       "g": "meal (lit. rice)"
+      }
+     ],
+     [
+      {
+       "t": "샀어",
+       "g": "bought (casual)",
+       "base": "사다"
+      }
+     ]
+    ],
+    "en": "My junior bought me a meal."
+   },
+   {
+    "context": "Praising the new team members",
+    "chips": [
+     [
+      {
+       "t": "후배",
+       "g": "junior"
+      },
+      {
+       "t": "들",
+       "g": "plural marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "착해요",
+       "g": "kind (polite)",
+       "base": "착하다"
+      }
+     ]
+    ],
+    "en": "My juniors are really nice."
+   }
+  ],
+  "related": [
+   "sunbae",
+   "maknae",
+   "noona",
+   "chingu"
+  ],
+  "faq": [
+   {
+    "q": "Can I call someone hoobae to their face?",
+    "a": "Not usually. 후배 is used to describe someone. When you talk to a junior, use their name instead."
+   },
+   {
+    "q": "Is a hoobae always younger?",
+    "a": "No. It depends on who joined first. A hoobae is often younger, but not always."
+   }
+  ]
+ },
+ {
+  "slug": "ahjussi",
+  "ko": "아저씨",
+  "roman": "ahjussi",
+  "aka": [
+   "ajussi",
+   "ajeossi",
+   "ahjusshi"
+  ],
+  "meaning": "Mister / middle-aged man",
+  "category": "people",
+  "register": "any",
+  "intro": "아저씨 (ahjussi) means \"mister\" or \"middle-aged man.\" Koreans use it to talk about or call out to a man who is roughly in his forties or older and is not a relative.",
+  "literal": "아저씨 is a native Korean word. It was once used for male relatives such as uncles, and today it mostly means an adult man in general.",
+  "usage": [
+   "You will hear it for shopkeepers, neighbors, delivery workers, or any older man whose name you don't know. Children also call their parents' male friends 아저씨.",
+   "It is not rude in itself, but younger men may not like being called 아저씨 because it makes them feel old. For taxi drivers, 기사님 is more polite, and for shop owners many people say 사장님.",
+   "아재 is a slangy form, and 아재 개그 means a corny \"dad joke.\""
+  ],
+  "forms": [
+   {
+    "ko": "아저씨들",
+    "en": "men / ahjussis",
+    "note": "Plural."
+   },
+   {
+    "ko": "옆집 아저씨",
+    "en": "the man next door",
+    "note": "Very common way to refer to a male neighbor."
+   },
+   {
+    "ko": "아재",
+    "en": "middle-aged guy (slang)",
+    "note": "Casual, often humorous."
+   },
+   {
+    "ko": "아재 개그",
+    "en": "dad joke",
+    "note": "A corny pun."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Buying fruit at a market stall",
+    "chips": [
+     [
+      {
+       "t": "아저씨",
+       "g": "mister"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "이거",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "얼마",
+       "g": "how much"
+      },
+      {
+       "t": "예요",
+       "g": "is (polite)",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Excuse me, sir, how much is this?"
+   },
+   {
+    "context": "Asking a friend about a man outside",
+    "chips": [
+     [
+      {
+       "t": "그",
+       "g": "that"
+      }
+     ],
+     [
+      {
+       "t": "아저씨",
+       "g": "man"
+      }
+     ],
+     [
+      {
+       "t": "누구",
+       "g": "who"
+      },
+      {
+       "t": "야",
+       "g": "is (casual)",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Who's that man?"
+   },
+   {
+    "context": "Explaining where a gift came from",
+    "chips": [
+     [
+      {
+       "t": "옆집",
+       "g": "next door"
+      }
+     ],
+     [
+      {
+       "t": "아저씨",
+       "g": "man"
+      },
+      {
+       "t": "가",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "주셨어요",
+       "g": "gave (honorific, polite)",
+       "base": "주다"
+      }
+     ]
+    ],
+    "en": "The man next door gave it to me."
+   }
+  ],
+  "related": [
+   "ajumma",
+   "oppa",
+   "kkondae"
+  ],
+  "faq": [
+   {
+    "q": "Is ahjussi rude?",
+    "a": "No, it is a normal word. It can bother a man who thinks he is too young to be an 아저씨, so with younger men or professionals, a job title like 기사님 or 사장님 is safer."
+   },
+   {
+    "q": "What age is an ahjussi?",
+    "a": "There is no fixed age, but it usually means a man in his late thirties or older, or anyone who looks like a grown-up to the speaker."
+   }
+  ]
+ },
+ {
+  "slug": "ajumma",
+  "ko": "아줌마",
+  "roman": "ajumma",
+  "aka": [
+   "ahjumma",
+   "ajoomma",
+   "ajumeoni"
+  ],
+  "meaning": "Middle-aged woman / ma'am",
+  "category": "people",
+  "register": "casual",
+  "intro": "아줌마 (ajumma) means \"middle-aged woman\" or \"ma'am.\" It usually refers to a married woman or a woman of about forty and older who is not a relative.",
+  "literal": "아줌마 is a casual form of 아주머니, a native Korean word for a married woman or a woman of one's parents' generation.",
+  "usage": [
+   "Be careful with it. Many women feel 아줌마 sounds old or a bit disrespectful, especially from a stranger. When calling a woman you don't know, 아주머니 is more polite, and in restaurants people often say 이모 (\"auntie\") or 사장님 (\"boss\").",
+   "It is very common when talking about women in general, like \"the ajummas in my neighborhood,\" and women in their forties or fifties often use it about themselves with a laugh.",
+   "It also brings to mind a stereotype of a tough, practical older woman, which is why it shows up often in comedy."
+  ],
+  "forms": [
+   {
+    "ko": "아주머니",
+    "en": "ma'am (polite)",
+    "note": "More polite version."
+   },
+   {
+    "ko": "아줌마들",
+    "en": "ajummas",
+    "note": "Plural."
+   },
+   {
+    "ko": "이모",
+    "en": "auntie",
+    "note": "Friendly way to call a woman who works in a restaurant."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Asking for more side dishes at a small diner",
+    "chips": [
+     [
+      {
+       "t": "아줌마",
+       "g": "ma'am"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "김치",
+       "g": "kimchi"
+      }
+     ],
+     [
+      {
+       "t": "더",
+       "g": "more"
+      }
+     ],
+     [
+      {
+       "t": "주세요",
+       "g": "please give",
+       "base": "주다"
+      }
+     ]
+    ],
+    "en": "Ma'am, more kimchi, please."
+   },
+   {
+    "context": "Gossiping about the neighborhood",
+    "chips": [
+     [
+      {
+       "t": "동네",
+       "g": "neighborhood"
+      }
+     ],
+     [
+      {
+       "t": "아줌마",
+       "g": "ajumma"
+      },
+      {
+       "t": "들",
+       "g": "plural marker",
+       "p": true
+      },
+      {
+       "t": "이",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "다",
+       "g": "all"
+      }
+     ],
+     [
+      {
+       "t": "알아요",
+       "g": "know (polite)",
+       "base": "알다"
+      }
+     ]
+    ],
+    "en": "All the neighborhood ajummas know."
+   },
+   {
+    "context": "Joking about getting older",
+    "chips": [
+     [
+      {
+       "t": "나",
+       "g": "I"
+      }
+     ],
+     [
+      {
+       "t": "이제",
+       "g": "now"
+      }
+     ],
+     [
+      {
+       "t": "아줌마",
+       "g": "ajumma"
+      },
+      {
+       "t": "야",
+       "g": "is (casual)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I'm an ajumma now."
+   }
+  ],
+  "related": [
+   "ahjussi",
+   "unnie",
+   "nunchi"
+  ],
+  "faq": [
+   {
+    "q": "Is ajumma rude?",
+    "a": "It can be. It is not a swear word, but many women dislike being called 아줌마 by strangers. 아주머니, 이모, or 사장님 are safer choices."
+   },
+   {
+    "q": "What is the difference between ajumma and ajumeoni?",
+    "a": "They mean the same thing. 아주머니 (ajumeoni) is the more polite form and 아줌마 is the casual one."
+   }
+  ]
+ },
+ {
+  "slug": "maknae",
+  "ko": "막내",
+  "roman": "maknae",
+  "aka": [
+   "mangnae",
+   "makne",
+   "maknea"
+  ],
+  "meaning": "The youngest member",
+  "category": "people",
+  "register": "any",
+  "intro": "막내 (maknae) means \"the youngest\" in a family or group. K-pop fans use it for the youngest member of an idol group, and Koreans use it for the youngest child, the newest employee on a team, and so on.",
+  "literal": "막내 is a native Korean word for the last-born child.",
+  "usage": [
+   "You can say it about someone (\"she's our 막내\") or call the youngest person 막내야. It sounds affectionate, since the youngest is often the one everyone looks after.",
+   "At work, being the 막내 can also mean you get the small chores, like ordering lunch, so people sometimes say it with a sigh.",
+   "The pronunciation is closer to \"mang-nae\" because of how ㄱ and ㄴ blend, which is why some people write \"mangnae.\""
+  ],
+  "forms": [
+   {
+    "ko": "막내야",
+    "en": "Hey, youngest! (calling)",
+    "note": "Calling form."
+   },
+   {
+    "ko": "막내딸",
+    "en": "youngest daughter",
+    "note": ""
+   },
+   {
+    "ko": "막내아들",
+    "en": "youngest son",
+    "note": ""
+   },
+   {
+    "ko": "황금막내",
+    "en": "golden maknae",
+    "note": "Fan term for a youngest member who is good at everything."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Saying where you rank in your family",
+    "chips": [
+     [
+      {
+       "t": "제",
+       "g": "I (humble)"
+      },
+      {
+       "t": "가",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "막내",
+       "g": "the youngest"
+      },
+      {
+       "t": "예요",
+       "g": "is (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I'm the youngest."
+   },
+   {
+    "context": "Showing a photo of the youngest member",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "our"
+      }
+     ],
+     [
+      {
+       "t": "막내",
+       "g": "the youngest"
+      }
+     ],
+     [
+      {
+       "t": "귀엽",
+       "g": "cute",
+       "base": "귀엽다"
+      },
+      {
+       "t": "지",
+       "g": "right? (casual)",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Isn't our maknae cute?"
+   },
+   {
+    "context": "An older sibling calling the youngest",
+    "chips": [
+     [
+      {
+       "t": "막내",
+       "g": "the youngest"
+      },
+      {
+       "t": "야",
+       "g": "calling ending",
+       "p": true
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "이리",
+       "g": "over here"
+      }
+     ],
+     [
+      {
+       "t": "와",
+       "g": "come (casual)",
+       "base": "오다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hey, little one, come here!"
+   }
+  ],
+  "related": [
+   "hyung",
+   "unnie",
+   "hoobae",
+   "aegyo"
+  ],
+  "faq": [
+   {
+    "q": "What does maknae mean in K-pop?",
+    "a": "It is the youngest member of the group. Some groups also have a 막내 for each sub-unit or line."
+   },
+   {
+    "q": "Is maknae only for families?",
+    "a": "No. It works for any group: a family, a team at work, a club, or an idol group."
+   }
+  ]
+ },
+ {
+  "slug": "chingu",
+  "ko": "친구",
+  "roman": "chingu",
+  "aka": [
+   "chinggu",
+   "cingu",
+   "chingoo"
+  ],
+  "meaning": "Friend",
+  "category": "people",
+  "register": "any",
+  "intro": "친구 (chingu) means \"friend.\" In Korea it usually means a friend who is the same age as you, while older friends are called by titles like 언니, 오빠, 형, or 누나.",
+  "literal": "친구 comes from Chinese characters: 親 (close, intimate) and 舊 (old). So it is roughly an \"old, close\" companion.",
+  "usage": [
+   "Age matters a lot in Korean friendships. People born in the same year are naturally 친구 and can talk casually with each other. With someone older, Koreans usually use a family title instead of calling them 친구.",
+   "You can also use it like \"buddy\" to call someone, as 친구야, and it appears inside words like 남자친구 (boyfriend) and 여자친구 (girlfriend).",
+   "Saying \"우리 친구 하자\" (\"let's be friends\") is a common, sweet way to suggest becoming friends, often used when two people find out they are the same age."
+  ],
+  "forms": [
+   {
+    "ko": "친구야",
+    "en": "Hey, friend! (calling)",
+    "note": "Calling form."
+   },
+   {
+    "ko": "친구들",
+    "en": "friends",
+    "note": "Plural."
+   },
+   {
+    "ko": "남자친구 / 남친",
+    "en": "boyfriend",
+    "note": "남친 is the short, casual form."
+   },
+   {
+    "ko": "여자친구 / 여친",
+    "en": "girlfriend",
+    "note": "여친 is the short, casual form."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Introducing someone at a party",
+    "chips": [
+     [
+      {
+       "t": "내",
+       "g": "my"
+      }
+     ],
+     [
+      {
+       "t": "친구",
+       "g": "friend"
+      },
+      {
+       "t": "야",
+       "g": "is (casual)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This is my friend."
+   },
+   {
+    "context": "Telling your mom what you did",
+    "chips": [
+     [
+      {
+       "t": "친구",
+       "g": "friend"
+      },
+      {
+       "t": "랑",
+       "g": "with",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "영화",
+       "g": "movie"
+      }
+     ],
+     [
+      {
+       "t": "봤어",
+       "g": "watched (casual)",
+       "base": "보다"
+      }
+     ]
+    ],
+    "en": "I watched a movie with a friend."
+   },
+   {
+    "context": "Finding out you were born the same year",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "we"
+      }
+     ],
+     [
+      {
+       "t": "친구",
+       "g": "friend"
+      }
+     ],
+     [
+      {
+       "t": "하자",
+       "g": "let's do",
+       "base": "하다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's be friends!"
+   }
+  ],
+  "related": [
+   "hyung",
+   "unnie",
+   "sseom",
+   "gganbu"
+  ],
+  "faq": [
+   {
+    "q": "Can an older person be my chingu?",
+    "a": "In casual English you would call them a friend, but in Korean you would usually call them 언니, 오빠, 형, or 누나 instead of 친구, especially to their face."
+   },
+   {
+    "q": "How do you say boyfriend and girlfriend in Korean?",
+    "a": "남자친구 (boyfriend) and 여자친구 (girlfriend). In casual talk they shorten to 남친 and 여친."
+   }
+  ]
+ },
+ {
+  "slug": "kkondae",
+  "ko": "꼰대",
+  "roman": "kkondae",
+  "aka": [
+   "ggondae",
+   "kondae",
+   "kkon dae"
+  ],
+  "meaning": "Preachy, bossy older person",
+  "category": "people",
+  "register": "casual",
+  "intro": "꼰대 (kkondae) is Korean slang for a preachy, bossy person, usually older or more senior, who lectures others and insists their way is the only right way. Think of a boss who keeps saying \"Back in my day...\" It is an insult, not a neutral word.",
+  "literal": "It was once teen slang for a father or a teacher. Over time it came to mean anyone who acts superior and old-fashioned, regardless of age.",
+  "usage": [
+   "People call a manager, senior or relative a 꼰대 when that person gives unwanted advice, looks down on younger people or forces outdated rules on them. You hear it often in office comedies and dramas about workplace life.",
+   "It is said behind someone's back or among friends. Calling someone a 꼰대 to their face is rude. Young people can be 꼰대 too, when they boss around people below them.",
+   "A famous joke line is 라떼는 말이야 (\"Latte is horse\"), a pun on 나 때는 말이야 (\"Back in my day\"), used to mock kkondae-style lectures."
+  ],
+  "forms": [
+   {
+    "ko": "꼰대질",
+    "en": "Acting like a kkondae",
+    "note": "Lecturing or bossing people around."
+   },
+   {
+    "ko": "젊은 꼰대",
+    "en": "Young kkondae",
+    "note": "A young person who acts preachy and bossy."
+   },
+   {
+    "ko": "나 때는 말이야",
+    "en": "Back in my day...",
+    "note": "The stereotypical kkondae opening line."
+   },
+   {
+    "ko": "라떼는 말이야",
+    "en": "Back in my day (pun)",
+    "note": "Joke version mocking kkondae talk."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Complaining to a friend about work",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "our / my"
+      }
+     ],
+     [
+      {
+       "t": "부장",
+       "g": "department head"
+      },
+      {
+       "t": "님",
+       "g": "honorific suffix",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "완전",
+       "g": "totally"
+      }
+     ],
+     [
+      {
+       "t": "꼰대",
+       "g": "preachy boss type"
+      },
+      {
+       "t": "야",
+       "g": "casual \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "My department head is a total kkondae."
+   },
+   {
+    "context": "Checking yourself after giving advice",
+    "chips": [
+     [
+      {
+       "t": "나",
+       "g": "I"
+      }
+     ],
+     [
+      {
+       "t": "꼰대",
+       "g": "preachy boss type"
+      }
+     ],
+     [
+      {
+       "t": "같",
+       "g": "seem like",
+       "base": "같다"
+      },
+      {
+       "t": "아",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Do I sound like a kkondae?"
+   },
+   {
+    "context": "Teasing a friend who is lecturing you",
+    "chips": [
+     [
+      {
+       "t": "꼰대",
+       "g": "preachy boss type"
+      },
+      {
+       "t": "처럼",
+       "g": "like",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "굴",
+       "g": "behave",
+       "base": "굴다"
+      },
+      {
+       "t": "지",
+       "g": "connector before 말다",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "마",
+       "g": "don't",
+       "base": "말다"
+      }
+     ]
+    ],
+    "en": "Don't act like a kkondae."
+   }
+  ],
+  "related": [
+   "sunbae",
+   "hoobae",
+   "ahjussi",
+   "nunchi"
+  ],
+  "faq": [
+   {
+    "q": "Is kkondae an insult?",
+    "a": "Yes. It criticizes someone for being preachy, bossy and old-fashioned. Don't call someone a 꼰대 to their face unless you are clearly joking with a close friend."
+   },
+   {
+    "q": "Can a young person be a kkondae?",
+    "a": "Yes. The word is about attitude, not age. A young person who lectures juniors is called a 젊은 꼰대 (\"young kkondae\")."
+   },
+   {
+    "q": "What does latte is horse mean?",
+    "a": "It is a pun on 나 때는 말이야 (\"Back in my day...\"). 나 때 sounds like \"latte\" and 말 also means \"horse\". People use it to tease kkondae-style talk."
+   }
+  ]
+ },
+ {
+  "slug": "gganbu",
+  "ko": "깐부",
+  "roman": "gganbu",
+  "aka": [
+   "kkanbu",
+   "ggan bu",
+   "kkambu"
+  ],
+  "meaning": "Close buddy / partner",
+  "category": "people",
+  "register": "casual",
+  "intro": "깐부 (gganbu) means a close buddy or partner, someone on your side who shares everything with you. It is old children's slang from games like marbles, where 깐부 were teammates who shared their winnings. The word became famous worldwide through the Netflix series Squid Game (2021).",
+  "literal": "Its exact origin is not clear. It was used among kids in the past, so many older Koreans remember it from childhood.",
+  "usage": [
+   "Today people use 깐부 playfully to mean a best friend, a partner in crime or someone you trust completely. It has a warm, slightly nostalgic feel.",
+   "It is casual. Use it with friends, or in a lighthearted way in speeches and ads. In everyday conversation, 친구 (chingu, \"friend\") or 베프 (\"best friend\") are more common.",
+   "After Squid Game, many brands and public figures used the word for fun, so many younger people learned it from the show."
+  ],
+  "forms": [
+   {
+    "ko": "깐부잖아",
+    "en": "We're buddies, aren't we?",
+    "note": "Casual, reminding someone of your bond."
+   },
+   {
+    "ko": "깐부 하자",
+    "en": "Let's be buddies",
+    "note": "What kids say to team up."
+   },
+   {
+    "ko": "친구",
+    "en": "Friend",
+    "note": "Standard everyday word."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Asking a friend to share their snack",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "we"
+      }
+     ],
+     [
+      {
+       "t": "깐부",
+       "g": "close buddy"
+      },
+      {
+       "t": "잖아",
+       "g": "you know / aren't we",
+       "p": true
+      }
+     ]
+    ],
+    "en": "We're buddies, aren't we?"
+   },
+   {
+    "context": "Making a pact with your best friend",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      },
+      {
+       "t": "랑",
+       "g": "and",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "나",
+       "g": "I"
+      },
+      {
+       "t": "는",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "깐부",
+       "g": "close buddy"
+      },
+      {
+       "t": "야",
+       "g": "casual \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "You and I are partners."
+   },
+   {
+    "context": "Teaming up for a game",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "we"
+      }
+     ],
+     [
+      {
+       "t": "깐부",
+       "g": "close buddy"
+      }
+     ],
+     [
+      {
+       "t": "하",
+       "g": "do",
+       "base": "하다"
+      },
+      {
+       "t": "자",
+       "g": "let's",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's be partners."
+   }
+  ],
+  "related": [
+   "chingu",
+   "hyung",
+   "sunbae"
+  ],
+  "faq": [
+   {
+    "q": "What does gganbu mean in Squid Game?",
+    "a": "It means a close partner who shares everything, the kind of friend you team up with in childhood games. The show made the old word famous around the world."
+   },
+   {
+    "q": "Is gganbu a real Korean word?",
+    "a": "Yes. It is older children's slang that many Koreans remember from playing games like marbles. It is not in everyday use like 친구, but most people understand it."
+   },
+   {
+    "q": "Can I call my friend gganbu?",
+    "a": "Yes, it is a friendly, playful word. Just keep it for casual situations."
+   }
+  ]
+ },
+ {
+  "slug": "jagiya",
+  "ko": "자기야",
+  "roman": "jagiya",
+  "aka": [
+   "jagi",
+   "chagiya",
+   "jagiyah"
+  ],
+  "meaning": "Honey / babe",
+  "category": "love",
+  "register": "casual",
+  "intro": "자기야 (jagiya) means \"honey\" or \"babe.\" It is what couples call each other, especially dating couples and young married couples.",
+  "literal": "자기 means \"oneself,\" and 야 is the ending used when calling someone. Couples also use 자기 alone to mean \"you.\"",
+  "usage": [
+   "자기야 is for calling out to your partner, like \"Babe, where are you?\" Without the 야, 자기 works like \"you\" in a sweet way, as in 자기는 뭐 먹을래? (\"What do you want to eat, honey?\").",
+   "Use it only with a romantic partner. Calling a friend 자기야 would sound strange or like a joke. Some middle-aged women also call close friends 자기, but that is a separate habit.",
+   "Married couples often move on to 여보 (yeobo), but many keep using 자기야 too."
+  ],
+  "forms": [
+   {
+    "ko": "자기",
+    "en": "you / honey",
+    "note": "Used by couples as a sweet word for \"you\"."
+   },
+   {
+    "ko": "자기야",
+    "en": "Honey! (calling)",
+    "note": "Calling form."
+   },
+   {
+    "ko": "여보",
+    "en": "honey (between spouses)",
+    "note": "More typical for married couples."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting your partner in the evening",
+    "chips": [
+     [
+      {
+       "t": "자기",
+       "g": "honey"
+      },
+      {
+       "t": "야",
+       "g": "calling ending",
+       "p": true
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      }
+     ],
+     [
+      {
+       "t": "해",
+       "g": "do (casual)",
+       "base": "하다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Babe, what are you doing?"
+   },
+   {
+    "context": "Saying goodbye on the phone",
+    "chips": [
+     [
+      {
+       "t": "자기",
+       "g": "honey"
+      },
+      {
+       "t": "야",
+       "g": "calling ending",
+       "p": true
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "사랑해",
+       "g": "I love you (casual)",
+       "base": "사랑하다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Honey, I love you!"
+   },
+   {
+    "context": "Messaging your partner while apart",
+    "chips": [
+     [
+      {
+       "t": "자기",
+       "g": "honey"
+      },
+      {
+       "t": "야",
+       "g": "calling ending",
+       "p": true
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "see",
+       "base": "보다"
+      },
+      {
+       "t": "고",
+       "g": "connecting ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "싶",
+       "g": "want",
+       "base": "싶다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Babe, I miss you."
+   }
+  ],
+  "related": [
+   "yeobo",
+   "saranghae",
+   "oppa",
+   "aegyo"
+  ],
+  "faq": [
+   {
+    "q": "Can I call my friend jagiya?",
+    "a": "Not really. It is a couples' word, so using it with a friend sounds like teasing."
+   },
+   {
+    "q": "What is the difference between jagiya and yeobo?",
+    "a": "자기야 is used by dating and married couples alike. 여보 is mainly used between married couples."
+   }
+  ]
+ },
+ {
+  "slug": "yeobo",
+  "ko": "여보",
+  "roman": "yeobo",
+  "aka": [
+   "yobo",
+   "yeobo-ya",
+   "yobbo"
+  ],
+  "meaning": "Honey (between spouses)",
+  "category": "love",
+  "register": "any",
+  "intro": "여보 (yeobo) means \"honey\" or \"dear\" and is what married couples call each other. You hear it constantly from husbands and wives in K-dramas.",
+  "literal": "여보 is related to 여보세요, the \"hello\" Koreans say on the phone. Both are often explained as coming from an old way of saying \"look here.\"",
+  "usage": [
+   "It is used mainly by married couples, often middle-aged or older ones. Young dating couples usually say 자기야 instead, and using 여보 while dating can sound like playful pretending to be married.",
+   "Couples say it with both casual and polite speech, so you will hear 여보, 밥 먹어 as well as 여보, 밥 먹어요.",
+   "Do not confuse it with 여보세요, which is for answering the phone, not for your spouse."
+  ],
+  "forms": [
+   {
+    "ko": "여보세요",
+    "en": "Hello? (on the phone)",
+    "note": "Related word, used to answer calls."
+   },
+   {
+    "ko": "당신",
+    "en": "you (to a spouse)",
+    "note": "How spouses often say \"you\" to each other."
+   },
+   {
+    "ko": "자기야",
+    "en": "honey",
+    "note": "Common among dating and young married couples."
+   }
+  ],
+  "examples": [
+   {
+    "context": "A wife calling her husband to dinner",
+    "chips": [
+     [
+      {
+       "t": "여보",
+       "g": "honey"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "밥",
+       "g": "meal (lit. rice)"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "어요",
+       "g": "polite ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Honey, let's eat."
+   },
+   {
+    "context": "Looking for your spouse at home",
+    "chips": [
+     [
+      {
+       "t": "여보",
+       "g": "honey"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "어디",
+       "g": "where"
+      }
+     ],
+     [
+      {
+       "t": "있",
+       "g": "be (somewhere)",
+       "base": "있다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Honey, where are you?"
+   },
+   {
+    "context": "Thanking your spouse for a gift",
+    "chips": [
+     [
+      {
+       "t": "여보",
+       "g": "honey"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "고마워요",
+       "g": "thank you (polite)",
+       "base": "고맙다"
+      }
+     ]
+    ],
+    "en": "Thank you, honey."
+   }
+  ],
+  "related": [
+   "jagiya",
+   "saranghae",
+   "ahjussi",
+   "ajumma"
+  ],
+  "faq": [
+   {
+    "q": "Can unmarried couples say yeobo?",
+    "a": "They can, but it usually sounds like a joke or like they are acting married. 자기야 is the normal choice for dating couples."
+   },
+   {
+    "q": "Is yeobo the same as yeoboseyo?",
+    "a": "No. 여보 is for your spouse, and 여보세요 is \"hello\" on the phone. The two words are related, but they are used very differently."
+   }
+  ]
+ },
+ {
+  "slug": "aegyo",
+  "ko": "애교",
+  "roman": "aegyo",
+  "aka": [
+   "aeygo",
+   "egyo"
+  ],
+  "meaning": "Acting cute and charming",
+  "category": "love",
+  "register": "any",
+  "intro": "애교 (aegyo) means acting cute and charming, often with a baby-like voice, pouting, or sweet gestures. K-pop idols are often asked to show 애교 on variety shows.",
+  "literal": "애교 comes from Chinese characters: 愛 (love) and 嬌 (charming, lovely).",
+  "usage": [
+   "People show 애교 to a partner, to parents, or to fans, usually to be endearing or to get their way. It can be playful and sweet, but too much can seem fake or childish.",
+   "The usual verb is 애교를 부리다, \"to act cute.\" To say someone is naturally charming, Koreans say 애교가 많다, literally \"has a lot of aegyo.\"",
+   "Both men and women do it. A parent might also say a young child has a lot of 애교."
+  ],
+  "forms": [
+   {
+    "ko": "애교 부리다",
+    "en": "to act cute",
+    "note": "The standard verb phrase."
+   },
+   {
+    "ko": "애교가 많다",
+    "en": "to be very charming",
+    "note": "Describes someone who is naturally cute."
+   },
+   {
+    "ko": "애교쟁이",
+    "en": "a cutie, someone full of aegyo",
+    "note": "Affectionate nickname."
+   },
+   {
+    "ko": "애교살",
+    "en": "puffy under-eye area",
+    "note": "Considered cute; literally \"aegyo flesh\"."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Teasing your partner",
+    "chips": [
+     [
+      {
+       "t": "애교",
+       "g": "aegyo"
+      }
+     ],
+     [
+      {
+       "t": "좀",
+       "g": "a little"
+      }
+     ],
+     [
+      {
+       "t": "부려",
+       "g": "do (aegyo)",
+       "base": "부리다"
+      }
+     ],
+     [
+      {
+       "t": "봐",
+       "g": "try (casual)",
+       "base": "보다"
+      }
+     ]
+    ],
+    "en": "Come on, act cute for me."
+   },
+   {
+    "context": "A mom talking about her daughter",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "our"
+      }
+     ],
+     [
+      {
+       "t": "딸",
+       "g": "daughter"
+      },
+      {
+       "t": "은",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "애교",
+       "g": "aegyo"
+      },
+      {
+       "t": "가",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "많",
+       "g": "a lot",
+       "base": "많다"
+      },
+      {
+       "t": "아요",
+       "g": "polite ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Our daughter is so charming."
+   },
+   {
+    "context": "Reacting to a friend being sweet",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "애교",
+       "g": "aegyo"
+      }
+     ],
+     [
+      {
+       "t": "많",
+       "g": "a lot",
+       "base": "많다"
+      },
+      {
+       "t": "다",
+       "g": "plain ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "You're so cute!"
+   }
+  ],
+  "related": [
+   "maknae",
+   "jagiya",
+   "oppa",
+   "jjang"
+  ],
+  "faq": [
+   {
+    "q": "Is aegyo only for girls?",
+    "a": "No. Men and boys do 애교 too, and male idols are often asked to show it."
+   },
+   {
+    "q": "How do you do aegyo?",
+    "a": "Common moves are a cute, high-pitched voice, stretching words, pouting, and small hand gestures like finger hearts. The goal is to seem sweet and endearing."
+   }
+  ]
+ },
+ {
+  "slug": "saranghae",
+  "ko": "사랑해",
+  "roman": "saranghae",
+  "aka": [
+   "sarang hae",
+   "saranghe",
+   "salanghae"
+  ],
+  "meaning": "I love you",
+  "category": "love",
+  "register": "casual",
+  "intro": "사랑해 (saranghae) means \"I love you\" in Korean. It is the casual form, so people say it to partners, close friends, siblings and children. You will hear it constantly in K-dramas, love songs and fan messages to idols.",
+  "literal": "It comes from the verb 사랑하다 (saranghada), \"to love,\" which is 사랑 (love) plus 하다 (to do). 해 is the casual present-tense ending, so the word on its own means \"(I) love (you).\"",
+  "usage": [
+   "Korean usually drops \"I\" and \"you\" when they are obvious, so 사랑해 by itself is a complete sentence. Adding 너를 (you) is possible but often sounds heavier or more dramatic.",
+   "Because it is casual, use it with people you are close to. With parents many families use 사랑해 too, though some people switch to the polite 사랑해요, especially with grandparents or in a letter.",
+   "Saying 사랑해 to someone you just started dating can feel fast in Korea, the same as in English. Couples often say 좋아해 (I like you) first."
+  ],
+  "forms": [
+   {
+    "ko": "사랑해요",
+    "en": "I love you (polite)",
+    "note": "Polite form for parents, grandparents, or fans to idols."
+   },
+   {
+    "ko": "사랑합니다",
+    "en": "I love you (formal)",
+    "note": "Formal form, common in speeches, letters and on stage."
+   },
+   {
+    "ko": "사랑한다",
+    "en": "I love you",
+    "note": "Plain form; sounds firm or dramatic, often heard in dramas."
+   },
+   {
+    "ko": "나도 사랑해",
+    "en": "I love you too",
+    "note": "Casual reply."
+   },
+   {
+    "ko": "많이 사랑해",
+    "en": "I love you so much",
+    "note": "Literally \"I love you a lot.\""
+   }
+  ],
+  "examples": [
+   {
+    "context": "Saying goodbye to mom on the phone",
+    "chips": [
+     [
+      {
+       "t": "엄마",
+       "g": "mom"
+      }
+     ],
+     [
+      {
+       "t": "사랑해",
+       "g": "I love you",
+       "base": "사랑하다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Mom, I love you!"
+   },
+   {
+    "context": "Replying to a partner's message",
+    "chips": [
+     [
+      {
+       "t": "나",
+       "g": "I"
+      },
+      {
+       "t": "도",
+       "g": "too",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "사랑해",
+       "g": "love you",
+       "base": "사랑하다"
+      }
+     ]
+    ],
+    "en": "I love you too."
+   },
+   {
+    "context": "A fan's letter to an idol",
+    "chips": [
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "많이",
+       "g": "a lot"
+      }
+     ],
+     [
+      {
+       "t": "사랑해요",
+       "g": "love you (polite)",
+       "base": "사랑하다"
+      }
+     ]
+    ],
+    "en": "I really love you so much."
+   }
+  ],
+  "related": [
+   "joahae",
+   "bogo-sipeo",
+   "jagiya",
+   "yeobo"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between saranghae and saranghaeyo?",
+    "a": "Both mean \"I love you.\" 사랑해 is casual, for people close to you, and 사랑해요 adds the polite ending 요, which is safer with older people or when speaking publicly."
+   },
+   {
+    "q": "How do you reply to saranghae?",
+    "a": "The usual reply is 나도 사랑해 (nado saranghae), \"I love you too.\" Politely, say 저도 사랑해요 (jeodo saranghaeyo)."
+   },
+   {
+    "q": "Is saranghae only romantic?",
+    "a": "No. Koreans say it to family and close friends too, much like English speakers say \"love you\" to a sibling or best friend."
+   }
+  ]
+ },
+ {
+  "slug": "bogo-sipeo",
+  "ko": "보고 싶어",
+  "roman": "bogo sipeo",
+  "aka": [
+   "bogoshipo",
+   "bogo shipo",
+   "bogo sipo",
+   "bogoshipeo"
+  ],
+  "meaning": "I miss you",
+  "category": "love",
+  "register": "casual",
+  "intro": "보고 싶어 (bogo sipeo) means \"I miss you\" in Korean. Word for word it is \"I want to see (you),\" and it is the casual form you use with partners, friends and family. It also simply means \"I want to see it,\" for example a movie.",
+  "literal": "보다 (boda) means \"to see\" and -고 싶다 (-go sipda) means \"to want to.\" Together, 보고 싶다 is \"to want to see,\" and 싶어 is the casual ending.",
+  "usage": [
+   "Korean has no separate verb for \"to miss someone.\" Wanting to see them is how you say it, so 보고 싶어 covers both \"I miss you\" and \"I want to see you.\"",
+   "It is casual, so keep it for people you are close to. With parents or older people, add 요: 보고 싶어요.",
+   "Learners often hear \"bogoshipo\" in songs. The standard spelling is 보고 싶어, with a space, though many people type it as 보고싶어 in texts."
+  ],
+  "forms": [
+   {
+    "ko": "보고 싶어요",
+    "en": "I miss you (polite)",
+    "note": "Add 요 for politeness."
+   },
+   {
+    "ko": "보고 싶다",
+    "en": "I miss you / I want to see",
+    "note": "Plain form; often said to yourself or written in a post."
+   },
+   {
+    "ko": "보고 싶었어",
+    "en": "I missed you",
+    "note": "Past tense, said when you finally meet."
+   },
+   {
+    "ko": "너무 보고 싶어",
+    "en": "I miss you so much",
+    "note": "Very common in texts."
+   },
+   {
+    "ko": "보고싶어",
+    "en": "I miss you",
+    "note": "Common typed version without the space."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting a partner who is away",
+    "chips": [
+     [
+      {
+       "t": "너무",
+       "g": "so much"
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "see",
+       "base": "보다"
+      },
+      {
+       "t": "고",
+       "g": "connecting ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "싶",
+       "g": "want",
+       "base": "싶다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I miss you so much."
+   },
+   {
+    "context": "A student living away from home",
+    "chips": [
+     [
+      {
+       "t": "엄마",
+       "g": "mom"
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "see",
+       "base": "보다"
+      },
+      {
+       "t": "고",
+       "g": "connecting ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "싶",
+       "g": "want",
+       "base": "싶다"
+      },
+      {
+       "t": "어요",
+       "g": "polite ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I miss my mom."
+   },
+   {
+    "context": "Meeting a friend after a long time",
+    "chips": [
+     [
+      {
+       "t": "나",
+       "g": "I"
+      },
+      {
+       "t": "도",
+       "g": "too",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "see",
+       "base": "보다"
+      },
+      {
+       "t": "고",
+       "g": "connecting ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "싶",
+       "g": "want",
+       "base": "싶다"
+      },
+      {
+       "t": "었",
+       "g": "past tense",
+       "p": true
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I missed you too!"
+   }
+  ],
+  "related": [
+   "saranghae",
+   "joahae",
+   "jagiya"
+  ],
+  "faq": [
+   {
+    "q": "Is it bogoshipo or bogo sipeo?",
+    "a": "They are the same phrase, 보고 싶어. \"Bogo sipeo\" follows the official romanization, and \"bogoshipo\" is a popular spelling that matches how it sounds."
+   },
+   {
+    "q": "Can I say bogo sipeo to a friend?",
+    "a": "Yes. It is not only romantic; friends and family say it to each other all the time."
+   }
+  ]
+ },
+ {
+  "slug": "joahae",
+  "ko": "좋아해",
+  "roman": "joahae",
+  "aka": [
+   "johahae",
+   "joahe",
+   "joa hae"
+  ],
+  "meaning": "I like you",
+  "category": "love",
+  "register": "casual",
+  "intro": "좋아해 (joahae) means \"I like you\" in Korean, and it is the classic way to confess a crush. It is casual, and it also works for liking things, like food, music or a hobby.",
+  "literal": "It comes from 좋아하다 (joahada), \"to like,\" which is built on 좋다 (to be good). 해 is the casual present-tense ending.",
+  "usage": [
+   "In a romantic scene, 좋아해 is the big confession, a step before 사랑해 (I love you). Many Korean couples say 좋아해 for a long time before saying 사랑해.",
+   "With things, it just means you like them: 커피 좋아해 is \"I like coffee.\" Context makes it clear which meaning is meant.",
+   "The h in 좋 is silent here, so it sounds like \"jo-a-hae.\" Use 좋아해요 with people you are not close to."
+  ],
+  "forms": [
+   {
+    "ko": "좋아해요",
+    "en": "I like (it/you) (polite)",
+    "note": "Polite form."
+   },
+   {
+    "ko": "좋아합니다",
+    "en": "I like (it/you) (formal)",
+    "note": "Formal form."
+   },
+   {
+    "ko": "너 좋아해",
+    "en": "I like you",
+    "note": "Casual confession with \"you\" included."
+   },
+   {
+    "ko": "좋아한다",
+    "en": "I like (you)",
+    "note": "Plain form; sounds firm, common in dramas."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Confessing to a classmate",
+    "chips": [
+     [
+      {
+       "t": "나",
+       "g": "I"
+      }
+     ],
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "좋아해",
+       "g": "like",
+       "base": "좋아하다"
+      }
+     ]
+    ],
+    "en": "I like you."
+   },
+   {
+    "context": "Introducing yourself at a club",
+    "chips": [
+     [
+      {
+       "t": "저",
+       "g": "I (humble)"
+      },
+      {
+       "t": "는",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "고양이",
+       "g": "cats"
+      },
+      {
+       "t": "를",
+       "g": "object marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "좋아해요",
+       "g": "like (polite)",
+       "base": "좋아하다"
+      }
+     ]
+    ],
+    "en": "I like cats."
+   },
+   {
+    "context": "Teasing a friend about a crush",
+    "chips": [
+     [
+      {
+       "t": "누구",
+       "g": "who"
+      }
+     ],
+     [
+      {
+       "t": "좋아해",
+       "g": "like",
+       "base": "좋아하다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Who do you like?"
+   }
+  ],
+  "related": [
+   "saranghae",
+   "sseom",
+   "bogo-sipeo"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between joahae and saranghae?",
+    "a": "좋아해 is \"I like you\" and 사랑해 is \"I love you.\" In dating, 좋아해 is usually the first confession and 사랑해 comes later."
+   },
+   {
+    "q": "Can joahae be used for things?",
+    "a": "Yes. You can say you like food, music, a person or a hobby with 좋아해."
+   }
+  ]
+ },
+ {
+  "slug": "sseom",
+  "ko": "썸",
+  "roman": "sseom",
+  "aka": [
+   "ssum",
+   "sum",
+   "some"
+  ],
+  "meaning": "The flirting stage before dating",
+  "category": "love",
+  "register": "casual",
+  "intro": "썸 (sseom) means the flirty stage when two people clearly like each other but are not officially dating yet. It is slang, mostly used by younger people. Saying two people are \"in a sseom\" is like saying \"there's something going on between them.\"",
+  "literal": "It comes from the English word \"something,\" shortened to its first sound.",
+  "usage": [
+   "The usual verb is 타다 (to ride): 썸 타다 means \"to be in that flirting stage.\" You will hear questions like 너희 썸 타? (Are you two a thing?).",
+   "Related words are 썸남 (a guy you have a sseom with) and 썸녀 (a girl you have a sseom with).",
+   "It is casual slang, fine with friends but not something to use in formal settings."
+  ],
+  "forms": [
+   {
+    "ko": "썸 타다",
+    "en": "to be in the flirting stage",
+    "note": "The most common verb with 썸."
+   },
+   {
+    "ko": "썸 타는 중",
+    "en": "currently in a sseom",
+    "note": "Common in texts and posts."
+   },
+   {
+    "ko": "썸남",
+    "en": "guy you're flirting with",
+    "note": "썸 + 남 (man)."
+   },
+   {
+    "ko": "썸녀",
+    "en": "girl you're flirting with",
+    "note": "썸 + 녀 (woman)."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Explaining to a friend you're not dating yet",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "we"
+      }
+     ],
+     [
+      {
+       "t": "그냥",
+       "g": "just"
+      }
+     ],
+     [
+      {
+       "t": "썸",
+       "g": "sseom"
+      },
+      {
+       "t": "이야",
+       "g": "is (casual)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "We're just in the flirting stage."
+   },
+   {
+    "context": "Asking two friends who seem close",
+    "chips": [
+     [
+      {
+       "t": "너희",
+       "g": "you guys"
+      }
+     ],
+     [
+      {
+       "t": "둘",
+       "g": "two"
+      }
+     ],
+     [
+      {
+       "t": "썸",
+       "g": "sseom"
+      }
+     ],
+     [
+      {
+       "t": "타",
+       "g": "ride (be in)",
+       "base": "타다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Are you two a thing?"
+   },
+   {
+    "context": "Chatting with a coworker about dating",
+    "chips": [
+     [
+      {
+       "t": "요즘",
+       "g": "these days"
+      }
+     ],
+     [
+      {
+       "t": "썸",
+       "g": "sseom"
+      }
+     ],
+     [
+      {
+       "t": "타",
+       "g": "ride (be in)",
+       "base": "타다"
+      },
+      {
+       "t": "는",
+       "g": "describing ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "사람",
+       "g": "person"
+      }
+     ],
+     [
+      {
+       "t": "있",
+       "g": "there is",
+       "base": "있다"
+      },
+      {
+       "t": "어요",
+       "g": "polite ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Is there someone you're talking to these days?"
+   }
+  ],
+  "related": [
+   "joahae",
+   "saranghae",
+   "aegyo"
+  ],
+  "faq": [
+   {
+    "q": "Does sseom mean dating?",
+    "a": "No. 썸 is the stage before dating, when the feelings are there but nobody has made it official."
+   },
+   {
+    "q": "What does sseom tada mean?",
+    "a": "썸 타다 means \"to be in a sseom,\" that is, to be flirting with someone and heading toward dating."
+   }
+  ]
+ },
+ {
+  "slug": "gwaenchana",
+  "ko": "괜찮아",
+  "roman": "gwaenchana",
+  "aka": [
+   "gwenchana",
+   "kwenchana",
+   "gwaenchanha",
+   "gwenchanha"
+  ],
+  "meaning": "It's okay / Are you okay?",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "괜찮아 (gwaenchana) means \"It's okay\", \"I'm fine\" or, as a question, \"Are you okay?\" in casual Korean. It is one of the most useful words for comforting someone or politely saying no.",
+  "literal": "괜찮아 comes from the adjective 괜찮다, meaning \"to be fine\" or \"to be all right\".",
+  "usage": [
+   "Ask 괜찮아? to check on a friend, and answer 괜찮아 to say you are fine. Said warmly, 괜찮아 괜찮아 is a common way to comfort someone.",
+   "It also means \"No, thanks\". If someone offers you more food, 괜찮아요 politely declines.",
+   "괜찮아 is casual, for friends and younger people. Use 괜찮아요 with most adults and 괜찮습니다 in formal settings."
+  ],
+  "forms": [
+   {
+    "ko": "괜찮아요",
+    "en": "It's okay / I'm fine",
+    "note": "Polite form, safe with most people."
+   },
+   {
+    "ko": "괜찮습니다",
+    "en": "It's fine",
+    "note": "Formal, for work or customers."
+   },
+   {
+    "ko": "괜찮아?",
+    "en": "Are you okay?",
+    "note": "Casual question."
+   },
+   {
+    "ko": "괜찮을 거야",
+    "en": "It'll be okay",
+    "note": "Comforting someone about the future."
+   }
+  ],
+  "examples": [
+   {
+    "context": "A friend trips on the stairs",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "괜찮",
+       "g": "okay",
+       "base": "괜찮다"
+      },
+      {
+       "t": "아",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Are you okay?"
+   },
+   {
+    "context": "Comforting a friend before results come out",
+    "chips": [
+     [
+      {
+       "t": "괜찮",
+       "g": "okay",
+       "base": "괜찮다"
+      },
+      {
+       "t": "아",
+       "g": "casual ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "다",
+       "g": "everything"
+      }
+     ],
+     [
+      {
+       "t": "잘될",
+       "g": "go well",
+       "base": "잘되다"
+      }
+     ],
+     [
+      {
+       "t": "거",
+       "g": "thing"
+      },
+      {
+       "t": "야",
+       "g": "casual 'is' ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "It's okay, everything will be fine"
+   },
+   {
+    "context": "Turning down a second helping",
+    "chips": [
+     [
+      {
+       "t": "아니요",
+       "g": "no"
+      }
+     ],
+     [
+      {
+       "t": "괜찮",
+       "g": "fine",
+       "base": "괜찮다"
+      },
+      {
+       "t": "아요",
+       "g": "polite ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "No, I'm fine"
+   }
+  ],
+  "related": [
+   "mianhae",
+   "gomawo",
+   "aniyo",
+   "eotteokhae"
+  ],
+  "faq": [
+   {
+    "q": "How do you say gwaenchana politely?",
+    "a": "Say 괜찮아요. In formal situations, use 괜찮습니다."
+   },
+   {
+    "q": "Can gwaenchana mean no thanks?",
+    "a": "Yes. 괜찮아요 is a common, polite way to turn down an offer."
+   },
+   {
+    "q": "How do you spell gwaenchana in Korean?",
+    "a": "It is 괜찮아. The ㅎ in 찮 is silent, which is why it sounds like \"gwaenchana\"."
+   }
+  ]
+ },
+ {
+  "slug": "jebal",
+  "ko": "제발",
+  "roman": "jebal",
+  "aka": [
+   "jebal!",
+   "jaebal",
+   "chebal"
+  ],
+  "meaning": "Please (I'm begging)",
+  "category": "everyday",
+  "register": "any",
+  "intro": "제발 (jebal) means \"please\" in Korean, in the sense of begging or pleading. It shows that you really, really want something to happen or stop.",
+  "literal": "제발 is an adverb used to plead. It adds urgency to a request or wish.",
+  "usage": [
+   "Use 제발 for strong wishes and pleas: hoping you passed an exam, begging a friend to stop teasing you, or wishing for good weather.",
+   "A common mistake is using 제발 for everyday polite requests. To order food or ask for something politely, use 주세요 instead. Saying 제발 to a waiter sounds desperate.",
+   "제발 itself is fine with anyone, but the rest of the sentence decides how polite you are. With older people, use a polite ending, as in 제발 도와주세요 (Please help me)."
+  ],
+  "forms": [
+   {
+    "ko": "제발 부탁이야",
+    "en": "I'm begging you",
+    "note": "Casual."
+   },
+   {
+    "ko": "제발 부탁드려요",
+    "en": "I sincerely ask you",
+    "note": "Polite."
+   },
+   {
+    "ko": "제발 좀",
+    "en": "Please, just...",
+    "note": "좀 softens it but adds exasperation."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Asking a friend for one more chance",
+    "chips": [
+     [
+      {
+       "t": "제발",
+       "g": "please"
+      }
+     ],
+     [
+      {
+       "t": "한",
+       "g": "one"
+      }
+     ],
+     [
+      {
+       "t": "번",
+       "g": "time"
+      },
+      {
+       "t": "만",
+       "g": "only",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Please, just once!"
+   },
+   {
+    "context": "Waiting for exam results",
+    "chips": [
+     [
+      {
+       "t": "제발",
+       "g": "please"
+      }
+     ],
+     [
+      {
+       "t": "이번",
+       "g": "this time"
+      },
+      {
+       "t": "엔",
+       "g": "at (short for 에는)",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "붙",
+       "g": "pass",
+       "base": "붙다"
+      },
+      {
+       "t": "어라",
+       "g": "wishing ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Please let me pass this time"
+   },
+   {
+    "context": "Your sibling keeps poking you",
+    "chips": [
+     [
+      {
+       "t": "제발",
+       "g": "please"
+      }
+     ],
+     [
+      {
+       "t": "그만해",
+       "g": "stop it",
+       "base": "그만하다"
+      }
+     ]
+    ],
+    "en": "Please stop"
+   }
+  ],
+  "related": [
+   "mianhae",
+   "eotteokhae",
+   "wae"
+  ],
+  "faq": [
+   {
+    "q": "Can I use jebal to say please at a restaurant?",
+    "a": "No. Use 주세요 for polite requests, such as 물 주세요 (Water, please). 제발 sounds like begging."
+   },
+   {
+    "q": "Is jebal polite?",
+    "a": "The word is neutral. The ending of your sentence decides how polite it is."
+   },
+   {
+    "q": "What does \"jebal jom\" mean?",
+    "a": "제발 좀 is like \"Please, just...\" and often sounds exasperated."
+   }
+  ]
+ },
+ {
+  "slug": "wae",
+  "ko": "왜",
+  "roman": "wae",
+  "aka": [
+   "way",
+   "whae"
+  ],
+  "meaning": "Why? / What?",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "왜 (wae) means \"why\" in Korean. Said alone as 왜? when someone calls your name, it also means \"What?\" or \"Yeah, what is it?\"",
+  "literal": "왜 is the question word \"why\".",
+  "usage": [
+   "Put 왜 at the start of a question to ask why: 왜 안 왔어? (Why didn't you come?). It also appears in common phrases like 왜 그래? (What's wrong?).",
+   "When someone calls you, answering 왜? means \"What?\" between friends and family. To older people, use 왜요? or, even better, 네? which sounds softer.",
+   "A sharp 왜? can sound defensive, like \"What do you want?\", so watch your tone."
+  ],
+  "forms": [
+   {
+    "ko": "왜요?",
+    "en": "Why? / What is it?",
+    "note": "Polite form."
+   },
+   {
+    "ko": "왜 그래?",
+    "en": "What's wrong?",
+    "note": "Asking why someone is upset or acting strange."
+   },
+   {
+    "ko": "왜냐하면",
+    "en": "because",
+    "note": "Starts an explanation."
+   },
+   {
+    "ko": "왜 불러?",
+    "en": "Why'd you call me?",
+    "note": "Casual reply when someone calls your name."
+   }
+  ],
+  "examples": [
+   {
+    "context": "A friend looks upset",
+    "chips": [
+     [
+      {
+       "t": "왜",
+       "g": "why"
+      }
+     ],
+     [
+      {
+       "t": "그래",
+       "g": "act like that",
+       "base": "그러다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "What's wrong?"
+   },
+   {
+    "context": "Your mom calls your name from the kitchen",
+    "chips": [
+     [
+      {
+       "t": "엄마",
+       "g": "mom"
+      }
+     ],
+     [
+      {
+       "t": "왜",
+       "g": "why (what)"
+      },
+      {
+       "t": "요",
+       "g": "polite ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Yes, Mom? What is it?"
+   },
+   {
+    "context": "A friend missed your party",
+    "chips": [
+     [
+      {
+       "t": "왜",
+       "g": "why"
+      }
+     ],
+     [
+      {
+       "t": "안",
+       "g": "not"
+      }
+     ],
+     [
+      {
+       "t": "왔",
+       "g": "came",
+       "base": "오다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Why didn't you come?"
+   }
+  ],
+  "related": [
+   "mwoya",
+   "jinjja",
+   "jamkkanman"
+  ],
+  "faq": [
+   {
+    "q": "Does wae mean what?",
+    "a": "Yes, sometimes. When someone calls your name, 왜? means \"What?\" or \"What is it?\""
+   },
+   {
+    "q": "Is wae rude?",
+    "a": "Not by itself, but it is casual and can sound blunt. Use 왜요? with people you should be polite to."
+   },
+   {
+    "q": "How do you say because in Korean?",
+    "a": "왜냐하면 means \"because\" at the start of an explanation."
+   }
+  ]
+ },
+ {
+  "slug": "hwaiting",
+  "ko": "화이팅",
+  "roman": "hwaiting",
+  "aka": [
+   "fighting",
+   "paiting"
+  ],
+  "meaning": "You can do it! / Go!",
+  "category": "everyday",
+  "register": "any",
+  "intro": "화이팅 (hwaiting) is a Korean cheer that means \"You can do it!\", \"Good luck!\" or \"Go!\". It comes from the English word \"fighting\", but it has nothing to do with fighting.",
+  "literal": "화이팅 is borrowed from English \"fighting\". The officially recommended spelling is 파이팅, but 화이팅 is extremely common.",
+  "usage": [
+   "Say 화이팅 to encourage someone before an exam, interview, game or long day. You can put a word before it, like 시험 화이팅! (Good luck on your exam!)",
+   "It is friendly and widely used at school, at work and in sports. People often say it with a raised fist. With someone much older or senior, 힘내세요 (Please cheer up / keep going) can sound more respectful.",
+   "Do not translate it back into English as \"fighting\" when speaking to English speakers, as it can confuse them. \"You've got this\" is closer."
+  ],
+  "forms": [
+   {
+    "ko": "파이팅",
+    "en": "You can do it!",
+    "note": "Official spelling, same meaning."
+   },
+   {
+    "ko": "힘내",
+    "en": "Cheer up / Hang in there",
+    "note": "Casual."
+   },
+   {
+    "ko": "힘내세요",
+    "en": "Please keep going",
+    "note": "Polite."
+   },
+   {
+    "ko": "아자 아자 화이팅",
+    "en": "Let's go, you can do it!",
+    "note": "Extra energetic cheer."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting a friend the night before an exam",
+    "chips": [
+     [
+      {
+       "t": "시험",
+       "g": "exam"
+      }
+     ],
+     [
+      {
+       "t": "화이팅",
+       "g": "you can do it"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Good luck on your exam!"
+   },
+   {
+    "context": "Starting the morning with your team",
+    "chips": [
+     [
+      {
+       "t": "오늘",
+       "g": "today"
+      },
+      {
+       "t": "도",
+       "g": "too",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "화이팅",
+       "g": "let's go"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's do our best today too!"
+   },
+   {
+    "context": "Cheering at a game",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "our"
+      }
+     ],
+     [
+      {
+       "t": "팀",
+       "g": "team"
+      }
+     ],
+     [
+      {
+       "t": "화이팅",
+       "g": "go"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Go team!"
+   }
+  ],
+  "related": [
+   "jjang",
+   "daebak",
+   "sugohaesseoyo"
+  ],
+  "faq": [
+   {
+    "q": "Why do Koreans say fighting?",
+    "a": "화이팅 is a loanword from English \"fighting\" that came to mean \"You can do it!\" in Korean."
+   },
+   {
+    "q": "Is it hwaiting or paiting?",
+    "a": "Both are used. 파이팅 is the officially recommended spelling, but 화이팅 is very common."
+   },
+   {
+    "q": "Can I say hwaiting to my boss?",
+    "a": "It is common at work and usually fine. With someone much more senior, 힘내세요 can sound more respectful."
+   }
+  ]
+ },
+ {
+  "slug": "jamkkanman",
+  "ko": "잠깐만",
+  "roman": "jamkkanman",
+  "aka": [
+   "jamkanman",
+   "jamkkanmanyo",
+   "chamkkanman",
+   "jamkkan"
+  ],
+  "meaning": "Wait a moment / Hold on",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "잠깐만 (jamkkanman) means \"Wait a moment\" or \"Hold on\" in casual Korean. It is how you ask someone to wait, or stop a conversation to check something.",
+  "literal": "잠깐 means \"a short while\" and 만 means \"just\", so it literally means \"just a moment\".",
+  "usage": [
+   "Use 잠깐만 with friends and family when you need a second, or when you suddenly notice something: 잠깐만, 이거 뭐야? (Wait, what's this?)",
+   "With strangers or older people, add 요: 잠깐만요. 잠시만요 is similar and sounds slightly more formal.",
+   "Both 잠깐만요 and 잠시만요 are also how you say \"Excuse me\" when squeezing past people on a crowded subway or bus."
+  ],
+  "forms": [
+   {
+    "ko": "잠깐만요",
+    "en": "Just a moment, please",
+    "note": "Polite form."
+   },
+   {
+    "ko": "잠시만요",
+    "en": "One moment, please",
+    "note": "Polite and slightly more formal."
+   },
+   {
+    "ko": "잠깐만 기다려",
+    "en": "Wait a sec",
+    "note": "Casual."
+   },
+   {
+    "ko": "잠깐",
+    "en": "A moment",
+    "note": "Shorter, more abrupt."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Your friend is about to leave without you",
+    "chips": [
+     [
+      {
+       "t": "잠깐",
+       "g": "a moment"
+      },
+      {
+       "t": "만",
+       "g": "just",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "기다려",
+       "g": "wait",
+       "base": "기다리다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Wait a sec!"
+   },
+   {
+    "context": "Getting off a crowded subway",
+    "chips": [
+     [
+      {
+       "t": "잠깐",
+       "g": "a moment"
+      },
+      {
+       "t": "만",
+       "g": "just",
+       "p": true
+      },
+      {
+       "t": "요",
+       "g": "polite ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "지나갈",
+       "g": "pass by",
+       "base": "지나가다"
+      },
+      {
+       "t": "게요",
+       "g": "polite 'I will' ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Excuse me, coming through"
+   },
+   {
+    "context": "Noticing something odd on your desk",
+    "chips": [
+     [
+      {
+       "t": "잠깐",
+       "g": "a moment"
+      },
+      {
+       "t": "만",
+       "g": "just",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "이거",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      },
+      {
+       "t": "야",
+       "g": "casual 'is' ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Wait, what's this?"
+   }
+  ],
+  "related": [
+   "wae",
+   "mwoya",
+   "gaja"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between jamkkanman and jamsimanyo?",
+    "a": "They mean the same thing. 잠시만요 sounds slightly more formal, and 잠깐만 without 요 is casual."
+   },
+   {
+    "q": "Is jamkkanman polite?",
+    "a": "잠깐만 is casual. Use 잠깐만요 or 잠시만요 with strangers and older people."
+   },
+   {
+    "q": "How do you say excuse me on the subway in Korean?",
+    "a": "Say 잠깐만요 or 잠시만요 as you squeeze past."
+   }
+  ]
+ },
+ {
+  "slug": "mianhae",
+  "ko": "미안해",
+  "roman": "mianhae",
+  "aka": [
+   "mianhe",
+   "mian hae",
+   "mianhaeyo"
+  ],
+  "meaning": "I'm sorry",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "미안해 (mianhae) means \"I'm sorry\" in Korean. It is the casual form, used with friends, younger people and family. For strangers or older people, use 미안해요 or 죄송합니다.",
+  "literal": "It comes from 미안하다 (mianhada), \"to feel sorry.\" 미안 is a Sino-Korean word meaning roughly \"not at ease.\"",
+  "usage": [
+   "Use 미안해 for everyday apologies with people close to you, like being late or forgetting to reply.",
+   "With a boss, a teacher or a stranger, 죄송합니다 (joesonghamnida) is the safe choice. It is more formal and respectful than 미안해요.",
+   "Just 미안 on its own is even more casual, like \"my bad\" or \"sorry!\""
+  ],
+  "forms": [
+   {
+    "ko": "미안해요",
+    "en": "I'm sorry (polite)",
+    "note": "Polite form."
+   },
+   {
+    "ko": "미안",
+    "en": "Sorry / my bad",
+    "note": "Very casual short version."
+   },
+   {
+    "ko": "정말 미안해",
+    "en": "I'm really sorry",
+    "note": "Stronger apology."
+   },
+   {
+    "ko": "죄송합니다",
+    "en": "I apologize",
+    "note": "A different, formal word for apologizing."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Arriving late to meet a friend",
+    "chips": [
+     [
+      {
+       "t": "늦",
+       "g": "be late",
+       "base": "늦다"
+      },
+      {
+       "t": "어서",
+       "g": "because",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "미안해",
+       "g": "sorry",
+       "base": "미안하다"
+      }
+     ]
+    ],
+    "en": "Sorry I'm late."
+   },
+   {
+    "context": "Apologizing to an older coworker you're friendly with",
+    "chips": [
+     [
+      {
+       "t": "정말",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "미안해요",
+       "g": "sorry (polite)",
+       "base": "미안하다"
+      }
+     ]
+    ],
+    "en": "I'm really sorry."
+   },
+   {
+    "context": "Making up after an argument",
+    "chips": [
+     [
+      {
+       "t": "아까",
+       "g": "earlier"
+      },
+      {
+       "t": "는",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "미안해",
+       "g": "sorry",
+       "base": "미안하다"
+      }
+     ]
+    ],
+    "en": "Sorry about earlier."
+   }
+  ],
+  "related": [
+   "gomawo",
+   "gwaenchana",
+   "kamsahamnida"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between mianhae and joesonghamnida?",
+    "a": "미안해 is casual and 죄송합니다 is formal and respectful. Use 죄송합니다 with elders, customers, teachers and bosses."
+   },
+   {
+    "q": "How do you reply to mianhae?",
+    "a": "A common reply is 괜찮아 (gwaenchana), \"It's okay.\""
+   }
+  ]
+ },
+ {
+  "slug": "gomawo",
+  "ko": "고마워",
+  "roman": "gomawo",
+  "aka": [
+   "gomaweo",
+   "komawo",
+   "gomawoyo"
+  ],
+  "meaning": "Thanks",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "고마워 (gomawo) means \"thanks\" or \"thank you\" in Korean. It is the casual form, used with friends, younger people and family. With anyone else, use 고마워요 or 감사합니다.",
+  "literal": "It comes from 고맙다 (gomapda), \"to be thankful,\" a native Korean word. 고마워 is its casual form.",
+  "usage": [
+   "Use 고마워 with people you speak casually to: friends your age, younger siblings, your partner.",
+   "Add 요 (고마워요) to be polite with people you know a little. For strangers, staff and elders, 감사합니다 is the most common choice.",
+   "To thank someone for a specific thing, put it before: 선물 고마워 (thanks for the gift)."
+  ],
+  "forms": [
+   {
+    "ko": "고마워요",
+    "en": "Thank you (polite)",
+    "note": "Polite form."
+   },
+   {
+    "ko": "고맙습니다",
+    "en": "Thank you (formal)",
+    "note": "Formal form, as polite as 감사합니다."
+   },
+   {
+    "ko": "정말 고마워",
+    "en": "Thank you so much",
+    "note": "Stronger thanks."
+   },
+   {
+    "ko": "고마웡",
+    "en": "Thankies",
+    "note": "Cute typed version in texts."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Thanking a friend who helped you move",
+    "chips": [
+     [
+      {
+       "t": "도와줘서",
+       "g": "for helping me",
+       "base": "도와주다"
+      }
+     ],
+     [
+      {
+       "t": "고마워",
+       "g": "thanks",
+       "base": "고맙다"
+      }
+     ]
+    ],
+    "en": "Thanks for helping me."
+   },
+   {
+    "context": "Getting a birthday present",
+    "chips": [
+     [
+      {
+       "t": "선물",
+       "g": "gift"
+      }
+     ],
+     [
+      {
+       "t": "고마워요",
+       "g": "thank you (polite)",
+       "base": "고맙다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Thank you for the gift!"
+   },
+   {
+    "context": "A sweet text to a partner",
+    "chips": [
+     [
+      {
+       "t": "항상",
+       "g": "always"
+      }
+     ],
+     [
+      {
+       "t": "고마워",
+       "g": "thank you",
+       "base": "고맙다"
+      }
+     ]
+    ],
+    "en": "Thank you, always."
+   }
+  ],
+  "related": [
+   "kamsahamnida",
+   "mianhae",
+   "gwaenchana"
+  ],
+  "faq": [
+   {
+    "q": "What is the difference between gomawo and kamsahamnida?",
+    "a": "고마워 is casual and 감사합니다 is formal. Use 고마워 with close friends and 감사합니다 with strangers, staff and older people."
+   },
+   {
+    "q": "How do you reply to gomawo?",
+    "a": "You can say 뭘 (mwol), like \"no problem,\" or 아니야 (aniya), \"not at all.\""
+   }
+  ]
+ },
+ {
+  "slug": "kamsahamnida",
+  "ko": "감사합니다",
+  "roman": "kamsahamnida",
+  "aka": [
+   "gamsahamnida",
+   "kamsamnida",
+   "kamsahamida"
+  ],
+  "meaning": "Thank you",
+  "category": "everyday",
+  "register": "formal",
+  "intro": "감사합니다 (kamsahamnida) means \"thank you\" in Korean. It is the formal, respectful form, and it is the safest way to thank strangers, shop staff, teachers and anyone older. It is probably the most useful phrase for a visitor to Korea.",
+  "literal": "감사 (gamsa) is a Sino-Korean word for gratitude, 하다 means \"to do,\" and -ㅂ니다 is the formal ending. The official romanization is \"gamsahamnida,\" but \"kamsahamnida\" is the spelling most people know.",
+  "usage": [
+   "Say it in shops, restaurants, taxis, and to anyone you don't know well. It is never rude.",
+   "In fast speech it often sounds like \"kamsamnida.\" With close friends it can feel stiff, so people use 고마워 instead.",
+   "고맙습니다 means the same thing and is just as polite. Both are fine."
+  ],
+  "forms": [
+   {
+    "ko": "감사해요",
+    "en": "Thank you (polite)",
+    "note": "Softer, less formal than 감사합니다."
+   },
+   {
+    "ko": "정말 감사합니다",
+    "en": "Thank you very much",
+    "note": "Stronger thanks."
+   },
+   {
+    "ko": "감사드립니다",
+    "en": "I give you my thanks",
+    "note": "Extra humble, used in speeches and emails."
+   },
+   {
+    "ko": "고맙습니다",
+    "en": "Thank you",
+    "note": "Equally polite native Korean word."
+   },
+   {
+    "ko": "ㄳ",
+    "en": "thx",
+    "note": "Internet shorthand from the first consonants."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Thanking a stranger who gave directions",
+    "chips": [
+     [
+      {
+       "t": "정말",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "감사합니다",
+       "g": "thank you",
+       "base": "감사하다"
+      }
+     ]
+    ],
+    "en": "Thank you very much."
+   },
+   {
+    "context": "Thanking a teacher for help",
+    "chips": [
+     [
+      {
+       "t": "도와주셔서",
+       "g": "for helping (honorific)",
+       "base": "도와주다"
+      }
+     ],
+     [
+      {
+       "t": "감사합니다",
+       "g": "thank you",
+       "base": "감사하다"
+      }
+     ]
+    ],
+    "en": "Thank you for helping me."
+   },
+   {
+    "context": "A host greeting guests at an event",
+    "chips": [
+     [
+      {
+       "t": "와",
+       "g": "come",
+       "base": "오다"
+      }
+     ],
+     [
+      {
+       "t": "주셔서",
+       "g": "for doing (honorific)",
+       "base": "주다"
+      }
+     ],
+     [
+      {
+       "t": "감사합니다",
+       "g": "thank you",
+       "base": "감사하다"
+      }
+     ]
+    ],
+    "en": "Thank you for coming."
+   }
+  ],
+  "related": [
+   "gomawo",
+   "annyeonghaseyo",
+   "ne"
+  ],
+  "faq": [
+   {
+    "q": "Is it kamsahamnida or gamsahamnida?",
+    "a": "Both spellings refer to 감사합니다. \"Gamsahamnida\" is the official romanization; \"kamsahamnida\" is older and very common."
+   },
+   {
+    "q": "How do you reply to kamsahamnida?",
+    "a": "A common reply is 아니에요 (anieyo), \"not at all,\" or 천만에요 (cheonmaneyo), \"you're welcome.\""
+   }
+  ]
+ },
+ {
+  "slug": "annyeong",
+  "ko": "안녕",
+  "roman": "annyeong",
+  "aka": [
+   "anyong",
+   "annyong",
+   "anyeong"
+  ],
+  "meaning": "Hi / Bye",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "안녕 (annyeong) means \"hi\" or \"bye\" in Korean. It is casual, so it is for friends, younger people and kids. With anyone else, use 안녕하세요.",
+  "literal": "안녕 is a Sino-Korean word meaning peace or well-being. As a greeting it is like saying \"be well.\"",
+  "usage": [
+   "The same word works for hello and goodbye. Context tells you which one.",
+   "Never use 안녕 with a stranger, a boss or an older person. It would sound rude. 안녕하세요 is the polite version.",
+   "For polite goodbyes, Korean uses two phrases: 안녕히 가세요 to someone leaving and 안녕히 계세요 to someone staying."
+  ],
+  "forms": [
+   {
+    "ko": "안녕하세요",
+    "en": "Hello (polite)",
+    "note": "The standard polite greeting."
+   },
+   {
+    "ko": "안녕히 가세요",
+    "en": "Goodbye (to someone leaving)",
+    "note": "Polite."
+   },
+   {
+    "ko": "안녕히 계세요",
+    "en": "Goodbye (to someone staying)",
+    "note": "Polite; said when you are the one leaving."
+   },
+   {
+    "ko": "잘 가",
+    "en": "Bye, get home safe",
+    "note": "Casual goodbye to someone leaving."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Walking into a room of friends",
+    "chips": [
+     [
+      {
+       "t": "얘들",
+       "g": "you guys"
+      },
+      {
+       "t": "아",
+       "g": "calling ending",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "안녕",
+       "g": "hi"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hi, everyone!"
+   },
+   {
+    "context": "Leaving a friend's place",
+    "chips": [
+     [
+      {
+       "t": "그럼",
+       "g": "well then"
+      }
+     ],
+     [
+      {
+       "t": "안녕",
+       "g": "bye"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Well then, bye!"
+   },
+   {
+    "context": "Running into an old classmate",
+    "chips": [
+     [
+      {
+       "t": "안녕",
+       "g": "hi"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "지냈어",
+       "g": "have been",
+       "base": "지내다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hi! How have you been?"
+   }
+  ],
+  "related": [
+   "annyeonghaseyo",
+   "gomawo",
+   "jal-ja"
+  ],
+  "faq": [
+   {
+    "q": "Can I say annyeong to a stranger?",
+    "a": "It is better not to. 안녕 is casual; use 안녕하세요 with strangers and older people."
+   },
+   {
+    "q": "Does annyeong mean hello or goodbye?",
+    "a": "Both. Friends use it when meeting and when parting."
+   }
+  ]
+ },
+ {
+  "slug": "annyeonghaseyo",
+  "ko": "안녕하세요",
+  "roman": "annyeonghaseyo",
+  "aka": [
+   "annyeong haseyo",
+   "anyonghaseyo",
+   "annyonghaseyo"
+  ],
+  "meaning": "Hello",
+  "category": "everyday",
+  "register": "polite",
+  "intro": "안녕하세요 (annyeonghaseyo) means \"hello\" in Korean. It is the standard polite greeting you can use with almost anyone: strangers, shop staff, teachers and coworkers. It works at any time of day.",
+  "literal": "안녕 means peace or well-being, and 하세요 is a polite, respectful form of 하다. Literally it asks \"Are you at peace?\" or \"Are you well?\", but people use it simply as \"hello.\"",
+  "usage": [
+   "It is the go-to greeting in Korea. People usually say it with a small bow or nod.",
+   "You do not need to answer the \"are you well\" part. Just say 안녕하세요 back.",
+   "It is a greeting only. For goodbye, use 안녕히 가세요 or 안녕히 계세요."
+  ],
+  "forms": [
+   {
+    "ko": "안녕하십니까",
+    "en": "Hello (very formal)",
+    "note": "Used in news, the military and formal speeches."
+   },
+   {
+    "ko": "안녕",
+    "en": "Hi",
+    "note": "Casual, for friends only."
+   },
+   {
+    "ko": "안녕히 가세요",
+    "en": "Goodbye (to someone leaving)",
+    "note": "Polite goodbye."
+   },
+   {
+    "ko": "안녕히 계세요",
+    "en": "Goodbye (to someone staying)",
+    "note": "Polite goodbye when you leave."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Greeting a teacher in the hallway",
+    "chips": [
+     [
+      {
+       "t": "선생님",
+       "g": "teacher"
+      }
+     ],
+     [
+      {
+       "t": "안녕하세요",
+       "g": "hello"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hello, teacher!"
+   },
+   {
+    "context": "Introducing yourself on the first day",
+    "chips": [
+     [
+      {
+       "t": "안녕하세요",
+       "g": "hello"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "저",
+       "g": "I (humble)"
+      },
+      {
+       "t": "는",
+       "g": "topic marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "민지",
+       "g": "Minji"
+      },
+      {
+       "t": "예요",
+       "g": "am (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hello! I'm Minji."
+   },
+   {
+    "context": "A streamer opening a live broadcast",
+    "chips": [
+     [
+      {
+       "t": "여러분",
+       "g": "everyone"
+      }
+     ],
+     [
+      {
+       "t": "안녕하세요",
+       "g": "hello"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Hello, everyone!"
+   }
+  ],
+  "related": [
+   "annyeong",
+   "kamsahamnida",
+   "ne"
+  ],
+  "faq": [
+   {
+    "q": "Can I say annyeonghaseyo to friends?",
+    "a": "You can, but it sounds a bit formal. Close friends say 안녕."
+   },
+   {
+    "q": "How do you reply to annyeonghaseyo?",
+    "a": "Just say 안녕하세요 back, often with a small bow."
+   }
+  ]
+ },
+ {
+  "slug": "gaja",
+  "ko": "가자",
+  "roman": "gaja",
+  "aka": [
+   "kaja",
+   "ga ja",
+   "gajua"
+  ],
+  "meaning": "Let's go",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "가자 (gaja) means \"let's go\" in Korean. It is casual, so it is for friends and people younger than you. It is also a common cheer to hype yourself or your team up.",
+  "literal": "It is 가다 (gada), \"to go,\" plus -자 (-ja), the casual \"let's\" ending.",
+  "usage": [
+   "Use it with friends when leaving somewhere or suggesting a plan: 밥 먹으러 가자 (Let's go eat).",
+   "As a cheer, it means something like \"Let's do this!\" Online you may see the stretched spelling 가즈아, used for excitement.",
+   "With older people, 가요 or 가실까요 is more polite. 갑시다 is also \"let's go\" but can sound bossy to someone older."
+  ],
+  "forms": [
+   {
+    "ko": "가요",
+    "en": "Let's go (polite)",
+    "note": "Polite; also means \"I'm going.\""
+   },
+   {
+    "ko": "갑시다",
+    "en": "Let's go",
+    "note": "Firmer; avoid with elders or bosses."
+   },
+   {
+    "ko": "빨리 가자",
+    "en": "Let's go quickly",
+    "note": "Common when in a hurry."
+   },
+   {
+    "ko": "가즈아",
+    "en": "Let's gooo!",
+    "note": "Internet hype spelling."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Hurrying a friend who is running late",
+    "chips": [
+     [
+      {
+       "t": "빨리",
+       "g": "quickly"
+      }
+     ],
+     [
+      {
+       "t": "가",
+       "g": "go",
+       "base": "가다"
+      },
+      {
+       "t": "자",
+       "g": "let's",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's go, quick!"
+   },
+   {
+    "context": "Suggesting lunch to a classmate",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "we"
+      }
+     ],
+     [
+      {
+       "t": "밥",
+       "g": "meal"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "으러",
+       "g": "in order to",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "가",
+       "g": "go",
+       "base": "가다"
+      },
+      {
+       "t": "자",
+       "g": "let's",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's go eat."
+   },
+   {
+    "context": "Leaving a party with a friend",
+    "chips": [
+     [
+      {
+       "t": "집",
+       "g": "home"
+      },
+      {
+       "t": "에",
+       "g": "to",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "가",
+       "g": "go",
+       "base": "가다"
+      },
+      {
+       "t": "자",
+       "g": "let's",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's go home."
+   }
+  ],
+  "related": [
+   "jamkkanman",
+   "baegopa",
+   "hwaiting"
+  ],
+  "faq": [
+   {
+    "q": "Is gaja rude?",
+    "a": "Not with friends. With older people or strangers, use 가요 instead."
+   },
+   {
+    "q": "What does gajua mean?",
+    "a": "가즈아 is a playful, stretched way to write 가자, used online to say \"Let's gooo!\""
+   }
+  ]
+ },
+ {
+  "slug": "baegopa",
+  "ko": "배고파",
+  "roman": "baegopa",
+  "aka": [
+   "baegoppa",
+   "bae gopa",
+   "begopa"
+  ],
+  "meaning": "I'm hungry",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "배고파 (baegopa) means \"I'm hungry\" in Korean. It is casual, and you will hear it all the time from friends, kids and drama characters raiding the fridge. To ask \"Are you hungry?\", say it with a rising tone: 배고파?",
+  "literal": "It comes from 배고프다 (baegopeuda), \"to be hungry,\" made of 배 (stomach) and 고프다 (to be empty or hungry).",
+  "usage": [
+   "Like many Korean sentences, it needs no \"I.\" The same word is a statement or a question, depending on your tone.",
+   "With older people, add 요: 배고파요. In a family, kids often say 엄마 배고파 to ask for food.",
+   "The opposite is 배불러 (baebulleo), \"I'm full.\""
+  ],
+  "forms": [
+   {
+    "ko": "배고파요",
+    "en": "I'm hungry (polite)",
+    "note": "Polite form."
+   },
+   {
+    "ko": "배고프다",
+    "en": "I'm hungry",
+    "note": "Plain form; often said to yourself."
+   },
+   {
+    "ko": "배고파 죽겠어",
+    "en": "I'm starving",
+    "note": "Literally \"so hungry I could die.\""
+   },
+   {
+    "ko": "배 안 고파",
+    "en": "I'm not hungry",
+    "note": "Negative form."
+   },
+   {
+    "ko": "배불러",
+    "en": "I'm full",
+    "note": "The opposite feeling."
+   }
+  ],
+  "examples": [
+   {
+    "context": "A kid coming home from school",
+    "chips": [
+     [
+      {
+       "t": "엄마",
+       "g": "mom"
+      }
+     ],
+     [
+      {
+       "t": "배고파",
+       "g": "hungry",
+       "base": "배고프다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Mom, I'm hungry!"
+   },
+   {
+    "context": "Texting a friend late at night",
+    "chips": [
+     [
+      {
+       "t": "너무",
+       "g": "so"
+      }
+     ],
+     [
+      {
+       "t": "배고파",
+       "g": "hungry",
+       "base": "배고프다"
+      }
+     ]
+    ],
+    "en": "I'm so hungry."
+   },
+   {
+    "context": "Asking a guest after a long trip",
+    "chips": [
+     [
+      {
+       "t": "배고파요",
+       "g": "hungry (polite)",
+       "base": "배고프다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "을래요",
+       "g": "want to (polite)",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Are you hungry? What would you like to eat?"
+   }
+  ],
+  "related": [
+   "gaja",
+   "jal-meokgesseumnida",
+   "mukbang",
+   "jonmat"
+  ],
+  "faq": [
+   {
+    "q": "How do I say I'm full in Korean?",
+    "a": "Say 배불러 (baebulleo), or politely 배불러요 (baebulleoyo)."
+   },
+   {
+    "q": "Is it baegopa or baegoppa?",
+    "a": "The spelling is 배고파 with a single ㅍ, so \"baegopa.\" \"Baegoppa\" is a common learner spelling."
+   }
+  ]
+ },
+ {
+  "slug": "jal-ja",
+  "ko": "잘 자",
+  "roman": "jal ja",
+  "aka": [
+   "jalja",
+   "jal jayo",
+   "jal ja yo"
+  ],
+  "meaning": "Good night / Sleep well",
+  "category": "everyday",
+  "register": "casual",
+  "intro": "잘 자 (jal ja) means \"good night\" or \"sleep well\" in Korean. It is casual, said to friends, partners, younger siblings and kids. It is a very common last text of the day.",
+  "literal": "잘 means \"well\" and 자 is the casual command form of 자다 (to sleep), so it is literally \"sleep well.\"",
+  "usage": [
+   "Use it with people you talk to casually. Adding 요 (잘 자요) makes it polite.",
+   "For parents, grandparents or anyone you need to show respect to, say 안녕히 주무세요 (annyeonghi jumuseyo), which uses the honorific verb for sleeping.",
+   "People often pair it with 좋은 꿈 꿔 (sweet dreams)."
+  ],
+  "forms": [
+   {
+    "ko": "잘 자요",
+    "en": "Good night (polite)",
+    "note": "Polite form."
+   },
+   {
+    "ko": "안녕히 주무세요",
+    "en": "Good night (respectful)",
+    "note": "For parents, elders and bosses."
+   },
+   {
+    "ko": "좋은 꿈 꿔",
+    "en": "Sweet dreams",
+    "note": "Casual; literally \"dream a good dream.\""
+   },
+   {
+    "ko": "굿밤",
+    "en": "Night night",
+    "note": "Playful slang from \"good\" + 밤 (night)."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Saying good night to mom",
+    "chips": [
+     [
+      {
+       "t": "엄마",
+       "g": "mom"
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "자요",
+       "g": "sleep (polite)",
+       "base": "자다"
+      }
+     ]
+    ],
+    "en": "Good night, Mom."
+   },
+   {
+    "context": "Replying to a friend's good night text",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      },
+      {
+       "t": "도",
+       "g": "too",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "자",
+       "g": "sleep",
+       "base": "자다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "You too, sleep well!"
+   },
+   {
+    "context": "Ending a group chat for the night",
+    "chips": [
+     [
+      {
+       "t": "다들",
+       "g": "everyone"
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "자",
+       "g": "sleep",
+       "base": "자다"
+      }
+     ]
+    ],
+    "en": "Good night, everyone."
+   }
+  ],
+  "related": [
+   "saranghae",
+   "annyeong",
+   "bogo-sipeo"
+  ],
+  "faq": [
+   {
+    "q": "Can I say jal ja to my parents?",
+    "a": "Many families do, especially with 잘 자요. The most respectful option is 안녕히 주무세요."
+   },
+   {
+    "q": "How do you reply to jal ja?",
+    "a": "Say 너도 잘 자 (neodo jal ja), \"you too, sleep well.\""
+   }
+  ]
+ },
+ {
+  "slug": "jal-meokgesseumnida",
+  "ko": "잘 먹겠습니다",
+  "roman": "jal meokgesseumnida",
+  "aka": [
+   "jal mukgesseumnida",
+   "jal meokgetseumnida",
+   "jal mokgessumnida"
+  ],
+  "meaning": "Thanks for the meal (before eating)",
+  "category": "everyday",
+  "register": "formal",
+  "intro": "잘 먹겠습니다 (jal meokgesseumnida) is what Koreans say before eating, a bit like \"thank you for the meal.\" It thanks whoever cooked or paid. It uses a formal ending, but people say it at family tables and with coworkers alike.",
+  "literal": "잘 means \"well,\" 먹다 means \"to eat,\" -겠- shows intention, and -습니다 is the formal ending. Literally it is \"I will eat well.\"",
+  "usage": [
+   "Say it right before you start eating, especially when someone else cooked or is paying.",
+   "After the meal, switch to the past tense: 잘 먹었습니다 (jal meogeotseumnida), \"I ate well, thank you.\"",
+   "With close friends, the casual 잘 먹을게 is common, but the formal version is never wrong."
+  ],
+  "forms": [
+   {
+    "ko": "잘 먹었습니다",
+    "en": "Thank you for the meal (after eating)",
+    "note": "Said when you finish."
+   },
+   {
+    "ko": "잘 먹을게",
+    "en": "Thanks, I'll enjoy it",
+    "note": "Casual, for friends."
+   },
+   {
+    "ko": "잘 먹을게요",
+    "en": "Thanks, I'll enjoy it (polite)",
+    "note": "Polite, softer than the formal version."
+   },
+   {
+    "ko": "맛있게 드세요",
+    "en": "Enjoy your meal",
+    "note": "Said to others who are about to eat."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Sitting down to grandma's cooking",
+    "chips": [
+     [
+      {
+       "t": "할머니",
+       "g": "grandma"
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "겠",
+       "g": "will (intention)",
+       "p": true
+      },
+      {
+       "t": "습니다",
+       "g": "formal ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Grandma, thank you for the meal."
+   },
+   {
+    "context": "When your boss pays for dinner",
+    "chips": [
+     [
+      {
+       "t": "사장님",
+       "g": "boss"
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "겠",
+       "g": "will (intention)",
+       "p": true
+      },
+      {
+       "t": "습니다",
+       "g": "formal ending",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Thank you for the meal, sir!"
+   },
+   {
+    "context": "Before digging in with coworkers",
+    "chips": [
+     [
+      {
+       "t": "그럼",
+       "g": "well then"
+      }
+     ],
+     [
+      {
+       "t": "잘",
+       "g": "well"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "겠",
+       "g": "will (intention)",
+       "p": true
+      },
+      {
+       "t": "습니다",
+       "g": "formal ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Well then, let's eat. Thank you."
+   }
+  ],
+  "related": [
+   "baegopa",
+   "kamsahamnida",
+   "jonmat"
+  ],
+  "faq": [
+   {
+    "q": "What do you say after eating in Korean?",
+    "a": "Say 잘 먹었습니다 (jal meogeotseumnida), the past-tense version, to thank the cook or the person who paid."
+   },
+   {
+    "q": "Is jal meokgesseumnida like itadakimasu?",
+    "a": "It plays a similar role as a phrase said before eating, but it is not a translation. It mainly thanks the person who prepared or paid for the food."
+   }
+  ]
+ },
+ {
+  "slug": "sugohaesseoyo",
+  "ko": "수고했어요",
+  "roman": "sugohaesseoyo",
+  "aka": [
+   "sugo haesseoyo",
+   "sugohaessoyo",
+   "sugohaeseoyo"
+  ],
+  "meaning": "Good work / Thanks for your effort",
+  "category": "everyday",
+  "register": "polite",
+  "intro": "수고했어요 (sugohaesseoyo) means \"good work\" or \"thanks for your hard work\" in Korean. People say it at the end of a work day, a project or an exam to recognize someone's effort. It is polite but warm.",
+  "literal": "수고 (sugo) means hard work or trouble taken, 하다 means \"to do,\" and 했어요 is its polite past form. Literally it is \"you worked hard.\"",
+  "usage": [
+   "You will hear it when coworkers leave the office, after a performance, or when someone finishes something tiring.",
+   "In traditional etiquette, saying 수고했어요 to a boss or someone much older can sound like you are judging their work. Many people do say 수고하셨습니다 to seniors, but 감사합니다 is the safest choice.",
+   "The casual form, 수고했어, is common between friends, for example after exams."
+  ],
+  "forms": [
+   {
+    "ko": "수고했어",
+    "en": "Good job",
+    "note": "Casual, for friends and juniors."
+   },
+   {
+    "ko": "수고하셨습니다",
+    "en": "Thank you for your hard work",
+    "note": "Formal and honorific."
+   },
+   {
+    "ko": "수고 많았어요",
+    "en": "You worked really hard",
+    "note": "Warmer, stresses the effort."
+   },
+   {
+    "ko": "수고하세요",
+    "en": "Keep up the good work",
+    "note": "Said when leaving someone who is still working."
+   }
+  ],
+  "examples": [
+   {
+    "context": "End of a long work day",
+    "chips": [
+     [
+      {
+       "t": "오늘",
+       "g": "today"
+      }
+     ],
+     [
+      {
+       "t": "정말",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "수고",
+       "g": "hard work"
+      },
+      {
+       "t": "했어요",
+       "g": "did (polite)",
+       "base": "하다"
+      }
+     ]
+    ],
+    "en": "You worked really hard today."
+   },
+   {
+    "context": "A team leader after a project wraps",
+    "chips": [
+     [
+      {
+       "t": "다들",
+       "g": "everyone"
+      }
+     ],
+     [
+      {
+       "t": "수고",
+       "g": "hard work"
+      },
+      {
+       "t": "했어요",
+       "g": "did (polite)",
+       "base": "하다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Great work, everyone!"
+   },
+   {
+    "context": "Picking up a cousin after their exam",
+    "chips": [
+     [
+      {
+       "t": "시험",
+       "g": "exam"
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "take",
+       "base": "보다"
+      },
+      {
+       "t": "느라",
+       "g": "because of doing",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "수고",
+       "g": "hard work"
+      },
+      {
+       "t": "했어요",
+       "g": "did (polite)",
+       "base": "하다"
+      }
+     ]
+    ],
+    "en": "Good job getting through the exam."
+   }
+  ],
+  "related": [
+   "hwaiting",
+   "gomawo",
+   "kamsahamnida"
+  ],
+  "faq": [
+   {
+    "q": "Can I say sugohaesseoyo to my boss?",
+    "a": "It is common at work, but some people feel it sounds like judging a senior's work. 수고하셨습니다 is more respectful, and 감사합니다 is always safe."
+   },
+   {
+    "q": "What is the difference between sugohaesseoyo and sugohaseyo?",
+    "a": "수고했어요 is past tense and praises effort already done. 수고하세요 is said when you leave someone who is still working."
+   }
+  ]
+ },
+ {
+  "slug": "ne",
+  "ko": "네",
+  "roman": "ne",
+  "aka": [
+   "neh",
+   "nae",
+   "ne yo"
+  ],
+  "meaning": "Yes (polite)",
+  "category": "everyday",
+  "register": "polite",
+  "intro": "네 (ne) means \"yes\" in polite Korean. It is the everyday way to say yes to anyone you don't talk to casually, like strangers, coworkers, teachers and older people. It can also mean \"okay\", \"I see\" or, with a rising tone, \"Pardon?\"",
+  "literal": "네 is a single word with no parts to break down. 예 (ye) means the same thing and sounds a little more formal.",
+  "usage": [
+   "Use 네 to agree, to answer a yes-or-no question, or simply to show you are listening. Koreans often say 네, 네 while someone talks to them, much like saying \"uh-huh\" or \"right\" in English.",
+   "Said with a rising tone, 네? means \"Sorry?\" or \"What did you say?\" It is a polite way to ask someone to repeat themselves, and it can also show surprise.",
+   "With close friends or people younger than you, the casual 응 (eung) or 어 (eo) is more natural. Saying 네 to a close friend can sound oddly stiff or even playful."
+  ],
+  "forms": [
+   {
+    "ko": "예",
+    "en": "Yes",
+    "note": "Same meaning, slightly more formal. Common in service jobs and the military."
+   },
+   {
+    "ko": "응",
+    "en": "Yeah",
+    "note": "Casual. For friends and people younger than you."
+   },
+   {
+    "ko": "네?",
+    "en": "Pardon? / What?",
+    "note": "Rising tone. Asking someone to repeat, or showing surprise."
+   },
+   {
+    "ko": "네네",
+    "en": "Yes, yes / Okay, okay",
+    "note": "Repeated to show you are listening. Can sound a little impatient depending on tone."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Your manager asks you to send a file",
+    "chips": [
+     [
+      {
+       "t": "네",
+       "g": "yes"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "알겠습니다",
+       "g": "understood (formal)",
+       "base": "알다"
+      }
+     ]
+    ],
+    "en": "Yes, understood."
+   },
+   {
+    "context": "You didn't hear what someone said",
+    "chips": [
+     [
+      {
+       "t": "네",
+       "g": "pardon"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "뭐",
+       "g": "what"
+      },
+      {
+       "t": "라고요",
+       "g": "quoting ending (polite)",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Pardon? What did you say?"
+   },
+   {
+    "context": "Answering the phone when someone asks for you",
+    "chips": [
+     [
+      {
+       "t": "네",
+       "g": "yes"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "저",
+       "g": "I (humble)"
+      },
+      {
+       "t": "예요",
+       "g": "polite \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Yes, this is me."
+   }
+  ],
+  "related": [
+   "aniyo",
+   "annyeonghaseyo",
+   "kamsahamnida"
+  ],
+  "faq": [
+   {
+    "q": "Does ne mean no in Korean?",
+    "a": "No. 네 means \"yes\". It sounds like the English \"nay\", which confuses many learners, but it is always a yes. The polite word for no is 아니요 (aniyo)."
+   },
+   {
+    "q": "What is the difference between ne and ye?",
+    "a": "They mean the same thing. 예 is a little more formal and is common in customer service, the military and very polite settings. 네 is used more often in daily life."
+   },
+   {
+    "q": "Can I say ne to my friends?",
+    "a": "You can, but it sounds polite and a bit distant. Between close friends, 응 (eung) is the natural casual yes."
+   }
+  ]
+ },
+ {
+  "slug": "aniyo",
+  "ko": "아니요",
+  "roman": "aniyo",
+  "aka": [
+   "anio",
+   "anyo",
+   "aniyo yo",
+   "ani yo"
+  ],
+  "meaning": "No (polite)",
+  "category": "everyday",
+  "register": "polite",
+  "intro": "아니요 (aniyo) means \"no\" in polite Korean. It is the opposite of 네 (ne) and is safe to say to anyone, including strangers, coworkers and older people. In speech it is often shortened to 아뇨 (anyo).",
+  "literal": "아니요 is the casual 아니 (ani, \"no\") with the polite ending 요 added.",
+  "usage": [
+   "Use 아니요 to answer a yes-or-no question, to turn down an offer, or to politely correct someone. Koreans often soften it by adding 괜찮아요 (\"I'm okay\") when refusing something.",
+   "A common mistake is mixing up 아니요 and 아니에요. 아니요 is just \"no\". 아니에요 means \"it is not\" (as in \"It's not me\"), and it is also a humble reply to thanks or praise, like \"Not at all.\"",
+   "With close friends or people younger than you, the casual 아니 (ani) is more natural."
+  ],
+  "forms": [
+   {
+    "ko": "아뇨",
+    "en": "No",
+    "note": "Shortened spoken form of 아니요. Very common."
+   },
+   {
+    "ko": "아니",
+    "en": "No / Nah",
+    "note": "Casual. For friends and people younger than you."
+   },
+   {
+    "ko": "아니에요",
+    "en": "It's not / Not at all",
+    "note": "Means \"it is not\". Also a humble reply to thanks or compliments."
+   },
+   {
+    "ko": "아닙니다",
+    "en": "No / It is not",
+    "note": "Formal. Used in work, the military and announcements."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Turning down a second helping of food",
+    "chips": [
+     [
+      {
+       "t": "아니요",
+       "g": "no"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "괜찮",
+       "g": "be okay",
+       "base": "괜찮다"
+      },
+      {
+       "t": "아요",
+       "g": "polite ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "No, I'm fine."
+   },
+   {
+    "context": "Someone asks if you have been to Korea before",
+    "chips": [
+     [
+      {
+       "t": "아니요",
+       "g": "no"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "처음",
+       "g": "first time"
+      },
+      {
+       "t": "이에요",
+       "g": "polite \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "No, it's my first time."
+   },
+   {
+    "context": "Your coworker asks if you took the last coffee",
+    "chips": [
+     [
+      {
+       "t": "아니요",
+       "g": "no"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "저",
+       "g": "I (humble)"
+      }
+     ],
+     [
+      {
+       "t": "아니에요",
+       "g": "is not (polite)",
+       "base": "아니다"
+      }
+     ]
+    ],
+    "en": "No, it wasn't me."
+   }
+  ],
+  "related": [
+   "ne",
+   "gwaenchana",
+   "mianhae"
+  ],
+  "faq": [
+   {
+    "q": "Is it aniyo or anieyo?",
+    "a": "Both exist but they mean different things. 아니요 (aniyo) is a plain polite \"no\". 아니에요 (anieyo) means \"it is not\", or \"not at all\" when someone thanks you."
+   },
+   {
+    "q": "How do you say no casually in Korean?",
+    "a": "Say 아니 (ani). Use it only with close friends, siblings or people younger than you."
+   },
+   {
+    "q": "Is aniyo rude?",
+    "a": "No. 아니요 is polite and safe with anyone. Your tone matters more than the word, so a soft 아니요, 괜찮아요 (\"No, I'm fine\") is a gentle way to refuse."
+   }
+  ]
+ },
+ {
+  "slug": "nunchi",
+  "ko": "눈치",
+  "roman": "nunchi",
+  "aka": [
+   "noonchi",
+   "nun chi",
+   "noon chi"
+  ],
+  "meaning": "Reading the room",
+  "category": "everyday",
+  "register": "any",
+  "intro": "눈치 (nunchi) means the ability to read the room: sensing how other people feel and what a situation needs without being told. Someone with good 눈치 notices moods quickly and reacts with tact. It is a very important idea in Korean social life.",
+  "literal": "The word contains 눈 (nun), \"eye\", which fits the idea of noticing things. Learners usually just treat 눈치 as one word.",
+  "usage": [
+   "Koreans talk about 눈치 with a few common phrases. 눈치가 빠르다 means someone is quick to pick up on things. 눈치가 없다 means someone is clueless about the mood. 눈치를 보다 means to watch others' reactions carefully, often because you feel you must be careful.",
+   "Telling someone 눈치 좀 챙겨! (\"Read the room!\") is a common casual scolding between friends. Saying 눈치가 없다 about someone is a criticism, so be careful whom you say it to.",
+   "The word itself is neutral and fits any politeness level. Only the sentence ending changes."
+  ],
+  "forms": [
+   {
+    "ko": "눈치가 빠르다",
+    "en": "To be quick to pick up on things",
+    "note": "A compliment."
+   },
+   {
+    "ko": "눈치가 없다",
+    "en": "To be clueless / Can't read the room",
+    "note": "A criticism."
+   },
+   {
+    "ko": "눈치를 보다",
+    "en": "To watch others' reactions",
+    "note": "Being careful about how others feel or might react."
+   },
+   {
+    "ko": "눈치 챙겨",
+    "en": "Read the room!",
+    "note": "Casual scolding between friends."
+   }
+  ],
+  "examples": [
+   {
+    "context": "A friend keeps talking during an awkward moment",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "눈치",
+       "g": "social sense"
+      }
+     ],
+     [
+      {
+       "t": "없",
+       "g": "not have",
+       "base": "없다"
+      },
+      {
+       "t": "다",
+       "g": "plain ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "You really can't read the room."
+   },
+   {
+    "context": "Your friend jokes at the wrong time",
+    "chips": [
+     [
+      {
+       "t": "눈치",
+       "g": "social sense"
+      }
+     ],
+     [
+      {
+       "t": "좀",
+       "g": "a little / please"
+      }
+     ],
+     [
+      {
+       "t": "챙겨",
+       "g": "look after",
+       "base": "챙기다"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Read the room a little!"
+   },
+   {
+    "context": "Describing a thoughtful new coworker",
+    "chips": [
+     [
+      {
+       "t": "그",
+       "g": "that"
+      }
+     ],
+     [
+      {
+       "t": "사람",
+       "g": "person"
+      }
+     ],
+     [
+      {
+       "t": "눈치",
+       "g": "social sense"
+      },
+      {
+       "t": "가",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "빨라요",
+       "g": "is quick (polite)",
+       "base": "빠르다"
+      }
+     ]
+    ],
+    "en": "That person picks up on things quickly."
+   }
+  ],
+  "related": [
+   "kkondae",
+   "sunbae",
+   "maknae",
+   "gwaenchana"
+  ],
+  "faq": [
+   {
+    "q": "What does nunchi eopseo mean?",
+    "a": "눈치 없어 means \"You can't read the room\" or \"You're so clueless.\" It is casual and a bit critical."
+   },
+   {
+    "q": "What does nunchi boda mean?",
+    "a": "눈치를 보다 means watching other people's reactions and adjusting your behavior, often because you feel pressure, like a new employee waiting to see when the boss leaves."
+   },
+   {
+    "q": "Is nunchi a slang word?",
+    "a": "No. It is a standard Korean word that everyone uses, in any situation."
+   }
+  ]
+ },
+ {
+  "slug": "chimaek",
+  "ko": "치맥",
+  "roman": "chimaek",
+  "aka": [
+   "chimac",
+   "chi maek",
+   "chimek"
+  ],
+  "meaning": "Chicken and beer",
+  "category": "everyday",
+  "register": "any",
+  "intro": "치맥 (chimaek) means fried chicken and beer, eaten together. It is one of Korea's favorite ways to relax with friends, especially in the evening, during sports games or at a riverside picnic.",
+  "literal": "It is short for 치킨 (chikin, \"fried chicken\") + 맥주 (maekju, \"beer\").",
+  "usage": [
+   "People say 치맥 하자 (\"Let's do chicken and beer\") or 치맥 먹자 (\"Let's have chicken and beer\") when making casual plans. It suggests a relaxed, fun night rather than a fancy meal.",
+   "The word itself is fine with anyone. Just match the sentence ending to the person you are talking to.",
+   "Korean fried chicken is often ordered for delivery, and eating 치맥 at a park by the Han River in Seoul is a well-known summer activity."
+  ],
+  "forms": [
+   {
+    "ko": "치맥하다",
+    "en": "To have chicken and beer",
+    "note": "Verb form. Also written 치맥 하다."
+   },
+   {
+    "ko": "치킨",
+    "en": "Fried chicken",
+    "note": "The first half."
+   },
+   {
+    "ko": "맥주",
+    "en": "Beer",
+    "note": "The second half."
+   },
+   {
+    "ko": "피맥",
+    "en": "Pizza and beer",
+    "note": "Similar word from 피자 + 맥주."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting a friend after work",
+    "chips": [
+     [
+      {
+       "t": "오늘",
+       "g": "today"
+      }
+     ],
+     [
+      {
+       "t": "치맥",
+       "g": "chicken and beer"
+      }
+     ],
+     [
+      {
+       "t": "어때",
+       "g": "how about",
+       "base": "어떻다"
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "How about chicken and beer today?"
+   },
+   {
+    "context": "Friends deciding what to do after a game",
+    "chips": [
+     [
+      {
+       "t": "치맥",
+       "g": "chicken and beer"
+      }
+     ],
+     [
+      {
+       "t": "하",
+       "g": "do",
+       "base": "하다"
+      },
+      {
+       "t": "러",
+       "g": "in order to",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "가",
+       "g": "go",
+       "base": "가다"
+      },
+      {
+       "t": "자",
+       "g": "let's",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Let's go have chicken and beer."
+   },
+   {
+    "context": "Telling a coworker about your weekend",
+    "chips": [
+     [
+      {
+       "t": "한강",
+       "g": "Han River"
+      },
+      {
+       "t": "에서",
+       "g": "at",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "치맥",
+       "g": "chicken and beer"
+      }
+     ],
+     [
+      {
+       "t": "먹었어요",
+       "g": "ate (polite)",
+       "base": "먹다"
+      }
+     ]
+    ],
+    "en": "I had chicken and beer by the Han River."
+   }
+  ],
+  "related": [
+   "mukbang",
+   "jonmat",
+   "baegopa",
+   "gaja"
+  ],
+  "faq": [
+   {
+    "q": "What does chimaek stand for?",
+    "a": "It is 치킨 (fried chicken) plus 맥주 (beer), shortened to the first syllable of each."
+   },
+   {
+    "q": "Is chimaek slang?",
+    "a": "It is an informal shortened word, but it is so common that everyone uses it, even on menus and in ads."
+   },
+   {
+    "q": "What is pimaek?",
+    "a": "피맥 is pizza and beer, made the same way from 피자 and 맥주."
+   }
+  ]
+ },
+ {
+  "slug": "michyeosseo",
+  "ko": "미쳤어",
+  "roman": "michyeosseo",
+  "aka": [
+   "michyeoseo",
+   "michyeotseo",
+   "michyeosso"
+  ],
+  "meaning": "Are you crazy? / That's insane",
+  "category": "slang",
+  "register": "casual",
+  "intro": "미쳤어 (michyeosseo) means \"(You're) crazy\" or \"Are you crazy?\" in casual Korean. Depending on context, it can be an insult, a shocked reaction, or high praise like \"That's insane!\"",
+  "literal": "미쳤어 is the casual past form of 미치다 (to go crazy). Korean uses the past form here to describe a current state, so it literally means \"(you) have gone crazy\".",
+  "usage": [
+   "As a question to a person, 너 미쳤어? means \"Are you out of your mind?\" It is strong and can be rude, so save it for close friends or real arguments.",
+   "About things, it is often praise. People say a song, a performance or food 미쳤어 or 미쳤다 when it is incredibly good, much like \"That's insane!\"",
+   "Even with 요 added, 미쳤어요? is still harsh when aimed at a person, so do not use it with anyone you need to be polite to."
+  ],
+  "forms": [
+   {
+    "ko": "미쳤어?",
+    "en": "Are you crazy?",
+    "note": "Question to a person. Strong."
+   },
+   {
+    "ko": "미쳤다",
+    "en": "That's insane",
+    "note": "Common for praising something amazing."
+   },
+   {
+    "ko": "미쳤나 봐",
+    "en": "I must be crazy",
+    "note": "Often said about yourself."
+   },
+   {
+    "ko": "미쳤어요?",
+    "en": "Are you crazy?",
+    "note": "Polite ending, but still rude in meaning."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Your friend wants to quit their job tomorrow",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "미쳤",
+       "g": "gone crazy",
+       "base": "미치다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Are you crazy?"
+   },
+   {
+    "context": "Listening to a new song you love",
+    "chips": [
+     [
+      {
+       "t": "이",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "노래",
+       "g": "song"
+      }
+     ],
+     [
+      {
+       "t": "미쳤",
+       "g": "crazy (amazing)",
+       "base": "미치다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This song is insane"
+   },
+   {
+    "context": "Realizing you bought the same shirt three times",
+    "chips": [
+     [
+      {
+       "t": "아",
+       "g": "ugh"
+      }
+     ],
+     [
+      {
+       "t": "내",
+       "g": "I"
+      },
+      {
+       "t": "가",
+       "g": "subject marker",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "미쳤",
+       "g": "gone crazy",
+       "base": "미치다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Ugh, what was I thinking"
+   }
+  ],
+  "related": [
+   "daebak",
+   "heol",
+   "jjajeungna"
+  ],
+  "faq": [
+   {
+    "q": "Is michyeosseo rude?",
+    "a": "Saying 미쳤어? to someone can be rude because it questions their sanity. Using it about a song or food as praise is just casual slang."
+   },
+   {
+    "q": "What is the difference between michyeosseo and michyeotda?",
+    "a": "미쳤어 is conversational and often aimed at someone. 미쳤다 sounds more like an exclamation about something, as in \"That's insane!\""
+   },
+   {
+    "q": "Why is it in the past tense?",
+    "a": "With some verbs like 미치다, Korean uses the past form to describe a state that is true now."
+   }
+  ]
+ },
+ {
+  "slug": "eojjeol-tv",
+  "ko": "어쩔티비",
+  "roman": "eojjeol tv",
+  "aka": [
+   "eojjeoltibi",
+   "eojjul tv",
+   "ujjul tv",
+   "어쩔TV"
+  ],
+  "meaning": "So what? / Whatever",
+  "category": "slang",
+  "register": "casual",
+  "intro": "어쩔티비 (eojjeol tv) is Korean slang meaning \"So what?\" or \"Whatever, I don't care.\" It became hugely popular with middle and high school students in the early 2020s. It is a teasing, very casual comeback, usually said with a smirk to win a silly argument.",
+  "literal": "어쩔 comes from 어쩌라고 (eojjeorago), \"So what do you want me to do about it?\" 티비 is simply \"TV\". The TV part adds no real meaning; it mostly makes the word sound catchy and childish.",
+  "usage": [
+   "Kids and teens toss 어쩔티비 back and forth when they are bickering or teasing each other. It is not meant to be deeply hurtful, but it is dismissive, so it only works between friends or siblings who are joking around.",
+   "It started a whole word game. The other person might answer 저쩔티비 (jeojjeol tv), a rhyming comeback, and others chain on more words like 안물티비 (\"didn't ask\"). Whoever runs out of comebacks loses.",
+   "Never say it to parents, teachers, older people or anyone at work. It sounds rude and immature. Many adults know it as \"kid slang\", so using it as an adult is usually a joke in itself."
+  ],
+  "forms": [
+   {
+    "ko": "어쩌라고",
+    "en": "So what? / What do you want me to do?",
+    "note": "The original phrase. Casual and blunt."
+   },
+   {
+    "ko": "어쩔",
+    "en": "Whatever",
+    "note": "Shortened form."
+   },
+   {
+    "ko": "저쩔티비",
+    "en": "Whatever back at you",
+    "note": "A rhyming comeback to 어쩔티비."
+   },
+   {
+    "ko": "안물티비",
+    "en": "Didn't ask",
+    "note": "Another word from the same game, from 안 물어봤어 (\"I didn't ask\")."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Your little brother ignores your complaint",
+    "chips": [
+     [
+      {
+       "t": "응",
+       "g": "yeah"
+      }
+     ],
+     [
+      {
+       "t": "어쩔",
+       "g": "so what"
+      },
+      {
+       "t": "티비",
+       "g": "TV"
+      }
+     ]
+    ],
+    "en": "Yeah, so what?"
+   },
+   {
+    "context": "A friend keeps asking about your test score",
+    "chips": [
+     [
+      {
+       "t": "아",
+       "g": "ugh"
+      }
+     ],
+     [
+      {
+       "t": "몰라",
+       "g": "don't know (casual)",
+       "base": "모르다"
+      },
+      {
+       "t": ",",
+       "g": "",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "어쩔",
+       "g": "so what"
+      },
+      {
+       "t": "티비",
+       "g": "TV"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Ugh, I don't know. Whatever!"
+   },
+   {
+    "context": "Two siblings teasing each other back and forth",
+    "chips": [
+     [
+      {
+       "t": "어쩔",
+       "g": "so what"
+      },
+      {
+       "t": "티비",
+       "g": "TV"
+      }
+     ],
+     [
+      {
+       "t": "저쩔",
+       "g": "rhyming comeback"
+      },
+      {
+       "t": "티비",
+       "g": "TV"
+      }
+     ]
+    ],
+    "en": "Whatever TV! Whatever-back TV!"
+   }
+  ],
+  "related": [
+   "mwoya",
+   "jjajeungna",
+   "heol"
+  ],
+  "faq": [
+   {
+    "q": "Is eojjeol tv rude?",
+    "a": "It is teasing and dismissive, so it is rude if you say it to the wrong person. Between friends or siblings who are joking around it is playful."
+   },
+   {
+    "q": "How do you reply to eojjeol tv?",
+    "a": "The classic comeback is 저쩔티비 (jeojjeol tv), which just rhymes and throws it back. People keep chaining words until someone gives up."
+   },
+   {
+    "q": "Do adults say eojjeol tv?",
+    "a": "Mostly as a joke. It is seen as school-kid slang from the early 2020s, so adults use it ironically, if at all."
+   }
+  ]
+ },
+ {
+  "slug": "jonmat",
+  "ko": "존맛",
+  "roman": "jonmat",
+  "aka": [
+   "jon mat",
+   "jmt",
+   "jonmattaeng",
+   "존맛탱"
+  ],
+  "meaning": "Super tasty / Crazy good",
+  "category": "slang",
+  "register": "casual",
+  "intro": "존맛 (jonmat) is Korean slang meaning \"super tasty\" or \"crazy good\". You will see it everywhere in food reviews, comments and texts. Be aware that it contains a vulgar word, so it is not polite language.",
+  "literal": "존 comes from 존나, a vulgar intensifier roughly like \"f***ing\" in English. 맛 means \"taste\", from 맛있다 (\"to be tasty\"). Together it is close to \"f***ing delicious\", though most young people use it so often that it feels softer than that.",
+  "usage": [
+   "Young people use 존맛 with close friends, in group chats and online food posts. It is extremely common, but it is still crude slang.",
+   "Do not use it with parents, teachers, older people, at work or with anyone you are not close to. Even some friends may find it vulgar. The safe version that works with anyone is 진짜 맛있어 (jinjja masisseo), \"It's really tasty\", or 진짜 맛있어요 to be polite.",
+   "The longer 존맛탱 (jonmattaeng) means the same thing with a playful sound. Online it is often typed as JMT."
+  ],
+  "forms": [
+   {
+    "ko": "존맛탱",
+    "en": "Crazy delicious",
+    "note": "Same meaning, playful ending. Also vulgar."
+   },
+   {
+    "ko": "JMT",
+    "en": "Crazy delicious",
+    "note": "Typed abbreviation of 존맛탱."
+   },
+   {
+    "ko": "진짜 맛있어",
+    "en": "It's really tasty",
+    "note": "Safe casual version for anyone you talk to casually."
+   },
+   {
+    "ko": "진짜 맛있어요",
+    "en": "It's really tasty",
+    "note": "Safe polite version."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting a friend about a new snack",
+    "chips": [
+     [
+      {
+       "t": "이거",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "존맛",
+       "g": "crazy tasty"
+      }
+     ]
+    ],
+    "en": "This is crazy good."
+   },
+   {
+    "context": "Trying a restaurant with friends",
+    "chips": [
+     [
+      {
+       "t": "와",
+       "g": "wow"
+      }
+     ],
+     [
+      {
+       "t": "여기",
+       "g": "this place"
+      }
+     ],
+     [
+      {
+       "t": "존맛탱",
+       "g": "crazy tasty"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Wow, this place is crazy good!"
+   },
+   {
+    "context": "Posting about street food",
+    "chips": [
+     [
+      {
+       "t": "떡볶이",
+       "g": "tteokbokki"
+      }
+     ],
+     [
+      {
+       "t": "존맛",
+       "g": "crazy tasty"
+      },
+      {
+       "t": "이야",
+       "g": "casual \"to be\"",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "The tteokbokki is crazy good!"
+   }
+  ],
+  "related": [
+   "daebak",
+   "jjang",
+   "mukbang",
+   "baegopa"
+  ],
+  "faq": [
+   {
+    "q": "Is jonmat a bad word?",
+    "a": "It contains 존, which comes from a vulgar word, so yes, it is crude. Friends use it all the time, but avoid it with older people, at work or in polite situations."
+   },
+   {
+    "q": "What does JMT mean in Korean?",
+    "a": "JMT is short for 존맛탱 (jonmattaeng), \"crazy delicious\". It has the same vulgar root as 존맛."
+   },
+   {
+    "q": "What can I say instead of jonmat?",
+    "a": "Say 진짜 맛있어 (\"It's really tasty\") or, politely, 진짜 맛있어요. Both are safe with anyone."
+   }
+  ]
+ },
+ {
+  "slug": "jjang",
+  "ko": "짱",
+  "roman": "jjang",
+  "aka": [
+   "zzang",
+   "jang",
+   "chang"
+  ],
+  "meaning": "The best / Awesome",
+  "category": "slang",
+  "register": "casual",
+  "intro": "짱 (jjang) is Korean slang meaning \"the best\" or \"awesome\". People say 짱이야 (\"It's the best\") or put it before a word to mean \"super\", as in 짱 좋다 (\"super good\"). It is cheerful, simple and a little playful.",
+  "literal": "It is often linked to 장 (jang), meaning \"head\" or \"chief\", said with a stronger sound. It also appears inside other words, like 얼짱 (good-looking face) and 몸짱 (great body).",
+  "usage": [
+   "Use 짱 to praise something you love, like food, a song or a friend. A thumbs-up with 짱! is a classic reaction.",
+   "It is casual and can sound a bit cute or childish, so it fits friends, family and kids. In polite situations, say 최고예요 (\"It's the best\") or 정말 좋아요 (\"It's really good\") instead.",
+   "As a noun, 짱 can also mean the top person in a group, like the toughest kid in school, but that use is less common today."
+  ],
+  "forms": [
+   {
+    "ko": "짱이야",
+    "en": "It's the best",
+    "note": "Casual sentence form."
+   },
+   {
+    "ko": "짱이다",
+    "en": "That's awesome",
+    "note": "Casual exclamation."
+   },
+   {
+    "ko": "짱 좋아",
+    "en": "Super good",
+    "note": "짱 used like \"super\"."
+   },
+   {
+    "ko": "최고예요",
+    "en": "It's the best",
+    "note": "Polite alternative."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Praising your mom's cooking",
+    "chips": [
+     [
+      {
+       "t": "우리",
+       "g": "our / my"
+      }
+     ],
+     [
+      {
+       "t": "엄마",
+       "g": "mom"
+      }
+     ],
+     [
+      {
+       "t": "짱",
+       "g": "the best"
+      }
+     ]
+    ],
+    "en": "My mom is the best."
+   },
+   {
+    "context": "Sharing a song with a friend",
+    "chips": [
+     [
+      {
+       "t": "이",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "노래",
+       "g": "song"
+      }
+     ],
+     [
+      {
+       "t": "짱",
+       "g": "the best"
+      },
+      {
+       "t": "이야",
+       "g": "casual \"to be\"",
+       "p": true
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This song is awesome!"
+   },
+   {
+    "context": "Stepping outside on a sunny day",
+    "chips": [
+     [
+      {
+       "t": "오늘",
+       "g": "today"
+      }
+     ],
+     [
+      {
+       "t": "날씨",
+       "g": "weather"
+      }
+     ],
+     [
+      {
+       "t": "짱",
+       "g": "super"
+      }
+     ],
+     [
+      {
+       "t": "좋",
+       "g": "good",
+       "base": "좋다"
+      },
+      {
+       "t": "다",
+       "g": "plain ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "The weather is super nice today."
+   }
+  ],
+  "related": [
+   "daebak",
+   "ulzzang",
+   "kkuljaem",
+   "jonmat"
+  ],
+  "faq": [
+   {
+    "q": "Is jjang rude?",
+    "a": "No, it is friendly and positive. It is just casual, so use 최고예요 with people you speak politely to."
+   },
+   {
+    "q": "What does jjang mean in K-pop?",
+    "a": "It means \"the best\". Fans might write 오빠 짱! (\"Oppa is the best!\") to cheer for an idol."
+   },
+   {
+    "q": "Is jjang old-fashioned?",
+    "a": "It is still widely used, but it can sound a little cute or dated. Younger people often say 대박 or 최고 too."
+   }
+  ]
+ },
+ {
+  "slug": "kkuljaem",
+  "ko": "꿀잼",
+  "roman": "kkuljaem",
+  "aka": [
+   "ggul jaem",
+   "kkul jam",
+   "kkuljam"
+  ],
+  "meaning": "Super fun",
+  "category": "slang",
+  "register": "casual",
+  "intro": "꿀잼 (kkuljaem) is Korean slang meaning \"super fun\" or \"really entertaining\". People use it for shows, games, videos, parties and anything they enjoyed. Its opposite is 노잼 (nojam), \"boring\".",
+  "literal": "꿀 means \"honey\", which in slang means \"sweet\" or \"great\". 잼 comes from 재미 (jaemi), \"fun\". So it is literally \"honey fun\".",
+  "usage": [
+   "Use 꿀잼 with friends, in texts and in online comments to say something was really fun. 꿀잼이야 (\"It's so fun\") and 꿀잼이었어 (\"It was so fun\") are common sentence forms.",
+   "It is casual slang. With people you speak politely to, say 정말 재미있어요 (\"It's really fun\").",
+   "For extra emphasis, people say 핵꿀잼 (\"extremely fun\")."
+  ],
+  "forms": [
+   {
+    "ko": "꿀잼이야",
+    "en": "It's so fun",
+    "note": "Casual sentence form."
+   },
+   {
+    "ko": "핵꿀잼",
+    "en": "Extremely fun",
+    "note": "Stronger version."
+   },
+   {
+    "ko": "노잼",
+    "en": "Boring",
+    "note": "The opposite."
+   },
+   {
+    "ko": "정말 재미있어요",
+    "en": "It's really fun",
+    "note": "Standard polite version."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Recommending a show to a friend",
+    "chips": [
+     [
+      {
+       "t": "이",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "드라마",
+       "g": "drama"
+      }
+     ],
+     [
+      {
+       "t": "꿀잼",
+       "g": "super fun"
+      },
+      {
+       "t": "이야",
+       "g": "casual \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "This drama is so much fun."
+   },
+   {
+    "context": "Talking about last night",
+    "chips": [
+     [
+      {
+       "t": "어제",
+       "g": "yesterday"
+      }
+     ],
+     [
+      {
+       "t": "파티",
+       "g": "party"
+      }
+     ],
+     [
+      {
+       "t": "꿀잼",
+       "g": "super fun"
+      },
+      {
+       "t": "이었어",
+       "g": "was (casual)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Yesterday's party was super fun."
+   },
+   {
+    "context": "Commenting on a funny video",
+    "chips": [
+     [
+      {
+       "t": "완전",
+       "g": "totally"
+      }
+     ],
+     [
+      {
+       "t": "꿀잼",
+       "g": "super fun"
+      },
+      {
+       "t": "!",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Totally fun!"
+   }
+  ],
+  "related": [
+   "nojam",
+   "jjang",
+   "daebak"
+  ],
+  "faq": [
+   {
+    "q": "What is the opposite of kkuljaem?",
+    "a": "노잼 (nojam), which means \"boring\" or \"no fun\"."
+   },
+   {
+    "q": "Is kkuljaem rude?",
+    "a": "No, it is positive. It is just casual slang, so use 정말 재미있어요 in polite situations."
+   },
+   {
+    "q": "What does kkul mean in Korean slang?",
+    "a": "꿀 means \"honey\", and in slang it adds the idea of \"sweet\" or \"great\", as in 꿀잼 (super fun) or 꿀팁 (great tip)."
+   }
+  ]
+ },
+ {
+  "slug": "nojam",
+  "ko": "노잼",
+  "roman": "nojam",
+  "aka": [
+   "no jam",
+   "no jaem",
+   "nojaem"
+  ],
+  "meaning": "Boring / Not fun",
+  "category": "slang",
+  "register": "casual",
+  "intro": "노잼 (nojam) is Korean slang meaning \"boring\" or \"no fun\". People use it for dull movies, classes and games, and also to tease a friend whose joke fell flat. Its opposite is 꿀잼 (kkuljaem), \"super fun\".",
+  "literal": "노 is the English word \"no\", and 잼 comes from 재미 (jaemi), \"fun\". So it is literally \"no fun\".",
+  "usage": [
+   "Say 노잼 about anything boring: 이 영화 노잼 (\"This movie is boring\"). Said about a person, it means they are not funny, which friends say jokingly when a joke flops.",
+   "It is casual slang. With people you speak politely to, say 재미없어요 (\"It's not fun\"), and be careful, because calling someone's work or plan boring can still hurt.",
+   "For extra emphasis, people say 핵노잼 (\"super boring\")."
+  ],
+  "forms": [
+   {
+    "ko": "노잼이야",
+    "en": "It's boring",
+    "note": "Casual sentence form."
+   },
+   {
+    "ko": "핵노잼",
+    "en": "Super boring",
+    "note": "Stronger version."
+   },
+   {
+    "ko": "꿀잼",
+    "en": "Super fun",
+    "note": "The opposite."
+   },
+   {
+    "ko": "재미없어요",
+    "en": "It's not fun",
+    "note": "Standard polite version."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Texting a friend halfway through a movie",
+    "chips": [
+     [
+      {
+       "t": "이",
+       "g": "this"
+      }
+     ],
+     [
+      {
+       "t": "영화",
+       "g": "movie"
+      }
+     ],
+     [
+      {
+       "t": "노잼",
+       "g": "boring"
+      }
+     ]
+    ],
+    "en": "This movie is boring."
+   },
+   {
+    "context": "Complaining after school",
+    "chips": [
+     [
+      {
+       "t": "수업",
+       "g": "class"
+      }
+     ],
+     [
+      {
+       "t": "완전",
+       "g": "totally"
+      }
+     ],
+     [
+      {
+       "t": "노잼",
+       "g": "boring"
+      },
+      {
+       "t": "이었어",
+       "g": "was (casual)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Class was totally boring."
+   },
+   {
+    "context": "A friend's joke falls flat",
+    "chips": [
+     [
+      {
+       "t": "너",
+       "g": "you"
+      }
+     ],
+     [
+      {
+       "t": "진짜",
+       "g": "really"
+      }
+     ],
+     [
+      {
+       "t": "노잼",
+       "g": "no fun"
+      },
+      {
+       "t": "이야",
+       "g": "casual \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "You're so not funny."
+   }
+  ],
+  "related": [
+   "kkuljaem",
+   "jjajeungna",
+   "eojjeol-tv"
+  ],
+  "faq": [
+   {
+    "q": "What is the opposite of nojam?",
+    "a": "꿀잼 (kkuljaem), which means \"super fun\"."
+   },
+   {
+    "q": "Is calling someone nojam rude?",
+    "a": "Between friends it is usually playful teasing. Said to someone you don't know well, it can sound insulting."
+   },
+   {
+    "q": "What does haek nojam mean?",
+    "a": "핵노잼 means \"super boring\". 핵 adds strong emphasis, a bit like \"mega\"."
+   }
+  ]
+ },
+ {
+  "slug": "mukbang",
+  "ko": "먹방",
+  "roman": "mukbang",
+  "aka": [
+   "meokbang",
+   "muk bang",
+   "mokbang"
+  ],
+  "meaning": "Eating show / broadcast",
+  "category": "internet",
+  "register": "any",
+  "intro": "먹방 (mukbang) means an \"eating show\": a video or live stream where someone eats food on camera, often a lot of it, while chatting with viewers. The word and the trend started in Korea and spread worldwide.",
+  "literal": "It combines 먹 (meok), from 먹다 (\"to eat\"), and 방 (bang), from 방송 (\"broadcast\").",
+  "usage": [
+   "People use 먹방 for YouTube eating videos, eating scenes on TV shows, and even jokingly for a friend who is eating with great enthusiasm.",
+   "You 보다 (watch) a 먹방 or 찍다 (film) one. It is a normal everyday word, fine in casual and polite speech alike.",
+   "The romanization \"mukbang\" is the most common in English, even though standard romanization would be meokbang."
+  ],
+  "forms": [
+   {
+    "ko": "먹방 보다",
+    "en": "To watch mukbang",
+    "note": "Everyday phrase."
+   },
+   {
+    "ko": "먹방 찍다",
+    "en": "To film a mukbang",
+    "note": "Also used jokingly when someone eats a lot."
+   },
+   {
+    "ko": "먹방 유튜버",
+    "en": "Mukbang YouTuber",
+    "note": "Someone who makes eating videos."
+   },
+   {
+    "ko": "쿡방",
+    "en": "Cooking show",
+    "note": "Similar word from 쿡 (cook) + 방송."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Telling a friend about your dinner habit",
+    "chips": [
+     [
+      {
+       "t": "먹방",
+       "g": "eating show"
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "watch",
+       "base": "보다"
+      },
+      {
+       "t": "면서",
+       "g": "while",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "밥",
+       "g": "meal"
+      }
+     ],
+     [
+      {
+       "t": "먹",
+       "g": "eat",
+       "base": "먹다"
+      },
+      {
+       "t": "어",
+       "g": "casual ending",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I eat while watching mukbang."
+   },
+   {
+    "context": "Planning a video with a friend",
+    "chips": [
+     [
+      {
+       "t": "오늘",
+       "g": "today"
+      }
+     ],
+     [
+      {
+       "t": "먹방",
+       "g": "eating show"
+      }
+     ],
+     [
+      {
+       "t": "찍",
+       "g": "film",
+       "base": "찍다"
+      },
+      {
+       "t": "을까",
+       "g": "shall we",
+       "p": true
+      },
+      {
+       "t": "?",
+       "g": "",
+       "p": true
+      }
+     ]
+    ],
+    "en": "Should we film a mukbang today?"
+   },
+   {
+    "context": "Explaining your late-night snacking",
+    "chips": [
+     [
+      {
+       "t": "밤",
+       "g": "night"
+      },
+      {
+       "t": "에",
+       "g": "at / in",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "먹방",
+       "g": "eating show"
+      }
+     ],
+     [
+      {
+       "t": "보",
+       "g": "watch",
+       "base": "보다"
+      },
+      {
+       "t": "면",
+       "g": "when / if",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "배고파요",
+       "g": "am hungry (polite)",
+       "base": "배고프다"
+      }
+     ]
+    ],
+    "en": "Watching mukbang at night makes me hungry."
+   }
+  ],
+  "related": [
+   "jonmat",
+   "chimaek",
+   "baegopa",
+   "jal-meokgesseumnida"
+  ],
+  "faq": [
+   {
+    "q": "Is it mukbang or meokbang?",
+    "a": "Both refer to 먹방. \"Mukbang\" is the spelling most people use in English, while \"meokbang\" follows the official romanization."
+   },
+   {
+    "q": "Why are mukbangs popular?",
+    "a": "Many viewers enjoy the company of someone eating with them, especially when eating alone, and they like seeing new foods and big portions."
+   },
+   {
+    "q": "Is mukbang a slang word?",
+    "a": "It started as a casual internet word but is now standard everyday vocabulary that anyone can use."
+   }
+  ]
+ },
+ {
+  "slug": "ulzzang",
+  "ko": "얼짱",
+  "roman": "ulzzang",
+  "aka": [
+   "eoljjang",
+   "uljjang",
+   "ulzang"
+  ],
+  "meaning": "Best face / very good-looking",
+  "category": "internet",
+  "register": "casual",
+  "intro": "얼짱 (ulzzang) is Korean slang for a very good-looking person, literally \"best face\". In the 2000s it also became a style of selfie and fashion, with soft makeup, big eyes and flattering camera angles, made popular by online \"ulzzang\" stars.",
+  "literal": "얼 comes from 얼굴 (eolgul), \"face\", and 짱 (jjang) means \"the best\".",
+  "usage": [
+   "Use 얼짱 to say someone is the best-looking in a group, like a school or class. It is a compliment and casual in tone.",
+   "The term feels strongly tied to the 2000s and early 2010s internet era, so today it can sound a little nostalgic. 얼짱 각도 (\"ulzzang angle\"), the flattering high selfie angle, is still a known phrase.",
+   "In polite situations, simple words like 잘생겼어요 (\"handsome\") or 예뻐요 (\"pretty\") are more natural."
+  ],
+  "forms": [
+   {
+    "ko": "얼짱 각도",
+    "en": "Ulzzang angle",
+    "note": "The flattering selfie angle, usually from slightly above."
+   },
+   {
+    "ko": "몸짱",
+    "en": "Great body",
+    "note": "Similar word with 몸 (body)."
+   },
+   {
+    "ko": "잘생겼어요",
+    "en": "You're handsome / good-looking",
+    "note": "Standard polite compliment."
+   },
+   {
+    "ko": "예뻐요",
+    "en": "You're pretty",
+    "note": "Standard polite compliment."
+   }
+  ],
+  "examples": [
+   {
+    "context": "Gossiping about a classmate",
+    "chips": [
+     [
+      {
+       "t": "걔",
+       "g": "that kid / he"
+      }
+     ],
+     [
+      {
+       "t": "우리",
+       "g": "our"
+      }
+     ],
+     [
+      {
+       "t": "반",
+       "g": "class"
+      }
+     ],
+     [
+      {
+       "t": "얼짱",
+       "g": "best face"
+      },
+      {
+       "t": "이야",
+       "g": "casual \"to be\"",
+       "p": true
+      }
+     ]
+    ],
+    "en": "He's the best-looking guy in our class."
+   },
+   {
+    "context": "Handing your phone to a friend",
+    "chips": [
+     [
+      {
+       "t": "얼짱",
+       "g": "best face"
+      }
+     ],
+     [
+      {
+       "t": "각도",
+       "g": "angle"
+      },
+      {
+       "t": "로",
+       "g": "at / with",
+       "p": true
+      }
+     ],
+     [
+      {
+       "t": "찍어",
+       "g": "take a photo",
+       "base": "찍다"
+      }
+     ],
+     [
+      {
+       "t": "줘",
+       "g": "for me",
+       "base": "주다"
+      }
+     ]
+    ],
+    "en": "Take it from the ulzzang angle."
+   },
+   {
+    "context": "Joking about your school days",
+    "chips": [
+     [
+      {
+       "t": "학생",
+       "g": "student"
+      }
+     ],
+     [
+      {
+       "t": "때",
+       "g": "time / when"
+      }
+     ],
+     [
+      {
+       "t": "얼짱",
+       "g": "best face"
+      },
+      {
+       "t": "이었어요",
+       "g": "was (polite)",
+       "p": true
+      }
+     ]
+    ],
+    "en": "I was an ulzzang as a student."
+   }
+  ],
+  "related": [
+   "jjang",
+   "oppa",
+   "aegyo"
+  ],
+  "faq": [
+   {
+    "q": "Is ulzzang a compliment?",
+    "a": "Yes. It means someone is very good-looking. It is casual, so it fits friends better than formal settings."
+   },
+   {
+    "q": "What is ulzzang style?",
+    "a": "It is a look from Korean internet culture of the 2000s: bright skin, big eyes, cute poses and selfies taken from a flattering high angle."
+   },
+   {
+    "q": "Is ulzzang still used?",
+    "a": "People still know and use it, but it feels a bit nostalgic now. The phrase 얼짱 각도 (ulzzang angle) is still common."
+   }
+  ]
+ }
+]
