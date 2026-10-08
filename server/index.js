@@ -46,6 +46,7 @@ const getAudioURL = require('./controllers/auth/getAudioURL');
 const generateAudio = require('./controllers/auth/generateAudio');
 const getSentence = require('./controllers/auth/getSentence');
 const { hideHistorySentence, hideHistoryExtendedText, clearHistory } = require('./controllers/auth/hideHistory');
+const claimSentences = require('./controllers/auth/claimSentences');
 const { listFolders, createFolder, renameFolder, deleteFolder, moveSavedItem } = require('./controllers/auth/libraryFolders');
 const submitExtendedText = require('./controllers/auth/submitExtendedText');
 const getExtendedText = require('./controllers/auth/getExtendedText');
@@ -118,6 +119,7 @@ const { getTraffic } = require('./controllers/admin/traffic');
 const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./controllers/admin/snapshot');
 const { setHeardFrom } = require('./controllers/auth/setHeardFrom');
 const lifecycleEmails = require('./services/lifecycleEmails');
+const streakEmails = require('./services/streakEmails');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -309,6 +311,7 @@ app.get('/api/user/history', isAuthenticated, async (req, res) => {
 app.delete('/api/user/history/sentences/:id', isAuthenticated, hideHistorySentence);
 app.delete('/api/user/history/extended-texts/:id', isAuthenticated, hideHistoryExtendedText);
 app.post('/api/user/history/clear', isAuthenticated, clearHistory);
+app.post('/api/user/history/claim', isAuthenticated, claimSentences);
 
 app.post('/api/sentences/:sentenceId/save', isAuthenticated, async (req, res) => {
     saveSentence(req, res);
@@ -419,6 +422,11 @@ app.get('/api/progress', isAuthenticated, async (req, res) => {
 // Stripe endpoints
 app.post('/api/create-checkout-session', isAuthenticated, createCheckoutSession);
 app.get('/api/pricing/offer', require('./controllers/pricingOffer'));
+app.get('/api/daily-sentence', (req, res) => {
+    const { text, gist, date } = require('./utils/dailySentence').dailySentence();
+    res.set('Cache-Control', 'public, max-age=600');
+    res.json({ success: true, text, gist, date, language: 'ko' });
+});
 
 // Creator affiliates
 const affiliates = require('./controllers/affiliates');
@@ -871,6 +879,8 @@ async function startServer() {
 
     // Hourly lifecycle emails; does nothing unless LIFECYCLE_EMAILS_ENABLED=true
     lifecycleEmails.startLifecycleEmailScheduler();
+    // Evening streak reminders; does nothing unless STREAK_EMAILS_ENABLED=true
+    streakEmails.startStreakEmailScheduler();
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

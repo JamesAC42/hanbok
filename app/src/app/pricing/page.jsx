@@ -91,6 +91,7 @@ const Pricing = () => {
     // Yearly is the better deal for anyone who sticks with it, so it's shown first.
     const [isYearly, setIsYearly] = useState(true);
     const [studentOffer, setStudentOffer] = useState(null);
+    const [trialOffer, setTrialOffer] = useState(null);
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const { t } = useLanguage();
     // Newer lines fall back to English until they're translated.
@@ -108,8 +109,11 @@ const Pricing = () => {
         if (authLoading) return;
         fetch('/api/pricing/offer', { credentials: 'include' })
             .then((res) => res.json())
-            .then((data) => setStudentOffer(data?.student?.enabled ? data.student : null))
-            .catch(() => setStudentOffer(null));
+            .then((data) => {
+                setStudentOffer(data?.student?.enabled ? data.student : null);
+                setTrialOffer(data?.trial?.eligible && data.trial.days > 0 ? data.trial : null);
+            })
+            .catch(() => { setStudentOffer(null); setTrialOffer(null); });
     }, [authLoading, user]);
 
     const faqItems = FAQ_ITEMS.map((item) => item.id === 'student' && studentOffer
@@ -117,7 +121,8 @@ const Pricing = () => {
         : item);
 
     const handlePurchase = async (priceId) => {
-        track('checkout_start', { plan: PLAN_BY_PRICE_ID[priceId] || 'unknown', loggedIn: !!user });
+        const plan = PLAN_BY_PRICE_ID[priceId] || 'unknown';
+        track('checkout_start', { plan, loggedIn: !!user, trial: !!trialOffer && plan.startsWith('PLUS_SUBSCRIPTION') });
         if (!user) {
             router.push('/login');
             return;
@@ -301,8 +306,15 @@ const Pricing = () => {
                                 onClick={() => handlePurchase(getPriceId('plus'))}
                                 disabled={loading}
                             >
-                                {loading ? 'Processing...' : t('pricing.planButtons.getPlus')}
+                                {loading ? 'Processing...' : trialOffer ? `Try Plus free for ${trialOffer.days} days` : t('pricing.planButtons.getPlus')}
                             </button>
+                            {trialOffer && (
+                                <p className={pricingStyles.trialNote}>
+                                    {studentOffer?.eligible
+                                        ? `Free for ${trialOffer.days} days, then your student price. Cancel before then and you pay nothing.`
+                                        : `Free for ${trialOffer.days} days, then ${t('pricing.pricing.currency')}${isYearly ? PRICING.plus.yearly : PRICING.plus.monthly}${isYearly ? ' a year' : ' a month'}. Cancel before then and you pay nothing.`}
+                                </p>
+                            )}
                             <p className={pricingStyles.guaranteeText}>{t('pricing.badges.guarantee')}</p>
                         </div>
 

@@ -1,5 +1,6 @@
 const { getDb } = require('../../database');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
+const { weeklySentenceQuota } = require('../../utils/sentenceQuota');
 
 const getQuota = async (req, res) => {
     try {
@@ -58,7 +59,9 @@ const getQuota = async (req, res) => {
             }
         }
         
-        const WEEKLY_QUOTA = 10;
+        const WEEKLY_QUOTA = weeklySentenceQuota(identifierType);
+        response.totalWeekly = WEEKLY_QUOTA;
+        response.signedOut = identifierType === 'ipAddress';
 
         if (!rateLimitRecord) {
             // No record means full quota

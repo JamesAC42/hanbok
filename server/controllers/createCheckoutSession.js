@@ -1,6 +1,7 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { getDb } = require('../database');
 const { isStudentEligible, studentCouponId } = require('../utils/studentDiscount');
+const { plusTrialDays, isTrialEligible, isPlusPrice } = require('../utils/plusTrial');
 
 const createCheckoutSession = async (req, res) => {
     const { priceId } = req.body;
@@ -13,21 +14,11 @@ const createCheckoutSession = async (req, res) => {
         const price = await stripe.prices.retrieve(priceId);
         const isSubscription = price.type === 'recurring';
 
-        // Check if this is a monthly subscription for trial (exclude yearly)
-        const MONTHLY_SUBSCRIPTION_PRICE_IDS = [
-            'price_1R94kODv6kE7Gata9Zwzvvom', // BASIC_SUBSCRIPTION
-            'price_1QtBf2Dv6kE7Gatasq6pq1Tc', // PLUS_SUBSCRIPTION
-        ];
-        const isMonthlySubscription = MONTHLY_SUBSCRIPTION_PRICE_IDS.includes(priceId);
+        const db = getDb();
+        const user = await db.collection('users').findOne({ userId });
 
-        // Check if user has already used their free trial
-        let userHasUsedTrial = false;
-        if (isSubscription && isMonthlySubscription) {
-            const db = getDb();
-            const user = await db.collection('users').findOne({ userId });
-            userHasUsedTrial = user?.hasUsedFreeTrial === true;
-            console.log('User has used free trial:', userHasUsedTrial);
-        }
+        // New subscribers get a free trial of Plus (monthly or yearly)
+        const withTrial = isSubscription && isPlusPrice(priceId) && isTrialEligible(user);
 
         // Base session configuration
         const sessionConfig = {
@@ -46,27 +37,21 @@ const createCheckoutSession = async (req, res) => {
             client_reference_id: userId.toString(),
         };
 
-        // Add trial settings for monthly subscriptions (only if user hasn't used trial yet)
-        if (isSubscription && isMonthlySubscription && !userHasUsedTrial) {
-            // sessionConfig.subscription_data = {
-            //     trial_period_days: 7,
-            //     trial_settings: {
-            //         end_behavior: {
-            //             missing_payment_method: 'cancel',
-            //         },
-            //     },
-            // };
-            // sessionConfig.payment_method_collection = 'if_required';
-            // console.log('Applying 7-day free trial to checkout session');
-        } else if (isSubscription && isMonthlySubscription && userHasUsedTrial) {
-            console.log('User has already used free trial, no trial applied');
+        if (withTrial) {
+            sessionConfig.subscription_data = {
+                trial_period_days: plusTrialDays(),
+                trial_settings: {
+                    end_behavior: {
+                        missing_payment_method: 'cancel',
+                    },
+                },
+            };
+            sessionConfig.metadata.trial = 'true';
         }
 
         // Students get their coupon applied automatically. Stripe allows either a
         // discount or the promo-code box, not both.
         if (isSubscription) {
-            const db = getDb();
-            const user = await db.collection('users').findOne({ userId });
             if (isStudentEligible(user)) {
                 sessionConfig.discounts = [{ coupon: studentCouponId() }];
                 delete sessionConfig.allow_promotion_codes;
