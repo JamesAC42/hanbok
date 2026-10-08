@@ -14,6 +14,7 @@ const { getDb } = require('../../database');
 const { isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
 const SupportedLanguages = require('../../supported_languages');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
+const { weeklySentenceQuota, quotaExceededMessage } = require('../../utils/sentenceQuota');
 
 const { extractTextFromImage } = require('../../llm/analyzeImage');
 
@@ -132,15 +133,10 @@ const checkRateLimits = async (req, db) => {
     }
     
     // Check if user has exceeded the weekly quota
-    const WEEKLY_QUOTA = 10;
-    const hasQuota = rateLimitRecord.weekSentences < WEEKLY_QUOTA;
+    const hasQuota = rateLimitRecord.weekSentences < weeklySentenceQuota(identifierType);
     
-    // Create appropriate message for quota exceeded
-    const message = hasQuota ? null : {
-        type: 'rate_limit_exceeded',
-        message: 'You have used all 10 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses for $4/month or purchase 100 additional analyses for $1.',
-        remaining: 0
-    };
+    // Signed-out visitors are asked to make a free account; free accounts to upgrade
+    const message = hasQuota ? null : quotaExceededMessage(identifierType);
     
     return {
         hasQuota,
@@ -172,8 +168,11 @@ const incrementRateLimitsAndCheckNotifications = async (identifier, identifierTy
     const updatedRecord = await db.collection('rate_limits').findOne({ identifier, identifierType });
     if (!updatedRecord) return null;
     
+    // Signed-out visitors hit the sign-up wall instead of upgrade notifications
+    if (identifierType === 'ipAddress') return null;
+
     // Check if we've hit any notification thresholds
-    const WEEKLY_QUOTA = 10;
+    const WEEKLY_QUOTA = weeklySentenceQuota(identifierType);
     const remaining = WEEKLY_QUOTA - updatedRecord.weekSentences;
     let notification = null;
     
@@ -605,7 +604,7 @@ const submitSentence = async (req, res) => {
             const currentRecord = await db.collection('rate_limits').findOne({ identifier, identifierType });
             
             if (currentRecord) {
-                const WEEKLY_QUOTA = 10;
+                const WEEKLY_QUOTA = weeklySentenceQuota(identifierType);
                 const remaining = WEEKLY_QUOTA - currentRecord.weekSentences;
                 
                 weeklyQuotaInfo = {

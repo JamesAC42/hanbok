@@ -19,6 +19,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
 import { sentenceHref } from '@/lib/sentenceLink';
+import { rememberAnonSentence } from '@/lib/anonSentences';
 
 const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 
@@ -380,6 +381,18 @@ const SentenceForm = ({
                 return;
             }
 
+            // Signed-out visitor used their free tries: ask for a free account
+            if (data.message?.error?.type === 'signup_required') {
+                setError({
+                    type: 'signup_required',
+                    message: data.message.error.message
+                });
+                track('signup_wall', { language, source });
+                showLoginRequiredPopup('sentence-analyses');
+                setLoading(false);
+                return;
+            }
+
             if(data.message.isValid) {
                 // If this is an image submission and user is logged in
                 if (imagePreview && isAuthenticated && (user.tier === 0 || user.tier === 1)) {
@@ -440,6 +453,7 @@ const SentenceForm = ({
                 
                 playFinishedSound();
                 track('analyze', { language, source, signedIn: isAuthenticated });
+                if (!isAuthenticated) rememberAnonSentence(data.publicId);
                 
                 // If originalLanguage or sentenceId is in the response, add them to query params
                 if (data.originalLanguage && data.sentenceId) {
@@ -492,6 +506,8 @@ const SentenceForm = ({
                 return error.message || t('sentenceForm.errors.image_processing');
             case 'rate_limit_exceeded':
                 return error.message || t('sentenceForm.errors.rate_limit_exceeded');
+            case 'signup_required':
+                return error.message;
             case 'rate_limit_notification':
                 return error.notification?.message || '';
             case 'purchased_analysis_used':

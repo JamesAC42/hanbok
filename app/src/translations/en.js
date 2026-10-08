@@ -519,6 +519,11 @@ export const en = {
                 main: 'Create a free account to generate audio and hear lifelike pronunciation!',
                 sub: 'Join thousands of Korean learners using Hanbok to improve their speaking and listening.'
             },
+            'sentence-analyses': {
+                title: 'Keep going with a free account',
+                main: "You've used this week's free tries. A free account gets 10 breakdowns a week and keeps every one in your Library.",
+                sub: 'No card needed. The sentences you just broke down come with you.'
+            },
             'image-extracts': {
                 main: 'Create a free account to extract text from images!',
                 sub: 'Free accounts get 20 free image extractions to help you analyze text from any source.'
@@ -529,6 +534,7 @@ export const en = {
             }
         },
         createAccount: 'Create Account',
+        signUpWithEmail: 'Sign up with email',
         maybeLater: 'Maybe Later'
     },
     audioPlayer: {

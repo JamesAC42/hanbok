@@ -113,6 +113,13 @@
     &:focus-visible { outline: 3px solid var(--bp-read-line); outline-offset: 2px; }
 }
 
+// Google's own button on the sign-up wall.
+.google {
+    margin-top: 1.4rem;
+
+    + .buttons { margin-top: .75rem; }
+}
+
 .buttons {
     display: flex;
     flex-direction: column;
