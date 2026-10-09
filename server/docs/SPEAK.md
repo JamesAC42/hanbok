@@ -30,7 +30,9 @@ usage reported by the browser).
 | `SPEAK_COACH_MODEL` | gpt-4.1 | Live only: reads the transcript after each line for captions, goals, cards, mood and the end of the scene |
 | `SPEAK_MODEL_FREE` / `_BASIC` / `_PLUS` | gpt-realtime-2.1 | the mini model sounded off in testing, so every plan uses the full one |
 | `SPEAK_MAX_SESSION_SECONDS` | 600 | longest single call |
-| `SPEAK_VOICE_HORANG` (or `SPEAK_VOICE`) | cedar | Horang's voice |
-| `SPEAK_VOICE_SORA` | marin | Sora's voice |
+| `SPEAK_VOICE_HORANG` | ripple | Horang's GPT-Live voice |
+| `SPEAK_REALTIME_VOICE_HORANG` | cedar | Horang's voice on the Realtime fallback (it lacks the newer voices) |
+| `SPEAK_VOICE_SORA` | marin | Sora's GPT-Live voice |
+| `SPEAK_REALTIME_VOICE_SORA` | marin | Sora's voice on the Realtime fallback |
 | `SPEAK_TRANSCRIBE_MODEL` | gpt-4o-transcribe | captions of what the learner says, with a mixed-language hint |
 | `SPEAK_TRANSLATE_MODEL` | gpt-4.1 | translation and romanization under the character's lines |

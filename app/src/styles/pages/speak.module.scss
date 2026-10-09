@@ -190,17 +190,6 @@ $horang: #FF8A00;
 .saveBtn { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px); padding: .5rem .9rem; font-size: .8rem; }
 .tipList li { line-height: 1.5; span { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; margin-right: .35rem; } }
 
-// Admin voice picker (/speak/voices)
-.voiceList { list-style: none; margin: .5rem 0 1.5rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .5rem; }
-.voiceRow { display: flex; align-items: center; gap: .5rem; padding: .5rem .5rem .5rem .9rem; border-radius: 14px; border: 2px solid var(--bp-line); background: var(--bp-card); }
-.voiceRowOn { border-color: var(--bp-purple); background: var(--bp-purple-soft); }
-.voiceName { flex: 1; font-weight: 800; text-transform: capitalize; em { font-style: normal; font-weight: 700; font-size: .8rem; color: var(--bp-ink2); text-transform: none; } }
-.voicePlay { @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 3px); padding: .45rem .9rem; font-size: .8rem; }
-.voiceUse { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px); padding: .45rem .9rem; font-size: .8rem; }
-.voiceText { @include bp-card; padding: .75rem 1rem; font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; line-height: 1.5; }
-.voiceDebug { margin: 0 0 1rem; font-size: .85rem; summary { cursor: pointer; font-weight: 700; } pre { white-space: pre-wrap; background: var(--bp-soft); border-radius: 10px; padding: .75rem; max-height: 260px; overflow: auto; } }
-.voiceError { color: #D63A40; font-weight: 700; }
-
 // ===== Live scene =====
 // A flex column so the dialogue grows upward and nothing overlaps or scrolls:
 // top bar and goals, empty stage (the sprite stands behind it), then the
@@ -389,8 +378,6 @@ $horang: #FF8A00;
     svg { width: 26px; height: 26px; }
     &:active { transform: translateY(3px); box-shadow: 0 2px 0 #6B4BD0; }
 }
-.voicePick { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #5A5F78;
-    select { flex: 1; min-height: 36px; border-radius: 10px; border: 2px solid #E6E1F8; font: 700 14px var(--font-display); padding: 0 8px; } }
 .readyNote { margin: 0; text-align: center; font-size: 12px; font-weight: 700; color: #6A6F88; }
 
 .controls { display: flex; align-items: center; justify-content: center; gap: 22px; padding-top: 4px; }

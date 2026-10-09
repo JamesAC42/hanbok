@@ -376,7 +376,6 @@ app.post('/api/speak/coach', isAuthenticated, speak.coach);
 app.post('/api/speak/session/:id/recap', isAuthenticated, speak.recap);
 app.get('/api/speak/history', isAuthenticated, speak.history);
 app.get('/api/speak/history/:id', isAuthenticated, speak.historyItem);
-app.post('/api/speak/voice-sample', isAuthenticated, requireAdmin, speak.voiceSample);
 
 // Flashcard routes
 app.get('/api/decks', isAuthenticated, async (req, res) => {

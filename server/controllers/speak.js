@@ -16,10 +16,6 @@ const OPENAI_URL = 'https://api.openai.com/v1/realtime/calls';
 const LIVE_URL = 'https://api.openai.com/v1/live/sessions';
 const LIVE_MODEL = process.env.SPEAK_LIVE_MODEL || 'gpt-live-1';
 const engineNow = () => (process.env.SPEAK_ENGINE === 'realtime' ? 'realtime' : 'live');
-// Voices a tester can try with ?voices=1 on /speak. Realtime only knows the
-// older ones; GPT-Live knows all of them.
-const REALTIME_VOICES = ['alloy', 'ash', 'ballad', 'cedar', 'coral', 'echo', 'marin', 'sage', 'shimmer', 'verse'];
-const LIVE_VOICES = [...REALTIME_VOICES, 'beacon', 'bossa', 'cinder', 'delta', 'gleam', 'meridian', 'quartz', 'ripple', 'stone', 'tempo', 'vesper', 'willow'];
 const TRANSLATE_MODEL = process.env.SPEAK_TRANSLATE_MODEL || 'gpt-4.1';
 const hangupTimers = new Map();
 const NON_LATIN = new Set(['ko', 'ja', 'zh', 'zh-TW', 'ru', 'hi']);
@@ -173,11 +169,8 @@ const startSession = async (req, res) => {
             userName: str(user.name, 40).split(' ')[0],
         };
         let engine = engineNow();
-        const base = characterFor(scenario.character);
-        const asked = str(req.body?.voice, 20);
-        const voiceFor = (eng) => ((eng === 'live' ? LIVE_VOICES : REALTIME_VOICES).includes(asked) ? asked : base.voice);
-        const character = { ...base, voice: voiceFor(engine) };
-        const realtime = () => openRealtime({ sdp, character: { ...base, voice: voiceFor('realtime') }, instructions: buildInstructions(promptArgs), model: planFor(user.tier || 0).model, language, nativeLanguage });
+        const character = characterFor(scenario.character);
+        const realtime = () => openRealtime({ sdp, character: { ...character, voice: character.realtimeVoice }, instructions: buildInstructions(promptArgs), model: planFor(user.tier || 0).model, language, nativeLanguage });
         let opened = engine === 'live'
             ? await openLive({ sdp, character, instructions: buildInstructions({ ...promptArgs, engine }), opener: '(The call just connected. Start the scene now with your opening line.)' })
             : await realtime();
@@ -293,33 +286,6 @@ const translate = async (req, res) => {
         console.error('speak translate', e.message);
         res.status(500).json({ success: false, error: 'Translation failed' });
     }
-};
-
-// POST /api/speak/voice-sample { voice, character, sdp } (admins): a short
-// GPT-Live call where the character reads an audition line in that voice, so
-// voices can be compared by ear on /speak/voices.
-const SAMPLE_LINES = {
-    horang: 'Hey hey, welcome to Kkachi Café! 어서 오세요! 뭐 드릴까요? ...An iced americano in winter? Bold. As a tiger, I respect that.',
-    sora: 'Hi! I\'m Sora, I just moved to Seoul from the mountains. 서울은 진짜 신기해요! Yesterday I bowed to a vending machine. ...It did not bow back.',
-};
-const voiceSample = async (req, res) => {
-    const voice = str(req.body?.voice, 20);
-    const sdp = typeof req.body?.sdp === 'string' ? req.body.sdp : '';
-    const base = characterFor(req.body?.character === 'sora' ? 'sora' : 'horang');
-    if (!LIVE_VOICES.includes(voice)) return res.status(400).json({ success: false, error: 'Unknown voice' });
-    if (!sdp.startsWith('v=0') || sdp.length > 20000) return res.status(400).json({ success: false, error: 'Bad connection offer' });
-    const instructions = [
-        ...base.who,
-        base.sound,
-        '',
-        'This is a voice audition. As soon as the call connects, perform these lines in character, with energy and natural pacing, then stop and stay silent:',
-        SAMPLE_LINES[base.id],
-    ].join('\n');
-    // Stored so a failed sample's recording can be pulled up by its id.
-    const opened = await openLive({ sdp, character: { ...base, voice }, instructions, opener: '(Connected. Perform your audition lines now.)', trusted: true, store: true });
-    if (!opened) return res.status(502).json({ success: false, error: 'Could not open the sample' });
-    setTimeout(() => hangup(opened.callId, 'live'), 30 * 1000);
-    res.json({ success: true, answer: opened.answer, callId: opened.callId, line: SAMPLE_LINES[base.id] });
 };
 
 // POST /api/speak/coach { sessionId, transcript }: screen updates for GPT-Live calls.
@@ -442,4 +408,4 @@ const historyItem = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, voiceSample, LIVE_VOICES, REALTIME_VOICES };
+module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem };

@@ -6,7 +6,9 @@ const CHARACTERS = {
     horang: {
         id: 'horang',
         name: 'Horang',
-        voice: process.env.SPEAK_VOICE_HORANG || process.env.SPEAK_VOICE || 'cedar',
+        // GPT-Live voice, and the closest Realtime API voice for the fallback.
+        voice: process.env.SPEAK_VOICE_HORANG || 'ripple',
+        realtimeVoice: process.env.SPEAK_REALTIME_VOICE_HORANG || 'cedar',
         moods: ['neutral', 'happy', 'amused', 'encouraging', 'explaining', 'thinking', 'shocked', 'exasperated', 'apologetic', 'proud', 'smug', 'serious'],
         who: [
             'You are Horang (호랑), the tutor in the Hanbok Study app: a young man with tiger ears and a striped tail, wearing a red hanbok with a teal sash.',
@@ -18,6 +20,7 @@ const CHARACTERS = {
         id: 'sora',
         name: 'Sora',
         voice: process.env.SPEAK_VOICE_SORA || 'marin',
+        realtimeVoice: process.env.SPEAK_REALTIME_VOICE_SORA || 'marin',
         moods: ['neutral', 'happy', 'excited', 'surprised', 'thinking', 'confused', 'determined', 'embarrassed', 'scheming', 'worried', 'annoyed', 'disappointed'],
         who: [
             'You are Sora (소라), Horang\'s friend in the Hanbok Study app: a young woman with a short black bob and blunt bangs who always wears hanbok (a cream jeogori with a navy collar and bow, and a navy chima).',
