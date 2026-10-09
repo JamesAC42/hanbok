@@ -1,0 +1,192 @@
+@import '../variables.module.scss';
+
+// Speak results (right after a call) and the call history. Colors come from
+// the character (--accent, --accent-soft).
+
+.results, .history {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 4rem;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    @media screen and (max-width: 725px) { padding: 1rem 1rem 3rem; }
+}
+
+// Everything after the hero arrives in order.
+.stats li, .goalList li, .noteCard, .saveBlock { animation: rise .45s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    border: 3px solid var(--accent);
+    background: var(--accent-soft);
+    min-height: 300px;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.25rem;
+    @media screen and (max-width: 560px) { min-height: 400px; align-items: flex-start; }
+}
+.heroBg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: .35;
+    filter: saturate(1.1) blur(1px);
+    animation: bg-in .8s ease both;
+}
+@keyframes bg-in { from { opacity: 0; transform: scale(1.08); } to { opacity: .35; transform: none; } }
+.heroSprite {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    max-width: 60%;
+    object-fit: contain;
+    object-position: bottom;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, .2));
+    animation: sprite-up .7s cubic-bezier(.2, 1.5, .4, 1) .1s both, bob 3s ease-in-out 1s infinite;
+    @media screen and (max-width: 560px) { height: 58%; max-width: 75%; right: -4%; }
+}
+@keyframes sprite-up { from { transform: translateY(60%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+.heroText { position: relative; z-index: 2; max-width: 58%; display: flex; flex-direction: column; gap: .5rem; align-items: flex-start;
+    @media screen and (max-width: 560px) { max-width: 100%; }
+}
+.kicker { @include bp-label; margin: 0; color: var(--accent); filter: brightness(.8); }
+.heroTitle { @include bp-title; margin: 0; font-size: 2.6rem; line-height: 1; animation: title-pop .6s cubic-bezier(.2, 1.7, .4, 1) .25s both;
+    @media screen and (max-width: 560px) { font-size: 2.1rem; }
+}
+@keyframes title-pop { from { transform: scale(.3) rotate(-6deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.stars { display: flex; gap: .25rem; font-size: 2.4rem; line-height: 1; }
+.starOn, .starOff { display: inline-block; animation: star-pop .5s cubic-bezier(.2, 1.8, .4, 1) both; }
+.starOn { color: #FFB020; text-shadow: 0 3px 0 #D18700; }
+.starOff { color: color-mix(in srgb, var(--foreground) 15%, var(--background)); }
+@keyframes star-pop { 0% { transform: scale(0) rotate(-90deg); opacity: 0; } 70% { transform: scale(1.3); opacity: 1; } 100% { transform: scale(1); } }
+.bubble {
+    position: relative; margin: .35rem 0 0; padding: .7rem .9rem; border-radius: 16px;
+    background: var(--bp-card); border: 2px solid var(--accent);
+    font-weight: 600; line-height: 1.45; font-size: 1rem;
+    animation: rise .45s ease 1.1s both;
+    span { display: block; margin-top: .25rem; font-size: .8rem; font-weight: 800; color: var(--accent); filter: brightness(.8); }
+}
+
+.confetti { position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: hidden;
+    span { position: absolute; top: -20px; animation: fall 2.6s cubic-bezier(.25, .5, .5, 1) both; }
+}
+@keyframes fall {
+    0% { transform: translate(0, 0) rotate(0); opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate(var(--drift), 420px) rotate(var(--spin)); opacity: 0; }
+}
+
+.stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem;
+    @media screen and (max-width: 560px) { grid-template-columns: repeat(2, 1fr); }
+    li { @include bp-card; padding: .8rem .6rem; display: flex; flex-direction: column; align-items: center; gap: .1rem; text-align: center; }
+    b { font-family: var(--font-lilita); font-weight: 400; font-size: 1.9rem; color: var(--accent); font-variant-numeric: tabular-nums; }
+    span { @include bp-label; font-size: .7rem; }
+}
+
+.goalList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .4rem;
+    li { display: flex; align-items: center; gap: .6rem; font-weight: 700; padding: .55rem .8rem; border-radius: 14px; border: 2px solid var(--bp-line); background: var(--bp-card); color: var(--bp-ink2); }
+    .goalDone { color: var(--foreground); border-color: var(--bp-und-line); background: var(--bp-und-soft); }
+}
+.goalMark { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: .85rem; color: #fff;
+    border: 2px solid var(--bp-line-strong);
+    .goalDone & { background: var(--bp-und); border-color: var(--bp-und); }
+}
+
+.notes { word-break: keep-all; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 1.1rem; }
+.noteGrid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+    @media screen and (max-width: 640px) { grid-template-columns: 1fr; }
+}
+.noteCard { @include bp-card; padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: .5rem;
+    h3 { margin: 0; font-family: var(--font-lilita); font-weight: 400; font-size: 1.25rem; display: flex; gap: .4rem; align-items: center; }
+    ul { margin: 0; padding-left: 1.1rem; display: flex; flex-direction: column; gap: .35rem; line-height: 1.45; font-weight: 600; }
+    b { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; margin-right: .2rem; }
+}
+.noteWell { border-color: var(--bp-und-line); background: var(--bp-und-soft); }
+.noteWork { border-color: var(--bp-keep-line); background: var(--bp-keep-soft); }
+.notePron { border-color: var(--bp-purple-line); background: var(--bp-purple-soft); grid-column: 1 / -1; }
+.noteLabel { @include bp-label; font-size: .7rem; }
+.noteMuted { margin: 0; color: var(--bp-ink2); font-weight: 600; }
+.bestLine { margin: .2rem 0 0; display: flex; flex-direction: column; gap: .1rem; padding: .6rem .75rem; border-radius: 12px; background: var(--bp-card); }
+.target { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; font-size: 1.1rem; }
+.meaning { color: var(--bp-ink2); font-weight: 600; font-size: .92rem; }
+.fixList { list-style: none; padding: 0 !important; li { display: flex; flex-direction: column; gap: .1rem; padding: .55rem .7rem; border-radius: 12px; background: var(--bp-card); } }
+.said { font-family: var(--font-kr-sans), var(--font-display); text-decoration: line-through; text-decoration-color: var(--bp-rev); color: var(--bp-ink2); font-weight: 600; }
+.better { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; font-size: 1.05rem;
+    &::before { content: '→ '; color: var(--bp-und); }
+}
+
+.saveBlock { display: flex; flex-direction: column; gap: .6rem; }
+.blockRow { display: flex; align-items: center; justify-content: space-between; }
+.blockTitle { @include bp-title; margin: 0; font-size: 1.35rem; }
+.grammarList { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .6rem;
+    li { @include bp-card; padding: .9rem 1rem; display: flex; flex-direction: column; gap: .4rem; align-items: flex-start; border-color: var(--bp-read-line); }
+}
+.grammarHead { display: flex; flex-direction: column; }
+.pattern { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; font-size: 1.3rem; color: var(--bp-read-d); }
+.grammarName { font-weight: 800; font-size: .95rem; }
+.grammarText { margin: 0; line-height: 1.45; font-weight: 500; font-size: .93rem; }
+.example { margin: 0; padding: .45rem .6rem; border-radius: 10px; background: var(--bp-read-soft); line-height: 1.4; font-size: .93rem;
+    span[lang] { font-family: var(--font-kr-sans), var(--font-display); font-weight: 700; display: block; }
+}
+.phraseList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .4rem;
+    li { display: flex; align-items: center; gap: .75rem; background: var(--bp-card); border: 2px solid var(--bp-line); border-radius: 14px; padding: .5rem .5rem .5rem .9rem; flex-wrap: wrap; }
+    .meaning { flex: 1; min-width: 8rem; }
+}
+.saveBtn { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px); padding: .5rem .9rem; font-size: .82rem; margin-top: auto; }
+.savedLink { font-weight: 800; color: var(--bp-und-d); text-decoration: none; margin-top: auto; }
+.linkBtn { background: none; border: 0; padding: .25rem; font: 800 .9rem var(--font-display); color: var(--bp-purple-d); cursor: pointer; text-decoration: underline; }
+
+.shimmerBox { display: flex; flex-direction: column; gap: .45rem;
+    span { height: .95rem; border-radius: 6px; background: linear-gradient(90deg, var(--bp-line), var(--bp-soft), var(--bp-line)); background-size: 200% 100%; animation: shimmer 1.2s linear infinite; }
+}
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+.upsell { margin: 0; font-weight: 600; a { color: var(--bp-purple-d); font-weight: 800; } }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; }
+.againBtn { @include bp-press(var(--bp-purple), var(--bp-purple-d)); }
+.backBtn { @include bp-press-ghost(var(--bp-purple-d)); }
+.historyLink { font-weight: 800; color: var(--bp-purple-d); }
+
+@media (prefers-reduced-motion: reduce) {
+    .results *, .history * { animation: none !important; }
+    .confetti { display: none; }
+}
+
+// History list and one call
+.histHead { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    h1 { @include bp-title; margin: 0; font-size: 2.2rem; }
+    a { font-weight: 800; color: var(--bp-purple-d); }
+}
+.histList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .6rem; }
+.histItem { @include bp-press-card; display: flex; gap: .9rem; align-items: center; padding: .7rem .9rem .7rem .7rem; text-decoration: none; color: inherit; border-color: var(--bp-line); }
+.histThumb { width: 74px; height: 74px; border-radius: 14px; background-size: cover; background-position: center; flex-shrink: 0; position: relative; background-color: var(--accent-soft);
+    img { position: absolute; right: -6px; bottom: -4px; width: 44px; height: 44px; object-fit: cover; object-position: 50% 12%; border-radius: 50%; border: 3px solid var(--accent); background: var(--accent-soft); }
+}
+.histInfo { display: flex; flex-direction: column; gap: .15rem; min-width: 0; flex: 1; }
+.histTitle { font-family: var(--font-lilita); font-size: 1.2rem; }
+.histMeta { font-size: .85rem; font-weight: 700; color: var(--bp-ink2); }
+.histSummary { font-size: .92rem; font-weight: 600; color: var(--bp-ink2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.histStars { color: #FFB020; font-size: 1.1rem; letter-spacing: 1px; flex-shrink: 0; }
+.empty { @include bp-card; padding: 1.5rem; text-align: center; font-weight: 600; display: flex; flex-direction: column; gap: .75rem; align-items: center; }
+.moreBtn { @include bp-press-ghost(var(--bp-purple-d)); align-self: center; }
+
+.detailHead { @include bp-card; border-color: var(--accent); background: var(--accent-soft); display: flex; gap: 1rem; align-items: center; padding: 1rem;
+    h1 { @include bp-title; margin: 0; font-size: 1.8rem; }
+    p { margin: .2rem 0 0; }
+}
+.detailFace { width: 76px; height: 76px; border-radius: 50%; overflow: hidden; border: 3px solid var(--accent); background: #fff; flex-shrink: 0;
+    img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%; transform: scale(1.6); transform-origin: 50% 8%; }
+}
+.script { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .5rem; }
+.script li { display: flex; flex-direction: column; gap: .1rem; max-width: 85%; padding: .55rem .8rem; border-radius: 14px; line-height: 1.45; }
+.scriptChar { align-self: flex-start; background: var(--accent-soft); border: 2px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.scriptYou { align-self: flex-end; background: var(--bp-read-soft); border: 2px solid var(--bp-read-line); }
+.scriptWho { @include bp-label; font-size: .68rem; }
+.scriptText { font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; }

@@ -11,11 +11,11 @@ import { useAuth } from '@/contexts/AuthContext';
 const PopupContext = createContext();
 
 // Current announcement. A new id shows it once more to everyone it targets.
-// The redesign note only makes sense to people who used the old design, so it
-// goes to signed-in accounts created before the new look went out.
+// Speak goes to every signed-in account. Set accountsCreatedBefore (ISO date)
+// to limit a future announcement to accounts older than that.
 const CURRENT_ANNOUNCEMENT = {
-    id: '2026-10-new-look',
-    accountsCreatedBefore: '2026-10-08T00:00:00Z',
+    id: '2026-10-speak',
+    accountsCreatedBefore: null,
 };
 
 export function PopupProvider({ children }) {
@@ -38,10 +38,13 @@ export function PopupProvider({ children }) {
             // from search land there, and Google penalizes interstitials over the
             // content. The update post itself doesn't need a popup pointing at it.
             const path = pathname || window.location.pathname;
-            if (path === '/' || /^\/(learn|lyrics|login|pricing|about|updates)(\/|$)/.test(path)) return;
+            // Speak itself doesn't need a popup advertising it either.
+            if (path === '/' || /^\/(learn|lyrics|login|pricing|about|updates|speak)(\/|$)/.test(path)) return;
 
-            const created = user.dateCreated ? new Date(user.dateCreated) : null;
-            if (!created || created >= new Date(CURRENT_ANNOUNCEMENT.accountsCreatedBefore)) return;
+            if (CURRENT_ANNOUNCEMENT.accountsCreatedBefore) {
+                const created = user.dateCreated ? new Date(user.dateCreated) : null;
+                if (!created || created >= new Date(CURRENT_ANNOUNCEMENT.accountsCreatedBefore)) return;
+            }
 
             let seenAnnouncements = {};
             try {

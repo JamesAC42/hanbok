@@ -369,6 +369,17 @@ app.delete('/api/grammar/point/:grammarId', isAuthenticated, grammarSave.removeG
 app.get('/api/grammar/point/:grammarId/lesson', isAuthenticated, grammarStudy.getGrammarLesson);
 app.post('/api/grammar/point/:grammarId/lesson/complete', isAuthenticated, grammarStudy.completeGrammarLesson);
 
+// Speak: live voice role-play with Horang (controllers/speak.js)
+const speak = require('./controllers/speak');
+app.get('/api/speak', speak.overview);
+app.post('/api/speak/session', isAuthenticated, speak.startSession);
+app.post('/api/speak/session/:id/end', isAuthenticated, speak.endSession);
+app.post('/api/speak/translate', isAuthenticated, speak.translate);
+app.post('/api/speak/coach', isAuthenticated, speak.coach);
+app.post('/api/speak/session/:id/recap', isAuthenticated, speak.recap);
+app.get('/api/speak/history', isAuthenticated, speak.history);
+app.get('/api/speak/history/:id', isAuthenticated, speak.historyItem);
+
 // Flashcard routes
 app.get('/api/decks', isAuthenticated, async (req, res) => {
     getDecks(req, res);
