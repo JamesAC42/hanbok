@@ -122,16 +122,20 @@ export class SpeakCall {
         if (this.engine === 'live') this.send({ type: muted ? 'session.input_audio.mute' : 'session.input_audio.unmute' });
     }
 
-    // GPT-Live ignores commands until session.started, and waits for the
-    // learner unless told to start, so the opening nudge goes out then (and
-    // once more if the character still hasn't spoken a few seconds later).
+    // The server seeds the call with a "just connected" turn so the character
+    // opens the scene. If they still haven't spoken a few seconds after
+    // session.started (commands before it are ignored), nudge them, twice at most.
     kickoff() {
         const L = this.live;
         if (L.started) return;
         L.started = true;
         const go = '(The call just connected. Start the scene now with your opening line.)';
-        this.nudge(go);
-        L.kickTimer = setTimeout(() => { if (!L.n && !this.ended) this.nudge(go); }, 5000);
+        const quiet = () => !L.n && !L.line && !this.ended;
+        L.kickTimer = setTimeout(() => {
+            if (!quiet()) return;
+            this.nudge(go);
+            L.kickTimer = setTimeout(() => { if (quiet()) this.nudge(go); }, 5000);
+        }, 3000);
     }
 
     onLiveEvent(ev) {

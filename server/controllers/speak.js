@@ -110,7 +110,8 @@ const openRealtime = async ({ sdp, character, instructions, model, language, nat
 // GPT-Live: full-duplex voice billed per minute. It can't call tools, so the
 // browser asks /api/speak/coach to drive the screen after each turn.
 const LIVE_CLIENT_EVENTS = ['session.instructions.append', 'session.commentary.append', 'session.thinking.append', 'session.input_audio.mute', 'session.input_audio.unmute'];
-const openLive = async ({ sdp, character, instructions }) => {
+// opener: a first user turn, so the character speaks as soon as the call connects.
+const openLive = async ({ sdp, character, instructions, opener, trusted = false, store = false }) => {
     const r = await fetch(LIVE_URL, {
         method: 'POST',
         headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
@@ -120,7 +121,9 @@ const openLive = async ({ sdp, character, instructions }) => {
                 instructions,
                 audio: { output: { voice: character.voice } },
                 // The browser is untrusted: it may only nudge and mute.
-                client: { data_channel: { allowed_client_events: LIVE_CLIENT_EVENTS, allowed_server_events: 'all' } },
+                ...(trusted ? {} : { client: { data_channel: { allowed_client_events: LIVE_CLIENT_EVENTS, allowed_server_events: 'all' } } }),
+                ...(store ? { store: true } : {}),
+                ...(opener ? { input: [{ type: 'message', role: 'user', content: [{ type: 'input_text', text: opener }] }] } : {}),
             },
             transport: { type: 'webrtc', sdp },
         }),
@@ -176,7 +179,7 @@ const startSession = async (req, res) => {
         const character = { ...base, voice: voiceFor(engine) };
         const realtime = () => openRealtime({ sdp, character: { ...base, voice: voiceFor('realtime') }, instructions: buildInstructions(promptArgs), model: planFor(user.tier || 0).model, language, nativeLanguage });
         let opened = engine === 'live'
-            ? await openLive({ sdp, character, instructions: buildInstructions({ ...promptArgs, engine }) })
+            ? await openLive({ sdp, character, instructions: buildInstructions({ ...promptArgs, engine }), opener: '(The call just connected. Start the scene now with your opening line.)' })
             : await realtime();
         // If GPT-Live won't open the call, fall back to the Realtime API.
         if (!opened && engine === 'live') { engine = 'realtime'; opened = await realtime(); }
@@ -305,10 +308,11 @@ const voiceSample = async (req, res) => {
         'This is a voice audition. As soon as the call connects, perform these lines in character, with energy and natural pacing, then stop and stay silent:',
         SAMPLE_LINES[base.id],
     ].join('\n');
-    const opened = await openLive({ sdp, character: { ...base, voice }, instructions });
+    // Stored so a failed sample's recording can be pulled up by its id.
+    const opened = await openLive({ sdp, character: { ...base, voice }, instructions, opener: '(Connected. Perform your audition lines now.)', trusted: true, store: true });
     if (!opened) return res.status(502).json({ success: false, error: 'Could not open the sample' });
     setTimeout(() => hangup(opened.callId, 'live'), 30 * 1000);
-    res.json({ success: true, answer: opened.answer, line: SAMPLE_LINES[base.id] });
+    res.json({ success: true, answer: opened.answer, callId: opened.callId, line: SAMPLE_LINES[base.id] });
 };
 
 // POST /api/speak/coach { sessionId, transcript }: screen updates for GPT-Live calls.

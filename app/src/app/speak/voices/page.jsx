@@ -17,20 +17,41 @@ const MAX_MS = 25000;
 const pickKey = (ch) => `speakVoice.${ch}`;
 const readPick = (ch) => { try { return localStorage.getItem(pickKey(ch)) || ''; } catch { return ''; } };
 
-async function recordSample({ voice, character, onText }) {
+async function recordSample({ voice, character, onText, log }) {
+    const t0 = Date.now();
+    const note = (m) => log(`${((Date.now() - t0) / 1000).toFixed(1)}s ${m}`);
     const pc = new RTCPeerConnection();
+    pc.onconnectionstatechange = () => note(`connection: ${pc.connectionState}`);
+    pc.oniceconnectionstatechange = () => note(`ice: ${pc.iceConnectionState}`);
     // A silent outgoing track: the sample never needs the microphone.
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     const silent = ctx.createMediaStreamDestination();
     pc.addTrack(silent.stream.getAudioTracks()[0], silent.stream);
     const dc = pc.createDataChannel('oai-events');
+    dc.addEventListener('open', () => note('data channel open'));
+    dc.addEventListener('close', () => note('data channel closed'));
     const audio = new Audio();
     audio.autoplay = true;
     let recorder = null;
     const chunks = [];
+    let meter = null;
     pc.ontrack = (e) => {
+        note('audio track arrived');
         audio.srcObject = e.streams[0];
-        audio.play?.().catch(() => {});
+        audio.play?.().then(() => note('audio playing'), (err) => note(`audio blocked: ${err.name}`));
+        // Logs when sound actually comes in, to tell "silent" from "no captions".
+        try {
+            const an = ctx.createAnalyser();
+            ctx.createMediaStreamSource(e.streams[0]).connect(an);
+            const buf = new Uint8Array(an.fftSize);
+            let heard = false;
+            meter = setInterval(() => {
+                an.getByteTimeDomainData(buf);
+                const loud = buf.some((v) => Math.abs(v - 128) > 6);
+                if (loud && !heard) note('sound is coming in');
+                heard = heard || loud;
+            }, 200);
+        } catch { /* meter is optional */ }
         try {
             recorder = new MediaRecorder(e.streams[0]);
             recorder.ondataavailable = (ev) => { if (ev.data.size) chunks.push(ev.data); };
@@ -45,13 +66,17 @@ async function recordSample({ voice, character, onText }) {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.success) { pc.close(); ctx.close(); throw new Error(data.error || `HTTP ${res.status}`); }
+    note(`session ${data.callId}`);
     await pc.setRemoteDescription({ type: 'answer', sdp: data.answer });
+    ctx.resume?.();
 
     return new Promise((resolve) => {
         let text = '';
         let quiet = null;
         const done = () => {
             clearTimeout(retry);
+            clearInterval(meter);
+            note('finished');
             clearTimeout(quiet);
             clearTimeout(cap);
             const finish = () => {
@@ -62,15 +87,20 @@ async function recordSample({ voice, character, onText }) {
             if (recorder && recorder.state !== 'inactive') { recorder.onstop = finish; recorder.stop(); } else finish();
         };
         const cap = setTimeout(done, MAX_MS);
-        // GPT-Live ignores commands until session.started.
+        // The server seeds a "connected" turn, so the voice should start on its
+        // own; if it's still quiet after session.started, nudge it (twice at most).
         let kicked = 0;
-        const kick = () => dc.readyState === 'open' && kicked++ < 2 && dc.send(JSON.stringify({ type: 'session.commentary.append', delegation_id: null, content: '(Connected. Perform your audition lines now.)' }));
+        const kick = () => {
+            if (text || dc.readyState !== 'open' || kicked++ >= 2) return;
+            note('sent start nudge');
+            dc.send(JSON.stringify({ type: 'session.commentary.append', delegation_id: null, content: '(Connected. Perform your audition lines now.)' }));
+        };
         let retry = null;
-        dc.onopen = () => { retry = setTimeout(() => { if (!kicked) kick(); }, 3000); };
         dc.onmessage = (e) => {
             let ev = {};
             try { ev = JSON.parse(e.data); } catch { return; }
-            if (ev.type === 'session.started' && !kicked) { kick(); retry = setTimeout(() => { if (!text) kick(); }, 5000); }
+            if (ev.type !== 'session.output_transcript.delta' || !text) note(`event: ${ev.type}${ev.error ? ` ${ev.error.message || ev.error.code}` : ''}${ev.reason ? ` (${ev.reason})` : ''}${ev.message ? ` ${ev.message}` : ''}`);
+            if (ev.type === 'session.started') retry = setTimeout(() => { kick(); retry = setTimeout(kick, 5000); }, 3000);
             if (ev.type === 'error') onText(`Error: ${ev.error?.message || ev.error?.code || 'unknown'}`);
             if (ev.type === 'session.output_transcript.delta') {
                 text += ev.delta || '';
@@ -89,6 +119,7 @@ export default function SpeakVoicesPage() {
     const [busy, setBusy] = useState(null);
     const [text, setText] = useState('');
     const [error, setError] = useState('');
+    const [debug, setDebug] = useState([]);
     const [picks, setPicks] = useState({ horang: '', sora: '' });
     const player = useRef(null);
 
@@ -101,8 +132,9 @@ export default function SpeakVoicesPage() {
         if (busy) return;
         setBusy(key);
         setText('');
+        setDebug([]);
         try {
-            const url = await recordSample({ voice, character, onText: setText });
+            const url = await recordSample({ voice, character, onText: setText, log: (m) => setDebug((d) => [...d, m]) });
             if (url) setSamples((s) => ({ ...s, [key]: url }));
         } catch (e) {
             setError(e.message === 'Unauthorized access' ? 'This page is for Hanbok admins.' : e.message);
@@ -152,6 +184,12 @@ export default function SpeakVoicesPage() {
                 </div>
                 {(busy || text) && <p className={styles.voiceText}>{busy ? '🔊 ' : ''}{text || 'Connecting…'}</p>}
                 {error && <p className={styles.voiceError}>{error}</p>}
+                {debug.length > 0 && (
+                    <details className={styles.voiceDebug} open>
+                        <summary>Connection log (send this to Claude if it gets stuck)</summary>
+                        <pre>{debug.join('\n')}</pre>
+                    </details>
+                )}
                 <h2 className={styles.castName}>New GPT-Live voices</h2>
                 <ul className={styles.voiceList}>{NEW_VOICES.map(row)}</ul>
                 <h2 className={styles.castName}>Older voices</h2>

@@ -198,6 +198,7 @@ $horang: #FF8A00;
 .voicePlay { @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 3px); padding: .45rem .9rem; font-size: .8rem; }
 .voiceUse { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px); padding: .45rem .9rem; font-size: .8rem; }
 .voiceText { @include bp-card; padding: .75rem 1rem; font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; line-height: 1.5; }
+.voiceDebug { margin: 0 0 1rem; font-size: .85rem; summary { cursor: pointer; font-weight: 700; } pre { white-space: pre-wrap; background: var(--bp-soft); border-radius: 10px; padding: .75rem; max-height: 260px; overflow: auto; } }
 .voiceError { color: #D63A40; font-weight: 700; }
 
 // ===== Live scene =====
