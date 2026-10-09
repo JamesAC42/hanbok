@@ -285,6 +285,32 @@ const translate = async (req, res) => {
     }
 };
 
+// POST /api/speak/voice-sample { voice, character, sdp } (admins): a short
+// GPT-Live call where the character reads an audition line in that voice, so
+// voices can be compared by ear on /speak/voices.
+const SAMPLE_LINES = {
+    horang: 'Hey hey, welcome to Kkachi Café! 어서 오세요! 뭐 드릴까요? ...An iced americano in winter? Bold. As a tiger, I respect that.',
+    sora: 'Hi! I\'m Sora, I just moved to Seoul from the mountains. 서울은 진짜 신기해요! Yesterday I bowed to a vending machine. ...It did not bow back.',
+};
+const voiceSample = async (req, res) => {
+    const voice = str(req.body?.voice, 20);
+    const sdp = typeof req.body?.sdp === 'string' ? req.body.sdp : '';
+    const base = characterFor(req.body?.character === 'sora' ? 'sora' : 'horang');
+    if (!LIVE_VOICES.includes(voice)) return res.status(400).json({ success: false, error: 'Unknown voice' });
+    if (!sdp.startsWith('v=0') || sdp.length > 20000) return res.status(400).json({ success: false, error: 'Bad connection offer' });
+    const instructions = [
+        ...base.who,
+        base.sound,
+        '',
+        'This is a voice audition. As soon as the call connects, perform these lines in character, with energy and natural pacing, then stop and stay silent:',
+        SAMPLE_LINES[base.id],
+    ].join('\n');
+    const opened = await openLive({ sdp, character: { ...base, voice }, instructions });
+    if (!opened) return res.status(502).json({ success: false, error: 'Could not open the sample' });
+    setTimeout(() => hangup(opened.callId, 'live'), 30 * 1000);
+    res.json({ success: true, answer: opened.answer, line: SAMPLE_LINES[base.id] });
+};
+
 // POST /api/speak/coach { sessionId, transcript }: screen updates for GPT-Live calls.
 const coach = async (req, res) => {
     const transcript = cleanTranscript(req.body?.transcript);
@@ -308,4 +334,4 @@ const coach = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach };
+module.exports = { overview, startSession, endSession, translate, coach, voiceSample, LIVE_VOICES, REALTIME_VOICES };

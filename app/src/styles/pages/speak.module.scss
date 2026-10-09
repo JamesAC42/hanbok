@@ -107,6 +107,7 @@ $horang: #FF8A00;
 .sceneThumb {
     display: block;
     height: 130px;
+    background-color: var(--bp-soft);
     background-size: cover;
     background-position: center 35%;
 }
@@ -189,6 +190,16 @@ $horang: #FF8A00;
 .saveBtn { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px); padding: .5rem .9rem; font-size: .8rem; }
 .tipList li { line-height: 1.5; span { font-family: var(--font-kr-sans), var(--font-display); font-weight: 800; margin-right: .35rem; } }
 
+// Admin voice picker (/speak/voices)
+.voiceList { list-style: none; margin: .5rem 0 1.5rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .5rem; }
+.voiceRow { display: flex; align-items: center; gap: .5rem; padding: .5rem .5rem .5rem .9rem; border-radius: 14px; border: 2px solid var(--bp-line); background: var(--bp-card); }
+.voiceRowOn { border-color: var(--bp-purple); background: var(--bp-purple-soft); }
+.voiceName { flex: 1; font-weight: 800; text-transform: capitalize; em { font-style: normal; font-weight: 700; font-size: .8rem; color: var(--bp-ink2); text-transform: none; } }
+.voicePlay { @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 3px); padding: .45rem .9rem; font-size: .8rem; }
+.voiceUse { @include bp-press(var(--bp-keep), var(--bp-keep-d), var(--bp-keep-ink), 3px); padding: .45rem .9rem; font-size: .8rem; }
+.voiceText { @include bp-card; padding: .75rem 1rem; font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; line-height: 1.5; }
+.voiceError { color: #D63A40; font-weight: 700; }
+
 // ===== Live scene =====
 // A flex column so the dialogue grows upward and nothing overlaps or scrolls:
 // top bar and goals, empty stage (the sprite stands behind it), then the
@@ -238,6 +249,7 @@ $horang: #FF8A00;
 .spriteRight { right: -8%; }
 .spriteLeft { left: -8%; }
 .spriteTalk { animation: sprite-bounce .18s ease-out; }
+.spriteRight, .spriteLeft { transition: opacity .2s ease; }
 @keyframes sprite-bounce {
     0% { transform: translateY(0); }
     45% { transform: translateY(-6px); }
@@ -343,6 +355,8 @@ $horang: #FF8A00;
 .lineSmall { font-size: 16px; -webkit-line-clamp: 4; }
 .lineRoman { margin: 0; font-size: 14px; font-weight: 700; color: var(--accent); filter: brightness(.8); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .lineNative { margin: 0; font-size: 15px; color: #5A5F78; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.pending { filter: none; color: transparent; background: linear-gradient(90deg, #F1EEF9, #F8F6FD, #F1EEF9); background-size: 200% 100%; border-radius: 6px; width: 70%; animation: shimmer 1.2s linear infinite; }
+@keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 .lineTools { display: flex; gap: 6px; margin-top: 4px;
     button { flex: 1; min-height: 36px; padding: 0 6px; border-radius: 10px; border: 2px solid #E6E1F8; background: #fff; font: 700 13px var(--font-display); color: #1F2340; display: inline-flex; align-items: center; justify-content: center; gap: 4px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .toolOn { background: var(--accent-soft); border-color: var(--accent); }
@@ -426,5 +440,5 @@ $horang: #FF8A00;
 .assistRowOn { border-color: var(--accent); background: var(--accent-soft); }
 
 @media (prefers-reduced-motion: reduce) {
-    .spriteTalk, .heroSora, .heroHorang, .card, .suggest, .goals .goalDone { animation: none; }
+    .spriteTalk, .heroSora, .heroHorang, .card, .suggest, .goals .goalDone, .pending { animation: none; }
 }

@@ -24,6 +24,23 @@ const Icon = {
 const TEST_VOICES = ['cedar', 'ash', 'echo', 'verse', 'ballad', 'beacon', 'bossa', 'cinder', 'delta', 'gleam', 'meridian', 'quartz', 'ripple', 'stone', 'tempo', 'vesper', 'willow', 'marin', 'coral', 'sage', 'shimmer', 'alloy'];
 const voiceTesting = () => { try { return new URLSearchParams(window.location.search).has('voices'); } catch { return false; } };
 
+const storedVoice = (character) => { try { return localStorage.getItem(`speakVoice.${character}`) || ''; } catch { return ''; } };
+
+// Keeps showing the current picture until the next one is decoded, so
+// switching faces or mouth frames never flashes blank.
+function useDecodedSrc(src) {
+    const [shown, setShown] = useState(src);
+    useEffect(() => {
+        let live = true;
+        const img = new Image();
+        img.src = src;
+        const show = () => { if (live) setShown(src); };
+        (img.decode ? img.decode() : Promise.resolve()).then(show, show);
+        return () => { live = false; };
+    }, [src]);
+    return shown;
+}
+
 const lineSize = (text) => (text.length > 110 ? styles.lineSmall : text.length > 60 ? styles.lineMedium : '');
 
 export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, onDone, onLimit }) {
@@ -167,7 +184,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             onError: (err) => track('speak_error', { code: String(err?.code || err?.type || ''), engine: call.engine }),
         });
         callRef.current = call;
-        call.start({ scenarioId: scenario.id, level, assist, language, nativeLanguage, voice: voice || undefined })
+        call.start({ scenarioId: scenario.id, level, assist, language, nativeLanguage, voice: voice || storedVoice(ch.id) || undefined })
             .then((data) => {
                 s.startedAt = Date.now();
                 s.notes = data.assistNotes || {};
@@ -221,10 +238,17 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
         return () => cancelAnimationFrame(raf);
     }, [status]);
 
-    // Both mouth frames for the current mood, so talking never flickers.
+    // Every face and mouth frame, decoded up front so nothing pops in mid-call.
     useEffect(() => {
-        [mood, ch.celebrate].forEach((m) => [false, true].forEach((t) => { const img = new Image(); img.src = spriteSrc(ch.id, m, t); }));
-    }, [mood, ch]);
+        const imgs = ch.moods.flatMap((m) => [false, true].map((t) => {
+            const img = new Image();
+            img.src = spriteSrc(ch.id, m, t);
+            img.decode?.().catch(() => {});
+            return img;
+        }));
+        return () => { imgs.length = 0; };
+    }, [ch]);
+    const sprite = useDecodedSrc(spriteSrc(ch.id, mood, speaking));
 
     const help = () => {
         const how = {
@@ -253,9 +277,8 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
     return (
         <div className={styles.scene} style={sceneStyle}>
             <img
-                key={`${mood}-${speaking}`}
                 className={`${styles.sprite} ${ch.side === 'left' ? styles.spriteLeft : styles.spriteRight} ${speaking ? styles.spriteTalk : ''}`}
-                src={spriteSrc(ch.id, mood, speaking)}
+                src={sprite}
                 alt={`${ch.name} looks ${mood}`}
             />
 
@@ -343,8 +366,9 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                         <div className={styles.dialogue}>
                             {youLine && <p className={styles.youLine}><span>You</span> <span lang={language}>{youLine}</span></p>}
                             <p lang={language} className={`${styles.lineTarget} ${lineSize(line.text || '')}`}>{line.text || '…'}</p>
-                            {showRoman && cap?.roman && <p className={styles.lineRoman}>{cap.roman}</p>}
-                            {showNative && cap?.native && cap.native !== line.text && <p className={styles.lineNative}>{cap.native}</p>}
+                            {/* Caption rows keep their space while the caption loads, so the box doesn't jump. */}
+                            {showRoman && (cap ? cap.roman : true) && <p className={`${styles.lineRoman} ${cap ? '' : styles.pending}`}>{cap?.roman || '\u00a0'}</p>}
+                            {showNative && (cap ? cap.native && cap.native !== line.text : true) && <p className={`${styles.lineNative} ${cap ? '' : styles.pending}`}>{cap?.native || '\u00a0'}</p>}
                             <div className={styles.lineTools}>
                                 <button type="button" onClick={slower}>{Icon.slow}Slower</button>
                                 <button type="button" aria-pressed={showRoman} className={showRoman ? styles.toolOn : ''} onClick={() => setShowRoman((v) => !v)}>Aa</button>
