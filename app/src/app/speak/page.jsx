@@ -3,10 +3,10 @@ import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Dashboard from '@/components/Dashboard';
 import SpeakScene from '@/components/speak/SpeakScene';
-import { CHARACTERS, ASSISTS, defaultAssist, characterOf } from '@/components/speak/characters';
+import SpeakResults from '@/components/speak/SpeakResults';
+import { CHARACTERS, ASSISTS, defaultAssist } from '@/components/speak/characters';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { addWord } from '@/api/words';
 import { track } from '@/lib/analytics';
 import styles from '@/styles/pages/speak.module.scss';
 
@@ -33,7 +33,6 @@ export default function SpeakPage() {
     const [active, setActive] = useState(null);
     const [result, setResult] = useState(null);
     const [limit, setLimit] = useState(null);
-    const [saved, setSaved] = useState({});
 
     const load = useCallback(() => {
         fetch(`/api/speak?language=${encodeURIComponent(language || 'ko')}`, { credentials: 'include' })
@@ -74,7 +73,6 @@ export default function SpeakPage() {
         setActive(null);
         if (r) {
             setResult(r);
-            setSaved({});
             if (r.allowance) setData((d) => ({ ...d, allowance: r.allowance }));
             window.scrollTo?.(0, 0);
         }
@@ -87,17 +85,6 @@ export default function SpeakPage() {
         track('speak_limit', { where: 'start' });
     }, [allowance]);
 
-    const savePhrase = async (p) => {
-        if (saved[p.word]) return;
-        setSaved((s) => ({ ...s, [p.word]: 'saving' }));
-        try {
-            const r = await addWord({ originalWord: p.word, translatedWord: p.text, originalLanguage: language, translationLanguage: nativeLanguage });
-            setSaved((s) => ({ ...s, [p.word]: r?.reachedLimit ? 'limit' : 'saved' }));
-        } catch {
-            setSaved((s) => ({ ...s, [p.word]: 'error' }));
-        }
-    };
-    const saveAll = () => result.phrases.reduce((chain, p) => chain.then(() => savePhrase(p)), Promise.resolve());
 
     const nativeName = languageName(nativeLanguage || 'en');
     const scenarios = data?.scenarios || [];
@@ -120,7 +107,22 @@ export default function SpeakPage() {
         );
     }
 
-    const resultCh = result ? characterOf(result.character) : null;
+    if (result) {
+        return (
+            <Dashboard>
+                <SpeakResults
+                    result={result}
+                    language={language}
+                    nativeLanguage={nativeLanguage}
+                    tier={tier}
+                    allowance={allowance}
+                    onAgain={() => start(result.scenario)}
+                    onBack={() => { setResult(null); window.scrollTo?.(0, 0); }}
+                />
+            </Dashboard>
+        );
+    }
+
     const minutesLeft = allowance ? Math.floor(allowance.leftSeconds / 60) : 0;
 
     return (
@@ -138,60 +140,9 @@ export default function SpeakPage() {
                             Pick a scene and just talk out loud. They play the barista, the taxi driver or your new friend in Seoul,
                             help in {nativeName} when you get stuck, and work in the words you&apos;ve saved.
                         </p>
+                        {isAuthenticated && <Link className={styles.historyLink} href="/speak/history">Your past conversations →</Link>}
                     </div>
                 </header>
-
-                {result && (
-                    <section className={styles.result} aria-label="How it went" style={{ '--accent': resultCh.color, '--accent-soft': resultCh.soft }}>
-                        <div className={styles.resultHead}>
-                            <span className={`${styles.castFace} ${styles.resultFace}`} style={{ '--face': resultCh.face }}><img src={`/images/speak/${resultCh.id}/${resultCh.celebrate}.webp`} alt="" /></span>
-                            <div>
-                                <h2 className={styles.resultTitle}>{result.goals.every((g) => g.done) ? 'Scene complete!' : 'Nice practice!'}</h2>
-                                {result.summary && <p className={styles.resultSummary}>&ldquo;{result.summary}&rdquo; <span>{resultCh.name}</span></p>}
-                            </div>
-                        </div>
-                        <ul className={styles.resultGoals}>
-                            {result.goals.map((g) => <li key={g.text} className={g.done ? styles.goalDone : ''}>{g.done ? '✓ ' : ''}{g.text}</li>)}
-                        </ul>
-                        {result.phrases.length > 0 && (
-                            <>
-                                <div className={styles.resultRow}>
-                                    <h3 className={styles.resultSub}>Phrases from this scene</h3>
-                                    {isAuthenticated && result.phrases.length > 1 && (
-                                        <button type="button" className={styles.linkBtn} onClick={saveAll}>Save all</button>
-                                    )}
-                                </div>
-                                <ul className={styles.phraseList}>
-                                    {result.phrases.map((p) => (
-                                        <li key={p.word}>
-                                            <span lang={language} className={styles.phraseWord}>{p.word}</span>
-                                            <span className={styles.phraseMeaning}>{p.text}</span>
-                                            <button type="button" className={styles.saveBtn} disabled={!!saved[p.word]} onClick={() => savePhrase(p)}>
-                                                {saved[p.word] === 'saved' ? 'Saved' : saved[p.word] === 'limit' ? 'Library full' : saved[p.word] === 'saving' ? 'Saving…' : 'Save'}
-                                            </button>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </>
-                        )}
-                        {result.tips.filter((t) => t.kind === 'tip').length > 0 && (
-                            <>
-                                <h3 className={styles.resultSub}>Pronunciation notes</h3>
-                                <ul className={styles.tipList}>
-                                    {result.tips.filter((t) => t.kind === 'tip').map((t) => (
-                                        <li key={t.key}><span lang={language}>{t.word}</span> {t.text}</li>
-                                    ))}
-                                </ul>
-                            </>
-                        )}
-                        {tier < 1 && allowance && (
-                            <p className={styles.resultUpsell}>
-                                {minutesLeft > 0 ? `${minutesLeft} free ${minutesLeft === 1 ? 'minute' : 'minutes'} left this week. ` : 'That was your free time for this week. '}
-                                <Link href="/pricing" onClick={() => track('speak_upsell', { where: 'result' })}>Basic gives you 60 minutes a month for $4.</Link>
-                            </p>
-                        )}
-                    </section>
-                )}
 
                 {limit && (
                     <section className={styles.limit}>

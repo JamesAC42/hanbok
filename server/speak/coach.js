@@ -75,4 +75,87 @@ const coachTurn = async ({ scenario, assist, language, nativeLanguage, transcrip
     return parsed;
 };
 
-module.exports = { coachTurn, coachPrompt, COACH_MODEL };
+// After the call: the grammar worth saving, a fix or two for the learner's own
+// lines, and their best line, for the results screen.
+const recapSchema = {
+    type: 'object',
+    additionalProperties: false,
+    properties: {
+        grammar: {
+            type: 'array',
+            items: {
+                type: 'object',
+                additionalProperties: false,
+                properties: {
+                    pattern: { type: 'string' },
+                    name: { type: 'string' },
+                    explanation: { type: 'string' },
+                    level: { type: 'integer' },
+                    example: pair('original', 'translation'),
+                },
+                required: ['pattern', 'name', 'explanation', 'level', 'example'],
+            },
+        },
+        fixes: {
+            type: 'array',
+            items: { type: 'object', additionalProperties: false, properties: { said: { type: 'string' }, better: { type: 'string' }, why: { type: 'string' } }, required: ['said', 'better', 'why'] },
+        },
+        best: nullable(pair('text', 'translation')),
+        well: { type: 'array', items: { type: 'string' } },
+        improve: { type: 'array', items: { type: 'string' } },
+        pronunciation: { type: 'array', items: pair('word', 'tip') },
+    },
+    required: ['well', 'improve', 'pronunciation', 'grammar', 'fixes', 'best'],
+};
+
+const recapPrompt = ({ scenario, language, nativeLanguage, level, goals, tips }) => {
+    const target = nameOf(language);
+    const native = nameOf(nativeLanguage);
+    return [
+        `A ${level || 'beginner'} ${target} learner (native language ${native}) just finished a spoken role-play: "${scenario.title}". Read the transcript and reply with JSON for their results screen. Write every explanation in ${native}.`,
+        goals?.length ? `Scene goals: ${goals.map((g) => `${g.text} (${g.done ? 'done' : 'not done'})`).join('; ')}.` : '',
+        tips?.length ? `Pronunciation feedback given during the call: ${tips.map((t) => `${t.word}: ${t.text}`).join('; ')}.` : '',
+        `- well: 2 or 3 short, specific notes (one sentence each) on what the learner did well, citing what they actually said. Warm but honest.`,
+        `- improve: 1 to 3 short, specific, doable notes on what to work on next (a goal they skipped, leaning on ${native}, very short answers, a recurring mistake). Never about spelling or spacing.`,
+        `- pronunciation: up to 3 {word, tip}: first the feedback given during the call (rewrite it as a clear ${native} tip), then only words where the transcript plainly shows the learner was misheard (a near-miss of the word they clearly meant; say what it came through as). [] if there is nothing real.`,
+        `- grammar: 2 or 3 ${target} grammar patterns that actually appear in the transcript and are worth studying at this level (endings, particles, connectors, set constructions; not single vocabulary words). pattern is the pattern as a textbook writes it (for Korean e.g. "-(으)세요", "-고 싶다", "이/가"). name is a short ${native} name for it. explanation is one or two plain sentences on what it does. level is 1 (first weeks) to 5 (advanced). example.original is a line from the transcript in which that exact pattern appears (check the ending is really there; if no line has it, pick a different pattern; prefer the character's lines and fix spacing), and example.translation is its ${native} meaning.`,
+        'The learner\'s lines are speech-to-text, so their spacing, punctuation and spelling mean nothing: never comment on them, and fix spacing when you quote a line.',
+        `- fixes: up to 2 of the LEARNER's own lines with a real spoken mistake (wrong ending, particle, word or word order) or that a native speaker would say differently. said is what they said, better is a natural ${target} way to say it, why is one short ${native} sentence. Use [] if their lines were fine; never invent a mistake.`,
+        `- best: the learner's best ${target} line (copied exactly) and its ${native} meaning, or null if they never spoke ${target}.`,
+    ].join('\n');
+};
+
+const bare = (t) => String(t || '').replace(/[\s.,!?~'"…·]/g, '');
+
+const recapCall = async ({ scenario, language, nativeLanguage, level, transcript, goals, tips }) => {
+    const ch = characterFor(scenario.character);
+    const lines = transcript.slice(-60).map((m) => `${m.who === 'you' ? 'Learner' : ch.name}: ${m.text}`).join('\n');
+    const r = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: COACH_MODEL,
+            temperature: 0.2,
+            max_tokens: 1200,
+            response_format: { type: 'json_schema', json_schema: { name: 'recap', strict: true, schema: recapSchema } },
+            messages: [
+                { role: 'system', content: recapPrompt({ scenario, language, nativeLanguage, level, goals, tips }).replace(/\n\n+/g, '\n') },
+                { role: 'user', content: lines },
+            ],
+        }),
+    });
+    const out = await r.json();
+    if (!r.ok) throw new Error(out?.error?.message || `HTTP ${r.status}`);
+    const parsed = JSON.parse(out.choices?.[0]?.message?.content || '{}');
+    return {
+        grammar: (parsed.grammar || []).slice(0, 3).map((g) => ({ ...g, level: Math.min(5, Math.max(1, g.level || 2)) })),
+        // A "fix" that only moves spaces or punctuation is a transcription artifact.
+        fixes: (parsed.fixes || []).filter((f) => bare(f.said) !== bare(f.better)).slice(0, 2),
+        best: parsed.best || null,
+        well: (parsed.well || []).slice(0, 3),
+        improve: (parsed.improve || []).slice(0, 3),
+        pronunciation: (parsed.pronunciation || []).slice(0, 3),
+    };
+};
+
+module.exports = { coachTurn, coachPrompt, recapCall, COACH_MODEL };

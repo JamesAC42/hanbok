@@ -49,6 +49,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
     const micRingRef = useRef(null);
     const [status, setStatus] = useState('ready'); // ready | connecting | live | error
     const [engine, setEngine] = useState(null);
+    const [ending, setEnding] = useState(false);
     const [error, setError] = useState('');
     const [speaking, setSpeaking] = useState(false);
     const [listening, setListening] = useState(false);
@@ -91,11 +92,21 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
         const goalsDone = s.goals.filter(Boolean).length;
         const seconds = s.startedAt ? Math.round((Date.now() - s.startedAt) / 1000) : 0;
         track('speak_end', { scenario: scenario.id, seconds, goals: goalsDone, reason });
-        const result = await callRef.current?.end({ goalsDone, transcript: s.transcript, reason });
+        const sessionId = callRef.current?.sessionId || null;
+        const notes = {
+            goals: scenario.goals.map((g, i) => !!s.goals[i]),
+            summary: s.summary,
+            phrases: s.phrases.map(({ word, text }) => ({ word, text })),
+            tips: s.tips.map(({ word, text, kind }) => ({ word, text, kind })),
+        };
+        const result = await callRef.current?.end({ goalsDone, transcript: s.transcript, reason, ...notes });
         onDone({
+            sessionId,
+            scenario,
             character: ch.id,
             goals: scenario.goals.map((g, i) => ({ text: g, done: !!s.goals[i] })),
             phrases: s.phrases, tips: s.tips, summary: s.summary, seconds,
+            lines: s.transcript.filter((m) => m.who === 'you').length,
             allowance: result?.allowance || null,
         });
     }, [onDone, scenario, ch.id]);
@@ -134,7 +145,10 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             if (name === 'end_scene' && !s.ending) {
                 s.ending = true;
                 s.summary = args.summary || '';
-                setTimeout(() => finish('complete'), 3500); // let the goodbye finish
+                setEnding(true);
+                setMood(ch.celebrate);
+                // Hang up only once the goodbye has actually finished playing.
+                call.waitForQuiet().then(() => setTimeout(() => finish('complete'), 400));
             }
         };
         // GPT-Live can't call tools: after each line, a text model reads the
@@ -302,6 +316,13 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                     <div className={styles.lowTime}>
                         {fmt(timeLeft)} left in this call.
                         {tier < 1 && <> <Link href="/pricing">Basic gets 60 minutes a month</Link></>}
+                    </div>
+                )}
+                {ending && (
+                    <div className={styles.endBanner} role="status">
+                        <span className={styles.endStars} aria-hidden="true">★★★</span>
+                        {goals.every(Boolean) ? 'Scene complete!' : 'Wrapping up…'}
+                        <span className={styles.endSub}>{ch.name} is saying goodbye</span>
                     </div>
                 )}
                 <div className={styles.cards} aria-live="polite">

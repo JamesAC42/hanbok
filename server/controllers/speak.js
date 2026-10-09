@@ -10,7 +10,7 @@ const SupportedLanguages = require('../supported_languages');
 const { SCENARIOS, LEVELS, findScenario, publicScenario } = require('../speak/scenarios');
 const { buildInstructions, toolsFor, characterFor, ASSISTS, defaultAssist, assistSwitchNote, nameOf } = require('../speak/prompt');
 const { allowanceFor, planFor, planTable, MAX_SESSION_SECONDS, MIN_START_SECONDS } = require('../speak/limits');
-const { coachTurn } = require('../speak/coach');
+const { coachTurn, recapCall } = require('../speak/coach');
 
 const OPENAI_URL = 'https://api.openai.com/v1/realtime/calls';
 const LIVE_URL = 'https://api.openai.com/v1/live/sessions';
@@ -218,9 +218,16 @@ const endSession = async (req, res) => {
         const db = getDb();
         const s = await db.collection('speak_sessions').findOne({ sessionId: String(req.params.id), userId: req.session.user.userId });
         if (!s) return res.status(404).json({ success: false, error: 'Not found' });
+        const cards = (list) => (Array.isArray(list) ? list : []).slice(0, 20)
+            .map((c) => ({ word: str(c?.word, 120), text: str(c?.text, 300), ...(c?.kind ? { kind: str(c.kind, 10) } : {}) }))
+            .filter((c) => c.word);
         const extra = {
             goalsDone: Math.max(0, Math.min(10, parseInt(req.body?.goalsDone, 10) || 0)),
             transcript: cleanTranscript(req.body?.transcript),
+            ...(Array.isArray(req.body?.goals) ? { goals: req.body.goals.slice(0, 10).map(Boolean) } : {}),
+            ...(req.body?.summary ? { summary: str(req.body.summary, 500) } : {}),
+            phrases: cards(req.body?.phrases),
+            tips: cards(req.body?.tips),
             ...(req.body?.usage && typeof req.body.usage === 'object' ? {
                 usage: {
                     inputAudio: Number(req.body.usage.inputAudio) || 0,
@@ -338,4 +345,101 @@ const coach = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach, voiceSample, LIVE_VOICES, REALTIME_VOICES };
+const goalList = (s, scenario) => (scenario?.goals || []).map((text, i) => ({ text, done: s.goals ? !!s.goals[i] : i < (s.goalsDone || 0) }));
+
+// The results notes for one call, made once from its stored transcript.
+const ensureRecap = async (db, s) => {
+    if (s.recap) return s.recap;
+    const transcript = s.transcript || [];
+    if (!transcript.some((m) => m.who === 'you')) return null;
+    const scenario = findScenario(s.scenarioId);
+    const out = await recapCall({
+        scenario, language: s.language, nativeLanguage: s.nativeLanguage, level: s.level, transcript,
+        goals: goalList(s, scenario), tips: (s.tips || []).filter((t) => t.kind !== 'good'),
+    });
+    await db.collection('speak_sessions').updateOne({ sessionId: s.sessionId }, { $set: { recap: out } });
+    return out;
+};
+
+const EMPTY_RECAP = { well: [], improve: [], pronunciation: [], grammar: [], fixes: [], best: null };
+
+// POST /api/speak/session/:id/recap: notes for the results screen.
+const recap = async (req, res) => {
+    try {
+        const db = getDb();
+        const s = await db.collection('speak_sessions').findOne({ sessionId: String(req.params.id), userId: req.session.user.userId });
+        if (!s) return res.status(404).json({ success: false, error: 'Not found' });
+        res.json({ success: true, ...(await ensureRecap(db, s) || EMPTY_RECAP) });
+    } catch (e) {
+        console.error('speak recap', e.message);
+        res.status(500).json({ success: false, error: 'Could not build the recap' });
+    }
+};
+
+const historyRow = (s) => {
+    const scenario = findScenario(s.scenarioId);
+    const goals = goalList(s, scenario);
+    return {
+        sessionId: s.sessionId,
+        scenarioId: s.scenarioId,
+        title: scenario?.title || s.scenarioId,
+        background: scenario?.background || null,
+        character: s.character || scenario?.character || 'horang',
+        language: s.language,
+        nativeLanguage: s.nativeLanguage,
+        level: s.level,
+        startedAt: s.startedAt,
+        seconds: s.billedSeconds || 0,
+        goalsDone: goals.filter((g) => g.done).length,
+        goalsTotal: goals.length,
+        summary: s.summary || '',
+    };
+};
+
+// GET /api/speak/history: the learner's finished calls, newest first.
+const history = async (req, res) => {
+    try {
+        const db = getDb();
+        const before = req.query.before ? new Date(req.query.before) : null;
+        const rows = await db.collection('speak_sessions')
+            .find({
+                userId: req.session.user.userId,
+                endedAt: { $exists: true },
+                'transcript.0': { $exists: true },
+                ...(before && !Number.isNaN(before.getTime()) ? { startedAt: { $lt: before } } : {}),
+            }, { projection: { transcript: 0, recap: 0, usage: 0 } })
+            .sort({ startedAt: -1 })
+            .limit(30)
+            .toArray();
+        res.json({ success: true, sessions: rows.map(historyRow), more: rows.length === 30 });
+    } catch (e) {
+        console.error('speak history', e.message);
+        res.status(500).json({ success: false, error: 'Could not load your calls' });
+    }
+};
+
+// GET /api/speak/history/:id: one call with its transcript and notes.
+const historyItem = async (req, res) => {
+    try {
+        const db = getDb();
+        const s = await db.collection('speak_sessions').findOne({ sessionId: String(req.params.id), userId: req.session.user.userId });
+        if (!s || !s.endedAt) return res.status(404).json({ success: false, error: 'Not found' });
+        const scenario = findScenario(s.scenarioId);
+        res.json({
+            success: true,
+            session: {
+                ...historyRow(s),
+                goals: goalList(s, scenario),
+                transcript: s.transcript || [],
+                phrases: s.phrases || [],
+                tips: s.tips || [],
+                recap: s.recap || null,
+            },
+        });
+    } catch (e) {
+        console.error('speak history item', e.message);
+        res.status(500).json({ success: false, error: 'Could not load that call' });
+    }
+};
+
+module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, voiceSample, LIVE_VOICES, REALTIME_VOICES };

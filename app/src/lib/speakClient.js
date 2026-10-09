@@ -60,7 +60,16 @@ export class SpeakCall {
         this.pc = pc;
         this.audio = new Audio();
         this.audio.autoplay = true;
-        pc.ontrack = (e) => { this.audio.srcObject = e.streams[0]; this.audio.play?.().catch(() => {}); };
+        pc.ontrack = (e) => {
+            this.audio.srcObject = e.streams[0];
+            this.audio.play?.().catch(() => {});
+            // Lets the call wait for the character to finish talking before hanging up.
+            try {
+                this.outAnalyser = this.ctx.createAnalyser();
+                this.outAnalyser.fftSize = 512;
+                this.ctx.createMediaStreamSource(e.streams[0]).connect(this.outAnalyser);
+            } catch { this.outAnalyser = null; }
+        };
         pc.addTrack(this.mic.getAudioTracks()[0], this.mic);
         pc.onconnectionstatechange = () => {
             if (['failed', 'disconnected', 'closed'].includes(pc.connectionState) && !this.ended) {
@@ -261,6 +270,25 @@ export class SpeakCall {
         if (!spoke && !ending) this.send({ type: 'response.create' });
     }
 
+    // Resolves once the character has been silent for `quietMs` (their audio,
+    // not the transcript, which runs ahead of it), or after `maxMs` at most.
+    waitForQuiet({ quietMs = 1300, maxMs = 15000 } = {}) {
+        return new Promise((resolve) => {
+            const started = Date.now();
+            let quietSince = Date.now();
+            const buf = new Uint8Array(512);
+            const tick = setInterval(() => {
+                const an = this.outAnalyser;
+                if (!an || this.ended) { clearInterval(tick); resolve(); return; }
+                an.getByteTimeDomainData(buf);
+                let peak = 0;
+                for (let i = 0; i < buf.length; i += 1) peak = Math.max(peak, Math.abs(buf[i] - 128));
+                if (peak > 4 || this.live.lineId) quietSince = Date.now();
+                if (Date.now() - quietSince >= quietMs || Date.now() - started >= maxMs) { clearInterval(tick); resolve(); }
+            }, 100);
+        });
+    }
+
     stopLocal() {
         this.ended = true;
         clearTimeout(this.live.lineTimer);
@@ -275,13 +303,13 @@ export class SpeakCall {
     }
 
     // Hang up and tell the server how it went. `beacon` is for page unload.
-    async end({ goalsDone = 0, transcript = [], reason = 'user', beacon = false } = {}) {
+    async end({ goalsDone = 0, transcript = [], reason = 'user', beacon = false, ...notes } = {}) {
         if (this.ended && !this.sessionId) return null;
         this.stopLocal();
         if (!this.sessionId) return null;
         const id = this.sessionId;
         this.sessionId = null;
-        const body = JSON.stringify({ goalsDone, transcript, usage: this.usage, reason });
+        const body = JSON.stringify({ goalsDone, transcript, usage: this.usage, reason, ...notes });
         if (beacon && navigator.sendBeacon) {
             navigator.sendBeacon(`/api/speak/session/${id}/end`, new Blob([body], { type: 'application/json' }));
             return null;

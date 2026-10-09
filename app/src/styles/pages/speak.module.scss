@@ -443,3 +443,17 @@ $horang: #FF8A00;
 @media (prefers-reduced-motion: reduce) {
     .spriteTalk, .heroSora, .heroHorang, .card, .suggest, .goals .goalDone, .pending { animation: none; }
 }
+
+// Shown while the character says goodbye, before the results.
+.endBanner {
+    align-self: center;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    background: #fff; border: 3px solid var(--accent); border-radius: 18px; padding: 10px 22px;
+    font-family: var(--font-lilita); font-size: 24px; color: #1F2340;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, .15);
+    animation: end-pop .5s cubic-bezier(.2, 1.6, .4, 1) both;
+}
+.endStars { color: #FFB020; font-size: 20px; letter-spacing: 4px; }
+.endSub { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: #5A5F78; }
+@keyframes end-pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.historyLink { font-weight: 800; color: var(--bp-purple-d); text-decoration: none; &:hover { text-decoration: underline; } }
