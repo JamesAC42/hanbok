@@ -30,7 +30,6 @@ const callJson = async (prompt, schema, { attempts = 2, timeoutMs = TIMEOUT_MS, 
                     responseMimeType: 'application/json',
                     responseJsonSchema: schema,
                     maxOutputTokens: MAX_OUTPUT_TOKENS,
-                    temperature: 0.7,
                 },
             }, { timeout: timeoutMs });
             return JSON.parse(result.response.text());
