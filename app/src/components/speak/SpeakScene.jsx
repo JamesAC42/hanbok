@@ -20,6 +20,10 @@ const Icon = {
 };
 
 // Long lines get a smaller size so they fit without scrolling.
+// Testers can audition voices with ?voices=1 on /speak.
+const TEST_VOICES = ['cedar', 'ash', 'echo', 'verse', 'ballad', 'beacon', 'bossa', 'cinder', 'delta', 'gleam', 'meridian', 'quartz', 'ripple', 'stone', 'tempo', 'vesper', 'willow', 'marin', 'coral', 'sage', 'shimmer', 'alloy'];
+const voiceTesting = () => { try { return new URLSearchParams(window.location.search).has('voices'); } catch { return false; } };
+
 const lineSize = (text) => (text.length > 110 ? styles.lineSmall : text.length > 60 ? styles.lineMedium : '');
 
 export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, onDone, onLimit }) {
@@ -43,6 +47,9 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
     const [transcript, setTranscript] = useState([]);
     const [sheet, setSheet] = useState(null); // 'script' | 'assist'
     const [assist, setAssist] = useState(initialAssist);
+    const [voice, setVoice] = useState('');
+    const [showVoices, setShowVoices] = useState(false);
+    useEffect(() => { setShowVoices(voiceTesting()); }, []);
     const [timeLeft, setTimeLeft] = useState(null);
     const state = useRef({ goals: [], transcript: [], phrases: [], tips: [], summary: '', startedAt: 0, finished: false, notes: {} });
 
@@ -153,10 +160,14 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 setTranscript(s.transcript);
             },
             onTool,
-            onDrop: () => { if (!s.finished) { setError('The call dropped.'); finish('dropped'); } },
+            onDrop: (reason) => {
+                track('speak_drop', { reason: String(reason || ''), engine: call.engine });
+                if (!s.finished) { setError('The call dropped.'); finish(`dropped:${reason || ''}`.slice(0, 20)); }
+            },
+            onError: (err) => track('speak_error', { code: String(err?.code || err?.type || ''), engine: call.engine }),
         });
         callRef.current = call;
-        call.start({ scenarioId: scenario.id, level, assist, language, nativeLanguage })
+        call.start({ scenarioId: scenario.id, level, assist, language, nativeLanguage, voice: voice || undefined })
             .then((data) => {
                 s.startedAt = Date.now();
                 s.notes = data.assistNotes || {};
@@ -296,6 +307,15 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                             ))}
                         </div>
                         <p className={styles.assistBlurb}>{ASSISTS.find((a) => a.id === assist)?.blurb}</p>
+                        {showVoices && (
+                            <label className={styles.voicePick}>
+                                Voice (testing)
+                                <select value={voice} onChange={(e) => setVoice(e.target.value)}>
+                                    <option value="">Default</option>
+                                    {TEST_VOICES.map((v) => <option key={v} value={v}>{v}</option>)}
+                                </select>
+                            </label>
+                        )}
                         <button type="button" className={styles.startBtn} onClick={start}>{Icon.mic} Start talking</button>
                         <p className={styles.readyNote}>Headphones help {ch.name} hear you clearly.</p>
                     </div>

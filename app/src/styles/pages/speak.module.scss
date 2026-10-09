@@ -374,6 +374,8 @@ $horang: #FF8A00;
     svg { width: 26px; height: 26px; }
     &:active { transform: translateY(3px); box-shadow: 0 2px 0 #6B4BD0; }
 }
+.voicePick { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #5A5F78;
+    select { flex: 1; min-height: 36px; border-radius: 10px; border: 2px solid #E6E1F8; font: 700 14px var(--font-display); padding: 0 8px; } }
 .readyNote { margin: 0; text-align: center; font-size: 12px; font-weight: 700; color: #6A6F88; }
 
 .controls { display: flex; align-items: center; justify-content: center; gap: 22px; padding-top: 4px; }

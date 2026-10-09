@@ -44,7 +44,7 @@ export class SpeakCall {
         return Math.min(1, Math.sqrt(sum / this.levelBuf.length) * 4);
     }
 
-    async start({ scenarioId, level, assist, language, nativeLanguage }) {
+    async start({ scenarioId, level, assist, language, nativeLanguage, voice }) {
         this.mic = await navigator.mediaDevices.getUserMedia({
             audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
         });
@@ -72,7 +72,11 @@ export class SpeakCall {
         this.dc.onmessage = (e) => {
             try { this.onEvent(JSON.parse(e.data)); } catch (err) { console.error(err); }
         };
-        this.dc.onopen = () => this.emit('onOpen');
+        this.dc.onopen = () => {
+            // GPT-Live waits for the learner unless told to start.
+            if (this.engine === 'live') this.nudge('(The call just connected. Start the scene now with your opening line.)');
+            this.emit('onOpen');
+        };
 
         await pc.setLocalDescription(await pc.createOffer());
         await waitForIce(pc);
@@ -81,7 +85,7 @@ export class SpeakCall {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ scenarioId, level, assist, language, nativeLanguage, sdp: pc.localDescription.sdp }),
+            body: JSON.stringify({ scenarioId, level, assist, language, nativeLanguage, voice, sdp: pc.localDescription.sdp }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.success) {
@@ -157,6 +161,7 @@ export class SpeakCall {
                 break;
             case 'error':
                 console.warn('speak error', ev.error);
+                this.emit('onError', ev.error);
                 break;
             default:
         }

@@ -16,6 +16,10 @@ const OPENAI_URL = 'https://api.openai.com/v1/realtime/calls';
 const LIVE_URL = 'https://api.openai.com/v1/live/sessions';
 const LIVE_MODEL = process.env.SPEAK_LIVE_MODEL || 'gpt-live-1';
 const engineNow = () => (process.env.SPEAK_ENGINE === 'realtime' ? 'realtime' : 'live');
+// Voices a tester can try with ?voices=1 on /speak. Realtime only knows the
+// older ones; GPT-Live knows all of them.
+const REALTIME_VOICES = ['alloy', 'ash', 'ballad', 'cedar', 'coral', 'echo', 'marin', 'sage', 'shimmer', 'verse'];
+const LIVE_VOICES = [...REALTIME_VOICES, 'beacon', 'bossa', 'cinder', 'delta', 'gleam', 'meridian', 'quartz', 'ripple', 'stone', 'tempo', 'vesper', 'willow'];
 const TRANSLATE_MODEL = process.env.SPEAK_TRANSLATE_MODEL || 'gpt-4.1';
 const hangupTimers = new Map();
 const NON_LATIN = new Set(['ko', 'ja', 'zh', 'zh-TW', 'ru', 'hi']);
@@ -165,11 +169,17 @@ const startSession = async (req, res) => {
             scenario, level, assist, language, nativeLanguage, words, grammar,
             userName: str(user.name, 40).split(' ')[0],
         };
-        const engine = engineNow();
-        const character = characterFor(scenario.character);
-        const opened = engine === 'live'
+        let engine = engineNow();
+        const base = characterFor(scenario.character);
+        const asked = str(req.body?.voice, 20);
+        const voiceFor = (eng) => ((eng === 'live' ? LIVE_VOICES : REALTIME_VOICES).includes(asked) ? asked : base.voice);
+        const character = { ...base, voice: voiceFor(engine) };
+        const realtime = () => openRealtime({ sdp, character: { ...base, voice: voiceFor('realtime') }, instructions: buildInstructions(promptArgs), model: planFor(user.tier || 0).model, language, nativeLanguage });
+        let opened = engine === 'live'
             ? await openLive({ sdp, character, instructions: buildInstructions({ ...promptArgs, engine }) })
-            : await openRealtime({ sdp, character, instructions: buildInstructions(promptArgs), model: planFor(user.tier || 0).model, language, nativeLanguage });
+            : await realtime();
+        // If GPT-Live won't open the call, fall back to the Realtime API.
+        if (!opened && engine === 'live') { engine = 'realtime'; opened = await realtime(); }
         if (!opened) return res.status(502).json({ success: false, error: `${character.name} could not pick up. Please try again.` });
         const { answer, callId, model } = opened;
 
