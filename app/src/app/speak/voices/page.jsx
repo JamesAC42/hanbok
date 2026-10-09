@@ -51,6 +51,7 @@ async function recordSample({ voice, character, onText }) {
         let text = '';
         let quiet = null;
         const done = () => {
+            clearTimeout(retry);
             clearTimeout(quiet);
             clearTimeout(cap);
             const finish = () => {
@@ -61,10 +62,16 @@ async function recordSample({ voice, character, onText }) {
             if (recorder && recorder.state !== 'inactive') { recorder.onstop = finish; recorder.stop(); } else finish();
         };
         const cap = setTimeout(done, MAX_MS);
-        dc.onopen = () => dc.send(JSON.stringify({ type: 'session.commentary.append', delegation_id: null, content: '(Connected. Perform your audition lines now.)' }));
+        // GPT-Live ignores commands until session.started.
+        let kicked = 0;
+        const kick = () => dc.readyState === 'open' && kicked++ < 2 && dc.send(JSON.stringify({ type: 'session.commentary.append', delegation_id: null, content: '(Connected. Perform your audition lines now.)' }));
+        let retry = null;
+        dc.onopen = () => { retry = setTimeout(() => { if (!kicked) kick(); }, 3000); };
         dc.onmessage = (e) => {
             let ev = {};
             try { ev = JSON.parse(e.data); } catch { return; }
+            if (ev.type === 'session.started' && !kicked) { kick(); retry = setTimeout(() => { if (!text) kick(); }, 5000); }
+            if (ev.type === 'error') onText(`Error: ${ev.error?.message || ev.error?.code || 'unknown'}`);
             if (ev.type === 'session.output_transcript.delta') {
                 text += ev.delta || '';
                 onText(text);

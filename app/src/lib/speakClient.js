@@ -73,8 +73,8 @@ export class SpeakCall {
             try { this.onEvent(JSON.parse(e.data)); } catch (err) { console.error(err); }
         };
         this.dc.onopen = () => {
-            // GPT-Live waits for the learner unless told to start.
-            if (this.engine === 'live') this.nudge('(The call just connected. Start the scene now with your opening line.)');
+            // In case session.started came before the channel opened.
+            this.live.openTimer = setTimeout(() => { if (this.engine === 'live' && !this.live.started) this.kickoff(); }, 3000);
             this.emit('onOpen');
         };
 
@@ -122,9 +122,24 @@ export class SpeakCall {
         if (this.engine === 'live') this.send({ type: muted ? 'session.input_audio.mute' : 'session.input_audio.unmute' });
     }
 
+    // GPT-Live ignores commands until session.started, and waits for the
+    // learner unless told to start, so the opening nudge goes out then (and
+    // once more if the character still hasn't spoken a few seconds later).
+    kickoff() {
+        const L = this.live;
+        if (L.started) return;
+        L.started = true;
+        const go = '(The call just connected. Start the scene now with your opening line.)';
+        this.nudge(go);
+        L.kickTimer = setTimeout(() => { if (!L.n && !this.ended) this.nudge(go); }, 5000);
+    }
+
     onLiveEvent(ev) {
         const L = this.live;
         switch (ev.type) {
+            case 'session.started':
+                this.kickoff();
+                break;
             case 'session.output_transcript.delta': {
                 if (!L.lineId) {
                     L.n += 1;
@@ -246,6 +261,8 @@ export class SpeakCall {
         this.ended = true;
         clearTimeout(this.live.lineTimer);
         clearTimeout(this.live.youTimer);
+        clearTimeout(this.live.kickTimer);
+        clearTimeout(this.live.openTimer);
         try { this.dc?.close(); } catch { /* closed */ }
         try { this.pc?.close(); } catch { /* closed */ }
         this.mic?.getTracks().forEach((t) => t.stop());
