@@ -25,6 +25,9 @@ usage reported by the browser).
 | `SPEAK_FREE_MINUTES` | 5 | per 7 days |
 | `SPEAK_BASIC_MINUTES` | 60 | per 30 days |
 | `SPEAK_PLUS_MINUTES` | 120 | per 30 days |
+| `SPEAK_ENGINE` | live | `live` = GPT-Live (`gpt-live-1`, $0.05/min, screen driven by `/api/speak/coach`); `realtime` = Realtime API with tool calls |
+| `SPEAK_LIVE_MODEL` | gpt-live-1 | |
+| `SPEAK_COACH_MODEL` | gpt-4.1 | Live only: reads the transcript after each line for captions, goals, cards, mood and the end of the scene |
 | `SPEAK_MODEL_FREE` / `_BASIC` / `_PLUS` | gpt-realtime-2.1 | the mini model sounded off in testing, so every plan uses the full one |
 | `SPEAK_MAX_SESSION_SECONDS` | 600 | longest single call |
 | `SPEAK_VOICE_HORANG` (or `SPEAK_VOICE`) | cedar | Horang's voice |

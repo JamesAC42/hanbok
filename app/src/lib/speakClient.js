@@ -1,7 +1,13 @@
-// Browser side of a Speak call: microphone + WebRTC to OpenAI Realtime.
-// The server opens the call (POST /api/speak/session) so the API key and
-// Horang's instructions stay server-side; this file only moves audio and
-// listens to the data channel for captions, tool calls and speaking state.
+// Browser side of a Speak call: microphone + WebRTC to OpenAI (GPT-Live or
+// the Realtime API, whichever the server opened). The server opens the call
+// (POST /api/speak/session) so the API key and the character's instructions
+// stay server-side; this file only moves audio and listens to the data
+// channel for captions, tool calls and speaking state.
+
+// GPT-Live sends transcript fragments without turn boundaries, so a pause in
+// the fragments ends a line.
+const LINE_GAP_MS = 900;
+const YOU_GAP_MS = 1200;
 
 const waitForIce = (pc) => new Promise((resolve) => {
     if (pc.iceGatheringState === 'complete') return resolve();
@@ -21,6 +27,8 @@ export class SpeakCall {
         this.usage = { inputAudio: 0, inputCachedAudio: 0, inputText: 0, outputAudio: 0, outputText: 0 };
         this.lines = new Map(); // response id -> transcript so far
         this.ended = false;
+        this.engine = 'realtime';
+        this.live = { line: '', lineId: null, lineTimer: null, you: '', youTimer: null, n: 0 };
     }
 
     emit(name, ...args) {
@@ -84,6 +92,7 @@ export class SpeakCall {
             throw err;
         }
         this.sessionId = data.sessionId;
+        this.engine = data.engine || 'realtime';
         await pc.setRemoteDescription({ type: 'answer', sdp: data.answer });
         return data;
     }
@@ -92,18 +101,79 @@ export class SpeakCall {
         if (this.dc?.readyState === 'open') this.dc.send(JSON.stringify(event));
     }
 
-    // A note to Horang that the learner didn't say out loud (button presses).
-    nudge(text) {
+    // A note to the character that the learner didn't say out loud (button presses).
+    // `speak` false changes how they behave without asking for a reply.
+    nudge(text, { speak = true } = {}) {
+        if (this.engine === 'live') {
+            this.send({ type: speak ? 'session.commentary.append' : 'session.instructions.append', content: text.slice(0, 1800), delegation_id: null });
+            return;
+        }
         this.send({ type: 'conversation.item.create', item: { type: 'message', role: 'user', content: [{ type: 'input_text', text }] } });
-        this.send({ type: 'response.create' });
+        if (speak) this.send({ type: 'response.create' });
     }
 
     setMuted(muted) {
         this.muted = muted;
         this.mic?.getAudioTracks().forEach((t) => { t.enabled = !muted; });
+        if (this.engine === 'live') this.send({ type: muted ? 'session.input_audio.mute' : 'session.input_audio.unmute' });
+    }
+
+    onLiveEvent(ev) {
+        const L = this.live;
+        switch (ev.type) {
+            case 'session.output_transcript.delta': {
+                if (!L.lineId) {
+                    L.n += 1;
+                    L.lineId = `l${L.n}`;
+                    L.line = '';
+                    this.emit('onSpeaking', true);
+                }
+                L.line += ev.delta || '';
+                this.emit('onHorangText', { id: L.lineId, text: L.line.trim(), done: false });
+                clearTimeout(L.lineTimer);
+                L.lineTimer = setTimeout(() => this.endLiveLine(), LINE_GAP_MS);
+                break;
+            }
+            case 'session.input_transcript.delta': {
+                if (!L.youTimer) { L.you = ''; this.emit('onListening', true); }
+                L.you += ev.delta || '';
+                clearTimeout(L.youTimer);
+                L.youTimer = setTimeout(() => {
+                    L.youTimer = null;
+                    this.emit('onListening', false);
+                    if (L.you.trim()) this.emit('onYouText', { id: `u${L.n}`, text: L.you.trim() });
+                }, YOU_GAP_MS);
+                break;
+            }
+            case 'session.delegation.created':
+                // No tools on this side: let the character carry on by itself.
+                this.send({ type: 'session.thinking.append', delegation_id: ev.delegation?.id || null, content: 'Nothing to look up here. Carry on the conversation yourself.' });
+                break;
+            case 'session.usage.updated':
+                this.usage.seconds = ev.usage?.seconds || this.usage.seconds || 0;
+                break;
+            case 'session.closed':
+                if (!this.ended) this.emit('onDrop', ev.reason);
+                break;
+            case 'error':
+                console.warn('speak error', ev.error);
+                break;
+            default:
+        }
+    }
+
+    endLiveLine() {
+        const L = this.live;
+        clearTimeout(L.lineTimer);
+        if (!L.lineId) return;
+        const id = L.lineId;
+        L.lineId = null;
+        this.emit('onSpeaking', false);
+        if (L.line.trim()) this.emit('onHorangText', { id, text: L.line.trim(), done: true });
     }
 
     onEvent(ev) {
+        if (this.engine === 'live') { this.onLiveEvent(ev); return; }
         switch (ev.type) {
             case 'output_audio_buffer.started':
                 this.emit('onSpeaking', true);
@@ -169,6 +239,8 @@ export class SpeakCall {
 
     stopLocal() {
         this.ended = true;
+        clearTimeout(this.live.lineTimer);
+        clearTimeout(this.live.youTimer);
         try { this.dc?.close(); } catch { /* closed */ }
         try { this.pc?.close(); } catch { /* closed */ }
         this.mic?.getTracks().forEach((t) => t.stop());

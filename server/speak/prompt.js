@@ -62,18 +62,35 @@ const ASSIST_RULES = {
     ],
 };
 
+// GPT-Live can't call tools (the screen is driven from the transcript instead),
+// so its rules say the same things without naming them.
+const LIVE_ASSIST_RULES = {
+    guided: [
+        'HELP STYLE: GUIDED. The learner wants step-by-step help.',
+        '- Before each of their turns, if it is not obvious what to say, tell them in {native} what to say next, then say the exact {target} phrase once, slowly and clearly, and wait for them to try it.',
+        '- When they are stuck, answer wrongly or ask for help: say in {native} exactly what to say, say the {target} phrase slowly, then wait for them to repeat it.',
+    ],
+    hints: [
+        'HELP STYLE: HINTS. The learner wants to work things out themselves.',
+        '- When they are stuck or ask for help, give a short hint in {native} (a key word, or the start of the sentence), not the full answer. Say the full phrase only if they are still stuck after the hint.',
+    ],
+    immersion: ASSIST_RULES.immersion,
+};
+const assistRules = (assist, engine) => (engine === 'live' ? LIVE_ASSIST_RULES : ASSIST_RULES)[assist];
+
 const ASSISTS = Object.keys(ASSIST_RULES);
 const defaultAssist = (level) => (level === 'advanced' ? 'immersion' : level === 'intermediate' ? 'hints' : 'guided');
 
 const fill = (s, vars) => s.replace(/\{(target|native)\}/g, (_, k) => vars[k]);
 
 // One line the browser can send mid-call when the learner changes help style.
-const assistSwitchNote = (assist, language, nativeLanguage) => {
+const assistSwitchNote = (assist, language, nativeLanguage, engine) => {
     const vars = { target: nameOf(language), native: nameOf(nativeLanguage) };
-    return fill(`(The learner changed their help style. From now on: ${(ASSIST_RULES[assist] || ASSIST_RULES.guided).join(' ')} Acknowledge it in a few words and carry on.)`, vars);
+    return fill(`(The learner changed their help style. From now on: ${(assistRules(assist, engine) || assistRules('guided', engine)).join(' ')} Acknowledge it in a few words and carry on.)`, vars);
 };
 
-const buildInstructions = ({ scenario, level, assist, language, nativeLanguage, words, grammar, userName }) => {
+const buildInstructions = ({ scenario, level, assist, language, nativeLanguage, words, grammar, userName, engine = 'realtime' }) => {
+    const live = engine === 'live';
     const vars = { target: nameOf(language), native: nameOf(nativeLanguage) };
     const ch = characterFor(scenario.character);
     const goals = scenario.goals.map((g, i) => `${i + 1}. ${g}`).join('\n');
@@ -92,7 +109,7 @@ const buildInstructions = ({ scenario, level, assist, language, nativeLanguage, 
         '- EVERYTHING ELSE is in {native}: explaining a word or grammar, translating, pronunciation feedback, praise about their {target}, answering their questions, telling them what to say. Never explain {target} in {target}.',
         '- Keep the two apart: say the {native} part, then the {target} line, never a long mix.',
         '',
-        ...(ASSIST_RULES[assist] || ASSIST_RULES[defaultAssist(level)]),
+        ...(assistRules(assist, engine) || assistRules(defaultAssist(level), engine)),
         '',
         '# The scene',
         scenario.free
@@ -110,12 +127,21 @@ const buildInstructions = ({ scenario, level, assist, language, nativeLanguage, 
                 : '- Open with ONE short {native} sentence that sets the scene and their first goal, then start the scene with a short greeting in {target}.'),
         '- Keep every turn short, then stop and let them talk. Never lecture, never list several options at length.',
         '- When they make a mistake, recast it: repeat what they meant correctly and keep going. Only explain (in {native}) if they ask.',
-        '- You can HEAR their pronunciation. When a word they say is clearly off in a way a native speaker would notice, give one short, specific tip in {native} and call pronunciation_tip. At most one tip every few turns. Tell them when something sounded good, too.',
-        '- When you introduce a useful new word or phrase, call teach_phrase so it appears on their screen.',
-        '- Call complete_goal right after the learner achieves a goal themselves, out loud in {target}. A goal you said for them, or one they only asked how to say, does not count yet. Answer them first (for example, tell them the price), then mark it.',
-        '- When every goal is done, celebrate, wrap up in one sentence, then call end_scene.',
-        '- Call set_mood whenever your feeling changes so your picture matches your voice.',
-        '- Always say something out loud in the same turn as your tool calls; never answer with tool calls alone.',
+        live
+            ? '- You can HEAR their pronunciation. When a word they say is clearly off in a way a native speaker would notice, give one short, specific tip in {native}. At most one tip every few turns. Tell them when something sounded good, too.'
+            : '- You can HEAR their pronunciation. When a word they say is clearly off in a way a native speaker would notice, give one short, specific tip in {native} and call pronunciation_tip. At most one tip every few turns. Tell them when something sounded good, too.',
+        ...(live ? [
+            '- Their goals count only when they say it themselves, out loud in {target}. Answer them first (for example, tell them the price), then move to the next goal.',
+            '- When every goal is done, celebrate, wrap up in one sentence and say goodbye.',
+            '- You have no tools and never delegate: handle everything yourself in the conversation. Their screen shows captions, goals and phrase cards automatically.',
+            '- Let them finish: learners pause mid-sentence to think, so wait through short silences and don\'t talk over them.',
+        ] : [
+            '- When you introduce a useful new word or phrase, call teach_phrase so it appears on their screen.',
+            '- Call complete_goal right after the learner achieves a goal themselves, out loud in {target}. A goal you said for them, or one they only asked how to say, does not count yet. Answer them first (for example, tell them the price), then mark it.',
+            '- When every goal is done, celebrate, wrap up in one sentence, then call end_scene.',
+            '- Call set_mood whenever your feeling changes so your picture matches your voice.',
+            '- Always say something out loud in the same turn as your tool calls; never answer with tool calls alone.',
+        ]),
         '- If they go quiet, give a gentle nudge in the style their help level asks for.',
         '- Stay family-friendly. Politely decline anything inappropriate and steer back to the lesson.',
     ];

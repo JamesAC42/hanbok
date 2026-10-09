@@ -84,6 +84,56 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             setCards((c) => [card, ...c].slice(0, 2));
             setTimeout(() => setCards((c) => c.filter((x) => x.key !== card.key)), 9000);
         };
+        const onTool = (name, args) => {
+            if (name === 'set_mood') setMood(args.mood);
+            if (name === 'complete_goal') {
+                const i = Number(args.goal) - 1;
+                setGoals((g) => g.map((v, j) => (j === i ? true : v)));
+                setMood(ch.celebrate);
+            }
+            if (name === 'suggest_reply' && args.phrase) {
+                const key = `s${Date.now()}`;
+                setSuggestion({ key, phrase: args.phrase, meaning: args.meaning || '' });
+                caption(key, args.phrase);
+            }
+            if (name === 'pronunciation_tip' && args.word) {
+                const card = { kind: args.good ? 'good' : 'tip', word: args.word, text: args.tip, key: `${Date.now()}t` };
+                s.tips = [...s.tips, card];
+                showCard(card);
+            }
+            if (name === 'teach_phrase' && args.phrase) {
+                const card = { kind: 'phrase', word: args.phrase, text: args.meaning, key: `${Date.now()}p` };
+                if (!s.phrases.some((p) => p.word === card.word)) s.phrases = [...s.phrases, card];
+                showCard(card);
+            }
+            if (name === 'end_scene' && !s.ending) {
+                s.ending = true;
+                s.summary = args.summary || '';
+                setTimeout(() => finish('complete'), 3500); // let the goodbye finish
+            }
+        };
+        // GPT-Live can't call tools: after each line, a text model reads the
+        // transcript and returns the same screen updates, plus the caption.
+        const coachLine = async (id) => {
+            s.coachSeq = (s.coachSeq || 0) + 1;
+            const seq = s.coachSeq;
+            try {
+                const r = await fetch('/api/speak/coach', {
+                    method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId: call.sessionId, transcript: s.transcript, assist: s.assist }),
+                });
+                const d = await r.json();
+                if (!d.success || s.finished) return;
+                setCaptions((c) => ({ ...c, [id]: { native: d.translation, roman: d.romanization } }));
+                if (seq !== s.coachSeq) return; // a newer line has its own screen updates
+                if (d.mood) onTool('set_mood', { mood: d.mood });
+                (d.goals_done || []).filter((g) => !s.goals[g - 1]).forEach((g) => onTool('complete_goal', { goal: g }));
+                if (d.suggestion?.phrase) onTool('suggest_reply', d.suggestion);
+                if (d.new_phrase?.phrase && !s.phrases.some((p) => p.word === d.new_phrase.phrase)) onTool('teach_phrase', d.new_phrase);
+                if (d.tip?.word && !s.tips.some((t) => t.word === d.tip.word && t.text === d.tip.tip)) onTool('pronunciation_tip', d.tip);
+                if (d.end) onTool('end_scene', d.end);
+            } catch { /* the call goes on without screen updates */ }
+        };
         const call = new SpeakCall({
             onSpeaking: setSpeaking,
             onListening: (on) => { setListening(on); if (on) setYouLine('…'); },
@@ -92,7 +142,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 if (done) {
                     s.transcript = [...s.transcript, { who: 'horang', text }];
                     setTranscript(s.transcript);
-                    caption(id, text);
+                    if (call.engine === 'live') coachLine(id); else caption(id, text);
                 }
             },
             onYouText: ({ text }) => {
@@ -102,33 +152,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 s.transcript = [...s.transcript, { who: 'you', text }];
                 setTranscript(s.transcript);
             },
-            onTool: (name, args) => {
-                if (name === 'set_mood') setMood(args.mood);
-                if (name === 'complete_goal') {
-                    const i = Number(args.goal) - 1;
-                    setGoals((g) => g.map((v, j) => (j === i ? true : v)));
-                    setMood(ch.celebrate);
-                }
-                if (name === 'suggest_reply' && args.phrase) {
-                    const key = `s${Date.now()}`;
-                    setSuggestion({ key, phrase: args.phrase, meaning: args.meaning || '' });
-                    caption(key, args.phrase);
-                }
-                if (name === 'pronunciation_tip' && args.word) {
-                    const card = { kind: args.good ? 'good' : 'tip', word: args.word, text: args.tip, key: `${Date.now()}t` };
-                    s.tips = [...s.tips, card];
-                    showCard(card);
-                }
-                if (name === 'teach_phrase' && args.phrase) {
-                    const card = { kind: 'phrase', word: args.phrase, text: args.meaning, key: `${Date.now()}p` };
-                    if (!s.phrases.some((p) => p.word === card.word)) s.phrases = [...s.phrases, card];
-                    showCard(card);
-                }
-                if (name === 'end_scene') {
-                    s.summary = args.summary || '';
-                    setTimeout(() => finish('complete'), 3500); // let the goodbye finish
-                }
-            },
+            onTool,
             onDrop: () => { if (!s.finished) { setError('The call dropped.'); finish('dropped'); } },
         });
         callRef.current = call;
@@ -136,6 +160,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             .then((data) => {
                 s.startedAt = Date.now();
                 s.notes = data.assistNotes || {};
+                s.assist = assist;
                 setTimeLeft(data.maxSeconds);
                 setStatus('live');
                 track('speak_start', { scenario: scenario.id, level, assist, character: ch.id });
@@ -192,7 +217,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
 
     const help = () => {
         const how = {
-            guided: `tell them in ${nativeName} exactly what to say next, call suggest_reply with it, and wait for them to try`,
+            guided: `tell them in ${nativeName} exactly what to say next${callRef.current?.engine === 'live' ? ', say the phrase slowly' : ', call suggest_reply with it'}, and wait for them to try`,
             hints: `give a short hint in ${nativeName} (a key word or the first part), not the whole answer`,
             immersion: 'rephrase what you said more simply, or offer two choices',
         }[assist];
@@ -203,7 +228,8 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
     const changeAssist = (a) => {
         setAssist(a);
         setSheet(null);
-        if (a !== assist && state.current.notes[a]) callRef.current?.nudge(state.current.notes[a]);
+        state.current.assist = a;
+        if (a !== assist && state.current.notes[a]) callRef.current?.nudge(state.current.notes[a], { speak: callRef.current?.engine !== 'live' });
         try { localStorage.setItem('speakAssist', a); } catch { /* private mode */ }
         track('speak_assist', { assist: a });
     };
