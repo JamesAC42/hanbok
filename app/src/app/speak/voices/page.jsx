@@ -95,12 +95,24 @@ async function recordSample({ voice, character, onText, log }) {
             note('sent start nudge');
             dc.send(JSON.stringify({ type: 'session.commentary.append', delegation_id: null, content: '(Connected. Perform your audition lines now.)' }));
         };
+        // GPT-Live seems to wait to be spoken to, so play a short "go ahead"
+        // into the outgoing (otherwise silent) track.
+        const greet = async () => {
+            try {
+                const buf = await ctx.decodeAudioData(await (await fetch('/audio/speak/hello.mp3')).arrayBuffer());
+                const src = ctx.createBufferSource();
+                src.buffer = buf;
+                src.connect(silent);
+                src.start();
+                note('said "go ahead"');
+            } catch (err) { note(`greeting failed: ${err.message}`); }
+        };
         let retry = null;
         dc.onmessage = (e) => {
             let ev = {};
             try { ev = JSON.parse(e.data); } catch { return; }
             if (ev.type !== 'session.output_transcript.delta' || !text) note(`event: ${ev.type}${ev.error ? ` ${ev.error.message || ev.error.code}` : ''}${ev.reason ? ` (${ev.reason})` : ''}${ev.message ? ` ${ev.message}` : ''}`);
-            if (ev.type === 'session.started') retry = setTimeout(() => { kick(); retry = setTimeout(kick, 5000); }, 3000);
+            if (ev.type === 'session.started') { greet(); retry = setTimeout(() => { kick(); retry = setTimeout(kick, 5000); }, 5000); }
             if (ev.type === 'error') onText(`Error: ${ev.error?.message || ev.error?.code || 'unknown'}`);
             if (ev.type === 'session.output_transcript.delta') {
                 text += ev.delta || '';

@@ -48,6 +48,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
     const callRef = useRef(null);
     const micRingRef = useRef(null);
     const [status, setStatus] = useState('ready'); // ready | connecting | live | error
+    const [engine, setEngine] = useState(null);
     const [error, setError] = useState('');
     const [speaking, setSpeaking] = useState(false);
     const [listening, setListening] = useState(false);
@@ -190,6 +191,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 s.notes = data.assistNotes || {};
                 s.assist = assist;
                 setTimeLeft(data.maxSeconds);
+                setEngine(data.engine);
                 setStatus('live');
                 track('speak_start', { scenario: scenario.id, level, assist, character: ch.id });
             })
@@ -365,7 +367,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                         )}
                         <div className={styles.dialogue}>
                             {youLine && <p className={styles.youLine}><span>You</span> <span lang={language}>{youLine}</span></p>}
-                            <p lang={language} className={`${styles.lineTarget} ${lineSize(line.text || '')}`}>{line.text || '…'}</p>
+                            <p lang={language} className={`${styles.lineTarget} ${lineSize(line.text || '')}`}>{line.text || (engine === 'live' && !youLine ? `Say hello to ${ch.name} to start!` : '…')}</p>
                             {/* Caption rows keep their space while the caption loads, so the box doesn't jump. */}
                             {showRoman && (cap ? cap.roman : true) && <p className={`${styles.lineRoman} ${cap ? '' : styles.pending}`}>{cap?.roman || '\u00a0'}</p>}
                             {showNative && (cap ? cap.native && cap.native !== line.text : true) && <p className={`${styles.lineNative} ${cap ? '' : styles.pending}`}>{cap?.native || '\u00a0'}</p>}
