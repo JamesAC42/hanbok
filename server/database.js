@@ -116,6 +116,7 @@ async function connectToDatabase() {
     await safeCreateIndex('conversations', { lastUpdated: -1 });
     await safeCreateIndex('conversations', { dateCreated: -1 });
     await safeCreateIndex('extended_texts', { dateCreated: -1 });
+    await safeCreateIndex('extension_events', { at: -1 });
     await safeCreateIndex('extended_text_jobs', { createdAt: -1 });
 
     // Add index for word_audio collection

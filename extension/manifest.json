@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Hanbok Study",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Analyze sentences on any page with Hanbok, save words to your deck, and see the words you're learning highlighted as you browse.",
   "permissions": [
     "storage",

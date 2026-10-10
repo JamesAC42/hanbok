@@ -500,9 +500,100 @@ const buildUserDetail = async (db, userId) => {
 
 // ---------- Handlers ----------
 
+// ---------- Extension ----------
+
+const EXTENSION_ACTIONS = ['analyze', 'saveWord', 'saveSentence', 'audio', 'wordDetails', 'open', 'sync'];
+
+// Who uses the Chrome extension and what they do with it. Events start when
+// tracking shipped (lib/extensionUsage.js); installs live in the Web Store.
+const buildExtension = async (db, { days, tz }) => {
+    const now = new Date();
+    const from = new Date(now.getTime() - days * DAY);
+    const events = db.collection('extension_events');
+    const person = { $ifNull: [{ $toString: '$userId' }, { $concat: ['v:', '$visitor'] }] };
+    const distinctPeople = (since) => events.aggregate([
+        { $match: { at: { $gte: since, $lt: now } } },
+        { $group: { _id: person } },
+        { $count: 'n' },
+    ]).toArray().then((rows) => rows[0]?.n || 0);
+
+    const [first, byDay, actions, active1, active7, active30, everUsed, detected, perUser] = await Promise.all([
+        events.find({}, { projection: { at: 1 } }).sort({ at: 1 }).limit(1).toArray(),
+        events.aggregate([
+            { $match: { at: { $gte: from, $lt: now } } },
+            { $group: {
+                _id: dayKey('at', tz),
+                people: { $addToSet: person },
+                analyses: { $sum: { $cond: [{ $eq: ['$action', 'analyze'] }, 1, 0] } },
+            } },
+        ]).toArray(),
+        events.aggregate([
+            { $match: { at: { $gte: from, $lt: now } } },
+            { $group: { _id: '$action', uses: { $sum: 1 }, people: { $addToSet: person } } },
+        ]).toArray(),
+        distinctPeople(new Date(now.getTime() - DAY)),
+        distinctPeople(new Date(now.getTime() - 7 * DAY)),
+        distinctPeople(new Date(now.getTime() - 30 * DAY)),
+        db.collection('users').countDocuments({ extensionFirstSeen: { $type: 'date' } }),
+        db.collection('users').countDocuments({ $or: [{ extensionFirstSeen: { $type: 'date' } }, { extensionDetectedAt: { $type: 'date' } }] }),
+        events.aggregate([
+            { $match: { at: { $gte: from, $lt: now }, userId: { $type: 'number' } } },
+            { $group: {
+                _id: '$userId',
+                analyses: { $sum: { $cond: [{ $eq: ['$action', 'analyze'] }, 1, 0] } },
+                saves: { $sum: { $cond: [{ $in: ['$action', ['saveWord', 'saveSentence']] }, 1, 0] } },
+                lastUsed: { $max: '$at' },
+            } },
+        ]).toArray(),
+    ]);
+
+    const dayMap = new Map(byDay.map((row) => [row._id, row]));
+    const daily = listDays(from, now, tz).map((key) => ({
+        key,
+        people: dayMap.get(key)?.people.length || 0,
+        analyses: dayMap.get(key)?.analyses || 0,
+    }));
+    const actionMap = new Map(actions.map((row) => [row._id, { uses: row.uses, people: row.people.length }]));
+
+    // Everyone the extension has seen (or the site saw with it installed), most recent first.
+    const usageMap = new Map(perUser.map((row) => [row._id, row]));
+    const users = await db.collection('users').find(
+        { $or: [{ extensionFirstSeen: { $type: 'date' } }, { extensionDetectedAt: { $type: 'date' } }] },
+        { projection: { _id: 0, userId: 1, name: 1, email: 1, tier: 1, dateCreated: 1, extensionFirstSeen: 1, extensionLastSeen: 1, extensionDetectedAt: 1, extensionDetectedLastAt: 1, extensionVersion: 1 } }
+    ).toArray();
+    const lastSeen = (u) => Math.max(u.extensionLastSeen?.getTime?.() || 0, u.extensionDetectedLastAt?.getTime?.() || 0);
+    const list = users
+        .sort((a, b) => lastSeen(b) - lastSeen(a))
+        .slice(0, 100)
+        .map((u) => ({
+            userId: u.userId,
+            name: u.name || u.email?.split('@')[0] || `User ${u.userId}`,
+            email: u.email,
+            tier: u.tier || 0,
+            joined: u.dateCreated,
+            firstSeen: u.extensionFirstSeen || u.extensionDetectedAt || null,
+            lastSeen: lastSeen(u) ? new Date(lastSeen(u)) : null,
+            version: u.extensionVersion || null,
+            analyses: usageMap.get(u.userId)?.analyses || 0,
+            saves: usageMap.get(u.userId)?.saves || 0,
+        }));
+    const tiers = [0, 1, 2].map((tier) => users.filter((u) => (u.tier || 0) === tier).length);
+
+    return {
+        range: { days, from, to: now, tz },
+        trackingSince: first[0]?.at || null,
+        people: { known: detected, used: everUsed, tiers },
+        active: { day: active1, week: active7, month: active30 },
+        daily,
+        actions: EXTENSION_ACTIONS.map((key) => ({ key, ...(actionMap.get(key) || { uses: 0, people: 0 }) })),
+        users: list,
+    };
+};
+
 const overviewCache = createTtlCache(5 * 60 * 1000);
 const engagementCache = createTtlCache(10 * 60 * 1000);
 const feedCache = createTtlCache(60 * 1000);
+const extensionCache = createTtlCache(5 * 60 * 1000);
 
 const respond = (cache, keyOf, build) => async (req, res) => {
     try {
@@ -519,6 +610,7 @@ const respond = (cache, keyOf, build) => async (req, res) => {
 const getOverview = respond(overviewCache, (days, tz) => `${days}:${tz}`, buildOverview);
 const getEngagement = respond(engagementCache, (days, tz) => `${days}:${tz}`, buildEngagement);
 const getFeed = respond(feedCache, () => 'feed', (db) => buildFeed(db));
+const getExtension = respond(extensionCache, (days, tz) => `${days}:${tz}`, buildExtension);
 
 const getUserDetail = async (req, res) => {
     try {
@@ -540,11 +632,13 @@ module.exports = {
     getEngagement,
     getFeed,
     getUserDetail,
+    getExtension,
     // exported for tests
     buildOverview,
     buildEngagement,
     buildFeed,
     buildUserDetail,
+    buildExtension,
     parseDays,
     parseTimeZone,
     listDays,

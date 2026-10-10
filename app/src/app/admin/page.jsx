@@ -13,6 +13,7 @@ import UsersPanel from '@/components/admin/dashboard/UsersPanel';
 import VisitorsPanel from '@/components/admin/dashboard/VisitorsPanel';
 import ToolsPanel from '@/components/admin/dashboard/ToolsPanel';
 import PartnersPanel from '@/components/admin/dashboard/PartnersPanel';
+import ExtensionPanel from '@/components/admin/dashboard/ExtensionPanel';
 import UserDrawer from '@/components/admin/dashboard/UserDrawer';
 import { RANGES, timeAgo } from '@/components/admin/dashboard/format';
 
@@ -22,10 +23,11 @@ const TABS = [
     { key: 'money', label: 'Money', color: 'var(--bp-purple)' },
     { key: 'users', label: 'Users', color: 'var(--bp-keep)' },
     { key: 'visitors', label: 'Visitors', color: 'var(--bp-gray)' },
+    { key: 'extension', label: 'Extension', color: 'var(--bp-und)' },
     { key: 'partners', label: 'Partners', color: 'var(--bp-flame)' },
     { key: 'tools', label: 'Tools', color: 'var(--bp-rev)' },
 ];
-const RANGED = ['overview', 'learners', 'money', 'visitors'];
+const RANGED = ['overview', 'learners', 'money', 'visitors', 'extension'];
 
 const readTab = () => {
     if (typeof window === 'undefined') return 'overview';
@@ -140,6 +142,7 @@ export default function Admin() {
                 {visited.has('money') && <div hidden={tab !== 'money'}><MoneyPanel {...panelProps} /></div>}
                 {visited.has('users') && <div hidden={tab !== 'users'}><UsersPanel {...panelProps} usersVersion={usersVersion} /></div>}
                 {visited.has('visitors') && <div hidden={tab !== 'visitors'}><VisitorsPanel {...panelProps} /></div>}
+                {visited.has('extension') && <div hidden={tab !== 'extension'}><ExtensionPanel {...panelProps} /></div>}
                 {visited.has('partners') && <div hidden={tab !== 'partners'}><PartnersPanel {...panelProps} /></div>}
                 {visited.has('tools') && <div hidden={tab !== 'tools'}><ToolsPanel /></div>}
             </div>
