@@ -621,6 +621,15 @@
     font-weight: 700;
 }
 
+.wordLink {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: var(--bp-read-line);
+    text-underline-offset: .2em;
+
+    &:hover { color: var(--bp-read); }
+}
+
 .wordRom {
     font-size: .9rem;
     font-weight: 700;

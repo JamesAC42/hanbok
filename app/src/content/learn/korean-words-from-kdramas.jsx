@@ -4,6 +4,7 @@ import TryIt from '@/components/learn/TryIt';
 import WordList from '@/components/learn/WordList';
 import Link from 'next/link';
 import { chip, W, P } from './parts';
+import { phraseForWord, phraseHref } from '@/content/phrases';
 import styles from '@/styles/pages/learn.module.scss';
 
 export const meta = {
@@ -52,6 +53,12 @@ const PHRASES = [
     { ko: '맛있다', rom: 'masitda', en: "It's delicious", note: 'Often 맛있어 or 맛있어요 when talking to someone.' },
     { ko: '왜', rom: 'wae', en: 'Why? / What?', note: 'Alone, it can also mean "What do you want?"' },
 ];
+
+// Words with their own phrase page link to it.
+const linked = (items) => items.map((item) => {
+    const phrase = phraseForWord(item.ko);
+    return phrase ? { ...item, href: phraseHref(phrase) } : item;
+});
 
 export const faq = [
     {
@@ -114,21 +121,21 @@ export function Body() {
             </p>
 
             <h2 id="feelings">Reactions and feelings</h2>
-            <WordList items={FEELINGS} />
+            <WordList items={linked(FEELINGS)} />
 
             <h2 id="people">What people call each other</h2>
             <p>
                 Koreans rarely call someone older by their name alone. These family words get used for friends,
                 coworkers and couples too, and which one you use depends on <em>your</em> gender as well as theirs.
             </p>
-            <WordList items={PEOPLE} />
+            <WordList items={linked(PEOPLE)} />
             <Tutor>
                 Rule of thumb: if they&rsquo;re older than you, don&rsquo;t just use their name. Pick the word that matches
                 you both, or add <span lang="ko">씨</span> after their name with people you don&rsquo;t know well.
             </Tutor>
 
             <h2 id="phrases">Everyday lines</h2>
-            <WordList items={PHRASES} />
+            <WordList items={linked(PHRASES)} />
 
             <h2 id="in-a-sentence">Hear them in a sentence</h2>
             <p>Tap a word to see how each line is built.</p>

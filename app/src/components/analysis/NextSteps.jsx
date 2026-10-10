@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import useCardsToday from '@/hooks/useCardsToday';
 import Mascot from '@/components/Mascot';
+import GoogleSignInButton from '@/components/GoogleSignInButton';
+import { loginHref } from '@/lib/anonSentences';
 import Tiger from '@/components/Tiger';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { markStage } from '@/lib/todayLoop';
@@ -38,9 +40,16 @@ const KeepBox = ({ user, words, unsavedWords, savedLoading, addingAll, saveAll, 
     if (!user) {
         return (
             <section className={styles.keep}>
-                <h3 className={styles.keepTitle}>Keep these words</h3>
-                <p className={styles.keepText}>Sign in to save the new words as flashcards. Hanbok brings each one back right before you would forget it.</p>
-                <Link href="/login" className={styles.keepButton}>Sign in to keep words</Link>
+                <h3 className={styles.keepTitle}>Save this breakdown</h3>
+                <p className={styles.keepText}>
+                    Make a free account to keep this sentence in your Library and turn its
+                    {words.length ? ` ${plural(words.length, 'word')}` : ' words'} into flashcards.
+                    Free accounts get 10 breakdowns a week. No card needed.
+                </p>
+                <div className={styles.keepGoogle}>
+                    <GoogleSignInButton text="signup_with" />
+                </div>
+                <Link href={loginHref(true)} className={styles.keepEmail}>Sign up with email</Link>
             </section>
         );
     }

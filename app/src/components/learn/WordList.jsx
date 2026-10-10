@@ -1,12 +1,13 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { addWord } from '@/api/words';
 import styles from '@/styles/pages/learn.module.scss';
 
 // A vocabulary list where every word has its own Save button.
-// items: [{ ko, rom, en, note }]
+// items: [{ ko, rom, en, note, href? }]; with href the word links to its phrase page.
 const WordList = ({ items, lang = 'ko' }) => {
     const { user } = useAuth();
     const { showLoginRequiredPopup } = usePopup();
@@ -33,7 +34,9 @@ const WordList = ({ items, lang = 'ko' }) => {
                 return (
                     <li key={item.ko} className={styles.wordItem}>
                         <div className={styles.wordHead}>
-                            <span className={styles.wordKo} lang={lang}>{item.ko}</span>
+                            {item.href
+                                ? <Link href={item.href} className={`${styles.wordKo} ${styles.wordLink}`} lang={lang}>{item.ko}</Link>
+                                : <span className={styles.wordKo} lang={lang}>{item.ko}</span>}
                             <span className={styles.wordRom}>{item.rom}</span>
                             <button
                                 type="button"

@@ -58,7 +58,7 @@ export default function VisitorsPanel({ days, tz, refreshKey, onForbidden }) {
                 <header className={styles.cardHead}>
                     <div>
                         <h2>Analyses by visitors without an account</h2>
-                        <p>People trying Hanbok before signing up. Free visitors get 10 a week.</p>
+                        <p>People trying Hanbok before signing up. Signed-out visitors get 3 a week (ANON_WEEKLY_SENTENCES), then a sign-up wall.</p>
                     </div>
                 </header>
                 <ColumnChart points={points} label="Analyses" color="var(--bp-gray-d)" />

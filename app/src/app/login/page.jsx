@@ -20,6 +20,13 @@ const PERKS = [
     { color: 'und', icon: '↻', text: 'Your history follows you to every device' },
 ];
 
+// /login?next=/sentence/abc returns there after signing in. Only same-site paths.
+const nextPath = () => {
+    if (typeof window === 'undefined') return '/home';
+    const next = new URLSearchParams(window.location.search).get('next');
+    return next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\') ? next : '/home';
+};
+
 const Login = () => {
     const router = useRouter();
     const { isAuthenticated, loading } = useAuth();
@@ -28,7 +35,7 @@ const Login = () => {
 
     useEffect(() => {
         if (!loading && isAuthenticated) {
-            router.push('/home');
+            router.push(nextPath());
         }
         document.title = t('login.pageTitle');
     }, [isAuthenticated, loading, router, t]);

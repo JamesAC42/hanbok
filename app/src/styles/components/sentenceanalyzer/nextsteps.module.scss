@@ -115,6 +115,21 @@ li:last-child .check {
     width: 100%;
 }
 
+// Signed-out: Google's button, then a quieter email link.
+.keepGoogle {
+    margin-bottom: .6rem;
+}
+
+.keepEmail {
+    display: block;
+    text-align: center;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--bp-keep-d);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 .reviewButton {
     @include bp-press(var(--bp-rev), var(--bp-rev-d));
     width: 100%;

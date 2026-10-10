@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { track, getAttribution, identifyUser } from '@/lib/analytics';
+import { claimAnonSentences } from '@/lib/anonSentences';
 
 const AuthContext = createContext();
 
@@ -13,6 +14,11 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         identifyUser(user);
     }, [user?.userId, user?.tier]);
+
+    // Sentences broken down before signing in join this account's history.
+    useEffect(() => {
+        if (user?.userId) claimAnonSentences();
+    }, [user?.userId]);
 
     useEffect(() => {
         fetchSession();

@@ -1,0 +1,114 @@
+@import '../variables.module.scss';
+
+// Korean phrase pages (/phrases) on top of the Learn styles.
+
+// The headline word: one big Save-able card under the title.
+.card {
+    margin: 1rem 0 .5rem;
+
+    ol { margin: 0; grid-template-columns: 1fr; }
+    li > div::before { display: none; }
+}
+
+.answer {
+    font-size: 1.12rem;
+    font-weight: 600;
+}
+
+.example { margin: 1.25rem 0; }
+
+.context {
+    @include bp-label;
+    margin: 0 0 -.4rem;
+}
+
+.lines {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 1.5rem;
+    display: grid;
+    gap: .75rem;
+}
+
+.line {
+    @include bp-press-card(var(--bp-line));
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    padding: .9rem 1.1rem;
+    color: var(--foreground);
+    text-decoration: none;
+    font-family: var(--font-display);
+}
+
+.lineKo {
+    font-family: var(--font-kr-sans);
+    font-size: 1.15rem;
+    font-weight: 700;
+    word-break: keep-all;
+}
+
+.lineEn {
+    font-weight: 600;
+    color: var(--bp-ink2);
+}
+
+.lineSong {
+    @include bp-label;
+    color: var(--bp-read);
+}
+
+// ===== Hub =====
+
+.group {
+    max-width: 60rem;
+    margin: 0 auto 2.5rem;
+    scroll-margin-top: 5rem;
+}
+
+.groupDek {
+    margin: -.25rem 0 1rem;
+    color: var(--bp-ink2);
+    font-weight: 600;
+    font-family: var(--font-display);
+}
+
+.grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    gap: .75rem;
+}
+
+.tile {
+    @include bp-press-card(var(--bp-line));
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    height: 100%;
+    padding: .9rem 1rem;
+    color: var(--foreground);
+    text-decoration: none;
+    font-family: var(--font-display);
+}
+
+.tileKo {
+    font-family: var(--font-kr-sans);
+    font-size: 1.45rem;
+    font-weight: 800;
+}
+
+.tileRom {
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.tileEn {
+    margin-top: .2rem;
+    font-size: .92rem;
+    font-weight: 700;
+    line-height: 1.35;
+}

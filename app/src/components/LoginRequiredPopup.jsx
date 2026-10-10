@@ -1,11 +1,22 @@
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import GoogleSignInButton from '@/components/GoogleSignInButton';
+import { loginHref } from '@/lib/anonSentences';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
 import Mascot from '@/components/Mascot';
 
 const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
+    const { isAuthenticated } = useAuth();
     const { t } = useLanguage();
+    // The sign-up wall offers Google right here so the visitor stays on their sentence.
+    const inlineSignup = type === 'sentence-analyses';
+
+    useEffect(() => {
+        if (isAuthenticated) onClose();
+    }, [isAuthenticated, onClose]);
 
     const getMessage = () => {
         switch (type) {
@@ -20,6 +31,12 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
                     title: t('loginRequired.title'),
                     message: t('loginRequired.messages.audio.main'),
                     subMessage: t('loginRequired.messages.audio.sub')
+                };
+            case 'sentence-analyses':
+                return {
+                    title: t('loginRequired.messages.sentence-analyses.title'),
+                    message: t('loginRequired.messages.sentence-analyses.main'),
+                    subMessage: t('loginRequired.messages.sentence-analyses.sub')
                 };
             case 'image-extracts':
                 return {
@@ -37,7 +54,7 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
     };
 
     const handleLoginClick = () => {
-        router.push('/login');
+        router.push(loginHref(true));
         onClose();
     };
 
@@ -59,12 +76,17 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
                 <h2 id="login-popup-title">{title}</h2>
                 <p>{message}</p>
                 <p className={styles.subText}>{subMessage}</p>
+                {inlineSignup && (
+                    <div className={styles.google}>
+                        <GoogleSignInButton text="signup_with" />
+                    </div>
+                )}
                 <div className={styles.buttons}>
                     <button 
-                        className={styles.primaryButton}
+                        className={inlineSignup ? styles.cancelButton : styles.primaryButton}
                         onClick={handleLoginClick}
                     >
-                        {t('loginRequired.createAccount')}
+                        {inlineSignup ? t('loginRequired.signUpWithEmail') : t('loginRequired.createAccount')}
                     </button>
                     <button 
                         className={styles.cancelButton}

@@ -32,7 +32,8 @@ export default function LearnIndex() {
                     </p>
                     <p className={styles.dek}>
                         Stuck on a sentence of your own? Paste it into the{' '}
-                        <Link href="/korean-sentence-analyzer">free Korean sentence analyzer</Link>.
+                        <Link href="/korean-sentence-analyzer">free Korean sentence analyzer</Link>, or look up a
+                        word from a drama in <Link href="/phrases">Korean phrases</Link>.
                     </p>
                 </div>
             </header>

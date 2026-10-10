@@ -1,9 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-// Set to the Chrome Web Store listing URL once the extension is published.
-// While empty, install buttons say "Coming soon" and the home card stays hidden.
-export const CHROME_EXTENSION_URL = '';
+// Chrome Web Store listing. While empty, install buttons say "Coming soon"
+// and the home card stays hidden.
+export const CHROME_EXTENSION_URL =
+    'https://chromewebstore.google.com/detail/hanbok-study/fmcnjefaokldjlddnakekdokejlpamlc';
 
 // The extension's content script sets data-hanbok-extension on <html> and
 // fires 'hanbok-extension-ready' on hanbokstudy.com.

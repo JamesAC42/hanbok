@@ -9,6 +9,7 @@ import useProgress from '@/hooks/useProgress';
 import Mascot from '@/components/Mascot';
 import Tiger from '@/components/Tiger';
 import QuotaDisplay from '@/components/QuotaDisplay';
+import DailySentenceCard from '@/components/home/DailySentenceCard';
 import { WeekStrip, ActivityHeatmap, TrendChart } from '@/components/home/ActivityCharts';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { stagesToday } from '@/lib/todayLoop';
@@ -514,6 +515,7 @@ const HomeView = () => {
 
             <div className={styles.columns}>
                 <div className={styles.column}>
+                    <DailySentenceCard streak={streak} />
                     <QuickInput inputRef={inputRef} />
                     <QuotaDisplay smallScreensOnly />
                     <RecentWork items={recent} />

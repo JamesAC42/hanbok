@@ -140,6 +140,17 @@ const COPY = {
         ],
         button: { label: 'Open Hanbok', path: '/' },
     }),
+    // Sent by services/streakEmails.js, not by the lifecycle run
+    streak: (name, { streak, sentence }) => ({
+        subject: `Your ${streak}-day streak ends at midnight`,
+        intro: `Hi ${name},`,
+        paragraphs: [
+            `You've studied Korean ${streak} days in a row. One sentence tonight keeps the streak going.`,
+            `Today's sentence is ${sentence.text} (roughly: "${sentence.gist}"). Breaking it down is free and counts for your streak.`,
+        ],
+        button: { label: 'Break it down', path: `/analyze?text=${encodeURIComponent(sentence.text)}` },
+        footer: "You're getting this because you have a Hanbok streak going.",
+    }),
     winback: (name) => ({
         subject: "Here's what's new in Hanbok",
         intro: `Hi ${name},`,
@@ -160,9 +171,10 @@ const COPY = {
 
 const COLORS = { primary: '#3D64E8', shadow: '#2645B8', text: '#141833', muted: '#5B6080', border: '#E3E6F0' };
 
-const renderEmail = (type, { name, userId, secret }) => {
+const renderEmail = (type, { name, userId, secret, data }) => {
     if (!COPY[type]) throw new Error(`Unknown lifecycle email type: ${type}`);
-    const copy = COPY[type](firstName(name));
+    const copy = COPY[type](firstName(name), data);
+    const footer = copy.footer || "You're getting this because you have a free Hanbok account.";
     const unsub = unsubscribeUrl(userId, secret);
     const buttonUrl = withUtm(copy.button.path, type);
     const p = `margin:0 0 18px;font-size:18px;line-height:1.6;color:${COLORS.text};`;
@@ -194,7 +206,7 @@ const renderEmail = (type, { name, userId, secret }) => {
     <p style="${p}">${escapeHtml(SIGNATURE)}</p>
     <hr style="border:none;border-top:1px solid ${COLORS.border};margin:28px 0 16px;">
     <p style="margin:0;font-size:15px;line-height:1.6;color:${COLORS.muted};">
-        You're getting this because you have a free Hanbok account.
+        ${escapeHtml(footer)}
         <a href="${escapeHtml(unsub)}" style="color:${COLORS.muted};">Unsubscribe from these emails</a>.
         You'll still get account emails like password resets.
     </p>
@@ -212,7 +224,7 @@ const renderEmail = (type, { name, userId, secret }) => {
         `${copy.button.label}: ${buttonUrl}`,
         SIGNATURE,
         '--',
-        `You're getting this because you have a free Hanbok account. Unsubscribe: ${unsub}`,
+        `${footer} Unsubscribe: ${unsub}`,
     ].join('\n\n');
 
     return {
