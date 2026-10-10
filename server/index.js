@@ -377,6 +377,7 @@ app.post('/api/speak/session/:id/end', isAuthenticated, speak.endSession);
 app.post('/api/speak/translate', isAuthenticated, speak.translate);
 app.post('/api/speak/coach', isAuthenticated, speak.coach);
 app.post('/api/speak/session/:id/recap', isAuthenticated, speak.recap);
+app.get('/api/speak/stats', isAuthenticated, speak.stats);
 app.get('/api/speak/history', isAuthenticated, speak.history);
 app.get('/api/speak/history/:id', isAuthenticated, speak.historyItem);
 

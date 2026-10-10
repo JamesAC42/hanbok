@@ -408,4 +408,43 @@ const historyItem = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem };
+// GET /api/speak/stats: speaking numbers for the Home page.
+const stats = async (req, res) => {
+    try {
+        const db = getDb();
+        const user = await loadUser(db, req);
+        const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const rows = await db.collection('speak_sessions')
+            .find({ userId: req.session.user.userId, endedAt: { $exists: true } }, { projection: { sessionId: 1, scenarioId: 1, startedAt: 1, billedSeconds: 1, goals: 1, goalsDone: 1, 'transcript.who': 1 } })
+            .sort({ startedAt: -1 })
+            .limit(500)
+            .toArray();
+        // Only calls where the learner actually said something count.
+        const calls = rows.filter((s) => (s.transcript || []).some((m) => m.who === 'you'));
+        const cleared = new Set(calls.filter((s) => {
+            const total = findScenario(s.scenarioId)?.goals.length || 0;
+            const done = s.goals ? s.goals.filter(Boolean).length : s.goalsDone || 0;
+            return total && done >= total;
+        }).map((s) => s.scenarioId));
+        const sum = (list) => list.reduce((n, s) => n + (s.billedSeconds || 0), 0);
+        const allowance = user ? await allowanceFor(db, user) : null;
+        if (allowance) delete allowance.model;
+        const last = calls[0];
+        res.json({
+            success: true,
+            calls: calls.length,
+            totalSeconds: sum(calls),
+            weekSeconds: sum(calls.filter((s) => new Date(s.startedAt) >= weekAgo)),
+            weekCalls: calls.filter((s) => new Date(s.startedAt) >= weekAgo).length,
+            scenesCleared: cleared.size,
+            scenesTotal: SCENARIOS.length,
+            last: last ? { sessionId: last.sessionId, title: findScenario(last.scenarioId)?.title || '', startedAt: last.startedAt } : null,
+            allowance,
+        });
+    } catch (e) {
+        console.error('speak stats', e.message);
+        res.status(500).json({ success: false, error: 'Could not load speaking stats' });
+    }
+};
+
+module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats };

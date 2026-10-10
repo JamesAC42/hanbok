@@ -679,12 +679,23 @@
 
 .statGrid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: .75rem;
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
     @media screen and (max-width: 560px) {
         gap: .5rem;
     }
+}
+
+a.statTile {
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s ease;
+    &:hover { border-color: var(--tile-color); }
 }
 
 .statTile {
@@ -874,6 +885,59 @@
     @include bp-press(var(--bp-und), var(--bp-und-d));
     font-size: .82rem;
     padding: .6rem 1rem;
+}
+
+.speakCard {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    background: var(--bp-purple-soft);
+    border-color: var(--bp-purple-line);
+
+    p {
+        margin: .3rem 0 .85rem;
+        font-size: .92rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+    }
+}
+
+.speakFaces {
+    display: flex;
+    width: 88px;
+    > span {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        box-sizing: border-box;
+        border: 3px solid var(--ring);
+        background: var(--fill);
+        &:last-child { margin-left: -20px; margin-top: 22px; }
+    }
+    // Zoom the full-body art onto the head.
+    img { display: block; width: 190%; max-width: none; margin-top: 2%; margin-left: calc(50% - var(--face) * 1.9%); }
+}
+
+.speakActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+}
+
+.speakButton {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d));
+    font-size: .82rem;
+    padding: .6rem 1rem;
+}
+
+.speakLink {
+    font-weight: 800;
+    font-size: .88rem;
+    color: var(--bp-purple-d);
 }
 
 .tutorButton {
