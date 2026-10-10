@@ -31,6 +31,7 @@ const Profile = () => {
     if (loading || !isAuthenticated) return null;
 
     const userNotFree = user.tier === 1 || user.tier === 2;
+    const onTrial = !!user.plusTrialEndsAt;
     const unlimited = t('profile.unlimited');
     const tierName =
         user.tier === 0 ? t('profile.tierTypes.free') :
@@ -112,9 +113,14 @@ const Profile = () => {
                     <p className={profileStyles.planText}>
                         <strong>{t(`profile.tierInfo.${tierKey}.title`)}:</strong> {t(`profile.tierInfo.${tierKey}.description`)}
                     </p>
+                    {onTrial && (
+                        <p className={profileStyles.planText}>
+                            Your free Plus trial ends {new Date(user.plusTrialEndsAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}. Choose a plan on the pricing page to keep Plus after that.
+                        </p>
+                    )}
                     <div className={profileStyles.planLinks}>
                         <Link href="/pricing">{t('profile.tierInfo.moreDetails')} Pricing page</Link>
-                        {userNotFree && (
+                        {userNotFree && !onTrial && (
                             <a href="https://billing.stripe.com/p/login/fZe9EtgcAgFe6UU5kk" target="_blank" rel="noreferrer">
                                 {t('profile.manageSubscriptionLink')}
                             </a>

@@ -120,6 +120,7 @@ const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./contr
 const { setHeardFrom } = require('./controllers/auth/setHeardFrom');
 const lifecycleEmails = require('./services/lifecycleEmails');
 const streakEmails = require('./services/streakEmails');
+const { startAutoTrialExpiry } = require('./utils/autoTrial');
 
 // Import admin lyrics controllers
 const { getAllLyrics, addLyrics, updateLyrics, deleteLyrics, togglePublished } = require('./controllers/lyrics/adminLyrics');
@@ -881,6 +882,8 @@ async function startServer() {
     lifecycleEmails.startLifecycleEmailScheduler();
     // Evening streak reminders; does nothing unless STREAK_EMAILS_ENABLED=true
     streakEmails.startStreakEmailScheduler();
+    // Ends no-card Plus trials that have run out (AUTO_TRIAL_ENABLED grants them)
+    startAutoTrialExpiry(getDb);
     
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);

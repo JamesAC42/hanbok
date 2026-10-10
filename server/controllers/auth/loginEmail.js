@@ -3,6 +3,7 @@ const { getDb } = require('../../database');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
+const { expireIfDue, trialEndsAt } = require('../../utils/autoTrial');
 
 const loginEmail = async (req, res, redisClient) => {
     const { email, password } = req.body;
@@ -60,6 +61,7 @@ const loginEmail = async (req, res, redisClient) => {
         // Apply polyfill data
         try {
             user = await polyfillData(user, db);
+            user = await expireIfDue(db, user);
         } catch (polyfillError) {
             console.error('Error during user data polyfill:', polyfillError);
             // Continue with login process even if polyfill fails
@@ -151,6 +153,7 @@ const loginEmail = async (req, res, redisClient) => {
                 maxSavedWords: user.maxSavedWords,
                 feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
                 heardFrom: user.attribution?.heardFrom || null,
+                plusTrialEndsAt: trialEndsAt(user),
                 remainingImageExtracts: user.remainingImageExtracts,
                 remainingSentenceAnalyses: user.remainingSentenceAnalyses || 0,
                 hasUsedFreeTrial: user.hasUsedFreeTrial || false,
