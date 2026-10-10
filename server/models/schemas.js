@@ -96,6 +96,15 @@ const collections = {
             },
             required: ["status", "startDate"]
           },
+          autoTrial: {
+            bsonType: ["object", "null"],
+            description: "No-card Plus trial given at signup (AUTO_TRIAL_ENABLED); expiredAt is set when tier drops back to 0",
+            properties: {
+              startedAt: { bsonType: "date" },
+              endsAt: { bsonType: "date" },
+              expiredAt: { bsonType: ["date", "null"] }
+            }
+          },
           emailPrefs: {
             bsonType: ["object", "null"],
             description: "Email preferences; marketing=false means unsubscribed from lifecycle emails",

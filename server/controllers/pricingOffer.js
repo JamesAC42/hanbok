@@ -14,7 +14,7 @@ const getPricingOffer = async (req, res) => {
     if (userId) {
         try {
             const user = await getDb().collection('users').findOne({ userId }, {
-                projection: { email: 1, verified: 1, googleId: 1, tier: 1, hasUsedFreeTrial: 1, 'subscription.stripeSubscriptionId': 1 }
+                projection: { email: 1, verified: 1, googleId: 1, tier: 1, hasUsedFreeTrial: 1, autoTrial: 1, 'subscription.stripeSubscriptionId': 1 }
             });
             offer.trial.eligible = isTrialEligible(user);
             if (enabled) {

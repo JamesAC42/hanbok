@@ -2,6 +2,7 @@ const { getDb } = require('../../database');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
+const { expireIfDue, trialEndsAt } = require('../../utils/autoTrial');
 
 const getSession = async (req, res) => {
     
@@ -27,6 +28,7 @@ const getSession = async (req, res) => {
         }
 
         user = await polyfillData(user, db);
+        user = await expireIfDue(db, user);
 
         // For free users, get their rate limit information
         let weekSentencesUsed = 0;
@@ -107,6 +109,7 @@ const getSession = async (req, res) => {
             maxSavedWords: user.maxSavedWords ? user.maxSavedWords : 0,
             feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
             heardFrom: user.attribution?.heardFrom || null,
+            plusTrialEndsAt: trialEndsAt(user),
             remainingImageExtracts: user.remainingImageExtracts ? user.remainingImageExtracts : 0,
             remainingSentenceAnalyses: user.remainingSentenceAnalyses ? user.remainingSentenceAnalyses : 0,
             hasUsedFreeTrial: user.hasUsedFreeTrial || false,

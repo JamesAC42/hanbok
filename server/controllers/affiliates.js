@@ -4,6 +4,7 @@
 const { getDb } = require('../database');
 const { createTtlCache } = require('../lib/ttlCache');
 const { DEFAULT_RATE, DEFAULT_MONTHS, normalizeCode, newStatsToken, commissionForInvoices } = require('../lib/affiliates');
+const { isPaying, PAYING_PROJECTION } = require('../utils/autoTrial');
 
 const statsCache = createTtlCache(10 * 60 * 1000);
 
@@ -28,12 +29,12 @@ const paidInvoices = async (stripe, customerId) => {
 const computeStats = async (affiliate) => {
     const db = getDb();
     const referred = await db.collection('users')
-        .find({ 'attribution.ref': affiliate.code }, { projection: { userId: 1, tier: 1, dateCreated: 1, 'subscription.customerId': 1 } })
+        .find({ 'attribution.ref': affiliate.code }, { projection: { userId: 1, dateCreated: 1, 'subscription.customerId': 1, ...PAYING_PROJECTION } })
         .toArray();
 
     const stats = {
         signups: referred.length,
-        paying: referred.filter((u) => u.tier > 0).length,
+        paying: referred.filter(isPaying).length,
         customers: 0,
         revenue: 0,
         earned: 0,

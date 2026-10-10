@@ -3,6 +3,7 @@
 // the page stays fast as the collections grow.
 const { getDb } = require('../../database');
 const { createTtlCache } = require('../../lib/ttlCache');
+const { isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION } = require('../../utils/autoTrial');
 
 const DAY = 24 * 60 * 60 * 1000;
 const WEEK = 7 * DAY;
@@ -135,14 +136,15 @@ const buildOverview = async (db, { days, tz }) => {
         activeUsersByDay(db, from, now, tz),
         distinctActiveUsers(db, prevFrom, from),
         db.collection('users')
-            .find({ dateCreated: { $gte: from, $lt: now } }, { projection: { _id: 0, userId: 1, tier: 1, attribution: 1 } })
+            .find({ dateCreated: { $gte: from, $lt: now } }, { projection: { _id: 0, userId: 1, attribution: 1, ...PAYING_PROJECTION } })
             .toArray(),
-        db.collection('users').aggregate([{ $group: { _id: '$tier', count: { $sum: 1 } } }]).toArray(),
+        // Running no-card trials count under 'trial', not Plus.
+        db.collection('users').aggregate([{ $group: { _id: { $cond: [ON_TRIAL_EXPR, 'trial', '$tier'] }, count: { $sum: 1 } } }]).toArray(),
         db.collection('users').aggregate([
             { $group: {
                 _id: { $ifNull: ['$attribution.heardFrom', null] },
                 users: { $sum: 1 },
-                paid: { $sum: { $cond: [{ $gt: ['$tier', 0] }, 1, 0] } },
+                paid: { $sum: { $cond: [PAYING_EXPR, 1, 0] } },
             } },
         ]).toArray(),
         db.collection('sentences').aggregate([
@@ -175,7 +177,7 @@ const buildOverview = async (db, { days, tz }) => {
     const heardFrom = countBy(cohort.map((u) => u.attribution?.heardFrom || null));
     const utm = countBy(cohort.map((u) => u.attribution?.utm_source || null));
     const referrers = countBy(cohort.map((u) => referrerHost(u.attribution?.referrer)));
-    const paidFromCohort = cohort.filter((u) => u.tier > 0).length;
+    const paidFromCohort = cohort.filter(isPaying).length;
 
     const tierCount = (tier) => tiers.find((row) => row._id === tier)?.count || 0;
 
@@ -186,7 +188,7 @@ const buildOverview = async (db, { days, tz }) => {
             active: change(unionSize(activeByDay), prevActive.size),
             sentences: { ...change(sentences, prevSentences), anon: anonSentences },
             paidFromCohort,
-            users: { total: tiers.reduce((sum, row) => sum + row.count, 0), free: tierCount(0), basic: tierCount(1), plus: tierCount(2) },
+            users: { total: tiers.reduce((sum, row) => sum + row.count, 0), free: tierCount(0), basic: tierCount(1), plus: tierCount(2), trial: tierCount('trial') },
         },
         series,
         funnel,
@@ -250,7 +252,7 @@ const buildFunnel = async (db, cohort) => {
         { key: 'saved', users: new Set([...words, ...savedSentences]).size },
         { key: 'reviewed', users: reviewed.length },
         { key: 'returned', users: returned },
-        { key: 'paid', users: cohort.filter((u) => u.tier > 0).length },
+        { key: 'paid', users: cohort.filter(isPaying).length },
     ];
 };
 
