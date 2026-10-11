@@ -7,6 +7,7 @@ const { getDb } = require('../../database');
 const { createTtlCache } = require('../../lib/ttlCache');
 const { buildOverview, buildEngagement } = require('./stats');
 const { buildRevenue } = require('./revenue');
+const { PAYING_EXPR } = require('../../utils/autoTrial');
 const { buildTraffic, buildEventBreakdown, isConfigured: umamiConfigured } = require('./traffic');
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -102,11 +103,25 @@ const buildChannels = async (db, now) => {
                 heardFrom: { $ifNull: ['$attribution.heardFrom', null] },
             },
             users: { $sum: 1 },
-            paid: { $sum: { $cond: [{ $gt: ['$tier', 0] }, 1, 0] } },
+            paid: { $sum: { $cond: [PAYING_EXPR, 1, 0] } },
         } },
         { $sort: { users: -1 } },
     ]).toArray();
     return rows.map((row) => ({ ...row._id, users: row.users, paid: row.paid }));
+};
+
+// No-card Plus trials (AUTO_TRIAL_ENABLED): how many are running, how many
+// ended in the last 30 days, and how many of those accounts now subscribe.
+const buildAutoTrials = async (db, now) => {
+    const users = db.collection('users');
+    const since = new Date(now.getTime() - 30 * DAY);
+    const subscribed = { 'subscription.stripeSubscriptionId': { $exists: true } };
+    const [active, started30d, converted30d] = await Promise.all([
+        users.countDocuments({ 'autoTrial.endsAt': { $gt: now }, 'autoTrial.expiredAt': { $exists: false }, 'subscription.stripeSubscriptionId': { $exists: false } }),
+        users.countDocuments({ 'autoTrial.startedAt': { $gte: since } }),
+        users.countDocuments({ 'autoTrial.startedAt': { $gte: since }, ...subscribed, tier: { $gt: 0 } }),
+    ]);
+    return { active, started30d, converted30d };
 };
 
 // Each section is computed on its own so one failing source (Stripe, Umami)
@@ -122,7 +137,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100 }))
         : Promise.resolve(null));
 
-    const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels] = await Promise.all([
+    const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials] = await Promise.all([
         section('overview7d', buildOverview(db, { days: 7, tz })),
         section('overview30d', buildOverview(db, { days: 30, tz })),
         section('engagement', buildEngagement(db, { days: 30, tz })),
@@ -131,6 +146,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         traffic(7),
         traffic(30),
         section('channels', buildChannels(db, now)),
+        section('autoTrials', buildAutoTrials(db, now)),
     ]);
 
     return {
@@ -158,6 +174,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
             '30d': trafficMonth ? trafficFrom(trafficMonth) : null,
         } : { available: false, reason: 'not_configured' },
         channels30d: channels,
+        autoTrials,
         errors,
     };
 };

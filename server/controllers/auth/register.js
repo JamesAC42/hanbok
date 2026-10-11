@@ -4,6 +4,7 @@ const { getDb } = require('../../database');
 const { sendVerificationEmail } = require('../../utils/emailService');
 const polyfillData = require('../../migrations/user_polyfill');
 const { sanitizeAttribution } = require('../../utils/attribution');
+const { autoTrialFields } = require('../../utils/autoTrial');
 
 const register = async (req, res, redisClient) => {
     const { email, password, name, attribution } = req.body;
@@ -86,7 +87,8 @@ const register = async (req, res, redisClient) => {
             maxSavedWords: 60,
             feedbackAudioCreditRedeemed: false,
             remainingImageExtracts: 20,
-            remainingSentenceAnalyses: 0
+            remainingSentenceAnalyses: 0,
+            ...autoTrialFields()
         };
 
         const cleanAttribution = sanitizeAttribution(attribution);

@@ -5,6 +5,7 @@ const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
 const { sanitizeAttribution } = require('../../utils/attribution');
+const { autoTrialFields, expireIfDue, trialEndsAt } = require('../../utils/autoTrial');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -115,7 +116,8 @@ const login = async (req, res, redisClient) => {
                 maxSavedWords:60,
                 feedbackAudioCreditRedeemed: false,
                 remainingImageExtracts: 20,
-                remainingSentenceAnalyses: 0
+                remainingSentenceAnalyses: 0,
+                ...autoTrialFields()
             };
 
             const cleanAttribution = sanitizeAttribution(attribution);
@@ -152,6 +154,7 @@ const login = async (req, res, redisClient) => {
 
         try {
             user = await polyfillData(user, db);
+            user = await expireIfDue(db, user);
         } catch (polyfillError) {
             console.error('Error during user data polyfill:', polyfillError);
             // Continue with the login process even if polyfill fails
@@ -240,6 +243,7 @@ const login = async (req, res, redisClient) => {
                 maxSavedWords: user.maxSavedWords,
                 feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
                 heardFrom: user.attribution?.heardFrom || null,
+                plusTrialEndsAt: trialEndsAt(user),
                 remainingImageExtracts: user.remainingImageExtracts,
                 remainingSentenceAnalyses: user.remainingSentenceAnalyses || 0,
                 hasUsedFreeTrial: user.hasUsedFreeTrial || false,

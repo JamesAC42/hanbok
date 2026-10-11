@@ -12,11 +12,13 @@ const plusTrialDays = () => {
     return Math.max(0, Math.min(days, 30));
 };
 
+// Accounts that already had the no-card trial (utils/autoTrial) don't get a second one.
 // Signed-out visitors count as eligible: they'll make a fresh account at checkout.
 const isTrialEligible = (user) => {
     if (plusTrialDays() === 0) return false;
     if (!user) return true;
     return user.hasUsedFreeTrial !== true
+        && !user.autoTrial
         && !user.subscription?.stripeSubscriptionId
         && !(user.tier > 0);
 };
