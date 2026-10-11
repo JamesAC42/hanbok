@@ -9,12 +9,13 @@ import HeroTry from '@/components/landing/HeroTry';
 import HeroArt from '@/components/landing/HeroArt';
 import PromoVideo from '@/components/landing/PromoVideo';
 import SignedInRedirect from '@/components/landing/SignedInRedirect';
+import { Cast, SpeakSpotlight, NewFeatures } from '@/components/landing/Showcase';
 import { apiGet, JsonLd, SITE_NAME, SITE_URL } from '@/lib/seo';
 
 export const metadata = {
     // absolute: the landing title shouldn't get the "| Hanbok" suffix
     title: { absolute: 'Hanbok: Learn Korean, Japanese & Chinese from Real Sentences' },
-    description: 'Paste any Korean, Japanese or Chinese sentence and Hanbok breaks it down word by word: grammar, readings, translation and audio. Save words to flashcards, learn from K-pop lyrics, and practice with an AI tutor. Free to start.',
+    description: 'Paste any Korean, Japanese or Chinese sentence and Hanbok breaks it down word by word: grammar, readings, translation and audio. Save words to flashcards, learn from K-pop lyrics, and practice speaking out loud with AI characters. Free to start.',
     alternates: { canonical: '/' },
 };
 
@@ -43,10 +44,10 @@ const LOOP = [
 const FEATURES = [
     { key: 'lyrics', color: 'pink', icon: '♪', title: 'Song lyrics', text: 'K-pop, J-pop and anime songs broken down line by line, ready to sing along to.', href: '/lyrics', cta: 'Browse songs' },
     { key: 'tutor', color: 'flame', tiger: true, title: 'Horangi, your tutor', text: 'Stuck on a sentence? Ask the tutor why, get more examples, or practice a conversation.', href: '/analyze', cta: 'Try a sentence first' },
-    { key: 'paragraphs', color: 'purple', icon: '¶', title: 'Whole paragraphs', text: 'News articles, webtoon pages or your own writing, split into sentences you can open one by one.', href: '/analyze', cta: 'Start reading' },
     { key: 'photo', color: 'read', icon: '◎', title: 'Photo to text', text: 'Point your camera at a sign, a menu or a screenshot and Hanbok reads the text for you.', href: '/analyze', cta: 'Try it' },
     { key: 'audio', color: 'und', icon: '▶', title: 'Native audio', text: 'Hear any sentence read aloud, then slow it down to catch every sound.', href: '/analyze', cta: 'Listen' },
-    { key: 'hangeul', color: 'freeze', icon: '가', title: 'Start from zero', text: 'New to Korean? Learn Hangeul with short lessons, then practice typing it.', href: '/hangeul', cta: 'Learn Hangeul' },
+    { key: 'hangeul', color: 'freeze', icon: '가', title: 'Start from zero', text: 'New to Korean? Learn Hangeul with short lessons, one group of letters at a time.', href: '/hangeul', cta: 'Learn Hangeul' },
+    { key: 'typing', color: 'purple', icon: '⌨', title: 'Typing practice', text: 'Learn the Korean keyboard with drills, from single letters up to whole paragraphs.', href: '/typing', cta: 'Start typing' },
 ];
 
 // Real reviews, as credited on the About page (Reddit handles where they came from Reddit).
@@ -62,7 +63,7 @@ const QUOTES = [
 const FAQ = [
     {
         q: 'Is Hanbok free?',
-        a: 'Yes. You can break down 10 sentences a week, save words, review flashcards and read song lyrics without paying. Paid plans start at $4 a month for unlimited sentences.',
+        a: 'Yes. A free account breaks down 10 sentences a week and includes flashcards, song lyrics and 5 minutes of Speak a week. New accounts also get 7 days of Plus free, no card needed. Paid plans start at $4 a month for unlimited sentences.',
     },
     {
         q: 'Which languages can I learn?',
@@ -71,6 +72,14 @@ const FAQ = [
     {
         q: "I'm a total beginner. Is it for me?",
         a: 'Yes. Start with the Hangeul lessons and the Learn articles, then paste short sentences. Every word comes with its reading, so you never have to guess how to say it.',
+    },
+    {
+        q: 'What is Speak?',
+        a: 'Speak is live voice practice. You pick an everyday scene, like ordering at a café or taking a taxi, and talk it through out loud with Horang or Sora. It can tell you what to say next, and you can ask for help in English anytime. It is in beta: free accounts get 5 minutes a week, Basic 60 minutes a month and Plus 120.',
+    },
+    {
+        q: 'Is there a browser extension?',
+        a: 'Yes. Hanbok for Chrome breaks down any sentence you select on a web page, saves new words to your deck and highlights the words you already know as you read.',
     },
     {
         q: 'Do I need an account?',
@@ -167,6 +176,16 @@ export default async function Home() {
                     ))}
                 </section>
 
+                {/* ---------- The cast ---------- */}
+                <section className={`${styles.section} ${styles.sectionSoft}`} id="meet-the-cast">
+                    <header className={styles.sectionHead}>
+                        <span className={styles.kicker}>Meet the cast</span>
+                        <h2>You won&apos;t be studying alone</h2>
+                        <p>Four characters show you around Hanbok. You&apos;ll meet them in your breakdowns, your lessons and in Speak.</p>
+                    </header>
+                    <Cast />
+                </section>
+
                 {/* ---------- The loop ---------- */}
                 <section className={styles.section} id="how-it-works">
                     <header className={styles.sectionHead}>
@@ -189,10 +208,28 @@ export default async function Home() {
                     <PromoVideo />
                 </section>
 
+                {/* ---------- Speak ---------- */}
+                <section className={`${styles.section} ${styles.speakBand}`} id="speak">
+                    <SpeakSpotlight />
+                </section>
+
+                {/* ---------- New features ---------- */}
+                <section className={styles.section} id="whats-new">
+                    <header className={styles.sectionHead}>
+                        <span className={styles.kicker}>New in Hanbok</span>
+                        <h2>More ways to read, keep and practice</h2>
+                        <p>Hanbok keeps growing. Here&apos;s what landed in the last few weeks.</p>
+                    </header>
+                    <NewFeatures />
+                    <div className={styles.center}>
+                        <Link href="/updates" className={styles.ghostButton}>See everything that&apos;s new</Link>
+                    </div>
+                </section>
+
                 {/* ---------- Features ---------- */}
                 <section className={`${styles.section} ${styles.sectionSoft}`}>
                     <header className={styles.sectionHead}>
-                        <span className={styles.kicker}>Everything in one place</span>
+                        <span className={styles.kicker}>And everything else</span>
                         <h2>From your first <span lang="ko">안녕</span> to full song lyrics</h2>
                     </header>
                     <div className={styles.features}>
@@ -261,33 +298,43 @@ export default async function Home() {
 
                 {/* ---------- Pricing teaser ---------- */}
                 <section className={styles.section}>
-                    <div className={styles.plans}>
-                        <div className={styles.plansCopy}>
-                            <span className={styles.kicker}>Pricing</span>
-                            <h2>Start free. Upgrade when you&apos;re hooked.</h2>
-                            <p>The free plan is a real plan, not a trial. When you want more, unlimited sentences cost less than a coffee a month.</p>
-                            <Link href="/pricing" className={styles.ghostButton}>Compare plans</Link>
+                    <header className={styles.sectionHead}>
+                        <span className={styles.kicker}>Pricing</span>
+                        <h2>Start free. Upgrade when you&apos;re hooked.</h2>
+                        <p>The free plan is a real plan, not a trial. And every new account gets 7 days of Plus on us, no card needed.</p>
+                    </header>
+                    <div className={styles.planCards}>
+                        <div className={styles.planCard}>
+                            <span className={styles.planName}>Free</span>
+                            <strong>$0</strong>
+                            <ul>
+                                <li>10 sentences a week</li>
+                                <li>Flashcards, song lyrics and phrases</li>
+                                <li>5 minutes of Speak a week</li>
+                            </ul>
                         </div>
-                        <div className={styles.planCards}>
-                            <div className={styles.planCard}>
-                                <span className={styles.planName}>Free</span>
-                                <strong>$0</strong>
-                                <ul>
-                                    <li>10 sentences a week</li>
-                                    <li>Flashcards and song lyrics</li>
-                                    <li>A few tutor chats to try it</li>
-                                </ul>
-                            </div>
-                            <div className={`${styles.planCard} ${styles.planCardHot}`}>
-                                <span className={styles.planName}>Basic</span>
-                                <strong>$4<small>/month</small></strong>
-                                <ul>
-                                    <li>Unlimited sentences</li>
-                                    <li>Unlimited saved words</li>
-                                    <li>Unlimited paragraphs, 50 tutor chats a month</li>
-                                </ul>
-                            </div>
+                        <div className={styles.planCard}>
+                            <span className={styles.planName}>Basic</span>
+                            <strong>$4<small>/month</small></strong>
+                            <ul>
+                                <li>Unlimited sentences and saved words</li>
+                                <li>Read up to 5,000 characters at once</li>
+                                <li>50 tutor chats and 60 Speak minutes a month</li>
+                            </ul>
                         </div>
+                        <div className={`${styles.planCard} ${styles.planCardHot}`}>
+                            <span className={styles.planName}>Plus</span>
+                            <strong>$10<small>/month</small></strong>
+                            <ul>
+                                <li>Everything unlimited, plus audio and photo text</li>
+                                <li>Unlimited grammar lessons and practice</li>
+                                <li>120 Speak minutes a month</li>
+                            </ul>
+                            <span className={styles.planTrial}>Free for your first 7 days</span>
+                        </div>
+                    </div>
+                    <div className={styles.center}>
+                        <Link href="/pricing" className={styles.ghostButton}>Compare plans</Link>
                     </div>
                 </section>
 
