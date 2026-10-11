@@ -1,6 +1,6 @@
 # Speak (voice role-play with Horang)
 
-Live voice conversations with Horang over OpenAI Realtime (WebRTC).
+Live voice conversations with Horang and Sora over GPT-Live (WebRTC), with the OpenAI Realtime API as a fallback (`SPEAK_ENGINE`).
 
 Flow: the browser makes a WebRTC offer and posts it to `POST /api/speak/session`.
 The server checks the plan's minutes, builds Horang's instructions (scene, level,
@@ -41,3 +41,15 @@ and microphone, not only on gaps (see `startLiveLine` in `speakClient.js`).
 | `SPEAK_REALTIME_VOICE_SORA` | marin | Sora's voice on the Realtime fallback |
 | `SPEAK_TRANSCRIBE_MODEL` | gpt-4o-transcribe | captions of what the learner says, with a mixed-language hint |
 | `SPEAK_TRANSLATE_MODEL` | gpt-4.1 | translation and romanization under the character's lines |
+| `SPEAK_BETA` | on | `off` hides the Beta labels and stops giving minutes back |
+| `SPEAK_BETA_REFUNDS` | 3 | reported calls per plan period that get their minutes back |
+| `SPEAK_REPORT_EMAIL` | (unset) | when set, each problem report is emailed here |
+
+## Beta survey
+
+After each call (and on past calls from the last 7 days) the learner is asked
+"How did the call go?". A problem report (`POST /api/speak/session/:id/feedback`,
+`{ok, issues, note}`) is saved on the session as `feedback`; during the beta it
+also refunds that call's minutes once (`refundedSeconds`, which `secondsUsed`
+subtracts), up to `SPEAK_BETA_REFUNDS` calls per plan period. Reports show in
+the admin Speak tab under "Problem reports (beta)".
