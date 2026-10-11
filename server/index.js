@@ -149,7 +149,8 @@ app.use((req, res, next) => {
 app.use(
   session({
     store: redisStore,
-    secret: 'domoarigato',
+    // Set SESSION_SECRET in .env; the old fallback is public in this repo.
+    secret: process.env.SESSION_SECRET || 'domoarigato',
     resave: false,
     name: process.env.SESSION_COOKIE_NAME || 'hanbok-session',
     saveUninitialized: false,
@@ -164,6 +165,9 @@ app.use(
   })
 );
 app.set('trust proxy', 1);
+if (!process.env.SESSION_SECRET && process.env.LOCAL !== 'true') {
+  console.warn('SESSION_SECRET is not set; sessions are signed with the public fallback secret.');
+}
 
 // Auth middleware
 const isAuthenticated = (req, res, next) => {
