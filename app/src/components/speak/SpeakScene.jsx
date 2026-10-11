@@ -63,7 +63,7 @@ const sounds = (a, b) => {
 
 const lineSize = (text) => (text.length > 110 ? styles.lineSmall : text.length > 60 ? styles.lineMedium : '');
 
-export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, onDone, onLimit }) {
+export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, beta = true, onDone, onLimit }) {
     const ch = characterOf(scenario.character);
     const callRef = useRef(null);
     const micRingRef = useRef(null);
@@ -125,6 +125,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             phrases: s.phrases, tips: s.tips, summary: s.summary, seconds,
             lines: s.transcript.filter((m) => m.who === 'you').length,
             transcript: s.transcript.map(({ who, text }) => ({ who, text })),
+            reason,
             allowance: result?.allowance || null,
         });
     }, [onDone, scenario, ch.id]);
@@ -401,7 +402,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 <div className={styles.topRow}>
                     <button type="button" className={styles.iconBtn} onClick={() => { if (status === 'live') { speakEvent('hang_up', {}, callRef.current?.sessionId); finish('user'); } else onDone(null); }} aria-label="End the conversation">{Icon.close}</button>
                     <div className={styles.titleCard}>
-                        <div className={styles.sceneTitle}>{scenario.title}</div>
+                        <div className={styles.sceneTitle}>{scenario.title}{beta && <span className={styles.betaTag}>Beta</span>}</div>
                         <div className={styles.progress}><div style={{ width: `${(goals.filter(Boolean).length / goals.length) * 100}%` }} /></div>
                     </div>
                     {timeLeft !== null && <div className={`${styles.timer} ${timeLeft <= 60 ? styles.timerLow : ''}`} aria-label="Time left">{fmt(timeLeft)}</div>}
@@ -454,6 +455,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                         <p className={styles.assistBlurb}>{ASSISTS.find((a) => a.id === assist)?.blurb}</p>
                         <button type="button" className={styles.startBtn} onClick={start}>{Icon.mic} Start talking</button>
                         <p className={styles.readyNote}>Headphones help {ch.name} hear you clearly.</p>
+                        {beta && <p className={styles.readyNote}>Speak is in beta. If anything goes wrong, tell us after the call and you&apos;ll get the minutes back.</p>}
                     </div>
                 )}
 

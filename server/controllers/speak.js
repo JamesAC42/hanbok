@@ -9,7 +9,7 @@ const { getDb } = require('../database');
 const SupportedLanguages = require('../supported_languages');
 const { SCENARIOS, LEVELS, findScenario, publicScenario } = require('../speak/scenarios');
 const { buildInstructions, toolsFor, characterFor, ASSISTS, defaultAssist, assistSwitchNote, nameOf } = require('../speak/prompt');
-const { allowanceFor, planFor, planTable, MAX_SESSION_SECONDS, MIN_START_SECONDS } = require('../speak/limits');
+const { allowanceFor, planFor, planTable, MAX_SESSION_SECONDS, MIN_START_SECONDS, BETA } = require('../speak/limits');
 const { coachTurn, recapCall } = require('../speak/coach');
 
 const OPENAI_URL = 'https://api.openai.com/v1/realtime/calls';
@@ -21,6 +21,7 @@ const hangupTimers = new Map();
 const NON_LATIN = new Set(['ko', 'ja', 'zh', 'zh-TW', 'ru', 'hi']);
 
 const { logSpeakEvent } = require('../lib/speakEvents');
+const { sendTeamAlert } = require('../utils/emailService');
 const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const langOr = (code, fallback) => (SupportedLanguages[code] ? code : fallback);
 
@@ -60,13 +61,13 @@ const overview = async (req, res) => {
     const language = langOr(req.query.language, 'ko');
     const scenarios = SCENARIOS.map((s) => publicScenario(s, language));
     const plans = planTable();
-    if (!req.session?.user) return res.json({ success: true, scenarios, levels: LEVELS, plans, allowance: null });
+    if (!req.session?.user) return res.json({ success: true, scenarios, levels: LEVELS, plans, beta: BETA, allowance: null });
     try {
         const db = getDb();
         const user = await loadUser(db, req);
         const allowance = user ? await allowanceFor(db, user) : null;
         if (allowance) delete allowance.model;
-        res.json({ success: true, scenarios, levels: LEVELS, plans, allowance });
+        res.json({ success: true, scenarios, levels: LEVELS, plans, beta: BETA, allowance });
     } catch (e) {
         console.error('speak overview', e);
         res.status(500).json({ success: false, error: 'Could not load Speak' });
@@ -338,6 +339,58 @@ const coach = async (req, res) => {
     }
 };
 
+// The "How did the call go?" answers on the results screen.
+const ISSUES = ['dropped', 'cant_hear', 'didnt_hear_me', 'wrong_text', 'try_saying', 'ended_early', 'slow', 'other'];
+
+// POST /api/speak/session/:id/feedback { ok, issues, note }. During the beta a
+// reported problem gives the call's minutes back (a few calls per window).
+const feedback = async (req, res) => {
+    try {
+        const db = getDb();
+        const s = await db.collection('speak_sessions').findOne(
+            { sessionId: String(req.params.id), userId: req.session.user.userId },
+            { projection: { sessionId: 1, scenarioId: 1, billedSeconds: 1, refundedSeconds: 1, endReason: 1, engine: 1 } },
+        );
+        if (!s) return res.status(404).json({ success: false, error: 'Not found' });
+        const ok = req.body?.ok === true;
+        const issues = ok ? [] : [...new Set((Array.isArray(req.body?.issues) ? req.body.issues : []).filter((i) => ISSUES.includes(i)))];
+        const note = ok ? '' : str(req.body?.note, 1000);
+        const user = await loadUser(db, req);
+        let refundedSeconds = 0;
+        if (!ok && BETA && !s.refundedSeconds && s.billedSeconds > 0) {
+            const before = await allowanceFor(db, user);
+            if (before.refundsLeft > 0) refundedSeconds = s.billedSeconds;
+        }
+        await db.collection('speak_sessions').updateOne({ sessionId: s.sessionId }, {
+            $set: {
+                feedback: { ok, issues, note, at: new Date() },
+                ...(refundedSeconds ? { refundedSeconds, refundedAt: new Date() } : {}),
+            },
+        });
+        logSpeakEvent(db, { type: ok ? 'survey_ok' : 'survey_problem', sessionId: s.sessionId, userId: user.userId, tier: user.tier || 0, meta: { scene: s.scenarioId, ...(issues.length ? { reason: issues.join(',') } : {}) } });
+        if (!ok && process.env.SPEAK_REPORT_EMAIL) {
+            const scene = findScenario(s.scenarioId);
+            sendTeamAlert({
+                to: process.env.SPEAK_REPORT_EMAIL,
+                subject: `Speak problem: ${scene?.title || s.scenarioId}${issues.length ? ` (${issues.join(', ')})` : ''}`,
+                text: [
+                    `${user.name || 'A learner'} (user ${user.userId}, tier ${user.tier || 0}) reported a problem with a Speak call.`,
+                    `Scene: ${scene?.title || s.scenarioId}. Ended: ${s.endReason || '?'}. Engine: ${s.engine || '?'}. Billed: ${s.billedSeconds || 0}s${refundedSeconds ? ' (refunded)' : ''}.`,
+                    `Issues: ${issues.join(', ') || 'none picked'}`,
+                    note ? `What happened: ${note}` : '',
+                    `Call ${s.sessionId}: Admin > Speak > Recent calls (transcript and raw call timeline).`,
+                ].filter(Boolean).join('\n'),
+            }).catch(() => {});
+        }
+        const allowance = await allowanceFor(db, user);
+        delete allowance.model;
+        res.json({ success: true, refundedSeconds, allowance });
+    } catch (e) {
+        console.error('speak feedback', e);
+        res.status(500).json({ success: false, error: 'Could not save that' });
+    }
+};
+
 const goalList = (s, scenario) => (scenario?.goals || []).map((text, i) => ({ text, done: s.goals ? !!s.goals[i] : i < (s.goalsDone || 0) }));
 
 // The results notes for one call, made once from its stored transcript.
@@ -428,6 +481,9 @@ const historyItem = async (req, res) => {
                 tips: s.tips || [],
                 recap: s.recap || null,
                 lineNotes: s.lineNotes?.length === (s.transcript || []).length ? s.lineNotes : null,
+                feedback: s.feedback || null,
+                refundedSeconds: s.refundedSeconds || 0,
+                endReason: s.endReason || null,
             },
         });
     } catch (e) {
@@ -569,4 +625,4 @@ const stats = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats, lines, event };
+module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats, lines, event, feedback };

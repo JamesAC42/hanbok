@@ -39,7 +39,10 @@ const SpeakInterstitial = ({ onClose, onAction, free }) => {
                             See how it works
                         </Link>
                     </div>
-                    {free && <p className={styles.speakFine}>Free accounts get 5 speaking minutes every week.</p>}
+                    <p className={styles.speakFine}>
+                        {free ? 'Free accounts get 5 speaking minutes every week. ' : ''}
+                        It&apos;s in beta: if a call goes wrong, tell us and you get those minutes back.
+                    </p>
                 </div>
                 <div className={styles.speakArt} aria-hidden="true">
                     <img className={styles.speakBg} src="/images/speak/bg/cafe.webp" alt="" />

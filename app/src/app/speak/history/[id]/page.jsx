@@ -7,6 +7,7 @@ import Dashboard from '@/components/Dashboard';
 import { characterOf } from '@/components/speak/characters';
 import { RecapNotes, useRecap, starsFor } from '@/components/speak/SpeakResults';
 import TranscriptLines from '@/components/speak/TranscriptLines';
+import CallSurvey from '@/components/speak/CallSurvey';
 import styles from '@/styles/pages/speakResults.module.scss';
 
 const when = (d) => new Date(d).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
@@ -63,6 +64,9 @@ function Detail({ session }) {
                     <li key={g.text} className={g.done ? styles.goalDone : ''}><span className={styles.goalMark} aria-hidden="true">{g.done ? '✓' : ''}</span>{g.text}</li>
                 ))}
             </ul>
+            {(session.feedback || Date.now() - new Date(session.startedAt).getTime() < 7 * 24 * 60 * 60 * 1000) && (
+                <CallSurvey sessionId={session.sessionId} seconds={session.seconds} reason={session.feedback ? '' : session.endReason} initial={session.feedback} />
+            )}
             <RecapNotes recap={recap} loading={loading} failed={failed} phrases={session.phrases} tips={session.tips} language={session.language} nativeLanguage={session.nativeLanguage || 'en'} sessionId={session.sessionId} from="history" />
             <TranscriptLines sessionId={session.sessionId} transcript={session.transcript} notes={session.lineNotes} character={ch} language={session.language} from="history" />
         </div>

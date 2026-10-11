@@ -122,6 +122,15 @@ export default function SpeakPost() {
                 </section>
 
                 <section className={styles.section}>
+                    <h2>It&apos;s in beta</h2>
+                    <p>
+                        Speak is brand new, and live voice is tricky to get right. After every call you can tell us how it went.
+                        If something broke (the call dropped, they couldn&apos;t hear you, the words on screen were wrong),
+                        tell us what happened and we&apos;ll give you that call&apos;s minutes back. We read every report.
+                    </p>
+                </section>
+
+                <section className={styles.section}>
                     <h2>Give it a try</h2>
                     <p>
                         A five-minute call is a great way to start. Tell us how it goes, we are improving Speak every week.

@@ -37,6 +37,61 @@ function CallTimeline({ log }) {
     );
 }
 
+const ISSUE_LABELS = {
+    dropped: 'The call dropped',
+    cant_hear: "Couldn't hear them",
+    didnt_hear_me: "They didn't hear me",
+    wrong_text: 'Words on screen were wrong',
+    try_saying: '"Try saying" wrong or missing',
+    ended_early: 'Ended too early',
+    slow: 'Slow or laggy',
+    other: 'Something else',
+    'none picked': 'Nothing picked',
+};
+
+// Beta: what learners said after their calls, problem reports first.
+function ReportsCard({ reports: r, onOpenCall }) {
+    if (!r) return null;
+    return (
+        <section className={styles.card}>
+            <header className={styles.cardHead}>
+                <div>
+                    <h2>Problem reports (beta)</h2>
+                    <p>
+                        &ldquo;How did the call go?&rdquo; after each call. {fmt(r.answered)} of {fmt(r.asked)} answered, {fmt(r.ok)} said it worked,{' '}
+                        {fmt(r.problems)} reported a problem. {fmt(Math.round(r.refundedSeconds / 60))} minutes refunded.
+                    </p>
+                </div>
+            </header>
+            {r.list.length ? (
+                <>
+                    <BarList rows={r.issues.map((i) => ({ key: i.key, label: ISSUE_LABELS[i.key] || i.key, value: i.count, color: 'var(--bp-flame)' }))} />
+                    <div className={styles.tableWrap}>
+                        <table className={styles.table}>
+                            <thead><tr><th>When</th><th>Learner</th><th>Scene</th><th>What went wrong</th><th>In their words</th><th>Ended</th><th>Refunded</th></tr></thead>
+                            <tbody>
+                                {r.list.map((x) => (
+                                    <tr key={x.sessionId} className={styles.clickRow} tabIndex={0}
+                                        onClick={() => onOpenCall(x.sessionId)}
+                                        onKeyDown={(ev) => { if (ev.key === 'Enter') onOpenCall(x.sessionId); }}>
+                                        <td>{timeAgo(x.at)}</td>
+                                        <td><strong>{x.name}</strong></td>
+                                        <td>{x.title}<span className={styles.muted}>{x.engine}</span></td>
+                                        <td>{x.issues.map((i) => ISSUE_LABELS[i] || i).join(', ') || '–'}</td>
+                                        <td>{x.note || '–'}</td>
+                                        <td>{END[x.endReason.replace(/^dropped.*/, 'dropped')] || x.endReason}</td>
+                                        <td>{x.refunded ? `${fmtDuration(x.seconds)}` : 'no'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            ) : <p className={styles.empty}>No problem reports in this period.</p>}
+        </section>
+    );
+}
+
 const pctOf = (rate) => (rate === null || rate === undefined ? '–' : `${Math.round(rate * 100)}%`);
 
 const LABELS = {
@@ -175,6 +230,8 @@ export default function SpeakPanel({ days, tz, refreshKey, onForbidden, onLoaded
                 </header>
                 <ColumnChart points={d.daily.map((p) => ({ key: p.key, value: p[metric] }))} label={chart.label} color={chart.color} />
             </section>
+
+            <ReportsCard reports={d.reports} onOpenCall={setOpenCall} />
 
             <div className={styles.twoCol}>
                 <section className={styles.card}>
@@ -369,7 +426,7 @@ export default function SpeakPanel({ days, tz, refreshKey, onForbidden, onLoaded
                                         <td className={styles.num}>{fmtDuration(c.seconds)}</td>
                                         <td className={styles.num}>{fmt(c.youLines)} / {fmt(c.charLines)}</td>
                                         <td className={styles.num}>{c.goalsDone}/{c.goalsTotal}</td>
-                                        <td>{END[c.endReason.replace(/^dropped.*/, 'dropped')] || c.endReason}</td>
+                                        <td>{END[c.endReason.replace(/^dropped.*/, 'dropped')] || c.endReason}{c.feedback === 'problem' ? ' · 👎 reported' : c.feedback === 'ok' ? ' · 👍' : ''}</td>
                                         <td className={styles.num}>{fmt(c.tools)}</td>
                                     </tr>
                                 ))}
@@ -415,7 +472,14 @@ function CallDrawer({ sessionId, onClose, onForbidden, onOpenUser }) {
                             <span className={styles.chip}>Ended: {END[(c.endReason || (c.open ? 'still open' : 'unknown')).replace(/^dropped.*/, 'dropped')] || c.endReason}</span>
                             <span className={styles.chip}>{c.youLines} learner lines</span>
                             <span className={styles.chip}>{c.goalsDoneCount}/{c.goalsTotal} goals</span>
+                            {c.feedback && <span className={styles.chip}>{c.feedback.ok ? '👍 Said it worked' : `👎 Reported a problem${c.refundedSeconds ? ' · minutes refunded' : ''}`}</span>}
                         </div>
+                        {c.feedback && !c.feedback.ok && (
+                            <div className={styles.callReport}>
+                                <b>What went wrong:</b> {(c.feedback.issues || []).map((i) => ISSUE_LABELS[i] || i).join(', ') || 'nothing picked'}
+                                {c.feedback.note && <p>&ldquo;{c.feedback.note}&rdquo;</p>}
+                            </div>
+                        )}
                         <h3 className={styles.subHead}>Goals</h3>
                         <ul className={styles.callGoals}>
                             {c.goalList.map((g) => <li key={g.text}>{g.done ? '✓' : '○'} {g.text}</li>)}

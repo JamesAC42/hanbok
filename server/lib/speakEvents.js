@@ -35,6 +35,9 @@ const EVENT_TYPES = {
     more_scenes: 'after',
     history_list_view: 'after',
     history_view: 'after',
+    survey_view: 'after',
+    survey_ok: 'after', // logged by the server with the answer
+    survey_problem: 'after',
     // Money
     upsell_click: 'money', // meta.where
     limit_hit: 'money',

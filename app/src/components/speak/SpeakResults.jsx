@@ -6,6 +6,7 @@ import { track } from '@/lib/analytics';
 import { speakEvent } from '@/lib/speakEvents';
 import UpgradeSheet from '@/components/grammar/UpgradeSheet';
 import { characterOf } from '@/components/speak/characters';
+import CallSurvey from '@/components/speak/CallSurvey';
 import TranscriptLines from '@/components/speak/TranscriptLines';
 import styles from '@/styles/pages/speakResults.module.scss';
 
@@ -234,7 +235,7 @@ export function RecapNotes({ recap, loading, failed, phrases = [], tips = [], la
 
 // The screen right after a call: a short celebration, then the numbers, the
 // notes and what to save.
-export default function SpeakResults({ result, language, nativeLanguage, tier, allowance, onAgain, onBack }) {
+export default function SpeakResults({ result, language, nativeLanguage, tier, allowance, onAllowance, onAgain, onBack }) {
     const ch = characterOf(result.character);
     const { recap, loading, failed } = useRecap(result.sessionId);
     const stars = starsFor(result.goals);
@@ -281,6 +282,15 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
                     </li>
                 ))}
             </ul>
+
+            <CallSurvey
+                sessionId={result.sessionId}
+                seconds={result.seconds}
+                reason={result.reason}
+                beta={allowance?.beta !== false}
+                refundsLeft={allowance?.refundsLeft || 0}
+                onAllowance={onAllowance}
+            />
 
             <RecapNotes recap={recap} loading={loading} failed={failed} phrases={result.phrases} tips={result.tips} language={language} nativeLanguage={nativeLanguage} delay={1.6} sessionId={result.sessionId} />
 

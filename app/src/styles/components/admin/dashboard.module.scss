@@ -1205,3 +1205,13 @@ div.toolCard:active { transform: none; box-shadow: 0 4px 0 var(--bp-line); }
   font: 800 .75rem var(--font-display);
   cursor: pointer;
 }
+
+.callReport {
+  margin: .25rem 0 0;
+  padding: .6rem .8rem;
+  border-radius: 10px;
+  background: var(--bp-flame-soft);
+  font-size: .88rem;
+
+  p { margin: .3rem 0 0; font-style: italic; }
+}

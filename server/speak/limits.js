@@ -10,14 +10,18 @@ const PLANS = {
     2: { minutes: num(process.env.SPEAK_PLUS_MINUTES, 120), windowDays: 30, model: process.env.SPEAK_MODEL_PLUS || 'gpt-realtime-2.1' },
 };
 const MAX_SESSION_SECONDS = num(process.env.SPEAK_MAX_SESSION_SECONDS, 600);
+// Beta (on unless SPEAK_BETA=off): a learner who reports that a call went wrong
+// gets its minutes back, for up to SPEAK_BETA_REFUNDS calls per plan window.
+const BETA = process.env.SPEAK_BETA !== 'off';
+const BETA_REFUNDS = num(process.env.SPEAK_BETA_REFUNDS, 3);
 const MIN_START_SECONDS = 30;
 
 const planFor = (tier) => PLANS[tier] || PLANS[0];
 
-// Seconds a session counts for. Ended sessions count what was billed;
-// open ones count the time since they started, up to their cap.
+// Seconds a session counts for. Ended sessions count what was billed, less
+// any beta refund; open ones count the time since they started, up to their cap.
 const secondsUsed = (s, now = Date.now()) => {
-    if (Number.isFinite(s.billedSeconds)) return s.billedSeconds;
+    if (Number.isFinite(s.billedSeconds)) return Math.max(0, s.billedSeconds - (s.refundedSeconds || 0));
     const elapsed = Math.max(0, (now - new Date(s.startedAt).getTime()) / 1000);
     return Math.min(elapsed, s.maxSeconds || MAX_SESSION_SECONDS);
 };
@@ -26,7 +30,7 @@ const allowanceFor = async (db, user) => {
     const plan = planFor(user?.tier || 0);
     const since = new Date(Date.now() - plan.windowDays * DAY_MS);
     const sessions = await db.collection('speak_sessions')
-        .find({ userId: user.userId, startedAt: { $gte: since } }, { projection: { billedSeconds: 1, startedAt: 1, maxSeconds: 1 } })
+        .find({ userId: user.userId, startedAt: { $gte: since } }, { projection: { billedSeconds: 1, refundedSeconds: 1, startedAt: 1, maxSeconds: 1 } })
         .toArray();
     const usedSeconds = Math.round(sessions.reduce((sum, s) => sum + secondsUsed(s), 0));
     const limitSeconds = plan.minutes * 60;
@@ -39,6 +43,8 @@ const allowanceFor = async (db, user) => {
         usedSeconds,
         leftSeconds: Math.max(0, limitSeconds - usedSeconds),
         resetsAt: oldest ? new Date(new Date(oldest).getTime() + plan.windowDays * DAY_MS) : null,
+        beta: BETA,
+        refundsLeft: BETA ? Math.max(0, BETA_REFUNDS - sessions.filter((s) => s.refundedSeconds > 0).length) : 0,
         model: plan.model,
     };
 };
@@ -46,4 +52,4 @@ const allowanceFor = async (db, user) => {
 // What each plan gets, for the plan table on /speak.
 const planTable = () => [0, 1, 2].map((tier) => ({ tier, minutes: PLANS[tier].minutes, windowDays: PLANS[tier].windowDays }));
 
-module.exports = { planTable, PLANS, MAX_SESSION_SECONDS, MIN_START_SECONDS, planFor, allowanceFor, secondsUsed };
+module.exports = { planTable, PLANS, MAX_SESSION_SECONDS, MIN_START_SECONDS, BETA, planFor, allowanceFor, secondsUsed };

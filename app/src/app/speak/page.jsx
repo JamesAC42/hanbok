@@ -111,6 +111,7 @@ export default function SpeakPage() {
                     language={language}
                     nativeLanguage={nativeLanguage}
                     nativeName={nativeName}
+                    beta={data?.beta !== false}
                     onDone={onDone}
                     onLimit={onLimit}
                 />
@@ -127,6 +128,7 @@ export default function SpeakPage() {
                     nativeLanguage={nativeLanguage}
                     tier={tier}
                     allowance={allowance}
+                    onAllowance={(a) => setData((d) => ({ ...d, allowance: a }))}
                     onAgain={() => { speakEvent('play_again', { scene: result.scenario.id }, result.sessionId); start(result.scenario); }}
                     onBack={() => { speakEvent('more_scenes', {}, result.sessionId); setResult(null); window.scrollTo?.(0, 0); }}
                 />
@@ -145,12 +147,17 @@ export default function SpeakPage() {
                         <img className={styles.heroHorang} src="/images/speak/horang/happy.webp" alt="" />
                     </div>
                     <div className={styles.heroText}>
-                        <p className={styles.label}>Speak</p>
+                        <p className={styles.label}>Speak {data?.beta !== false && <span className={styles.betaPill}>Beta</span>}</p>
                         <h1 className={styles.title}>Talk it out with Horang and Sora</h1>
                         <p className={styles.dek}>
                             Pick a scene and just talk out loud. They play the barista, the taxi driver or your new friend in Seoul,
                             help in {nativeName} when you get stuck, and work in the words you&apos;ve saved.
                         </p>
+                        {data?.beta !== false && (
+                            <p className={styles.betaNote}>
+                                Speak is brand new and still in beta. If a call goes wrong, tell us right after it and we&apos;ll give you those minutes back.
+                            </p>
+                        )}
                         {isAuthenticated && past?.calls > 0 && (
                             <Link className={styles.historyLink} href="/speak/history?from=hero">
                                 📜 Your past conversations ({past.calls})

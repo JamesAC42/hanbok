@@ -457,3 +457,8 @@ $horang: #FF8A00;
 .pastActions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; }
 .pastBtn { @include bp-press(var(--bp-purple), var(--bp-purple-d)); white-space: nowrap; text-decoration: none; }
 .pastAll { font-weight: 800; color: var(--bp-purple-d); white-space: nowrap; }
+
+// Beta labels
+.betaPill { display: inline-block; margin-left: .4rem; padding: .1rem .5rem; border-radius: 999px; background: var(--bp-purple-soft); border: 1.5px solid var(--bp-purple-line); color: var(--bp-purple-d); font-size: .66rem; vertical-align: middle; }
+.betaNote { margin: 0; font-size: .92rem; font-weight: 700; color: var(--bp-purple-d); max-width: 60ch; }
+.betaTag { margin-left: 6px; padding: 1px 6px; border-radius: 999px; background: #EFEAFE; color: #6B4BD0; font: 800 10px var(--font-display); letter-spacing: .08em; text-transform: uppercase; vertical-align: 2px; }

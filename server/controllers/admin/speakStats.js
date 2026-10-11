@@ -45,7 +45,7 @@ const avg = (list, f) => (list.length ? list.reduce((n, x) => n + f(x), 0) / lis
 const SESSION_PROJECTION = {
     _id: 0, sessionId: 1, userId: 1, scenarioId: 1, character: 1, level: 1, assist: 1, engine: 1, tier: 1,
     startedAt: 1, endedAt: 1, billedSeconds: 1, endReason: 1, fellBack: 1, goals: 1, goalsDone: 1,
-    savedWordsUsed: 1, summary: 1,
+    savedWordsUsed: 1, summary: 1, feedback: 1, refundedSeconds: 1,
     youLines: { $size: { $filter: { input: { $ifNull: ['$transcript', []] }, cond: { $eq: ['$$this.who', 'you'] } } } },
     charLines: { $size: { $filter: { input: { $ifNull: ['$transcript', []] }, cond: { $ne: ['$$this.who', 'you'] } } } },
     phrases: { $size: { $ifNull: ['$phrases', []] } },
@@ -245,7 +245,35 @@ const summarizeSpeak = ({ calls: rawCalls, prevCalls: rawPrev = [], events, user
         endReason: c.open ? 'still open' : c.endReason || 'unknown',
         tools: toolsBySession.get(c.sessionId) || 0,
         hasRecap: !!c.hasRecap,
+        feedback: c.feedback ? (c.feedback.ok ? 'ok' : 'problem') : null,
     }));
+
+    // "How did the call go?" after each call (beta).
+    const answered = calls.filter((c) => c.feedback);
+    const problems = answered.filter((c) => !c.feedback.ok);
+    const issueCounts = new Map();
+    for (const c of problems) for (const i of (c.feedback.issues?.length ? c.feedback.issues : ['none picked'])) issueCounts.set(i, (issueCounts.get(i) || 0) + 1);
+    const reports = {
+        asked: new Set(events.filter((e) => e.type === 'survey_view' && e.sessionId).map((e) => e.sessionId)).size,
+        answered: answered.length,
+        ok: answered.length - problems.length,
+        problems: problems.length,
+        refundedSeconds: calls.reduce((n, c) => n + (c.refundedSeconds || 0), 0),
+        issues: [...issueCounts.entries()].map(([key, count]) => ({ key, count })).sort((a, b) => b.count - a.count),
+        list: [...problems].sort((a, b) => new Date(b.feedback.at) - new Date(a.feedback.at)).slice(0, 30).map((c) => ({
+            sessionId: c.sessionId,
+            userId: c.userId,
+            name: userInfo.get(c.userId)?.name || `User ${c.userId}`,
+            title: findScenario(c.scenarioId)?.title || c.scenarioId,
+            at: c.feedback.at,
+            issues: c.feedback.issues || [],
+            note: c.feedback.note || '',
+            endReason: c.endReason || 'unknown',
+            seconds: c.seconds,
+            refunded: (c.refundedSeconds || 0) > 0,
+            engine: c.fellBack ? 'realtime (fallback)' : c.engine,
+        })),
+    };
 
     return {
         tiles,
@@ -296,6 +324,7 @@ const summarizeSpeak = ({ calls: rawCalls, prevCalls: rawPrev = [], events, user
         },
         topSpeakers,
         recent,
+        reports,
     };
 };
 

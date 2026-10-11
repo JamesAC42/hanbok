@@ -78,3 +78,32 @@ test('cleanEvent keeps known types and drops everything else', () => {
     assert.strictEqual(anon.visitorId, 'v-123456');
     assert.strictEqual(cleanEvent({ type: 'constructor' }), null);
 });
+
+test('summarizeSpeak lists problem reports and refunded minutes', () => {
+    const at = new Date('2026-10-03T10:00:00Z');
+    const calls = [
+        call({ userId: 1, feedback: { ok: true, issues: [], note: '', at } }),
+        call({ userId: 2, endReason: 'dropped:ice', refundedSeconds: 240, feedback: { ok: false, issues: ['dropped', 'cant_hear'], note: 'cut out', at } }),
+        call({ userId: 3, feedback: { ok: false, issues: [], note: '', at } }),
+        call({ userId: 4 }),
+    ];
+    const events = calls.map((c) => ({ type: 'survey_view', userId: c.userId, sessionId: c.sessionId, at }));
+    const s = summarizeSpeak({ calls, events, from, to, users: [{ userId: 2, name: 'B' }], firstCallTier: new Map() });
+    assert.strictEqual(s.reports.asked, 4);
+    assert.strictEqual(s.reports.answered, 3);
+    assert.strictEqual(s.reports.ok, 1);
+    assert.strictEqual(s.reports.problems, 2);
+    assert.strictEqual(s.reports.refundedSeconds, 240);
+    assert.deepStrictEqual(s.reports.issues.map((i) => i.key).sort(), ['cant_hear', 'dropped', 'none picked']);
+    const b = s.reports.list.find((r) => r.userId === 2);
+    assert.strictEqual(b.name, 'B');
+    assert.strictEqual(b.note, 'cut out');
+    assert.strictEqual(b.refunded, true);
+    assert.strictEqual(s.recent.filter((r) => r.feedback === 'problem').length, 2);
+});
+
+test('a refunded call stops counting against the allowance', () => {
+    const { secondsUsed } = require('../speak/limits');
+    assert.strictEqual(secondsUsed({ billedSeconds: 240 }), 240);
+    assert.strictEqual(secondsUsed({ billedSeconds: 240, refundedSeconds: 240 }), 0);
+});
