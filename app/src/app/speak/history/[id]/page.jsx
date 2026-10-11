@@ -49,6 +49,8 @@ function Detail({ session }) {
     // Calls from before notes existed get them made the first time they're opened.
     const { recap, loading, failed } = useRecap(session.sessionId, session.recap);
     const stars = starsFor(session.goals);
+    // Problems can be reported for a week after the call.
+    const recent = Date.now() - new Date(session.startedAt).getTime() < 7 * 24 * 60 * 60 * 1000;
     return (
         <div className={styles.notes} style={{ '--accent': ch.color, '--accent-soft': ch.soft }}>
             <header className={styles.detailHead}>
@@ -64,8 +66,8 @@ function Detail({ session }) {
                     <li key={g.text} className={g.done ? styles.goalDone : ''}><span className={styles.goalMark} aria-hidden="true">{g.done ? '✓' : ''}</span>{g.text}</li>
                 ))}
             </ul>
-            {(session.feedback || Date.now() - new Date(session.startedAt).getTime() < 7 * 24 * 60 * 60 * 1000) && (
-                <CallSurvey sessionId={session.sessionId} seconds={session.seconds} reason={session.feedback ? '' : session.endReason} initial={session.feedback} />
+            {(session.feedback || recent) && (
+                <CallSurvey sessionId={session.sessionId} seconds={session.seconds} reason={session.feedback ? '' : session.endReason} initial={session.feedback} canReport={recent} />
             )}
             <RecapNotes recap={recap} loading={loading} failed={failed} phrases={session.phrases} tips={session.tips} language={session.language} nativeLanguage={session.nativeLanguage || 'en'} sessionId={session.sessionId} from="history" />
             <TranscriptLines sessionId={session.sessionId} transcript={session.transcript} notes={session.lineNotes} character={ch} language={session.language} from="history" />

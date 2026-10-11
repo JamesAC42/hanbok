@@ -127,6 +127,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             transcript: s.transcript.map(({ who, text }) => ({ who, text })),
             reason,
             allowance: result?.allowance || null,
+            askRating: !!result?.askRating,
         });
     }, [onDone, scenario, ch.id]);
 

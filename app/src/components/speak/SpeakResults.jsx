@@ -289,6 +289,8 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
                 reason={result.reason}
                 beta={allowance?.beta !== false}
                 refundsLeft={allowance?.refundsLeft || 0}
+                askRating={!!result.askRating}
+                characterName={ch.name}
                 onAllowance={onAllowance}
             />
 

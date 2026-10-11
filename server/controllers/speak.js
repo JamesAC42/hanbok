@@ -233,6 +233,23 @@ const cleanLog = (log) => {
 };
 
 // POST /api/speak/session/:id/end { goalsDone, transcript, usage }
+// "How did you like this call?" comes up on some calls, not all: the learner's
+// first call long enough to judge, then one in every SPEAK_RATING_EVERY.
+const RATING_EVERY = Math.max(1, parseInt(process.env.SPEAK_RATING_EVERY, 10) || 3);
+const RATING_MIN_SECONDS = 45;
+const ratable = (s) => (s?.billedSeconds || 0) >= RATING_MIN_SECONDS && !/^dropped/.test(s?.endReason || '');
+const shouldAskRating = async (db, s) => {
+    if (!s) return false;
+    if (s.ratingAsked) return true;
+    if (!ratable(s)) return false;
+    if (RATING_EVERY === 1) return true;
+    const before = await db.collection('speak_sessions').find(
+        { userId: s.userId, sessionId: { $ne: s.sessionId }, startedAt: { $lt: s.startedAt }, billedSeconds: { $gte: RATING_MIN_SECONDS }, endReason: { $not: /^dropped/ } },
+        { projection: { ratingAsked: 1 }, sort: { startedAt: -1 }, limit: RATING_EVERY - 1 },
+    ).toArray();
+    return !before.some((b) => b.ratingAsked);
+};
+
 const endSession = async (req, res) => {
     try {
         const db = getDb();
@@ -262,10 +279,16 @@ const endSession = async (req, res) => {
         };
         if (!s.endedAt) await closeSession(db, s, str(req.body?.reason, 20) || 'user');
         await db.collection('speak_sessions').updateOne({ sessionId: s.sessionId }, { $set: extra });
+        const ended = await db.collection('speak_sessions').findOne(
+            { sessionId: s.sessionId },
+            { projection: { sessionId: 1, userId: 1, startedAt: 1, billedSeconds: 1, endReason: 1, ratingAsked: 1 } },
+        );
+        const askRating = await shouldAskRating(db, ended);
+        if (askRating && !ended.ratingAsked) await db.collection('speak_sessions').updateOne({ sessionId: s.sessionId }, { $set: { ratingAsked: true } });
         const user = await loadUser(db, req);
         const allowance = await allowanceFor(db, user);
         delete allowance.model;
-        res.json({ success: true, allowance });
+        res.json({ success: true, allowance, askRating });
     } catch (e) {
         console.error('speak end', e);
         res.status(500).json({ success: false, error: 'Could not end the call' });
@@ -342,8 +365,11 @@ const coach = async (req, res) => {
 // The "How did the call go?" answers on the results screen.
 const ISSUES = ['dropped', 'cant_hear', 'didnt_hear_me', 'wrong_text', 'try_saying', 'ended_early', 'slow', 'other'];
 
-// POST /api/speak/session/:id/feedback { ok, issues, note }. During the beta a
-// reported problem gives the call's minutes back (a few calls per window).
+// POST /api/speak/session/:id/feedback, after a call. Two kinds of answer,
+// which can come separately for the same call:
+// - { ok, issues, note }: "How did the call go?". During the beta a reported
+//   problem gives the call's minutes back (a few calls per window).
+// - { rating, comment }: "How did you like this call?" (1-5), asked on some calls.
 const feedback = async (req, res) => {
     try {
         const db = getDb();
@@ -352,23 +378,29 @@ const feedback = async (req, res) => {
             { projection: { sessionId: 1, scenarioId: 1, billedSeconds: 1, refundedSeconds: 1, endReason: 1, engine: 1 } },
         );
         if (!s) return res.status(404).json({ success: false, error: 'Not found' });
+        const rating = Number.isInteger(req.body?.rating) && req.body.rating >= 1 && req.body.rating <= 5 ? req.body.rating : null;
+        const comment = rating ? str(req.body?.comment, 1000) : '';
+        const report = typeof req.body?.ok === 'boolean';
+        if (!rating && !report) return res.status(400).json({ success: false, error: 'Nothing to save' });
         const ok = req.body?.ok === true;
         const issues = ok ? [] : [...new Set((Array.isArray(req.body?.issues) ? req.body.issues : []).filter((i) => ISSUES.includes(i)))];
         const note = ok ? '' : str(req.body?.note, 1000);
         const user = await loadUser(db, req);
         let refundedSeconds = 0;
-        if (!ok && BETA && !s.refundedSeconds && s.billedSeconds > 0) {
+        if (report && !ok && BETA && !s.refundedSeconds && s.billedSeconds > 0) {
             const before = await allowanceFor(db, user);
             if (before.refundsLeft > 0) refundedSeconds = s.billedSeconds;
         }
         await db.collection('speak_sessions').updateOne({ sessionId: s.sessionId }, {
             $set: {
-                feedback: { ok, issues, note, at: new Date() },
+                ...(rating ? { 'feedback.rating': rating, 'feedback.ratedAt': new Date(), ...(comment ? { 'feedback.comment': comment } : {}) } : {}),
+                ...(report ? { 'feedback.ok': ok, 'feedback.issues': issues, 'feedback.note': note, 'feedback.at': new Date() } : {}),
                 ...(refundedSeconds ? { refundedSeconds, refundedAt: new Date() } : {}),
             },
         });
-        logSpeakEvent(db, { type: ok ? 'survey_ok' : 'survey_problem', sessionId: s.sessionId, userId: user.userId, tier: user.tier || 0, meta: { scene: s.scenarioId, ...(issues.length ? { reason: issues.join(',') } : {}) } });
-        if (!ok && process.env.SPEAK_REPORT_EMAIL) {
+        if (rating) logSpeakEvent(db, { type: 'survey_rating', sessionId: s.sessionId, userId: user.userId, tier: user.tier || 0, meta: { scene: s.scenarioId, reason: String(rating) } });
+        if (report) logSpeakEvent(db, { type: ok ? 'survey_ok' : 'survey_problem', sessionId: s.sessionId, userId: user.userId, tier: user.tier || 0, meta: { scene: s.scenarioId, ...(issues.length ? { reason: issues.join(',') } : {}) } });
+        if (report && !ok && process.env.SPEAK_REPORT_EMAIL) {
             const scene = findScenario(s.scenarioId);
             sendTeamAlert({
                 to: process.env.SPEAK_REPORT_EMAIL,

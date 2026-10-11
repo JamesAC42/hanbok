@@ -45,7 +45,7 @@ const avg = (list, f) => (list.length ? list.reduce((n, x) => n + f(x), 0) / lis
 const SESSION_PROJECTION = {
     _id: 0, sessionId: 1, userId: 1, scenarioId: 1, character: 1, level: 1, assist: 1, engine: 1, tier: 1,
     startedAt: 1, endedAt: 1, billedSeconds: 1, endReason: 1, fellBack: 1, goals: 1, goalsDone: 1,
-    savedWordsUsed: 1, summary: 1, feedback: 1, refundedSeconds: 1,
+    savedWordsUsed: 1, summary: 1, feedback: 1, refundedSeconds: 1, ratingAsked: 1,
     youLines: { $size: { $filter: { input: { $ifNull: ['$transcript', []] }, cond: { $eq: ['$$this.who', 'you'] } } } },
     charLines: { $size: { $filter: { input: { $ifNull: ['$transcript', []] }, cond: { $ne: ['$$this.who', 'you'] } } } },
     phrases: { $size: { $ifNull: ['$phrases', []] } },
@@ -53,6 +53,9 @@ const SESSION_PROJECTION = {
     hasRecap: { $gt: ['$recap', null] },
     hasLineNotes: { $gt: ['$lineNotes', null] },
 };
+
+// The "did anything go wrong" answer (a rating alone doesn't count).
+const answeredReport = (c) => typeof c.feedback?.ok === 'boolean';
 
 const callFacts = (s) => {
     const total = findScenario(s.scenarioId)?.goals.length || 0;
@@ -245,11 +248,12 @@ const summarizeSpeak = ({ calls: rawCalls, prevCalls: rawPrev = [], events, user
         endReason: c.open ? 'still open' : c.endReason || 'unknown',
         tools: toolsBySession.get(c.sessionId) || 0,
         hasRecap: !!c.hasRecap,
-        feedback: c.feedback ? (c.feedback.ok ? 'ok' : 'problem') : null,
+        feedback: answeredReport(c) ? (c.feedback.ok ? 'ok' : 'problem') : null,
+        rating: c.feedback?.rating || null,
     }));
 
     // "How did the call go?" after each call (beta).
-    const answered = calls.filter((c) => c.feedback);
+    const answered = calls.filter(answeredReport);
     const problems = answered.filter((c) => !c.feedback.ok);
     const issueCounts = new Map();
     for (const c of problems) for (const i of (c.feedback.issues?.length ? c.feedback.issues : ['none picked'])) issueCounts.set(i, (issueCounts.get(i) || 0) + 1);
@@ -272,6 +276,42 @@ const summarizeSpeak = ({ calls: rawCalls, prevCalls: rawPrev = [], events, user
             seconds: c.seconds,
             refunded: (c.refundedSeconds || 0) > 0,
             engine: c.fellBack ? 'realtime (fallback)' : c.engine,
+        })),
+    };
+
+    // "How did you like this call?" (1-5), asked on some calls.
+    const rated = calls.filter((c) => c.feedback?.rating);
+    const ratingGroups = (keyOf) => {
+        const groups = new Map();
+        for (const c of rated) {
+            const key = keyOf(c) ?? 'unknown';
+            if (!groups.has(key)) groups.set(key, []);
+            groups.get(key).push(c.feedback.rating);
+        }
+        return [...groups.entries()].map(([key, list]) => ({ key: String(key), ratings: list.length, average: list.reduce((n, r) => n + r, 0) / list.length }))
+            .sort((a, b) => b.ratings - a.ratings);
+    };
+    const ratings = {
+        asked: calls.filter((c) => c.ratingAsked).length,
+        rated: rated.length,
+        average: avg(rated, (c) => c.feedback.rating),
+        prevAverage: avg(prev.filter((c) => c.feedback?.rating), (c) => c.feedback.rating),
+        scores: [5, 4, 3, 2, 1].map((score) => ({ score, count: rated.filter((c) => c.feedback.rating === score).length })),
+        scenes: ratingGroups((c) => findScenario(c.scenarioId)?.title || c.scenarioId),
+        character: ratingGroups((c) => c.character),
+        list: [...rated].sort((a, b) => new Date(b.feedback.ratedAt || b.startedAt) - new Date(a.feedback.ratedAt || a.startedAt)).slice(0, 40).map((c) => ({
+            sessionId: c.sessionId,
+            userId: c.userId,
+            name: userInfo.get(c.userId)?.name || `User ${c.userId}`,
+            title: findScenario(c.scenarioId)?.title || c.scenarioId,
+            character: c.character,
+            at: c.feedback.ratedAt || c.startedAt,
+            rating: c.feedback.rating,
+            comment: c.feedback.comment || '',
+            problem: answeredReport(c) && !c.feedback.ok,
+            seconds: c.seconds,
+            goalsDone: c.goalsDoneCount,
+            goalsTotal: c.goalsTotal,
         })),
     };
 
@@ -325,6 +365,7 @@ const summarizeSpeak = ({ calls: rawCalls, prevCalls: rawPrev = [], events, user
         topSpeakers,
         recent,
         reports,
+        ratings,
     };
 };
 
@@ -337,7 +378,7 @@ const buildSpeak = async (db, { days, tz }) => {
         sessions.aggregate([{ $match: { startedAt: { $gte: from, $lt: to } } }, { $project: SESSION_PROJECTION }], { allowDiskUse: true }).toArray(),
         sessions.aggregate([
             { $match: { startedAt: { $gte: prevFrom, $lt: from } } },
-            { $project: { _id: 0, userId: 1, scenarioId: 1, engine: 1, billedSeconds: 1, goals: 1, goalsDone: 1, endedAt: 1, youLines: SESSION_PROJECTION.youLines } },
+            { $project: { _id: 0, userId: 1, scenarioId: 1, engine: 1, billedSeconds: 1, goals: 1, goalsDone: 1, endedAt: 1, 'feedback.rating': 1, youLines: SESSION_PROJECTION.youLines } },
         ], { allowDiskUse: true }).toArray(),
         db.collection('speak_events').find({ at: { $gte: from, $lt: to } }, { projection: { _id: 0 } }).limit(200000).toArray(),
     ]);
