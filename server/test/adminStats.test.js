@@ -5,7 +5,7 @@ const assert = require('node:assert');
 process.env.MONGODB_DB = process.env.MONGODB_DB || 'test';
 
 const { createTtlCache } = require('../lib/ttlCache');
-const { summarize, monthlyAmount } = require('../controllers/admin/revenue');
+const { summarize, monthlyAmount, netMonthly, dayStart } = require('../controllers/admin/revenue');
 const { parseDays, parseTimeZone, listDays } = require('../controllers/admin/stats');
 
 const DAY = 24 * 60 * 60;
@@ -73,6 +73,116 @@ test('payments are matched to learners by Stripe customer id', () => {
     const [payment] = summarize([], charges, { days: 30, now: NOW, users }).recentPayments;
     assert.strictEqual(payment.userId, 9);
     assert.strictEqual(payment.name, 'Mina');
+});
+
+test('MRR is net of coupons, read from the latest invoice first', () => {
+    const yearly = { data: [{ price: price(4000, 'year'), quantity: 1 }] };
+    const deal = { id: 'di_1', coupon: { id: 'DEAL30', name: 'Yearly deal', percent_off: 30, duration: 'once' } };
+    // Bought yearly with 30% off the first year: $28 paid.
+    const dealSub = sub({
+        id: 'deal', status: 'active', created: nowSec - DAY, items: yearly, discounts: [],
+        latest_invoice: { billing_reason: 'subscription_create', subtotal: 4000, total: 2800, amount_paid: 2800, total_discount_amounts: [{ amount: 1200 }], discounts: [deal] },
+    });
+    assert.strictEqual(Math.round(netMonthly(dealSub)), 233);
+
+    // No usable invoice: a forever student coupon still on the subscription.
+    const student = sub({
+        id: 'student', status: 'active', created: nowSec - 90 * DAY,
+        discounts: [{ id: 'di_2', coupon: { id: 'STUDENT50', percent_off: 50, duration: 'forever' } }],
+    });
+    assert.strictEqual(netMonthly(student), 200);
+
+    // A once coupon that was already used and an expired repeating one change nothing.
+    const used = sub({
+        id: 'used', status: 'active', created: nowSec - 90 * DAY,
+        discounts: [
+            { id: 'di_3', coupon: { id: 'ONCE', percent_off: 50, duration: 'once' } },
+            { id: 'di_4', end: nowSec - DAY, coupon: { id: 'THREE', amount_off: 100, duration: 'repeating' } },
+        ],
+    });
+    assert.strictEqual(netMonthly(used, NOW), 400);
+
+    const result = summarize([dealSub, student, used], [], { days: 30, now: NOW, users: new Map() });
+    assert.strictEqual(Math.round(result.mrr), 233 + 200 + 400);
+    assert.strictEqual(Math.round(result.mrrList), 333 + 400 + 400);
+    assert.strictEqual(result.subscribers.discounted, 2);
+    assert.strictEqual(result.mrrHistory[result.mrrHistory.length - 1].mrr, result.mrr);
+    const basicYearly = result.plans.find((p) => p.interval === 'yearly');
+    assert.strictEqual(Math.round(basicYearly.mrr), 233);
+    assert.strictEqual(basicYearly.discounted, 1);
+});
+
+test('new subscriptions and cancellations come back as events with what was paid', () => {
+    const users = new Map([['cus_s', { userId: 7, name: 'Saskia', email: 's@example.com' }]]);
+    const subs = [
+        sub({
+            id: 'new', customer: { id: 'cus_s' }, status: 'active', created: nowSec - 5 * 3600,
+            items: { data: [{ price: { id: 'price_1Rjh9EDv6kE7GataEdXl4ICx', unit_amount: 4000, recurring: { interval: 'year', interval_count: 1 } } }] },
+            latest_invoice: {
+                billing_reason: 'subscription_create', subtotal: 4000, amount_paid: 2800, total_discount_amounts: [{ amount: 1200 }],
+                discounts: [{ id: 'di', coupon: { id: 'DEAL30', name: 'Yearly deal', percent_off: 30, duration: 'once' } }],
+            },
+        }),
+        sub({ id: 'monthly', status: 'active', created: nowSec - 17 * 3600 }),
+        sub({ id: 'gone', status: 'canceled', created: nowSec - 300 * DAY, ended_at: nowSec - 3 * DAY }),
+        sub({ id: 'leaving', status: 'active', created: nowSec - 300 * DAY, cancel_at_period_end: true, canceled_at: nowSec - 2 * DAY, cancel_at: nowSec + 20 * DAY }),
+        sub({ id: 'trial', status: 'trialing', created: nowSec - DAY, trial_end: nowSec + 6 * DAY }),
+    ];
+    const charges = [{ id: 'ch', paid: true, status: 'succeeded', amount: 400, amount_refunded: 0, currency: 'usd', created: nowSec - 17 * 3600 + 5, invoice: 'in_m', customer: 'cus_1' }];
+    const result = summarize(subs, charges, { days: 7, now: NOW, users });
+
+    assert.deepStrictEqual(result.events.map((e) => [e.type, e.subscriptionId]), [
+        ['new', 'new'], ['new', 'monthly'], ['trial', 'trial'], ['cancelling', 'leaving'], ['cancelled', 'gone'],
+    ]);
+    const [deal, monthly] = result.events;
+    assert.strictEqual(deal.name, 'Saskia');
+    assert.strictEqual(deal.plan, 'Basic');
+    assert.strictEqual(deal.interval, 'yearly');
+    assert.strictEqual(deal.paid, 2800);
+    assert.strictEqual(deal.listPrice, 4000);
+    assert.deepStrictEqual(deal.coupon, { id: 'DEAL30', name: 'Yearly deal', percentOff: 30, amountOff: null, duration: 'once' });
+    assert.strictEqual(monthly.paid, 400);
+    assert.strictEqual(monthly.coupon, null);
+    assert.strictEqual(result.events[3].endsAt.getTime(), (nowSec + 20 * DAY) * 1000);
+
+    // MRR moved by the two new payers minus the one that ended.
+    assert.strictEqual(result.movement.newCount, 2);
+    assert.strictEqual(result.movement.churnedCount, 1);
+    assert.strictEqual(Math.round(result.movement.to - result.movement.from), Math.round(2800 / 12 + 400 - 400));
+    assert.strictEqual(Math.round(result.movement.otherMrr), 0);
+});
+
+test('today and the daily series follow the admin time zone', () => {
+    const tz = 'America/New_York';
+    // NOW is 08:00 in New York on Oct 6.
+    assert.strictEqual(dayStart('2026-10-06', tz), Date.UTC(2026, 9, 6, 4));
+    assert.strictEqual(dayStart('2026-11-01', tz), Date.UTC(2026, 10, 1, 4)); // the day clocks go back
+    assert.strictEqual(dayStart('2026-11-02', tz), Date.UTC(2026, 10, 2, 5));
+
+    const at = (iso) => Date.parse(iso) / 1000;
+    const charge = (amount, created, fields = {}) => ({ id: `${amount}-${created}`, paid: true, status: 'succeeded', amount, amount_refunded: 0, currency: 'usd', created, invoice: 'in', ...fields });
+    const charges = [
+        charge(2800, at('2026-10-06T06:30:00-04:00')),
+        charge(400, at('2026-10-05T22:00:00-04:00'), { amount_refunded: 400, refunded: true }),
+        charge(1000, at('2026-10-05T03:00:00-04:00')),
+        charge(500, at('2026-09-29T12:00:00-04:00')),
+    ];
+    const result = summarize([], charges, { days: 7, now: NOW, users: new Map(), tz });
+
+    assert.strictEqual(result.today.date, '2026-10-06');
+    assert.strictEqual(result.today.gross, 2800);
+    assert.strictEqual(result.today.yesterday, 1400); // gross, before the refund
+    assert.strictEqual(result.today.yesterdaySoFar, 1000);
+    assert.strictEqual(result.today.hourly.length, 9);
+    assert.strictEqual(result.today.hourly[5], 0);
+    assert.strictEqual(result.today.hourly[6], 2800);
+    assert.strictEqual(result.today.yesterdayHourly.length, 24);
+    assert.strictEqual(result.today.yesterdayHourly[23], 1400);
+
+    assert.strictEqual(result.daily.length, 8);
+    const last = result.daily[result.daily.length - 1];
+    assert.deepStrictEqual([last.date, last.gross, last.prevDate, last.prevGross], ['2026-10-06', 2800, '2026-09-29', 500]);
+    assert.strictEqual(result.revenue.gross, 2800 + 1400 + 500); // range starts 08:00 Sep 29
 });
 
 test('ttl cache reuses values, shares in-flight work and never caches failures', async () => {

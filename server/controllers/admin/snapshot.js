@@ -64,6 +64,7 @@ const revenueFrom = (week, month) => {
         available: true,
         currency: week.currency,
         mrr: Math.round(week.mrr),
+        mrrList: Math.round(week.mrrList ?? week.mrr),
         paying: week.subscribers.paying,
         trialing: week.subscribers.trialing,
         pastDue: week.subscribers.pastDue,
