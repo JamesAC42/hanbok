@@ -38,6 +38,7 @@ const EVENT_TYPES = {
     survey_view: 'after',
     survey_ok: 'after', // logged by the server with the answer
     survey_problem: 'after',
+    survey_rating: 'after', // logged by the server, meta.reason = the 1-5 score
     // Money
     upsell_click: 'money', // meta.where
     limit_hit: 'money',

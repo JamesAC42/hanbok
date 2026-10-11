@@ -1390,3 +1390,20 @@ button.event {
   span, time { font-size: .76rem; font-weight: 700; color: var(--bp-ink2); }
   s { opacity: .8; }
 }
+
+.callComment { background: var(--bp-purple-soft, var(--bp-soft)); }
+
+.nowrap { white-space: nowrap; }
+
+.ratingBig {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .1rem;
+  text-align: right;
+
+  strong { font-family: var(--font-lilita); font-size: 2.2rem; line-height: 1; }
+  > span { font-size: .8rem; font-weight: 700; color: var(--bp-ink2); }
+}
+
+.tableNarrow .table { min-width: 0; }

@@ -92,6 +92,72 @@ function ReportsCard({ reports: r, onOpenCall }) {
     );
 }
 
+const FACES = { 1: ['😖', 'Not for me'], 2: ['😕', 'Meh'], 3: ['😐', 'Okay'], 4: ['🙂', 'Good'], 5: ['😍', 'Loved it'] };
+const SCORE_COLORS = { 5: 'var(--bp-und)', 4: 'var(--bp-und-line)', 3: 'var(--bp-keep)', 2: 'var(--bp-flame)', 1: 'var(--bp-rev)' };
+const avgText = (n) => (n === null || n === undefined ? '–' : n.toFixed(1));
+const answeredReport = (f) => typeof f?.ok === 'boolean';
+
+// "How did you like this call?" (1-5), asked on some calls.
+function RatingsCard({ ratings: r, onOpenCall }) {
+    if (!r) return null;
+    const groups = [...r.character.map((g) => ({ ...g, key: `c:${g.key}`, label: g.key === 'sora' ? 'Sora' : g.key === 'horang' ? 'Horang' : g.key })), ...r.scenes.map((g) => ({ ...g, key: `s:${g.key}`, label: g.key }))];
+    return (
+        <section className={styles.card}>
+            <header className={styles.cardHead}>
+                <div>
+                    <h2>How people feel about calls</h2>
+                    <p>
+                        &ldquo;How did you like this call?&rdquo; comes up on a learner&apos;s first call and then every few calls.{' '}
+                        {fmt(r.rated)} of {fmt(r.asked)} asked gave a rating.
+                    </p>
+                </div>
+                <div className={styles.ratingBig}>
+                    <strong>{avgText(r.average)}</strong><span>/ 5 average</span>
+                    {r.average !== null && r.prevAverage !== null && <span>{avgText(r.prevAverage)} the period before</span>}
+                </div>
+            </header>
+            {r.rated ? (
+                <>
+                    <div className={styles.twoCol}>
+                        <BarList rows={r.scores.map((x) => ({ key: String(x.score), label: `${FACES[x.score][0]} ${FACES[x.score][1]}`, value: x.count, color: SCORE_COLORS[x.score] }))} />
+                        <div className={`${styles.tableWrap} ${styles.tableNarrow}`}>
+                            <table className={styles.table}>
+                                <thead><tr><th>Character or scene</th><th>Ratings</th><th>Avg</th></tr></thead>
+                                <tbody>
+                                    {groups.map((g) => (
+                                        <tr key={g.key}><td>{g.label}</td><td>{fmt(g.ratings)}</td><td>{avgText(g.average)}</td></tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <h3 className={styles.subHead}>Latest ratings</h3>
+                    <div className={styles.tableWrap}>
+                        <table className={styles.table}>
+                            <thead><tr><th>When</th><th>Learner</th><th>Scene</th><th>Rating</th><th>In their words</th><th>Goals</th><th>Length</th></tr></thead>
+                            <tbody>
+                                {r.list.map((x) => (
+                                    <tr key={x.sessionId} className={styles.clickRow} tabIndex={0}
+                                        onClick={() => onOpenCall(x.sessionId)}
+                                        onKeyDown={(ev) => { if (ev.key === 'Enter') onOpenCall(x.sessionId); }}>
+                                        <td>{timeAgo(x.at)}</td>
+                                        <td><strong>{x.name}</strong></td>
+                                        <td>{x.title}</td>
+                                        <td className={styles.nowrap}>{FACES[x.rating][0]} {FACES[x.rating][1]}{x.problem ? <span className={styles.muted}>also reported a problem</span> : null}</td>
+                                        <td>{x.comment || '–'}</td>
+                                        <td>{x.goalsDone}/{x.goalsTotal}</td>
+                                        <td>{fmtDuration(x.seconds)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </>
+            ) : <p className={styles.empty}>No ratings in this period yet.</p>}
+        </section>
+    );
+}
+
 const pctOf = (rate) => (rate === null || rate === undefined ? '–' : `${Math.round(rate * 100)}%`);
 
 const LABELS = {
@@ -127,6 +193,10 @@ const LABELS = {
     more_scenes: 'Went back for more scenes',
     history_list_view: 'Opened past conversations',
     history_view: 'Opened a past call',
+    survey_view: 'Saw "How did the call go?"',
+    survey_ok: 'Said the call worked',
+    survey_problem: 'Reported a problem',
+    survey_rating: 'Rated the call',
 };
 const WHERE = {
     home_card: 'Home Speak card', home_promo: 'Home promo card', sidebar: 'Sidebar "New" tag', analysis: 'Analysis page link',
@@ -230,6 +300,8 @@ export default function SpeakPanel({ days, tz, refreshKey, onForbidden, onLoaded
                 </header>
                 <ColumnChart points={d.daily.map((p) => ({ key: p.key, value: p[metric] }))} label={chart.label} color={chart.color} />
             </section>
+
+            <RatingsCard ratings={d.ratings} onOpenCall={setOpenCall} />
 
             <ReportsCard reports={d.reports} onOpenCall={setOpenCall} />
 
@@ -426,7 +498,7 @@ export default function SpeakPanel({ days, tz, refreshKey, onForbidden, onLoaded
                                         <td className={styles.num}>{fmtDuration(c.seconds)}</td>
                                         <td className={styles.num}>{fmt(c.youLines)} / {fmt(c.charLines)}</td>
                                         <td className={styles.num}>{c.goalsDone}/{c.goalsTotal}</td>
-                                        <td>{END[c.endReason.replace(/^dropped.*/, 'dropped')] || c.endReason}{c.feedback === 'problem' ? ' · 👎 reported' : c.feedback === 'ok' ? ' · 👍' : ''}</td>
+                                        <td>{END[c.endReason.replace(/^dropped.*/, 'dropped')] || c.endReason}{c.feedback === 'problem' ? ' · 👎 reported' : c.feedback === 'ok' ? ' · 👍' : ''}{c.rating ? ` · ${FACES[c.rating][0]} ${c.rating}/5` : ''}</td>
                                         <td className={styles.num}>{fmt(c.tools)}</td>
                                     </tr>
                                 ))}
@@ -472,9 +544,16 @@ function CallDrawer({ sessionId, onClose, onForbidden, onOpenUser }) {
                             <span className={styles.chip}>Ended: {END[(c.endReason || (c.open ? 'still open' : 'unknown')).replace(/^dropped.*/, 'dropped')] || c.endReason}</span>
                             <span className={styles.chip}>{c.youLines} learner lines</span>
                             <span className={styles.chip}>{c.goalsDoneCount}/{c.goalsTotal} goals</span>
-                            {c.feedback && <span className={styles.chip}>{c.feedback.ok ? '👍 Said it worked' : `👎 Reported a problem${c.refundedSeconds ? ' · minutes refunded' : ''}`}</span>}
+                            {c.feedback?.rating && <span className={styles.chip}>Rated {FACES[c.feedback.rating][0]} {FACES[c.feedback.rating][1]} ({c.feedback.rating}/5)</span>}
+                            {answeredReport(c.feedback) && <span className={styles.chip}>{c.feedback.ok ? '👍 Said it worked' : `👎 Reported a problem${c.refundedSeconds ? ' · minutes refunded' : ''}`}</span>}
                         </div>
-                        {c.feedback && !c.feedback.ok && (
+                        {c.feedback?.comment && (
+                            <div className={`${styles.callReport} ${styles.callComment}`}>
+                                <b>About the call:</b>
+                                <p>&ldquo;{c.feedback.comment}&rdquo;</p>
+                            </div>
+                        )}
+                        {answeredReport(c.feedback) && !c.feedback.ok && (
                             <div className={styles.callReport}>
                                 <b>What went wrong:</b> {(c.feedback.issues || []).map((i) => ISSUE_LABELS[i] || i).join(', ') || 'nothing picked'}
                                 {c.feedback.note && <p>&ldquo;{c.feedback.note}&rdquo;</p>}

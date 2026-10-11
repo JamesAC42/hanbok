@@ -107,3 +107,28 @@ test('a refunded call stops counting against the allowance', () => {
     assert.strictEqual(secondsUsed({ billedSeconds: 240 }), 240);
     assert.strictEqual(secondsUsed({ billedSeconds: 240, refundedSeconds: 240 }), 0);
 });
+
+test('summarizeSpeak averages call ratings without counting them as problem answers', () => {
+    const ratedAt = new Date('2026-10-03T10:00:00Z');
+    const calls = [
+        call({ userId: 1, ratingAsked: true, feedback: { rating: 5, ratedAt } }),
+        call({ userId: 2, ratingAsked: true, character: 'sora', scenarioId: 'hanriver', feedback: { rating: 2, comment: 'Too fast', ratedAt, ok: false, issues: ['slow'], note: '', at: ratedAt } }),
+        call({ userId: 3, ratingAsked: true }),
+        call({ userId: 4, feedback: { ok: true, issues: [], note: '', at: ratedAt } }),
+    ];
+    const prevCalls = [call({ userId: 1, feedback: { rating: 3 } })];
+    const s = summarizeSpeak({ calls, prevCalls, events: [], from, to, users: [{ userId: 2, name: 'B' }], firstCallTier: new Map() });
+    assert.strictEqual(s.ratings.asked, 3);
+    assert.strictEqual(s.ratings.rated, 2);
+    assert.strictEqual(s.ratings.average, 3.5);
+    assert.strictEqual(s.ratings.prevAverage, 3);
+    assert.deepStrictEqual(s.ratings.scores.map((x) => x.count), [1, 0, 0, 1, 0]);
+    assert.deepStrictEqual(s.ratings.character.map((g) => [g.key, g.average]).sort(), [['horang', 5], ['sora', 2]]);
+    const b = s.ratings.list.find((r) => r.userId === 2);
+    assert.strictEqual(b.comment, 'Too fast');
+    assert.strictEqual(b.problem, true);
+    // A rating alone is not an answer to "did anything go wrong".
+    assert.strictEqual(s.reports.answered, 2);
+    assert.strictEqual(s.recent.find((r) => r.userId === 1).feedback, null);
+    assert.strictEqual(s.recent.find((r) => r.userId === 1).rating, 5);
+});

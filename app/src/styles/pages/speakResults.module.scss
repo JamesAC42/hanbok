@@ -251,8 +251,23 @@
 }
 .surveyActions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
 .surveySend { @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 3px); padding: .6rem 1rem; font-size: .82rem; }
-.surveyCancel { background: none; border: none; padding: 0; font: 700 .88rem var(--font-display); color: var(--bp-ink2); text-decoration: underline; cursor: pointer; }
+.surveyCancel { background: none; border: none; padding: 0; text-align: left; font: 700 .88rem var(--font-display); color: var(--bp-ink2); text-decoration: underline; cursor: pointer; }
 .surveyError { margin: 0; font-size: .88rem; font-weight: 700; color: var(--bp-flame-d, #c2410c); }
 .surveyDone { margin: 0; padding: .7rem 1rem; border-radius: 14px; background: var(--bp-und-soft, var(--bp-soft)); font-size: .95rem; font-weight: 600; color: var(--bp-ink2);
     b { color: var(--foreground); }
+}
+// "How did you like this call?" faces
+.faces { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .4rem;
+    button { display: flex; flex-direction: column; align-items: center; gap: .2rem; padding: .55rem .2rem .5rem; background: var(--bp-card); border: 2px solid var(--bp-line); border-bottom-width: 4px; border-radius: 14px; cursor: pointer; transition: transform .12s, border-color .12s, opacity .12s; }
+    button:hover:not(:disabled) { border-color: var(--bp-line-strong); transform: translateY(-2px); }
+    button:disabled { cursor: default; }
+    .faceOn, .faceOn:hover:not(:disabled) { background: var(--bp-purple-soft); border-color: var(--bp-purple); transform: none; }
+    .faceDim { opacity: .55; }
+}
+.faceEmoji { font-size: 1.7rem; line-height: 1; }
+.faceLabel { font: 700 .72rem var(--font-display); color: var(--bp-ink2); text-align: center; }
+.faceOn .faceLabel { color: var(--bp-purple-d); }
+.rateComment { display: flex; gap: .5rem; align-items: stretch;
+    .surveyNote { flex: 1; min-width: 0; resize: none; }
+    .surveySend { flex: none; }
 }

@@ -44,6 +44,7 @@ and microphone, not only on gaps (see `startLiveLine` in `speakClient.js`).
 | `SPEAK_BETA` | on | `off` hides the Beta labels and stops giving minutes back |
 | `SPEAK_BETA_REFUNDS` | 3 | reported calls per plan period that get their minutes back |
 | `SPEAK_REPORT_EMAIL` | (unset) | when set, each problem report is emailed here |
+| `SPEAK_RATING_EVERY` | 3 | "How did you like this call?" comes up on the learner's first call of 45s+ and then one in every this many (1 = every call) |
 
 ## Beta survey
 
@@ -53,3 +54,9 @@ After each call (and on past calls from the last 7 days) the learner is asked
 also refunds that call's minutes once (`refundedSeconds`, which `secondsUsed`
 subtracts), up to `SPEAK_BETA_REFUNDS` calls per plan period. Reports show in
 the admin Speak tab under "Problem reports (beta)".
+
+Some calls lead with "How did you like this call?" instead: five faces (1-5)
+and an optional comment, sent as `{rating, comment}` to the same endpoint and
+saved as `feedback.rating` / `feedback.comment` next to any problem report.
+`/end` decides which calls ask (`askRating`, stored as `ratingAsked`). The admin
+Speak tab shows them under "How people feel about calls".
