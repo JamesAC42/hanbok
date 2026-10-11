@@ -207,10 +207,29 @@ const startSession = async (req, res) => {
     }
 };
 
+// Speech-to-text noise tags like "[cough]" (sometimes missing the "]") are dropped.
+const dropTags = (t) => t.replace(/\[[^\]\n]*(\]|$)/g, ' ').replace(/\s{2,}/g, ' ').trim();
+
 const cleanTranscript = (t) => (Array.isArray(t) ? t : []).slice(-80)
     .filter((m) => m && (m.who === 'horang' || m.who === 'you'))
-    .map((m) => ({ who: m.who, text: str(m.text, 600) }))
+    .map((m) => ({ who: m.who, text: dropTags(str(m.text, 600)) }))
     .filter((m) => m.text);
+
+// The raw GPT-Live event timeline the browser kept ([ms, kind, text]), for
+// replaying odd calls. Kept small.
+const cleanLog = (log) => {
+    if (!Array.isArray(log)) return null;
+    const out = [];
+    let size = 0;
+    for (const e of log.slice(0, 800)) {
+        if (!Array.isArray(e)) continue;
+        const row = [Math.max(0, Math.round(Number(e[0]) || 0)), str(e[1], 8), typeof e[2] === 'string' ? e[2].slice(0, 300) : ''];
+        size += row[2].length + 12;
+        if (size > 60000) break;
+        out.push(row);
+    }
+    return out.length ? out : null;
+};
 
 // POST /api/speak/session/:id/end { goalsDone, transcript, usage }
 const endSession = async (req, res) => {
@@ -228,6 +247,7 @@ const endSession = async (req, res) => {
             ...(req.body?.summary ? { summary: str(req.body.summary, 500) } : {}),
             phrases: cards(req.body?.phrases),
             tips: cards(req.body?.tips),
+            ...(cleanLog(req.body?.log) ? { eventLog: cleanLog(req.body.log) } : {}),
             ...(req.body?.usage && typeof req.body.usage === 'object' ? {
                 usage: {
                     inputAudio: Number(req.body.usage.inputAudio) || 0,
@@ -380,7 +400,7 @@ const history = async (req, res) => {
                 endedAt: { $exists: true },
                 'transcript.0': { $exists: true },
                 ...(before && !Number.isNaN(before.getTime()) ? { startedAt: { $lt: before } } : {}),
-            }, { projection: { transcript: 0, recap: 0, usage: 0, lineNotes: 0 } })
+            }, { projection: { transcript: 0, recap: 0, usage: 0, lineNotes: 0, eventLog: 0 } })
             .sort({ startedAt: -1 })
             .limit(30)
             .toArray();

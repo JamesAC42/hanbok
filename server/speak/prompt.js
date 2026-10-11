@@ -137,7 +137,7 @@ const buildInstructions = ({ scenario, level, assist, language, nativeLanguage, 
             ? '- Open with a short, energetic greeting in {target} and ask what they want to talk about.'
             : (level === 'advanced'
                 ? '- Open the scene straight away with a greeting in {target}.'
-                : '- Open with ONE short {native} sentence that sets the scene and their first goal, then start the scene with a short greeting in {target}.'),
+                : '- Open in character with a short greeting in {target}. Their screen already shows the scene and their goals, so never describe the scene, narrate or read the goals out.'),
         '- Keep every turn short, then stop and let them talk. Never lecture, never list several options at length.',
         '- When they make a mistake, recast it: repeat what they meant correctly and keep going. Only explain (in {native}) if they ask.',
         live
@@ -145,7 +145,7 @@ const buildInstructions = ({ scenario, level, assist, language, nativeLanguage, 
             : '- You can HEAR their pronunciation. When a word they say is clearly off in a way a native speaker would notice, give one short, specific tip in {native} and call pronunciation_tip. At most one tip every few turns. Tell them when something sounded good, too.',
         ...(live ? [
             '- Their goals count only when they say it themselves, out loud in {target}. Answer them first (for example, tell them the price), then move to the next goal.',
-            '- When every goal is done, celebrate, wrap up in one sentence and say goodbye.',
+            '- When every goal is done, celebrate, wrap up in one sentence and say goodbye. Never end on a question or a new task.',
             '- You have no tools and never delegate: handle everything yourself in the conversation. Their screen shows captions, goals and phrase cards automatically.',
             '- Let them finish: learners pause mid-sentence to think, so wait through short silences and don\'t talk over them.',
         ] : [

@@ -200,8 +200,17 @@
     button:hover { border-color: var(--bp-line-strong); }
 }
 .script li.scriptYou .scriptTools { justify-content: flex-end; }
-.scriptTools .breakBtn { border-color: var(--bp-purple-line); color: var(--bp-purple-d); }
-.scriptTools .breakBtn:hover { background: var(--bp-purple-soft); border-color: var(--bp-purple); }
+.scriptTools .breakBtn {
+    @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 3px);
+    gap: .4rem; padding: .45rem .85rem .42rem; border: none; border-radius: 11px; font-size: .74rem; letter-spacing: .06em;
+    &:hover { border: none; }
+}
+.scriptTools .breakLocked {
+    @include bp-press-ghost(var(--bp-purple-d), 3px);
+    gap: .4rem; padding: .38rem .8rem .36rem; border-color: var(--bp-purple-line); border-radius: 11px; font-size: .74rem; letter-spacing: .06em;
+    box-shadow: 0 3px 0 var(--bp-purple-line);
+    &:hover { border-color: var(--bp-purple-line); background: var(--bp-purple-soft); }
+}
 
 .breakdownPitch { display: flex; gap: .8rem; align-items: center; padding: .85rem 1rem; border-radius: var(--bp-radius, 16px);
     background: var(--bp-purple-soft); border: 2px solid var(--bp-purple-line); flex-wrap: wrap;

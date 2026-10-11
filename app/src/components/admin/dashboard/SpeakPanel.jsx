@@ -6,6 +6,37 @@ import { ColumnChart, BarList, Delta, StatTile } from './charts';
 import { PanelSkeleton, SectionError } from './OverviewPanel';
 import { fmt, fmtDateTime, fmtDuration, fmtMoney, pct, timeAgo, TIERS } from './format';
 
+// What GPT-Live sent during the call, as the browser saw it: runs of transcript
+// pieces joined into one row. For working out odd calls.
+const KINDS = { o: 'Character', i: 'Learner (heard)', Y: 'Learner line', 'L+': 'Line starts', 'L.': 'Line ends', 'L/': 'Line split', v: 'Learner voice', s: 'Session started', x: 'Event', error: 'Error', closed: 'Closed' };
+function CallTimeline({ log }) {
+    const [copied, setCopied] = useState(false);
+    const rows = [];
+    for (const [t, kind, text] of log) {
+        const last = rows[rows.length - 1];
+        if ((kind === 'o' || kind === 'i') && last?.kind === kind) { last.text += text; last.end = t; continue; }
+        rows.push({ t, end: t, kind, text });
+    }
+    const copy = () => {
+        navigator.clipboard?.writeText(JSON.stringify(log)).then(() => { setCopied(true); setTimeout(() => setCopied(false), 1500); }).catch(() => {});
+    };
+    return (
+        <details className={styles.callTimeline}>
+            <summary>Raw call timeline ({log.length} events)</summary>
+            <button type="button" className={styles.miniBtn} onClick={copy}>{copied ? 'Copied' : 'Copy as JSON'}</button>
+            <ol>
+                {rows.map((r, i) => (
+                    <li key={i} className={styles[`tl_${r.kind.replace(/\W/g, '_')}`] || ''}>
+                        <span>{(r.t / 1000).toFixed(1)}s{r.end !== r.t ? `–${(r.end / 1000).toFixed(1)}s` : ''}</span>
+                        <b>{KINDS[r.kind] || r.kind}</b>
+                        {r.text && <span lang="ko">{r.text}</span>}
+                    </li>
+                ))}
+            </ol>
+        </details>
+    );
+}
+
 const pctOf = (rate) => (rate === null || rate === undefined ? '–' : `${Math.round(rate * 100)}%`);
 
 const LABELS = {
@@ -427,6 +458,7 @@ function CallDrawer({ sessionId, onClose, onForbidden, onOpenUser }) {
                                 ))}
                             </ul>
                         ) : <p className={styles.empty}>No tracked actions for this call.</p>}
+                        {c.eventLog?.length > 0 && <CallTimeline log={c.eventLog} />}
                     </div>
                 )}
             </aside>

@@ -36,6 +36,13 @@ function useDecodedSrc(src) {
     return shown;
 }
 
+// The transcript with the character's line added, or updated when it's the
+// line they're still on.
+const withLine = (list, id, text) => {
+    const last = list[list.length - 1];
+    return last?.id === id ? [...list.slice(0, -1), { id, who: 'horang', text }] : [...list, { id, who: 'horang', text }];
+};
+
 const lineSize = (text) => (text.length > 110 ? styles.lineSmall : text.length > 60 ? styles.lineMedium : '');
 
 export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, onDone, onLimit }) {
@@ -117,6 +124,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             if (name === 'set_mood') setMood(args.mood);
             if (name === 'complete_goal') {
                 const i = Number(args.goal) - 1;
+                s.goals = scenario.goals.map((g, j) => j === i || !!s.goals[j]);
                 setGoals((g) => g.map((v, j) => (j === i ? true : v)));
                 setMood(ch.celebrate);
             }
@@ -150,14 +158,18 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             }
         };
         // GPT-Live can't call tools: after each line, a text model reads the
-        // transcript and returns the same screen updates, plus the caption.
+        // transcript and returns the same screen updates, plus the caption. It
+        // runs as soon as the line's words are in (the audio is still playing),
+        // and what the learner should say next waits until the character stops.
         const coachLine = async (id, text) => {
+            if (s.coached?.id === id && s.coached.text === text) return;
+            s.coached = { id, text };
             s.coachSeq = (s.coachSeq || 0) + 1;
             const seq = s.coachSeq;
             try {
                 const r = await fetch('/api/speak/coach', {
                     method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ sessionId: call.sessionId, transcript: s.transcript, assist: s.assist }),
+                    body: JSON.stringify({ sessionId: call.sessionId, transcript: withLine(s.transcript, id, text), assist: s.assist }),
                 });
                 const d = await r.json();
                 if (!d.success || s.finished) return;
@@ -165,35 +177,60 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 if (seq !== s.coachSeq) return; // a newer line has its own screen updates
                 if (d.mood) onTool('set_mood', { mood: d.mood });
                 (d.goals_done || []).filter((g) => !s.goals[g - 1]).forEach((g) => onTool('complete_goal', { goal: g }));
-                if (d.suggestion?.phrase) onTool('suggest_reply', d.suggestion);
                 if (d.new_phrase?.phrase && !s.phrases.some((p) => p.word === d.new_phrase.phrase)) onTool('teach_phrase', d.new_phrase);
                 if (d.tip?.word && !s.tips.some((t) => t.word === d.tip.word && t.text === d.tip.tip)) onTool('pronunciation_tip', d.tip);
-                if (d.end) onTool('end_scene', d.end);
+                s.turnScreen = { id, text, d };
+                showTurn();
             } catch { /* the call goes on without screen updates */ }
+        };
+        // Once the character has finished the line the coach read: the "Try
+        // saying" card, and the end of the scene when it's really over (every
+        // goal done and a goodbye, not a question still waiting for an answer).
+        const showTurn = () => {
+            const t = s.turnScreen;
+            if (!t || s.talking || s.lineDone?.id !== t.id || s.lineDone.text !== t.text) return;
+            s.turnScreen = null;
+            if (t.d.suggestion?.phrase && !s.heardAfter) onTool('suggest_reply', t.d.suggestion);
+            const allDone = scenario.goals.every((g, i) => s.goals[i]);
+            if (t.d.end && allDone && !/[?？]\s*$/.test(t.text)) onTool('end_scene', t.d.end);
         };
         const call = new SpeakCall({
             onSpeaking: setSpeaking,
             onListening: (on) => { setListening(on); if (on) setYouLine('…'); },
-            onHorangText: ({ id, text, done }) => {
+            // A new line from the character: the last "Try saying" is stale until they finish.
+            onLineStart: () => {
+                s.talking = true;
+                s.lineDone = null;
+                s.turnScreen = null;
+                s.coachSeq = (s.coachSeq || 0) + 1;
+                setSuggestion(null);
+            },
+            onHorangText: ({ id, text, done, settled }) => {
                 setLine({ id, text });
-                if (done) {
-                    // A line that continues the last one replaces it.
-                    const last = s.transcript[s.transcript.length - 1];
-                    s.transcript = last?.id === id ? [...s.transcript.slice(0, -1), { id, who: 'horang', text }] : [...s.transcript, { id, who: 'horang', text }];
-                    setTranscript(s.transcript);
-                    if (call.engine !== 'live') caption(id, text);
-                    else {
-                        // A line can arrive in pieces; coach it once it has settled so the
-                        // "Try saying" card changes once, not after every piece.
-                        clearTimeout(s.coachTimer);
-                        s.coachTimer = setTimeout(() => coachLine(id, text), 700);
+                if (call.engine !== 'live') {
+                    if (done) {
+                        s.transcript = withLine(s.transcript, id, text);
+                        setTranscript(s.transcript);
+                        caption(id, text);
                     }
+                    return;
+                }
+                if (settled) coachLine(id, text);
+                if (done) {
+                    s.transcript = withLine(s.transcript, id, text);
+                    setTranscript(s.transcript);
+                    s.talking = false;
+                    s.heardAfter = false;
+                    s.lineDone = { id, text };
+                    coachLine(id, text);
+                    showTurn();
                 }
             },
             onYouText: ({ id, text }) => {
                 if (!text.trim()) return;
                 setYouLine(text);
                 setSuggestion(null);
+                s.heardAfter = true;
                 const last = s.transcript[s.transcript.length - 1];
                 s.transcript = id && last?.id === id ? [...s.transcript.slice(0, -1), { id, who: 'you', text }] : [...s.transcript, { id, who: 'you', text }];
                 setTranscript(s.transcript);
@@ -240,10 +277,26 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
         return () => { window.removeEventListener('pagehide', leave); leave(); callRef.current?.stopLocal(); };
     }, []);
 
-    // Countdown; the server hangs up at zero as well.
+    // Countdown; the server hangs up a few seconds after zero. Near the end the
+    // character is asked to wrap up, and at zero the call waits for them to
+    // finish their sentence.
     useEffect(() => {
         if (status !== 'live' || timeLeft === null) return undefined;
-        if (timeLeft <= 0) { finish('time'); return undefined; }
+        const s = state.current;
+        if (timeLeft === 30 && !s.ending && !s.wrapAsked) {
+            s.wrapAsked = true;
+            callRef.current?.nudge('(Only about 30 seconds are left in this call. On your next turn, wrap up the scene warmly in one or two short sentences and say goodbye.)', { speak: false });
+        }
+        if (timeLeft <= 0) {
+            if (!s.timeUp) {
+                s.timeUp = true;
+                s.ending = true;
+                setEnding('time');
+                const call = callRef.current;
+                (call ? call.waitForQuiet({ quietMs: 700, maxMs: 4000 }) : Promise.resolve()).then(() => finish('time'));
+            }
+            return undefined;
+        }
         const t = setTimeout(() => setTimeLeft((x) => x - 1), 1000);
         return () => clearTimeout(t);
     }, [status, timeLeft, finish]);
@@ -334,8 +387,8 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 {ending && (
                     <div className={styles.endBanner} role="status">
                         <span className={styles.endStars} aria-hidden="true">★★★</span>
-                        {goals.every(Boolean) ? 'Scene complete!' : 'Wrapping up…'}
-                        <span className={styles.endSub}>{ch.name} is saying goodbye</span>
+                        {ending === 'time' ? "Time's up!" : goals.every(Boolean) ? 'Scene complete!' : 'Wrapping up…'}
+                        <span className={styles.endSub}>{ending === 'time' ? 'Saving your conversation' : `${ch.name} is saying goodbye`}</span>
                     </div>
                 )}
                 <div className={styles.cards} aria-live="polite">

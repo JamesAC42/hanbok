@@ -47,7 +47,7 @@ const coachPrompt = ({ scenario, assist, language, nativeLanguage }) => {
         romanize ? `- suggestion.romanization: the suggested phrase romanized for a beginner (same system as above).` : '- suggestion.romanization: always "".',
         `- new_phrase: a useful ${target} word or phrase the last line taught or explained, with its ${native} meaning, or null.`,
         `- tip: if the last line gives pronunciation feedback, the ${target} word and a one-sentence tip in ${native} (good: true when it is praise), else null.`,
-        `- end: when every goal is done and ${ch.name} has said goodbye, {"summary": one encouraging sentence in ${native} about how the learner did}; else null.`,
+        `- end: only when every goal is done AND ${ch.name}'s last line is a goodbye that closes the scene, {"summary": one encouraging sentence in ${native} about how the learner did}. null if a goal is still open, or the last line asks a question, gives the learner something new to say, or isn't a goodbye.`,
     ].join('\n');
 };
 

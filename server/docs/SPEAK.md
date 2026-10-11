@@ -15,7 +15,12 @@ Code: `speak/scenarios.js` (scenes), `speak/prompt.js` (instructions + tools),
 `app/src/lib/speakClient.js` + `app/src/components/speak/SpeakScene.jsx` (browser).
 
 Sessions are stored in `speak_sessions` (time used, goals done, transcript, token
-usage reported by the browser).
+usage reported by the browser). GPT-Live calls also keep `eventLog`, the raw
+transcript pieces and line breaks the browser saw (`[ms, kind, text]`), shown as
+"Raw call timeline" in the admin call drawer. GPT-Live sends no turn
+boundaries: the character often starts answering before the learner's own
+transcript arrives, so the browser splits lines on the learner's transcript
+and microphone, not only on gaps (see `startLiveLine` in `speakClient.js`).
 
 ## Settings (server .env)
 

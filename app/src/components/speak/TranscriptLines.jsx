@@ -6,6 +6,11 @@ import { speakEvent } from '@/lib/speakEvents';
 import UpgradeSheet from '@/components/grammar/UpgradeSheet';
 import styles from '@/styles/pages/speakResults.module.scss';
 
+const Icons = {
+    lens: <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>,
+    lock: <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>,
+};
+
 // The whole conversation after a call, each line with its translation and a
 // "Break it down" button that opens it in the analyzer. Free accounts spend
 // their weekly breakdowns on it, so the quota and the upgrade sit right here.
@@ -100,8 +105,9 @@ export default function TranscriptLines({ sessionId, transcript: initial = [], n
                                     <button type="button" onClick={() => { if (!open[i]) speakEvent('line_translate', { from }, sessionId); setOpen((o) => ({ ...o, [i]: !o[i] })); }}>{open[i] ? 'Hide' : 'Translate'}</button>
                                 )}
                                 {target && (
-                                    <button type="button" className={styles.breakBtn} onClick={() => breakDown(target)}>
-                                        {out ? '🔒 Break it down' : 'Break it down'}
+                                    <button type="button" className={`${styles.breakBtn} ${out ? styles.breakLocked : ''}`} onClick={() => breakDown(target)}>
+                                        {out ? Icons.lock : Icons.lens}
+                                        Break it down
                                     </button>
                                 )}
                             </span>

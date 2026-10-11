@@ -343,6 +343,7 @@ const buildSpeakCall = async (db, sessionId) => {
             phrases: s.phrases || [],
             tips: s.tips || [],
             recap: s.recap || null,
+            eventLog: s.eventLog || null,
         },
         user,
         events,

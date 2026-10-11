@@ -8,6 +8,20 @@
 // the fragments ends a line.
 const LINE_GAP_MS = 1100;
 const YOU_GAP_MS = 1400;
+// A character line that starts this soon after their last one, with no word
+// from the learner in between, is the same turn and joins that line.
+const CONTINUE_MS = 6000;
+const LOG_MAX = 800;
+
+// GPT-Live sometimes drops the space between two sentences ("drink.어서").
+const joinPiece = (text, piece) => {
+    if (!piece) return text;
+    if (/[.!?…]["'”’)]?$/.test(text) && /^[\p{L}]/u.test(piece)) return `${text} ${piece}`;
+    return text + piece;
+};
+
+// Speech-to-text marks noises like "[cough]", sometimes without the closing bracket.
+export const cleanSpoken = (t) => String(t || '').replace(/\[[^\]\n]*(\]|$)/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
 const waitForIce = (pc) => new Promise((resolve) => {
     if (pc.iceGatheringState === 'complete') return resolve();
@@ -29,6 +43,13 @@ export class SpeakCall {
         this.ended = false;
         this.engine = 'realtime';
         this.live = { line: '', lineId: null, lineTimer: null, you: '', youTimer: null, n: 0 };
+        // What GPT-Live actually sent, with times, so odd calls can be replayed (admin call drawer).
+        this.log = [];
+        this.t0 = Date.now();
+    }
+
+    note(kind, text = '') {
+        if (this.log.length < LOG_MAX) this.log.push([Date.now() - this.t0, kind, String(text).slice(0, 300)]);
     }
 
     emit(name, ...args) {
@@ -41,7 +62,22 @@ export class SpeakCall {
         this.analyser.getByteTimeDomainData(this.levelBuf);
         let sum = 0;
         for (let i = 0; i < this.levelBuf.length; i += 1) { const v = (this.levelBuf[i] - 128) / 128; sum += v * v; }
-        return Math.min(1, Math.sqrt(sum / this.levelBuf.length) * 4);
+        const v = Math.min(1, Math.sqrt(sum / this.levelBuf.length) * 4);
+        this.trackVoice(v);
+        return v;
+    }
+
+    // Notes when the learner is audibly talking (a steady quarter second of
+    // voice while the character is quiet), since their transcript can arrive
+    // after the character has already started answering.
+    trackVoice(v) {
+        const now = Date.now();
+        const dt = Math.min(100, now - (this.voiceTick || now));
+        this.voiceTick = now;
+        if (v > 0.15 && !this.outLoud()) {
+            this.voiceRun = (this.voiceRun || 0) + dt;
+            if (this.voiceRun >= 250) { if (!(this.voiceAt > now - 1000)) this.note('v'); this.voiceAt = now; }
+        } else this.voiceRun = 0;
     }
 
     async start({ scenarioId, level, assist, language, nativeLanguage }) {
@@ -151,29 +187,26 @@ export class SpeakCall {
         const L = this.live;
         switch (ev.type) {
             case 'session.started':
+                this.note('s');
                 this.kickoff();
                 break;
             case 'session.output_transcript.delta': {
-                if (!L.lineId) {
-                    if (L.lastWho === 'char' && L.prevId && Date.now() - L.prevAt < 8000) {
-                        // Still the same turn (the learner hasn't spoken): keep
-                        // adding to that line instead of starting a new bubble.
-                        L.lineId = L.prevId;
-                        L.line = `${L.prevLine} `;
-                    } else {
-                        L.n += 1;
-                        L.lineId = `l${L.n}`;
-                        L.line = '';
-                    }
-                    this.emit('onSpeaking', true);
-                }
-                L.line += ev.delta || '';
-                this.emit('onHorangText', { id: L.lineId, text: L.line.trim(), done: false });
+                this.note('o', ev.delta);
+                if (!L.lineId) this.startLiveLine();
+                L.line = joinPiece(L.line, ev.delta || '');
+                L.quietSince = 0;
+                this.emit('onHorangText', { id: L.lineId, text: cleanSpoken(L.line), done: false });
                 clearTimeout(L.lineTimer);
+                L.settled = false;
                 L.lineTimer = setTimeout(() => this.endLiveLine(), LINE_GAP_MS);
                 break;
             }
             case 'session.input_transcript.delta': {
+                this.note('i', ev.delta);
+                L.heardAt = Date.now();
+                // The learner talking means the character's next words are a new line,
+                // even if they were glued onto the last one before this transcript came in.
+                if (L.lineId && L.cont) this.splitLiveLine();
                 if (!L.youTimer) {
                     // Same turn as the learner's last fragment: keep adding to it.
                     if (L.lastWho === 'you' && L.youId && Date.now() - L.youAt < 6000) L.you = `${L.you} `;
@@ -182,15 +215,7 @@ export class SpeakCall {
                 }
                 L.you += ev.delta || '';
                 clearTimeout(L.youTimer);
-                L.youTimer = setTimeout(() => {
-                    L.youTimer = null;
-                    this.emit('onListening', false);
-                    if (L.you.trim()) {
-                        L.lastWho = 'you';
-                        L.youAt = Date.now();
-                        this.emit('onYouText', { id: L.youId, text: L.you.trim() });
-                    }
-                }, YOU_GAP_MS);
+                L.youTimer = setTimeout(() => this.flushYou(), YOU_GAP_MS);
                 break;
             }
             case 'session.delegation.created':
@@ -201,13 +226,72 @@ export class SpeakCall {
                 this.usage.seconds = ev.usage?.seconds || this.usage.seconds || 0;
                 break;
             case 'session.closed':
+                this.note('closed', ev.reason);
                 if (!this.ended) this.emit('onDrop', ev.reason);
                 break;
             case 'error':
+                this.note('error', ev.error?.message || ev.error?.code);
                 console.warn('speak error', ev.error);
                 this.emit('onError', ev.error);
                 break;
             default:
+                this.note('x', ev.type);
+        }
+    }
+
+    // The character started talking: a new line, or more of their last one
+    // when they only paused and the learner hasn't said anything since.
+    startLiveLine() {
+        const L = this.live;
+        const now = Date.now();
+        // They answered, so whatever the learner said is finished.
+        if (L.youTimer) this.flushYou();
+        const learnerSpoke = L.heardAt > (L.prevStart || 0) || this.voiceAt > (L.prevAt || 0);
+        if (L.lastWho === 'char' && L.prevId && !learnerSpoke && now - L.prevAt < CONTINUE_MS) {
+            L.lineId = L.prevId;
+            L.cont = true;
+            L.contBase = L.prevLine;
+            L.line = `${L.prevLine} `;
+        } else {
+            L.n += 1;
+            L.lineId = `l${L.n}`;
+            L.cont = false;
+            L.contBase = '';
+            L.line = '';
+        }
+        L.lastWho = 'char';
+        L.lineStart = now;
+        this.note('L+', `${L.lineId}${L.cont ? ' cont' : ''}`);
+        this.emit('onLineStart', { id: L.lineId, cont: L.cont });
+        this.emit('onSpeaking', true);
+    }
+
+    // A line we joined onto the last one turned out to come after the learner
+    // spoke: give the new part its own line.
+    splitLiveLine() {
+        const L = this.live;
+        const rest = L.line.slice(L.contBase.length).trim();
+        L.n += 1;
+        L.lineId = `l${L.n}`;
+        L.cont = false;
+        L.contBase = '';
+        L.line = rest;
+        this.note('L/', L.lineId);
+        this.emit('onLineStart', { id: L.lineId, cont: false });
+        if (rest) this.emit('onHorangText', { id: L.lineId, text: cleanSpoken(rest), done: false });
+    }
+
+    flushYou() {
+        const L = this.live;
+        clearTimeout(L.youTimer);
+        L.youTimer = null;
+        this.emit('onListening', false);
+        const text = cleanSpoken(L.you);
+        if (text) {
+            L.lastWho = 'you';
+            L.youAt = Date.now();
+            this.note('Y', text);
+            this.emit('onYouText', { id: L.youId, text });
         }
     }
 
@@ -225,17 +309,32 @@ export class SpeakCall {
         const L = this.live;
         clearTimeout(L.lineTimer);
         if (!L.lineId) return;
-        // A pause in the transcript isn't the end of the line while they're still talking.
-        if (this.outLoud() && !this.ended) { L.lineTimer = setTimeout(() => this.endLiveLine(), 300); return; }
+        // A pause in the transcript isn't the end of the line while they're still talking,
+        // but the words are all in: say so, so the screen can get ready for the learner's turn.
+        // Short gaps between their sentences don't count: the audio has to stay quiet for a moment.
+        const now = Date.now();
+        if (this.outLoud()) L.quietSince = 0;
+        else if (!L.quietSince) L.quietSince = now;
+        if ((!L.quietSince || now - L.quietSince < 500) && !this.ended) {
+            if (!L.settled && L.line.trim()) {
+                L.settled = true;
+                this.emit('onHorangText', { id: L.lineId, text: cleanSpoken(L.line), done: false, settled: true });
+            }
+            L.lineTimer = setTimeout(() => this.endLiveLine(), 100);
+            return;
+        }
         const id = L.lineId;
         L.lineId = null;
+        L.settled = false;
         this.emit('onSpeaking', false);
         if (L.line.trim()) {
             L.lastWho = 'char';
             L.prevId = id;
             L.prevLine = L.line.trim();
+            L.prevStart = L.lineStart;
             L.prevAt = Date.now();
-            this.emit('onHorangText', { id, text: L.prevLine, done: true });
+            this.note('L.', id);
+            this.emit('onHorangText', { id, text: cleanSpoken(L.prevLine), done: true });
         }
     }
 
@@ -343,7 +442,7 @@ export class SpeakCall {
         if (!this.sessionId) return null;
         const id = this.sessionId;
         this.sessionId = null;
-        const body = JSON.stringify({ goalsDone, transcript, usage: this.usage, reason, ...notes });
+        const body = JSON.stringify({ goalsDone, transcript, usage: this.usage, reason, ...notes, ...(this.engine === 'live' ? { log: this.log } : {}) });
         if (beacon && navigator.sendBeacon) {
             navigator.sendBeacon(`/api/speak/session/${id}/end`, new Blob([body], { type: 'application/json' }));
             return null;
