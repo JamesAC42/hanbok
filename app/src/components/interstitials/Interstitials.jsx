@@ -9,6 +9,7 @@ import {
 } from '@/lib/interstitials';
 import PlansInterstitial from './PlansInterstitial';
 import ExtensionInterstitial from './ExtensionInterstitial';
+import SpeakInterstitial from './SpeakInterstitial';
 
 const DAY = 24 * 60 * 60 * 1000;
 const DELAY_MS = 6000;
@@ -16,6 +17,19 @@ const DELAY_MS = 6000;
 const PLANS_EVERY_DAYS = 7;
 // A new id shows the extension announcement once more.
 const EXTENSION_ID = 'extension-2026-10';
+// The Speak announcement. Matches the id the old one-off popup stored in
+// seenAnnouncements, so people who saw that one don't see this one.
+const SPEAK_ID = '2026-10-speak';
+
+// Signed-in learners who haven't seen the Speak announcement or opened Speak.
+const wantsSpeakAnnouncement = (user) => {
+    if (!user || lastShown(SPEAK_ID)) return false;
+    try {
+        if (JSON.parse(localStorage.getItem('seenAnnouncements') || '{}')[SPEAK_ID]) return false;
+        if (localStorage.getItem('speakVisited')) return false;
+    } catch {}
+    return true;
+};
 
 // Paying = a real subscription, not the no-card trial.
 const isPayingUser = (user) => !!user && user.tier > 0 && !user.plusTrialEndsAt;
@@ -48,7 +62,8 @@ const loadOffer = async () => {
 
 // Picks at most one popup for this page load, highest priority first:
 // 1. a running yearly deal, once per deal (free and signed-out only)
-// 2. one-time announcements (the Chrome extension, for desktop Chrome without it)
+// 2. one-time announcements: Speak (signed-in learners who haven't tried it),
+//    then the Chrome extension (desktop Chrome without it)
 // 3. the plans pitch, every PLANS_EVERY_DAYS (free and signed-out only)
 // lib/interstitials.js keeps the shared budget across all of them.
 const pickInterstitial = async (user) => {
@@ -58,6 +73,9 @@ const pickInterstitial = async (user) => {
 
     if (deal && !lastShown(dealId(deal))) {
         return { id: dealId(deal), kind: 'plans', deal, trial: null };
+    }
+    if (wantsSpeakAnnouncement(user)) {
+        return { id: SPEAK_ID, kind: 'speak' };
     }
     const hasExtension = !!document.documentElement.dataset.hanbokExtension;
     if (CHROME_EXTENSION_URL && isDesktopChrome() && !hasExtension && !lastShown(EXTENSION_ID)) {
@@ -109,6 +127,9 @@ const Interstitials = () => {
     const close = () => setCurrent(null);
     const onAction = (action) => track('interstitial_click', { id: current.id, action });
 
+    if (current.kind === 'speak') {
+        return <SpeakInterstitial onClose={close} onAction={onAction} free={!isPayingUser(user)} />;
+    }
     if (current.kind === 'extension') {
         return <ExtensionInterstitial onClose={close} onAction={onAction} />;
     }

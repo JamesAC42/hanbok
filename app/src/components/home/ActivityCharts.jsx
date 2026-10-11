@@ -6,9 +6,10 @@ export const METRICS = [
     { key: 'analyzed', label: 'Sentences read', color: 'var(--chart-analyzed)' },
     { key: 'wordsSaved', label: 'Words saved', color: 'var(--chart-words)' },
     { key: 'reviews', label: 'Cards reviewed', color: 'var(--chart-reviews)' },
+    { key: 'speakMinutes', label: 'Minutes speaking', color: 'var(--chart-speak)' },
 ];
 
-const total = (day) => day.analyzed + day.wordsSaved + day.reviews;
+const total = (day) => METRICS.reduce((sum, m) => sum + (day[m.key] || 0), 0);
 
 // Parse YYYY-MM-DD as a local calendar date (no time zone shift).
 const toDate = (key) => {
@@ -113,7 +114,7 @@ export const TrendChart = ({ days }) => {
     const gap = 3;
     const barWidth = days.length ? (width - gap * (days.length - 1)) / days.length : 0;
     const max = Math.max(1, ...days.map(total));
-    const totals = METRICS.map(m => days.reduce((sum, d) => sum + d[m.key], 0));
+    const totals = METRICS.map(m => days.reduce((sum, d) => sum + (d[m.key] || 0), 0));
 
     return (
         <div className={styles.trend}>
@@ -143,7 +144,7 @@ export const TrendChart = ({ days }) => {
                                 <rect x={x} y={height - 2} width={barWidth} height={2} rx={1} className={styles.trendEmpty} />
                             )}
                             {METRICS.map(m => {
-                                const h = (day[m.key] / max) * (height - 4);
+                                const h = ((day[m.key] || 0) / max) * (height - 4);
                                 if (h <= 0) return null;
                                 y -= h;
                                 return (

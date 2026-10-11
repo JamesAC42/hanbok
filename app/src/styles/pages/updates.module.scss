@@ -331,3 +331,174 @@
 .section .ghost {
     @include bp-press-ghost(color-mix(in srgb, var(--bp-read) 82%, var(--foreground)), 3px);
 }
+
+// ===== Changelog (index) =====
+
+.changelog {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--bp-line);
+}
+
+.changelogTitle {
+    @include bp-title;
+    margin: 0 0 .35rem;
+    font-size: 1.85rem;
+
+    @media screen and (max-width: 725px) {
+        font-size: 1.55rem;
+    }
+}
+
+.changelogDek {
+    margin: 0 0 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--bp-ink2);
+}
+
+.changelogDays {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.changelogDay {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1rem;
+
+    @media screen and (max-width: 640px) {
+        grid-template-columns: 1fr;
+        gap: .5rem;
+    }
+}
+
+.changelogDate {
+    @include bp-label;
+    padding-top: .2rem;
+}
+
+.changelogItems {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+
+    li {
+        position: relative;
+        padding-left: 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.55;
+        text-wrap: pretty;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: .1rem;
+            top: .58em;
+            width: .45rem;
+            height: .45rem;
+            border-radius: 50%;
+            background: var(--bp-read);
+        }
+    }
+
+    a {
+        color: color-mix(in srgb, var(--bp-read) 82%, var(--foreground));
+        font-weight: 700;
+        text-underline-offset: 2px;
+    }
+}
+
+// ===== Speak post =====
+
+.planList {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: .75rem;
+
+    li {
+        padding: .9rem 1rem;
+        border: 2px solid var(--bp-line);
+        border-radius: 16px;
+        background: var(--bp-card);
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+    }
+
+    strong {
+        @include bp-title;
+        font-size: 1.35rem;
+    }
+
+    span {
+        font-size: .92rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+    }
+
+    @media screen and (max-width: 560px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.steps {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+
+    li {
+        counter-increment: step;
+        position: relative;
+        padding-left: 2.6rem;
+        font-size: 1.05rem;
+        font-weight: 500;
+        line-height: 1.6;
+
+        &::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.85rem;
+            height: 1.85rem;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--bp-read);
+            color: #fff;
+            font-size: .95rem;
+            font-weight: 900;
+        }
+    }
+}
+
+.castPhotos {
+    flex: 0 0 auto;
+    display: flex;
+    gap: .35rem;
+
+    img {
+        width: 5rem;
+        height: 5.5rem;
+        object-fit: cover;
+        object-position: 50% 12%;
+        -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+        mask-image: linear-gradient(to bottom, #000 60%, transparent);
+    }
+}

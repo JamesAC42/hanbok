@@ -9,7 +9,7 @@ const {
     sumRange,
 } = require('../lib/progressSeries');
 
-const day = (date, analyzed = 0, wordsSaved = 0, reviews = 0) => ({ date, analyzed, wordsSaved, reviews });
+const day = (date, analyzed = 0, wordsSaved = 0, reviews = 0, speakMinutes = 0) => ({ date, analyzed, wordsSaved, reviews, speakMinutes });
 
 test('isValidTimeZone accepts IANA zones and rejects junk', () => {
     assert.equal(isValidTimeZone('America/New_York'), true);
@@ -56,4 +56,9 @@ test('computeStreak is zero with no recent activity', () => {
 test('sumRange adds a metric from an index to the end', () => {
     assert.equal(sumRange([day('a', 1), day('b', 2), day('c', 3)], 'analyzed', 1), 5);
     assert.equal(sumRange([day('a', 1)], 'analyzed', -4), 1);
+});
+
+test('computeStreak counts a day with only speaking practice', () => {
+    const series = [day('a', 1), day('b', 0, 0, 0, 4)];
+    assert.deepEqual(computeStreak(series), { current: 2, best: 2, activeToday: true });
 });

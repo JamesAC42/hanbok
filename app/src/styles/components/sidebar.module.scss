@@ -170,6 +170,22 @@
     flex-shrink:0;
 }
 
+.sidebarNew {
+    margin-left:auto;
+    padding:.12rem .5rem;
+    border-radius:99px;
+    background:var(--bp-purple);
+    color:#fff;
+    font-size:.66rem;
+    font-weight:800;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    flex-shrink:0;
+    animation:sidebar-new-pulse 2.4s ease-in-out infinite;
+}
+@keyframes sidebar-new-pulse { 0%, 100% { box-shadow:0 0 0 0 color-mix(in srgb, var(--bp-purple) 45%, transparent); } 50% { box-shadow:0 0 0 5px transparent; } }
+@media (prefers-reduced-motion: reduce) { .sidebarNew { animation:none; } }
+
 .sidebarFooter {
     margin-top:auto;
     padding-top:1rem;
@@ -214,6 +230,17 @@
             padding:.42rem 0;
         }
         .sidebarSectionItemText { display:none; }
+
+        .sidebarNew {
+            position:absolute;
+            top:-.1rem;
+            right:.2rem;
+            width:.7rem;
+            height:.7rem;
+            padding:0;
+            font-size:0;
+            border:2px solid var(--background);
+        }
 
         .sidebarBadge {
             position:absolute;

@@ -1144,3 +1144,74 @@ div.toolCard:active { transform: none; box-shadow: 0 4px 0 var(--bp-line); }
   font-size: 1.5rem;
   margin: 1.5rem 0 0;
 }
+
+// ---------- Speak ----------
+
+.callGoals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.callScript {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  li {
+    padding: .45rem .7rem;
+    border-radius: 12px;
+    background: var(--bp-soft);
+    border: 2px solid var(--bp-line);
+    font-size: .92rem;
+    line-height: 1.45;
+    max-width: 90%;
+    align-self: flex-start;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  b { text-transform: capitalize; margin-right: .3rem; color: var(--bp-ink2); font-size: .78rem; }
+  .callYou { align-self: flex-end; background: var(--bp-purple-soft); border-color: var(--bp-purple-line); }
+}
+
+.callTimeline {
+  margin-top: 1rem;
+  font-size: .82rem;
+
+  summary { cursor: pointer; font-weight: 800; color: var(--bp-ink2); }
+  ol { list-style: none; margin: .5rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; max-height: 24rem; overflow-y: auto; }
+  li { display: grid; grid-template-columns: 6.5rem 7.5rem 1fr; gap: .5rem; padding: .2rem .4rem; border-radius: 6px; }
+  li > span:first-child { color: var(--bp-ink2); font-variant-numeric: tabular-nums; }
+  li > span:last-child { overflow-wrap: anywhere; }
+  .tl_o { background: var(--bp-purple-soft); }
+  .tl_i, .tl_Y { background: var(--bp-read-soft); }
+  .tl_L_, .tl_L__ { color: var(--bp-ink2); }
+  .tl_error { background: var(--bp-flame-soft); }
+}
+
+.miniBtn {
+  margin-top: .5rem;
+  padding: .25rem .6rem;
+  border: 2px solid var(--bp-line);
+  border-radius: 8px;
+  background: var(--bp-card);
+  font: 800 .75rem var(--font-display);
+  cursor: pointer;
+}
+
+.callReport {
+  margin: .25rem 0 0;
+  padding: .6rem .8rem;
+  border-radius: 10px;
+  background: var(--bp-flame-soft);
+  font-size: .88rem;
+
+  p { margin: .3rem 0 0; font-style: italic; }
+}

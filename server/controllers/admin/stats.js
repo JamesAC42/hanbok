@@ -46,6 +46,7 @@ const ACTIVITY_SOURCES = [
     { collection: 'savedSentences', field: 'dateSaved' },
     { collection: 'conversations', field: 'lastUpdated' },
     { collection: 'extended_texts', field: 'dateCreated' },
+    { collection: 'speak_sessions', field: 'startedAt', match: { 'transcript.who': 'you' } },
 ];
 
 const activityMatch = (source, from, to, userIds) => ({
@@ -292,7 +293,7 @@ const buildFeatureUse = async (db, from, to) => {
         { $group: { _id: null, users: { $sum: 1 }, uses: { $sum: '$uses' } } },
     ], { allowDiskUse: true }).toArray().then((rows) => rows[0] || { users: 0, uses: 0 });
 
-    const [analyze, paragraphs, tutor, savedSentences, words, flashcards, reviews, anon] = await Promise.all([
+    const [analyze, paragraphs, tutor, savedSentences, words, flashcards, reviews, anon, speak] = await Promise.all([
         usersAndUses('sentences', 'dateCreated', { userId: { $type: 'number' }, extendedTextId: { $in: [null] } }),
         usersAndUses('extended_texts', 'dateCreated'),
         usersAndUses('conversations', 'dateCreated'),
@@ -301,6 +302,7 @@ const buildFeatureUse = async (db, from, to) => {
         usersAndUses('flashcards', 'dateCreated'),
         usersAndUses('study_progress', 'date', {}, { $sum: { $add: [{ $ifNull: ['$reviewsCompleted', 0] }, { $ifNull: ['$newCardsStudied', 0] }] } }),
         db.collection('sentences').countDocuments({ ...inRange('dateCreated'), userId: { $not: { $type: 'number' } } }),
+        usersAndUses('speak_sessions', 'startedAt', { 'transcript.who': 'you' }),
     ]);
 
     return {
@@ -308,6 +310,7 @@ const buildFeatureUse = async (db, from, to) => {
             { key: 'analyze', stage: 'read', ...pick(analyze) },
             { key: 'paragraphs', stage: 'read', ...pick(paragraphs) },
             { key: 'tutor', stage: 'understand', ...pick(tutor) },
+            { key: 'speak', stage: 'understand', ...pick(speak) },
             { key: 'savedSentences', stage: 'keep', ...pick(savedSentences) },
             { key: 'words', stage: 'keep', ...pick(words) },
             { key: 'flashcards', stage: 'keep', ...pick(flashcards) },

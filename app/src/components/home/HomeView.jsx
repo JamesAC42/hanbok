@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { speakEvent } from '@/lib/speakEvents';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -59,6 +60,23 @@ const useGrammarSummary = (enabled) => {
     }, [enabled]);
     return summary;
 };
+
+// Calls, minutes and scenes from Speak.
+const useSpeakStats = (enabled) => {
+    const [stats, setStats] = useState(null);
+    useEffect(() => {
+        if (!enabled) return;
+        let cancelled = false;
+        fetch('/api/speak/stats')
+            .then(res => (res.ok ? res.json() : null))
+            .then(data => { if (!cancelled && data?.success) setStats(data); })
+            .catch(() => {});
+        return () => { cancelled = true; };
+    }, [enabled]);
+    return stats;
+};
+
+const minutesOf = (seconds) => Math.round((seconds || 0) / 60);
 
 const QuickInput = ({ inputRef }) => {
     const router = useRouter();
@@ -376,6 +394,54 @@ const GrammarCard = ({ summary }) => {
     );
 };
 
+const SpeakCard = ({ stats }) => {
+    const left = stats?.allowance ? Math.floor(stats.allowance.leftSeconds / 60) : null;
+    let line = 'Talk out loud with Horang and Sora: order coffee, take a taxi, make a friend in Seoul. They help when you get stuck.';
+    if (stats?.calls) {
+        line = `${plural(stats.calls, 'conversation')}, ${plural(minutesOf(stats.totalSeconds), 'minute')} of talking, ${stats.scenesCleared} of ${stats.scenesTotal} scenes cleared.`;
+        if (left !== null) line += ` ${plural(left, 'minute')} left to talk ${stats.allowance.windowDays === 7 ? 'this week' : 'this month'}.`;
+    }
+    return (
+        <section className={`${styles.card} ${styles.speakCard}`} aria-labelledby="speak-heading">
+            <span className={styles.speakFaces} aria-hidden="true">
+                <span style={{ '--face': 38, '--ring': '#3D64E8', '--fill': '#EAF0FF' }}><img src="/images/speak/sora/happy.webp" alt="" /></span>
+                <span style={{ '--face': 57, '--ring': '#FF8A00', '--fill': '#FFF1DD' }}><img src="/images/speak/horang/happy.webp" alt="" /></span>
+            </span>
+            <div>
+                <h2 id="speak-heading" className={styles.cardTitle}>Speak</h2>
+                <p>{line}</p>
+                <div className={styles.speakActions}>
+                    <Link href="/speak?from=home" className={styles.speakButton} onClick={() => speakEvent('promo_click', { where: 'home_card' })}>{stats?.calls ? 'Start a conversation' : 'Try your first call'}</Link>
+                    {stats?.calls > 0 && <Link href="/speak/history?from=home" className={styles.speakLink}>Your past conversations</Link>}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// For people who haven't tried Speak yet: a bigger card at the top of the column.
+const SpeakPromo = ({ stats }) => {
+    const minutes = stats?.allowance?.minutes;
+    const per = stats?.allowance?.windowDays === 7 ? 'every week' : 'every month';
+    useEffect(() => { speakEvent('promo_view', { where: 'home_promo' }); }, []);
+    return (
+        <section className={`${styles.card} ${styles.speakPromo}`} aria-labelledby="speak-promo-heading">
+            <div className={styles.speakPromoArt} aria-hidden="true">
+                <img src="/images/speak/horang/happy.webp" alt="" />
+                <img src="/images/speak/sora/happy.webp" alt="" />
+            </div>
+            <div className={styles.speakPromoText}>
+                <span className={styles.speakPromoTag}>New</span>
+                <h2 id="speak-promo-heading" className={styles.cardTitle}>Talk out loud with Horang and Sora</h2>
+                <p>Order coffee, take a taxi, make a friend in Seoul. They play the scene with you and help in English when you get stuck.{minutes ? ` You get ${minutes} free minutes ${per}.` : ''}</p>
+                <Link href="/speak?from=home" className={styles.speakButton} onClick={() => speakEvent('promo_click', { where: 'home_promo' })}>
+                    Try your first call
+                </Link>
+            </div>
+        </section>
+    );
+};
+
 const TutorCard = () => (
     <section className={`${styles.card} ${styles.tutorCard}`} aria-labelledby="tutor-heading">
         <Tiger pose="teach" size={72} />
@@ -424,7 +490,7 @@ const ExtensionCard = () => {
     );
 };
 
-const ProgressPanel = ({ progress }) => {
+const ProgressPanel = ({ progress, speak }) => {
     const { totals, days } = progress;
     const hasActivity = days.some(d => d.analyzed || d.wordsSaved || d.reviews);
     return (
@@ -448,6 +514,11 @@ const ProgressPanel = ({ progress }) => {
                     <b>{totals.masteredWords.toLocaleString()}</b>
                     <small>reviewed well for 3+ weeks</small>
                 </div>
+                <Link href="/speak" className={styles.statTile} style={{ '--tile-color': 'var(--bp-purple-d)' }}>
+                    <span>Minutes speaking</span>
+                    <b>{minutesOf(speak?.weekSeconds).toLocaleString()}</b>
+                    <small>{speak?.weekCalls ? `${plural(speak.weekCalls, 'call')} this week` : 'this week'}</small>
+                </Link>
             </div>
             {hasActivity ? (
                 <div className={styles.charts}>
@@ -478,6 +549,7 @@ const HomeView = () => {
     const [now] = useState(() => new Date());
     const inputRef = useRef(null);
     const grammar = useGrammarSummary(!!user);
+    const speak = useSpeakStats(!!user);
     const path = useTodayPath({ progress, cardsToday: cardsToday || 0, recent, grammarDue: grammar?.due || 0 });
 
     const firstName = user?.name ? user.name.split(' ')[0] : '';
@@ -521,15 +593,17 @@ const HomeView = () => {
                     <RecentWork items={recent} />
                 </div>
                 <div className={styles.column}>
+                    {speak && !speak.calls && <SpeakPromo stats={speak} />}
                     {progress && <WordsCard totals={progress.totals} />}
                     {progress && <StreakCard progress={progress} />}
                     <GrammarCard summary={grammar} />
+                    {speak?.calls > 0 && <SpeakCard stats={speak} />}
                     <TutorCard />
                     <ExtensionCard />
                 </div>
             </div>
 
-            {progress && <ProgressPanel progress={progress} />}
+            {progress && <ProgressPanel progress={progress} speak={speak} />}
         </div>
     );
 };

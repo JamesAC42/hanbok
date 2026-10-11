@@ -162,3 +162,8 @@
 @media (prefers-reduced-motion: reduce) {
     .overlay, .popup { animation: none; }
 }
+
+.speakNote {
+    font-size: .92rem;
+    a { display: inline-block; margin-top: .25rem; font-weight: 800; color: var(--bp-purple-d); }
+}

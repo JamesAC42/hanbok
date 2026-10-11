@@ -20,6 +20,11 @@ const COPY = {
         title: 'Your grammar path is full',
         body: 'Free accounts keep 20 grammar points. Basic saves as many as you like.',
     },
+    breakdown: {
+        title: "You've used this week's free breakdowns",
+        body: 'Basic breaks down as many sentences as you like: every word, the grammar and the audio. It also gives you 60 minutes a month of speaking practice.',
+        note: 'Your free breakdowns come back on Sunday.',
+    },
 };
 
 const UpgradeSheet = ({ reason = 'quiz', onClose }) => {
@@ -41,7 +46,7 @@ const UpgradeSheet = ({ reason = 'quiz', onClose }) => {
                 <Link href="/pricing" className={`${styles.pressRead} ${styles.wide}`} onClick={() => track('grammar_paywall_click', { reason })}>
                     See plans
                 </Link>
-                <p className={styles.muted} style={{ fontSize: '.88rem' }}>Reviewing the grammar you saved stays free.</p>
+                <p className={styles.muted} style={{ fontSize: '.88rem' }}>{copy.note || 'Reviewing the grammar you saved stays free.'}</p>
                 <button type="button" className={styles.removeButton} style={{ alignSelf: 'center' }} onClick={onClose}>Not now</button>
             </div>
         </div>

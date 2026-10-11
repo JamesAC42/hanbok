@@ -10,6 +10,7 @@ const LINKS = [
     { href: '/lyrics', label: 'Lyrics' },
     { href: '/learn', label: 'Learn' },
     { href: '/pricing', label: 'Pricing' },
+    { href: '/updates', label: "What's new" },
 ];
 
 // Header for the public pages (landing, lyrics, learn, pricing, login).

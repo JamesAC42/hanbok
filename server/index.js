@@ -114,6 +114,7 @@ const { getUsersAdmin } = require('./controllers/admin/getUsersAdmin');
 const { updateUser } = require('./controllers/admin/updateUser');
 const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
+const adminSpeak = require('./controllers/admin/speakStats');
 const { trackExtensionUsage, reportInstalled } = require('./lib/extensionUsage');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
@@ -375,6 +376,21 @@ app.delete('/api/grammar/point/:grammarId', isAuthenticated, grammarSave.removeG
 app.get('/api/grammar/point/:grammarId/lesson', isAuthenticated, grammarStudy.getGrammarLesson);
 app.post('/api/grammar/point/:grammarId/lesson/complete', isAuthenticated, grammarStudy.completeGrammarLesson);
 
+// Speak: live voice role-play with Horang (controllers/speak.js)
+const speak = require('./controllers/speak');
+app.get('/api/speak', speak.overview);
+app.post('/api/speak/session', isAuthenticated, speak.startSession);
+app.post('/api/speak/session/:id/end', isAuthenticated, speak.endSession);
+app.post('/api/speak/translate', isAuthenticated, speak.translate);
+app.post('/api/speak/coach', isAuthenticated, speak.coach);
+app.post('/api/speak/session/:id/recap', isAuthenticated, speak.recap);
+app.post('/api/speak/session/:id/lines', isAuthenticated, speak.lines);
+app.post('/api/speak/session/:id/feedback', isAuthenticated, speak.feedback);
+app.post('/api/speak/event', speak.event);
+app.get('/api/speak/stats', isAuthenticated, speak.stats);
+app.get('/api/speak/history', isAuthenticated, speak.history);
+app.get('/api/speak/history/:id', isAuthenticated, speak.historyItem);
+
 // Flashcard routes
 app.get('/api/decks', isAuthenticated, async (req, res) => {
     getDecks(req, res);
@@ -496,6 +512,8 @@ app.get('/api/admin/stats/revenue', isAuthenticated, requireAdmin, getRevenue);
 app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
 app.get('/api/admin/stats/extension', isAuthenticated, requireAdmin, adminStats.getExtension);
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
+app.get('/api/admin/stats/speak', isAuthenticated, requireAdmin, adminSpeak.getSpeakStats);
+app.get('/api/admin/speak/calls/:id', isAuthenticated, requireAdmin, adminSpeak.getSpeakCall);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);

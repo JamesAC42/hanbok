@@ -194,8 +194,20 @@ const sendPasswordResetEmail = async (email, username, resetToken) => {
     }
 };
 
+// A short plain-text note to the team (e.g. a Speak problem report).
+const sendTeamAlert = async ({ to, subject, text }) => {
+    try {
+        const info = await createTransporter().sendMail({ from: `"Hanbok Study" <${process.env.EMAIL_USER}>`, to, subject, text });
+        return { success: true, messageId: info.messageId };
+    } catch (error) {
+        console.error('Error sending team alert:', error);
+        return { success: false, error: error.message };
+    }
+};
+
 module.exports = {
     createTransporter,
+    sendTeamAlert,
     sendVerificationEmail,
     sendPasswordResetEmail
 }; 

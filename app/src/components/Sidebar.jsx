@@ -5,6 +5,7 @@ import Mascot from '@/components/Mascot';
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { speakEvent } from "@/lib/speakEvents";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAdmin } from "@/contexts/AdminContext";
@@ -24,6 +25,7 @@ import { CuidaSidebarCollapseOutline } from "./icons/Collapse";
 import { IcBaselinePerson } from "./icons/Profile";
 import { MaterialSymbolsHistory } from "./icons/History";
 import { MaterialSymbolsKeyboard } from "./icons/Keyboard";
+import { MaterialSymbolsMicRounded } from "./icons/Mic";
 import { TablerAlphabetKorean } from "./icons/Korean";
 import { MaterialSymbolsSettingsRounded } from "./icons/Settings";
 import { MaterialSymbolsMenuBook } from "./icons/MenuBook";
@@ -153,6 +155,15 @@ function Sidebar() {
     const label = useLabel(t);
     const cardsToday = useCardsToday(isAuthenticated);
 
+    // "New" on Speak until they've opened it once.
+    const [speakNew, setSpeakNew] = useState(false);
+    useEffect(() => {
+        try {
+            if (pathname?.startsWith('/speak')) { localStorage.setItem('speakVisited', '1'); setSpeakNew(false); }
+            else setSpeakNew(!localStorage.getItem('speakVisited'));
+        } catch { /* private mode */ }
+    }, [pathname]);
+
     const sections = [
         {
             key: 'main',
@@ -170,6 +181,7 @@ function Sidebar() {
             header: label('sidebar.practice', 'Practice'),
             items: [
                 { path: "/learn", match: ["/learn"], label: label('sidebar.learn', 'Learn'), color: 'var(--bp-read)', icon: <MaterialSymbolsMenuBook /> },
+                { path: "/speak", match: ["/speak"], label: label('sidebar.speak', 'Speak'), color: 'var(--bp-purple)', icon: <MaterialSymbolsMicRounded />, tag: speakNew ? 'New' : null },
                 { path: "/tutor", match: ["/tutor"], label: t('sidebar.tutor'), color: 'var(--bp-flame)', icon: <IcSharpSchool /> },
                 { path: "/typing", match: ["/typing"], label: t('sidebar.koreanTyping'), color: 'var(--bp-purple)', icon: <MaterialSymbolsKeyboard /> },
                 { path: "/hangeul", match: ["/hangeul"], label: t('sidebar.learnHangeul'), color: 'var(--bp-und)', icon: <TablerAlphabetKorean /> },
@@ -239,7 +251,10 @@ function Sidebar() {
                                         <Link
                                             key={item.path}
                                             href={item.path}
-                                            onClick={() => { if (isMobile && !collapsed) toggleCollapse(); }}
+                                            onClick={() => {
+                                                if (item.tag) speakEvent('promo_click', { where: 'sidebar' });
+                                                if (isMobile && !collapsed) toggleCollapse();
+                                            }}
                                             className={`${styles.sidebarSectionItem} ${active}`}
                                             aria-current={active ? "page" : undefined}
                                             style={{ '--item-color': item.color }}
@@ -250,6 +265,7 @@ function Sidebar() {
                                             <span className={styles.sidebarSectionItemText}>
                                                 {item.label}
                                             </span>
+                                            {item.tag ? <span className={styles.sidebarNew}>{item.tag}</span> : null}
                                             {item.badge ? (
                                                 <span className={styles.sidebarBadge} aria-label={`${item.badge} cards to study today`}>
                                                     {item.badge > 99 ? '99+' : item.badge}

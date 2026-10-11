@@ -162,6 +162,19 @@ li:last-child .check {
     }
 }
 
+.altSpeak { border-color: var(--bp-purple-line); background: var(--bp-purple-soft); }
+.altFace {
+    width: 46px;
+    height: 46px;
+    flex: none;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #3D64E8;
+    background: #EAF0FF;
+    box-sizing: border-box;
+    img { display: block; width: 190%; max-width: none; margin-top: 2%; margin-left: calc(50% - 38 * 1.9%); }
+}
+
 .altIcon {
     width: 46px;
     height: 46px;

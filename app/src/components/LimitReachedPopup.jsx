@@ -4,6 +4,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
 import { track } from '@/lib/analytics';
 import Mascot from '@/components/Mascot';
+import Link from 'next/link';
+import { speakEvent } from '@/lib/speakEvents';
 
 // Friendly heads-up notices (not a hard stop) get the teaching pose.
 const NOTICE_TYPES = ['first-five-used', 'fifteen-remaining', 'five-remaining'];
@@ -79,6 +81,14 @@ const LimitReachedPopup = ({ onClose, type = 'words' }) => {
                 </div>
                 <h2 id="limit-popup-title">{title}</h2>
                 <p>{message}</p>
+                {type === 'sentence-analyses' && (
+                    <p className={styles.speakNote}>
+                        Paid plans also include speaking practice with Horang and Sora.{' '}
+                        <Link href="/speak?from=limit" onClick={() => { speakEvent('promo_click', { where: 'analysis_limit' }); onClose(); }}>
+                            Your free speaking minutes are still waiting →
+                        </Link>
+                    </p>
+                )}
                 <div className={styles.buttons}>
                     <button 
                         className={styles.upgradeButton}

@@ -52,6 +52,7 @@
 
 .tone_read { --tone: var(--bp-read); }
 .tone_rev { --tone: var(--bp-rev); }
+.tone_speak { --tone: var(--bp-purple); }
 
 .close {
     position: absolute;
@@ -318,6 +319,37 @@
         max-height: 14rem;
     }
 }
+
+// Speak announcement: text beside the two characters in the café.
+.pillSpeak {
+    background: var(--bp-purple);
+    color: #fff;
+}
+
+.speakFine {
+    margin: .8rem 0 0;
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.speakArt {
+    position: relative;
+    height: 26rem;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 2px solid var(--bp-line);
+    background: var(--bp-purple-soft);
+
+    img { position: absolute; display: block; }
+    @media (max-width: 760px) {
+        order: -1;
+        height: 13rem;
+    }
+}
+.speakBg { inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.speakSora { bottom: -4%; left: 4%; height: 88%; width: auto; }
+.speakHorang { bottom: -6%; right: 2%; height: 100%; width: auto; }
 
 @keyframes interstitialFade {
     from { opacity: 0; }
