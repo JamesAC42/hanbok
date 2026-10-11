@@ -40,3 +40,25 @@ export const isDesktopChrome = () => {
     if (/Android|iPhone|iPad|iPod|Mobile|CriOS|EdgiOS/i.test(ua)) return false;
     return /Chrome\//.test(ua);
 };
+
+// Tells the server, once a day per browser, that this signed-in user has the
+// extension installed, so the admin dashboard can count installs it can see.
+export const reportExtensionInstalled = () => {
+    const report = () => {
+        const version = document.documentElement.dataset.hanbokExtension;
+        if (!version) return;
+        const today = new Date().toISOString().slice(0, 10);
+        try {
+            if (localStorage.getItem('hanbokExtensionReported') === today) return;
+            localStorage.setItem('hanbokExtensionReported', today);
+        } catch { /* private mode: report anyway */ }
+        fetch('/api/extension/installed', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ version }),
+        }).catch(() => {});
+    };
+    report();
+    window.addEventListener('hanbok-extension-ready', report, { once: true });
+    return () => window.removeEventListener('hanbok-extension-ready', report);
+};

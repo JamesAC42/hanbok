@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { track, getAttribution, identifyUser } from '@/lib/analytics';
 import { claimAnonSentences } from '@/lib/anonSentences';
+import { reportExtensionInstalled } from '@/lib/extension';
 
 const AuthContext = createContext();
 
@@ -18,6 +19,10 @@ export function AuthProvider({ children }) {
     // Sentences broken down before signing in join this account's history.
     useEffect(() => {
         if (user?.userId) claimAnonSentences();
+    }, [user?.userId]);
+
+    useEffect(() => {
+        if (user?.userId) return reportExtensionInstalled();
     }, [user?.userId]);
 
     useEffect(() => {
