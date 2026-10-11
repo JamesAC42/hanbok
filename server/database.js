@@ -117,6 +117,11 @@ async function connectToDatabase() {
     await safeCreateIndex('conversations', { dateCreated: -1 });
     await safeCreateIndex('extended_texts', { dateCreated: -1 });
     await safeCreateIndex('extended_text_jobs', { createdAt: -1 });
+    await safeCreateIndex('speak_sessions', { startedAt: -1 });
+    await safeCreateIndex('speak_sessions', { userId: 1, startedAt: -1 });
+    await safeCreateIndex('speak_sessions', { sessionId: 1 });
+    await safeCreateIndex('speak_events', { at: -1 });
+    await safeCreateIndex('speak_events', { sessionId: 1 });
 
     // Add index for word_audio collection
     await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });

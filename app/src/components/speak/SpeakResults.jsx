@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { addWord } from '@/api/words';
 import { track } from '@/lib/analytics';
+import { speakEvent } from '@/lib/speakEvents';
 import UpgradeSheet from '@/components/grammar/UpgradeSheet';
 import { characterOf } from '@/components/speak/characters';
 import TranscriptLines from '@/components/speak/TranscriptLines';
@@ -83,7 +84,7 @@ function Shimmer({ rows = 2 }) {
 
 // Grammar and phrase saving, and the notes, shared by the results screen and
 // the call history.
-export function RecapNotes({ recap, loading, failed, phrases = [], tips = [], language, nativeLanguage, delay = 0 }) {
+export function RecapNotes({ recap, loading, failed, phrases = [], tips = [], language, nativeLanguage, delay = 0, sessionId = null, from = 'result' }) {
     const [savedWords, setSavedWords] = useState({});
     const [savedGrammar, setSavedGrammar] = useState({});
     const [limitHit, setLimitHit] = useState(false);
@@ -94,6 +95,7 @@ export function RecapNotes({ recap, loading, failed, phrases = [], tips = [], la
         try {
             const r = await addWord({ originalWord: p.word, translatedWord: p.text, originalLanguage: language, translationLanguage: nativeLanguage });
             setSavedWords((s) => ({ ...s, [p.word]: r?.reachedLimit ? 'limit' : 'saved' }));
+            speakEvent('phrase_save', { from, ...(r?.reachedLimit ? { reason: 'limit' } : {}) }, sessionId);
         } catch {
             setSavedWords((s) => ({ ...s, [p.word]: 'error' }));
         }
@@ -113,10 +115,11 @@ export function RecapNotes({ recap, loading, failed, phrases = [], tips = [], la
                 }),
             });
             const d = await r.json();
-            if (d.reachedLimit) { setLimitHit(true); setSavedGrammar((s) => ({ ...s, [g.pattern]: null })); return; }
+            if (d.reachedLimit) { speakEvent('limit_hit', { where: 'grammar_save' }, sessionId); setLimitHit(true); setSavedGrammar((s) => ({ ...s, [g.pattern]: null })); return; }
             if (!d.success) throw new Error();
             setSavedGrammar((s) => ({ ...s, [g.pattern]: { state: 'saved', grammarId: d.grammarId } }));
             track('grammar_save', { language, already: !!d.alreadySaved, from: 'speak' });
+            speakEvent('grammar_save', { from }, sessionId);
         } catch {
             setSavedGrammar((s) => ({ ...s, [g.pattern]: { state: 'error' } }));
         }
@@ -240,7 +243,11 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
     const minutesLeft = allowance ? Math.floor(allowance.leftSeconds / 60) : null;
     const title = complete ? 'Scene complete!' : done ? 'Nice practice!' : 'Good start!';
 
-    useEffect(() => { window.scrollTo?.(0, 0); }, []);
+    useEffect(() => {
+        window.scrollTo?.(0, 0);
+        speakEvent('results_view', { scene: result.scenario.id }, result.sessionId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div className={styles.results} style={{ '--accent': ch.color, '--accent-soft': ch.soft }}>
@@ -275,14 +282,14 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
                 ))}
             </ul>
 
-            <RecapNotes recap={recap} loading={loading} failed={failed} phrases={result.phrases} tips={result.tips} language={language} nativeLanguage={nativeLanguage} delay={1.6} />
+            <RecapNotes recap={recap} loading={loading} failed={failed} phrases={result.phrases} tips={result.tips} language={language} nativeLanguage={nativeLanguage} delay={1.6} sessionId={result.sessionId} />
 
             <TranscriptLines sessionId={result.sessionId} transcript={result.transcript || []} character={ch} language={language} from="result" />
 
             {tier < 1 && minutesLeft !== null && (
                 <p className={styles.upsell}>
                     {minutesLeft > 0 ? `${minutesLeft} free ${minutesLeft === 1 ? 'minute' : 'minutes'} left this week. ` : 'That was your free time for this week. '}
-                    <Link href="/pricing" onClick={() => track('speak_upsell', { where: 'result' })}>Basic gives you 60 minutes a month for $4.</Link>
+                    <Link href="/pricing" onClick={() => speakEvent('upsell_click', { where: 'result' }, result.sessionId)}>Basic gives you 60 minutes a month for $4.</Link>
                 </p>
             )}
 
@@ -290,7 +297,7 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
                 <button type="button" className={styles.againBtn} onClick={onAgain}>Play this scene again</button>
                 <button type="button" className={styles.backBtn} onClick={onBack}>More scenes</button>
             </div>
-            <Link className={styles.historyCard} href="/speak/history" onClick={() => track('speak_history_open', { from: 'result' })}>
+            <Link className={styles.historyCard} href="/speak/history?from=result">
                 <span className={styles.historyIcon} aria-hidden="true">📜</span>
                 <span>
                     <b>All your conversations</b>

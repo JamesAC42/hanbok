@@ -127,7 +127,7 @@ export default function SpeakPost() {
                         A five-minute call is a great way to start. Tell us how it goes, we are improving Speak every week.
                     </p>
                     <div className={styles.actions}>
-                        <Link href="/speak" className={styles.primary}>Start speaking</Link>
+                        <Link href="/speak?from=updates" className={styles.primary}>Start speaking</Link>
                         <Link href="/feedback" className={styles.ghost}>Send feedback</Link>
                     </div>
                 </section>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { speakEvent } from '@/lib/speakEvents';
 import Dashboard from '@/components/Dashboard';
 import { characterOf } from '@/components/speak/characters';
 import { RecapNotes, useRecap, starsFor } from '@/components/speak/SpeakResults';
@@ -19,7 +20,12 @@ export default function SpeakHistoryItemPage() {
     useEffect(() => {
         fetch(`/api/speak/history/${encodeURIComponent(id)}`, { credentials: 'include' })
             .then((r) => r.json())
-            .then((d) => { if (d.success) setSession(d.session); else setError(d.error || 'Not found'); })
+            .then((d) => {
+                if (!d.success) { setError(d.error || 'Not found'); return; }
+                setSession(d.session);
+                const from = new URLSearchParams(window.location.search).get('from');
+                speakEvent('history_view', from ? { from } : {}, d.session.sessionId);
+            })
             .catch(() => setError('Could not load this conversation.'));
     }, [id]);
 
@@ -57,7 +63,7 @@ function Detail({ session }) {
                     <li key={g.text} className={g.done ? styles.goalDone : ''}><span className={styles.goalMark} aria-hidden="true">{g.done ? '✓' : ''}</span>{g.text}</li>
                 ))}
             </ul>
-            <RecapNotes recap={recap} loading={loading} failed={failed} phrases={session.phrases} tips={session.tips} language={session.language} nativeLanguage={session.nativeLanguage || 'en'} />
+            <RecapNotes recap={recap} loading={loading} failed={failed} phrases={session.phrases} tips={session.tips} language={session.language} nativeLanguage={session.nativeLanguage || 'en'} sessionId={session.sessionId} from="history" />
             <TranscriptLines sessionId={session.sessionId} transcript={session.transcript} notes={session.lineNotes} character={ch} language={session.language} from="history" />
         </div>
     );

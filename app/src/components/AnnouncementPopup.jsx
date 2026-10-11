@@ -1,11 +1,17 @@
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { speakEvent } from '@/lib/speakEvents';
 import styles from '@/styles/components/announcementpopup.module.scss';
 
 // One-time "Speak is here" note. PopupContext decides who sees it and when;
-// the full story is the /updates/speak post.
+// the full story is the /updates/speak post. Self-contained (just onClose), so
+// it can move into the shared interstitial budget as one more candidate.
 const AnnouncementPopup = ({ onClose }) => {
     const { t } = useLanguage();
+    useEffect(() => { speakEvent('announcement_view'); }, []);
+    const dismiss = () => { speakEvent('announcement_dismiss'); onClose(); };
+    const go = (where) => () => { speakEvent('announcement_click', { where }); onClose(); };
 
     const highlights = [
         { tone: styles.dotRead, text: t('announcement.speakRolePlay') },
@@ -14,7 +20,7 @@ const AnnouncementPopup = ({ onClose }) => {
     ];
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
+        <div className={styles.overlay} onClick={dismiss}>
             <div
                 className={`${styles.popup} ${styles.news}`}
                 onClick={e => e.stopPropagation()}
@@ -22,7 +28,7 @@ const AnnouncementPopup = ({ onClose }) => {
                 aria-modal="true"
                 aria-labelledby="announcement-title"
             >
-                <button className={styles.closeButton} onClick={onClose} aria-label={t('common.close')}>×</button>
+                <button className={styles.closeButton} onClick={dismiss} aria-label={t('common.close')}>×</button>
                 <div className={styles.speakArt} aria-hidden="true">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/images/speak/horang/happy.webp" alt="" />
@@ -40,15 +46,15 @@ const AnnouncementPopup = ({ onClose }) => {
                 </ul>
 
                 <div className={styles.buttons}>
-                    <Link href="/speak" className={styles.primaryButton} onClick={onClose}>
+                    <Link href="/speak?from=announcement" className={styles.primaryButton} onClick={go('try')}>
                         {t('announcement.speakCta')}
                     </Link>
-                    <button className={styles.cancelButton} onClick={onClose}>
+                    <button className={styles.cancelButton} onClick={dismiss}>
                         {t('announcement.speakDismiss')}
                     </button>
                 </div>
                 <p className={styles.feedbackNote}>
-                    <Link href="/updates/speak" onClick={onClose}>{t('announcement.speakReadMore')}</Link>
+                    <Link href="/updates/speak" onClick={go('read_more')}>{t('announcement.speakReadMore')}</Link>
                 </p>
             </div>
         </div>

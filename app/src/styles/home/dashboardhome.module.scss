@@ -904,6 +904,45 @@ a.statTile {
     }
 }
 
+.speakPromo {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 132px minmax(0, 1fr);
+    gap: .9rem;
+    align-items: center;
+    padding-bottom: 0;
+    background: linear-gradient(135deg, var(--bp-purple-soft), color-mix(in srgb, var(--bp-flame-soft) 60%, var(--bp-purple-soft)));
+    border-color: var(--bp-purple);
+
+    p {
+        margin: .3rem 0 .9rem;
+        font-size: .95rem;
+        font-weight: 600;
+        color: var(--bp-ink2);
+    }
+}
+.speakPromoArt {
+    align-self: end;
+    position: relative;
+    height: 170px;
+    img { position: absolute; bottom: 0; height: 100%; width: auto; }
+    img:first-child { left: -14px; z-index: 1; }
+    img:last-child { left: 52px; height: 92%; }
+}
+.speakPromoText { padding-bottom: 1.1rem; display: flex; flex-direction: column; align-items: flex-start; }
+.speakPromoTag {
+    padding: .15rem .55rem;
+    border-radius: 99px;
+    background: var(--bp-purple);
+    color: #fff;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: .35rem;
+}
+
 .speakFaces {
     display: flex;
     width: 88px;

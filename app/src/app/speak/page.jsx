@@ -7,7 +7,7 @@ import SpeakResults from '@/components/speak/SpeakResults';
 import { CHARACTERS, ASSISTS, defaultAssist } from '@/components/speak/characters';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { track } from '@/lib/analytics';
+import { speakEvent } from '@/lib/speakEvents';
 import styles from '@/styles/pages/speak.module.scss';
 
 const LEVELS = [
@@ -41,6 +41,10 @@ export default function SpeakPage() {
     }, [language]);
     useEffect(() => { load(); }, [load, isAuthenticated]);
     useEffect(() => {
+        const from = new URLSearchParams(window.location.search).get('from');
+        speakEvent('picker_view', from ? { from } : {});
+    }, []);
+    useEffect(() => {
         if (!isAuthenticated || active || result) return;
         fetch('/api/speak/stats', { credentials: 'include' })
             .then((r) => r.json()).then((d) => d.success && setPast(d)).catch(() => {});
@@ -69,7 +73,8 @@ export default function SpeakPage() {
     const plans = data?.plans || [];
 
     const start = (s) => {
-        if (allowance && allowance.leftSeconds < 30) { setLimit(allowance); track('speak_limit', { where: 'picker' }); return; }
+        if (allowance && allowance.leftSeconds < 30) { setLimit(allowance); speakEvent('limit_hit', { where: 'picker', scene: s.id }); return; }
+        speakEvent('scene_click', { scene: s.id, assist });
         setResult(null);
         setLimit(null);
         setActive(s);
@@ -88,7 +93,7 @@ export default function SpeakPage() {
     const onLimit = useCallback((a) => {
         setActive(null);
         setLimit(a || allowance || {});
-        track('speak_limit', { where: 'start' });
+        speakEvent('limit_hit', { where: 'start' });
     }, [allowance]);
 
 
@@ -122,8 +127,8 @@ export default function SpeakPage() {
                     nativeLanguage={nativeLanguage}
                     tier={tier}
                     allowance={allowance}
-                    onAgain={() => start(result.scenario)}
-                    onBack={() => { setResult(null); window.scrollTo?.(0, 0); }}
+                    onAgain={() => { speakEvent('play_again', { scene: result.scenario.id }, result.sessionId); start(result.scenario); }}
+                    onBack={() => { speakEvent('more_scenes', {}, result.sessionId); setResult(null); window.scrollTo?.(0, 0); }}
                 />
             </Dashboard>
         );
@@ -147,7 +152,7 @@ export default function SpeakPage() {
                             help in {nativeName} when you get stuck, and work in the words you&apos;ve saved.
                         </p>
                         {isAuthenticated && past?.calls > 0 && (
-                            <Link className={styles.historyLink} href="/speak/history" onClick={() => track('speak_history_open', { from: 'hero' })}>
+                            <Link className={styles.historyLink} href="/speak/history?from=hero">
                                 📜 Your past conversations ({past.calls})
                             </Link>
                         )}
@@ -162,7 +167,7 @@ export default function SpeakPage() {
                                 ? `Your minutes come back as older calls roll off${limit.resetsAt ? `, starting ${shortDate(limit.resetsAt)}` : ''}. Thanks for talking so much!`
                                 : `More come back${limit.resetsAt ? ` on ${shortDate(limit.resetsAt)}` : ' soon'}. Or upgrade and keep talking today.`}
                         </p>
-                        {limit.tier !== 2 && <Link className={styles.primaryBtn} href="/pricing" onClick={() => track('speak_upsell', { where: 'limit' })}>See plans</Link>}
+                        {limit.tier !== 2 && <Link className={styles.primaryBtn} href="/pricing" onClick={() => speakEvent('upsell_click', { where: 'limit' })}>See plans</Link>}
                     </section>
                 )}
 
@@ -184,7 +189,7 @@ export default function SpeakPage() {
                         <div className={styles.meterBlock}>
                             <div className={styles.meterHead}><strong>Try it free</strong><span>No card needed</span></div>
                             <p className={styles.meterNote}>Make a free account and get {plans[0]?.minutes || 5} speaking minutes every week.</p>
-                            <Link className={styles.primaryBtn} href="/login?next=/speak" onClick={() => track('speak_upsell', { where: 'signup' })}>Sign up free to talk</Link>
+                            <Link className={styles.primaryBtn} href="/login?next=/speak" onClick={() => speakEvent('signup_click', { where: 'plan_card' })}>Sign up free to talk</Link>
                         </div>
                     )}
                     {plans.length > 0 && tier < 2 && (
@@ -199,7 +204,7 @@ export default function SpeakPage() {
                         </ul>
                     )}
                     {isAuthenticated && tier < 2 && (
-                        <Link className={styles.upgradeLink} href="/pricing" onClick={() => track('speak_upsell', { where: 'plan_card' })}>
+                        <Link className={styles.upgradeLink} href="/pricing" onClick={() => speakEvent('upsell_click', { where: 'plan_card' })}>
                             {tier === 0 ? 'Get more minutes' : 'Double it with Plus'}
                         </Link>
                     )}
@@ -223,9 +228,9 @@ export default function SpeakPage() {
                         </span>
                         <span className={styles.pastActions}>
                             {past.last && (
-                                <Link className={styles.pastBtn} href={`/speak/history/${past.last.sessionId}`} onClick={() => track('speak_history_open', { from: 'picker_last' })}>Open last call</Link>
+                                <Link className={styles.pastBtn} href={`/speak/history/${past.last.sessionId}?from=picker`}>Open last call</Link>
                             )}
-                            <Link className={styles.pastAll} href="/speak/history" onClick={() => track('speak_history_open', { from: 'picker_all' })}>
+                            <Link className={styles.pastAll} href="/speak/history?from=picker">
                                 All {past.calls} {past.calls === 1 ? 'conversation' : 'conversations'}
                             </Link>
                         </span>
@@ -278,7 +283,7 @@ export default function SpeakPage() {
                                                 <SceneCardBody s={s} />
                                             </button>
                                         ) : (
-                                            <Link className={styles.sceneCard} href="/login?next=/speak" onClick={() => track('speak_upsell', { where: 'scene', scene: s.id })}>
+                                            <Link className={styles.sceneCard} href="/login?next=/speak" onClick={() => speakEvent('signup_click', { where: 'scene', scene: s.id })}>
                                                 <SceneCardBody s={s} />
                                             </Link>
                                         )}

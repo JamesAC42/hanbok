@@ -20,6 +20,7 @@ const TRANSLATE_MODEL = process.env.SPEAK_TRANSLATE_MODEL || 'gpt-4.1';
 const hangupTimers = new Map();
 const NON_LATIN = new Set(['ko', 'ja', 'zh', 'zh-TW', 'ru', 'hi']);
 
+const { logSpeakEvent } = require('../lib/speakEvents');
 const str = (v, max) => (typeof v === 'string' ? v.trim().slice(0, max) : '');
 const langOr = (code, fallback) => (SupportedLanguages[code] ? code : fallback);
 
@@ -153,6 +154,7 @@ const startSession = async (req, res) => {
 
         const allowance = await allowanceFor(db, user);
         if (allowance.leftSeconds < MIN_START_SECONDS) {
+            logSpeakEvent(db, { type: 'start_failed', userId: user.userId, tier: user.tier || 0, meta: { reason: 'limit', scene: scenario.id } });
             return res.status(403).json({ success: false, reachedLimit: true, allowance: { ...allowance, model: undefined }, error: 'You have used your speaking minutes for now' });
         }
         const maxSeconds = Math.floor(Math.min(allowance.leftSeconds, MAX_SESSION_SECONDS));
@@ -175,8 +177,12 @@ const startSession = async (req, res) => {
             ? await openLive({ sdp, character, instructions: buildInstructions({ ...promptArgs, engine }), opener: '(The call just connected. Start the scene now with your opening line.)' })
             : await realtime();
         // If GPT-Live won't open the call, fall back to the Realtime API.
-        if (!opened && engine === 'live') { engine = 'realtime'; opened = await realtime(); }
-        if (!opened) return res.status(502).json({ success: false, error: `${character.name} could not pick up. Please try again.` });
+        const fellBack = !opened && engine === 'live';
+        if (fellBack) { engine = 'realtime'; opened = await realtime(); }
+        if (!opened) {
+            logSpeakEvent(db, { type: 'start_failed', userId: user.userId, tier: user.tier || 0, meta: { reason: 'pickup', scene: scenario.id } });
+            return res.status(502).json({ success: false, error: `${character.name} could not pick up. Please try again.` });
+        }
         const { answer, callId, model } = opened;
 
         const sessionId = crypto.randomBytes(12).toString('hex');
@@ -184,6 +190,7 @@ const startSession = async (req, res) => {
             sessionId, userId: user.userId, engine, callId, scenarioId: scenario.id, character: character.id, level, assist, language, nativeLanguage,
             model, tier: user.tier || 0, maxSeconds, startedAt: new Date(),
             savedWordsUsed: words.length, savedGrammarUsed: grammar.length,
+            ...(fellBack ? { fellBack: true } : {}),
         });
         // Hard stop when the time runs out, even if the tab is gone.
         hangupTimers.set(sessionId, setTimeout(async () => {
@@ -483,6 +490,26 @@ const lines = async (req, res) => {
     }
 };
 
+// POST /api/speak/event { type, sessionId?, meta?, visitorId? }: one thing
+// someone did around Speak, for the admin Speak tab. Signed-out visitors count
+// too, so it is open, with a small per-person rate limit.
+const eventCounts = new Map();
+const event = async (req, res) => {
+    const user = req.session?.user;
+    const who = user?.userId || req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'anon';
+    const minute = Math.floor(Date.now() / 60000);
+    const key = `${who}:${minute}`;
+    const n = (eventCounts.get(key) || 0) + 1;
+    eventCounts.set(key, n);
+    if (eventCounts.size > 5000) for (const k of eventCounts.keys()) if (!k.endsWith(`:${minute}`)) eventCounts.delete(k);
+    if (n > 60) return res.status(429).json({ success: false });
+    const ok = await logSpeakEvent(getDb(), {
+        type: req.body?.type, sessionId: req.body?.sessionId, meta: req.body?.meta, visitorId: req.body?.visitorId,
+        userId: user?.userId, tier: user ? user.tier || 0 : undefined,
+    });
+    res.status(ok ? 200 : 400).json({ success: ok });
+};
+
 // GET /api/speak/stats: speaking numbers for the Home page.
 const stats = async (req, res) => {
     try {
@@ -522,4 +549,4 @@ const stats = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats, lines };
+module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats, lines, event };

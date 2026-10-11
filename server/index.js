@@ -114,6 +114,7 @@ const { getUsersAdmin } = require('./controllers/admin/getUsersAdmin');
 const { updateUser } = require('./controllers/admin/updateUser');
 const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
+const adminSpeak = require('./controllers/admin/speakStats');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
 const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./controllers/admin/snapshot');
@@ -378,6 +379,7 @@ app.post('/api/speak/translate', isAuthenticated, speak.translate);
 app.post('/api/speak/coach', isAuthenticated, speak.coach);
 app.post('/api/speak/session/:id/recap', isAuthenticated, speak.recap);
 app.post('/api/speak/session/:id/lines', isAuthenticated, speak.lines);
+app.post('/api/speak/event', speak.event);
 app.get('/api/speak/stats', isAuthenticated, speak.stats);
 app.get('/api/speak/history', isAuthenticated, speak.history);
 app.get('/api/speak/history/:id', isAuthenticated, speak.historyItem);
@@ -502,6 +504,8 @@ app.get('/api/admin/stats/feed', isAuthenticated, requireAdmin, adminStats.getFe
 app.get('/api/admin/stats/revenue', isAuthenticated, requireAdmin, getRevenue);
 app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
+app.get('/api/admin/stats/speak', isAuthenticated, requireAdmin, adminSpeak.getSpeakStats);
+app.get('/api/admin/speak/calls/:id', isAuthenticated, requireAdmin, adminSpeak.getSpeakCall);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);

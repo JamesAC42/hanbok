@@ -1144,3 +1144,39 @@ div.toolCard:active { transform: none; box-shadow: 0 4px 0 var(--bp-line); }
   font-size: 1.5rem;
   margin: 1.5rem 0 0;
 }
+
+// ---------- Speak ----------
+
+.callGoals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.callScript {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  li {
+    padding: .45rem .7rem;
+    border-radius: 12px;
+    background: var(--bp-soft);
+    border: 2px solid var(--bp-line);
+    font-size: .92rem;
+    line-height: 1.45;
+    max-width: 90%;
+    align-self: flex-start;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  b { text-transform: capitalize; margin-right: .3rem; color: var(--bp-ink2); font-size: .78rem; }
+  .callYou { align-self: flex-end; background: var(--bp-purple-soft); border-color: var(--bp-purple-line); }
+}

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { SpeakCall } from '@/lib/speakClient';
 import { track } from '@/lib/analytics';
+import { speakEvent } from '@/lib/speakEvents';
 import { characterOf, spriteSrc, ASSISTS } from '@/components/speak/characters';
 import styles from '@/styles/pages/speak.module.scss';
 
@@ -214,9 +215,11 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 setEngine(data.engine);
                 setStatus('live');
                 track('speak_start', { scenario: scenario.id, level, assist, character: ch.id });
+                speakEvent('call_connected', { scene: scenario.id, assist }, call.sessionId);
             })
             .catch((e) => {
                 if (e.reachedLimit) { onLimit?.(e.allowance); return; }
+                speakEvent(e.name === 'NotAllowedError' ? 'mic_denied' : 'connect_failed', { scene: scenario.id, reason: String(e.name || e.message || '').slice(0, 40) });
                 setStatus('error');
                 setError(e.name === 'NotAllowedError'
                     ? 'Hanbok needs your microphone for this. Allow it in your browser (the icon next to the address bar) and try again.'
@@ -279,16 +282,19 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             immersion: 'rephrase what you said more simply, or offer two choices',
         }[assist];
         callRef.current?.nudge(`(The learner tapped Help. Briefly ${how}.)`);
-        track('speak_help', { assist });
+        speakEvent('help_tap', { assist }, callRef.current?.sessionId);
     };
-    const slower = () => callRef.current?.nudge('(The learner tapped "Again, slower". Repeat your last line slowly and clearly, then wait.)');
+    const slower = () => {
+        callRef.current?.nudge('(The learner tapped "Again, slower". Repeat your last line slowly and clearly, then wait.)');
+        speakEvent('slower_tap', {}, callRef.current?.sessionId);
+    };
     const changeAssist = (a) => {
         setAssist(a);
         setSheet(null);
         state.current.assist = a;
         if (a !== assist && state.current.notes[a]) callRef.current?.nudge(state.current.notes[a], { speak: callRef.current?.engine !== 'live' });
         try { localStorage.setItem('speakAssist', a); } catch { /* private mode */ }
-        track('speak_assist', { assist: a });
+        if (a !== assist) speakEvent('assist_change', { assist: a }, callRef.current?.sessionId);
     };
 
     // A caption made for an earlier, shorter version of the line waits for the new one.
@@ -307,7 +313,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
 
             <div className={styles.sceneTop}>
                 <div className={styles.topRow}>
-                    <button type="button" className={styles.iconBtn} onClick={() => (status === 'live' ? finish('user') : onDone(null))} aria-label="End the conversation">{Icon.close}</button>
+                    <button type="button" className={styles.iconBtn} onClick={() => { if (status === 'live') { speakEvent('hang_up', {}, callRef.current?.sessionId); finish('user'); } else onDone(null); }} aria-label="End the conversation">{Icon.close}</button>
                     <div className={styles.titleCard}>
                         <div className={styles.sceneTitle}>{scenario.title}</div>
                         <div className={styles.progress}><div style={{ width: `${(goals.filter(Boolean).length / goals.length) * 100}%` }} /></div>
@@ -393,8 +399,8 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                             <div className={styles.lineTools}>
                                 <button type="button" onClick={slower}>{Icon.slow}Slower</button>
                                 <button type="button" aria-pressed={showRoman} className={showRoman ? styles.toolOn : ''} onClick={() => setShowRoman((v) => !v)}>Aa</button>
-                                <button type="button" aria-pressed={showNative} className={showNative ? styles.toolOn : ''} onClick={() => setShowNative((v) => !v)}>{nativeName}</button>
-                                <button type="button" onClick={() => setSheet('script')}>Script</button>
+                                <button type="button" aria-pressed={showNative} className={showNative ? styles.toolOn : ''} onClick={() => { setShowNative((v) => !v); speakEvent('english_toggle', { on: !showNative }, callRef.current?.sessionId); }}>{nativeName}</button>
+                                <button type="button" onClick={() => { setSheet('script'); speakEvent('script_open', {}, callRef.current?.sessionId); }}>Script</button>
                             </div>
                         </div>
                         <div className={styles.controls}>

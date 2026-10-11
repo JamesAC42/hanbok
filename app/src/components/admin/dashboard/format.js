@@ -97,6 +97,7 @@ export const FEATURES = {
     analyze: { label: 'Sentence analysis', unit: 'sentences' },
     paragraphs: { label: 'Paragraph analysis', unit: 'paragraphs' },
     tutor: { label: 'Tutor chats', unit: 'chats' },
+    speak: { label: 'Speak calls', unit: 'calls' },
     savedSentences: { label: 'Saved sentences', unit: 'saved' },
     words: { label: 'Saved words', unit: 'saved' },
     flashcards: { label: 'Flashcards made', unit: 'cards' },

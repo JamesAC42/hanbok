@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { track } from '@/lib/analytics';
+import { speakEvent } from '@/lib/speakEvents';
 import UpgradeSheet from '@/components/grammar/UpgradeSheet';
 import styles from '@/styles/pages/speakResults.module.scss';
 
@@ -48,8 +48,8 @@ export default function TranscriptLines({ sessionId, transcript: initial = [], n
     const out = free && left <= 0;
 
     const breakDown = (text) => {
-        track('speak_breakdown', { from, free: !!free, left });
-        if (out) { setSheet(true); return; }
+        if (out) { speakEvent('breakdown_locked', { from }, sessionId); setSheet(true); return; }
+        speakEvent('breakdown', { from, ...(free ? { left } : {}) }, sessionId);
         localStorage.setItem('pendingAnalysis', text);
         localStorage.setItem('pendingAnalysisRun', '1');
         router.push('/analyze');
@@ -59,7 +59,7 @@ export default function TranscriptLines({ sessionId, transcript: initial = [], n
         <section className={styles.saveBlock}>
             <div className={styles.blockRow}>
                 <h2 className={styles.blockTitle}>Your conversation</h2>
-                <button type="button" className={styles.linkBtn} onClick={() => { setShowAll((v) => !v); setOpen({}); }}>
+                <button type="button" className={styles.linkBtn} onClick={() => { speakEvent('translations_toggle', { from, on: !showAll }, sessionId); setShowAll((v) => !v); setOpen({}); }}>
                     {showAll ? 'Hide translations' : 'Show translations'}
                 </button>
             </div>
@@ -77,7 +77,7 @@ export default function TranscriptLines({ sessionId, transcript: initial = [], n
                                 : <>Tap <b>Break it down</b> on any line to see every word, the grammar and the audio. With Basic it&apos;s unlimited, and you get 60 speaking minutes a month.</>}
                         </p>
                     </div>
-                    <Link href="/pricing" className={styles.pitchBtn} onClick={() => track('speak_upsell', { where: `transcript_${from}`, out })}>
+                    <Link href="/pricing" className={styles.pitchBtn} onClick={() => speakEvent('upsell_click', { where: `transcript_${from}`, on: !!out }, sessionId)}>
                         {out ? 'Unlock unlimited' : 'Go unlimited'}
                     </Link>
                 </div>
@@ -97,7 +97,7 @@ export default function TranscriptLines({ sessionId, transcript: initial = [], n
                             {shown && !n && !failed && <span className={styles.scriptLoading}>Translating…</span>}
                             <span className={styles.scriptTools}>
                                 {!showAll && n?.translation && (
-                                    <button type="button" onClick={() => setOpen((o) => ({ ...o, [i]: !o[i] }))}>{open[i] ? 'Hide' : 'Translate'}</button>
+                                    <button type="button" onClick={() => { if (!open[i]) speakEvent('line_translate', { from }, sessionId); setOpen((o) => ({ ...o, [i]: !o[i] })); }}>{open[i] ? 'Hide' : 'Translate'}</button>
                                 )}
                                 {target && (
                                     <button type="button" className={styles.breakBtn} onClick={() => breakDown(target)}>

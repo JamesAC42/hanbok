@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { speakEvent } from '@/lib/speakEvents';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
@@ -410,9 +411,32 @@ const SpeakCard = ({ stats }) => {
                 <h2 id="speak-heading" className={styles.cardTitle}>Speak</h2>
                 <p>{line}</p>
                 <div className={styles.speakActions}>
-                    <Link href="/speak" className={styles.speakButton}>{stats?.calls ? 'Start a conversation' : 'Try your first call'}</Link>
-                    {stats?.calls > 0 && <Link href="/speak/history" className={styles.speakLink}>Past calls</Link>}
+                    <Link href="/speak?from=home" className={styles.speakButton} onClick={() => speakEvent('promo_click', { where: 'home_card' })}>{stats?.calls ? 'Start a conversation' : 'Try your first call'}</Link>
+                    {stats?.calls > 0 && <Link href="/speak/history?from=home" className={styles.speakLink}>Your past conversations</Link>}
                 </div>
+            </div>
+        </section>
+    );
+};
+
+// For people who haven't tried Speak yet: a bigger card at the top of the column.
+const SpeakPromo = ({ stats }) => {
+    const minutes = stats?.allowance?.minutes;
+    const per = stats?.allowance?.windowDays === 7 ? 'every week' : 'every month';
+    useEffect(() => { speakEvent('promo_view', { where: 'home_promo' }); }, []);
+    return (
+        <section className={`${styles.card} ${styles.speakPromo}`} aria-labelledby="speak-promo-heading">
+            <div className={styles.speakPromoArt} aria-hidden="true">
+                <img src="/images/speak/horang/happy.webp" alt="" />
+                <img src="/images/speak/sora/happy.webp" alt="" />
+            </div>
+            <div className={styles.speakPromoText}>
+                <span className={styles.speakPromoTag}>New</span>
+                <h2 id="speak-promo-heading" className={styles.cardTitle}>Talk out loud with Horang and Sora</h2>
+                <p>Order coffee, take a taxi, make a friend in Seoul. They play the scene with you and help in English when you get stuck.{minutes ? ` You get ${minutes} free minutes ${per}.` : ''}</p>
+                <Link href="/speak?from=home" className={styles.speakButton} onClick={() => speakEvent('promo_click', { where: 'home_promo' })}>
+                    Try your first call
+                </Link>
             </div>
         </section>
     );
@@ -569,10 +593,11 @@ const HomeView = () => {
                     <RecentWork items={recent} />
                 </div>
                 <div className={styles.column}>
+                    {speak && !speak.calls && <SpeakPromo stats={speak} />}
                     {progress && <WordsCard totals={progress.totals} />}
                     {progress && <StreakCard progress={progress} />}
                     <GrammarCard summary={grammar} />
-                    <SpeakCard stats={speak} />
+                    {speak?.calls > 0 && <SpeakCard stats={speak} />}
                     <TutorCard />
                     <ExtensionCard />
                 </div>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Dashboard from '@/components/Dashboard';
 import { characterOf } from '@/components/speak/characters';
 import { useAuth } from '@/contexts/AuthContext';
+import { speakEvent } from '@/lib/speakEvents';
 import styles from '@/styles/pages/speakResults.module.scss';
 
 const when = (d) => new Date(d).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
@@ -27,6 +28,10 @@ export default function SpeakHistoryPage() {
             .catch(() => setError('Could not load your conversations. Try again in a moment.'));
     };
     useEffect(() => { if (isAuthenticated) load(); }, [isAuthenticated]);
+    useEffect(() => {
+        const from = new URLSearchParams(window.location.search).get('from');
+        speakEvent('history_list_view', from ? { from } : {});
+    }, []);
 
     return (
         <Dashboard>

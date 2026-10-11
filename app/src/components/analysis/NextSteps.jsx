@@ -9,6 +9,7 @@ import { loginHref } from '@/lib/anonSentences';
 import Tiger from '@/components/Tiger';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { markStage } from '@/lib/todayLoop';
+import { speakEvent } from '@/lib/speakEvents';
 import styles from '@/styles/components/sentenceanalyzer/nextsteps.module.scss';
 
 const plural = (n, word, many = `${word}s`) => `${n} ${n === 1 ? word : many}`;
@@ -155,6 +156,13 @@ const NextSteps = ({ sentenceId, words, unsavedWords, savedLoading, addingAll, s
                     </span>
                 </Link>
             )}
+            <Link href="/speak?from=analysis" className={`${styles.alt} ${styles.altSpeak}`} onClick={() => speakEvent('promo_click', { where: 'analysis' })}>
+                <span className={styles.altFace} aria-hidden="true"><img src="/images/speak/sora/happy.webp" alt="" /></span>
+                <span>
+                    <b>Say it out loud with Sora and Horang</b>
+                    <small>Practice real conversations by voice, like ordering coffee. Free to try.</small>
+                </span>
+            </Link>
             {showParagraphLink && (
                 <Link href="/extended-text" className={styles.alt}>
                     <span className={styles.altIcon}><Fa6SolidParagraph /></span>
