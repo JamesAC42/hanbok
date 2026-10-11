@@ -660,3 +660,49 @@
     font-weight: 700;
     text-align: center;
 }
+
+// Yearly deal (YEARLY_DEAL_COUPON_ID): banner above the plans, and the list
+// price struck through above the deal price.
+.dealBanner {
+    max-width: 40rem;
+    margin: -1.5rem auto 2rem;
+    padding: 0.75rem 1.1rem;
+    border: 2px solid var(--bp-rev-line);
+    border-radius: 16px;
+    background: var(--bp-rev-soft);
+    color: color-mix(in srgb, var(--bp-rev) 72%, var(--foreground));
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.dealSwitch {
+    display: block;
+    margin: 0.5rem auto 0;
+    border: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: 800;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.dealWas {
+    margin: 0 0 0.2rem;
+    text-align: center;
+    color: var(--bp-ink2);
+    font-weight: 700;
+
+    span {
+        margin-left: 0.35rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 99px;
+        background: var(--bp-rev);
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+}

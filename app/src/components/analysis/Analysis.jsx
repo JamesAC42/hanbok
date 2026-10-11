@@ -15,7 +15,6 @@ import LyricalDevices from '@/components/analysis/LyricalDevices';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdmin } from '@/contexts/AdminContext';
-import { usePopup } from '@/contexts/PopupContext';
 import styles from '@/styles/components/sentenceanalyzer/analysis.module.scss';
 import getFontClass from '@/lib/fontClass';
 import QuotaDisplay from '@/components/QuotaDisplay';
@@ -43,7 +42,6 @@ const Analysis = ({
     const { t, language } = useLanguage();
     const { user } = useAuth();
     const { isAdmin } = useAdmin();
-    const { showPromoPopup } = usePopup();
     const [prevWord, setPrevWord] = useState(null);
     const [wordInfo, setWordInfo] = useState(false);
     const [shouldAnimate, setShouldAnimate] = useState(false);
@@ -103,32 +101,6 @@ const Analysis = ({
             setShowPronunciation(JSON.parse(savedPref));
         }
     }, []);
-
-    // Check if we should show the promo popup
-    useEffect(() => {
-        const shouldShowPromo = () => {
-            const attemptCount = localStorage.getItem('promoAttemptCount');
-            if (attemptCount !== null) {
-                const countInt = parseInt(attemptCount);
-                localStorage.setItem('promoAttemptCount', countInt + 1);
-                if (countInt < 4) {
-                    return;
-                }
-            } else {
-                localStorage.setItem('promoAttemptCount', 1);
-                return;
-            }
-
-            // Only show for non-logged-in users or free tier users
-            if (!user || user.tier === 0) {
-                setTimeout(() => {
-                    showPromoPopup();
-                }, 1500);
-            }
-        };
-
-        shouldShowPromo();
-    }, [user, showPromoPopup]);
 
     useEffect(() => {
         if (!wordInfo) {
