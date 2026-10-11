@@ -312,6 +312,11 @@
     font-size: 1rem;
 }
 
+.planFootnote {
+    display: flex;
+    flex-direction: column;
+}
+
 .trialNote {
     margin: 0.7rem 0 0;
     text-align: center;

@@ -335,16 +335,19 @@ const Pricing = () => {
                             >
                                 {loading ? 'Processing...' : trialOffer ? `Try Plus free for ${trialOffer.days} days` : t('pricing.planButtons.getPlus')}
                             </button>
-                            {trialOffer && (
-                                <p className={pricingStyles.trialNote}>
-                                    {studentOffer?.eligible
-                                        ? `Free for ${trialOffer.days} days, then your student price. Cancel before then and you pay nothing.`
-                                        : isYearly && dealOffer
-                                        ? `Free for ${trialOffer.days} days, then ${formatPrice(dealYearlyPrice('plus', dealOffer))} for ${dealDurationLabel(dealOffer)}. Cancel before then and you pay nothing.`
-                                        : `Free for ${trialOffer.days} days, then ${t('pricing.pricing.currency')}${isYearly ? PRICING.plus.yearly : PRICING.plus.monthly}${isYearly ? ' a year' : ' a month'}. Cancel before then and you pay nothing.`}
-                                </p>
-                            )}
-                            <p className={pricingStyles.guaranteeText}>{t('pricing.badges.guarantee')}</p>
+                            {/* One wrapper so the card keeps its 4 subgrid rows; a 5th child would overlap the 4th. */}
+                            <div className={pricingStyles.planFootnote}>
+                                {trialOffer && (
+                                    <p className={pricingStyles.trialNote}>
+                                        {studentOffer?.eligible
+                                            ? `Free for ${trialOffer.days} days, then your student price. Cancel before then and you pay nothing.`
+                                            : isYearly && dealOffer
+                                            ? `Free for ${trialOffer.days} days, then ${formatPrice(dealYearlyPrice('plus', dealOffer))} for ${dealDurationLabel(dealOffer)}. Cancel before then and you pay nothing.`
+                                            : `Free for ${trialOffer.days} days, then ${t('pricing.pricing.currency')}${isYearly ? PRICING.plus.yearly : PRICING.plus.monthly}${isYearly ? ' a year' : ' a month'}. Cancel before then and you pay nothing.`}
+                                    </p>
+                                )}
+                                <p className={pricingStyles.guaranteeText}>{t('pricing.badges.guarantee')}</p>
+                            </div>
                         </div>
 
                         {/* Basic Plan */}
