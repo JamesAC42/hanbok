@@ -1,14 +1,24 @@
 const { getDb } = require('../database');
 const { isSchoolEmail, isStudentEligible, studentCouponId, studentDiscountPercent } = require('../utils/studentDiscount');
 const { plusTrialDays, isTrialEligible } = require('../utils/plusTrial');
+const { getYearlyDeal, isDealEligible } = require('../utils/yearlyDeal');
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const retrieveCoupon = (id) => stripe.coupons.retrieve(id);
 
 // What the pricing page should say about the student price for this visitor.
 const getPricingOffer = async (req, res) => {
     const enabled = !!studentCouponId();
     const offer = {
         student: { enabled, percent: studentDiscountPercent(), eligible: false, schoolEmail: false },
-        trial: { days: plusTrialDays(), eligible: isTrialEligible(null) }
+        trial: { days: plusTrialDays(), eligible: isTrialEligible(null) },
+        deal: null
     };
+    const deal = await getYearlyDeal(retrieveCoupon);
+    if (deal) {
+        const { couponId, ...shown } = deal;
+        offer.deal = { ...shown, eligible: true };
+    }
 
     const userId = req.session?.user?.userId;
     if (userId) {
@@ -17,6 +27,7 @@ const getPricingOffer = async (req, res) => {
                 projection: { email: 1, verified: 1, googleId: 1, tier: 1, hasUsedFreeTrial: 1, autoTrial: 1, 'subscription.stripeSubscriptionId': 1 }
             });
             offer.trial.eligible = isTrialEligible(user);
+            if (offer.deal) offer.deal.eligible = isDealEligible(user);
             if (enabled) {
                 offer.student.schoolEmail = isSchoolEmail(user?.email);
                 offer.student.eligible = isStudentEligible(user);

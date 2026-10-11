@@ -1,58 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import SubscriptionPromptPopup from '@/components/SubscriptionPromptPopup';
+import { useEffect } from 'react';
 import { captureAttribution } from '@/lib/analytics';
+import Interstitials from '@/components/interstitials/Interstitials';
 
 function ClientLayoutWrapper({ children }) {
-  const { user, loading } = useAuth();
-  const [showSubscriptionPrompt, setShowSubscriptionPrompt] = useState(false);
-
   useEffect(() => {
     captureAttribution();
   }, []);
 
-  useEffect(() => {
-    // Only run on the client
-    if (typeof window !== 'undefined' && !loading) {
-      // Show prompt only for logged-out users or free-tier users, and never
-      // over a reading page (search visitors land there; see PopupContext).
-      const onReadingPage = /^\/(learn|lyrics)(\/|$)/.test(window.location.pathname);
-      if ((!user || user.tier === 0) && !onReadingPage) {
-        const promptKey = 'lastSubscriptionPromptTimestamp';
-        const twentyFourHours = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-        const lastPromptTime = localStorage.getItem(promptKey);
-        const now = Date.now();
-
-        if (!lastPromptTime) {
-          // If no timestamp exists, set it and maybe show immediately? Or wait 24h?
-          // Let's set it and wait 24h from first visit.
-          localStorage.setItem(promptKey, now.toString());
-        } else {
-          // If timestamp exists, check if 24 hours have passed
-          if (now - parseInt(lastPromptTime, 10) > twentyFourHours) {
-            setShowSubscriptionPrompt(true);
-            // Update timestamp after showing
-            localStorage.setItem(promptKey, now.toString());
-          }
-        }
-      }
-    }
-  }, [user, loading]); // Rerun effect when user or loading state changes
-
-  const handleCloseSubscriptionPrompt = () => {
-    setShowSubscriptionPrompt(false);
-    // Optionally, update the timestamp immediately on close to reset the 24h timer
-    // localStorage.setItem('lastSubscriptionPromptTimestamp', Date.now().toString());
-  };
-
   return (
     <>
       {children} {/* Render the main layout content passed from layout.jsx */}
-      {showSubscriptionPrompt && <SubscriptionPromptPopup onClose={handleCloseSubscriptionPrompt} />}
+      {/* Plans/deal popup and announcements, on a shared budget (lib/interstitials.js) */}
+      <Interstitials />
     </>
   );
 }
 
-export default ClientLayoutWrapper; 
+export default ClientLayoutWrapper;
