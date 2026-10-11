@@ -5,6 +5,7 @@ import { addWord } from '@/api/words';
 import { track } from '@/lib/analytics';
 import UpgradeSheet from '@/components/grammar/UpgradeSheet';
 import { characterOf } from '@/components/speak/characters';
+import TranscriptLines from '@/components/speak/TranscriptLines';
 import styles from '@/styles/pages/speakResults.module.scss';
 
 const fmtTime = (s) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.max(0, Math.round(s)) % 60).padStart(2, '0')}`;
@@ -276,6 +277,8 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
 
             <RecapNotes recap={recap} loading={loading} failed={failed} phrases={result.phrases} tips={result.tips} language={language} nativeLanguage={nativeLanguage} delay={1.6} />
 
+            <TranscriptLines sessionId={result.sessionId} transcript={result.transcript || []} character={ch} language={language} from="result" />
+
             {tier < 1 && minutesLeft !== null && (
                 <p className={styles.upsell}>
                     {minutesLeft > 0 ? `${minutesLeft} free ${minutesLeft === 1 ? 'minute' : 'minutes'} left this week. ` : 'That was your free time for this week. '}
@@ -286,8 +289,15 @@ export default function SpeakResults({ result, language, nativeLanguage, tier, a
             <div className={styles.actions}>
                 <button type="button" className={styles.againBtn} onClick={onAgain}>Play this scene again</button>
                 <button type="button" className={styles.backBtn} onClick={onBack}>More scenes</button>
-                <Link className={styles.historyLink} href="/speak/history">See all your conversations</Link>
             </div>
+            <Link className={styles.historyCard} href="/speak/history" onClick={() => track('speak_history_open', { from: 'result' })}>
+                <span className={styles.historyIcon} aria-hidden="true">📜</span>
+                <span>
+                    <b>All your conversations</b>
+                    <span>Every transcript and its notes are saved. Go back and break down any line.</span>
+                </span>
+                <span className={styles.historyArrow} aria-hidden="true">→</span>
+            </Link>
         </div>
     );
 }

@@ -6,8 +6,8 @@
 
 // GPT-Live sends transcript fragments without turn boundaries, so a pause in
 // the fragments ends a line.
-const LINE_GAP_MS = 900;
-const YOU_GAP_MS = 1200;
+const LINE_GAP_MS = 1100;
+const YOU_GAP_MS = 1400;
 
 const waitForIce = (pc) => new Promise((resolve) => {
     if (pc.iceGatheringState === 'complete') return resolve();
@@ -155,9 +155,16 @@ export class SpeakCall {
                 break;
             case 'session.output_transcript.delta': {
                 if (!L.lineId) {
-                    L.n += 1;
-                    L.lineId = `l${L.n}`;
-                    L.line = '';
+                    if (L.lastWho === 'char' && L.prevId && Date.now() - L.prevAt < 8000) {
+                        // Still the same turn (the learner hasn't spoken): keep
+                        // adding to that line instead of starting a new bubble.
+                        L.lineId = L.prevId;
+                        L.line = `${L.prevLine} `;
+                    } else {
+                        L.n += 1;
+                        L.lineId = `l${L.n}`;
+                        L.line = '';
+                    }
                     this.emit('onSpeaking', true);
                 }
                 L.line += ev.delta || '';
@@ -167,13 +174,22 @@ export class SpeakCall {
                 break;
             }
             case 'session.input_transcript.delta': {
-                if (!L.youTimer) { L.you = ''; this.emit('onListening', true); }
+                if (!L.youTimer) {
+                    // Same turn as the learner's last fragment: keep adding to it.
+                    if (L.lastWho === 'you' && L.youId && Date.now() - L.youAt < 6000) L.you = `${L.you} `;
+                    else { L.you = ''; L.youId = `u${L.n}-${Date.now()}`; }
+                    this.emit('onListening', true);
+                }
                 L.you += ev.delta || '';
                 clearTimeout(L.youTimer);
                 L.youTimer = setTimeout(() => {
                     L.youTimer = null;
                     this.emit('onListening', false);
-                    if (L.you.trim()) this.emit('onYouText', { id: `u${L.n}`, text: L.you.trim() });
+                    if (L.you.trim()) {
+                        L.lastWho = 'you';
+                        L.youAt = Date.now();
+                        this.emit('onYouText', { id: L.youId, text: L.you.trim() });
+                    }
                 }, YOU_GAP_MS);
                 break;
             }
@@ -195,14 +211,32 @@ export class SpeakCall {
         }
     }
 
+    // True while the character's audio is still playing (the transcript runs ahead of it).
+    outLoud() {
+        const an = this.outAnalyser;
+        if (!an) return false;
+        const buf = this.outBuf || (this.outBuf = new Uint8Array(an.fftSize));
+        an.getByteTimeDomainData(buf);
+        for (let i = 0; i < buf.length; i += 1) if (Math.abs(buf[i] - 128) > 4) return true;
+        return false;
+    }
+
     endLiveLine() {
         const L = this.live;
         clearTimeout(L.lineTimer);
         if (!L.lineId) return;
+        // A pause in the transcript isn't the end of the line while they're still talking.
+        if (this.outLoud() && !this.ended) { L.lineTimer = setTimeout(() => this.endLiveLine(), 300); return; }
         const id = L.lineId;
         L.lineId = null;
         this.emit('onSpeaking', false);
-        if (L.line.trim()) this.emit('onHorangText', { id, text: L.line.trim(), done: true });
+        if (L.line.trim()) {
+            L.lastWho = 'char';
+            L.prevId = id;
+            L.prevLine = L.line.trim();
+            L.prevAt = Date.now();
+            this.emit('onHorangText', { id, text: L.prevLine, done: true });
+        }
     }
 
     onEvent(ev) {

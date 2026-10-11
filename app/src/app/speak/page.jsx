@@ -33,12 +33,18 @@ export default function SpeakPage() {
     const [active, setActive] = useState(null);
     const [result, setResult] = useState(null);
     const [limit, setLimit] = useState(null);
+    const [past, setPast] = useState(null);
 
     const load = useCallback(() => {
         fetch(`/api/speak?language=${encodeURIComponent(language || 'ko')}`, { credentials: 'include' })
             .then((r) => r.json()).then(setData).catch(() => setData({ scenarios: [], plans: [] }));
     }, [language]);
     useEffect(() => { load(); }, [load, isAuthenticated]);
+    useEffect(() => {
+        if (!isAuthenticated || active || result) return;
+        fetch('/api/speak/stats', { credentials: 'include' })
+            .then((r) => r.json()).then((d) => d.success && setPast(d)).catch(() => {});
+    }, [isAuthenticated, active, result]);
 
     useEffect(() => {
         try {
@@ -140,7 +146,11 @@ export default function SpeakPage() {
                             Pick a scene and just talk out loud. They play the barista, the taxi driver or your new friend in Seoul,
                             help in {nativeName} when you get stuck, and work in the words you&apos;ve saved.
                         </p>
-                        {isAuthenticated && <Link className={styles.historyLink} href="/speak/history">Your past conversations →</Link>}
+                        {isAuthenticated && past?.calls > 0 && (
+                            <Link className={styles.historyLink} href="/speak/history" onClick={() => track('speak_history_open', { from: 'hero' })}>
+                                📜 Your past conversations ({past.calls})
+                            </Link>
+                        )}
                     </div>
                 </header>
 
@@ -194,6 +204,33 @@ export default function SpeakPage() {
                         </Link>
                     )}
                 </section>
+
+                {isAuthenticated && past?.calls > 0 && (
+                    <section className={styles.pastCard} aria-label="Your past conversations">
+                        <span className={styles.pastFaces} aria-hidden="true">
+                            {Object.values(CHARACTERS).map((ch) => (
+                                <span key={ch.id} className={styles.castFace} style={{ '--face': ch.face, '--accent': ch.color, '--accent-soft': ch.soft, '--size': '52px' }}>
+                                    <img src={`/images/speak/${ch.id}/happy.webp`} alt="" />
+                                </span>
+                            ))}
+                        </span>
+                        <span className={styles.pastText}>
+                            <b>Pick up where you left off</b>
+                            <span>
+                                {past.last?.title ? `Your last call: ${past.last.title}. ` : ''}
+                                Read the transcript with translations, save the grammar and break down any line you said.
+                            </span>
+                        </span>
+                        <span className={styles.pastActions}>
+                            {past.last && (
+                                <Link className={styles.pastBtn} href={`/speak/history/${past.last.sessionId}`} onClick={() => track('speak_history_open', { from: 'picker_last' })}>Open last call</Link>
+                            )}
+                            <Link className={styles.pastAll} href="/speak/history" onClick={() => track('speak_history_open', { from: 'picker_all' })}>
+                                All {past.calls} {past.calls === 1 ? 'conversation' : 'conversations'}
+                            </Link>
+                        </span>
+                    </section>
+                )}
 
                 <div className={styles.settings}>
                     <div className={styles.setting}>

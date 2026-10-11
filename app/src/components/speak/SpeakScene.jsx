@@ -71,7 +71,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 body: JSON.stringify({ sessionId: callRef.current.sessionId, text }),
             });
             const d = await r.json();
-            if (d.success) setCaptions((c) => ({ ...c, [key]: { native: d.translation, roman: d.romanization } }));
+            if (d.success) setCaptions((c) => ({ ...c, [key]: { native: d.translation, roman: d.romanization, for: text } }));
             return d;
         } catch { return null; }
     }, []);
@@ -98,6 +98,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             goals: scenario.goals.map((g, i) => ({ text: g, done: !!s.goals[i] })),
             phrases: s.phrases, tips: s.tips, summary: s.summary, seconds,
             lines: s.transcript.filter((m) => m.who === 'you').length,
+            transcript: s.transcript.map(({ who, text }) => ({ who, text })),
             allowance: result?.allowance || null,
         });
     }, [onDone, scenario, ch.id]);
@@ -119,9 +120,14 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 setMood(ch.celebrate);
             }
             if (name === 'suggest_reply' && args.phrase) {
-                const key = `s${Date.now()}`;
-                setSuggestion({ key, phrase: args.phrase, meaning: args.meaning || '' });
-                caption(key, args.phrase);
+                // Keep the card still unless the phrase itself changed.
+                const bare = (t) => String(t || '').replace(/[\s.,!?~'"…]/g, '');
+                setSuggestion((cur) => {
+                    if (cur && bare(cur.phrase) === bare(args.phrase)) return cur;
+                    const key = `s${Date.now()}`;
+                    if (!args.romanization) caption(key, args.phrase);
+                    return { key, phrase: args.phrase, meaning: args.meaning || '', roman: args.romanization || '' };
+                });
             }
             if (name === 'pronunciation_tip' && args.word) {
                 const card = { kind: args.good ? 'good' : 'tip', word: args.word, text: args.tip, key: `${Date.now()}t` };
@@ -144,7 +150,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
         };
         // GPT-Live can't call tools: after each line, a text model reads the
         // transcript and returns the same screen updates, plus the caption.
-        const coachLine = async (id) => {
+        const coachLine = async (id, text) => {
             s.coachSeq = (s.coachSeq || 0) + 1;
             const seq = s.coachSeq;
             try {
@@ -154,7 +160,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 });
                 const d = await r.json();
                 if (!d.success || s.finished) return;
-                setCaptions((c) => ({ ...c, [id]: { native: d.translation, roman: d.romanization } }));
+                setCaptions((c) => ({ ...c, [id]: { native: d.translation, roman: d.romanization, for: text } }));
                 if (seq !== s.coachSeq) return; // a newer line has its own screen updates
                 if (d.mood) onTool('set_mood', { mood: d.mood });
                 (d.goals_done || []).filter((g) => !s.goals[g - 1]).forEach((g) => onTool('complete_goal', { goal: g }));
@@ -170,16 +176,25 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
             onHorangText: ({ id, text, done }) => {
                 setLine({ id, text });
                 if (done) {
-                    s.transcript = [...s.transcript, { who: 'horang', text }];
+                    // A line that continues the last one replaces it.
+                    const last = s.transcript[s.transcript.length - 1];
+                    s.transcript = last?.id === id ? [...s.transcript.slice(0, -1), { id, who: 'horang', text }] : [...s.transcript, { id, who: 'horang', text }];
                     setTranscript(s.transcript);
-                    if (call.engine === 'live') coachLine(id); else caption(id, text);
+                    if (call.engine !== 'live') caption(id, text);
+                    else {
+                        // A line can arrive in pieces; coach it once it has settled so the
+                        // "Try saying" card changes once, not after every piece.
+                        clearTimeout(s.coachTimer);
+                        s.coachTimer = setTimeout(() => coachLine(id, text), 700);
+                    }
                 }
             },
-            onYouText: ({ text }) => {
+            onYouText: ({ id, text }) => {
                 if (!text.trim()) return;
                 setYouLine(text);
                 setSuggestion(null);
-                s.transcript = [...s.transcript, { who: 'you', text }];
+                const last = s.transcript[s.transcript.length - 1];
+                s.transcript = id && last?.id === id ? [...s.transcript.slice(0, -1), { id, who: 'you', text }] : [...s.transcript, { id, who: 'you', text }];
                 setTranscript(s.transcript);
             },
             onTool,
@@ -276,7 +291,8 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
         track('speak_assist', { assist: a });
     };
 
-    const cap = line.id ? captions[line.id] : null;
+    // A caption made for an earlier, shorter version of the line waits for the new one.
+    const cap = line.id && captions[line.id]?.for === line.text ? captions[line.id] : null;
     const sugCap = suggestion ? captions[suggestion.key] : null;
     const assistLabel = ASSISTS.find((a) => a.id === assist)?.label;
     const sceneStyle = { backgroundImage: `url(/images/speak/bg/${scenario.background}.webp)`, '--accent': ch.color, '--accent-soft': ch.soft };
@@ -364,7 +380,7 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                             <div className={styles.suggest}>
                                 <span className={styles.suggestLabel}>Try saying</span>
                                 <span lang={language} className={styles.suggestPhrase}>{suggestion.phrase}</span>
-                                {sugCap?.roman && <span className={styles.suggestRoman}>{sugCap.roman}</span>}
+                                {(suggestion.roman || sugCap?.roman) && <span className={styles.suggestRoman}>{suggestion.roman || sugCap.roman}</span>}
                                 {suggestion.meaning && <span className={styles.suggestMeaning}>{suggestion.meaning}</span>}
                             </div>
                         )}

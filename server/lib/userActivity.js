@@ -17,11 +17,11 @@ const mergeCounts = (a, b) => {
     return [...byDay].map(([_id, count]) => ({ _id, count }));
 };
 
-// Per-day analyses, saved words and reviews for the last `days` days in the
+// Per-day analyses, saved words, reviews and speaking minutes for the last `days` days in the
 // learner's time zone, oldest first. This is what streaks are counted from.
 const activityHistory = async (db, userId, timeZone, days, now = new Date()) => {
     const since = new Date(now.getTime() - days * DAY_MS);
-    const [analyzed, wordsSaved, reviews, grammarPractice] = await Promise.all([
+    const [analyzed, wordsSaved, reviews, grammarPractice, speakSeconds] = await Promise.all([
         perDay(db.collection('sentences'), { userId, dateCreated: { $gte: since } }, 'dateCreated', timeZone),
         perDay(db.collection('words'), { userId, dateSaved: { $gte: since } }, 'dateSaved', timeZone),
         perDay(
@@ -34,9 +34,12 @@ const activityHistory = async (db, userId, timeZone, days, now = new Date()) => 
         ),
         // Grammar questions answered on the path (Review answers are already in study_progress)
         perDay(db.collection('grammar_practice_log'), { userId, kind: 'question', context: 'path', date: { $gte: since } }, 'date', timeZone),
+        // Minutes on Speak calls
+        perDay(db.collection('speak_sessions'), { userId, startedAt: { $gte: since }, endedAt: { $exists: true } }, 'startedAt', timeZone, { $ifNull: ['$billedSeconds', 0] }),
     ]);
+    const speakMinutes = speakSeconds.map((row) => ({ _id: row._id, count: Math.round(row.count / 60) }));
     const keys = lastDayKeys(days, timeZone, now);
-    return buildSeries(keys, { analyzed, wordsSaved, reviews: mergeCounts(reviews, grammarPractice) });
+    return buildSeries(keys, { analyzed, wordsSaved, reviews: mergeCounts(reviews, grammarPractice), speakMinutes });
 };
 
 module.exports = { activityHistory };

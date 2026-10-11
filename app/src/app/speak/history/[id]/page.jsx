@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Dashboard from '@/components/Dashboard';
 import { characterOf } from '@/components/speak/characters';
 import { RecapNotes, useRecap, starsFor } from '@/components/speak/SpeakResults';
+import TranscriptLines from '@/components/speak/TranscriptLines';
 import styles from '@/styles/pages/speakResults.module.scss';
 
 const when = (d) => new Date(d).toLocaleString(undefined, { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' });
@@ -57,17 +58,7 @@ function Detail({ session }) {
                 ))}
             </ul>
             <RecapNotes recap={recap} loading={loading} failed={failed} phrases={session.phrases} tips={session.tips} language={session.language} nativeLanguage={session.nativeLanguage || 'en'} />
-            <section className={styles.saveBlock}>
-                <h2 className={styles.blockTitle}>Transcript</h2>
-                <ul className={styles.script}>
-                    {session.transcript.map((m, i) => (
-                        <li key={i} className={m.who === 'you' ? styles.scriptYou : styles.scriptChar}>
-                            <span className={styles.scriptWho}>{m.who === 'you' ? 'You' : ch.name}</span>
-                            <span lang={session.language} className={styles.scriptText}>{m.text}</span>
-                        </li>
-                    ))}
-                </ul>
-            </section>
+            <TranscriptLines sessionId={session.sessionId} transcript={session.transcript} notes={session.lineNotes} character={ch} language={session.language} from="history" />
         </div>
     );
 }

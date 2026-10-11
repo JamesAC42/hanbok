@@ -189,4 +189,35 @@
 .scriptChar { align-self: flex-start; background: var(--accent-soft); border: 2px solid color-mix(in srgb, var(--accent) 35%, transparent); }
 .scriptYou { align-self: flex-end; background: var(--bp-read-soft); border: 2px solid var(--bp-read-line); }
 .scriptWho { @include bp-label; font-size: .68rem; }
-.scriptText { font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; }
+.scriptText { font-family: var(--font-kr-sans), var(--font-display); font-weight: 600; word-break: keep-all; overflow-wrap: anywhere; }
+
+// Transcript with translations and Break it down
+.scriptRoman { font-size: .85rem; font-style: italic; color: var(--bp-ink2); }
+.scriptMeaning { font-size: .92rem; font-weight: 600; color: var(--bp-ink2); }
+.scriptLoading { font-size: .82rem; color: var(--bp-ink2); opacity: .7; }
+.scriptTools { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .3rem;
+    button { background: #fff; border: 2px solid var(--bp-line); border-radius: 999px; padding: .2rem .65rem; font: 800 .78rem var(--font-display); color: var(--bp-ink2); cursor: pointer; }
+    button:hover { border-color: var(--bp-line-strong); }
+}
+.script li.scriptYou .scriptTools { justify-content: flex-end; }
+.scriptTools .breakBtn { border-color: var(--bp-purple-line); color: var(--bp-purple-d); }
+.scriptTools .breakBtn:hover { background: var(--bp-purple-soft); border-color: var(--bp-purple); }
+
+.breakdownPitch { display: flex; gap: .8rem; align-items: center; padding: .85rem 1rem; border-radius: var(--bp-radius, 16px);
+    background: var(--bp-purple-soft); border: 2px solid var(--bp-purple-line); flex-wrap: wrap;
+    > div { flex: 1; min-width: 14rem; }
+}
+.breakdownOut { background: var(--bp-flame-soft); border-color: var(--bp-flame-line); }
+.pitchIcon { font-size: 1.6rem; }
+.pitchTitle { margin: 0; font-family: var(--font-lilita); font-size: 1.1rem; }
+.pitchText { margin: .15rem 0 0; font-size: .92rem; font-weight: 600; color: var(--bp-ink2); }
+.pitchBtn { @include bp-press(var(--bp-purple), var(--bp-purple-d)); padding: .55rem 1rem; font-size: .9rem; text-decoration: none; white-space: nowrap; }
+
+.historyCard { @include bp-press-card(var(--bp-purple-line)); display: flex; align-items: center; gap: .9rem; padding: .9rem 1rem; text-decoration: none; color: inherit; background: var(--bp-purple-soft);
+    > span:nth-child(2) { display: flex; flex-direction: column; gap: .1rem; flex: 1;
+        b { font-family: var(--font-lilita); font-weight: 400; font-size: 1.15rem; color: var(--bp-purple-d); }
+        span { font-size: .9rem; font-weight: 600; color: var(--bp-ink2); }
+    }
+}
+.historyIcon { font-size: 1.7rem; }
+.historyArrow { font-size: 1.4rem; font-weight: 800; color: var(--bp-purple-d); }

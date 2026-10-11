@@ -18,7 +18,7 @@ const schemaFor = (moods) => ({
         romanization: { type: 'string' },
         goals_done: { type: 'array', items: { type: 'integer' } },
         mood: { type: 'string', enum: moods },
-        suggestion: nullable(pair('phrase', 'meaning')),
+        suggestion: nullable({ type: 'object', additionalProperties: false, properties: { phrase: { type: 'string' }, meaning: { type: 'string' }, romanization: { type: 'string' } }, required: ['phrase', 'meaning', 'romanization'] }),
         new_phrase: nullable(pair('phrase', 'meaning')),
         tip: nullable({ type: 'object', additionalProperties: false, properties: { word: { type: 'string' }, tip: { type: 'string' }, good: { type: 'boolean' } }, required: ['word', 'tip', 'good'] }),
         end: nullable({ type: 'object', additionalProperties: false, properties: { summary: { type: 'string' } }, required: ['summary'] }),
@@ -43,7 +43,8 @@ const coachPrompt = ({ scenario, assist, language, nativeLanguage }) => {
         `- mood: the face that matches how ${ch.name} sounds in the last line.`,
         assist === 'immersion'
             ? '- suggestion: null, unless the last line tells the learner exactly what to say; then that phrase and its meaning.'
-            : `- suggestion: the exact ${target} phrase the learner could say next and its ${native} meaning. Use the phrase ${ch.name} just told them to say if there is one${assist === 'guided' ? '; otherwise suggest a short, natural reply that moves toward the next unfinished goal' : '; otherwise null'}. Use null when the scene is ending.`,
+            : `- suggestion: the exact ${target} phrase the learner could say next and its ${native} meaning. Use the phrase ${ch.name} just told them to say if there is one${assist === 'guided' ? '; otherwise suggest a short, natural reply that moves toward the next unfinished goal' : '; otherwise null'}. Use null when the scene is ending. Keep the same suggestion as long as it still fits; don't reword it.`,
+        romanize ? `- suggestion.romanization: the suggested phrase romanized for a beginner (same system as above).` : '- suggestion.romanization: always "".',
         `- new_phrase: a useful ${target} word or phrase the last line taught or explained, with its ${native} meaning, or null.`,
         `- tip: if the last line gives pronunciation feedback, the ${target} word and a one-sentence tip in ${native} (good: true when it is praise), else null.`,
         `- end: when every goal is done and ${ch.name} has said goodbye, {"summary": one encouraging sentence in ${native} about how the learner did}; else null.`,

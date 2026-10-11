@@ -38,7 +38,7 @@ const lastDayKeys = (count, timeZone, now = new Date()) => {
 // Merge per-day counts ({ metric: [{ _id: 'YYYY-MM-DD', count }] }) into one
 // series covering every day in `keys`.
 const buildSeries = (keys, countsByMetric) => {
-    const series = keys.map(date => ({ date, analyzed: 0, wordsSaved: 0, reviews: 0 }));
+    const series = keys.map(date => ({ date, analyzed: 0, wordsSaved: 0, reviews: 0, speakMinutes: 0 }));
     const index = new Map(series.map((day, i) => [day.date, i]));
     for (const [metric, rows] of Object.entries(countsByMetric)) {
         for (const row of rows || []) {
@@ -49,7 +49,7 @@ const buildSeries = (keys, countsByMetric) => {
     return series;
 };
 
-const isActive = (day) => day.analyzed > 0 || day.wordsSaved > 0 || day.reviews > 0;
+const isActive = (day) => day.analyzed > 0 || day.wordsSaved > 0 || day.reviews > 0 || day.speakMinutes > 0;
 
 // Current streak counts back from today; if today has no activity yet the
 // streak from yesterday still stands.

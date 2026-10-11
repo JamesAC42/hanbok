@@ -38,6 +38,14 @@ export function PopupProvider({ children }) {
             // from search land there, and Google penalizes interstitials over the
             // content. The update post itself doesn't need a popup pointing at it.
             const path = pathname || window.location.pathname;
+            // Someone who has opened Speak already knows about it.
+            if (/^\/speak(\/|$)/.test(path)) {
+                try {
+                    const seen = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
+                    if (!seen[CURRENT_ANNOUNCEMENT.id]) localStorage.setItem('seenAnnouncements', JSON.stringify({ ...seen, [CURRENT_ANNOUNCEMENT.id]: true }));
+                } catch {}
+                return;
+            }
             // Speak itself doesn't need a popup advertising it either.
             if (path === '/' || /^\/(learn|lyrics|login|pricing|about|updates|speak)(\/|$)/.test(path)) return;
 

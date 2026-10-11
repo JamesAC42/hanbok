@@ -373,7 +373,7 @@ const history = async (req, res) => {
                 endedAt: { $exists: true },
                 'transcript.0': { $exists: true },
                 ...(before && !Number.isNaN(before.getTime()) ? { startedAt: { $lt: before } } : {}),
-            }, { projection: { transcript: 0, recap: 0, usage: 0 } })
+            }, { projection: { transcript: 0, recap: 0, usage: 0, lineNotes: 0 } })
             .sort({ startedAt: -1 })
             .limit(30)
             .toArray();
@@ -400,11 +400,86 @@ const historyItem = async (req, res) => {
                 phrases: s.phrases || [],
                 tips: s.tips || [],
                 recap: s.recap || null,
+                lineNotes: s.lineNotes?.length === (s.transcript || []).length ? s.lineNotes : null,
             },
         });
     } catch (e) {
         console.error('speak history item', e.message);
         res.status(500).json({ success: false, error: 'Could not load that call' });
+    }
+};
+
+// Every line of a finished call with its translation, romanization and the
+// target-language part alone (what "Break it down" sends to the analyzer).
+const lineNotesFor = async (db, s) => {
+    const transcript = s.transcript || [];
+    if (s.lineNotes?.length === transcript.length) return s.lineNotes;
+    if (!transcript.length) return [];
+    const target = nameOf(s.language);
+    const native = nameOf(s.nativeLanguage);
+    const romanize = NON_LATIN.has(s.language);
+    const ch = characterFor(s.character);
+    const schema = {
+        type: 'object',
+        additionalProperties: false,
+        properties: {
+            lines: {
+                type: 'array',
+                items: {
+                    type: 'object',
+                    additionalProperties: false,
+                    properties: { n: { type: 'integer' }, translation: { type: 'string' }, romanization: { type: 'string' }, target: { type: 'string' } },
+                    required: ['n', 'translation', 'romanization', 'target'],
+                },
+            },
+        },
+        required: ['lines'],
+    };
+    const r = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${process.env.OPENAI_API_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: TRANSLATE_MODEL,
+            temperature: 0,
+            max_tokens: 6000,
+            response_format: { type: 'json_schema', json_schema: { name: 'lines', strict: true, schema } },
+            messages: [
+                {
+                    role: 'system',
+                    content: [
+                        `Below is a numbered ${target} speaking lesson between ${ch.name} and a learner whose native language is ${native}. The learner's lines are speech-to-text. For EVERY line, in order, reply with:`,
+                        `- n: the line number.`,
+                        `- translation: the whole line in natural ${native} (translate the ${target} parts, keep ${native} parts as they are).`,
+                        romanize ? `- romanization: only the ${target} parts, romanized for a beginner, or "".` : '- romanization: always "".',
+                        `- target: only the ${target} sentence(s) from the line, copied as said with spacing fixed, or "" if the line has no ${target}.`,
+                    ].join('\n'),
+                },
+                { role: 'user', content: transcript.map((m, i) => `${i + 1}. ${m.who === 'you' ? 'Learner' : ch.name}: ${m.text}`).join('\n') },
+            ],
+        }),
+    });
+    const out = await r.json();
+    if (!r.ok) throw new Error(out?.error?.message || `HTTP ${r.status}`);
+    const parsed = JSON.parse(out.choices?.[0]?.message?.content || '{}');
+    const byN = new Map((parsed.lines || []).map((l) => [l.n, l]));
+    const notes = transcript.map((_, i) => {
+        const l = byN.get(i + 1) || {};
+        return { translation: str(l.translation, 800), romanization: str(l.romanization, 800), target: str(l.target, 500) };
+    });
+    await db.collection('speak_sessions').updateOne({ sessionId: s.sessionId }, { $set: { lineNotes: notes } });
+    return notes;
+};
+
+// POST /api/speak/session/:id/lines
+const lines = async (req, res) => {
+    try {
+        const db = getDb();
+        const s = await db.collection('speak_sessions').findOne({ sessionId: String(req.params.id), userId: req.session.user.userId });
+        if (!s) return res.status(404).json({ success: false, error: 'Not found' });
+        res.json({ success: true, transcript: s.transcript || [], lines: await lineNotesFor(db, s) });
+    } catch (e) {
+        console.error('speak lines', e.message);
+        res.status(500).json({ success: false, error: 'Could not translate the conversation' });
     }
 };
 
@@ -447,4 +522,4 @@ const stats = async (req, res) => {
     }
 };
 
-module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats };
+module.exports = { overview, startSession, endSession, translate, coach, recap, history, historyItem, stats, lines };
