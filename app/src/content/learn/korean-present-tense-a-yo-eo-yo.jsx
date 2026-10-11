@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Present tense (아요/어요)',
     description: 'One simple rule decides between 아요 and 어요 for every Korean verb. Learn it, plus why 하다 becomes 해요, the vowel shortcuts behind 가요 and 봐요, and 이에요/예요.',
     level: 'Beginner',
+    topic: 'verbs',
     minutes: 8,
     published: '2026-10-07',
     color: 'keep',

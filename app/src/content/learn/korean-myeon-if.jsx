@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Saying "if" in Korean (-(으)면)',
     description: 'Learn -(으)면, the Korean ending for "if" and "when": how to attach it to any verb, use it with nouns, and say "I hope" with 았/었으면 좋겠어요.',
     level: 'Beginner',
+    topic: 'linking',
     minutes: 7,
     published: '2026-10-08',
     color: 'keep',

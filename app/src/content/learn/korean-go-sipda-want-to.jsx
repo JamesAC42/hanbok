@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: '"Want to" in Korean (-고 싶다)',
     description: 'Learn -고 싶다, the Korean pattern for "want to." See how to say 고 싶어요, the past and negative forms, talk about what others want, and why 보고 싶어요 means "I miss you."',
     level: 'Beginner',
+    topic: 'expressing',
     minutes: 7,
     published: '2026-10-07',
     color: 'keep',

@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: '은/는 vs 이/가',
     description: 'The clear guide to Korean topic and subject particles. 은/는 says what you are talking about, 이/가 points at who or what. Six rules, tappable examples and a quick quiz.',
     level: 'Beginner',
+    topic: 'basics',
     minutes: 8,
     published: '2026-10-06',
     color: 'und',

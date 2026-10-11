@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Saying "but" (-지만, 하지만)',
     description: 'Learn how to say "but" in Korean. Add 지만 to any verb or adjective, start a sentence with 하지만 or 그렇지만, and soften requests with 죄송하지만 and 실례지만.',
     level: 'Beginner',
+    topic: 'linking',
     minutes: 7,
     published: '2026-10-08',
     color: 'keep',

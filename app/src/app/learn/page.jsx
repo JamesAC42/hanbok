@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import LearnShell from '@/components/learn/LearnShell';
 import Tiger from '@/components/Tiger';
-import { articles } from '@/content/learn';
+import LearnHub from '@/components/learn/LearnHub';
+import { articles, LEVELS, TOPICS } from '@/content/learn';
 import { JsonLd, SITE_URL } from '@/lib/seo';
 import styles from '@/styles/pages/learn.module.scss';
 
@@ -13,6 +14,19 @@ export const metadata = {
 
 export default function LearnIndex() {
     const list = articles;
+    // Plain data for the client hub: no Body components cross the boundary.
+    const items = list.map(({ meta }) => ({
+        slug: meta.slug,
+        language: meta.language,
+        title: meta.title,
+        shortTitle: meta.shortTitle,
+        description: meta.description,
+        level: meta.level,
+        topic: meta.topic,
+        minutes: meta.minutes,
+        color: meta.color,
+        forms: (meta.grammar || []).map((g) => `${g.form} ${g.label}`).join(' '),
+    }));
     return (
         <LearnShell>
             <JsonLd data={{
@@ -28,7 +42,7 @@ export default function LearnIndex() {
                     <p className={styles.label}>Hanbok Learn</p>
                     <h1 className={styles.title}>Korean you can tap</h1>
                     <p className={styles.dek}>
-                        Short guides with Horangi. Every example is a real Hanbok breakdown: tap a word, save it, then check yourself.
+                        Short guides with Horangi, sorted by topic and level. Every example is a real Hanbok breakdown: tap a word, save it, then check yourself. Tell us where you are and we&rsquo;ll pick what to read next.
                     </p>
                     <p className={styles.dek}>
                         Stuck on a sentence of your own? Paste it into the{' '}
@@ -37,17 +51,7 @@ export default function LearnIndex() {
                     </p>
                 </div>
             </header>
-            <ul className={styles.cards}>
-                {list.map(({ meta }) => (
-                    <li key={meta.slug}>
-                        <Link href={`/learn/${meta.slug}`} className={`${styles.card} ${styles[`tone_${meta.color}`] || ''}`}>
-                            <span className={styles.cardTitle} lang={meta.language}>{meta.shortTitle}</span>
-                            <span className={styles.cardDek}>{meta.description}</span>
-                            <span className={styles.cardMeta}>{meta.level} · {meta.minutes} min</span>
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+            <LearnHub items={items} topics={TOPICS} levels={LEVELS} />
         </LearnShell>
     );
 }

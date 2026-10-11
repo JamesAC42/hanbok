@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import LearnShell from '@/components/learn/LearnShell';
 import Quiz from '@/components/learn/Quiz';
-import { articles, getArticle } from '@/content/learn';
+import MarkRead from '@/components/learn/MarkRead';
+import { articles, getArticle, TOPICS } from '@/content/learn';
 import { JsonLd, SITE_URL, SITE_NAME } from '@/lib/seo';
 import styles from '@/styles/pages/learn.module.scss';
 
@@ -35,6 +36,7 @@ export default async function LearnArticle({ params }) {
     const url = `${SITE_URL}/learn/${meta.slug}`;
     const at = articles.findIndex((a) => a.meta.slug === meta.slug);
     const more = [1, 2, 3].map((i) => articles[(at + i) % articles.length]).filter((a) => a.meta.slug !== meta.slug);
+    const topic = TOPICS.find((t) => t.key === meta.topic);
 
     const structuredData = [
         {
@@ -75,6 +77,7 @@ export default async function LearnArticle({ params }) {
                 <p className={styles.dek}>{meta.description}</p>
                 <p className={styles.articleMeta}>
                     <span className={styles.pill}>{meta.level}</span>
+                    {topic && <Link href={`/learn#${topic.key}`} className={styles.topicLink}>{topic.title}</Link>}
                     <span>{meta.minutes} min read</span>
                     <span>Tap any Korean word to see it explained</span>
                 </p>
@@ -82,6 +85,7 @@ export default async function LearnArticle({ params }) {
                 <div className={styles.prose}>
                     <Body />
                 </div>
+                <MarkRead slug={meta.slug} />
 
                 {quiz?.length > 0 && (
                     <>

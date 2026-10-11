@@ -649,3 +649,196 @@
     line-height: 1.5;
     color: var(--bp-ink2);
 }
+
+// ===== Hub: picks, filters, topic groups =====
+
+.dek a {
+    color: var(--bp-read);
+    font-weight: 800;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+}
+
+.forYou {
+    @include bp-card;
+    max-width: 60rem;
+    margin: 0 auto 2.5rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    background: var(--bp-read-soft);
+    border-color: var(--bp-read-line);
+
+    @media screen and (max-width: 725px) {
+        padding: 1.1rem;
+    }
+
+    .cards { margin-top: 1.25rem; margin-bottom: 0; }
+    .dek { margin: 1rem 0 0; }
+}
+
+.forYouHead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.forYouTitle {
+    @include learn-heading;
+    font-size: 1.7rem;
+    margin: 0;
+}
+
+.progressText {
+    @include bp-label;
+}
+
+.startPoints {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+
+    @media screen and (max-width: 725px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.startPoint {
+    @include bp-press-card(var(--bp-line), 3px);
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    padding: .8rem 1rem;
+    text-align: left;
+    font-family: var(--font-display);
+    color: var(--foreground);
+
+    strong { font-size: 1.05rem; font-weight: 800; }
+    span { font-size: .88rem; font-weight: 600; color: var(--bp-ink2); line-height: 1.35; }
+}
+
+.startPointOn {
+    border-color: var(--bp-read);
+    box-shadow: 0 3px 0 var(--bp-read-d);
+    background: var(--bp-card);
+    strong { color: var(--bp-read); }
+}
+
+.browse {
+    max-width: 60rem;
+    margin: 0 auto;
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    margin-bottom: 2rem;
+}
+
+.search {
+    @include bp-input;
+    width: 100%;
+    max-width: 28rem;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.chipRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.filterChip {
+    font-family: var(--font-display);
+    font-size: .88rem;
+    font-weight: 800;
+    color: var(--bp-ink2);
+    background: var(--bp-card);
+    border: 2px solid var(--bp-line);
+    border-radius: 999px;
+    padding: .4rem .9rem;
+    cursor: pointer;
+    &:hover { background: var(--bp-soft); }
+    &:focus-visible { outline: 3px solid var(--bp-read-line); outline-offset: 2px; }
+}
+
+.filterChipOn {
+    color: #fff;
+    background: var(--bp-read);
+    border-color: var(--bp-read);
+    &:hover { background: var(--bp-read); }
+}
+
+.topicGroup {
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 5rem;
+    .cards { margin-bottom: 0; }
+}
+
+.topicTitle {
+    @include learn-heading;
+    font-size: 1.6rem;
+    margin: 0 0 .25rem;
+}
+
+.topicBlurb {
+    margin: 0 0 1rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}
+
+.cardTop {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .4rem;
+}
+
+.cardStep {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    padding: 0 .3rem;
+    box-sizing: border-box;
+    border-radius: 999px;
+    font-size: .8rem;
+    font-weight: 800;
+    color: var(--bp-ink2);
+    background: var(--bp-soft);
+    border: 2px solid var(--bp-line);
+}
+
+.levelTag, .readTag {
+    @include bp-label;
+    font-size: .66rem;
+    padding: .2rem .5rem;
+    border-radius: 8px;
+    background: var(--bp-und-soft);
+    color: var(--bp-und-d);
+}
+
+.levelTag[data-level='Intermediate'] {
+    background: var(--bp-purple-soft);
+    color: var(--bp-purple-d);
+}
+
+.readTag {
+    background: var(--bp-keep-soft);
+    color: var(--bp-keep-ink);
+}
+
+.cardDone {
+    .cardTitle { color: var(--bp-ink2); }
+}
+
+.topicLink {
+    color: inherit;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+}
