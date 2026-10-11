@@ -54,7 +54,7 @@ const LEVEL_RULES = {
 const ASSIST_RULES = {
     guided: [
         'HELP STYLE: GUIDED. The learner wants step-by-step help.',
-        '- Before each of their turns, if it is not obvious what to say, tell them in {native} what to say next, then call suggest_reply with the exact {target} phrase so it appears on their screen.',
+        '- End EVERY turn by telling them in {native} what to say next and calling suggest_reply with the exact {target} phrase so it appears on their screen. The only turn without this is your goodbye.',
         '- When they are stuck, answer wrongly or ask for help: say in {native} exactly what to say, call suggest_reply, then wait for them to repeat it.',
     ],
     hints: [
@@ -72,7 +72,7 @@ const ASSIST_RULES = {
 const LIVE_ASSIST_RULES = {
     guided: [
         'HELP STYLE: GUIDED. The learner wants step-by-step help.',
-        '- Before each of their turns, if it is not obvious what to say, tell them in {native} what to say next, then say the exact {target} phrase once, slowly and clearly, and wait for them to try it.',
+        '- End EVERY turn by telling them what to say next: a few words in {native} ("Now ask for a bigger size:"), then the exact {target} phrase once, slowly and clearly. Then stop and wait for them to try it. The only turn without this is your goodbye.',
         '- When they are stuck, answer wrongly or ask for help: say in {native} exactly what to say, say the {target} phrase slowly, then wait for them to repeat it.',
     ],
     hints: [

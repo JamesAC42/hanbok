@@ -43,6 +43,24 @@ const withLine = (list, id, text) => {
     return last?.id === id ? [...list.slice(0, -1), { id, who: 'horang', text }] : [...list, { id, who: 'horang', text }];
 };
 
+// Rough match between two spoken lines (shared letter pairs), for telling
+// whether the learner already said a scene's starter phrase.
+const pairs = (t) => {
+    const b = String(t || '').replace(/[\s.,!?~'"…_]/g, '');
+    const out = [];
+    for (let i = 0; i < b.length - 1; i += 1) out.push(b.slice(i, i + 2));
+    return out;
+};
+const sounds = (a, b) => {
+    const x = pairs(a);
+    const pool = pairs(b);
+    const total = x.length + pool.length;
+    if (!x.length || !pool.length) return false;
+    let hit = 0;
+    for (const g of x) { const k = pool.indexOf(g); if (k >= 0) { hit += 1; pool.splice(k, 1); } }
+    return (2 * hit) / total >= 0.5;
+};
+
 const lineSize = (text) => (text.length > 110 ? styles.lineSmall : text.length > 60 ? styles.lineMedium : '');
 
 export default function SpeakScene({ scenario, level, assist: initialAssist, language, nativeLanguage, nativeName, tier, onDone, onLimit }) {
@@ -172,7 +190,8 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                     body: JSON.stringify({ sessionId: call.sessionId, transcript: withLine(s.transcript, id, text), assist: s.assist }),
                 });
                 const d = await r.json();
-                if (!d.success || s.finished) return;
+                if (s.finished) return;
+                if (!d.success) throw new Error(d.error || 'coach failed');
                 setCaptions((c) => ({ ...c, [id]: { native: d.translation, roman: d.romanization, for: text } }));
                 if (seq !== s.coachSeq) return; // a newer line has its own screen updates
                 if (d.mood) onTool('set_mood', { mood: d.mood });
@@ -181,7 +200,21 @@ export default function SpeakScene({ scenario, level, assist: initialAssist, lan
                 if (d.tip?.word && !s.tips.some((t) => t.word === d.tip.word && t.text === d.tip.tip)) onTool('pronunciation_tip', d.tip);
                 s.turnScreen = { id, text, d };
                 showTurn();
-            } catch { /* the call goes on without screen updates */ }
+            } catch {
+                // No coach right now: clear the caption placeholders and fall
+                // back to the scene's starter phrase for the next goal.
+                if (s.finished) return;
+                setCaptions((c) => ({ ...c, [id]: { native: '', roman: '', for: text } }));
+                if (seq !== s.coachSeq) return;
+                s.turnScreen = { id, text, d: { suggestion: fallbackSuggestion() } };
+                showTurn();
+            }
+        };
+        const fallbackSuggestion = () => {
+            if (s.assist === 'immersion') return null;
+            const said = s.transcript.filter((m) => m.who === 'you').map((m) => m.text);
+            const i = scenario.goals.findIndex((g, j) => !s.goals[j] && scenario.phrases?.[j] && !said.some((t) => sounds(t, scenario.phrases[j])));
+            return i >= 0 ? { phrase: scenario.phrases[i], meaning: scenario.goals[i] } : null;
         };
         // Once the character has finished the line the coach read: the "Try
         // saying" card, and the end of the scene when it's really over (every
