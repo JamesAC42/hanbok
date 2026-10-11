@@ -30,6 +30,7 @@ import { TablerAlphabetKorean } from "./icons/Korean";
 import { MaterialSymbolsSettingsRounded } from "./icons/Settings";
 import { MaterialSymbolsMenuBook } from "./icons/MenuBook";
 import { RiBrain2Fill } from "./icons/Brain";
+import { MaterialSymbolsExtension } from "./icons/Extension";
 import QuotaDisplay from "./QuotaDisplay";
 import useCardsToday from "@/hooks/useCardsToday";
 
@@ -191,6 +192,7 @@ function Sidebar() {
             header: label('sidebar.discover', 'Discover'),
             items: [
                 { path: "/lyrics", match: ["/lyrics"], label: t('sidebar.lyrics'), color: 'var(--bp-pink)', icon: <IcSharpQueueMusic /> },
+                { path: "/extension", match: ["/extension"], label: label('sidebar.extension', 'Chrome extension'), color: 'var(--bp-read)', icon: <MaterialSymbolsExtension /> },
                 { path: "/feedback", label: t('sidebar.feedback'), color: 'var(--bp-freeze)', icon: <MingcuteCommentFill /> },
                 ...(user && isAdmin(user.email) ? [{ path: "/admin", match: ["/admin"], label: "Admin", color: 'var(--bp-gray)', icon: <MaterialSymbolsSettingsRounded /> }] : []),
             ],

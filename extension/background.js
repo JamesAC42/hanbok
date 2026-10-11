@@ -69,7 +69,12 @@ async function api(path, options = {}) {
     const response = await fetch(`${baseUrl}${path}`, {
       credentials: 'include',
       ...options,
-      headers: { 'Content-Type': 'application/json', ...options.headers }
+      headers: {
+        'Content-Type': 'application/json',
+        // Lets the server count extension use for the admin dashboard
+        'X-Hanbok-Client': `extension/${chrome.runtime.getManifest().version}`,
+        ...options.headers
+      }
     });
     let data = null;
     try {

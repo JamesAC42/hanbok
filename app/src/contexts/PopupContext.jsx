@@ -1,85 +1,24 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import LimitReachedPopup from '@/components/LimitReachedPopup';
 import LoginRequiredPopup from '@/components/LoginRequiredPopup';
-import AnnouncementPopup from '@/components/AnnouncementPopup';
 import PromoPopup from '@/components/PromoPopup';
 import HeardFromPrompt from '@/components/HeardFromPrompt';
-import { usePathname } from 'next/navigation';
-import { useAuth } from '@/contexts/AuthContext';
 
 const PopupContext = createContext();
 
-// Current announcement. A new id shows it once more to everyone it targets.
-// Speak goes to every signed-in account. Set accountsCreatedBefore (ISO date)
-// to limit a future announcement to accounts older than that.
-const CURRENT_ANNOUNCEMENT = {
-    id: '2026-10-speak',
-    accountsCreatedBefore: null,
-};
-
 export function PopupProvider({ children }) {
-    const { user, loading: authLoading } = useAuth();
-    const pathname = usePathname();
     const [popupState, setPopupState] = useState({
         show: false,
         type: null,
-        variant: null, // 'limit', 'login', or 'announcement'
-        announcementId: null
+        variant: null, // 'limit', 'login' or 'promo'
     });
-
-    // Check for the announcement once we know who is signed in, and again on
-    // navigation in case they arrived on a page that skips it
-    useEffect(() => {
-        if (authLoading || !user) return;
-
-        const checkAnnouncement = () => {
-            // Never cover a reading page or the front door with a popup: visitors
-            // from search land there, and Google penalizes interstitials over the
-            // content. The update post itself doesn't need a popup pointing at it.
-            const path = pathname || window.location.pathname;
-            // Someone who has opened Speak already knows about it.
-            if (/^\/speak(\/|$)/.test(path)) {
-                try {
-                    const seen = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
-                    if (!seen[CURRENT_ANNOUNCEMENT.id]) localStorage.setItem('seenAnnouncements', JSON.stringify({ ...seen, [CURRENT_ANNOUNCEMENT.id]: true }));
-                } catch {}
-                return;
-            }
-            // Speak itself doesn't need a popup advertising it either.
-            if (path === '/' || /^\/(learn|lyrics|login|pricing|about|updates|speak)(\/|$)/.test(path)) return;
-
-            if (CURRENT_ANNOUNCEMENT.accountsCreatedBefore) {
-                const created = user.dateCreated ? new Date(user.dateCreated) : null;
-                if (!created || created >= new Date(CURRENT_ANNOUNCEMENT.accountsCreatedBefore)) return;
-            }
-
-            let seenAnnouncements = {};
-            try {
-                seenAnnouncements = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
-            } catch {}
-            if (seenAnnouncements[CURRENT_ANNOUNCEMENT.id]) return;
-
-            // Don't replace a popup that is already open
-            setPopupState(prev => prev.show ? prev : {
-                show: true,
-                type: null,
-                variant: 'announcement',
-                announcementId: CURRENT_ANNOUNCEMENT.id
-            });
-        };
-
-        // Small delay to ensure the page is loaded first
-        const timer = setTimeout(checkAnnouncement, 1000);
-        return () => clearTimeout(timer);
-    }, [authLoading, user?.userId, pathname]);
 
     const showLimitReachedPopup = (type) => {
         setPopupState({
             show: true,
             type,
-            variant: 'limit',
-            announcementId: null
+            variant: 'limit'
         });
     };
 
@@ -87,8 +26,7 @@ export function PopupProvider({ children }) {
         setPopupState({
             show: true,
             type,
-            variant: 'login',
-            announcementId: null
+            variant: 'login'
         });
     };
 
@@ -106,26 +44,17 @@ export function PopupProvider({ children }) {
         setPopupState({
             show: true,
             type: null,
-            variant: 'promo',
-            announcementId: null
+            variant: 'promo'
         });
         
         return true;
     };
 
     const hidePopup = () => {
-        // If hiding an announcement, mark it as seen
-        if (popupState.variant === 'announcement' && popupState.announcementId) {
-            const seenAnnouncements = JSON.parse(localStorage.getItem('seenAnnouncements') || '{}');
-            seenAnnouncements[popupState.announcementId] = true;
-            localStorage.setItem('seenAnnouncements', JSON.stringify(seenAnnouncements));
-        }
-        
         setPopupState({
             show: false,
             type: null,
-            variant: null,
-            announcementId: null
+            variant: null
         });
     };
 
@@ -144,9 +73,6 @@ export function PopupProvider({ children }) {
                     onClose={hidePopup}
                     type={popupState.type}
                 />
-            )}
-            {popupState.show && popupState.variant === 'announcement' && (
-                <AnnouncementPopup onClose={hidePopup} />
             )}
             {popupState.show && popupState.variant === 'promo' && (
                 <PromoPopup 

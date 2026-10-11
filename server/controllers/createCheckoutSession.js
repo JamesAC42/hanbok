@@ -2,6 +2,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { getDb } = require('../database');
 const { isStudentEligible, studentCouponId } = require('../utils/studentDiscount');
 const { plusTrialDays, isTrialEligible, isPlusPrice } = require('../utils/plusTrial');
+const { getYearlyDeal, isDealEligible, isYearlyPrice } = require('../utils/yearlyDeal');
 
 const createCheckoutSession = async (req, res) => {
     const { priceId } = req.body;
@@ -56,6 +57,14 @@ const createCheckoutSession = async (req, res) => {
                 sessionConfig.discounts = [{ coupon: studentCouponId() }];
                 delete sessionConfig.allow_promotion_codes;
                 sessionConfig.metadata.student = 'true';
+            } else if (isYearlyPrice(priceId) && isDealEligible(user)) {
+                // The yearly deal, while YEARLY_DEAL_COUPON_ID names a live coupon.
+                const deal = await getYearlyDeal((id) => stripe.coupons.retrieve(id));
+                if (deal) {
+                    sessionConfig.discounts = [{ coupon: deal.couponId }];
+                    delete sessionConfig.allow_promotion_codes;
+                    sessionConfig.metadata.deal = deal.couponId;
+                }
             }
         }
 

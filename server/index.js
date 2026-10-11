@@ -115,6 +115,7 @@ const { updateUser } = require('./controllers/admin/updateUser');
 const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
 const adminSpeak = require('./controllers/admin/speakStats');
+const { trackExtensionUsage, reportInstalled } = require('./lib/extensionUsage');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
 const { getSnapshot, getEventBreakdown, requireMetricsToken } = require('./controllers/admin/snapshot');
@@ -202,6 +203,10 @@ const passwordResetLimit = authLimit({
     email: { max: 3, windowSeconds: HOUR }
 });
 const resetPasswordLimit = authLimit({ name: 'reset-password', ip: { max: 20, windowSeconds: HOUR } });
+
+// Counts Chrome extension use for the admin dashboard (lib/extensionUsage.js)
+app.use('/api', trackExtensionUsage);
+app.post('/api/extension/installed', reportInstalled);
 
 app.get('/api/session', async (req, res) => {
     await getSession(req, res);
@@ -504,6 +509,7 @@ app.get('/api/admin/stats/engagement', isAuthenticated, requireAdmin, adminStats
 app.get('/api/admin/stats/feed', isAuthenticated, requireAdmin, adminStats.getFeed);
 app.get('/api/admin/stats/revenue', isAuthenticated, requireAdmin, getRevenue);
 app.get('/api/admin/stats/traffic', isAuthenticated, requireAdmin, getTraffic);
+app.get('/api/admin/stats/extension', isAuthenticated, requireAdmin, adminStats.getExtension);
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
 app.get('/api/admin/stats/speak', isAuthenticated, requireAdmin, adminSpeak.getSpeakStats);
 app.get('/api/admin/speak/calls/:id', isAuthenticated, requireAdmin, adminSpeak.getSpeakCall);

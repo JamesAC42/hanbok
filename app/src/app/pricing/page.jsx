@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { track } from '@/lib/analytics';
+import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
 import Mascot from '@/components/Mascot';
@@ -37,16 +38,7 @@ const PLAN_BY_PRICE_ID = Object.fromEntries(
     Object.entries(PRICE_IDS).map(([plan, id]) => [id, plan])
 );
 
-const PRICING = {
-    basic: {
-        monthly: 4,
-        yearly: 40, // $3/month billed yearly - 25% discount
-    },
-    plus: {
-        monthly: 10,
-        yearly: 99, // $8/month billed yearly - 20% discount
-    }
-};
+const PRICING = PLAN_PRICES;
 
 const REVIEWS = [
     {
@@ -92,6 +84,7 @@ const Pricing = () => {
     const [isYearly, setIsYearly] = useState(true);
     const [studentOffer, setStudentOffer] = useState(null);
     const [trialOffer, setTrialOffer] = useState(null);
+    const [dealOffer, setDealOffer] = useState(null);
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const { t } = useLanguage();
     // Newer lines fall back to English until they're translated.
@@ -112,8 +105,9 @@ const Pricing = () => {
             .then((data) => {
                 setStudentOffer(data?.student?.enabled ? data.student : null);
                 setTrialOffer(data?.trial?.eligible && data.trial.days > 0 ? data.trial : null);
+                setDealOffer(data?.deal?.eligible ? data.deal : null);
             })
-            .catch(() => { setStudentOffer(null); setTrialOffer(null); });
+            .catch(() => { setStudentOffer(null); setTrialOffer(null); setDealOffer(null); });
     }, [authLoading, user]);
 
     const faqItems = FAQ_ITEMS.map((item) => item.id === 'student' && studentOffer
@@ -187,6 +181,24 @@ const Pricing = () => {
     const renderPlanPrice = (plan) => {
         const amount = isYearly ? PRICING[plan].yearly : PRICING[plan].monthly;
         const info = getPriceInfo(plan);
+        const dealPrice = isYearly ? dealYearlyPrice(plan, dealOffer) : null;
+        if (dealPrice !== null) {
+            return (
+                <>
+                    <p className={pricingStyles.dealWas}>
+                        <s>{formatPrice(amount)}/year</s> <span>{dealAmountLabel(dealOffer)}</span>
+                    </p>
+                    <div className={pricingStyles.planPrice}>
+                        <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
+                        <span className={pricingStyles.amount}>{formatPrice(dealPrice).slice(1)}</span>
+                        <span className={pricingStyles.period}>/year</span>
+                    </div>
+                    <p className={pricingStyles.perMonth}>
+                        {`${formatPrice(Math.round(dealPrice / 12 * 100) / 100)} a month, ${dealDurationLabel(dealOffer)}`}
+                    </p>
+                </>
+            );
+        }
         return (
             <>
                 <div className={pricingStyles.planPrice}>
@@ -255,6 +267,19 @@ const Pricing = () => {
                     </p>
                 )}
 
+                {dealOffer && (
+                    <p className={pricingStyles.dealBanner} role="status">
+                        <strong>{dealAmountLabel(dealOffer)} yearly plans</strong>
+                        {' '}{dealDurationLabel(dealOffer)}, applied at checkout.
+                        {dealEndsLabel(dealOffer) && <> {dealEndsLabel(dealOffer)}.</>}
+                        {!isYearly && (
+                            <button type="button" className={pricingStyles.dealSwitch} onClick={() => setIsYearly(true)}>
+                                See yearly prices
+                            </button>
+                        )}
+                    </p>
+                )}
+
                 {/* Main Subscription Plans */}
                 <section id="pricing-plans" className={pricingStyles.mainPlansSection}>
                     <div className={pricingStyles.mainPlansContainer}>
@@ -314,6 +339,8 @@ const Pricing = () => {
                                 <p className={pricingStyles.trialNote}>
                                     {studentOffer?.eligible
                                         ? `Free for ${trialOffer.days} days, then your student price. Cancel before then and you pay nothing.`
+                                        : isYearly && dealOffer
+                                        ? `Free for ${trialOffer.days} days, then ${formatPrice(dealYearlyPrice('plus', dealOffer))} for ${dealDurationLabel(dealOffer)}. Cancel before then and you pay nothing.`
                                         : `Free for ${trialOffer.days} days, then ${t('pricing.pricing.currency')}${isYearly ? PRICING.plus.yearly : PRICING.plus.monthly}${isYearly ? ' a year' : ' a month'}. Cancel before then and you pay nothing.`}
                                 </p>
                             )}
