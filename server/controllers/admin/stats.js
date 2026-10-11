@@ -3,6 +3,7 @@
 // the page stays fast as the collections grow.
 const { getDb } = require('../../database');
 const { createTtlCache } = require('../../lib/ttlCache');
+const { mongoTimeZone } = require('../../lib/progressSeries');
 const { isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION } = require('../../utils/autoTrial');
 
 const DAY = 24 * 60 * 60 * 1000;
@@ -25,7 +26,7 @@ const parseTimeZone = (value) => {
     }
 };
 
-const dayKey = (field, tz) => ({ $dateToString: { format: '%Y-%m-%d', date: `$${field}`, timezone: tz } });
+const dayKey = (field, tz) => ({ $dateToString: { format: '%Y-%m-%d', date: `$${field}`, timezone: mongoTimeZone(tz) } });
 
 // The local calendar days covered by [from, to), oldest first.
 const listDays = (from, to, tz) => {

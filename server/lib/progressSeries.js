@@ -13,6 +13,27 @@ const isValidTimeZone = (tz) => {
     }
 };
 
+// Browsers report some zones by their old CLDR names (Asia/Calcutta,
+// Asia/Saigon), which MongoDB's $dateToString rejects. Its fallback is the
+// zone's current UTC offset, e.g. "+05:30".
+const LEGACY_ZONES = {
+    'Asia/Calcutta': 'Asia/Kolkata',
+    'Asia/Saigon': 'Asia/Ho_Chi_Minh',
+    'Asia/Katmandu': 'Asia/Kathmandu',
+    'Asia/Rangoon': 'Asia/Yangon',
+    'Atlantic/Faeroe': 'Atlantic/Faroe',
+    'America/Buenos_Aires': 'America/Argentina/Buenos_Aires',
+    'America/Indianapolis': 'America/Indiana/Indianapolis',
+    'America/Louisville': 'America/Kentucky/Louisville',
+};
+const mongoTimeZone = (tz) => LEGACY_ZONES[tz] || tz;
+
+const utcOffset = (timeZone, date = new Date()) => {
+    const name = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'longOffset' })
+        .formatToParts(date).find((p) => p.type === 'timeZoneName').value;
+    return name === 'GMT' ? '+00:00' : name.replace('GMT', '');
+};
+
 // YYYY-MM-DD for a date in the given time zone.
 const dayKey = (date, timeZone) => {
     const parts = new Intl.DateTimeFormat('en-CA', {
@@ -75,6 +96,8 @@ const sumRange = (series, metric, fromIndex) =>
 module.exports = {
     DAY_MS,
     isValidTimeZone,
+    mongoTimeZone,
+    utcOffset,
     dayKey,
     lastDayKeys,
     buildSeries,
