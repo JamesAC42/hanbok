@@ -73,6 +73,7 @@ export default function MoneyPanel({ days, tz, refreshKey, onForbidden, onLoaded
                 <StatTile label="Monthly revenue (MRR)" accent="var(--bp-purple)" value={exact(r.mrr)}>
                     {r.movement && <Delta value={r.mrr} prev={r.movement.from} suffix={`since ${sinceLabel}`} />}
                     {couponGap >= 50 && <span>{money(r.mrrList)} before coupons</span>}
+                    {r.mrrCancelling > 0 && <span>{exact(r.mrr - r.mrrCancelling)} without the {fmt(s.cancelling)} set to cancel</span>}
                 </StatTile>
                 <StatTile label="Paying subscribers" accent="var(--bp-purple)" value={fmt(s.paying)}>
                     <span>{money(arpu)} each on average{s.discounted ? ` · ${fmt(s.discounted)} on a coupon` : ''}</span>
@@ -194,6 +195,8 @@ export default function MoneyPanel({ days, tz, refreshKey, onForbidden, onLoaded
                 </section>
             </div>
 
+            {r.mrrBreakdown?.length > 0 && <MrrBreakdown rows={r.mrrBreakdown} total={r.mrr} exact={exact} onOpenUser={onOpenUser} />}
+
             <div className={styles.twoCol}>
                 <section className={styles.card}>
                     <header className={styles.cardHead}>
@@ -242,6 +245,39 @@ export default function MoneyPanel({ days, tz, refreshKey, onForbidden, onLoaded
                 </section>
             </div>
         </div>
+    );
+}
+
+// Every subscription counted in today's MRR, to check against Stripe's list.
+function MrrBreakdown({ rows, total, exact, onOpenUser }) {
+    return (
+        <section className={styles.card}>
+            <header className={styles.cardHead}>
+                <div>
+                    <h2>What's in MRR</h2>
+                    <p>The {fmt(rows.length)} subscriptions that make up {exact(total)}, largest first. Yearly plans count a twelfth of their price.</p>
+                </div>
+            </header>
+            <details className={styles.breakdown}>
+                <summary>Show all {fmt(rows.length)}</summary>
+                <div className={styles.tableWrap}>
+                    <table className={styles.table}>
+                        <thead><tr><th>Who</th><th>Plan</th><th>Status</th><th>Since</th><th className={styles.num}>Monthly</th></tr></thead>
+                        <tbody>
+                            {rows.map((row) => (
+                                <tr key={row.subscriptionId} className={row.userId ? styles.clickRow : undefined} onClick={row.userId ? () => onOpenUser(row.userId) : undefined}>
+                                    <td><strong>{row.name || row.email || 'Unknown customer'}</strong>{row.name && row.email && <span className={styles.muted}>{row.email}</span>}</td>
+                                    <td>{row.plan} {row.interval}{row.coupon ? ` · ${row.coupon.name}` : ''}</td>
+                                    <td>{row.cancelAtPeriodEnd ? 'Set to cancel' : STATUS_LABELS[row.status] || row.status}</td>
+                                    <td>{fmtDate(row.since, { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                                    <td className={styles.num}>{exact(row.monthly, row.currency)}{row.monthly < row.listMonthly - 0.5 && <span className={styles.muted}> of {exact(row.listMonthly, row.currency)}</span>}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </details>
+        </section>
     );
 }
 
