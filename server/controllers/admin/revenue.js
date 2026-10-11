@@ -73,10 +73,12 @@ const listAll = async (list, max) => {
 };
 
 // ---------- Discounts ----------
-// Stripe reports MRR net of coupons, so ours does too. The most reliable
-// source is the subscription's latest regular invoice, which shows what the
-// current period actually cost after every discount (subscription, customer
-// or promotion code). Without one, fall back to the coupons still attached.
+// Stripe reports MRR net of ongoing coupons (forever or repeating) but not
+// one-off ones: a "once" coupon like the yearly deal only lowers the first
+// invoice, so that subscription still counts at its full price. The latest
+// regular invoice shows what the current period cost after each discount;
+// without one, fall back to the coupons still attached. Each subscription is
+// rounded to whole cents, as Stripe does.
 
 const SUBSCRIPTION_INVOICES = new Set(['subscription_create', 'subscription_cycle']);
 
@@ -92,10 +94,14 @@ const attachedDiscounts = (sub) => {
 
 const invoiceOf = (sub) => (sub.latest_invoice && typeof sub.latest_invoice === 'object' ? sub.latest_invoice : null);
 
-// Share of the list price the latest regular invoice charged, or null.
+// Share of the list price the latest regular invoice charged, counting only
+// ongoing discounts, or null when there is no regular invoice to read.
 const invoiceShare = (invoice) => {
     if (!invoice || !SUBSCRIPTION_INVOICES.has(invoice.billing_reason) || !(invoice.subtotal > 0)) return null;
-    const off = (invoice.total_discount_amounts || []).reduce((sum, d) => sum + (d.amount || 0), 0);
+    const duration = new Map((invoice.discounts || []).filter((d) => d && typeof d === 'object').map((d) => [d.id, couponOf(d)?.duration]));
+    const off = (invoice.total_discount_amounts || [])
+        .filter((d) => duration.get(typeof d.discount === 'string' ? d.discount : d.discount?.id) !== 'once')
+        .reduce((sum, d) => sum + (d.amount || 0), 0);
     return Math.max(0, invoice.subtotal - off) / invoice.subtotal;
 };
 
@@ -103,7 +109,7 @@ const invoiceShare = (invoice) => {
 const netMonthly = (sub, now = Date.now()) => {
     const list = subscriptionMonthly(sub);
     const share = invoiceShare(invoiceOf(sub));
-    if (share !== null) return list * share;
+    if (share !== null) return Math.round(list * share);
 
     let factor = 1;
     let off = 0;
@@ -115,7 +121,7 @@ const netMonthly = (sub, now = Date.now()) => {
         if (coupon.percent_off) factor *= 1 - coupon.percent_off / 100;
         else if (coupon.amount_off && firstItem) off += monthlyAmount({ ...firstItem, quantity: 1, price: { ...(firstItem.price || {}), unit_amount: coupon.amount_off } });
     }
-    return Math.max(0, list * factor - off);
+    return Math.round(Math.max(0, list * factor - off));
 };
 
 // The coupon a subscription was sold with, for the activity feed.
@@ -355,7 +361,20 @@ const summarize = (subs, charges, { days, now, users, tz = 'UTC' }) => {
         currency,
         tz,
         mrr,
-        mrrList: paying.reduce((sum, sub) => sum + subscriptionMonthly(sub), 0),
+        mrrList: paying.reduce((sum, sub) => sum + Math.round(subscriptionMonthly(sub)), 0),
+        // Subscriptions set to cancel still count until they end, as in Stripe.
+        mrrCancelling: paying.filter((sub) => sub.cancel_at_period_end && payingAt(sub, now)).reduce((sum, sub) => sum + value.get(sub), 0),
+        // Every subscription in today's MRR, so it can be checked line by line
+        // against Stripe's subscription list.
+        mrrBreakdown: subs.filter((sub) => payingAt(sub, now))
+            .map((sub) => ({
+                status: sub.status,
+                cancelAtPeriodEnd: !!sub.cancel_at_period_end,
+                since: new Date(sub.created * 1000),
+                coupon: couponFor(sub),
+                ...describe(sub),
+            }))
+            .sort((a, b) => b.monthly - a.monthly),
         movement,
         today,
         daily,

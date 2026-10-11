@@ -75,15 +75,26 @@ test('payments are matched to learners by Stripe customer id', () => {
     assert.strictEqual(payment.name, 'Mina');
 });
 
-test('MRR is net of coupons, read from the latest invoice first', () => {
+test('MRR is net of ongoing coupons but not one-off ones, like Stripe', () => {
     const yearly = { data: [{ price: price(4000, 'year'), quantity: 1 }] };
     const deal = { id: 'di_1', coupon: { id: 'DEAL30', name: 'Yearly deal', percent_off: 30, duration: 'once' } };
-    // Bought yearly with 30% off the first year: $28 paid.
+    // Bought yearly with 30% off the first year only: $28 paid, but Stripe
+    // still counts the full $40 a year ($3.33 a month).
     const dealSub = sub({
         id: 'deal', status: 'active', created: nowSec - DAY, items: yearly, discounts: [],
-        latest_invoice: { billing_reason: 'subscription_create', subtotal: 4000, total: 2800, amount_paid: 2800, total_discount_amounts: [{ amount: 1200 }], discounts: [deal] },
+        latest_invoice: { billing_reason: 'subscription_create', subtotal: 4000, total: 2800, amount_paid: 2800, total_discount_amounts: [{ amount: 1200, discount: 'di_1' }], discounts: [deal] },
     });
-    assert.strictEqual(Math.round(netMonthly(dealSub)), 233);
+    assert.strictEqual(netMonthly(dealSub), 333);
+
+    // A forever coupon on the latest invoice lowers MRR.
+    const studentInvoice = sub({
+        id: 'si', status: 'active', created: nowSec - 90 * DAY,
+        latest_invoice: {
+            billing_reason: 'subscription_cycle', subtotal: 400, total_discount_amounts: [{ amount: 200, discount: 'di_s' }],
+            discounts: [{ id: 'di_s', coupon: { id: 'STUDENT50', percent_off: 50, duration: 'forever' } }],
+        },
+    });
+    assert.strictEqual(netMonthly(studentInvoice), 200);
 
     // No usable invoice: a forever student coupon still on the subscription.
     const student = sub({
@@ -92,9 +103,9 @@ test('MRR is net of coupons, read from the latest invoice first', () => {
     });
     assert.strictEqual(netMonthly(student), 200);
 
-    // A once coupon that was already used and an expired repeating one change nothing.
+    // A once coupon and an expired repeating one change nothing.
     const used = sub({
-        id: 'used', status: 'active', created: nowSec - 90 * DAY,
+        id: 'used', status: 'active', created: nowSec - 90 * DAY, cancel_at_period_end: true,
         discounts: [
             { id: 'di_3', coupon: { id: 'ONCE', percent_off: 50, duration: 'once' } },
             { id: 'di_4', end: nowSec - DAY, coupon: { id: 'THREE', amount_off: 100, duration: 'repeating' } },
@@ -102,14 +113,17 @@ test('MRR is net of coupons, read from the latest invoice first', () => {
     });
     assert.strictEqual(netMonthly(used, NOW), 400);
 
-    const result = summarize([dealSub, student, used], [], { days: 30, now: NOW, users: new Map() });
-    assert.strictEqual(Math.round(result.mrr), 233 + 200 + 400);
-    assert.strictEqual(Math.round(result.mrrList), 333 + 400 + 400);
+    const result = summarize([dealSub, studentInvoice, student, used], [], { days: 30, now: NOW, users: new Map() });
+    assert.strictEqual(result.mrr, 333 + 200 + 200 + 400);
+    assert.strictEqual(result.mrrList, 333 + 400 + 400 + 400);
+    assert.strictEqual(result.mrrCancelling, 400);
     assert.strictEqual(result.subscribers.discounted, 2);
     assert.strictEqual(result.mrrHistory[result.mrrHistory.length - 1].mrr, result.mrr);
-    const basicYearly = result.plans.find((p) => p.interval === 'yearly');
-    assert.strictEqual(Math.round(basicYearly.mrr), 233);
-    assert.strictEqual(basicYearly.discounted, 1);
+    assert.strictEqual(result.plans.find((p) => p.interval === 'yearly').mrr, 333);
+    assert.deepStrictEqual(result.mrrBreakdown.map((row) => [row.subscriptionId, row.monthly, row.cancelAtPeriodEnd]), [
+        ['used', 400, true], ['deal', 333, false], ['si', 200, false], ['student', 200, false],
+    ]);
+    assert.strictEqual(result.mrrBreakdown.find((row) => row.subscriptionId === 'deal').coupon.id, 'DEAL30');
 });
 
 test('new subscriptions and cancellations come back as events with what was paid', () => {
@@ -119,7 +133,7 @@ test('new subscriptions and cancellations come back as events with what was paid
             id: 'new', customer: { id: 'cus_s' }, status: 'active', created: nowSec - 5 * 3600,
             items: { data: [{ price: { id: 'price_1Rjh9EDv6kE7GataEdXl4ICx', unit_amount: 4000, recurring: { interval: 'year', interval_count: 1 } } }] },
             latest_invoice: {
-                billing_reason: 'subscription_create', subtotal: 4000, amount_paid: 2800, total_discount_amounts: [{ amount: 1200 }],
+                billing_reason: 'subscription_create', subtotal: 4000, amount_paid: 2800, total_discount_amounts: [{ amount: 1200, discount: 'di' }],
                 discounts: [{ id: 'di', coupon: { id: 'DEAL30', name: 'Yearly deal', percent_off: 30, duration: 'once' } }],
             },
         }),
@@ -148,7 +162,7 @@ test('new subscriptions and cancellations come back as events with what was paid
     // MRR moved by the two new payers minus the one that ended.
     assert.strictEqual(result.movement.newCount, 2);
     assert.strictEqual(result.movement.churnedCount, 1);
-    assert.strictEqual(Math.round(result.movement.to - result.movement.from), Math.round(2800 / 12 + 400 - 400));
+    assert.strictEqual(result.movement.to - result.movement.from, 333 + 400 - 400);
     assert.strictEqual(Math.round(result.movement.otherMrr), 0);
 });
 

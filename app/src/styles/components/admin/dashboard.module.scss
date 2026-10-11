@@ -1407,3 +1407,10 @@ button.event {
 }
 
 .tableNarrow .table { min-width: 0; }
+
+.breakdown {
+  summary { cursor: pointer; font-weight: 700; font-size: .85rem; color: var(--bp-ink2); width: fit-content; }
+  .tableWrap { margin-top: .6rem; }
+  td .muted { display: block; font-weight: 600; }
+  td.num .muted { display: inline; }
+}
