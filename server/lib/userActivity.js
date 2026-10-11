@@ -1,15 +1,27 @@
-const { DAY_MS, lastDayKeys, buildSeries } = require('./progressSeries');
+const { DAY_MS, lastDayKeys, buildSeries, mongoTimeZone, utcOffset } = require('./progressSeries');
 
-const perDay = (collection, match, dateField, timeZone, countExpr = 1) =>
+// MongoDB: "unrecognized time zone identifier"
+const UNKNOWN_TIME_ZONE = 40485;
+
+const perDayIn = (collection, match, dateField, timezone, countExpr) =>
     collection.aggregate([
         { $match: match },
         {
             $group: {
-                _id: { $dateToString: { format: '%Y-%m-%d', date: `$${dateField}`, timezone: timeZone } },
+                _id: { $dateToString: { format: '%Y-%m-%d', date: `$${dateField}`, timezone } },
                 count: { $sum: countExpr },
             },
         },
     ]).toArray();
+
+const perDay = async (collection, match, dateField, timeZone, countExpr = 1) => {
+    try {
+        return await perDayIn(collection, match, dateField, mongoTimeZone(timeZone), countExpr);
+    } catch (error) {
+        if (error?.code !== UNKNOWN_TIME_ZONE) throw error;
+        return perDayIn(collection, match, dateField, utcOffset(timeZone), countExpr);
+    }
+};
 
 const mergeCounts = (a, b) => {
     const byDay = new Map(a.map((row) => [row._id, row.count]));
@@ -42,4 +54,4 @@ const activityHistory = async (db, userId, timeZone, days, now = new Date()) => 
     return buildSeries(keys, { analyzed, wordsSaved, reviews: mergeCounts(reviews, grammarPractice), speakMinutes });
 };
 
-module.exports = { activityHistory };
+module.exports = { activityHistory, perDay };
