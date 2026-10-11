@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Saying no: 안 vs 못',
     description: 'Learn how to make any Korean sentence negative. When to use 안 (don\'t) and 못 (can\'t), the long forms -지 않아요 and -지 못해요, plus 아니에요 and 없어요.',
     level: 'Beginner',
+    topic: 'expressing',
     minutes: 8,
     published: '2026-10-07',
     color: 'read',

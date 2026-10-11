@@ -13,6 +13,7 @@ export const meta = {
     shortTitle: 'Korean numbers (하나 vs 일)',
     description: 'Korean has two sets of numbers. Learn when to use 하나, 둘, 셋 and when to use 일, 이, 삼, plus counters, age, telling time and prices in won.',
     level: 'Beginner',
+    topic: 'vocab',
     minutes: 9,
     published: '2026-10-08',
     color: 'keep',

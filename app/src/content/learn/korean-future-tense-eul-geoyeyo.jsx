@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Future tense -(으)ㄹ 거예요',
     description: 'Learn the Korean future tense -(으)ㄹ 거예요: how to say "I will" and "it will probably", how to build it from any verb, and when to use -(으)ㄹ게요 instead.',
     level: 'Beginner',
+    topic: 'verbs',
     minutes: 7,
     published: '2026-10-07',
     color: 'keep',

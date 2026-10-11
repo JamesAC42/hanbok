@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Korean sentence structure',
     description: 'Korean puts the verb last and uses particles to show who does what. Learn the basic word order, where time and place go, and why the subject often disappears, with tappable examples.',
     level: 'Beginner',
+    topic: 'basics',
     minutes: 7,
     published: '2026-10-06',
     color: 'read',

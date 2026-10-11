@@ -14,6 +14,7 @@ export const meta = {
     shortTitle: '25 K-drama words',
     description: 'What do daebak, aigoo, oppa and eotteokhae actually mean? The 25 Korean words and phrases that show up in every K-drama, with when people use them and one-tap saving to your flashcards.',
     level: 'Beginner',
+    topic: 'vocab',
     minutes: 9,
     published: '2026-10-06',
     color: 'pink',

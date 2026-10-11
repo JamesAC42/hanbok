@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Korean speech levels (반말 vs 존댓말)',
     description: 'Korean changes the end of every sentence depending on who you are talking to. Learn the three speech levels you actually need, when to use 반말 and 존댓말, and how 시 makes a sentence respectful.',
     level: 'Beginner',
+    topic: 'politeness',
     minutes: 8,
     published: '2026-10-07',
     color: 'pink',

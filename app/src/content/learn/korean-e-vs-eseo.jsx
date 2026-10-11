@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: '에 vs 에서',
     description: 'Both 에 and 에서 can mean "at" or "in", but they are not the same. Learn when to use each one, how to say "from" and "until", and the one verb that takes both.',
     level: 'Beginner',
+    topic: 'basics',
     minutes: 7,
     published: '2026-10-07',
     color: 'und',

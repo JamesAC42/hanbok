@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Because & and then (-아서/어서)',
     description: 'Learn -아서/어서, the everyday Korean ending for "because" and "and then." See how to build it, why 았어서 is wrong, and when to use -(으)니까 instead.',
     level: 'Beginner',
+    topic: 'linking',
     minutes: 8,
     published: '2026-10-08',
     color: 'read',

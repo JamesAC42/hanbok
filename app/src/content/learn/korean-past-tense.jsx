@@ -12,6 +12,7 @@ export const meta = {
     shortTitle: 'Korean past tense (았어요 / 었어요)',
     description: 'Learn how to say what happened in Korean. One simple vowel rule picks 았어요 or 었어요, plus 했어요 for 하다, common contractions like 갔어요, and "was" with 였어요.',
     level: 'Beginner',
+    topic: 'verbs',
     minutes: 7,
     published: '2026-10-07',
     color: 'und',
