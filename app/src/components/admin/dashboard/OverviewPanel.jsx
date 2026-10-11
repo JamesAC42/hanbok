@@ -40,7 +40,7 @@ export function SectionError({ error, onRetry }) {
 
 export default function OverviewPanel({ days, tz, refreshKey, onForbidden, onLoaded, onOpenUser, onGoTab }) {
     const overview = useAdminData(`/api/admin/stats/overview?days=${days}&tz=${encodeURIComponent(tz)}`, { onForbidden });
-    const revenue = useAdminData(`/api/admin/stats/revenue?days=${days}`, { onForbidden });
+    const revenue = useAdminData(`/api/admin/stats/revenue?days=${days}&tz=${encodeURIComponent(tz)}`, { onForbidden });
     const feed = useAdminData('/api/admin/stats/feed', { onForbidden });
     const [metric, setMetric] = useState('signups');
     const [sourceView, setSourceView] = useState('heardFrom');

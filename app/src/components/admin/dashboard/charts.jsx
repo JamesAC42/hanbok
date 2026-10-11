@@ -143,3 +143,112 @@ export function StatTile({ label, value, children, accent = 'var(--bp-read)', lo
         </div>
     );
 }
+
+// Line chart with an optional dashed comparison line, like Stripe's
+// "previous period". series: [{ label, values, color, dashed }]; every series
+// shares the x positions 0..count-1 and a shorter one simply stops early.
+// zeroBase=false zooms the y axis onto the data, for slow-moving lines like MRR.
+export function LineChart({ series, count, label, format = fmt, xLabel, height = 180, zeroBase = true }) {
+    const plotRef = useRef(null);
+    const [active, setActive] = useState(null);
+    const n = count ?? Math.max(...series.map((s) => s.values.length));
+    const all = series.flatMap((s) => s.values).filter((v) => Number.isFinite(v));
+    const dataMax = Math.max(0, ...all);
+    let lo = 0;
+    let hi = niceMax(dataMax);
+    if (!zeroBase && all.length) {
+        const dataMin = Math.min(...all);
+        const pad = Math.max((dataMax - dataMin) * 0.25, dataMax * 0.02, 1);
+        lo = Math.max(0, dataMin - pad);
+        hi = dataMax + pad;
+    }
+    const x = (i) => (n <= 1 ? 50 : (i / (n - 1)) * 100);
+    const y = (v) => 100 - ((v - lo) / (hi - lo || 1)) * 100;
+    const ticks = [hi, (hi + lo) / 2, lo];
+
+    const indexAt = (clientX) => {
+        const rect = plotRef.current.getBoundingClientRect();
+        return Math.min(n - 1, Math.max(0, Math.round(((clientX - rect.left) / rect.width) * (n - 1))));
+    };
+    const onKeyDown = (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            setActive((i) => {
+                const start = i ?? (e.key === 'ArrowRight' ? -1 : n);
+                return Math.min(n - 1, Math.max(0, start + (e.key === 'ArrowRight' ? 1 : -1)));
+            });
+        } else if (e.key === 'Escape') {
+            setActive(null);
+        }
+    };
+
+    const edge = active === null ? '' : active < n * 0.18 ? styles.tipStart : active > n * 0.82 ? styles.tipEnd : '';
+    const xTicks = n > 2 ? [0, Math.floor((n - 1) / 2), n - 1] : [...Array(n).keys()];
+    const shown = active === null ? [] : series.filter((s) => s.values[active] !== undefined);
+
+    return (
+        <figure className={styles.columnChart}>
+            <div className={styles.chartFrame}>
+                <div className={styles.yAxis} aria-hidden="true">
+                    {ticks.map((t, i) => <span key={i}>{format(t)}</span>)}
+                </div>
+                <div
+                    ref={plotRef}
+                    className={styles.plot}
+                    style={{ height }}
+                    tabIndex={0}
+                    role="img"
+                    aria-label={`${label}: ${series.map((s) => `${s.label} ${format(s.values[s.values.length - 1] ?? 0)}`).join(', ')}. Use the arrow keys to read each value.`}
+                    onPointerMove={(e) => setActive(indexAt(e.clientX))}
+                    onPointerLeave={() => setActive(null)}
+                    onBlur={() => setActive(null)}
+                    onKeyDown={onKeyDown}
+                >
+                    <div className={styles.grid} aria-hidden="true"><i /><i /><i /></div>
+                    <svg className={styles.lines} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                        {[...series].reverse().map((s) => (
+                            <polyline
+                                key={s.label}
+                                points={s.values.map((v, i) => `${x(i)},${y(v)}`).join(' ')}
+                                fill="none"
+                                stroke={s.color}
+                                strokeWidth={s.dashed ? 1.75 : 2.5}
+                                strokeDasharray={s.dashed ? '4 4' : undefined}
+                                strokeLinejoin="round"
+                                strokeLinecap="round"
+                                vectorEffect="non-scaling-stroke"
+                            />
+                        ))}
+                    </svg>
+                    {series.filter((s) => !s.dashed && s.values.length).map((s) => (
+                        <i key={s.label} className={styles.lineEnd} aria-hidden="true"
+                            style={{ left: `${x(s.values.length - 1)}%`, top: `${y(s.values[s.values.length - 1])}%`, background: s.color }} />
+                    ))}
+                    {active !== null && (
+                        <>
+                            <i className={styles.lineGuide} style={{ left: `${x(active)}%` }} aria-hidden="true" />
+                            {shown.map((s) => (
+                                <i key={s.label} className={styles.lineDot} aria-hidden="true"
+                                    style={{ left: `${x(active)}%`, top: `${y(s.values[active])}%`, borderColor: s.color }} />
+                            ))}
+                            <div className={`${styles.tip} ${edge}`} style={{ left: `${x(active)}%` }} aria-live="polite">
+                                {shown.map((s, i) => (
+                                    <span key={s.label} className={i === 0 ? styles.tipMain : undefined}>
+                                        {i === 0 ? <strong>{format(s.values[active])}</strong> : format(s.values[active])}
+                                        {' '}{s.pointLabel ? s.pointLabel(active) : s.label}
+                                    </span>
+                                ))}
+                                {!shown.length && <span>{xLabel(active)}</span>}
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+            <div className={styles.xAxis} aria-hidden="true">
+                {xTicks.map((i) => (
+                    <span key={i} style={{ left: `${x(i)}%` }}>{xLabel(i)}</span>
+                ))}
+            </div>
+        </figure>
+    );
+}
