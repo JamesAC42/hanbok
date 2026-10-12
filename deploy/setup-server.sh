@@ -4,7 +4,10 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/JamesAC42/hanbok/main/deploy/setup-server.sh -o setup.sh
 #   less setup.sh        # read it first
-#   bash setup.sh <your-admin-username> "<GitHub Actions deploy public key>"
+#   bash setup.sh <your-admin-username> "<GitHub Actions deploy public key>" [hanbok|sites]
+#
+# The third argument picks the role: hanbok (default) or sites (blog,
+# kirakissu, umami and Postgres; see deploy/sites/).
 #
 # What it does: an admin user with sudo (your SSH key only), a `deploy` user
 # without sudo that can only run deploy/compose-entry.sh over SSH, SSH hardening
@@ -14,6 +17,8 @@ set -euo pipefail
 
 ADMIN="${1:?usage: setup-server.sh <admin-user> \"<deploy public key>\"}"
 DEPLOY_PUBKEY="${2:?usage: setup-server.sh <admin-user> \"<deploy public key>\"}"
+ROLE="${3:-hanbok}"
+case "$ROLE" in hanbok|sites) ;; *) echo "role must be hanbok or sites" >&2; exit 2 ;; esac
 REPO_RAW=https://raw.githubusercontent.com/JamesAC42/hanbok/main
 
 [ "$(id -u)" = 0 ] || { echo "run as root" >&2; exit 1; }
@@ -50,12 +55,22 @@ passwd "$ADMIN"
 # Deploy user: no sudo, no shell beyond the forced command
 id deploy >/dev/null 2>&1 || adduser --disabled-password --gecos "" deploy
 usermod -aG docker deploy
-install -d -m 755 -o deploy -g deploy /srv/hanbok /srv/hanbok/audio /srv/hanbok/certs
-curl -fsSL "$REPO_RAW/deploy/docker-compose.yml" -o /srv/hanbok/docker-compose.yml
-curl -fsSL "$REPO_RAW/deploy/compose-entry.sh" -o /home/deploy/hanbok-deploy-entry.sh
-chmod 755 /home/deploy/hanbok-deploy-entry.sh
+if [ "$ROLE" = hanbok ]; then
+  install -d -m 755 -o deploy -g deploy /srv/hanbok /srv/hanbok/audio /srv/hanbok/certs
+  curl -fsSL "$REPO_RAW/deploy/docker-compose.yml" -o /srv/hanbok/docker-compose.yml
+  curl -fsSL "$REPO_RAW/deploy/compose-entry.sh" -o /home/deploy/hanbok-deploy-entry.sh
+  touch /srv/hanbok/api.env && chown deploy:deploy /srv/hanbok/api.env && chmod 600 /srv/hanbok/api.env
+else
+  install -d -m 755 -o deploy -g deploy /srv/sites /srv/sites/blog /srv/sites/blog/content /srv/sites/kirakissu /srv/sites/kirakissu/content
+  chown 1000:1000 /srv/sites/blog/content /srv/sites/kirakissu/content
+  curl -fsSL "$REPO_RAW/deploy/sites/docker-compose.yml" -o /srv/sites/docker-compose.yml
+  curl -fsSL "$REPO_RAW/deploy/sites/sites-entry.sh" -o /home/deploy/hanbok-deploy-entry.sh
+  for f in postgres blog kirakissu umami; do
+    touch "/srv/sites/$f.env" && chown deploy:deploy "/srv/sites/$f.env" && chmod 600 "/srv/sites/$f.env"
+  done
+fi
 chown root:root /home/deploy/hanbok-deploy-entry.sh
-touch /srv/hanbok/api.env && chown deploy:deploy /srv/hanbok/api.env && chmod 600 /srv/hanbok/api.env
+chmod 755 /home/deploy/hanbok-deploy-entry.sh
 install -d -m 700 -o deploy -g deploy /home/deploy/.ssh
 echo "command=\"/home/deploy/hanbok-deploy-entry.sh\",restrict $DEPLOY_PUBKEY" > /home/deploy/.ssh/authorized_keys
 chown deploy:deploy /home/deploy/.ssh/authorized_keys && chmod 600 /home/deploy/.ssh/authorized_keys
@@ -79,7 +94,4 @@ ufw --force enable
 
 echo
 echo "Done. Next, as $ADMIN (keep this root session open until you've logged in as $ADMIN):"
-echo "  1. Fill /srv/hanbok/api.env (see docs/deploy-docker.md) and put the Mongo CA in /srv/hanbok/certs/"
-echo "  2. Copy the audio folder into /srv/hanbok/audio"
-echo "  3. Install deploy/nginx-hanbok.conf and run certbot"
-echo "  4. Set the GitHub variables/secrets and run Actions -> Deploy (Docker)"
+echo "  Follow docs/deploy-docker.md for the $ROLE server from step 5."

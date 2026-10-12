@@ -103,3 +103,36 @@ Both images are stateless: sessions, rate limits and queues live in Redis, data
 in Mongo, and audio is the one folder to copy. Create a second droplet the same
 way, put both behind a DigitalOcean Load Balancer with health check
 `/api/health`, and point the deploy workflow at both.
+
+## The sites server (blog, kirakissu, umami)
+
+A second, smaller droplet (2 GB) set up with the same script and role `sites`:
+`bash setup-server.sh <you> "$(cat sites_deploy_key.pub)" sites`. It keeps
+those sites away from Hanbok, so a hole in one of them can't reach Hanbok's
+data or keys. Files are in `deploy/sites/`; everything lives in `/srv/sites`.
+
+1. `/srv/sites/postgres.env`: `POSTGRES_PASSWORD=<new>`. Start it:
+   `cd /srv/sites && sudo -u deploy docker compose up -d postgres`.
+2. Create a database and user per site, then restore the dumps from the old box:
+   ```
+   docker compose exec -T postgres psql -U postgres -c "create user blog password '<new>'; create database blog owner blog;"
+   docker compose exec -T postgres pg_restore -U postgres -d blog --no-owner --role=blog < blog.dump
+   ```
+   Same for `kirakissu` and `umami`.
+3. Copy each site's old `content/` folder into `/srv/sites/<site>/content/`
+   (blog posts and the about page are files there, not in the database), then
+   `sudo chown -R 1000:1000 /srv/sites/*/content`.
+4. Fill `blog.env` and `kirakissu.env`: `DATABASE_URL=postgresql://blog:<pw>@postgres:5432/blog`,
+   `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `JWT_SECRET` (new), `TURNSTILE_SECRET_KEY`,
+   the `AWS_*` values, `ALPHAVANTAGE_API_KEY`. `umami.env`: `DATABASE_URL=postgresql://umami:<pw>@postgres:5432/umami`
+   and `APP_SECRET=<new>`.
+5. In the blog and kirakissu repos (Settings → Secrets and variables → Actions):
+   variables `DEPLOY_MODE=docker`, `SITES_HOST=<droplet ip>`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`;
+   secrets `SITES_SSH_KEY`, `SITES_KNOWN_HOSTS`. Run Actions → Deploy (Docker),
+   make the `blog` and `kirakissu` packages public, and run it again.
+6. nginx: one server block per domain proxying to 127.0.0.1:3000 (blog),
+   3001 (kirakissu) and 3002 (umami), like `deploy/nginx-hanbok.conf` without
+   the `/api/` block, then certbot.
+
+Hanbok staging can move here later as two more services. Scraple, gym and stream
+aren't containerized yet; give them the same treatment before they go public again.

@@ -1,0 +1,51 @@
+# The "sites" server: James's smaller sites, each in its own hardened
+# container, plus the Postgres they share. Lives in /srv/sites on that server.
+# Each site's repo builds its image in GitHub Actions and deploys it with
+#   ssh deploy@<sites server> "deploy <service> <sha>"   (see sites-entry.sh)
+# nginx on the host proxies each domain to the 127.0.0.1 port below.
+
+x-site: &site
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  mem_limit: 384m
+  logging:
+    driver: json-file
+    options: { max-size: "10m", max-file: "3" }
+  depends_on: [postgres]
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file: ./postgres.env          # POSTGRES_PASSWORD=...
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    mem_limit: 512m
+    # Not published: only the containers on this network can reach it.
+
+  blog:
+    <<: *site
+    image: ghcr.io/jamesac42/blog:${BLOG_TAG:-latest}
+    env_file: ./blog.env              # DATABASE_URL=postgresql://blog:...@postgres:5432/blog ...
+    volumes:
+      - ./blog/content:/srv/app/content
+    tmpfs: ["/tmp", "/srv/app/.cache:uid=1000,gid=1000", "/srv/app/.next/cache:uid=1000,gid=1000"]
+    ports: ["127.0.0.1:3000:3000"]
+
+  kirakissu:
+    <<: *site
+    image: ghcr.io/jamesac42/kirakissu:${KIRAKISSU_TAG:-latest}
+    env_file: ./kirakissu.env
+    volumes:
+      - ./kirakissu/content:/srv/app/content
+    tmpfs: ["/tmp", "/srv/app/.cache:uid=1000,gid=1000", "/srv/app/.next/cache:uid=1000,gid=1000"]
+    ports: ["127.0.0.1:3001:3000"]
+
+  umami:
+    <<: *site
+    image: ghcr.io/umami-software/umami:postgresql-latest
+    env_file: ./umami.env             # DATABASE_URL=postgresql://umami:...@postgres:5432/umami, APP_SECRET=...
+    tmpfs: ["/tmp"]
+    ports: ["127.0.0.1:3002:3000"]
