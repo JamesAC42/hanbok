@@ -52,14 +52,15 @@ const planOf = (item) => {
 const subscriptionMonthly = (sub) => (sub.items?.data || []).reduce((sum, item) => sum + monthlyAmount(item), 0);
 
 // A subscription counts toward MRR at time t when it had started, was past any
-// trial, and had not ended. Unpaid, paused and never-completed subscriptions
-// don't count.
+// trial, and had not been cancelled. Like Stripe, a subscription set to cancel
+// at the end of its period leaves MRR when the cancellation is made, not when
+// access ends. Unpaid, paused and never-completed subscriptions don't count.
 const NEVER_PAYING = new Set(['incomplete', 'incomplete_expired', 'paused', 'unpaid']);
 const payingAt = (sub, t) => {
     if (NEVER_PAYING.has(sub.status)) return false;
     const start = (sub.start_date || sub.created) * 1000;
     const trialEnd = sub.trial_end ? sub.trial_end * 1000 : 0;
-    const ended = sub.ended_at ? sub.ended_at * 1000 : Infinity;
+    const ended = Math.min(sub.ended_at ? sub.ended_at * 1000 : Infinity, sub.canceled_at ? sub.canceled_at * 1000 : Infinity);
     return start <= t && trialEnd <= t && ended > t;
 };
 
@@ -194,8 +195,9 @@ const summarize = (subs, charges, { days, now, users, tz = 'UTC' }) => {
     const value = new Map(subs.map((sub) => [sub, netMonthly(sub, now)]));
     const mrrAt = (t) => subs.reduce((sum, sub) => (payingAt(sub, t) ? sum + value.get(sub) : sum), 0);
 
+    const counted = subs.filter((sub) => payingAt(sub, now));
     const plans = new Map();
-    for (const sub of paying) {
+    for (const sub of counted) {
         const items = sub.items?.data || [];
         const list = subscriptionMonthly(sub);
         for (const item of items) {
@@ -361,12 +363,12 @@ const summarize = (subs, charges, { days, now, users, tz = 'UTC' }) => {
         currency,
         tz,
         mrr,
-        mrrList: paying.reduce((sum, sub) => sum + Math.round(subscriptionMonthly(sub)), 0),
-        // Subscriptions set to cancel still count until they end, as in Stripe.
-        mrrCancelling: paying.filter((sub) => sub.cancel_at_period_end && payingAt(sub, now)).reduce((sum, sub) => sum + value.get(sub), 0),
+        mrrList: counted.reduce((sum, sub) => sum + Math.round(subscriptionMonthly(sub)), 0),
+        // What the subscriptions set to cancel were worth; already left out of MRR.
+        mrrCancelling: paying.filter((sub) => sub.cancel_at_period_end).reduce((sum, sub) => sum + value.get(sub), 0),
         // Every subscription in today's MRR, so it can be checked line by line
         // against Stripe's subscription list.
-        mrrBreakdown: subs.filter((sub) => payingAt(sub, now))
+        mrrBreakdown: counted
             .map((sub) => ({
                 status: sub.status,
                 cancelAtPeriodEnd: !!sub.cancel_at_period_end,
@@ -381,10 +383,11 @@ const summarize = (subs, charges, { days, now, users, tz = 'UTC' }) => {
         events: events.slice(0, 60),
         subscribers: {
             paying: paying.length,
+            inMrr: counted.length,
             trialing: live.length - paying.length,
             pastDue: live.filter((sub) => sub.status === 'past_due').length,
             cancelling: live.filter((sub) => sub.cancel_at_period_end).length,
-            discounted: paying.filter((sub) => value.get(sub) < subscriptionMonthly(sub) - 0.5).length,
+            discounted: counted.filter((sub) => value.get(sub) < subscriptionMonthly(sub) - 0.5).length,
             newInRange: subs.filter((sub) => createdIn(sub, from, now)).length,
             newPrev: subs.filter((sub) => createdIn(sub, prevFrom, from)).length,
             cancelledInRange: subs.filter((sub) => canceledIn(sub, from, now)).length,

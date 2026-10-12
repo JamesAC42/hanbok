@@ -126,6 +126,25 @@ test('MRR is net of ongoing coupons but not one-off ones, like Stripe', () => {
     assert.strictEqual(result.mrrBreakdown.find((row) => row.subscriptionId === 'deal').coupon.id, 'DEAL30');
 });
 
+test('a subscription set to cancel leaves MRR when the cancellation is made, like Stripe', () => {
+    const plusYearly = { data: [{ price: price(9900, 'year'), quantity: 1 }] };
+    const subs = [
+        sub({ id: 'stays', status: 'active', created: nowSec - 200 * DAY, items: plusYearly }),
+        sub({ id: 'leaving', status: 'active', created: nowSec - 200 * DAY, items: plusYearly, cancel_at_period_end: true, canceled_at: nowSec - 10 * DAY }),
+        sub({ id: 'yearlyBasic', status: 'active', created: nowSec - 50 * DAY, items: { data: [{ price: price(4000, 'year'), quantity: 1 }] } }),
+    ];
+    const result = summarize(subs, [], { days: 7, now: NOW, users: new Map() });
+    // $8.25 + $3.33: each subscription rounded to cents, the leaving one out.
+    assert.strictEqual(result.mrr, 825 + 333);
+    assert.strictEqual(result.mrrCancelling, 825);
+    assert.strictEqual(result.subscribers.paying, 3);
+    assert.strictEqual(result.subscribers.inMrr, 2);
+    assert.deepStrictEqual(result.mrrBreakdown.map((row) => row.subscriptionId), ['stays', 'yearlyBasic']);
+    assert.strictEqual(result.plans.reduce((sum, p) => sum + p.count, 0), 2);
+    // Two weeks ago, before the cancellation, it still counted.
+    assert.strictEqual(result.daily[0].prevMrr, 825 + 825 + 333);
+});
+
 test('new subscriptions and cancellations come back as events with what was paid', () => {
     const users = new Map([['cus_s', { userId: 7, name: 'Saskia', email: 's@example.com' }]]);
     const subs = [
@@ -159,10 +178,11 @@ test('new subscriptions and cancellations come back as events with what was paid
     assert.strictEqual(monthly.coupon, null);
     assert.strictEqual(result.events[3].endsAt.getTime(), (nowSec + 20 * DAY) * 1000);
 
-    // MRR moved by the two new payers minus the one that ended.
+    // MRR moved by the two new payers minus the one that ended and the one set
+    // to cancel, which Stripe drops as soon as the cancellation is made.
     assert.strictEqual(result.movement.newCount, 2);
-    assert.strictEqual(result.movement.churnedCount, 1);
-    assert.strictEqual(result.movement.to - result.movement.from, 333 + 400 - 400);
+    assert.strictEqual(result.movement.churnedCount, 2);
+    assert.strictEqual(result.movement.to - result.movement.from, 333 + 400 - 400 - 400);
     assert.strictEqual(Math.round(result.movement.otherMrr), 0);
 });
 
