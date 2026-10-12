@@ -1,0 +1,111 @@
+@import "../variables.module.scss";
+
+// Corner card for the one-tap "Would you use a phone app?" question
+// (components/interstitials/AppSurveyCard.jsx). Same look as the
+// "How did you find Hanbok?" card, with bigger buttons.
+.card {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.25rem;
+    z-index: 999999;
+    width: min(23rem, calc(100vw - 2rem));
+    padding: 1rem 1rem .95rem;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-display);
+    border: 2px solid var(--bp-line);
+    border-top: 6px solid var(--bp-read);
+    border-radius: 20px;
+    box-shadow: 0 5px 0 var(--bp-line);
+    animation: appSurveyIn .25s cubic-bezier(.3, 1.4, .5, 1);
+
+    @media (max-width: 480px) {
+        right: 1rem;
+        bottom: calc(1rem + env(safe-area-inset-bottom));
+    }
+}
+
+.head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding-right: 1.5rem;
+
+    h2 {
+        @include bp-title;
+        margin: 0;
+        font-size: 1.2rem;
+    }
+
+    p {
+        margin: .2rem 0 0;
+        color: var(--foreground);
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: 1.35;
+    }
+}
+
+.close {
+    position: absolute;
+    top: -.35rem;
+    right: -.25rem;
+    border: 0;
+    background: none;
+    color: var(--bp-ink2);
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.choices {
+    display: flex;
+    gap: .5rem;
+    margin-top: .9rem;
+
+    button {
+        @include bp-press-card;
+        flex: 1;
+        min-height: 2.75rem;
+        padding: .5rem .75rem;
+        border-radius: 14px;
+        color: var(--foreground);
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 800;
+
+        &:hover {
+            border-color: var(--bp-read);
+            color: var(--bp-read);
+        }
+    }
+
+    .primary {
+        @include bp-press-card(var(--bp-read-d));
+        background: var(--bp-read);
+        color: #fff;
+
+        &:hover {
+            background: var(--bp-read-d);
+            color: #fff;
+        }
+    }
+}
+
+.skip {
+    display: block;
+    margin: .6rem auto 0;
+    border: 0;
+    background: none;
+    color: var(--bp-ink2);
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+@keyframes appSurveyIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
