@@ -14,6 +14,7 @@ import VisitorsPanel from '@/components/admin/dashboard/VisitorsPanel';
 import ToolsPanel from '@/components/admin/dashboard/ToolsPanel';
 import PartnersPanel from '@/components/admin/dashboard/PartnersPanel';
 import SpeakPanel from '@/components/admin/dashboard/SpeakPanel';
+import TutorPanel from '@/components/admin/dashboard/TutorPanel';
 import ExtensionPanel from '@/components/admin/dashboard/ExtensionPanel';
 import UserDrawer from '@/components/admin/dashboard/UserDrawer';
 import { RANGES, timeAgo } from '@/components/admin/dashboard/format';
@@ -22,6 +23,7 @@ const TABS = [
     { key: 'overview', label: 'Overview', color: 'var(--bp-read)' },
     { key: 'learners', label: 'Learners', color: 'var(--bp-und)' },
     { key: 'speak', label: 'Speak', color: 'var(--bp-purple)' },
+    { key: 'tutor', label: 'Tutor', color: 'var(--bp-flame)' },
     { key: 'money', label: 'Money', color: 'var(--bp-purple)' },
     { key: 'users', label: 'Users', color: 'var(--bp-keep)' },
     { key: 'visitors', label: 'Visitors', color: 'var(--bp-gray)' },
@@ -29,7 +31,7 @@ const TABS = [
     { key: 'partners', label: 'Partners', color: 'var(--bp-flame)' },
     { key: 'tools', label: 'Tools', color: 'var(--bp-rev)' },
 ];
-const RANGED = ['overview', 'learners', 'speak', 'money', 'visitors', 'extension'];
+const RANGED = ['overview', 'learners', 'speak', 'tutor', 'money', 'visitors', 'extension'];
 
 const readTab = () => {
     if (typeof window === 'undefined') return 'overview';
@@ -142,6 +144,7 @@ export default function Admin() {
                 {visited.has('overview') && <div hidden={tab !== 'overview'}><OverviewPanel {...panelProps} /></div>}
                 {visited.has('learners') && <div hidden={tab !== 'learners'}><LearnersPanel {...panelProps} /></div>}
                 {visited.has('speak') && <div hidden={tab !== 'speak'}><SpeakPanel {...panelProps} /></div>}
+                {visited.has('tutor') && <div hidden={tab !== 'tutor'}><TutorPanel {...panelProps} /></div>}
                 {visited.has('money') && <div hidden={tab !== 'money'}><MoneyPanel {...panelProps} /></div>}
                 {visited.has('users') && <div hidden={tab !== 'users'}><UsersPanel {...panelProps} usersVersion={usersVersion} /></div>}
                 {visited.has('visitors') && <div hidden={tab !== 'visitors'}><VisitorsPanel {...panelProps} /></div>}

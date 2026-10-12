@@ -1,0 +1,50 @@
+@import '../variables.module.scss';
+
+// 👍/👎 under Horang's replies, and the occasional "How is Horang helping?" card.
+
+.votes { display: flex; align-items: center; gap: .3rem; margin-top: .45rem; }
+.vote {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 34px; height: 30px; padding: 0 .45rem;
+    background: transparent; border: 1.5px solid transparent; border-radius: 999px;
+    font-size: .95rem; line-height: 1; cursor: pointer; opacity: .6;
+    transition: opacity .12s, border-color .12s, background .12s;
+    &:hover:not(:disabled) { opacity: 1; border-color: var(--bp-line); }
+    &:disabled { cursor: default; }
+}
+.voteOn, .voteOn:hover:not(:disabled) { opacity: 1; background: var(--bp-purple-soft); border-color: var(--bp-purple-line); }
+.voteThanks { font: 700 .78rem var(--font-display); color: var(--bp-ink2); margin-left: .2rem; }
+
+.why { display: flex; flex-direction: column; gap: .5rem; margin-top: .55rem; padding-top: .6rem; border-top: 1.5px dashed var(--bp-line); }
+.whyTitle { margin: 0; font: 700 .88rem var(--font-display); color: var(--bp-ink2); }
+.chips { display: flex; flex-wrap: wrap; gap: .35rem;
+    button { background: var(--bp-card); border: 2px solid var(--bp-line); border-radius: 999px; padding: .3rem .65rem; font: 700 .8rem var(--font-display); color: var(--bp-ink2); cursor: pointer; }
+    button:hover { border-color: var(--bp-line-strong); }
+    .chipOn, .chipOn:hover { background: var(--bp-purple-soft); border-color: var(--bp-purple); color: var(--bp-purple-d); }
+}
+.note { width: 100%; box-sizing: border-box; border: 2px solid var(--bp-line); border-radius: 12px; padding: .5rem .7rem; font: 600 .9rem var(--font-display); color: var(--foreground); background: var(--background); resize: vertical;
+    &:focus { outline: none; border-color: var(--bp-purple); }
+}
+.actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.send { @include bp-press(var(--bp-purple), var(--bp-purple-d), #fff, 3px); padding: .5rem .9rem; font-size: .78rem; }
+.cancel { background: none; border: none; padding: 0; font: 700 .85rem var(--font-display); color: var(--bp-ink2); text-decoration: underline; cursor: pointer; }
+.error { margin: 0; font-size: .85rem; font-weight: 700; color: var(--bp-flame-d, #c2410c); }
+
+.rating { @include bp-card; display: flex; flex-direction: column; gap: .6rem; padding: .85rem 1rem; margin: .5rem 0 1rem; font-family: var(--font-display); color: var(--foreground); }
+.ratingHead { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.ratingTitle { margin: 0; font-family: var(--font-lilita); font-size: 1.1rem; }
+.faces { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .4rem;
+    button { display: flex; flex-direction: column; align-items: center; gap: .2rem; padding: .5rem .2rem .45rem; background: var(--bp-card); border: 2px solid var(--bp-line); border-bottom-width: 4px; border-radius: 14px; cursor: pointer; transition: transform .12s, border-color .12s, opacity .12s; }
+    button:hover:not(:disabled) { border-color: var(--bp-line-strong); transform: translateY(-2px); }
+    button:disabled { cursor: default; }
+    .faceOn, .faceOn:hover:not(:disabled) { background: var(--bp-purple-soft); border-color: var(--bp-purple); transform: none; }
+    .faceDim { opacity: .55; }
+}
+.faceEmoji { font-size: 1.6rem; line-height: 1; }
+.faceLabel { font: 700 .7rem var(--font-display); color: var(--bp-ink2); text-align: center; }
+.faceOn .faceLabel { color: var(--bp-purple-d); }
+.comment { display: flex; gap: .5rem; align-items: stretch;
+    .note { flex: 1; min-width: 0; resize: none; }
+    .send { flex: none; }
+}
+.fine { margin: 0; font-size: .85rem; font-weight: 600; color: var(--bp-ink2); }
