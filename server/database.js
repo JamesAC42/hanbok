@@ -123,6 +123,11 @@ async function connectToDatabase() {
     await safeCreateIndex('speak_sessions', { sessionId: 1 });
     await safeCreateIndex('speak_events', { at: -1 });
     await safeCreateIndex('speak_events', { sessionId: 1 });
+    await safeCreateIndex('conversation_messages', { conversationId: 1, timestamp: 1 });
+    await safeCreateIndex('conversation_messages', { timestamp: -1 });
+    await safeCreateIndex('conversations', { userId: 1, dateCreated: -1 });
+    await safeCreateIndex('tutor_events', { at: -1 });
+    await safeCreateIndex('tutor_events', { conversationId: 1 });
 
     // Add index for word_audio collection
     await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });

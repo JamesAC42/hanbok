@@ -115,6 +115,7 @@ const { updateUser } = require('./controllers/admin/updateUser');
 const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
 const adminSpeak = require('./controllers/admin/speakStats');
+const adminTutor = require('./controllers/admin/tutorStats');
 const { trackExtensionUsage, reportInstalled } = require('./lib/extensionUsage');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
@@ -530,6 +531,8 @@ app.get('/api/admin/stats/extension', isAuthenticated, requireAdmin, adminStats.
 app.get('/api/admin/stats/users/:userId', isAuthenticated, requireAdmin, adminStats.getUserDetail);
 app.get('/api/admin/stats/speak', isAuthenticated, requireAdmin, adminSpeak.getSpeakStats);
 app.get('/api/admin/speak/calls/:id', isAuthenticated, requireAdmin, adminSpeak.getSpeakCall);
+app.get('/api/admin/stats/tutor', isAuthenticated, requireAdmin, adminTutor.getTutorStats);
+app.get('/api/admin/tutor/conversations/:id', isAuthenticated, requireAdmin, adminTutor.getTutorConversation);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);
@@ -727,6 +730,12 @@ app.post('/api/conversations/:conversationId/messages/stream', isAuthenticated, 
     const { addMessageStream } = require('./controllers/conversations/conversations');
     addMessageStream(req, res);
 });
+
+// Tutor feedback: 👍/👎 on replies, the occasional rating, and the event log (admin Tutor tab)
+const tutorFeedback = require('./controllers/conversations/tutorFeedback');
+app.post('/api/conversations/:conversationId/messages/:messageId/feedback', isAuthenticated, tutorFeedback.messageFeedback);
+app.post('/api/conversations/:conversationId/feedback', isAuthenticated, tutorFeedback.conversationFeedback);
+app.post('/api/tutor/event', isAuthenticated, tutorFeedback.event);
 
 app.put('/api/conversations/:conversationId/title', isAuthenticated, async (req, res) => {
     const { updateConversationTitle } = require('./controllers/conversations/conversations');

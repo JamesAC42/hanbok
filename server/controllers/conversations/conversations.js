@@ -2,22 +2,12 @@ const { getDb } = require('../../database');
 const { generateTutorResponse } = require('../../llm/tutorResponse');
 const { generateTutorResponseStream } = require('../../llm/tutorResponseStream');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
+const { logTutorEvent } = require('../../lib/tutorEvents');
+const { TIER_LIMITS } = require('../../lib/tutorLimits');
+const { shouldAskRating } = require('./tutorFeedback');
 
 // The server picks the tutor model; clients can't choose a provider.
 const TUTOR_MODEL = 'openai';
-
-/**
- * Tier limitations for conversations:
- * Free: 5 conversations/month, 1 conversation per sentence, and 5 messages per conversation
- * Basic: 50 conversations/month, 2 conversations per sentence, and 15 messages per conversation
- * Plus: 200 conversations/month, 5 conversations per sentence, and 50 messages per conversation
- */
-
-const TIER_LIMITS = {
-  0: { maxUserMessages: 5, maxConversationsPerSentence: 1, monthlyConversations: 5 }, // Free
-  1: { maxUserMessages: 15, maxConversationsPerSentence: 2, monthlyConversations: 50 }, // Basic
-  2: { maxUserMessages: 50, maxConversationsPerSentence: Infinity, monthlyConversations: 200 } // Plus
-};
 
 // Helper function to get next sequence value
 async function getNextSequence(name) {
@@ -283,6 +273,9 @@ async function createConversation(req, res) {
     // Check conversation rate limits
     const rateLimitCheck = await checkConversationRateLimits(req, db, !!sentenceId);
     if (!rateLimitCheck.hasQuota) {
+      if (userId) {
+        logTutorEvent(db, { type: 'limit_hit', userId, meta: { reason: rateLimitCheck.message?.remaining === 0 && rateLimitCheck.message?.monthlyTotal ? 'monthly' : 'free_blank', where: 'server' } });
+      }
       return res.status(403).json({
         success: false,
         error: rateLimitCheck.message
@@ -315,6 +308,7 @@ async function createConversation(req, res) {
           .countDocuments({ userId, sentenceId, isDeleted: { $ne: true } });
         
         if (existingConversations >= tierLimits.maxConversationsPerSentence) {
+          logTutorEvent(db, { type: 'limit_hit', userId, tier: user.tier || 0, meta: { reason: 'per_sentence', where: 'server' } });
           return res.status(403).json({ 
             success: false, 
             message: `Your tier allows maximum ${tierLimits.maxConversationsPerSentence} conversation(s) per sentence. Upgrade to Plus for unlimited conversations.` 
@@ -340,7 +334,10 @@ async function createConversation(req, res) {
       lastUpdated: now,
       messageCount: 1,
       userMessageCount: 1,
-      isDeleted: false
+      isDeleted: false,
+      // For the admin Tutor tab
+      targetLanguage: typeof targetLanguage === 'string' ? targetLanguage.slice(0, 10) : 'ko',
+      tier: user ? user.tier || 0 : null
     };
 
     // Create initial user message
@@ -360,6 +357,9 @@ async function createConversation(req, res) {
     const identifier = userId !== null ? userId.toString() : (req.headers['x-forwarded-for'] || req.socket.remoteAddress);
     const identifierType = userId !== null ? 'userId' : 'ipAddress';
     await incrementConversationRateLimits(identifier, identifierType, db);
+    if (userId) {
+      logTutorEvent(db, { type: 'chat_start', conversationId, userId, tier: user.tier || 0, meta: { from: sentenceId ? 'sentence' : 'open', on: conversation.targetLanguage } });
+    }
 
     // Generate AI response for the initial message (unless skipped)
     let aiResponse = null;
@@ -718,7 +718,8 @@ async function getConversation(req, res) {
       conversation: {
         ...conversation,
         sentence,
-        messages
+        messages,
+        askRating: !!conversation.ratingAsked && !conversation.feedback?.rating && !conversation.feedback?.dismissedAt
       }
     });
 
@@ -904,6 +905,7 @@ async function addMessageStream(req, res) {
       const tierLimits = TIER_LIMITS[user.tier];
       
       if (conversation.userMessageCount >= tierLimits.maxUserMessages) {
+        logTutorEvent(db, { type: 'limit_hit', conversationId: conversation.conversationId, userId, tier: user.tier || 0, meta: { reason: 'messages', where: 'server' } });
         res.write(`data: ${JSON.stringify({ 
           type: 'error',
           error: `Your tier allows maximum ${tierLimits.maxUserMessages} user message(s) per conversation. Upgrade for more messages.` 
@@ -1015,6 +1017,8 @@ async function addMessageStream(req, res) {
         // Generate AI message ID
         const aiMessageId = await getNextSequence('messageId');
         let aiContent = '';
+        const replyStarted = Date.now();
+        let firstChunkMs = null;
         
         // Send AI response start notification
         res.write(`data: ${JSON.stringify({
@@ -1035,6 +1039,7 @@ async function addMessageStream(req, res) {
           (chunk) => {
             //console.log('Chunk received in controller:', chunk.length, 'chars');
             aiContent += chunk;
+            if (firstChunkMs === null) firstChunkMs = Date.now() - replyStarted;
             res.write(`data: ${JSON.stringify({
               type: 'aiChunk',
               messageId: aiMessageId,
@@ -1053,11 +1058,15 @@ async function addMessageStream(req, res) {
               conversationId: parseInt(conversationId),
               role: 'assistant',
               content: fullResponse,
-              timestamp: aiTimestamp
+              timestamp: aiTimestamp,
+              // How long the learner waited, for the admin Tutor tab
+              replyMs: aiTimestamp.getTime() - replyStarted,
+              firstChunkMs
             };
 
             // Insert AI response and update conversation stats
             await db.collection('conversation_messages').insertOne(aiResponse);
+            const askRating = await shouldAskRating(db, conversation).catch(() => false);
             await db.collection('conversations').updateOne(
               { conversationId: parseInt(conversationId) },
               { 
@@ -1073,7 +1082,8 @@ async function addMessageStream(req, res) {
               type: 'aiComplete',
               messageId: aiMessageId,
               content: fullResponse,
-              timestamp: aiTimestamp
+              timestamp: aiTimestamp,
+              askRating
             })}\n\n`);
             res.write('data: [DONE]\n\n');
             res.end();
@@ -1081,6 +1091,7 @@ async function addMessageStream(req, res) {
           // onError callback
           (error) => {
             console.error('Error generating AI response:', error);
+            logTutorEvent(db, { type: 'reply_failed', conversationId: conversation.conversationId, userId, meta: { reason: String(error?.message || 'stream error').slice(0, 60) } });
             res.write(`data: ${JSON.stringify({
               type: 'error',
               error: 'Failed to generate AI response'
@@ -1092,6 +1103,7 @@ async function addMessageStream(req, res) {
 
       } catch (aiError) {
         console.error('Error in streaming AI response:', aiError);
+        logTutorEvent(db, { type: 'reply_failed', conversationId: conversation.conversationId, userId, meta: { reason: String(aiError?.message || 'error').slice(0, 60) } });
         res.write(`data: ${JSON.stringify({
           type: 'error',
           error: 'Failed to generate AI response'

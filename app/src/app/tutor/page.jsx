@@ -12,6 +12,9 @@ import { MaterialSymbolsDelete } from '@/components/icons/Delete';
 import { MaterialSymbolsHistory } from '@/components/icons/History';
 import { track } from '@/lib/analytics';
 import { sentenceHref } from '@/lib/sentenceLink';
+import { tutorEvent } from '@/lib/tutorEvents';
+import ReplyFeedback from '@/components/tutor/ReplyFeedback';
+import TutorRating from '@/components/tutor/TutorRating';
 
 export default function TutorPage() {
   const router = useRouter();
@@ -63,6 +66,15 @@ export default function TutorPage() {
     loadConversations();
     loadConversationLimits();
   }, []);
+
+  useEffect(() => {
+    if (loading || !isAuthenticated) return;
+    const params = new URLSearchParams(window.location.search);
+    tutorEvent('page_view', { from: params.get('sentenceId') ? 'sentence' : params.get('conversation') ? 'conversation' : 'direct' });
+  }, [loading, isAuthenticated]);
+
+  // The server says when to ask "How is Horang helping?" (askRating).
+  const markAskRating = () => setCurrentConversation((c) => (c ? { ...c, askRating: true } : c));
 
   // Handle URL parameters for loading specific conversations and sentences
   useEffect(() => {
@@ -149,6 +161,7 @@ export default function TutorPage() {
   };
 
   const loadConversation = async (conversationId) => {
+    tutorEvent('conversation_open', {}, conversationId);
     try {
       setIsLoading(true);
       const response = await fetch(`/api/conversations/${conversationId}`, {
@@ -310,6 +323,7 @@ export default function TutorPage() {
                           : msg
                       ));
                     }
+                    if (data.askRating) markAskRating();
                     setIsLoading(false);
                     await loadConversations();
                     await loadConversationLimits(); // Refresh limits after creating conversation
@@ -345,6 +359,7 @@ export default function TutorPage() {
     
     // Check if user can create new conversations when sentence is linked
     if (!currentConversation && sentenceId && conversationCount && !conversationCount.canCreateMore) {
+      tutorEvent('limit_hit', { reason: 'per_sentence' });
       alert(t('tutor.sentencePreview.limitReached')
         .replace('{count}', conversationCount.count)
         .replace('{maxAllowed}', conversationCount.maxAllowed));
@@ -353,12 +368,14 @@ export default function TutorPage() {
 
     // Check monthly conversation limits for new conversations
     if (!currentConversation && conversationLimits && !conversationLimits.canCreateConversation) {
+      tutorEvent('limit_hit', { reason: 'monthly' });
       alert(t('tutor.limits.monthlyLimitReached'));
       return;
     }
 
     // Check if free users are trying to create blank conversations
     if (!currentConversation && !sentenceId && conversationLimits && !conversationLimits.canCreateBlankConversation) {
+      tutorEvent('limit_hit', { reason: 'free_blank' });
       alert(t('tutor.limits.freeUserRestriction'));
       return;
     }
@@ -373,6 +390,7 @@ export default function TutorPage() {
     if (currentConversation && conversationLimits) {
       const currentUserMessages = messages.filter(msg => msg.role === 'user').length;
       if (currentUserMessages >= conversationLimits.maxUserMessages) {
+        tutorEvent('limit_hit', { reason: 'messages' }, currentConversation.conversationId);
         alert(t('tutor.limits.messageLimitReached')
           .replace('{limit}', conversationLimits.maxUserMessages));
         return;
@@ -489,6 +507,7 @@ export default function TutorPage() {
                           : msg
                       ));
                     }
+                    if (data.askRating) markAskRating();
                     setIsLoading(false);
                     await loadConversations(); // Refresh to update lastUpdated
                     await loadConversationLimits(); // Refresh limits after sending message
@@ -526,6 +545,7 @@ export default function TutorPage() {
       });
       
       if (response.ok) {
+        tutorEvent('conversation_delete', {}, conversationId);
         await loadConversations();
         if (currentConversation?.conversationId === conversationId) {
           setCurrentConversation(null);
@@ -657,6 +677,7 @@ export default function TutorPage() {
               url.searchParams.delete('sentenceId');
               url.searchParams.delete('conversation');
               window.history.replaceState({}, '', url);
+              tutorEvent('new_chat');
               
               setCurrentConversation(null);
               setMessages([]);
@@ -810,6 +831,7 @@ export default function TutorPage() {
                     <Link 
                       href={sentenceHref({ publicId: currentConversation.sentence?.publicId, sentenceId: currentConversation.sentenceId })}
                       className={styles.viewAnalysisLink}
+                      onClick={() => tutorEvent('view_analysis', {}, currentConversation.conversationId)}
                     >
                       {t('tutor.activeSentence.viewAnalysis')}
                     </Link>
@@ -852,6 +874,14 @@ export default function TutorPage() {
                       <div className={styles.messageTimestamp}>
                         {formatDate(message.timestamp)}
                       </div>
+                      {message.role === 'assistant' && !message.isStreaming && (
+                        <ReplyFeedback
+                          key={message.messageId}
+                          conversationId={currentConversation.conversationId}
+                          messageId={message.messageId}
+                          initial={message.feedback}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -872,6 +902,13 @@ export default function TutorPage() {
                     </div>
                   </div>
                 )}
+                {currentConversation.askRating && !isLoading && (
+                  <TutorRating
+                    key={currentConversation.conversationId}
+                    conversationId={currentConversation.conversationId}
+                    onDone={() => setCurrentConversation((c) => (c ? { ...c, askRating: false } : c))}
+                  />
+                )}
                 <div ref={messagesEndRef} />
               </div>
             </>
@@ -889,7 +926,7 @@ export default function TutorPage() {
                     </label>
                     <select 
                       value={targetLanguage}
-                      onChange={(e) => setTargetLanguage(e.target.value)}
+                      onChange={(e) => { setTargetLanguage(e.target.value); tutorEvent('language_change', { on: e.target.value }); }}
                       className={styles.languageSelect}
                     >
                       {Object.entries(supportedLanguages).map(([code, name]) => (

@@ -1428,3 +1428,9 @@ button.event {
   td .muted { display: block; font-weight: 600; }
   td.num .muted { display: inline; }
 }
+
+// ---------- Tutor ----------
+
+.tutorScript li { display: flex; flex-direction: column; gap: .2rem; max-width: 92%; }
+.tutorText { white-space: pre-wrap; }
+.tutorReply { font-size: .88rem; line-height: 1.45; max-height: 22rem; overflow-y: auto; }
