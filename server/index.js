@@ -380,6 +380,18 @@ app.delete('/api/grammar/point/:grammarId', isAuthenticated, grammarSave.removeG
 app.get('/api/grammar/point/:grammarId/lesson', isAuthenticated, grammarStudy.getGrammarLesson);
 app.post('/api/grammar/point/:grammarId/lesson/complete', isAuthenticated, grammarStudy.completeGrammarLesson);
 
+// Health check for uptime monitors, load balancers and deploys: 200 only when
+// MongoDB and Redis both answer.
+app.get('/api/health', async (req, res) => {
+    const check = (p) => Promise.race([p, new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2000))])
+        .then(() => true, () => false);
+    const [mongo, redis] = await Promise.all([
+        check(Promise.resolve().then(() => getDb().command({ ping: 1 }))),
+        check(redisClient.ping()),
+    ]);
+    res.status(mongo && redis ? 200 : 503).json({ ok: mongo && redis, mongo, redis });
+});
+
 // Speak: live voice role-play with Horang (controllers/speak.js)
 const speak = require('./controllers/speak');
 app.get('/api/speak', speak.overview);
