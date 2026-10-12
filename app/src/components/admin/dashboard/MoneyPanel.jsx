@@ -60,7 +60,8 @@ export default function MoneyPanel({ days, tz, refreshKey, onForbidden, onLoaded
     const cur = r.revenue.current;
     const money = (cents) => fmtMoney(cents, r.currency);
     const exact = (cents, currency = r.currency) => fmtMoney(cents, currency, { exact: true });
-    const arpu = s.paying ? r.mrr / s.paying : 0;
+    const inMrr = s.inMrr ?? s.paying;
+    const arpu = inMrr ? r.mrr / inMrr : 0;
     const daily = r.daily || [];
     const sinceLabel = daily.length ? fmtDate(daily[0].date) : `${days} days ago`;
     const couponGap = (r.mrrList ?? r.mrr) - r.mrr;
@@ -73,7 +74,6 @@ export default function MoneyPanel({ days, tz, refreshKey, onForbidden, onLoaded
                 <StatTile label="Monthly revenue (MRR)" accent="var(--bp-purple)" value={exact(r.mrr)}>
                     {r.movement && <Delta value={r.mrr} prev={r.movement.from} suffix={`since ${sinceLabel}`} />}
                     {couponGap >= 50 && <span>{money(r.mrrList)} before coupons</span>}
-                    {r.mrrCancelling > 0 && <span>{exact(r.mrr - r.mrrCancelling)} without the {fmt(s.cancelling)} set to cancel</span>}
                 </StatTile>
                 <StatTile label="Paying subscribers" accent="var(--bp-purple)" value={fmt(s.paying)}>
                     <span>{money(arpu)} each on average{s.discounted ? ` · ${fmt(s.discounted)} on a coupon` : ''}</span>
@@ -99,8 +99,8 @@ export default function MoneyPanel({ days, tz, refreshKey, onForbidden, onLoaded
                     )}
                     {s.cancelling > 0 && (
                         <div className={styles.alert}>
-                            <strong>{fmt(s.cancelling)} set to cancel</strong>
-                            <span>They keep access until the end of the period they paid for.</span>
+                            <strong>{fmt(s.cancelling)} set to cancel{r.mrrCancelling ? ` (${exact(r.mrrCancelling)} a month)` : ''}</strong>
+                            <span>Already left out of MRR, as Stripe does. They keep access until the end of the period they paid for.</span>
                         </div>
                     )}
                     {s.trialing > 0 && (
@@ -374,7 +374,12 @@ const couponText = (coupon, exact, currency) => {
 function ActivityCard({ events, days, exact, onOpenUser }) {
     const [all, setAll] = useState(false);
     const shown = all ? events : events.slice(0, 12);
-    let lastDay = null;
+    const groups = [];
+    for (const e of shown) {
+        const heading = dayHeading(e.at);
+        if (groups[groups.length - 1]?.heading !== heading) groups.push({ heading, events: [] });
+        groups[groups.length - 1].events.push(e);
+    }
     return (
         <section className={styles.card}>
             <header className={styles.cardHead}>
@@ -383,20 +388,19 @@ function ActivityCard({ events, days, exact, onOpenUser }) {
                     <p>New subscriptions, trials and cancellations in the last {days} days.</p>
                 </div>
             </header>
-            {shown.length ? (
-                <ul className={styles.feed}>
-                    {shown.map((e) => {
-                        const heading = dayHeading(e.at);
-                        const showHeading = heading !== lastDay;
-                        lastDay = heading;
-                        return (
-                            <li key={`${e.type}-${e.subscriptionId}`}>
-                                {showHeading && <div className={styles.dayLabel}>{heading}</div>}
-                                <EventRow event={e} exact={exact} onOpenUser={onOpenUser} />
-                            </li>
-                        );
-                    })}
-                </ul>
+            {groups.length ? (
+                <div className={styles.dayGroups}>
+                    {groups.map((group) => (
+                        <section key={group.heading} className={styles.dayGroup}>
+                            <h3 className={styles.dayLabel}>{group.heading}</h3>
+                            <ul className={styles.eventList}>
+                                {group.events.map((e) => (
+                                    <li key={`${e.type}-${e.subscriptionId}`}><EventRow event={e} exact={exact} onOpenUser={onOpenUser} /></li>
+                                ))}
+                            </ul>
+                        </section>
+                    ))}
+                </div>
             ) : <p className={styles.empty}>No new subscriptions or cancellations in this period.</p>}
             {events.length > 12 && (
                 <button type="button" className={styles.linkButton} onClick={() => setAll((v) => !v)}>
@@ -410,35 +414,32 @@ function ActivityCard({ events, days, exact, onOpenUser }) {
 function EventRow({ event: e, exact, onOpenUser }) {
     const text = EVENT_TEXT[e.type] || EVENT_TEXT.new;
     const person = e.name || e.email || 'Unknown customer';
-    const plan = `${e.plan} ${e.interval}`;
     const time = new Date(e.at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    const discounted = e.type === 'new' && e.paid !== null && e.paid !== undefined && e.paid < e.listPrice;
+    const paid = e.paid === null || e.paid === undefined ? e.listPrice : e.paid;
 
-    let side;
+    let amount;
+    let note;
     if (e.type === 'new') {
-        side = (
-            <>
-                <strong>{e.paid === null || e.paid === undefined ? exact(e.listPrice, e.currency) : exact(e.paid, e.currency)}</strong>
-                {discounted && <span><s>{exact(e.listPrice, e.currency)}</s> list</span>}
-                <span>+{exact(e.monthly, e.currency)} MRR</span>
-            </>
-        );
+        amount = exact(paid, e.currency);
+        note = `+${exact(e.monthly, e.currency)} MRR`;
     } else if (e.type === 'trial') {
-        side = <><strong>Free</strong><span>{exact(e.listMonthly, e.currency)}/mo after</span></>;
+        amount = 'Free trial';
+        note = `${exact(e.listMonthly, e.currency)}/mo after`;
     } else {
-        side = <><strong>−{exact(e.monthly, e.currency)}</strong><span>MRR{e.type === 'cancelling' ? ' when it ends' : ''}</span></>;
+        amount = `−${exact(e.monthly, e.currency)}`;
+        note = 'MRR';
     }
+
+    const details = [time, text.label, `${e.plan} ${e.interval}`];
+    if (e.type === 'cancelling' && e.endsAt) details.push(`access ends ${fmtDate(e.endsAt)}`);
 
     const content = (
         <>
             <span className={`${styles.eventIcon} ${styles[`eventIcon_${e.type}`]}`} aria-hidden="true">{text.icon}</span>
             <span className={styles.eventMain}>
                 <strong>{person}</strong>
-                <span>
-                    {text.label} · {plan}
-                    {e.type === 'cancelling' && e.endsAt ? ` · ends ${fmtDate(e.endsAt)}` : ''}
-                </span>
-                {(e.coupon || (e.type === 'new' && e.status && e.status !== 'active')) && (
+                <span>{details.join(' · ')}</span>
+                {(e.coupon || (e.type === 'new' && e.status !== 'active')) && (
                     <span className={styles.chips}>
                         {e.coupon && <span className={`${styles.chip} ${styles.chipWarn}`}>{couponText(e.coupon, exact, e.currency)}</span>}
                         {e.type === 'new' && e.status !== 'active' && (
@@ -448,8 +449,8 @@ function EventRow({ event: e, exact, onOpenUser }) {
                 )}
             </span>
             <span className={styles.eventSide}>
-                {side}
-                <time dateTime={e.at}>{time}</time>
+                <strong>{amount}</strong>
+                <span>{note}</span>
             </span>
         </>
     );

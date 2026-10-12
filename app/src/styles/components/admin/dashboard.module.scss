@@ -1322,31 +1322,46 @@ div.toolCard:active { transform: none; box-shadow: 0 4px 0 var(--bp-line); }
 .chipGood { background: var(--bp-und-soft); border-color: var(--bp-und-line); color: color-mix(in srgb, var(--bp-und-d) 75%, var(--foreground)); }
 .chipWarn { background: var(--bp-keep-soft); border-color: var(--bp-keep-line); color: var(--bp-keep-ink); }
 
+.dayGroups {
+  display: flex;
+  flex-direction: column;
+}
+
+.dayGroup {
+  padding: .9rem 0 .4rem;
+  border-top: 1px solid var(--bp-line);
+  &:first-child { padding-top: 0; border-top: none; }
+}
+
 .dayLabel {
   @include bp-label;
   font-size: .7rem;
-  margin: .9rem 0 .2rem;
-  &:first-child { margin-top: 0; }
+  margin: 0 0 .35rem;
+}
+
+.eventList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
 }
 
 .event {
   display: flex;
-  align-items: flex-start;
-  gap: .75rem;
-  padding: .7rem .5rem;
-  margin: 0 -.5rem;
-  border-bottom: 1px solid var(--bp-line);
+  align-items: center;
+  gap: .8rem;
+  padding: .55rem .6rem;
+  margin: 0 -.6rem;
+  width: calc(100% + 1.2rem);
+  box-sizing: border-box;
+  border: none;
   border-radius: 12px;
-  width: 100%;
-  box-sizing: content-box;
   background: none;
-  border-left: none;
-  border-right: none;
-  border-top: none;
   text-align: left;
   font: inherit;
   color: inherit;
-  li:last-child > & { border-bottom: none; }
 }
 button.event {
   cursor: pointer;
@@ -1376,7 +1391,7 @@ button.event {
   gap: .2rem;
   > strong { font-size: .95rem; }
   > span { font-size: .8rem; font-weight: 600; color: var(--bp-ink2); overflow-wrap: anywhere; }
-  .chips { margin-top: .15rem; }
+  .chips { margin-top: .2rem; }
 }
 
 .eventSide {
@@ -1384,11 +1399,10 @@ button.event {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: .15rem;
+  gap: .1rem;
   text-align: right;
   strong { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
-  span, time { font-size: .76rem; font-weight: 700; color: var(--bp-ink2); }
-  s { opacity: .8; }
+  span { font-size: .76rem; font-weight: 700; color: var(--bp-ink2); }
 }
 
 .callComment { background: var(--bp-purple-soft, var(--bp-soft)); }
