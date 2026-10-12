@@ -738,8 +738,9 @@ app.delete('/api/conversations/:conversationId', isAuthenticated, async (req, re
     deleteConversation(req, res);
 });
 
+// Debug endpoints: admins only. Some return every Tutor chat, others change data.
 // Debug endpoint to initialize counters manually (remove in production)
-app.post('/api/debug/init-counters', async (req, res) => {
+app.post('/api/debug/init-counters', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         await initializeCounters();
         res.json({ success: true, message: 'Counters initialized successfully' });
@@ -750,7 +751,7 @@ app.post('/api/debug/init-counters', async (req, res) => {
 });
 
 // Debug endpoint to migrate conversation index (remove in production)
-app.post('/api/debug/migrate-conversation-index', async (req, res) => {
+app.post('/api/debug/migrate-conversation-index', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const { migrateConversationIndex } = require('./utils/migrateConversationIndex');
         const result = await migrateConversationIndex();
@@ -767,7 +768,7 @@ app.post('/api/debug/migrate-conversation-index', async (req, res) => {
 });
 
 // Debug endpoint to fix counters (remove in production)
-app.post('/api/debug/fix-counters', async (req, res) => {
+app.post('/api/debug/fix-counters', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const { fixCounters } = require('./utils/fixCounters');
         const result = await fixCounters();
@@ -784,7 +785,7 @@ app.post('/api/debug/fix-counters', async (req, res) => {
 });
 
 // Debug endpoint to check database state (remove in production)
-app.get('/api/debug/database-state', async (req, res) => {
+app.get('/api/debug/database-state', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const db = getDb();
         
@@ -818,7 +819,7 @@ app.get('/api/debug/database-state', async (req, res) => {
 });
 
 // Debug endpoint to check conversations only (remove in production)
-app.get('/api/debug/conversations', async (req, res) => {
+app.get('/api/debug/conversations', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const db = getDb();
         const conversations = await db.collection('conversations').find({}).toArray();
@@ -830,7 +831,7 @@ app.get('/api/debug/conversations', async (req, res) => {
 });
 
 // Debug endpoint to check messages only (remove in production)
-app.get('/api/debug/messages', async (req, res) => {
+app.get('/api/debug/messages', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const db = getDb();
         const messages = await db.collection('conversation_messages').find({}).toArray();
@@ -842,7 +843,7 @@ app.get('/api/debug/messages', async (req, res) => {
 });
 
 // Debug endpoint to force fix counters (remove in production)
-app.post('/api/debug/force-fix-counters', async (req, res) => {
+app.post('/api/debug/force-fix-counters', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const { forceFixCounters } = require('./utils/forceFixCounters');
         const result = await forceFixCounters();
@@ -859,7 +860,7 @@ app.post('/api/debug/force-fix-counters', async (req, res) => {
 });
 
 // Debug endpoint to cleanup conflicting data (remove in production)
-app.post('/api/debug/cleanup-conflicts', async (req, res) => {
+app.post('/api/debug/cleanup-conflicts', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const { cleanupConflictingData } = require('./utils/cleanupConflictingData');
         const result = await cleanupConflictingData();
@@ -876,7 +877,7 @@ app.post('/api/debug/cleanup-conflicts', async (req, res) => {
 });
 
 // Debug endpoint to delete specific conversation (remove in production)
-app.post('/api/debug/delete-conversation/:id', async (req, res) => {
+app.post('/api/debug/delete-conversation/:id', isAuthenticated, requireAdmin, async (req, res) => {
     try {
         const { deleteSpecificConversation } = require('./utils/deleteSpecificConversation');
         const conversationId = parseInt(req.params.id);
