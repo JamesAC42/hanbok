@@ -241,6 +241,8 @@
     flex-direction: column;
     background: var(--background);
     position: relative;
+    // Lets tutor rows check whether the side gutter has room for Horang.
+    container: tutor-chat / inline-size;
 }
 
 .mainTop {
@@ -408,8 +410,13 @@
         max-width: min(85%, 36rem);
     }
 
+    // Horang's bubble starts at the column's left edge, even with the
+    // right edge of the user's bubbles. Narrow columns put him above it.
     &.assistant {
         align-self: flex-start;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
     }
 
     &.system {
@@ -427,7 +434,31 @@
     place-items: center;
     background: var(--bp-flame-soft);
     border: 2px solid var(--bp-flame-line);
-    margin-bottom: 1.4rem;
+
+    .messageWrapper.assistant & {
+        width: 2.25rem;
+        height: 2.25rem;
+        img { width: 30px; height: auto; }
+    }
+}
+
+// Wide enough for the avatar to sit in the gutter left of the column
+// (50rem column + avatar and gap on each side).
+@container tutor-chat (min-width: 58rem) {
+    .messageWrapper.assistant {
+        flex-direction: row;
+        align-items: flex-end;
+        gap: 0.6rem;
+        margin-left: -3.35rem;
+        max-width: calc(100% + 3.35rem);
+    }
+
+    .messageWrapper.assistant .tutorBubble {
+        width: 2.75rem;
+        height: 2.75rem;
+        margin-bottom: 1.4rem;
+        img { width: 38px; }
+    }
 }
 
 .message {
@@ -766,12 +797,6 @@
 
     .chatMessages {
         padding: 1rem;
-    }
-
-    .tutorBubble {
-        width: 2.4rem;
-        height: 2.4rem;
-        img { width: 32px; height: auto; }
     }
 
     .messageWrapper.user {
