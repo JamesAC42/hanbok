@@ -15,6 +15,7 @@ import ToolsPanel from '@/components/admin/dashboard/ToolsPanel';
 import PartnersPanel from '@/components/admin/dashboard/PartnersPanel';
 import SpeakPanel from '@/components/admin/dashboard/SpeakPanel';
 import TutorPanel from '@/components/admin/dashboard/TutorPanel';
+import SurveysPanel from '@/components/admin/dashboard/SurveysPanel';
 import ExtensionPanel from '@/components/admin/dashboard/ExtensionPanel';
 import UserDrawer from '@/components/admin/dashboard/UserDrawer';
 import { RANGES, timeAgo } from '@/components/admin/dashboard/format';
@@ -27,6 +28,7 @@ const TABS = [
     { key: 'money', label: 'Money', color: 'var(--bp-purple)' },
     { key: 'users', label: 'Users', color: 'var(--bp-keep)' },
     { key: 'visitors', label: 'Visitors', color: 'var(--bp-gray)' },
+    { key: 'surveys', label: 'Surveys', color: 'var(--bp-read)' },
     { key: 'extension', label: 'Extension', color: 'var(--bp-und)' },
     { key: 'partners', label: 'Partners', color: 'var(--bp-flame)' },
     { key: 'tools', label: 'Tools', color: 'var(--bp-rev)' },
@@ -148,6 +150,7 @@ export default function Admin() {
                 {visited.has('money') && <div hidden={tab !== 'money'}><MoneyPanel {...panelProps} /></div>}
                 {visited.has('users') && <div hidden={tab !== 'users'}><UsersPanel {...panelProps} usersVersion={usersVersion} /></div>}
                 {visited.has('visitors') && <div hidden={tab !== 'visitors'}><VisitorsPanel {...panelProps} /></div>}
+                {visited.has('surveys') && <div hidden={tab !== 'surveys'}><SurveysPanel {...panelProps} /></div>}
                 {visited.has('extension') && <div hidden={tab !== 'extension'}><ExtensionPanel {...panelProps} /></div>}
                 {visited.has('partners') && <div hidden={tab !== 'partners'}><PartnersPanel {...panelProps} /></div>}
                 {visited.has('tools') && <div hidden={tab !== 'tools'}><ToolsPanel /></div>}

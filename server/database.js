@@ -128,6 +128,9 @@ async function connectToDatabase() {
     await safeCreateIndex('conversations', { userId: 1, dateCreated: -1 });
     await safeCreateIndex('tutor_events', { at: -1 });
     await safeCreateIndex('tutor_events', { conversationId: 1 });
+    // "Would you use a phone app?" card: one row per person.
+    await safeCreateIndex('app_survey', { userId: 1 });
+    await safeCreateIndex('app_survey', { visitorId: 1 });
 
     // Add index for word_audio collection
     await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });

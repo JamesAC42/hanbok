@@ -116,6 +116,8 @@ const requireAdmin = require('./lib/requireAdmin');
 const adminStats = require('./controllers/admin/stats');
 const adminSpeak = require('./controllers/admin/speakStats');
 const adminTutor = require('./controllers/admin/tutorStats');
+const adminAppSurvey = require('./controllers/admin/appSurveyStats');
+const { saveAppSurvey } = require('./controllers/appSurvey');
 const { trackExtensionUsage, reportInstalled } = require('./lib/extensionUsage');
 const { getRevenue } = require('./controllers/admin/revenue');
 const { getTraffic } = require('./controllers/admin/traffic');
@@ -483,6 +485,10 @@ app.get('/api/word-relations', isAuthenticated, async (req, res) => {
     getWordRelations(req, res);
 });
 
+// "Would you use a phone app?" card, open to signed-out visitors too
+const appSurveyLimit = authLimit({ name: 'app-survey', ip: { max: 30, windowSeconds: HOUR } });
+app.post('/api/app-survey', appSurveyLimit, saveAppSurvey);
+
 // Feedback forum routes
 app.get('/api/feedback', async (req, res) => {
     getFeedback(req, res);
@@ -533,6 +539,7 @@ app.get('/api/admin/stats/speak', isAuthenticated, requireAdmin, adminSpeak.getS
 app.get('/api/admin/speak/calls/:id', isAuthenticated, requireAdmin, adminSpeak.getSpeakCall);
 app.get('/api/admin/stats/tutor', isAuthenticated, requireAdmin, adminTutor.getTutorStats);
 app.get('/api/admin/tutor/conversations/:id', isAuthenticated, requireAdmin, adminTutor.getTutorConversation);
+app.get('/api/admin/stats/app-survey', isAuthenticated, requireAdmin, adminAppSurvey.getAppSurveyStats);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);

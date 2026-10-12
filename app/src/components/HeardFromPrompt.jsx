@@ -75,7 +75,7 @@ const HeardFromPrompt = () => {
     };
 
     return (
-        <aside className={styles.card} role="dialog" aria-labelledby="heard-from-title">
+        <aside className={styles.card} role="dialog" aria-labelledby="heard-from-title" data-corner-card="">
             <div className={styles.head}>
                 <Mascot pose={state === 'thanks' ? 'celebrate' : 'think'} size={52} />
                 <div>
