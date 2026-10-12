@@ -5,6 +5,7 @@ const app = express();
 
 const session = require('express-session');
 const {createClient} = require('redis');
+const { redisClientOptions } = require('./lib/redisConfig');
 const {RedisStore} = require('connect-redis');
 
 // Import Bull queue and cleanup function
@@ -14,18 +15,7 @@ const { processLyricAnalysis, shutdown: shutdownLyricProcessor } = require('./jo
 const { cleanupRedisConnections } = require('./controllers/lyrics/generateLyricAnalysis');
 
 // Create Redis client with configuration
-const redisClient = createClient({
-  password: process.env.REDIS_PW || undefined,
-  socket: {
-    reconnectStrategy: (retries) => {
-      if (retries > 10) {
-        console.error('Redis connection failed after multiple retries');
-        return false;
-      }
-      return Math.min(retries * 100, 3000);
-    }
-  }
-});
+const redisClient = createClient(redisClientOptions());
 
 // Handle Redis connection events
 redisClient.on('error', (err) => console.error('Redis Client Error:', err));

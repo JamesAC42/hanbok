@@ -8,16 +8,7 @@ const { createClient } = require('redis');
 const { generateSpeech } = require('../elevenlabs/generateSpeech');
 const { getJapaneseTextToRead } = require('../utils/sentenceAudio');
 
-// Redis connection options
-const redisOptions = {
-  password: process.env.REDIS_PW || undefined,
-  socket: {
-    reconnectStrategy: (retries) => {
-      if (retries > 10) return false;
-      return Math.min(retries * 100, 3000);
-    }
-  }
-};
+const { redisClientOptions } = require('../lib/redisConfig');
 
 // Create a Redis client to be reused
 let redisClient = null;
@@ -25,7 +16,7 @@ let redisClient = null;
 // Initialize Redis client
 async function getRedisClient() {
   if (!redisClient) {
-    redisClient = createClient(redisOptions);
+    redisClient = createClient(redisClientOptions());
     redisClient.on('error', (err) => console.error('Redis client error:', err));
     await redisClient.connect();
   }

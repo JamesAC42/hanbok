@@ -1,0 +1,9 @@
+**/node_modules
+**/.next
+**/.next-build
+**/.next-prev
+**/.env*
+.git
+audio
+screenshots
+extension

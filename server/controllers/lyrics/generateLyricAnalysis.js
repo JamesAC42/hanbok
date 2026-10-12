@@ -6,16 +6,7 @@ const { createClient } = require('redis');
 
 const ADMIN_EMAILS = require('../../lib/adminEmails');
 
-// Redis connection options
-const redisOptions = {
-  password: process.env.REDIS_PW || undefined,
-  socket: {
-    reconnectStrategy: (retries) => {
-      if (retries > 10) return false;
-      return Math.min(retries * 100, 3000);
-    }
-  }
-};
+const { redisClientOptions } = require('../../lib/redisConfig');
 
 // Create a Redis client to be reused
 let progressRedisClient = null;
@@ -23,7 +14,7 @@ let progressRedisClient = null;
 // Initialize Redis client
 async function getProgressRedisClient() {
   if (!progressRedisClient) {
-    progressRedisClient = createClient(redisOptions);
+    progressRedisClient = createClient(redisClientOptions());
     progressRedisClient.on('error', (err) => console.error('Progress Redis client error:', err));
     await progressRedisClient.connect();
   }

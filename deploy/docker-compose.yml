@@ -1,0 +1,41 @@
+# Hanbok on one server. The images are built and pushed by
+# .github/workflows/deploy.yml; the server only pulls and runs them.
+#   HANBOK_TAG=<git sha> docker compose up -d
+# nginx (on the host) proxies hanbokstudy.com to 127.0.0.1:3059 and /api to 127.0.0.1:5666.
+
+x-hardening: &hardening
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  tmpfs: ["/tmp"]
+  logging:
+    driver: json-file
+    options: { max-size: "20m", max-file: "5" }
+
+services:
+  api:
+    <<: *hardening
+    image: ghcr.io/jamesac42/hanbok-api:${HANBOK_TAG:-latest}
+    env_file: ./api.env
+    volumes:
+      - ./audio:/srv/audio:ro
+      # Managed database CA certificates (MONGODB_URI ...&tlsCAFile=/srv/certs/mongo-ca.crt)
+      - ./certs:/srv/certs:ro
+    ports: ["127.0.0.1:5666:5666"]
+    mem_limit: 1g
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5666/api/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  app:
+    <<: *hardening
+    image: ghcr.io/jamesac42/hanbok-app:${HANBOK_TAG:-latest}
+    environment:
+      API_INTERNAL_URL: http://api:5666
+    tmpfs: ["/tmp", "/srv/app/.next/cache:uid=1000,gid=1000"]
+    ports: ["127.0.0.1:3059:3059"]
+    mem_limit: 768m
+    depends_on: [api]
