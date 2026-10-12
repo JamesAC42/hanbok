@@ -25,9 +25,11 @@ concurrency:
 
 jobs:
   deploy:
+    # Once DEPLOY_MODE is "docker", deploy-docker.yml deploys instead.
     if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+      vars.DEPLOY_MODE != 'docker' && (
+        github.event_name == 'workflow_dispatch' ||
+        (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'))
     runs-on: ubuntu-latest
     environment: production
     timeout-minutes: 20

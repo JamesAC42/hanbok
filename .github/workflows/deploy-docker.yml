@@ -1,0 +1,98 @@
+name: Deploy (Docker)
+
+# Builds the API and app images in CI, pushes them to GHCR, then has the server
+# pull and run them (deploy/compose-entry.sh). Active once the repository
+# variable DEPLOY_MODE is "docker"; until then deploy.yml handles deploys.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      action:
+        description: deploy builds and ships the ref below; rollback switches back to the previous images
+        type: choice
+        options: [deploy, rollback]
+        default: deploy
+      ref:
+        description: Branch, tag or commit SHA to deploy
+        default: main
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    if: >-
+      vars.DEPLOY_MODE == 'docker' && (
+        (github.event_name == 'workflow_dispatch' && inputs.action == 'deploy') ||
+        (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      sha: ${{ steps.sha.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || inputs.ref }}
+      - id: sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push the API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: server/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/jamesac42/hanbok-api:${{ steps.sha.outputs.sha }}
+            ghcr.io/jamesac42/hanbok-api:latest
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+      - name: Build and push the app image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: app/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/jamesac42/hanbok-app:${{ steps.sha.outputs.sha }}
+            ghcr.io/jamesac42/hanbok-app:latest
+          cache-from: type=gha,scope=app
+          cache-to: type=gha,mode=max,scope=app
+
+  deploy:
+    needs: build
+    if: always() && vars.DEPLOY_MODE == 'docker' && (needs.build.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.action == 'rollback'))
+    runs-on: ubuntu-latest
+    environment: production
+    timeout-minutes: 10
+    steps:
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          COMMAND: ${{ needs.build.result == 'success' && format('deploy {0}', needs.build.outputs.sha) || 'rollback' }}
+        # authorized_keys pins this key to deploy/compose-entry.sh on the server.
+        run: ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes -o BatchMode=yes "$DEPLOY_USER@$DEPLOY_HOST" "$COMMAND"

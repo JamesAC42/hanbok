@@ -1,22 +1,10 @@
 const Queue = require('bull');
 
-// Redis connection options - reuse the same configuration as the main app
-const redisOptions = {
-  password: process.env.REDIS_PW || undefined,
-  socket: {
-    reconnectStrategy: (retries) => {
-      if (retries > 10) {
-        console.error('Redis connection failed after multiple retries');
-        return false;
-      }
-      return Math.min(retries * 100, 3000);
-    }
-  }
-};
+const { bullRedis } = require('../lib/redisConfig');
 
 // Create the analysis queue
 const analysisQueue = new Queue('lyrics-analysis', {
-  redis: redisOptions,
+  redis: bullRedis(),
   prefix: process.env.BULL_QUEUE_PREFIX || 'bull:lyrics:',
   defaultJobOptions: {
     attempts: 3,
