@@ -1,5 +1,7 @@
 @import '@/styles/variables.module.scss';
 
+// Formality dial (components/analysis/Variants.jsx)
+
 .variants {
     margin: 1.5rem 0 .5rem;
     width: 100%;
@@ -10,98 +12,105 @@
         font-size: 1.35rem;
         margin-bottom: .9rem;
     }
-
-    .variantsContainer {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap: 1rem;
-    }
 }
 
-.variantCard {
-    --tone: var(--bp-read);
-    --tone-d: var(--bp-read-d);
-    background: var(--background);
-    border: 2px solid var(--bp-line);
-    border-radius: 18px;
-    box-shadow: 0 4px 0 var(--bp-line);
-    overflow: hidden;
+.dial {
     display: flex;
     flex-direction: column;
-
-    .cardHeader {
-        padding: .8rem 1rem 0;
-        display: flex;
-        align-items: center;
-
-        .variantType {
-            font-size: .7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .07em;
-            padding: .3rem .7rem;
-            border-radius: 99px;
-            color: #fff;
-            background: var(--tone);
-        }
-    }
-
-    .cardBody {
-        padding: .9rem 1.1rem 1rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        gap: .35rem;
-
-        .variantText {
-            font-size: 1.4rem;
-            color: var(--foreground);
-            font-weight: 700;
-            line-height: 1.5;
-
-            &:global(.korean) {
-                font-family: var(--font-kr-sans);
-            }
-        }
-
-        .variantReading {
-            font-size: .85rem;
-            font-weight: 600;
-            color: var(--bp-ink2);
-        }
-    }
-
-    .cardFooter {
-        background: var(--bp-soft);
-        padding: .7rem 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .variantWhenToUse {
-            font-size: .86rem;
-            font-weight: 700;
-            color: var(--bp-ink2);
-            text-align: center;
-            line-height: 1.4;
-        }
-    }
-
-    &[data-formality="formal"] { --tone: var(--bp-read); }
-    &[data-formality="polite"] { --tone: var(--bp-und); }
-    &[data-formality="casual"],
-    &[data-formality="informal"] { --tone: var(--bp-pink); }
+    gap: .7rem;
+    padding: 1.1rem 1.2rem 1rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 18px;
+    background: var(--background);
+    box-shadow: 0 4px 0 var(--bp-line);
 }
 
-@media screen and (max-width: 600px) {
-    .variants .variantsContainer {
-        grid-template-columns: 1fr;
-    }
+.dialTop {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+}
 
-    .variantCard .cardBody .variantText {
-        font-size: 1.25rem;
+.dialLabel {
+    font-size: .7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    padding: .3rem .7rem;
+    border-radius: 99px;
+    color: #fff;
+    background: var(--bp-read);
+}
+
+.dialYours {
+    @include bp-label;
+}
+
+.dialText {
+    font-size: clamp(1.25rem, 3.4vw, 1.6rem);
+    font-weight: 700;
+    line-height: 1.55;
+    color: var(--foreground);
+
+    &:global(.korean) {
+        font-family: var(--font-kr-sans);
     }
+}
+
+.dialChanged {
+    background: var(--bp-keep-soft);
+    box-shadow: inset 0 -3px 0 var(--bp-keep);
+    border-radius: 6px;
+    padding: 0 .15em;
+}
+
+.variantReading {
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}
+
+.dialRange {
+    width: 100%;
+    accent-color: var(--bp-read);
+    margin: .2rem 0 0;
+}
+
+.dialStops {
+    display: grid;
+    gap: .3rem;
+}
+
+.dialStop {
+    border: 0;
+    background: transparent;
+    padding: .2rem;
+    font-family: var(--font-display);
+    font-size: .72rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--bp-ink2);
+    cursor: pointer;
+    text-align: center;
+    overflow-wrap: anywhere;
+
+    &:first-child { text-align: left; }
+    &:last-child { text-align: right; }
+    &:focus-visible { outline: 3px solid var(--bp-read-line); border-radius: 6px; }
+}
+
+.dialStopOn {
+    color: var(--bp-read);
+}
+
+.variantWhenToUse {
+    margin: 0;
+    padding-top: .6rem;
+    border-top: 2px solid var(--bp-line);
+    font-size: .9rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+    line-height: 1.5;
 }
