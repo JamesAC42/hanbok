@@ -319,3 +319,138 @@
     font-weight: 400;
     font-size: 1.5rem;
 }
+
+// Sentence map
+
+.mapRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.mapGroup {
+    --tone: var(--bp-read);
+    @include bp-press-card(color-mix(in srgb, var(--tone) 50%, var(--background)), 3px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .2rem;
+    padding: .55rem .8rem .45rem;
+    background: color-mix(in srgb, var(--tone) 10%, var(--background));
+    color: var(--foreground);
+    font-family: var(--font-display);
+
+    &:hover { background: color-mix(in srgb, var(--tone) 16%, var(--background)); }
+
+    &[aria-pressed="true"] {
+        border-color: var(--tone);
+        background: color-mix(in srgb, var(--tone) 18%, var(--background));
+    }
+}
+
+.tone_purple { --tone: var(--bp-purple); }
+.tone_keep { --tone: var(--bp-keep); }
+.tone_und { --tone: var(--bp-und); }
+.tone_read { --tone: var(--bp-read); }
+.tone_rev { --tone: var(--bp-rev); }
+.tone_flame { --tone: var(--bp-flame); }
+
+.mapWords {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.mapRole {
+    font-size: .66rem;
+    font-weight: 800;
+    letter-spacing: .07em;
+    text-transform: uppercase;
+    color: var(--bp-ink2);
+}
+
+.mapRead {
+    margin: 0;
+    font-size: .92rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+// Ask Horangi
+
+.askHead {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+}
+
+.askChips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .45rem;
+}
+
+.askChip {
+    @include bp-press-card(var(--bp-flame-line), 3px);
+    padding: .45rem .8rem;
+    font-family: var(--font-display);
+    font-size: .86rem;
+    font-weight: 700;
+    color: var(--foreground);
+    text-align: left;
+    background: var(--bp-flame-soft);
+
+    &:disabled { cursor: default; opacity: .6; }
+}
+
+span.askChip {
+    cursor: default;
+    &:active { transform: none; box-shadow: 0 3px 0 var(--bp-flame-line); }
+}
+
+.askForm {
+    display: flex;
+    gap: .5rem;
+    min-width: 0;
+}
+
+.askInput {
+    @include bp-input;
+    flex: 1;
+    min-width: 0;
+    padding: .6rem .85rem;
+    font-size: .95rem;
+}
+
+.askSend {
+    @include bp-press(var(--bp-flame), var(--bp-flame-d));
+    padding: .6rem 1rem;
+    font-size: .82rem;
+}
+
+.askAnswer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: .85rem 1rem;
+    border-radius: 14px;
+    background: var(--bp-card);
+    border: 2px solid var(--bp-line);
+    font-size: .95rem;
+    font-weight: 500;
+    line-height: 1.55;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.askQ {
+    margin: 0;
+    font-weight: 800;
+}
+
+.askMore {
+    @include bp-press-ghost(var(--bp-flame));
+    align-self: flex-start;
+    padding: .5rem .9rem;
+    font-size: .78rem;
+}

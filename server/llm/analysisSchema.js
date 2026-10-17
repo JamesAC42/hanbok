@@ -67,14 +67,14 @@ const isMapTemplate = (node) => {
 const SHORT_STRING_KEYS = new Set([
     'text', 'dictionary_form', 'reading', 'transliteration', 'type', 'type_translated',
     'original', 'translation', 'label', 'particle', 'step', 'pattern', 'formality',
-    'tense', 'importance', 'role'
+    'tense', 'importance', 'role', 'register', 'standard_form', 'gloss'
 ]);
 const SHORT_STRING_MAX = 600;
 const LONG_STRING_MAX = 2000;
 // Only top-level arrays get maxItems: Gemini rejects the schema ("invalid
 // argument") when components or nested arrays carry it too. Components follow
 // the input's length, and nested arrays are bounded by maxOutputTokens.
-const TOP_LEVEL_MAX_ITEMS = { grammar_points: 10, variants: 8, cultural_notes: 6 };
+const TOP_LEVEL_MAX_ITEMS = { grammar_points: 10, variants: 8, cultural_notes: 6, chunks: 12, questions: 3 };
 const maxItemsFor = (key, path) => (path.length === 2 ? TOP_LEVEL_MAX_ITEMS[key] : undefined);
 
 const stringSchema = (description, key) => {

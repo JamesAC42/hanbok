@@ -132,6 +132,7 @@ const Breakdown = ({
 				)}
 				<span className={`${styles.wordText} ${getFontClass(language)}`}>{item.text}</span>
 				{item.type !== 'punctuation' && <span className={styles.gloss}>{gloss(item) || '\u00a0'}</span>}
+				{item.register && <span className={styles.register} title={item.standard_form ? `Standard: ${item.standard_form}` : undefined}>{item.register}</span>}
 				</button>
 				{item.grammar?.particles?.length > 0 && renderParticles(item)}
 			</div>

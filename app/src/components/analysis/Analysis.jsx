@@ -281,7 +281,8 @@ const Analysis = ({
                         <AnalysisLayers
                             analysis={analysis}
                             language={originalLanguage}
-                            sentenceKey={shareKey || sentenceId || analysis.sentence.original} />
+                            sentenceKey={shareKey || sentenceId || analysis.sentence.original}
+                            sentenceId={isLyric ? null : sentenceId} />
                     </div>
                     
                     {/* Next steps (shown here when the side column is a bottom sheet) */}
