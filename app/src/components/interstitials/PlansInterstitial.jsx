@@ -22,24 +22,33 @@ const perMonth = (yearly) => formatPrice(Math.round(yearly / 12 * 100) / 100);
 
 // Full-screen plans pitch. With a deal (YEARLY_DEAL_COUPON_ID) it leads with
 // the discount; every number comes from the coupon or the real list prices.
-const PlansInterstitial = ({ deal, trial, onClose, onAction }) => {
+const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction }) => {
     const ends = dealEndsLabel(deal);
     const plusDeal = dealYearlyPrice('plus', deal);
 
-    const title = deal ? `${dealAmountLabel(deal)} a year of Hanbok` : 'Study without limits';
-    const subtitle = deal
+    const title = trialEnded
+        ? 'Your free week of Plus is over'
+        : deal ? `${dealAmountLabel(deal)} a year of Hanbok` : 'Study without limits';
+    const subtitle = trialEnded && deal
+        ? `You're back on the free plan, with 10 breakdowns a week. As a thank-you for trying Plus, keep it for ${formatPrice(plusDeal)} ${dealDurationLabel(deal)} instead of ${formatPrice(PLAN_PRICES.plus.yearly)}.`
+        : trialEnded
+        ? `You're back on the free plan, with 10 breakdowns a week. Keep Plus from ${perMonth(PLAN_PRICES.plus.yearly)} a month on a yearly plan, and everything you saved stays put.`
+        : deal
         ? `Get Plus for ${formatPrice(plusDeal)} ${dealDurationLabel(deal)} instead of ${formatPrice(PLAN_PRICES.plus.yearly)}.`
         : trial
             ? `Try Plus free for ${trial.days} days. Cancel before it ends and you pay nothing.`
             : `Unlimited breakdowns, flashcards and audio, from ${perMonth(PLAN_PRICES.basic.yearly)} a month on a yearly plan.`;
-    const cta = deal ? 'Get the deal' : trial ? 'Try Plus free' : 'See plans';
+    const cta = trialEnded ? 'Keep Plus' : deal ? 'Get the deal' : trial ? 'Try Plus free' : 'See plans';
+    const pill = trialEnded
+        ? (deal ? 'Trial-end offer' : 'Hanbok Plus')
+        : deal ? (ends ? 'Limited-time deal' : 'Yearly deal') : 'Hanbok Plus';
 
     return (
         <InterstitialFrame labelledBy="plans-interstitial-title" onClose={onClose} tone={deal ? 'rev' : 'read'}>
             <div className={styles.hero}>
                 <Mascot pose="celebrate" size={104} />
                 <span className={`${styles.pill} ${deal ? styles.pillRev : styles.pillRead}`}>
-                    {deal ? (ends ? 'Limited-time deal' : 'Yearly deal') : 'Hanbok Plus'}
+                    {pill}
                 </span>
                 <h2 id="plans-interstitial-title" className={styles.title}>{title}</h2>
                 <p className={styles.subtitle}>{subtitle}</p>

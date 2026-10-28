@@ -47,6 +47,25 @@ const trialEndsAt = (user) => {
     return trial.endsAt;
 };
 
+// Subscribing during the trial keeps the days left: checkout starts the
+// subscription as a Stripe trial ending when this one would have, so nobody
+// loses free days by paying early. Stripe Checkout needs trial_end at least 48
+// hours out, so with less left than that they're simply charged now.
+const MIN_CARRY_OVER_MS = 49 * 60 * 60 * 1000;
+const carryOverTrialEnd = (user, now = Date.now()) => {
+    const endsAt = trialEndsAt(user);
+    if (!endsAt) return null;
+    const end = new Date(endsAt);
+    return end.getTime() - now >= MIN_CARRY_OVER_MS ? end : null;
+};
+
+// When this account's trial ran out without a subscription; null otherwise.
+const trialEndedAt = (user) => {
+    const trial = user?.autoTrial;
+    if (!trial?.expiredAt || user.subscription?.stripeSubscriptionId || user.tier > 0) return null;
+    return trial.expiredAt;
+};
+
 // Paid tier from a real subscription, not a running trial. Use these anywhere
 // tier > 0 is read as "paying" (admin stats, affiliates, the snapshot).
 const isPaying = (user) => user?.tier > 0 && !trialEndsAt(user);
@@ -71,6 +90,6 @@ const startAutoTrialExpiry = (getDb) => {
 };
 
 module.exports = {
-    isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, startAutoTrialExpiry,
+    isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, trialEndedAt, carryOverTrialEnd, startAutoTrialExpiry,
     isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION,
 };

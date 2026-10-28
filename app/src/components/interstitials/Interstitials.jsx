@@ -37,6 +37,17 @@ const wantsSpeakAnnouncement = (user) => {
 // Paying = a real subscription, not the no-card trial.
 const isPayingUser = (user) => !!user && user.tier > 0 && !user.plusTrialEndsAt;
 
+// Trial users whose no-card Plus trial ended in the last week: one popup that
+// says so (with their trial-end offer if it's running). Unlike the others it
+// skips the gap between popups, since it only makes sense right after the end.
+const TRIAL_ENDED_WINDOW_DAYS = 7;
+const trialEndedId = (user) => `trial-ended:${user.plusTrialEndedAt}`;
+const wantsTrialEnded = (user) => {
+    if (!user?.plusTrialEndedAt || user.tier > 0) return false;
+    if (Date.now() - new Date(user.plusTrialEndedAt).getTime() > TRIAL_ENDED_WINDOW_DAYS * DAY) return false;
+    return !lastShown(trialEndedId(user));
+};
+
 const dealId = (deal) => `deal:${deal.percentOff || deal.amountOff}:${deal.endsAt || 'open'}`;
 
 // Someone is in the middle of something on this page: another popup is open,
@@ -65,6 +76,7 @@ const loadOffer = async () => {
 };
 
 // Picks at most one popup for this page load, highest priority first:
+// 0. "Your Plus trial ended", once, just after a no-card trial ends
 // 1. a running yearly deal, once per deal (free and signed-out only)
 // 2. one-time announcements: Speak (signed-in learners who haven't tried it),
 //    then the Chrome extension (desktop Chrome without it)
@@ -76,6 +88,9 @@ const pickInterstitial = async (user) => {
     const offer = paying ? null : await loadOffer();
     const deal = offer?.deal?.eligible ? offer.deal : null;
 
+    if (wantsTrialEnded(user)) {
+        return { id: trialEndedId(user), kind: 'plans', deal, trial: null, trialEnded: true };
+    }
     if (deal && !lastShown(dealId(deal))) {
         return { id: dealId(deal), kind: 'plans', deal, trial: null };
     }
@@ -108,7 +123,8 @@ const Interstitials = () => {
     useEffect(() => {
         if (loading || current) return;
         if (!INTERSTITIAL_PAGES.test(pathname || '')) return;
-        if (!canShowInterstitial()) return;
+        const allowed = () => wantsTrialEnded(user) || canShowInterstitial();
+        if (!allowed()) return;
 
         let cancelled = false;
         const timer = setTimeout(async () => {
@@ -119,9 +135,10 @@ const Interstitials = () => {
             if (busy()) return;
             const picked = await pickInterstitial(user);
             // Re-check: they may have started something while the offer loaded.
-            if (cancelled || !picked || busy() || !canShowInterstitial()) return;
+            if (cancelled || !picked || busy() || !(picked.trialEnded || canShowInterstitial())) return;
             noteInterstitialShown(picked.id);
             if (picked.kind === 'plans' && picked.deal) noteInterstitialShown('plans');
+            if (picked.trialEnded && picked.deal) noteInterstitialShown(dealId(picked.deal));
             track('interstitial_view', { id: picked.id, loggedIn: !!user });
             setCurrent(picked);
         }, DELAY_MS);
@@ -148,6 +165,7 @@ const Interstitials = () => {
         <PlansInterstitial
             deal={current.deal}
             trial={current.trial}
+            trialEnded={!!current.trialEnded}
             signedIn={!!user}
             onClose={close}
             onAction={onAction}

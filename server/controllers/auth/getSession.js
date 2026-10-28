@@ -2,7 +2,7 @@ const { getDb } = require('../../database');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
-const { expireIfDue, trialEndsAt } = require('../../utils/autoTrial');
+const { expireIfDue, trialEndsAt, trialEndedAt } = require('../../utils/autoTrial');
 
 const getSession = async (req, res) => {
     
@@ -110,6 +110,7 @@ const getSession = async (req, res) => {
             feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
             heardFrom: user.attribution?.heardFrom || null,
             plusTrialEndsAt: trialEndsAt(user),
+            plusTrialEndedAt: trialEndedAt(user),
             remainingImageExtracts: user.remainingImageExtracts ? user.remainingImageExtracts : 0,
             remainingSentenceAnalyses: user.remainingSentenceAnalyses ? user.remainingSentenceAnalyses : 0,
             hasUsedFreeTrial: user.hasUsedFreeTrial || false,

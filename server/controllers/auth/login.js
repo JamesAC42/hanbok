@@ -5,7 +5,7 @@ const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
 const { sanitizeAttribution } = require('../../utils/attribution');
-const { autoTrialFields, expireIfDue, trialEndsAt } = require('../../utils/autoTrial');
+const { autoTrialFields, expireIfDue, trialEndsAt, trialEndedAt } = require('../../utils/autoTrial');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -244,6 +244,7 @@ const login = async (req, res, redisClient) => {
                 feedbackAudioCreditRedeemed: user.feedbackAudioCreditRedeemed || false,
                 heardFrom: user.attribution?.heardFrom || null,
                 plusTrialEndsAt: trialEndsAt(user),
+                plusTrialEndedAt: trialEndedAt(user),
                 remainingImageExtracts: user.remainingImageExtracts,
                 remainingSentenceAnalyses: user.remainingSentenceAnalyses || 0,
                 hasUsedFreeTrial: user.hasUsedFreeTrial || false,
