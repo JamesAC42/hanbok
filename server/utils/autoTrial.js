@@ -17,6 +17,40 @@ const autoTrialFields = (now = new Date()) => {
     };
 };
 
+// Returning free accounts get the same trial once, the next time they open
+// Hanbok: anyone a week old or more who never had a trial or a subscription.
+// Most accounts predate the no-card trial and never saw what Plus does. OFF
+// unless RETURNING_TRIAL_ENABLED=true.
+const RETURNING_MIN_AGE_DAYS = 7;
+const isReturningTrialEnabled = (env = process.env) => env.RETURNING_TRIAL_ENABLED === 'true' && plusTrialDays() > 0;
+
+const returningTrialFilter = (now) => ({
+    tier: { $not: { $gt: 0 } },
+    autoTrial: { $exists: false },
+    'subscription.stripeSubscriptionId': { $exists: false },
+    hasUsedFreeTrial: { $ne: true },
+    dateCreated: { $lte: new Date(now.getTime() - RETURNING_MIN_AGE_DAYS * DAY) },
+});
+
+const isReturningTrialEligible = (user, now = new Date()) => !!user
+    && !(user.tier > 0)
+    && !user.autoTrial
+    && !user.subscription?.stripeSubscriptionId
+    && user.hasUsedFreeTrial !== true
+    && !!user.dateCreated
+    && now.getTime() - new Date(user.dateCreated).getTime() >= RETURNING_MIN_AGE_DAYS * DAY;
+
+// Starts the returning-user trial if this user qualifies. Returns the user as it now is.
+const startReturningTrialIfEligible = async (db, user, now = new Date()) => {
+    if (!isReturningTrialEnabled() || !isReturningTrialEligible(user, now)) return user;
+    const autoTrial = { startedAt: now, endsAt: new Date(now.getTime() + plusTrialDays() * DAY), source: 'returning' };
+    const result = await db.collection('users').updateOne(
+        { userId: user.userId, ...returningTrialFilter(now) },
+        { $set: { tier: 2, autoTrial } }
+    );
+    return result.modifiedCount === 1 ? { ...user, tier: 2, autoTrial } : user;
+};
+
 // A trial that has run out, on an account that never subscribed.
 const dueFilter = (now) => ({
     'autoTrial.endsAt': { $lte: now },
@@ -91,5 +125,6 @@ const startAutoTrialExpiry = (getDb) => {
 
 module.exports = {
     isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, trialEndedAt, carryOverTrialEnd, startAutoTrialExpiry,
+    isReturningTrialEnabled, isReturningTrialEligible, startReturningTrialIfEligible,
     isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION,
 };

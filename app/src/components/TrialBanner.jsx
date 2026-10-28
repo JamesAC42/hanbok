@@ -87,7 +87,7 @@ const TrialBanner = () => {
 
     const kind = onTrial ? 'trial' : 'offer';
     const message = onTrial
-        ? <>You're on <strong>Hanbok Plus free</strong>: {timeLeft(user.plusTrialEndsAt, now)}. Keep it from {perMonth(PLAN_PRICES.plus.yearly)} a month{
+        ? <>{user.plusTrialSource === 'returning' ? <>Welcome back! <strong>A free week of Hanbok Plus</strong> is on us: </> : <>You're on <strong>Hanbok Plus free</strong>: </>}{timeLeft(user.plusTrialEndsAt, now)}. Keep it from {perMonth(PLAN_PRICES.plus.yearly)} a month{
             new Date(user.plusTrialEndsAt).getTime() - now >= CARRY_OVER_MS ? ', and pay nothing until the trial ends' : ''}.</>
         : <>Your trial-end offer: <strong>{dealAmountLabel(offer)} yearly plans</strong>, Plus for {formatPrice(dealYearlyPrice('plus', offer))}. Offer {timeLeft(offer.endsAt, now)}.</>;
 
