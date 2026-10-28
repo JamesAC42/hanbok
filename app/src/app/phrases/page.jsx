@@ -32,7 +32,8 @@ export default function PhrasesIndex() {
                     <p className={styles.label}>Korean phrases</p>
                     <h1 className={styles.title}>What does that Korean word mean?</h1>
                     <p className={styles.dek}>
-                        The {phrases.length} words you keep hearing in dramas, songs and group chats, explained in plain English with real examples.
+                        The {phrases.length} words you keep hearing in dramas, songs and group chats, explained in plain English with real examples. Want to say something yourself? See{' '}
+                        <Link href="/how-to-say">how to say it in Korean</Link>.
                     </p>
                 </div>
             </header>
