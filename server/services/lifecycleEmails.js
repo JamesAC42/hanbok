@@ -110,6 +110,27 @@ const firstName = (name) => {
     return first || 'there';
 };
 
+// "So far on Plus you have analyzed 12 sentences and saved 30 words."
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+const usageLine = (sentences, words, lead) => {
+    const parts = [];
+    if (sentences > 0) parts.push(`analyzed ${plural(sentences, 'sentence')}`);
+    if (words > 0) parts.push(`saved ${plural(words, 'word')}`);
+    if (parts.length === 0) return 'There is still time to try sentence breakdowns, audio and Speak with Horang and Sora.';
+    return `${lead} ${parts.join(' and ')}.`;
+};
+
+const offerLabel = (offer) => (offer.percentOff ? `${offer.percentOff}% off` : `$${offer.amountOff} off`);
+const offerPrice = (list, offer) => {
+    const price = offer.percentOff
+        ? Math.round(list * (100 - offer.percentOff)) / 100
+        : Math.max(0, list - (offer.amountOff || 0));
+    return `$${Number.isInteger(price) ? price : price.toFixed(2)}`;
+};
+const offerDeadline = (offer) => new Date(offer.endsAt).toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC',
+});
+
 // Each template returns { subject, paragraphs, button: {label, path}, extra? }.
 // paragraphs are plain strings; links inside paragraphs use { text, path } items.
 const COPY = {
@@ -150,6 +171,33 @@ const COPY = {
         ],
         button: { label: 'Break it down', path: `/analyze?text=${encodeURIComponent(sentence.text)}` },
         footer: "You're getting this because you have a Hanbok streak going.",
+    }),
+    // Sent by services/trialEmails.js, not by the lifecycle run.
+    // data: { sentences, words, endsAt, offer } (offer = trial-end deal or null)
+    trialEnding: (name, { sentences = 0, words = 0 } = {}) => ({
+        subject: 'Your free Plus trial ends in a day',
+        intro: `Hi ${name},`,
+        paragraphs: [
+            usageLine(sentences, words, 'So far on Plus you have'),
+            'After that your account goes back to the free plan: 10 sentence breakdowns a week, limited audio, and 5 minutes of Speak a week.',
+            'To keep Plus, it is $99 a year (about $8.25 a month) or $10 month to month. Basic is $40 a year if you mostly need unlimited breakdowns. You can cancel anytime from your profile.',
+        ],
+        button: { label: 'Keep Plus', path: '/pricing' },
+        footer: "You're getting this because you started a free Plus trial on Hanbok.",
+    }),
+    trialEnded: (name, { sentences = 0, words = 0, offer = null } = {}) => ({
+        subject: offer ? `Your Plus trial ended. Here's ${offerLabel(offer)} until ${offerDeadline(offer)}` : 'Your Plus trial has ended',
+        intro: `Hi ${name},`,
+        paragraphs: [
+            `Your free week of Plus is over and your account is back on the free plan. ${usageLine(sentences, words, 'During the trial you')}`,
+            'Everything you saved is still in your Library.',
+            offer
+                ? `If you want Plus back, here is a thank-you for trying it: ${offerLabel(offer)} a yearly plan. Plus comes to ${offerPrice(99, offer)} ${offer.duration === 'forever' ? 'a year' : 'for your first year'} instead of $99, and Basic to ${offerPrice(40, offer)}. It is applied automatically at checkout and ends ${offerDeadline(offer)}.`
+                : 'If you want Plus back, it is $99 a year (about $8.25 a month) or $10 month to month. Basic is $40 a year for unlimited breakdowns.',
+            'And if something kept you from upgrading, just reply and tell me. I read every reply.',
+        ],
+        button: { label: offer ? 'Get Plus at the trial price' : 'See plans', path: '/pricing' },
+        footer: "You're getting this because you started a free Plus trial on Hanbok.",
     }),
     winback: (name) => ({
         subject: "Here's what's new in Hanbok",
@@ -390,6 +438,12 @@ const previewLifecycleEmails = async ({ db = getDb(), now = new Date() } = {}) =
         result.counts[type] = candidates[type].length;
         result.samples[type] = candidates[type].slice(0, 5).map((u) => ({ userId: u.userId, name: u.name }));
         const { subject, html } = renderEmail(type, { name: 'Alex', userId: 0, secret });
+        result.emails[type] = { subject, html };
+    }
+    // The trial emails (services/trialEmails.js), with sample numbers
+    const sample = { sentences: 14, words: 22, offer: { percentOff: 40, duration: 'once', endsAt: new Date(now.getTime() + 72 * 60 * 60 * 1000).toISOString() } };
+    for (const type of ['trialEnding', 'trialEnded']) {
+        const { subject, html } = renderEmail(type, { name: 'Alex', userId: 0, secret, data: sample });
         result.emails[type] = { subject, html };
     }
     return result;

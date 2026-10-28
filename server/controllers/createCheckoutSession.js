@@ -3,6 +3,8 @@ const { getDb } = require('../database');
 const { isStudentEligible, studentCouponId } = require('../utils/studentDiscount');
 const { plusTrialDays, isTrialEligible, isPlusPrice } = require('../utils/plusTrial');
 const { getYearlyDeal, isDealEligible, isYearlyPrice } = require('../utils/yearlyDeal');
+const { getTrialEndOffer } = require('../utils/trialEndOffer');
+const { carryOverTrialEnd } = require('../utils/autoTrial');
 
 const createCheckoutSession = async (req, res) => {
     const { priceId } = req.body;
@@ -38,6 +40,21 @@ const createCheckoutSession = async (req, res) => {
             client_reference_id: userId.toString(),
         };
 
+        // On the no-card trial: keep the free days they have left.
+        const carryOver = isSubscription && !withTrial ? carryOverTrialEnd(user) : null;
+        if (carryOver) {
+            sessionConfig.subscription_data = {
+                trial_end: Math.floor(carryOver.getTime() / 1000),
+                trial_settings: {
+                    end_behavior: {
+                        missing_payment_method: 'cancel',
+                    },
+                },
+            };
+            sessionConfig.metadata.trial = 'true';
+            sessionConfig.metadata.autoTrialCarryOver = 'true';
+        }
+
         if (withTrial) {
             sessionConfig.subscription_data = {
                 trial_period_days: plusTrialDays(),
@@ -58,12 +75,15 @@ const createCheckoutSession = async (req, res) => {
                 delete sessionConfig.allow_promotion_codes;
                 sessionConfig.metadata.student = 'true';
             } else if (isYearlyPrice(priceId) && isDealEligible(user)) {
-                // The yearly deal, while YEARLY_DEAL_COUPON_ID names a live coupon.
-                const deal = await getYearlyDeal((id) => stripe.coupons.retrieve(id));
+                // Their trial-end offer if it's still running, otherwise the yearly
+                // deal while YEARLY_DEAL_COUPON_ID names a live coupon.
+                const retrieve = (id) => stripe.coupons.retrieve(id);
+                const deal = (await getTrialEndOffer(user, retrieve)) || (await getYearlyDeal(retrieve));
                 if (deal) {
                     sessionConfig.discounts = [{ coupon: deal.couponId }];
                     delete sessionConfig.allow_promotion_codes;
                     sessionConfig.metadata.deal = deal.couponId;
+                    if (deal.kind === 'trialEnd') sessionConfig.metadata.trialEndOffer = 'true';
                 }
             }
         }

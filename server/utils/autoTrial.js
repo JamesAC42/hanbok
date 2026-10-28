@@ -17,6 +17,40 @@ const autoTrialFields = (now = new Date()) => {
     };
 };
 
+// Returning free accounts get the same trial once, the next time they open
+// Hanbok: anyone a week old or more who never had a trial or a subscription.
+// Most accounts predate the no-card trial and never saw what Plus does. OFF
+// unless RETURNING_TRIAL_ENABLED=true.
+const RETURNING_MIN_AGE_DAYS = 7;
+const isReturningTrialEnabled = (env = process.env) => env.RETURNING_TRIAL_ENABLED === 'true' && plusTrialDays() > 0;
+
+const returningTrialFilter = (now) => ({
+    tier: { $not: { $gt: 0 } },
+    autoTrial: { $exists: false },
+    'subscription.stripeSubscriptionId': { $exists: false },
+    hasUsedFreeTrial: { $ne: true },
+    dateCreated: { $lte: new Date(now.getTime() - RETURNING_MIN_AGE_DAYS * DAY) },
+});
+
+const isReturningTrialEligible = (user, now = new Date()) => !!user
+    && !(user.tier > 0)
+    && !user.autoTrial
+    && !user.subscription?.stripeSubscriptionId
+    && user.hasUsedFreeTrial !== true
+    && !!user.dateCreated
+    && now.getTime() - new Date(user.dateCreated).getTime() >= RETURNING_MIN_AGE_DAYS * DAY;
+
+// Starts the returning-user trial if this user qualifies. Returns the user as it now is.
+const startReturningTrialIfEligible = async (db, user, now = new Date()) => {
+    if (!isReturningTrialEnabled() || !isReturningTrialEligible(user, now)) return user;
+    const autoTrial = { startedAt: now, endsAt: new Date(now.getTime() + plusTrialDays() * DAY), source: 'returning' };
+    const result = await db.collection('users').updateOne(
+        { userId: user.userId, ...returningTrialFilter(now) },
+        { $set: { tier: 2, autoTrial } }
+    );
+    return result.modifiedCount === 1 ? { ...user, tier: 2, autoTrial } : user;
+};
+
 // A trial that has run out, on an account that never subscribed.
 const dueFilter = (now) => ({
     'autoTrial.endsAt': { $lte: now },
@@ -47,6 +81,25 @@ const trialEndsAt = (user) => {
     return trial.endsAt;
 };
 
+// Subscribing during the trial keeps the days left: checkout starts the
+// subscription as a Stripe trial ending when this one would have, so nobody
+// loses free days by paying early. Stripe Checkout needs trial_end at least 48
+// hours out, so with less left than that they're simply charged now.
+const MIN_CARRY_OVER_MS = 49 * 60 * 60 * 1000;
+const carryOverTrialEnd = (user, now = Date.now()) => {
+    const endsAt = trialEndsAt(user);
+    if (!endsAt) return null;
+    const end = new Date(endsAt);
+    return end.getTime() - now >= MIN_CARRY_OVER_MS ? end : null;
+};
+
+// When this account's trial ran out without a subscription; null otherwise.
+const trialEndedAt = (user) => {
+    const trial = user?.autoTrial;
+    if (!trial?.expiredAt || user.subscription?.stripeSubscriptionId || user.tier > 0) return null;
+    return trial.expiredAt;
+};
+
 // Paid tier from a real subscription, not a running trial. Use these anywhere
 // tier > 0 is read as "paying" (admin stats, affiliates, the snapshot).
 const isPaying = (user) => user?.tier > 0 && !trialEndsAt(user);
@@ -71,6 +124,7 @@ const startAutoTrialExpiry = (getDb) => {
 };
 
 module.exports = {
-    isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, startAutoTrialExpiry,
+    isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, trialEndedAt, carryOverTrialEnd, startAutoTrialExpiry,
+    isReturningTrialEnabled, isReturningTrialEligible, startReturningTrialIfEligible,
     isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION,
 };
