@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import WordList from '@/components/learn/WordList';
 import Tiger from '@/components/Tiger';
+import SignUpCta from '@/components/learn/SignUpCta';
 import { buildStudyNotes } from '@/lib/lyricStudy';
 import { languageName } from '@/lib/seo';
 import styles from '@/styles/components/studynotes.module.scss';
@@ -61,6 +62,8 @@ const StudyNotes = ({ lyric }) => {
                 <p>Have a line from another song stuck in your head?</p>
                 <Link href={lyric.language === 'ko' ? '/korean-sentence-analyzer' : '/analyze'} className={styles.ctaButton}>Break down any sentence</Link>
             </div>
+
+            <SignUpCta source="lyric_notes" title="Turn this song into flashcards" />
         </section>
     );
 };

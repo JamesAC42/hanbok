@@ -8,10 +8,10 @@ import styles from '@/styles/pages/learn.module.scss';
 
 // "Try it on your own sentence": hands the text to the analyzer. With `run`,
 // the analyzer starts the breakdown right away instead of only filling its input.
-const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw today', run = false, source, id = 'learn-try-it' }) => {
+const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw today', run = false, source, id = 'learn-try-it', initial = '', blurb }) => {
     const router = useRouter();
     const { setLanguage } = useLanguage();
-    const [text, setText] = useState('');
+    const [text, setText] = useState(initial);
 
     const submit = (e) => {
         e.preventDefault();
@@ -32,7 +32,7 @@ const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw
             <Mascot pose="teach" size={84} />
             <div className={styles.tryItBody}>
                 <label htmlFor={id} className={styles.tryItTitle}>{title}</label>
-                <p>Paste a line from a song, a drama or a text message. Hanbok marks every particle and explains each word.</p>
+                <p>{blurb || 'Paste a line from a song, a drama or a text message. Hanbok marks every particle and explains each word.'}</p>
                 <div className={styles.tryItRow}>
                     <input
                         id={id}
