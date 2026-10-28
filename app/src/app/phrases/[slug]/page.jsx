@@ -4,6 +4,7 @@ import LearnShell from '@/components/learn/LearnShell';
 import Example from '@/components/learn/Example';
 import TryIt from '@/components/learn/TryIt';
 import WordList from '@/components/learn/WordList';
+import SignUpCta from '@/components/learn/SignUpCta';
 import { phrases, getPhrase, phraseHref, CATEGORIES } from '@/content/phrases';
 import { apiGet, JsonLd, SITE_URL, SITE_NAME } from '@/lib/seo';
 import styles from '@/styles/pages/learn.module.scss';
@@ -50,6 +51,8 @@ export default async function PhrasePage({ params }) {
     const related = (p.related || []).map(getPhrase).filter(Boolean);
     const songs = await apiGet(`/api/lyrics/lines?q=${encodeURIComponent(p.ko)}&limit=4`, { revalidate });
     const lines = songs?.lines || [];
+    // The first example as plain text, ready to send to the analyzer in one press.
+    const firstLine = p.examples[0]?.chips.map((word) => word.map((part) => part.t).join('')).join(' ') || '';
 
     const structuredData = [
         {
@@ -112,6 +115,19 @@ export default async function PhrasePage({ params }) {
                             <Example words={ex.words} translation={ex.en} />
                         </div>
                     ))}
+                </div>
+
+                <TryIt
+                    lang="ko"
+                    run
+                    source="phrase_page_top"
+                    id="phrase-try-top"
+                    initial={firstLine}
+                    title="See the full breakdown"
+                    blurb="Hanbok explains every word and ending in a sentence, with audio and a translation. Try it on this example, or paste your own line from a drama, a song or a text."
+                />
+
+                <div className={styles.prose}>
 
                     {p.forms?.length > 0 && (
                         <>
@@ -163,6 +179,8 @@ export default async function PhrasePage({ params }) {
                         ))}
                     </section>
                 )}
+
+                <SignUpCta source="phrase_page" title={`Remember ${p.ko} next time you hear it`} />
 
                 {related.length > 0 && (
                     <section>

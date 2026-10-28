@@ -842,3 +842,61 @@
     text-decoration: none;
     &:hover { text-decoration: underline; }
 }
+
+// ===== Sign-up nudge on search pages =====
+
+.signUp {
+    @include bp-card;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 2.5rem 0;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border-color: var(--bp-keep-line);
+    background: var(--bp-keep-soft);
+
+    @media screen and (max-width: 725px) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.1rem;
+    }
+}
+
+.signUpBody {
+    flex: 1;
+    min-width: 0;
+
+    p {
+        margin: 0 0 1rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--bp-ink2);
+    }
+}
+
+.signUpTitle {
+    @include learn-heading;
+    font-size: 1.5rem;
+    margin: 0 0 .5rem;
+}
+
+.signUpActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1.25rem;
+}
+
+.signUpGoogle {
+    width: 260px;
+    max-width: 100%;
+    min-height: 44px;
+}
+
+.signUpEmail {
+    font-weight: 800;
+    color: var(--bp-read);
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+}
