@@ -65,7 +65,7 @@ else
   chown 1000:1000 /srv/sites/blog/content /srv/sites/kirakissu/content
   curl -fsSL "$REPO_RAW/deploy/sites/docker-compose.yml" -o /srv/sites/docker-compose.yml
   curl -fsSL "$REPO_RAW/deploy/sites/sites-entry.sh" -o /home/deploy/hanbok-deploy-entry.sh
-  for f in postgres blog kirakissu umami; do
+  for f in postgres blog kirakissu umami scraple; do
     touch "/srv/sites/$f.env" && chown deploy:deploy "/srv/sites/$f.env" && chmod 600 "/srv/sites/$f.env"
   done
 fi
