@@ -1,0 +1,39 @@
+# Hanbok staging (staging.hanbokstudy.com), on the same server as production
+# but fully separate: its own directory (/srv/hanbok-staging), compose project,
+# api.env (own MONGODB_DB, Stripe test key, session/queue prefixes) and ports.
+# Deployed by .github/workflows/deploy-staging.yml via compose-entry.sh's
+# staging-deploy / staging-rollback.
+# nginx proxies staging.hanbokstudy.com to 127.0.0.1:3060 and /api to 127.0.0.1:5667.
+
+x-hardening: &hardening
+  restart: unless-stopped
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  tmpfs: ["/tmp"]
+  logging:
+    driver: json-file
+    options: { max-size: "10m", max-file: "3" }
+
+services:
+  api:
+    <<: *hardening
+    image: ghcr.io/jamesac42/hanbok-api:${HANBOK_TAG:-latest}
+    env_file: ./api.env
+    volumes:
+      - ./audio:/srv/audio:ro
+    ports: ["127.0.0.1:5667:5666"]
+    mem_limit: 768m
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:5666/api/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  app:
+    <<: *hardening
+    image: ghcr.io/jamesac42/hanbok-app:${HANBOK_TAG:-latest}
+    tmpfs: ["/tmp", "/srv/app/.next/cache:uid=1000,gid=1000"]
+    ports: ["127.0.0.1:3060:3059"]
+    mem_limit: 512m
+    depends_on: [api]
