@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel>
+<total>5</total><start>1</start><num>30</num>
+<item><target_code>1</target_code><word><![CDATA[대학]]></word><sup_no>0</sup_no><origin><![CDATA[大學]]></origin><word_grade><![CDATA[중급]]></word_grade><pos><![CDATA[명사]]></pos><link><![CDATA[x]]></link>
+<sense><sense_order>1</sense_order><definition><![CDATA[고등 교육 기관.]]></definition><translation><trans_word><![CDATA[university]]></trans_word></translation></sense></item>
+<item><target_code>2</target_code><word><![CDATA[학교]]></word><sup_no>0</sup_no><origin><![CDATA[學校]]></origin><word_grade><![CDATA[초급]]></word_grade><pos><![CDATA[명사]]></pos><link><![CDATA[x]]></link>
+<sense><sense_order>1</sense_order><definition><![CDATA[교육 기관.]]></definition><translation><trans_word><![CDATA[school]]></trans_word></translation></sense></item>
+<item><target_code>3</target_code><word><![CDATA[학생]]></word><sup_no>0</sup_no><origin><![CDATA[學生]]></origin><word_grade><![CDATA[초급]]></word_grade><pos><![CDATA[명사]]></pos><link><![CDATA[x]]></link>
+<sense><sense_order>1</sense_order><definition><![CDATA[배우는 사람.]]></definition><translation><trans_word><![CDATA[student]]></trans_word></translation></sense></item>
+<item><target_code>4</target_code><word><![CDATA[학문]]></word><sup_no>0</sup_no><origin><![CDATA[學問]]></origin><pos><![CDATA[명사]]></pos><link><![CDATA[x]]></link>
+<sense><sense_order>1</sense_order><definition><![CDATA[지식을 배워서 익힘.]]></definition><translation><trans_word><![CDATA[learning; study]]></trans_word></translation></sense></item>
+<item><target_code>5</target_code><word><![CDATA[학생]]></word><sup_no>2</sup_no><origin><![CDATA[學生]]></origin><pos><![CDATA[명사]]></pos><link><![CDATA[x]]></link>
+<sense><sense_order>1</sense_order><definition><![CDATA[duplicate]]></definition><translation><trans_word><![CDATA[student]]></trans_word></translation></sense></item>
+</channel>

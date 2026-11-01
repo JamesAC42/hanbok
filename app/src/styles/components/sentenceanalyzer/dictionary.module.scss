@@ -1,0 +1,125 @@
+@import '@/styles/variables.module.scss';
+
+// Learner level, Hanja and word family inside the word details panel.
+
+.dictionary {
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+    margin-top: .8rem;
+    padding-top: .8rem;
+    border-top: 2px dashed var(--bp-line);
+    font-family: var(--font-display);
+    color: var(--foreground);
+    text-align: left;
+}
+
+.topRow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+}
+
+.level {
+    --tone: var(--bp-und);
+    display: inline-flex;
+    align-items: baseline;
+    gap: .35rem;
+    padding: .2rem .6rem;
+    border-radius: 99px;
+    background: color-mix(in srgb, var(--tone) 12%, var(--background));
+    border: 2px solid color-mix(in srgb, var(--tone) 45%, var(--background));
+    font-size: .78rem;
+    font-weight: 800;
+
+    small { font-size: .68rem; font-weight: 700; color: var(--bp-ink2); }
+}
+
+.level_beginner { --tone: var(--bp-und); }
+.level_intermediate { --tone: var(--bp-keep); }
+.level_advanced { --tone: var(--bp-rev); }
+
+.hanja {
+    display: inline-flex;
+    gap: .25rem;
+}
+
+.hanjaChar,
+.familyHead {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 2rem;
+    padding: .15rem .35rem;
+    border-radius: 10px;
+    background: var(--bp-soft);
+    border: 2px solid var(--bp-line);
+    line-height: 1.15;
+
+    b { font-size: 1.15rem; font-weight: 700; }
+    small { font-size: .7rem; font-weight: 700; color: var(--bp-ink2); }
+}
+
+.families {
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+}
+
+.familyLabel {
+    @include bp-label;
+}
+
+.family {
+    display: flex;
+    align-items: flex-start;
+    gap: .55rem;
+}
+
+.familyWords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 0;
+
+    li {
+        display: inline-flex;
+        align-items: baseline;
+        gap: .3rem;
+        padding: .2rem .55rem;
+        border-radius: 10px;
+        background: var(--bp-card);
+        border: 2px solid var(--bp-line);
+        font-size: .8rem;
+    }
+}
+
+.familyWord {
+    font-size: .95rem;
+    font-weight: 700;
+}
+
+.familyMeaning {
+    color: var(--bp-ink2);
+    font-weight: 600;
+}
+
+.more {
+    align-self: flex-start;
+    font-size: .8rem;
+    font-weight: 800;
+    color: var(--bp-keep-d);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.source {
+    align-self: flex-start;
+    font-size: .7rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}

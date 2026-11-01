@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel>
+<title><![CDATA[한국어 기초사전 개발 지원(Open API) - 사전 검색]]></title>
+<link><![CDATA[https://krdict.korean.go.kr]]></link>
+<description><![CDATA[한국어 기초사전 개발 지원(Open API) - 사전 검색 결과]]></description>
+<lastBuildDate><![CDATA[20261101120000]]></lastBuildDate>
+<total>3</total>
+<start>1</start>
+<num>20</num>
+<item>
+<target_code>16367</target_code>
+<word><![CDATA[배]]></word>
+<sup_no>1</sup_no>
+<pronunciation><![CDATA[배]]></pronunciation>
+<word_grade><![CDATA[초급]]></word_grade>
+<pos><![CDATA[명사]]></pos>
+<link><![CDATA[https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=16367]]></link>
+<sense>
+<sense_order>1</sense_order>
+<definition><![CDATA[사람이나 동물의 몸에서 위장, 창자, 콩팥 등의 내장이 들어 있는 곳.]]></definition>
+<translation><trans_word><![CDATA[belly; stomach; abdomen]]></trans_word><trans_dfn><![CDATA[The part of a human or animal body that contains organs.]]></trans_dfn></translation>
+</sense>
+</item>
+<item>
+<target_code>16368</target_code>
+<word><![CDATA[배]]></word>
+<sup_no>2</sup_no>
+<pronunciation><![CDATA[배]]></pronunciation>
+<word_grade><![CDATA[초급]]></word_grade>
+<pos><![CDATA[명사]]></pos>
+<link><![CDATA[https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=16368]]></link>
+<sense>
+<sense_order>1</sense_order>
+<definition><![CDATA[사람이나 짐 등을 싣고 물 위로 다니는 교통수단.]]></definition>
+<translation><trans_word><![CDATA[ship; boat]]></trans_word><trans_dfn><![CDATA[A vehicle that carries people or goods across water.]]></trans_dfn></translation>
+</sense>
+</item>
+<item>
+<target_code>16369</target_code>
+<word><![CDATA[배]]></word>
+<sup_no>3</sup_no>
+<pronunciation><![CDATA[배]]></pronunciation>
+<word_grade><![CDATA[초급]]></word_grade>
+<pos><![CDATA[명사]]></pos>
+<link><![CDATA[https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=16369]]></link>
+<sense>
+<sense_order>1</sense_order>
+<definition><![CDATA[물이 많고 단맛이 나는, 둥글고 누런 과일.]]></definition>
+<translation><trans_word><![CDATA[pear]]></trans_word><trans_dfn><![CDATA[A round, yellowish fruit that is juicy &amp; sweet.]]></trans_dfn></translation>
+</sense>
+</item>
+</channel>

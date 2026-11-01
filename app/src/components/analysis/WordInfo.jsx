@@ -5,12 +5,13 @@ import { MaterialSymbolsVolumeUp } from '@/components/icons/VolumeOn';
 import { SvgSpinnersRingResize } from '@/components/icons/RingSpin';
 import styles from '@/styles/components/sentenceanalyzer/wordinfo.module.scss';
 import Conjugation from './Conjugation';
+import DictionaryInfo from './DictionaryInfo';
 import { useLanguage } from '@/contexts/LanguageContext';
 import renderPronunciation from '@/lib/pronunciation';
 import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
 
-const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose}) => {
+const WordInfo = ({wordInfo, shouldAnimate, language, translationLanguage, showPronunciation, onClose}) => {
     const { t } = useLanguage();
     const [audioUrl, setAudioUrl] = useState(null);
     const [isAudioLoading, setIsAudioLoading] = useState(false);
@@ -264,7 +265,8 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose
                         )
                     }
                     </ul>
-                    
+
+                    <DictionaryInfo wordInfo={wordInfo} language={language} translationLanguage={translationLanguage} />
                     
                     {
                     wordInfo.grammar &&Object.keys(wordInfo?.grammar).length > 0 && (
