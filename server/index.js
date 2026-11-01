@@ -313,6 +313,10 @@ app.get('/api/user/sentences', isAuthenticated, async (req, res) => {
     getUserSentences(req, res);
 });
 
+// Search everything analyzed (Basic+) and export it for Anki (Plus).
+app.get('/api/library/search', isAuthenticated, (req, res) => require('./controllers/auth/library').searchLibrary(req, res));
+app.get('/api/library/anki', isAuthenticated, (req, res) => require('./controllers/auth/library').exportLibraryAnki(req, res));
+
 app.get('/api/user/history', isAuthenticated, async (req, res) => {
     getUserHistory(req, res);
 });

@@ -11,6 +11,8 @@ import styles from '@/styles/pages/history.module.scss';
 import { sentenceHref, sentenceKey } from '@/lib/sentenceLink';
 import FolderPicker, { FolderIcon } from '@/components/library/FolderPicker';
 import { fetchFolders, createFolder, renameFolder, deleteFolder } from '@/lib/libraryFolders';
+import { libraryEndpoint, ankiHref, matchLabel } from '@/lib/librarySearch';
+import { track } from '@/lib/analytics';
 
 // History (everything analyzed), Saved (bookmarked) and Words (saved for
 // flashcards) used to be separate pages; they share this one now.
@@ -45,7 +47,8 @@ const EMPTY_STATES = {
 
 export default function Library({ initialTab = 'history' }) {
   const router = useRouter();
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth();
+  const tier = user?.tier || 0;
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(10);
@@ -58,6 +61,7 @@ export default function Library({ initialTab = 'history' }) {
   const [selectedLanguage, setSelectedLanguage] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [tab, setTab] = useState(TABS.some(x => x.key === initialTab) ? initialTab : 'history');
   const [totalCount, setTotalCount] = useState(null);
   const [confirmRemove, setConfirmRemove] = useState(null);
@@ -93,6 +97,22 @@ export default function Library({ initialTab = 'history' }) {
     document.title = 'Hanbok - Library';
   }, [isAuthenticated, loading, router, t]);
 
+  // Basic and Plus search every sentence they have analyzed (by word or
+  // grammar point too) on the server; Free filters the page it is on.
+  const deepSearch = tab === 'history' && tier >= 1 && debouncedQuery.trim().length > 0;
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+      if (tab === 'history' && tier >= 1) setPage(1);
+    }, 300);
+    return () => clearTimeout(id);
+  }, [searchQuery, tab, tier]);
+
+  useEffect(() => {
+    if (deepSearch) track('library_search', { plan: ['free', 'basic', 'plus'][tier] || 'free' });
+  }, [deepSearch, debouncedQuery, tier]);
+
   useEffect(() => {
     async function fetchSentences() {
       try {
@@ -100,7 +120,9 @@ export default function Library({ initialTab = 'history' }) {
         setError(null);
 
         let endpoint;
-        if (tab === 'words') {
+        if (deepSearch) {
+          endpoint = libraryEndpoint({ q: debouncedQuery, page, limit, language: selectedLanguage });
+        } else if (tab === 'words') {
           endpoint = `/api/words?page=${page}&limit=${limit}${selectedLanguage ? `&originalLanguage=${selectedLanguage}` : ''}`;
         } else {
           const typesParam = typeFilter === 'all' ? 'sentences,extended' : typeFilter === 'sentences' ? 'sentences' : 'extended';
@@ -127,7 +149,7 @@ export default function Library({ initialTab = 'history' }) {
       }
     }
     fetchSentences();
-  }, [page, limit, selectedLanguage, typeFilter, tab, t, activeFolder, itemsVersion]);
+  }, [page, limit, selectedLanguage, typeFilter, tab, t, activeFolder, itemsVersion, deepSearch, debouncedQuery]);
 
   const loadFolders = async () => {
     try {
@@ -562,6 +584,9 @@ export default function Library({ initialTab = 'history' }) {
     >
       <p className={styles.sentenceText} lang={sentence.originalLanguage}>{sentence.text}</p>
       <p className={styles.sentenceTranslation}>{sentence.translation || sentence.analysis?.sentence?.translation}</p>
+      {sentence.match && matchLabel(sentence.match) && (
+        <p className={styles.searchMatch} lang={sentence.originalLanguage}>{matchLabel(sentence.match)}</p>
+      )}
       {sentence.dateCreated && (
         <p className={styles.sentenceDate}>
           {t('history.createdOn')} {new Date(sentence.dateCreated).toLocaleDateString()}
@@ -643,6 +668,32 @@ export default function Library({ initialTab = 'history' }) {
     );
   };
 
+  // Plus: download everything analyzed (or the current search) for Anki.
+  const renderAnkiExport = () => {
+    if (tab !== 'history' || items.length === 0) return null;
+    if (tier >= 2) {
+      return (
+        <a
+          className={styles.ankiExport}
+          href={ankiHref({ q: deepSearch ? debouncedQuery : '', language: selectedLanguage })}
+          onClick={() => track('anki_export', { search: deepSearch })}
+          download
+        >
+          {deepSearch ? 'Download results for Anki' : 'Download for Anki'}
+        </a>
+      );
+    }
+    return (
+      <Link
+        className={styles.ankiExport}
+        href="/pricing"
+        onClick={() => track('layer_upgrade_click', { layer: 'anki', plan: ['free', 'basic', 'plus'][tier] || 'free' })}
+      >
+        Download for Anki <span className={styles.plusBadge}>Plus</span>
+      </Link>
+    );
+  };
+
   const renderClearHistory = () => {
     if (tab !== 'history' || (items.length === 0 && !confirmClear)) return null;
     if (!confirmClear) {
@@ -677,6 +728,14 @@ export default function Library({ initialTab = 'history' }) {
       return <p className={styles.error}>{error}</p>;
     }
 
+    if (items.length === 0 && deepSearch) {
+      return (
+        <div className={styles.noSentences}>
+          <p>Nothing you&apos;ve analyzed mentions “{debouncedQuery.trim()}”.</p>
+        </div>
+      );
+    }
+
     if (items.length === 0) {
       if (tab === 'saved' && activeFolder !== 'all') {
         return (
@@ -691,7 +750,7 @@ export default function Library({ initialTab = 'history' }) {
     }
 
     const normalizedQuery = searchQuery.trim().toLowerCase();
-    const visibleItems = normalizedQuery
+    const visibleItems = normalizedQuery && !deepSearch
       ? items.filter((item) => {
           const fields = [
             item.text,
@@ -706,16 +765,31 @@ export default function Library({ initialTab = 'history' }) {
         })
       : items;
 
+    const searchHint = tab === 'history' && tier < 1 && normalizedQuery ? (
+      <p className={styles.searchHint}>
+        Searching this page only. <Link href="/pricing" onClick={() => track('layer_upgrade_click', { layer: 'library_search', plan: 'free' })}>Basic and Plus</Link> search every sentence you&apos;ve analyzed, by word or grammar point.
+      </p>
+    ) : null;
+
     if (visibleItems.length === 0) {
       return (
-        <div className={styles.noSentences}>
-          <p>{safeLabel('history.noMatches', 'Nothing matches your search on this page.')}</p>
-        </div>
+        <>
+          {searchHint}
+          <div className={styles.noSentences}>
+            <p>{safeLabel('history.noMatches', 'Nothing matches your search on this page.')}</p>
+          </div>
+        </>
       );
     }
 
     return (
       <>
+        {deepSearch && totalCount !== null && (
+          <p className={styles.searchSummary}>
+            {totalCount} {totalCount === 1 ? 'sentence' : 'sentences'} in your library {totalCount === 1 ? 'matches' : 'match'} “{debouncedQuery.trim()}”
+          </p>
+        )}
+        {searchHint}
         <div className={styles.itemList}>
           {visibleItems.map(item => {
             if (item.type === 'word') return renderWordItem(item);
@@ -747,7 +821,7 @@ export default function Library({ initialTab = 'history' }) {
               <div className={styles.searchRow}>
                 <input
                   type="search"
-                  placeholder={{ history: safeLabel('history.searchPlaceholder', 'Search history'), saved: 'Search saved sentences', words: 'Search words on this page' }[tab]}
+                  placeholder={{ history: tier >= 1 ? 'Search by sentence, word or grammar' : safeLabel('history.searchPlaceholder', 'Search history'), saved: 'Search saved sentences', words: 'Search words on this page' }[tab]}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className={styles.searchInput}
@@ -760,6 +834,7 @@ export default function Library({ initialTab = 'history' }) {
               {tab !== 'words' && (
                 <div className={styles.filterRow}>
                   {renderTypeSelector()}
+                  {renderAnkiExport()}
                   {renderClearHistory()}
                 </div>
               )}

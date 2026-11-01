@@ -98,8 +98,9 @@ const exportDeck = async (req, res) => {
         
         sentenceContents.forEach(sentence => {
             contentMap[sentence.sentenceId] = {
-                front: sentence.originalText || '',
-                back: sentence.translatedText || ''
+                // Analyzed sentences keep their text in text / analysis.sentence.translation.
+                front: sentence.originalText || sentence.text || '',
+                back: sentence.translatedText || sentence.analysis?.sentence?.translation || ''
             };
         });
 
