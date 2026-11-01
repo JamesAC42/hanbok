@@ -117,12 +117,16 @@ const buildAutoTrials = async (db, now) => {
     const users = db.collection('users');
     const since = new Date(now.getTime() - 30 * DAY);
     const subscribed = { 'subscription.stripeSubscriptionId': { $exists: true } };
-    const [active, started30d, converted30d] = await Promise.all([
+    const returning = { 'autoTrial.source': 'returning' };
+    const [active, started30d, converted30d, returningStarted30d, returningConverted30d] = await Promise.all([
         users.countDocuments({ 'autoTrial.endsAt': { $gt: now }, 'autoTrial.expiredAt': { $exists: false }, 'subscription.stripeSubscriptionId': { $exists: false } }),
         users.countDocuments({ 'autoTrial.startedAt': { $gte: since } }),
         users.countDocuments({ 'autoTrial.startedAt': { $gte: since }, ...subscribed, tier: { $gt: 0 } }),
+        users.countDocuments({ 'autoTrial.startedAt': { $gte: since }, ...returning }),
+        users.countDocuments({ 'autoTrial.startedAt': { $gte: since }, ...returning, ...subscribed, tier: { $gt: 0 } }),
     ]);
-    return { active, started30d, converted30d };
+    // started30d/converted30d include the returning-user trials
+    return { active, started30d, converted30d, returningStarted30d, returningConverted30d };
 };
 
 // Each section is computed on its own so one failing source (Stripe, Umami)

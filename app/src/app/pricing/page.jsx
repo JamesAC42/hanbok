@@ -13,6 +13,9 @@ import Footer from '@/components/Footer';
 
 // Signed-in readers get the app shell; visitors keep the public site header.
 // While auth is still loading, render a plain surface so neither shell flashes.
+// "Monday, November 2"
+const carryOverLabel = (iso) => new Date(iso).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
 const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
 
 //real
@@ -85,6 +88,8 @@ const Pricing = () => {
     const [studentOffer, setStudentOffer] = useState(null);
     const [trialOffer, setTrialOffer] = useState(null);
     const [dealOffer, setDealOffer] = useState(null);
+    // On the no-card trial: when billing would start if they pick a plan now.
+    const [carryOverEnd, setCarryOverEnd] = useState(null);
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const { t } = useLanguage();
     // Newer lines fall back to English until they're translated.
@@ -106,8 +111,9 @@ const Pricing = () => {
                 setStudentOffer(data?.student?.enabled ? data.student : null);
                 setTrialOffer(data?.trial?.eligible && data.trial.days > 0 ? data.trial : null);
                 setDealOffer(data?.deal?.eligible ? data.deal : null);
+                setCarryOverEnd(data?.trialCarryOver?.endsAt || null);
             })
-            .catch(() => { setStudentOffer(null); setTrialOffer(null); setDealOffer(null); });
+            .catch(() => { setStudentOffer(null); setTrialOffer(null); setDealOffer(null); setCarryOverEnd(null); });
     }, [authLoading, user]);
 
     const faqItems = FAQ_ITEMS.map((item) => item.id === 'student' && studentOffer
@@ -116,7 +122,7 @@ const Pricing = () => {
 
     const handlePurchase = async (priceId) => {
         const plan = PLAN_BY_PRICE_ID[priceId] || 'unknown';
-        track('checkout_start', { plan, loggedIn: !!user, trial: !!trialOffer && plan.startsWith('PLUS_SUBSCRIPTION') });
+        track('checkout_start', { plan, loggedIn: !!user, trial: !!trialOffer && plan.startsWith('PLUS_SUBSCRIPTION'), carryOver: !!carryOverEnd });
         if (!user) {
             router.push('/login');
             return;
@@ -333,10 +339,15 @@ const Pricing = () => {
                                 onClick={() => handlePurchase(getPriceId('plus'))}
                                 disabled={loading}
                             >
-                                {loading ? 'Processing...' : trialOffer ? `Try Plus free for ${trialOffer.days} days` : t('pricing.planButtons.getPlus')}
+                                {loading ? 'Processing...' : trialOffer ? `Try Plus free for ${trialOffer.days} days` : carryOverEnd ? 'Keep Plus' : t('pricing.planButtons.getPlus')}
                             </button>
                             {/* One wrapper so the card keeps its 4 subgrid rows; a 5th child would overlap the 4th. */}
                             <div className={pricingStyles.planFootnote}>
+                                {carryOverEnd && (
+                                    <p className={pricingStyles.trialNote}>
+                                        {`You won't be charged until ${carryOverLabel(carryOverEnd)}, when your free trial ends. Cancel before then and you pay nothing.`}
+                                    </p>
+                                )}
                                 {trialOffer && (
                                     <p className={pricingStyles.trialNote}>
                                         {studentOffer?.eligible
@@ -372,6 +383,11 @@ const Pricing = () => {
                             >
                                 {loading ? 'Processing...' : t('pricing.planButtons.getBasic')}
                             </button>
+                            {carryOverEnd && (
+                                <p className={pricingStyles.trialNote}>
+                                    {`Billing starts ${carryOverLabel(carryOverEnd)}, when your free trial ends.`}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </section>

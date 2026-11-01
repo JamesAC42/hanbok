@@ -1,0 +1,74 @@
+@import "../variables.module.scss";
+
+// Strip across the top of the page for no-card trial users (components/TrialBanner).
+.banner {
+    position: relative;
+    z-index: 1001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .75rem 1rem;
+    flex-wrap: wrap;
+    padding: .6rem 3rem .6rem 1rem;
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--foreground);
+    border-bottom: 2px solid var(--tone-line);
+    background: var(--tone-soft);
+
+    @media (max-width: 640px) {
+        justify-content: flex-start;
+        font-size: .95rem;
+        padding: .55rem 2.75rem .55rem 1rem;
+    }
+}
+
+.trial {
+    --tone: var(--bp-read);
+    --tone-d: var(--bp-read-d);
+    --tone-soft: var(--bp-read-soft);
+    --tone-line: var(--bp-read-line);
+}
+
+.offer {
+    --tone: var(--bp-rev);
+    --tone-d: var(--bp-rev-d);
+    --tone-soft: var(--bp-rev-soft);
+    --tone-line: var(--bp-rev-line);
+}
+
+.text {
+    margin: 0;
+    font-weight: 600;
+
+    strong { color: var(--tone); font-weight: 800; }
+}
+
+.cta {
+    flex-shrink: 0;
+    padding: .35rem 1rem;
+    border-radius: 10px;
+    background: var(--tone);
+    color: #FFFFFF;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 3px 0 var(--tone-d);
+
+    &:hover { filter: brightness(1.05); }
+    &:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--tone-d); }
+}
+
+.close {
+    position: absolute;
+    top: 50%;
+    right: .6rem;
+    transform: translateY(-50%);
+    border: 0;
+    background: none;
+    color: var(--bp-ink2);
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: .25rem .4rem;
+    cursor: pointer;
+}

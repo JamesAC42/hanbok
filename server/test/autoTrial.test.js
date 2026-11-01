@@ -98,3 +98,32 @@ test('a trial user who subscribed keeps their plan', async () => {
     assert.strictEqual(await expireIfDue(db, user, now), user);
     assert.strictEqual(db.calls.length, 0);
 });
+
+test('returning free accounts a week old get one trial on their next visit', async () => {
+    const { isReturningTrialEligible, startReturningTrialIfEligible, carryOverTrialEnd } = require('../utils/autoTrial');
+    const old = { userId: 5, tier: 0, dateCreated: new Date(now - 30 * DAY) };
+    assert.strictEqual(isReturningTrialEligible(old, now), true);
+    assert.strictEqual(isReturningTrialEligible({ ...old, dateCreated: new Date(now - 2 * DAY) }, now), false);
+    assert.strictEqual(isReturningTrialEligible({ ...old, autoTrial: { endsAt: now, expiredAt: now } }, now), false);
+    assert.strictEqual(isReturningTrialEligible({ ...old, hasUsedFreeTrial: true }, now), false);
+    assert.strictEqual(isReturningTrialEligible({ ...old, tier: 1 }, now), false);
+    assert.strictEqual(isReturningTrialEligible({ ...old, subscription: { stripeSubscriptionId: 's' } }, now), false);
+
+    let update = null;
+    const db = { collection: () => ({ updateOne: async (filter, change) => { update = { filter, change }; return { modifiedCount: 1 }; } }) };
+    await withEnv({ RETURNING_TRIAL_ENABLED: undefined }, async () => {
+        assert.strictEqual(await startReturningTrialIfEligible(db, old, now), old);
+        assert.strictEqual(update, null);
+    });
+    await withEnv({ RETURNING_TRIAL_ENABLED: 'true', PLUS_TRIAL_DAYS: undefined }, async () => {
+        const user = await startReturningTrialIfEligible(db, old, now);
+        assert.strictEqual(user.tier, 2);
+        assert.strictEqual(user.autoTrial.source, 'returning');
+        assert.strictEqual(new Date(user.autoTrial.endsAt).getTime(), now.getTime() + 7 * DAY);
+        assert.strictEqual(update.filter.userId, 5);
+        assert.deepStrictEqual(update.filter.autoTrial, { $exists: false });
+        // a plan bought on day 1 starts billing when the trial would have ended
+        assert.strictEqual(carryOverTrialEnd(user, now.getTime()).getTime(), now.getTime() + 7 * DAY);
+        assert.strictEqual(carryOverTrialEnd({ ...user, autoTrial: { endsAt: new Date(now.getTime() + DAY) } }, now.getTime()), null);
+    });
+});
