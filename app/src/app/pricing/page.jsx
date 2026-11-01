@@ -5,31 +5,21 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { track } from '@/lib/analytics';
+import { PRICE_IDS, PLAN_BY_PRICE_ID } from '@/lib/checkout';
 import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
 import Mascot from '@/components/Mascot';
 import Footer from '@/components/Footer';
 
-// Signed-in readers get the app shell; visitors keep the public site header.
-// While auth is still loading, render a plain surface so neither shell flashes.
 // "Monday, November 2"
 const carryOverLabel = (iso) => new Date(iso).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
+// Signed-in readers get the app shell; visitors keep the public site header.
+// While auth is still loading, render a plain surface so neither shell flashes.
 const BlankShell = () => <div style={{ minHeight: '100dvh', background: 'var(--background)' }} />;
 
-//real
-const PRICE_IDS = {
-    BASIC_UPGRADE: 'price_1QtCSlDv6kE7GataHOJpDPKT',
-    AUDIO_PACK: 'price_1QtCTcDv6kE7GataN7ebeLCF',
-    IMAGE_PACK: 'price_1QxXiXDv6kE7GataLRxt8hrj',
-    MORE_SENTENCES: 'price_1R5e8hDv6kE7Gata5CKPAu0Z',
-    BASIC_SUBSCRIPTION: 'price_1R94kODv6kE7Gata9Zwzvvom',
-    PLUS_SUBSCRIPTION: 'price_1QtBf2Dv6kE7Gatasq6pq1Tc',
-    BASIC_SUBSCRIPTION_YEARLY: 'price_1Rjh9EDv6kE7GataEdXl4ICx',
-    PLUS_SUBSCRIPTION_YEARLY: 'price_1RjhBODv6kE7GatajkAfu5cB',
-};
-
+// Live price IDs are in lib/checkout.js.
 //test
 // const PRICE_IDS = {
 //     BASIC_UPGRADE: 'price_1QtEdrDv6kE7GatabIZ21Odt',
@@ -37,9 +27,6 @@ const PRICE_IDS = {
 //     MONTHLY_SUB: 'price_1QtEcWDv6kE7Gata4QDYmETm'
 // };
 
-const PLAN_BY_PRICE_ID = Object.fromEntries(
-    Object.entries(PRICE_IDS).map(([plan, id]) => [id, plan])
-);
 
 const PRICING = PLAN_PRICES;
 

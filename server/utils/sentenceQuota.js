@@ -22,7 +22,7 @@ const quotaExceededMessage = (identifierType) => {
     }
     return {
         type: 'rate_limit_exceeded',
-        message: `You have used all ${FREE_WEEKLY_SENTENCES} of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses for $4/month or purchase 100 additional analyses for $1.`,
+        message: `You've used this week's ${FREE_WEEKLY_SENTENCES} free breakdowns. They come back on Sunday, or get unlimited breakdowns with Basic from $3.33 a month.`,
         remaining: 0
     };
 };

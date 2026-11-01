@@ -167,3 +167,69 @@
     font-size: .92rem;
     a { display: inline-block; margin-top: .25rem; font-weight: 800; color: var(--bp-purple-d); }
 }
+
+// Weekly limit popup (components/WeeklyLimitPopup): one-tap plan options.
+.wide { max-width: 32rem; }
+
+.dealLine { color: var(--bp-rev-d); }
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: .65rem;
+    margin: 1.1rem 0 .9rem;
+}
+
+.option {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    width: 100%;
+    padding: .8rem 1rem;
+    text-align: left;
+    font-family: var(--font-display);
+    color: var(--foreground);
+    background: var(--background);
+    border: 2px solid var(--bp-line);
+    border-radius: 16px;
+    box-shadow: 0 4px 0 var(--bp-line);
+    cursor: pointer;
+    transition: transform .08s ease, box-shadow .08s ease, border-color .15s ease;
+
+    &:hover { border-color: var(--bp-purple); }
+    &:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--bp-line); }
+    &:disabled { cursor: progress; opacity: .75; }
+    &:focus-visible { outline: 3px solid var(--bp-read-line); outline-offset: 2px; }
+}
+
+.optionFeatured {
+    border-color: var(--bp-purple);
+    box-shadow: 0 4px 0 var(--bp-purple-d);
+    background: var(--bp-purple-soft);
+}
+
+.optionHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: .75rem;
+    font-size: 1.05rem;
+
+    b { font-weight: 800; }
+    span { font-weight: 800; white-space: nowrap; }
+    s { color: var(--bp-ink2); font-weight: 600; margin-right: .2rem; }
+}
+
+.optionNote {
+    color: var(--bp-ink2);
+    font-size: .9rem;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.fine {
+    color: var(--bp-ink2) !important;
+    font-size: .88rem !important;
+
+    a { color: var(--bp-purple-d); font-weight: 800; }
+}

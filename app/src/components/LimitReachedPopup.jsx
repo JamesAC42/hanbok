@@ -6,11 +6,17 @@ import { track } from '@/lib/analytics';
 import Mascot from '@/components/Mascot';
 import Link from 'next/link';
 import { speakEvent } from '@/lib/speakEvents';
+import WeeklyLimitPopup from '@/components/WeeklyLimitPopup';
 
 // Friendly heads-up notices (not a hard stop) get the teaching pose.
 const NOTICE_TYPES = ['first-five-used', 'fifteen-remaining', 'five-remaining'];
 
-const LimitReachedPopup = ({ onClose, type = 'words' }) => {
+// The weekly breakdown limit has its own popup with one-tap checkout.
+const LimitReachedPopup = (props) => (props.type === 'sentence-analyses'
+    ? <WeeklyLimitPopup onClose={props.onClose} />
+    : <OtherLimitPopup {...props} />);
+
+const OtherLimitPopup = ({ onClose, type = 'words' }) => {
     const router = useRouter();
     const { t } = useLanguage();
 
