@@ -134,5 +134,17 @@ data or keys. Files are in `deploy/sites/`; everything lives in `/srv/sites`.
    3001 (kirakissu) and 3002 (umami), like `deploy/nginx-hanbok.conf` without
    the `/api/` block, then certbot.
 
-Hanbok staging can move here later as two more services. Scraple, gym and stream
-aren't containerized yet; give them the same treatment before they go public again.
+Scraple runs here too (`scraple-api`, `scraple`, and `redis` for its data).
+
+## Staging
+
+staging.hanbokstudy.com runs on the Hanbok server as a separate compose project
+in `/srv/hanbok-staging` (`deploy/staging/docker-compose.yml`), on 127.0.0.1:5667
+(API) and 3060 (app). Actions → Deploy to staging builds the images for a PR
+number, branch or SHA and runs `staging-deploy <sha>` through the same deploy
+key; `compose-entry.sh` only touches `/srv/hanbok-staging` for `staging-*`.
+
+Its `api.env` starts as a copy of production's with: `FRONTEND_URL`,
+`CLIENT_URL` and `COOKIE_DOMAIN` set to the staging domain, `MONGODB_DB=hanbok_staging`,
+a Stripe test key (`sk_test_…`), its own `SESSION_SECRET`, `REDIS_SESSION_PREFIX`,
+`SESSION_COOKIE_NAME` and `BULL_QUEUE_PREFIX`, and the lifecycle and streak emails off.

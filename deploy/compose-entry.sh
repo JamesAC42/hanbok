@@ -7,11 +7,23 @@
 #   deploy <40-char sha>   pull that commit's images, start them, health-check,
 #                          and put the previous images back if the check fails
 #   rollback               switch back to the images that ran before
+#   staging-deploy <sha> | staging-rollback
+#                          the same, for staging in /srv/hanbok-staging
 set -euo pipefail
 
-DIR="${HANBOK_COMPOSE_DIR:-/srv/hanbok}"
-API_HEALTH="${API_HEALTH:-http://127.0.0.1:5666/api/health}"
-APP_HEALTH="${APP_HEALTH:-http://127.0.0.1:3059/}"
+read -r action sha extra <<< "${SSH_ORIGINAL_COMMAND:-${*:-}}"
+
+if [[ "$action" == staging-* ]]; then
+  action="${action#staging-}"
+  DIR=/srv/hanbok-staging
+  API_HEALTH=http://127.0.0.1:5667/api/health
+  APP_HEALTH=http://127.0.0.1:3060/
+  [ -f "$DIR/api.env" ] || { echo "staging isn't set up: $DIR/api.env is missing" >&2; exit 1; }
+else
+  DIR="${HANBOK_COMPOSE_DIR:-/srv/hanbok}"
+  API_HEALTH="${API_HEALTH:-http://127.0.0.1:5666/api/health}"
+  APP_HEALTH="${APP_HEALTH:-http://127.0.0.1:3059/}"
+fi
 HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-60}"
 cd "$DIR"
 
@@ -28,7 +40,6 @@ healthy() {
 
 run_tag() { HANBOK_TAG="$1" docker compose up -d --remove-orphans; }
 
-read -r action sha extra <<< "${SSH_ORIGINAL_COMMAND:-${*:-}}"
 current="$(cat .tag 2>/dev/null || true)"
 
 case "$action" in
@@ -59,7 +70,7 @@ case "$action" in
     log "live on ${prev:0:7}"
     ;;
   *)
-    echo "usage: deploy <sha> | rollback" >&2
+    echo "usage: [staging-]deploy <sha> | [staging-]rollback" >&2
     exit 2
     ;;
 esac
