@@ -32,10 +32,16 @@ export default function PhrasesIndex() {
                     <p className={styles.label}>Korean phrases</p>
                     <h1 className={styles.title}>What does that Korean word mean?</h1>
                     <p className={styles.dek}>
-                        The words you keep hearing in dramas and songs, explained in plain English with real examples.
+                        The {phrases.length} words you keep hearing in dramas, songs and group chats, explained in plain English with real examples. Want to say something yourself? See{' '}
+                        <Link href="/how-to-say">how to say it in Korean</Link>.
                     </p>
                 </div>
             </header>
+            <nav className={`${styles.chipRow} ${own.jumpNav}`} aria-label="Jump to a topic">
+                {groups.map((g) => (
+                    <a key={g.key} href={`#${g.key}`} className={`${styles.filterChip} ${own.jump}`}>{g.title} ({g.items.length})</a>
+                ))}
+            </nav>
             {groups.map((g) => (
                 <section key={g.key} id={g.key} className={own.group}>
                     <h2 className={styles.sectionTitle}>{g.title}</h2>

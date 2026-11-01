@@ -14,7 +14,6 @@ const nextConfig = {
   // old links and rankings.
   async redirects() {
     return [
-      { source: '/grammar', destination: '/learn', statusCode: 301 },
       { source: '/lessons', destination: '/learn', statusCode: 301 },
       { source: '/lessons/:path*', destination: '/learn', statusCode: 301 },
     ];

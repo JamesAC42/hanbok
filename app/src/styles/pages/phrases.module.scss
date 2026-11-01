@@ -112,3 +112,58 @@
     font-weight: 700;
     line-height: 1.35;
 }
+
+.jump {
+    text-decoration: none;
+}
+
+.jumpNav {
+    max-width: 60rem;
+    margin: 0 auto 2rem;
+}
+
+// How-to-say tiles lead with the English.
+.tileSay {
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.3;
+    margin-bottom: .2rem;
+}
+
+// Grammar pages: the pattern itself, big, under the title.
+.formCard {
+    margin: 1rem 0 .5rem;
+    padding: 1.1rem 1.25rem;
+    border: 2px solid var(--bp-line);
+    border-bottom-width: 4px;
+    border-radius: 18px;
+    background: var(--background);
+    font-family: var(--font-display);
+
+    p { margin: 0; }
+}
+
+.formKo {
+    font-family: var(--font-kr-sans);
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.formRom {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.formMeaning {
+    margin-top: .35rem !important;
+    font-size: 1.1rem;
+    font-weight: 800;
+}
+
+.formMeta {
+    margin-top: .5rem !important;
+    @include bp-label;
+}

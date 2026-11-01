@@ -8,7 +8,8 @@ export const CATEGORIES = [
     { key: 'love', title: 'Love and friendship', dek: 'From a crush to saying I love you.' },
     { key: 'everyday', title: 'Everyday phrases', dek: 'Hello, thanks, sorry and the other words you hear every day.' },
     { key: 'slang', title: 'Slang', dek: 'Casual words friends use with each other.' },
-    { key: 'internet', title: 'Internet and texting', dek: 'Words born online and in group chats.' },
+    { key: 'internet', title: 'Internet and texting', dek: 'Words born online and in group chats, and what ㅋㅋㅋ and ㅇㅇ stand for.' },
+    { key: 'food', title: 'Food and drinking', dek: 'Soju, anju and the words you hear around a Korean table.' },
 ];
 
 // Example chips arrive as [[{ t, g, p?, base? }]]; <Example> wants [{ parts: [{ t, g, particle?, base? }] }].

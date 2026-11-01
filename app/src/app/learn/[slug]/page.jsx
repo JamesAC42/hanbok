@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import LearnShell from '@/components/learn/LearnShell';
 import Quiz from '@/components/learn/Quiz';
 import MarkRead from '@/components/learn/MarkRead';
+import SignUpCta from '@/components/learn/SignUpCta';
 import { articles, getArticle, TOPICS } from '@/content/learn';
 import { JsonLd, SITE_URL, SITE_NAME } from '@/lib/seo';
 import styles from '@/styles/pages/learn.module.scss';
@@ -105,6 +106,8 @@ export default async function LearnArticle({ params }) {
                         ))}
                     </section>
                 )}
+
+                <SignUpCta source="learn_article" title="Keep what you just learned" />
 
                 {more.length > 0 && (
                     <section>

@@ -11,7 +11,7 @@ Review every Korean sentence by hand before shipping.
   "roman": "daebak",
   "aka": ["dae bak"],                // other spellings learners type
   "meaning": "Awesome! / No way!",   // under 40 characters
-  "category": "reaction",            // reaction | people | love | everyday | slang | internet
+  "category": "reaction",            // reaction | people | love | everyday | slang | internet | food
   "register": "casual",              // casual | polite | formal | any
   "intro": "...",                    // answers "what does X mean" in 2-3 sentences
   "literal": "...",                  // origin, or "" when nothing reliable to say

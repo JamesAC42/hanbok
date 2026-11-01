@@ -23,7 +23,7 @@ export const findGuide = (guides, form, language = 'ko') => {
     const matches = guides.filter((g) => (g.language || 'ko') === language && formsMatch(g.form, form));
     if (!matches.length) return null;
     matches.sort((a, b) => a.focus - b.focus);
-    return { slug: matches[0].slug, title: matches[0].title, href: `/learn/${matches[0].slug}` };
+    return { slug: matches[0].slug, title: matches[0].title, href: matches[0].href || `/learn/${matches[0].slug}` };
 };
 
 export const useGrammarGuides = () => {
