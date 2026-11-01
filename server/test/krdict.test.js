@@ -80,6 +80,25 @@ test('lookup caches searches and builds families', async () => {
     assert.strictEqual(calls.length, before, 'second lookup is served from the cache');
 });
 
+test('empty results are looked up again after a day', async () => {
+    let t = 0;
+    let calls = 0;
+    const store = new Map();
+    const db = { collection: () => ({
+        findOne: async ({ _id }) => store.get(_id) || null,
+        updateOne: async ({ _id }, { $set }) => { store.set(_id, { _id, ...$set }); },
+    }) };
+    const fetchImpl = async () => { calls++; return { ok: true, text: async () => '<channel><total>0</total></channel>' }; };
+    const kd = createKrdict({ apiKey: 'test', getDb: () => db, fetchImpl, now: () => t });
+    assert.strictEqual(await kd.lookup('없는말'), null);
+    t = 60 * 60 * 1000;
+    await kd.lookup('없는말');
+    assert.strictEqual(calls, 1);
+    t = 25 * 60 * 60 * 1000;
+    await kd.lookup('없는말');
+    assert.strictEqual(calls, 2);
+});
+
 test('lookup without a key reports itself disabled', () => {
     assert.strictEqual(createKrdict({ apiKey: '' }).enabled, false);
 });

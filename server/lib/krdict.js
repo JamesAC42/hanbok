@@ -5,6 +5,9 @@
 
 const SEARCH_URL = 'https://krdict.korean.go.kr/api/search';
 const FRESH_MS = 90 * 24 * 60 * 60 * 1000;
+// Empty answers are kept only a day, so a word krdict missed (or a response
+// we misread) is asked again soon instead of hiding the panel for months.
+const EMPTY_FRESH_MS = 24 * 60 * 60 * 1000;
 const TIMEOUT_MS = 6000;
 
 // krdict translation language codes (trans_lang).
@@ -168,7 +171,7 @@ const createKrdict = ({ apiKey = process.env.KRDICT_API_KEY, getDb, fetchImpl = 
     const cached = async (key, load) => {
         const col = getDb?.()?.collection('krdict_cache');
         const hit = col && await col.findOne({ _id: key }).catch(() => null);
-        if (hit && now() - new Date(hit.at).getTime() < FRESH_MS) return hit.entries;
+        if (hit && now() - new Date(hit.at).getTime() < (hit.entries?.length ? FRESH_MS : EMPTY_FRESH_MS)) return hit.entries;
         if (pending.has(key)) return pending.get(key);
         const p = load().then(async (entries) => {
             if (col) await col.updateOne({ _id: key }, { $set: { entries, at: new Date(now()) } }, { upsert: true }).catch(() => {});
