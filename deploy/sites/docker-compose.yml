@@ -49,3 +49,35 @@ services:
     env_file: ./umami.env             # DATABASE_URL=postgresql://umami:...@postgres:5432/umami, APP_SECRET=...
     tmpfs: ["/tmp"]
     ports: ["127.0.0.1:3002:3000"]
+
+  # Scraple keeps everything (puzzles, scores, stats) in Redis. Snapshot file:
+  # ./redis/dump.rdb, saved every minute when anything changed.
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1", "--save", "300", "10"]
+    volumes:
+      - ./redis:/data
+    mem_limit: 256m
+    # Not published: only the containers on this network can reach it.
+
+  # One image, two containers: the API (which also runs the daily bot) and
+  # the Next.js front end, which proxies /api to scraple-api.
+  scraple-api:
+    <<: *site
+    image: ghcr.io/jamesac42/scraple:${SCRAPLE_TAG:-latest}
+    env_file: ./scraple.env           # PUZZLE_SEED_SECRET=...
+    environment:
+      REDIS_URL: redis://redis:6379
+    tmpfs: ["/tmp"]
+    mem_limit: 768m                   # the daily bot solver is memory-hungry
+    depends_on: [redis]
+
+  scraple:
+    <<: *site
+    image: ghcr.io/jamesac42/scraple:${SCRAPLE_TAG:-latest}
+    working_dir: /srv/scraple/app
+    command: ["node_modules/.bin/next", "start", "-p", "3000"]
+    tmpfs: ["/tmp", "/srv/scraple/app/.next/cache:uid=1000,gid=1000"]
+    ports: ["127.0.0.1:3061:3000"]
+    depends_on: [scraple-api]

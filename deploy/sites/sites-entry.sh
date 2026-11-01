@@ -9,16 +9,18 @@ set -euo pipefail
 cd "${SITES_DIR:-/srv/sites}"
 
 read -r action service sha extra <<< "${SSH_ORIGINAL_COMMAND:-${*:-}}"
+services="$service"
 case "$service" in
   blog) port=3000 ;;
   kirakissu) port=3001 ;;
+  scraple) port=3061; services="scraple-api scraple" ;;
   *) echo "unknown site: $service" >&2; exit 2 ;;
 esac
 var="$(echo "$service" | tr a-z A-Z)_TAG"
 log() { echo "[$(date -u +%FT%TZ)] $service: $*" | tee -a deploy.log; }
 current="$(cat ".tag-$service" 2>/dev/null || true)"
 
-up() { env "$var=$1" docker compose up -d --no-deps "$service"; }
+up() { env "$var=$1" docker compose up -d --no-deps $services; }
 healthy() {
   for _ in $(seq 1 45); do curl -fsS -o /dev/null "http://127.0.0.1:$port/" && return 0; sleep 2; done
   return 1
@@ -28,7 +30,7 @@ case "$action" in
   deploy)
     [[ "$sha" =~ ^[0-9a-f]{40}$ && -z "${extra:-}" ]] || { echo "usage: deploy <service> <40-char sha>" >&2; exit 2; }
     log "deploying ${sha:0:7} (was ${current:0:7})"
-    env "$var=$sha" docker compose pull -q "$service"
+    env "$var=$sha" docker compose pull -q $services
     up "$sha"
     if healthy; then
       [ -n "$current" ] && [ "$current" != "$sha" ] && echo "$current" > ".tag-prev-$service"
