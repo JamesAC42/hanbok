@@ -267,6 +267,11 @@ app.get('/api/word-audio', async (req, res) => {
     getWordAudioController(req, res);
 });
 
+// Learner level, Hanja and word family from the Korean Learners' Dictionary.
+app.get('/api/dictionary/word', (req, res) => {
+    require('./controllers/words/dictionary').getDictionaryWord(req, res);
+});
+
 app.get('/api/sentences/:sentenceId', async (req, res) => {
     getSentence(req, res);
 });

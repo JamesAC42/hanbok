@@ -337,6 +337,7 @@ const Analysis = ({
                          <WordInfo 
                             wordInfo={wordInfo}
                             language={originalLanguage}
+                            translationLanguage={translationLanguage}
                             shouldAnimate={shouldAnimate}
                             showPronunciation={showPronunciation}
                             onClose={handleCloseWordInfo} />

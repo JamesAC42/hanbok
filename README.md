@@ -77,6 +77,7 @@ ANTHROPIC_API_KEY=          <-- Optional, depends on which LLM you want to use
 GOOGLE_CLIENT_ID=           <-- For Google OAuth
 GOOGLE_CLIENT_SECRET=       <-- For Google OAuth
 ELEVENLABS_API_KEY=         <-- For text to speech
+KRDICT_API_KEY=             <-- Optional, Korean Learners' Dictionary key for word levels, Hanja and word families
 GEMINI_API_KEY=             <-- Optional, depends on which LLM you want to use
 OPENAI_API_KEY=             <-- Optional, depends on which LLM you want to use
 REDIS_PW=                   <-- For redis - leave blank if you don't want/need authentication for your server locally

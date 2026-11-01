@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channel>
+<title><![CDATA[한국어 기초사전 개발 지원(Open API) - 사전 검색]]></title>
+<total>1</total><start>1</start><num>20</num>
+<item>
+<target_code>36829</target_code>
+<word><![CDATA[학교]]></word>
+<sup_no>0</sup_no>
+<origin><![CDATA[學校]]></origin>
+<pronunciation><![CDATA[학꾜]]></pronunciation>
+<word_grade><![CDATA[초급]]></word_grade>
+<pos><![CDATA[명사]]></pos>
+<link><![CDATA[https://krdict.korean.go.kr/dicSearch/SearchView?ParaWordNo=36829]]></link>
+<sense><sense_order>1</sense_order>
+<definition><![CDATA[일정한 목적, 교과 과정, 설비, 제도 및 법규에 의하여 학생에게 교육을 실시하는 기관.]]></definition>
+<translation><trans_word><![CDATA[school]]></trans_word><trans_dfn><![CDATA[An institution where students are educated.]]></trans_dfn></translation>
+</sense>
+</item>
+</channel>
