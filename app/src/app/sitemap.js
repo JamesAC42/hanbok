@@ -2,6 +2,7 @@ import { apiGet, SITE_URL } from '@/lib/seo';
 import { articles } from '@/content/learn';
 import { phrases, phraseHref } from '@/content/phrases';
 import { sayings, sayingHref } from '@/content/how-to-say';
+import { patterns, patternHref } from '@/content/grammar';
 import { updates } from '@/content/updates';
 
 // Rebuilt at most hourly so new songs show up without a deploy.
@@ -15,6 +16,7 @@ const STATIC_PAGES = [
     { path: '/learn', changeFrequency: 'weekly', priority: 0.9 },
     { path: '/phrases', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/how-to-say', changeFrequency: 'weekly', priority: 0.8 },
+    { path: '/grammar', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/hangeul', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/pricing', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
@@ -54,6 +56,12 @@ export default async function sitemap() {
         priority: 0.7,
     }));
 
+    const grammarPages = patterns.map((g) => ({
+        url: `${SITE_URL}${patternHref(g)}`,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+    }));
+
     const posts = updates.map((post) => ({
         url: `${SITE_URL}/updates/${post.slug}`,
         lastModified: new Date(post.published),
@@ -61,5 +69,5 @@ export default async function sitemap() {
         priority: 0.4,
     }));
 
-    return [...pages, ...guides, ...phrasePages, ...sayingPages, ...posts, ...songs];
+    return [...pages, ...guides, ...phrasePages, ...sayingPages, ...grammarPages, ...posts, ...songs];
 }

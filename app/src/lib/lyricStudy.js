@@ -3,6 +3,7 @@
 // Runs on the server, so the notes are in the HTML search engines read.
 import { articlesForGrammar } from '@/content/learn';
 import { phraseForWord, phraseHref } from '@/content/phrases';
+import { patternForForm, patternHref } from '@/content/grammar';
 
 const SKIP_TYPES = /particle|punctuation|symbol|interjection|onomatopoeia|suffix|ending/i;
 const HANGUL = /[가-힣ㄱ-ㅎ]/;
@@ -24,6 +25,10 @@ const guideFor = (pattern, language) => {
     for (const form of formsIn(pattern)) {
         const [article] = articlesForGrammar(form);
         if (article) return { href: `/learn/${article.meta.slug}`, title: article.meta.shortTitle };
+    }
+    for (const form of formsIn(pattern)) {
+        const page = patternForForm(form);
+        if (page) return { href: patternHref(page), title: `${page.form} (${page.meaning})` };
     }
     return null;
 };

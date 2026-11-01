@@ -47,7 +47,8 @@ export default function LearnIndex() {
                     <p className={styles.dek}>
                         Stuck on a sentence of your own? Paste it into the{' '}
                         <Link href="/korean-sentence-analyzer">free Korean sentence analyzer</Link>, or look up a
-                        word from a drama in <Link href="/phrases">Korean phrases</Link>.
+                        word from a drama in <Link href="/phrases">Korean phrases</Link>. Looking for one ending or
+                        pattern, like -잖아 or -는 것 같다? See <Link href="/grammar">Korean grammar patterns</Link>.
                     </p>
                 </div>
             </header>
