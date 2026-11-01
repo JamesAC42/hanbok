@@ -253,3 +253,13 @@
         display: flex;
     }
 }
+
+// Shown on /sentence/<id> while its analysis loads.
+.sentenceLoading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	width: 100%;
+	min-height: 40vh;
+}

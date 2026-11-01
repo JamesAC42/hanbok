@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { track } from '@/lib/analytics';
+import { rememberSentence } from '@/lib/pendingSentence';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
@@ -455,9 +456,29 @@ const SentenceForm = ({
                 track('analyze', { language, source, signedIn: isAuthenticated });
                 if (!isAuthenticated) rememberAnonSentence(data.publicId);
                 
-                // If originalLanguage or sentenceId is in the response, add them to query params
+                // Go to the result page and hand it the analysis we already have, so it
+                // shows immediately. Keep the spinner up until that page replaces this
+                // one: turning it off here made the form look finished while the
+                // navigation was still under way.
                 if (data.originalLanguage && data.sentenceId) {
+                    rememberSentence({
+                        analysis: data.message.analysis,
+                        sentenceId: data.sentenceId,
+                        publicId: data.publicId || null,
+                        originalLanguage: data.originalLanguage,
+                        translationLanguage: data.translationLanguage,
+                        voice1Key: data.voice1Key || null,
+                        voice2Key: data.voice2Key || null,
+                        voice1SlowKey: data.voice1SlowKey || null,
+                        voice2SlowKey: data.voice2SlowKey || null,
+                    });
                     router.push(sentenceHref(data));
+                    // Safety net in case the navigation never lands.
+                    setTimeout(() => {
+                        setLoading(false);
+                        setIsProcessingImage(false);
+                    }, 20000);
+                    return;
                 }
             } else {
                 track('analyze_error', { reason: data.message.error?.type || 'other' });

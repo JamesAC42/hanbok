@@ -12,25 +12,36 @@ import { resources } from '@/translations';
 import TranslationSwitcher from '@/components/TranslationSwitcher';
 
 import Tiger from '@/components/Tiger';
+import Mascot from '@/components/Mascot';
+import { takeSentence } from '@/lib/pendingSentence';
 
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
     const searchParams = useSearchParams();
     const { loadSentence, isAuthenticated } = useAuth();
     const { t, language, nativeLanguage, supportedLanguages } = useLanguage();
+
+    // Coming straight from the analyze form: it already has the analysis, so
+    // draw it now and fetch the stored copy (audio keys etc.) in the background.
+    const [handoff] = useState(() => takeSentence(propSentenceId));
     
-    const [analysis, setAnalysis] = useState(null);
-    const [originalLanguage, setOriginalLanguage] = useState(null);
-    const [translationLanguage, setTranslationLanguage] = useState(null);
-    const [voice1, setVoice1] = useState(null);
-    const [voice2, setVoice2] = useState(null);  
-    const [voice1Slow, setVoice1Slow] = useState(null);
-    const [voice2Slow, setVoice2Slow] = useState(null);
+    const [analysis, setAnalysis] = useState(handoff?.analysis || null);
+    const [originalLanguage, setOriginalLanguage] = useState(handoff?.originalLanguage || null);
+    const [translationLanguage, setTranslationLanguage] = useState(handoff?.translationLanguage || null);
+    const [voice1, setVoice1] = useState(handoff?.voice1Key || null);
+    const [voice2, setVoice2] = useState(handoff?.voice2Key || null);
+    const [voice1Slow, setVoice1Slow] = useState(handoff?.voice1SlowKey || null);
+    const [voice2Slow, setVoice2Slow] = useState(handoff?.voice2SlowKey || null);
     const [doNotCache, setDoNotCache] = useState(false);
     // The link may carry a random publicId; API calls below use the numeric id.
-    const [loadedIds, setLoadedIds] = useState(null);
-    const [showTransition, setShowTransition] = useState(false);
+    const [loadedIds, setLoadedIds] = useState(handoff
+        ? { sentenceId: handoff.sentenceId, publicId: handoff.publicId || null }
+        : null);
+    const [showTransition, setShowTransition] = useState(!!handoff);
     const [error, setError] = useState(null);
+    // A /sentence/<id> link whose analysis hasn't arrived yet: show a loader,
+    // not the empty analyze form (which looked like nothing had happened).
+    const [loadingSentence, setLoadingSentence] = useState(!!propSentenceId && !handoff);
 
     const [translationMode, setTranslationMode] = useState(false);
 
@@ -105,18 +116,25 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
 
     const loadSavedSentence = async (id) => {
         const result = await loadSentence(id);
+        setLoadingSentence(false);
         if (result.success) {
-            setAnalysis(result.sentence.analysis);
-            setOriginalLanguage(result.sentence.originalLanguage);
-            setTranslationLanguage(result.sentence.translationLanguage);
+            // The handed-over analysis is the same one; replacing it would only
+            // re-render the page under someone who already started reading.
+            if (!handoff) {
+                setAnalysis(result.sentence.analysis);
+                setOriginalLanguage(result.sentence.originalLanguage);
+                setTranslationLanguage(result.sentence.translationLanguage);
+            }
             setVoice1(result.sentence.voice1Key);
             setVoice2(result.sentence.voice2Key);
             setVoice1Slow(result.sentence.voice1SlowKey);
             setVoice2Slow(result.sentence.voice2SlowKey);
             setDoNotCache(result.sentence.doNotCache === true);
             setLoadedIds({ sentenceId: result.sentence.sentenceId, publicId: result.sentence.publicId || null });
-            setShowTransition(false); // Reset transition when loading saved sentence
-        } else {
+            // Reset transition when loading saved sentence (but let a fresh result
+            // that was handed over finish its entrance).
+            if (!handoff) setShowTransition(false);
+        } else if (!handoff) {
             setError(result.error);
         }
     };
@@ -154,8 +172,16 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
                 )
             }
 
+            {
+                !analysis && loadingSentence && (
+                    <div className={styles.sentenceLoading} role="status" aria-live="polite">
+                        <Mascot pose="cards" size={64} motion="bob" />
+                    </div>
+                )
+            }
+
             { 
-                !analysis && 
+                !analysis && !loadingSentence &&
                 (
                     <>
                     <SentenceForm

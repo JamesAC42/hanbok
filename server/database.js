@@ -134,6 +134,19 @@ async function connectToDatabase() {
     await safeCreateIndex('app_survey', { userId: 1 });
     await safeCreateIndex('app_survey', { visitorId: 1 });
 
+    // Hot lookups that had no index. On the managed database every one of these
+    // was a full collection scan: the analysis cache check (submitSentence,
+    // lyric jobs) read every sentence ever analyzed, twice, before each new
+    // analysis. Built in the background so a large collection doesn't hold up startup.
+    for (const [collection, keys, options] of [
+      ['sentences', { text: 1, originalLanguage: 1, translationLanguage: 1 }, { name: 'sentence_cache_lookup' }],
+      ['users', { userId: 1 }, { name: 'user_id' }],
+    ]) {
+      safeCreateIndex(collection, keys, options).catch((error) => {
+        console.error(`Index on ${collection} ${JSON.stringify(keys)} failed:`, error.message);
+      });
+    }
+
     // Add index for word_audio collection
     await safeCreateIndex('word_audio', { language: 1, word: 1, hiraganaReading: 1 }, { unique: true });
 
