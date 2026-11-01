@@ -20,6 +20,7 @@ import getFontClass from '@/lib/fontClass';
 import QuotaDisplay from '@/components/QuotaDisplay';
 import RecentlyAnalyzed from '@/components/analysis/RecentlyAnalyzed';
 import NextSteps from '@/components/analysis/NextSteps';
+import AnalysisLayers from '@/components/analysis/layers/AnalysisLayers';
 import useSavedWords from '@/hooks/useSavedWords';
 import { markStage } from '@/lib/todayLoop';
 
@@ -277,6 +278,11 @@ const Analysis = ({
                             )}
                             <span className={styles.legendHint}>Tap a word for details</span>
                         </div>
+                        <AnalysisLayers
+                            analysis={analysis}
+                            language={originalLanguage}
+                            sentenceKey={shareKey || sentenceId || analysis.sentence.original}
+                            sentenceId={isLyric ? null : sentenceId} />
                     </div>
                     
                     {/* Next steps (shown here when the side column is a bottom sheet) */}

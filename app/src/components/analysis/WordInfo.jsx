@@ -238,6 +238,13 @@ const WordInfo = ({wordInfo, shouldAnimate, language, showPronunciation, onClose
                         </li> : null 
                     }
                     {
+                        !wordInfo.isParticle && wordInfo.register &&
+                        <li className={styles.register}>
+                            <b>{wordInfo.register.charAt(0).toUpperCase() + wordInfo.register.slice(1)}.</b>
+                            {wordInfo.standard_form && <> Standard form: <span className={getFontClass(language)}>{wordInfo.standard_form}</span></>}
+                        </li>
+                    }
+                    {
                         ((wordInfo.isParticle && wordInfo.function) ||
                         (!wordInfo.isParticle && wordInfo.meaning?.notes)) &&
                         <li>

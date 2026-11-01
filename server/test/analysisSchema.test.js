@@ -133,3 +133,23 @@ describe('field order', () => {
         assert.deepEqual(Object.keys(example.properties), ['original', 'translation']);
     });
 });
+
+describe('layers fields (Korean prompt)', () => {
+    const { schema } = getAnalysisSchema(require('../llm/prompt').ANALYSIS_PROMPT('ko', 'en') + 'sample');
+    const analysis = schema.properties.analysis;
+
+    test('asks for sentence chunks and 3 tutor questions, both optional', () => {
+        const chunk = analysis.properties.chunks.items.properties;
+        assert.deepEqual(Object.keys(chunk), ['components', 'role', 'gloss']);
+        assert.equal(analysis.properties.chunks.maxItems, 12);
+        assert.equal(analysis.properties.questions.maxItems, 3);
+        assert.ok(!analysis.required.includes('chunks'));
+        assert.ok(!analysis.required.includes('questions'));
+    });
+
+    test('lets a component carry a register and its standard form', () => {
+        const component = analysis.properties.components.items.properties;
+        assert.equal(component.register.type, 'string');
+        assert.equal(component.standard_form.type, 'string');
+    });
+});

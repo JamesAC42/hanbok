@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "PORT=${PORT:-3059} next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test test/*.test.mjs"
   },
   "dependencies": {
     "chart.js": "^4.4.8",

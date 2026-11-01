@@ -301,3 +301,12 @@
       transform: translateY(0px);
     }
 }
+
+// Slang, dialect and other non-standard words
+.register {
+    padding: .45rem .7rem;
+    border-radius: 12px;
+    background: var(--bp-pink-soft);
+    border: 2px solid color-mix(in srgb, var(--bp-pink) 45%, var(--background));
+    list-style: none;
+}

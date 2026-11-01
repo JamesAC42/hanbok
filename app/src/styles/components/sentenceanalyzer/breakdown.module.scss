@@ -129,6 +129,21 @@
 
 .hasPronunciation {}
 
+// Slang, dialect and other non-standard words
+.register {
+    margin-top: .15rem;
+    padding: .05rem .45rem;
+    border-radius: 99px;
+    background: var(--bp-pink-soft);
+    border: 2px solid color-mix(in srgb, var(--bp-pink) 50%, var(--background));
+    font-family: var(--font-display);
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--foreground);
+}
+
 @media screen and (max-width: 725px) {
     .breakdownContent {
         gap: .7rem .45rem;

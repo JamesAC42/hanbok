@@ -64,6 +64,8 @@ For valid input:
         ${originalLanguage === 'ja' ? '"reading": "(IMPORTANT) for Japanese words only: hiragana/katakana reading showing proper on/kunyomi pronunciation based on context",' : isChinese(originalLanguage) ? '"reading": "(IMPORTANT) for Chinese words only: pinyin with proper tone diacritical marks",' : ''}
         "type": "(IMPORTANT) grammatical type in ENGLISH (verb/noun/particle/etc)",
         "type_translated": "(IMPORTANT) grammatical type in ${SupportedLanguages[translationLanguage]}",
+        "register": "ONLY when this word is not standard everyday ${SupportedLanguages[originalLanguage]}: one of slang, internet, dialect, archaic, poetic. Omit for standard words.",
+        "standard_form": "ONLY together with register: the standard everyday ${SupportedLanguages[originalLanguage]} word a learner would use instead",
         "meaning": {
           "description": "meaning in ${SupportedLanguages[translationLanguage]}",
           "notes": "usage notes in ${SupportedLanguages[translationLanguage]}"
@@ -117,7 +119,15 @@ For valid input:
         "note": "cultural context in ${SupportedLanguages[translationLanguage]}",
         "importance": "importance level in ${SupportedLanguages[translationLanguage]}"
       }
-    ]
+    ],
+    "chunks": [
+      {
+        "components": ["indices of the components in this chunk, in sentence order"],
+        "role": "1-3 word label in ${SupportedLanguages[translationLanguage]} for the chunk's job, e.g. When, Where, Who, What, How, Why, Condition, Describes, Main verb",
+        "gloss": "what this chunk means, in ${SupportedLanguages[translationLanguage]}"
+      }
+    ],
+    "questions": ["a short question (under 12 words) a learner might ask a tutor about this sentence's grammar or word choice, written in ${SupportedLanguages[translationLanguage]} except for words quoted from the sentence"]
   }
 }
 
@@ -149,6 +159,8 @@ Important notes for the response:
 9. It is EXTREMELY important that the text and dictionary_form fields are populated for every single component.
 10. When constructing components, include both words of a compound noun in a single component (e.g., 버스 타임 should be a single component, not two).
 11. DO NOT INCLUDE PUNCTUATION IN THE COMPONENTS.
+12. Chunks group the components into the phrases a native speaker hears (a time phrase, the object with its modifiers, the main verb with its auxiliaries). Every component belongs to exactly one chunk and chunks follow sentence order. A single word is one chunk.
+13. Give exactly 3 questions, each about something specific in this sentence.
 
 ${originalLanguage === 'ja' ? 'Important note for Japanese analysis:\n1. Always include the reading field for each component with the proper hiragana/katakana showing on/kunyomi reading based on context.\n2. The reading should reflect the actual pronunciation in the given context, not just the dictionary form reading.\n' : ''}
 ${originalLanguage === 'ko' ? 'Important note for Korean analysis:\n1. When a verb or adjective carries the honorific -(으)시- (for example 세요 = 시 + 어요, 셨어요 = 시 + 었어요, 십니다 = 시 + ㅂ니다), name the -(으)시- honorific infix explicitly in the conjugation steps, explain that it shows respect to the subject of the sentence (the person doing the action or in the state), and explain the ending it combines with. Never describe 세요 only as "used instead of 요".\n' : ''}
