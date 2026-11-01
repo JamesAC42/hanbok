@@ -19,6 +19,21 @@ const { isDailySentence } = require('../../utils/dailySentence');
 
 const { extractTextFromImage } = require('../../llm/analyzeImage');
 
+// Server-Timing header so the browser's network tab shows where a slow
+// analysis spent its time (db, cache, llm, save).
+const startTiming = () => {
+    const parts = [];
+    let last = Date.now();
+    return {
+        mark(name) {
+            const now = Date.now();
+            parts.push(`${name};dur=${now - last}`);
+            last = now;
+        },
+        header: () => parts.join(', ')
+    };
+};
+
 const isBase64Image = (str) => {
     if (!str || typeof str !== 'string') return false;
     
@@ -216,6 +231,7 @@ const submitSentence = async (req, res) => {
 
     const userId = req.session.user ? req.session.user.userId : null;
     const db = getDb();
+    const timing = startTiming();
 
     // Validate languages are supported
     if (!SupportedLanguages[originalLanguage] || !SupportedLanguages[translationLanguage]) {
@@ -305,6 +321,8 @@ const submitSentence = async (req, res) => {
             });
         }
     }
+
+    if (translate === true) timing.mark('translate');
 
     let isImageSubmission = false;
     let user = null;
@@ -452,27 +470,19 @@ const submitSentence = async (req, res) => {
     
     try {
         
-        // First try to find a sentence with voice keys
-        let existingSentence = await db.collection('sentences').findOne({
+        timing.mark(isImageSubmission ? 'ocr' : 'limits');
+        // Reuse an earlier analysis of the same text, preferring one that already
+        // has audio. One indexed query (sentence_cache_lookup in database.js).
+        const cachedCopies = await db.collection('sentences').find({
             text: text,
             originalLanguage: originalLanguage,
             translationLanguage: translationLanguage,
-            doNotCache: { $ne: true },
-            $or: [
-                { voice1Key: { $ne: null } },
-                { voice2Key: { $ne: null } }
-            ]
-        });
-
-        // If no sentence with voice keys found, look for any matching sentence
-        if (!existingSentence) {
-            existingSentence = await db.collection('sentences').findOne({
-                text: text,
-                originalLanguage: originalLanguage,
-                translationLanguage: translationLanguage,
-                doNotCache: { $ne: true }
-            });
-        }
+            doNotCache: { $ne: true }
+        }).limit(20).toArray();
+        timing.mark('cache');
+        const existingSentence = cachedCopies.find((s) => s.voice1Key || s.voice2Key)
+            || cachedCopies[0]
+            || null;
 
         let analysis;
         let parsedResponse;
@@ -529,6 +539,7 @@ const submitSentence = async (req, res) => {
             }
             
             analysis = parsedResponse.analysis;
+            timing.mark('llm');
         }
 
         if (isLongSentenceAudioRestricted(text, user)) {
@@ -565,6 +576,7 @@ const submitSentence = async (req, res) => {
 
         // Store in database
         await db.collection('sentences').insertOne(sentenceDoc);
+        timing.mark('save');
 
         // Track sentence submission if user is logged in
         if (userId) {
@@ -627,12 +639,17 @@ const submitSentence = async (req, res) => {
             originalText: req.body.text, // The text before translation
         } : {};
 
+        timing.mark('quota');
+        console.log(`Analysis ${sentenceDoc.sentenceId}: ${timing.header()}${existingSentence ? ' (cached)' : ''}`);
+        res.set('Server-Timing', timing.header());
         res.json({ 
             message: parsedResponse,
             originalLanguage: originalLanguage,
             translationLanguage: translationLanguage,
             sentenceId: sentenceDoc.sentenceId,
             publicId: sentenceDoc.publicId,
+            // Lets the result page play cached audio without fetching the sentence again.
+            voice1Key, voice2Key, voice1SlowKey, voice2SlowKey,
             extractedFromImage: isImageSubmission,
             ...rateLimit,
             ...analysisUsage,
