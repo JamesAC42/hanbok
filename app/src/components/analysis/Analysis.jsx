@@ -20,6 +20,7 @@ import getFontClass from '@/lib/fontClass';
 import QuotaDisplay from '@/components/QuotaDisplay';
 import RecentlyAnalyzed from '@/components/analysis/RecentlyAnalyzed';
 import NextSteps from '@/components/analysis/NextSteps';
+import FitLine from '@/components/analysis/FitLine';
 import AnalysisLayers from '@/components/analysis/layers/AnalysisLayers';
 import useSavedWords from '@/hooks/useSavedWords';
 import { markStage } from '@/lib/todayLoop';
@@ -278,6 +279,7 @@ const Analysis = ({
                             )}
                             <span className={styles.legendHint}>Tap a word for details</span>
                         </div>
+                        {!isLyric && <FitLine sentenceId={sentenceId} />}
                         <AnalysisLayers
                             analysis={analysis}
                             language={originalLanguage}
