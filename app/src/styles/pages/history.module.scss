@@ -717,3 +717,50 @@ $purple-text: color-mix(in srgb, var(--bp-purple) 68%, var(--foreground));
         transform: none;
     }
 }
+
+// Library search across everything analyzed, and Anki export
+
+.ankiExport {
+    @include bp-press-ghost(var(--bp-und), 3px);
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    min-height: 40px;
+    padding: .45rem 1rem;
+    font-size: .76rem;
+    text-decoration: none;
+}
+
+.plusBadge {
+    padding: .1rem .45rem;
+    border-radius: 99px;
+    background: var(--bp-keep-soft);
+    border: 2px solid var(--bp-keep-line);
+    color: var(--foreground);
+    font-size: .62rem;
+    letter-spacing: .06em;
+}
+
+.searchSummary,
+.searchHint {
+    margin: 0 0 .8rem;
+    font-family: var(--font-display);
+    font-size: .88rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+
+    a { color: var(--bp-keep-d); text-decoration: underline; text-underline-offset: 3px; }
+}
+
+.searchMatch {
+    display: inline-block;
+    margin: .35rem 0 0;
+    padding: .15rem .55rem;
+    border-radius: 99px;
+    background: var(--bp-read-soft);
+    border: 2px solid var(--bp-read-line);
+    font-family: var(--font-display);
+    font-size: .76rem;
+    font-weight: 800;
+    color: var(--foreground);
+}
