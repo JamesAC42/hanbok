@@ -199,6 +199,24 @@ const COPY = {
         button: { label: offer ? 'Get Plus at the trial price' : 'See plans', path: '/pricing' },
         footer: "You're getting this because you started a free Plus trial on Hanbok.",
     }),
+    // Sent by services/freeWeekEmail.js, once, to older free accounts that the
+    // returning-user trial (RETURNING_TRIAL_ENABLED) hasn't reached yet.
+    freeWeek: (name) => ({
+        subject: 'A free week of Hanbok Plus is waiting for you',
+        intro: `Hi ${name},`,
+        paragraphs: [
+            "You made a Hanbok account a while ago, and you never got to try Plus. So the next time you sign in, you'll have a week of it free. No card, nothing to cancel.",
+        ],
+        list: [
+            { title: 'Unlimited sentence breakdowns.', body: 'Paste anything in Korean (a lyric, a text from a friend, a sign) and see every word and grammar point.' },
+            { title: 'Unlimited grammar practice.', body: 'Practice questions on the grammar from your own sentences, plus the Horangi lessons.' },
+            { title: 'Speaking practice.', body: 'Talk out loud with Horang and Sora, up to two hours a month instead of five minutes a week.' },
+        ],
+        after: [
+            'When the week ends you go back to the free plan, and everything you saved stays.',
+        ],
+        button: { label: 'Start my free week', path: '/home' },
+    }),
     winback: (name) => ({
         subject: "Here's what's new in Hanbok",
         intro: `Hi ${name},`,
@@ -442,7 +460,7 @@ const previewLifecycleEmails = async ({ db = getDb(), now = new Date() } = {}) =
     }
     // The trial emails (services/trialEmails.js), with sample numbers
     const sample = { sentences: 14, words: 22, offer: { percentOff: 40, duration: 'once', endsAt: new Date(now.getTime() + 72 * 60 * 60 * 1000).toISOString() } };
-    for (const type of ['trialEnding', 'trialEnded']) {
+    for (const type of ['trialEnding', 'trialEnded', 'freeWeek']) {
         const { subject, html } = renderEmail(type, { name: 'Alex', userId: 0, secret, data: sample });
         result.emails[type] = { subject, html };
     }

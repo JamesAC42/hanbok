@@ -125,6 +125,6 @@ const startAutoTrialExpiry = (getDb) => {
 
 module.exports = {
     isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, trialEndedAt, carryOverTrialEnd, startAutoTrialExpiry,
-    isReturningTrialEnabled, isReturningTrialEligible, startReturningTrialIfEligible,
+    isReturningTrialEnabled, isReturningTrialEligible, returningTrialFilter, startReturningTrialIfEligible,
     isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION,
 };
