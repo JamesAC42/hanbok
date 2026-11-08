@@ -313,6 +313,9 @@ app.get('/api/user/sentences', isAuthenticated, async (req, res) => {
     getUserSentences(req, res);
 });
 
+// Which words and grammar in an analysis the learner has met before.
+app.get('/api/analysis/encounters', isAuthenticated, (req, res) => require('./controllers/auth/encounters').getEncounters(req, res));
+
 // Search everything analyzed (Basic+) and export it for Anki (Plus).
 app.get('/api/library/search', isAuthenticated, (req, res) => require('./controllers/auth/library').searchLibrary(req, res));
 app.get('/api/library/anki', isAuthenticated, (req, res) => require('./controllers/auth/library').exportLibraryAnki(req, res));

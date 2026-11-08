@@ -1,0 +1,61 @@
+@import '@/styles/variables.module.scss';
+
+// Fit line under the breakdown and "met before" lines on grammar points.
+
+.fit {
+    --tone: var(--bp-und);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem .55rem;
+    margin: .9rem 0 0;
+    padding: .55rem .85rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--tone) 10%, var(--background));
+    border: 2px solid color-mix(in srgb, var(--tone) 40%, var(--background));
+    font-family: var(--font-display);
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--foreground);
+    text-align: left;
+
+    b { font-weight: 800; color: color-mix(in srgb, var(--tone) 70%, var(--foreground)); }
+}
+
+.fit_review { --tone: var(--bp-read); }
+.fit_just_right { --tone: var(--bp-und); }
+.fit_stretch { --tone: var(--bp-keep); }
+
+.fitWords {
+    color: var(--bp-ink2);
+    font-weight: 700;
+}
+
+.met {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .2rem .5rem;
+    margin: 0 1.1rem .5rem;
+    font-family: var(--font-display);
+    font-size: .84rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+
+    a {
+        color: var(--bp-purple-d);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        overflow-wrap: anywhere;
+    }
+}
+
+.metNew {
+    padding: .1rem .5rem;
+    border-radius: 99px;
+    background: var(--bp-und-soft);
+    border: 2px solid var(--bp-und-line);
+    color: var(--foreground);
+    font-size: .74rem;
+    font-weight: 800;
+}

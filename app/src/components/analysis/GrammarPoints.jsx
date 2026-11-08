@@ -6,6 +6,11 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import kpop from 'kpop';
 import getFontClass from '@/lib/fontClass';
 import SaveGrammarRow, { useSavedGrammar } from '@/components/grammar/SaveGrammarRow';
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEncounters, encounterLine } from '@/lib/encounters';
+import { sentenceHref } from '@/lib/sentenceLink';
+import metStyles from '@/styles/components/sentenceanalyzer/encounters.module.scss';
 
 // Examples are one short sentence each. Now and then the model runs away and
 // writes hundreds of sentences into one field; drop those rather than let
@@ -19,6 +24,32 @@ const usableExamples = (examples) => (Array.isArray(examples) ? examples : [])
 const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, showPronunciation}) => {
     const { t } = useLanguage();
     const savedGrammar = useSavedGrammar(sentenceId);
+    const { user } = useAuth();
+    const encounters = useEncounters(sentenceId, !!user);
+
+    // "You've met this 3 times before · last in 집에 가고 싶어." (signed in only)
+    const renderMet = (lessonIndex) => {
+        const g = encounters?.grammar?.[lessonIndex];
+        if (!g) return null;
+        if (!g.count) {
+            return encounters.historySize > 0
+                ? <div className={metStyles.met}><span className={metStyles.metNew}>{encounterLine(g)}</span></div>
+                : null;
+        }
+        return (
+            <div className={metStyles.met}>
+                <span>{encounterLine(g)}</span>
+                {g.last?.text && (
+                    <span>
+                        Last in{' '}
+                        <Link href={sentenceHref(g.last)} className={getFontClass(language)}>
+                            {g.last.text.length > 60 ? `${g.last.text.slice(0, 58)}…` : g.last.text}
+                        </Link>
+                    </span>
+                )}
+            </div>
+        );
+    };
     
     const renderLessonDifficulty = (difficulty) => {
         return renderStars(difficulty, 5);
@@ -88,6 +119,8 @@ const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, sho
                     <div className={styles.grammarListItemExplanation}>
                         {lesson.explanation}
                     </div>
+
+                    {renderMet(lessonIndex)}
 
                     {usableExamples(lesson.examples).length > 0 && (
                         <div className={styles.grammarListItemExamples}>
