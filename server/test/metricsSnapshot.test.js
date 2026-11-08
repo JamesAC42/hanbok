@@ -75,3 +75,18 @@ test('revenue keeps totals and plans but no customer details', () => {
     assert.ok(!JSON.stringify(out).includes('@'));
     assert.deepStrictEqual(revenueFrom({ available: false, reason: 'x' }, {}), { available: false, reason: 'x' });
 });
+
+test('usage depth buckets weekly breakdowns by who is using them', () => {
+    const { usageDepthFrom } = require('../controllers/admin/snapshot');
+    const users = new Map([[1, 'free'], [2, 'free'], [3, 'trial'], [4, 'paying']]);
+    const rows = [
+        { userId: 1, week: 0, count: 2 }, { userId: 1, week: 1, count: 10 },
+        { userId: 2, week: 0, count: 4 }, { userId: 3, week: 0, count: 25 },
+        { userId: 4, week: 0, count: 7 }, { userId: 9, week: 0, count: 3 },
+    ];
+    const d = usageDepthFrom(rows, users, [0, 0, 3, 12]);
+    assert.deepStrictEqual(d.weekly.free, { userWeeks: 3, '1-2': 1, '3-5': 1, '6-9': 0, '10+': 1, median: 4 });
+    assert.strictEqual(d.weekly.trial['10+'], 1);
+    assert.strictEqual(d.weekly.paying['6-9'], 1);
+    assert.deepStrictEqual(d.endedTrials, { count: 4, '0': 2, '1-4': 1, '5-9': 0, '10-19': 1, '20+': 0 });
+});

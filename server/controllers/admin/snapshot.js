@@ -129,6 +129,62 @@ const buildAutoTrials = async (db, now) => {
     return { active, started30d, converted30d, returningStarted30d, returningConverted30d };
 };
 
+// How hard people lean on the free allowance, to tell whether the 10-a-week
+// limit is ever felt. Pure part first so tests can feed it rows.
+const USAGE_BUCKETS = [['1-2', 1, 2], ['3-5', 3, 5], ['6-9', 6, 9], ['10+', 10, Infinity]];
+const TRIAL_BUCKETS = [['0', 0, 0], ['1-4', 1, 4], ['5-9', 5, 9], ['10-19', 10, 19], ['20+', 20, Infinity]];
+const bucketize = (counts, buckets) => Object.fromEntries(buckets.map(([label, lo, hi]) =>
+    [label, counts.filter((n) => n >= lo && n <= hi).length]));
+
+// weekRows: [{ userId, week, count }] (week = 0..3, 0 = the last 7 days)
+// users: Map userId -> 'free' | 'trial' | 'paying'
+// trialCounts: sentences analyzed during each ended trial
+const usageDepthFrom = (weekRows, users, trialCounts) => {
+    const groups = { free: [], trial: [], paying: [] };
+    for (const row of weekRows) {
+        const group = users.get(row.userId);
+        if (groups[group]) groups[group].push(row.count);
+    }
+    const summary = (counts) => ({
+        userWeeks: counts.length,
+        ...bucketize(counts, USAGE_BUCKETS),
+        median: counts.length ? [...counts].sort((a, b) => a - b)[Math.floor(counts.length / 2)] : 0,
+    });
+    return {
+        // One entry per person per active week, over the last 4 weeks
+        weekly: { free: summary(groups.free), trial: summary(groups.trial), paying: summary(groups.paying) },
+        // Breakdowns made during each no-card trial that ended in the last 30 days
+        endedTrials: { count: trialCounts.length, ...bucketize(trialCounts, TRIAL_BUCKETS) },
+    };
+};
+
+const buildUsageDepth = async (db, now) => {
+    const since = new Date(now.getTime() - 28 * DAY);
+    const weekRows = await db.collection('sentences').aggregate([
+        { $match: { dateCreated: { $gte: since }, userId: { $type: 'number' } } },
+        { $group: { _id: { userId: '$userId', week: { $floor: { $divide: [{ $subtract: [now, '$dateCreated'] }, 7 * DAY] } } }, count: { $sum: 1 } } },
+        { $project: { _id: 0, userId: '$_id.userId', week: '$_id.week', count: 1 } },
+    ]).toArray();
+    const ids = [...new Set(weekRows.map((r) => r.userId))];
+    const docs = await db.collection('users').find(
+        { userId: { $in: ids } },
+        { projection: { userId: 1, tier: 1, autoTrial: 1, 'subscription.stripeSubscriptionId': 1 } },
+    ).toArray();
+    const users = new Map(docs.map((u) => {
+        const onTrial = u.autoTrial && !u.autoTrial.expiredAt && new Date(u.autoTrial.endsAt) > now && !u.subscription?.stripeSubscriptionId;
+        return [u.userId, onTrial ? 'trial' : u.tier > 0 ? 'paying' : 'free'];
+    }));
+    const ended = await db.collection('users').find(
+        { 'autoTrial.expiredAt': { $gte: new Date(now.getTime() - 30 * DAY) } },
+        { projection: { userId: 1, autoTrial: 1 } },
+    ).toArray();
+    const trialCounts = await Promise.all(ended.map((u) => db.collection('sentences').countDocuments({
+        userId: u.userId,
+        dateCreated: { $gte: new Date(u.autoTrial.startedAt), $lte: new Date(u.autoTrial.expiredAt) },
+    })));
+    return usageDepthFrom(weekRows, users, trialCounts);
+};
+
 // Each section is computed on its own so one failing source (Stripe, Umami)
 // leaves the rest of the snapshot intact and is listed under `errors`.
 const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
@@ -142,7 +198,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100 }))
         : Promise.resolve(null));
 
-    const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials] = await Promise.all([
+    const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials, usageDepth] = await Promise.all([
         section('overview7d', buildOverview(db, { days: 7, tz })),
         section('overview30d', buildOverview(db, { days: 30, tz })),
         section('engagement', buildEngagement(db, { days: 30, tz })),
@@ -152,6 +208,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         traffic(30),
         section('channels', buildChannels(db, now)),
         section('autoTrials', buildAutoTrials(db, now)),
+        section('usageDepth', buildUsageDepth(db, now)),
     ]);
 
     return {
@@ -180,6 +237,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         } : { available: false, reason: 'not_configured' },
         channels30d: channels,
         autoTrials,
+        usageDepth,
         errors,
     };
 };
@@ -221,4 +279,4 @@ const getSnapshot = async (req, res) => {
     }
 };
 
-module.exports = { getSnapshot, getEventBreakdown, requireMetricsToken, buildSnapshot, seoFrom, revenueFrom };
+module.exports = { getSnapshot, getEventBreakdown, requireMetricsToken, buildSnapshot, seoFrom, revenueFrom, usageDepthFrom };
