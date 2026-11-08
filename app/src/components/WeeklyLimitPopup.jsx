@@ -15,7 +15,7 @@ const resetLabel = (now = new Date()) => {
     return days === 1 ? 'tomorrow' : 'on Sunday';
 };
 
-// Free accounts that used all 10 breakdowns this week. The one moment someone
+// Free accounts that used all 5 breakdowns this week. The one moment someone
 // is already asking for more, so each option goes straight to Stripe Checkout
 // instead of through the pricing page. Prices come from lib/plans and, when a
 // deal or trial-end offer is running, from /api/pricing/offer.
@@ -83,7 +83,7 @@ const WeeklyLimitPopup = ({ onClose }) => {
                 <div className={styles.art}>
                     <Mascot pose="think" size={96} />
                 </div>
-                <h2 id="limit-popup-title">You've used this week's 10 free breakdowns</h2>
+                <h2 id="limit-popup-title">You've used this week's 5 free breakdowns</h2>
                 <p className={styles.subText}>
                     They come back {resetLabel()}. Want to keep going now?
                     {deal && <> <strong className={styles.dealLine}>{dealAmountLabel(deal)} yearly plans{ends ? `, ${ends.replace(/^Ends/, 'ends')}` : ''}.</strong></>}

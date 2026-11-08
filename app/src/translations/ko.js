@@ -269,7 +269,7 @@ export const ko = {
 
         features: {
             free: {
-                analyses: '주당 10문장 분석',
+                analyses: '주당 5문장 분석',
                 extendedText: '주당 2회 확장 텍스트 분석 (최대 1,000자)',
                 conversations: '월 5회 무료 대화',
                 messages: '대화당 5개 메시지',
@@ -489,7 +489,7 @@ export const ko = {
         viewPricing: '요금제 보기',
         maybeLater: '나중에',
         sentenceAnalysesTitle: '주간 문장 분석 한도 도달',
-        sentenceAnalysesMessage: '이번 주 무료 문장 분석 10회를 모두 사용하셨습니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.',
+        sentenceAnalysesMessage: '이번 주 무료 문장 분석 5회를 모두 사용하셨습니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.',
         firstFiveUsedTitle: '주간 문장 분석 사용량',
         firstFiveUsedMessage: '이번 주 무료 문장 분석 10회 중 5회를 사용하셨습니다. 월 $4에 무제한 분석을 받으시거나, 추가 100회 분석을 $1에 구매하실 수 있습니다.',
         fifteenRemainingTitle: '주간 문장 분석 업데이트',

@@ -35,7 +35,7 @@ const OtherLimitPopup = ({ onClose, type = 'words' }) => {
             case 'sentence-analyses':
                 return {
                     title: t('limitReached.sentenceAnalysesTitle') || 'Weekly Sentence Analysis Limit Reached',
-                    message: t('limitReached.sentenceAnalysesMessage') || 'You have used all 10 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.'
+                    message: t('limitReached.sentenceAnalysesMessage') || 'You have used all 5 of your free weekly sentence analyses. Upgrade to Premium for unlimited analyses, or purchase an additional 100 analyses for just $1.'
                 };
             case 'first-five-used':
                 return {

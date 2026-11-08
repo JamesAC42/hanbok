@@ -269,7 +269,7 @@ export const ja = {
 
         features: {
             free: {
-                analyses: '週あたり10文の分析',
+                analyses: '週あたり5文の分析',
                 extendedText: '週2回の拡張テキスト分析（1,000文字まで）',
                 conversations: '月に5回の無料会話',
                 messages: '1会話あたり5メッセージ',
@@ -492,7 +492,7 @@ export const ja = {
         viewPricing: '料金を見る',
         maybeLater: '後で',
         sentenceAnalysesTitle: '週間の文分析制限に達しました',
-        sentenceAnalysesMessage: '今週の無料文の分析10回分をすべて使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
+        sentenceAnalysesMessage: '今週の無料文の分析5回分をすべて使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         firstFiveUsedTitle: '週間の文分析使用状況',
         firstFiveUsedMessage: '今週の無料文の分析10回分のうち5回分を使用しました。月額$4で無制限の分析を利用するか、追加100回分を$1で購入できます。',
         fifteenRemainingTitle: '週間の文分析更新',

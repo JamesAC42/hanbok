@@ -1,7 +1,7 @@
 // Weekly free sentence analyses. Signed-out visitors get a smaller taste
 // (tracked by IP) so that a free account, which unlocks the full allowance
 // plus saving, is worth making.
-const FREE_WEEKLY_SENTENCES = 10;
+const FREE_WEEKLY_SENTENCES = 5;
 
 const anonWeeklySentences = () => {
     const value = parseInt(process.env.ANON_WEEKLY_SENTENCES, 10);

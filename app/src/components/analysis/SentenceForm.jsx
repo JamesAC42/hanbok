@@ -433,7 +433,7 @@ const SentenceForm = ({
                     } else {
                         // Otherwise, calculate locally
                         const newWeekSentencesUsed = (user.weekSentencesUsed || 0) + 1;
-                        const weekSentencesTotal = user.weekSentencesTotal || 10;
+                        const weekSentencesTotal = user.weekSentencesTotal || 5;
                         const newWeekSentencesRemaining = Math.max(0, weekSentencesTotal - newWeekSentencesUsed);
                         
                         updateWeeklySentenceQuota(

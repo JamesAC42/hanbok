@@ -45,7 +45,7 @@ const KeepBox = ({ user, words, unsavedWords, savedLoading, addingAll, saveAll, 
                 <p className={styles.keepText}>
                     Make a free account to keep this sentence in your Library and turn its
                     {words.length ? ` ${plural(words.length, 'word')}` : ' words'} into flashcards.
-                    Free accounts get 10 breakdowns a week. No card needed.
+                    Free accounts get 5 breakdowns a week. No card needed.
                 </p>
                 <div className={styles.keepGoogle}>
                     <GoogleSignInButton text="signup_with" />

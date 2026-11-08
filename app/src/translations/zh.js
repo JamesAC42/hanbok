@@ -269,7 +269,7 @@ export const zh = {
 
         features: {
             free: {
-                analyses: '每周10个句子分析',
+                analyses: '每周5个句子分析',
                 extendedText: '每周2次扩展文本分析（最多1,000字符）',
                 conversations: '每月5次免费对话',
                 messages: '每次对话5条消息',
@@ -491,7 +491,7 @@ export const zh = {
         viewPricing: '查看价格',
         maybeLater: '稍后再说',
         sentenceAnalysesTitle: '每周句子分析次数已达上限',
-        sentenceAnalysesMessage: '您已用完本周10次免费句子分析。每月$4即可获得无限制分析，或$1购买额外100次分析。',
+        sentenceAnalysesMessage: '您已用完本周5次免费句子分析。每月$4即可获得无限制分析，或$1购买额外100次分析。',
         firstFiveUsedTitle: '每周句子分析使用情况',
         firstFiveUsedMessage: '您已使用本周10次免费句子分析中的5次。每月$4即可获得无限制分析，或$1购买额外100次分析。',
         fifteenRemainingTitle: '每周句子分析更新',

@@ -268,7 +268,7 @@ export const es = {
 
         features: {
             free: {
-                analyses: '10 análisis de oraciones por semana',
+                analyses: '5 análisis de oraciones por semana',
                 extendedText: '2 análisis de texto extendido por semana (hasta 1.000 caracteres)',
                 conversations: '5 conversaciones gratuitas por mes',
                 messages: '5 mensajes por conversación',
@@ -490,7 +490,7 @@ export const es = {
         viewPricing: 'Ver Precios',
         maybeLater: 'Quizás Después',
         sentenceAnalysesTitle: 'Límite semanal de análisis de oraciones alcanzado',
-        sentenceAnalysesMessage: 'Has usado tus 10 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
+        sentenceAnalysesMessage: 'Has usado tus 5 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         firstFiveUsedTitle: 'Uso de análisis de oraciones semanal',
         firstFiveUsedMessage: 'Has usado 5 de tus 10 análisis gratuitos de oraciones de esta semana. Obtén análisis ilimitados por $4/mes, o compra 100 análisis adicionales por solo $1.',
         fifteenRemainingTitle: 'Actualización de análisis de oraciones semanal',

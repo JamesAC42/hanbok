@@ -63,7 +63,7 @@ const QUOTES = [
 const FAQ = [
     {
         q: 'Is Hanbok free?',
-        a: 'Yes. A free account breaks down 10 sentences a week and includes flashcards, song lyrics and 5 minutes of Speak a week. New accounts also get 7 days of Plus free, no card needed. Paid plans start at $4 a month for unlimited sentences.',
+        a: 'Yes. A free account breaks down 5 sentences a week and includes flashcards, song lyrics and 5 minutes of Speak a week. New accounts also get 7 days of Plus free, no card needed. Paid plans start at $4 a month for unlimited sentences.',
     },
     {
         q: 'Which languages can I learn?',
@@ -308,7 +308,7 @@ export default async function Home() {
                             <span className={styles.planName}>Free</span>
                             <strong>$0</strong>
                             <ul>
-                                <li>10 sentences a week</li>
+                                <li>5 sentences a week</li>
                                 <li>Flashcards, song lyrics and phrases</li>
                                 <li>5 minutes of Speak a week</li>
                             </ul>

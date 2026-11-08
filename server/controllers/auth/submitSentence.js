@@ -193,7 +193,8 @@ const incrementRateLimitsAndCheckNotifications = async (identifier, identifierTy
     let notification = null;
     
     // Simply check the current values against our thresholds
-    if (updatedRecord.weekSentences === 5) {
+    // Halfway notice; skipped when the whole free allowance is only 5
+    if (WEEKLY_QUOTA >= 10 && updatedRecord.weekSentences === 5) {
         notification = {
             type: 'firstFiveUsed',
             message: 'You have used 5 out of your 10 free weekly sentence analyses. Consider upgrading to Premium for unlimited analyses.',

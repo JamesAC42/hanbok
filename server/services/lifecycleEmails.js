@@ -2,7 +2,7 @@
 // LIFECYCLE_EMAILS_ENABLED=true and EMAIL_ENABLED=true are set.
 //
 // Three emails:
-//   limit   - used all 10 free analyses this week (at most once per 30 days)
+//   limit   - used all 5 free analyses this week (at most once per 30 days)
 //   day3    - verified account 3-7 days old with at least 1 analysis (once ever)
 //   winback - 3+ analyses, last one 14-60 days ago (once ever)
 //
@@ -16,7 +16,7 @@ const getPreviousSunday = require('../utils/getPreviousSunday');
 
 const SITE_URL = 'https://hanbokstudy.com';
 const DAY_MS = 24 * 60 * 60 * 1000;
-const WEEKLY_FREE_LIMIT = 10;
+const { FREE_WEEKLY_SENTENCES: WEEKLY_FREE_LIMIT } = require('../utils/sentenceQuota');
 const LIMIT_COOLDOWN_DAYS = 30;
 const RUN_CAP = 200;              // most emails sent per run
 const SEND_DELAY_MS = 2000;       // pause between sends so the mail host isn't flooded
@@ -135,7 +135,7 @@ const offerDeadline = (offer) => new Date(offer.endsAt).toLocaleDateString('en-U
 // paragraphs are plain strings; links inside paragraphs use { text, path } items.
 const COPY = {
     limit: (name) => ({
-        subject: "You've used this week's 10 free analyses",
+        subject: "You've used this week's 5 free analyses",
         intro: `Hi ${name},`,
         paragraphs: [
             "You've used all 10 of your free sentence analyses this week. That's a good sign you're studying regularly.",
@@ -157,7 +157,7 @@ const COPY = {
             { title: 'Add the Chrome extension.', body: 'Analyze Korean text on any web page without copying and pasting.', link: { label: 'Get the extension', path: '/extension' } },
         ],
         after: [
-            'If you find yourself wanting more than 10 analyses a week, Basic is $40 a year (about $3.33 a month) for unlimited analyses. No pressure; the free plan is yours to keep.',
+            'If you find yourself wanting more than 5 analyses a week, Basic is $40 a year (about $3.33 a month) for unlimited analyses. No pressure; the free plan is yours to keep.',
         ],
         button: { label: 'Open Hanbok', path: '/' },
     }),
@@ -179,7 +179,7 @@ const COPY = {
         intro: `Hi ${name},`,
         paragraphs: [
             usageLine(sentences, words, 'So far on Plus you have'),
-            'After that your account goes back to the free plan: 10 sentence breakdowns a week, limited audio, and 5 minutes of Speak a week.',
+            'After that your account goes back to the free plan: 5 sentence breakdowns a week, limited audio, and 5 minutes of Speak a week.',
             'To keep Plus, it is $99 a year (about $8.25 a month) or $10 month to month. Basic is $40 a year if you mostly need unlimited breakdowns. You can cancel anytime from your profile.',
         ],
         button: { label: 'Keep Plus', path: '/pricing' },

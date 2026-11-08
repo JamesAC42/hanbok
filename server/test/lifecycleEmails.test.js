@@ -50,9 +50,10 @@ test('skipReason covers paid, unverified, unsubscribed and missing email', () =>
 });
 
 test('limit email: at the cap this week, at most once per 30 days', () => {
-    const atCap = { weekSentences: 10, weekStartDate: WEEK_START };
+    const { FREE_WEEKLY_SENTENCES } = require('../utils/sentenceQuota');
+    const atCap = { weekSentences: FREE_WEEKLY_SENTENCES, weekStartDate: WEEK_START };
     assert.equal(isEligibleForLimit(freeUser(), atCap, NOW, WEEK_START), true);
-    assert.equal(isEligibleForLimit(freeUser(), { ...atCap, weekSentences: 9 }, NOW, WEEK_START), false);
+    assert.equal(isEligibleForLimit(freeUser(), { ...atCap, weekSentences: FREE_WEEKLY_SENTENCES - 1 }, NOW, WEEK_START), false);
     // usage from last week doesn't count
     assert.equal(isEligibleForLimit(freeUser(), { ...atCap, weekStartDate: daysAgo(10) }, NOW, WEEK_START), false);
     assert.equal(isEligibleForLimit(freeUser(), null, NOW, WEEK_START), false);
