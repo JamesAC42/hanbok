@@ -88,6 +88,19 @@ export default async function GrammarPatternPage({ params }) {
 
                 <div className={styles.prose}>
                     <p className={own.answer}>{g.intro}</p>
+                </div>
+
+                <TryIt
+                    lang="ko"
+                    run
+                    source="grammar_page_top"
+                    id="grammar-try-top"
+                    initial={firstLine}
+                    title="See the full breakdown"
+                    blurb={`Tap Break it down and Hanbok explains every word and ending in this sentence, with audio and a translation. Or paste your own line with ${g.form} from a drama, a song or a text.`}
+                />
+
+                <div className={styles.prose}>
 
                     <h2 id="how-to-form">How to form it</h2>
                     <div className={styles.tableWrap}>
@@ -116,19 +129,6 @@ export default async function GrammarPatternPage({ params }) {
                             <Example words={ex.words} translation={ex.en} />
                         </div>
                     ))}
-                </div>
-
-                <TryIt
-                    lang="ko"
-                    run
-                    source="grammar_page_top"
-                    id="grammar-try-top"
-                    initial={firstLine}
-                    title="See the full breakdown"
-                    blurb={`Hanbok explains every word and ending in a sentence, with audio and a translation. Try it on this example, or paste a line with ${g.form} from a drama, a song or a text.`}
-                />
-
-                <div className={styles.prose}>
                     {g.compare?.length > 0 && (
                         <>
                             <h2 id="compare">Don&rsquo;t mix it up with</h2>

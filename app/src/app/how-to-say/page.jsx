@@ -7,7 +7,7 @@ import styles from '@/styles/pages/learn.module.scss';
 import own from '@/styles/pages/phrases.module.scss';
 
 const TITLE = 'How to Say It in Korean: Everyday Phrases, Casual to Formal';
-const DESCRIPTION = 'How to say hello, thank you, I love you, I miss you and more in Korean. The casual, polite and formal versions, when to use each, and examples you can tap.';
+const DESCRIPTION = 'How to say hello, thank you, I love you, I miss you, star, moon and more in Korean. The casual, polite and formal versions, when to use each, and examples you can tap.';
 
 export const metadata = {
     title: TITLE,

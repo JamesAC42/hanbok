@@ -28,7 +28,8 @@ export async function generateMetadata({ params }) {
     const { slug } = await params;
     const s = getSaying(slug);
     if (!s) return {};
-    const title = `How to Say "${s.english}" in Korean (${s.answer.ko})`;
+    const english = s.english.charAt(0).toUpperCase() + s.english.slice(1);
+    const title = `How to Say "${english}" in Korean (${s.answer.ko})`;
     const description = `"${s.english}" in Korean is ${s.answer.ko} (${s.answer.roman}). Casual, polite and formal ways to say it, when to use each, and example sentences you can tap to break down.`;
     const url = sayingHref(s);
     return {
@@ -83,6 +84,19 @@ export default async function SayingPage({ params }) {
 
                 <div className={styles.prose}>
                     <p className={own.answer}>{s.intro}</p>
+                </div>
+
+                <TryIt
+                    lang="ko"
+                    run
+                    source="how_to_say_top"
+                    id="saying-try-top"
+                    initial={firstLine}
+                    title="See the full breakdown"
+                    blurb="Tap Break it down and Hanbok explains every word and ending in this sentence, with audio and a translation. Or paste your own line from a drama, a song or a text."
+                />
+
+                <div className={styles.prose}>
 
                     <h2 id="ways">Ways to say it</h2>
                     <div className={styles.tableWrap}>
@@ -111,19 +125,6 @@ export default async function SayingPage({ params }) {
                             <Example words={ex.words} translation={ex.en} />
                         </div>
                     ))}
-                </div>
-
-                <TryIt
-                    lang="ko"
-                    run
-                    source="how_to_say_top"
-                    id="saying-try-top"
-                    initial={firstLine}
-                    title="See the full breakdown"
-                    blurb="Hanbok explains every word and ending in a sentence, with audio and a translation. Try it on this example, or paste your own line from a drama, a song or a text."
-                />
-
-                <div className={styles.prose}>
                     <h2 id="tips">Tips</h2>
                     {s.tips.map((para) => <p key={para}>{para}</p>)}
                     {phraseLinks.length > 0 && (

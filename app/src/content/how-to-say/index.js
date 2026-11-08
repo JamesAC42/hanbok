@@ -6,12 +6,15 @@ import { getPhrase } from '@/content/phrases';
 export const CATEGORIES = [
     { key: 'greetings', title: 'Hello and goodbye', dek: 'Greetings for every time of day and every kind of person.' },
     { key: 'polite', title: 'Polite basics', dek: 'Thank you, sorry, excuse me and the other words you need on day one.' },
+    { key: 'questions', title: 'Questions', dek: 'What are you doing, where are you, how old are you, and how to answer each one.' },
     { key: 'feelings', title: 'Feelings', dek: 'Say how you feel: happy, tired, hungry, missing someone.' },
     { key: 'love', title: 'Love and compliments', dek: 'From "I like you" to "I love you", and how to tell someone they look great.' },
     { key: 'celebrate', title: 'Wishes and celebrations', dek: 'Birthdays, holidays, toasts and good luck.' },
     { key: 'people', title: 'Family and people', dek: 'Mom, dad, friends and the words for brothers and sisters.' },
     { key: 'reactions', title: 'Reactions', dek: 'Oh my god, really, no way: what to say when something happens.' },
     { key: 'travel', title: 'Eating out and getting around', dek: 'Ordering food, paying and finding the bathroom.' },
+    { key: 'everyday', title: 'Everyday words', dek: 'Today, tomorrow, food, coffee, home and counting to ten.' },
+    { key: 'words', title: 'Beautiful words', dek: 'Star, moon, dream, forever: words people look up for names, captions and tattoos.' },
 ];
 
 // Example chips arrive as [[{ t, g, p?, base? }]]; <Example> wants [{ parts: [{ t, g, particle?, base? }] }].
