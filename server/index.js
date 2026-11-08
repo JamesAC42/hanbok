@@ -553,6 +553,18 @@ app.get('/api/admin/lifecycle-emails/preview', isAuthenticated, requireAdmin, as
         res.status(500).json({ success: false, error: 'Preview failed' });
     }
 });
+// One email rendered as a page, to read it the way it will look: /api/admin/lifecycle-emails/preview/freeWeek
+app.get('/api/admin/lifecycle-emails/preview/:type', isAuthenticated, requireAdmin, async (req, res) => {
+    try {
+        const { emails } = await lifecycleEmails.previewLifecycleEmails();
+        const email = emails[req.params.type];
+        if (!email) return res.status(404).type('text').send(`No email called ${req.params.type}. Try one of: ${Object.keys(emails).join(', ')}`);
+        res.type('html').send(email.html);
+    } catch (error) {
+        console.error('Lifecycle email preview failed:', error);
+        res.status(500).type('text').send('Preview failed');
+    }
+});
 // Unsubscribe link in lifecycle emails (GET) and one-click List-Unsubscribe (POST)
 app.get('/api/email/unsubscribe', lifecycleEmails.handleUnsubscribe);
 app.post('/api/email/unsubscribe', lifecycleEmails.handleUnsubscribe);
