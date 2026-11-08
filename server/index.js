@@ -491,6 +491,10 @@ app.get('/api/word-relations', isAuthenticated, async (req, res) => {
 // "Would you use a phone app?" card, open to signed-out visitors too
 const appSurveyLimit = authLimit({ name: 'app-survey', ip: { max: 30, windowSeconds: HOUR } });
 app.post('/api/app-survey', appSurveyLimit, saveAppSurvey);
+// "What stopped you from keeping Plus?" from the trial-ended popup
+const trialFeedback = require('./controllers/trialFeedback');
+const trialFeedbackLimit = authLimit({ name: 'trial-feedback', ip: { max: 20, windowSeconds: HOUR } });
+app.post('/api/trial-feedback', trialFeedbackLimit, isAuthenticated, trialFeedback.saveTrialFeedback);
 
 // Feedback forum routes
 app.get('/api/feedback', async (req, res) => {
@@ -543,6 +547,7 @@ app.get('/api/admin/speak/calls/:id', isAuthenticated, requireAdmin, adminSpeak.
 app.get('/api/admin/stats/tutor', isAuthenticated, requireAdmin, adminTutor.getTutorStats);
 app.get('/api/admin/tutor/conversations/:id', isAuthenticated, requireAdmin, adminTutor.getTutorConversation);
 app.get('/api/admin/stats/app-survey', isAuthenticated, requireAdmin, adminAppSurvey.getAppSurveyStats);
+app.get('/api/admin/stats/trial-feedback', isAuthenticated, requireAdmin, trialFeedback.getTrialFeedbackStats);
 // Daily growth snapshot, fetched by the metrics job with METRICS_TOKEN (no login).
 app.get('/api/metrics/snapshot', requireMetricsToken, getSnapshot);
 app.get('/api/metrics/event', requireMetricsToken, getEventBreakdown);

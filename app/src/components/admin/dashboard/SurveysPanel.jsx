@@ -18,13 +18,53 @@ const GROUP = { anon: 'Signed out', free: 'Free', trial: 'On the free Plus trial
 const PHONE = { iphone: 'iPhone', android: 'Android', skipped: 'Skipped' };
 const PHONE_COLOR = { iphone: 'var(--bp-read)', android: 'var(--bp-und)', skipped: 'var(--bp-gray)' };
 
+// "What stopped you from keeping Plus?" from the trial-ended popup
+// (server/controllers/trialFeedback.js)
+const WHY = {
+    price: { label: 'Too expensive', color: 'var(--bp-rev)' },
+    notEnoughUse: { label: "Didn't use it enough", color: 'var(--bp-keep)' },
+    missing: { label: 'Missing something', color: 'var(--bp-purple)' },
+    didntNotice: { label: "Didn't know they had Plus", color: 'var(--bp-read)' },
+    other: { label: 'Something else', color: 'var(--bp-gray)' },
+};
+
+const TrialFeedbackCard = ({ data, onOpenUser }) => (
+    <section className={styles.card}>
+        <header className={styles.cardHead}>
+            <div>
+                <h2>What stopped you from keeping Plus?</h2>
+                <p>Asked when someone closes the &quot;free week is over&quot; popup without keeping Plus. {fmt(data.answered)} answers so far.</p>
+            </div>
+        </header>
+        <BarList rows={Object.keys(WHY).map((k) => ({ key: k, label: WHY[k].label, value: data.reasons[k] || 0, note: pct(data.reasons[k] || 0, data.answered), color: WHY[k].color }))} empty="No answers yet" />
+        {data.recent.length > 0 && (
+            <div className={styles.tableWrap}>
+                <table className={styles.table}>
+                    <thead><tr><th>When</th><th>Who</th><th>Reason</th><th>In their words</th></tr></thead>
+                    <tbody>
+                        {data.recent.map((r, i) => (
+                            <tr key={i} style={{ cursor: 'pointer' }} onClick={() => onOpenUser?.(r.userId)}>
+                                <td>{timeAgo(r.at)}</td>
+                                <td>#{r.userId}{r.trialSource === 'returning' ? ' · returning' : ''}</td>
+                                <td>{WHY[r.reason]?.label || r.reason}</td>
+                                <td>{r.note || '–'}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        )}
+    </section>
+);
+
 const phoneRows = (counts) => Object.keys(PHONE).map((k) => ({ key: k, label: PHONE[k], value: counts[k], color: PHONE_COLOR[k] }));
 
 export default function SurveysPanel({ refreshKey, onForbidden, onLoaded, onOpenUser }) {
     const survey = useAdminData('/api/admin/stats/app-survey', { onForbidden });
+    const trialWhy = useAdminData('/api/admin/stats/trial-feedback', { onForbidden });
 
     useEffect(() => {
-        if (refreshKey) survey.reload(true);
+        if (refreshKey) { survey.reload(true); trialWhy.reload(true); }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [refreshKey]);
 
@@ -41,6 +81,7 @@ export default function SurveysPanel({ refreshKey, onForbidden, onLoaded, onOpen
 
     return (
         <div className={`${styles.panel} ${survey.loading ? styles.stale : ''}`}>
+            {trialWhy.data && <TrialFeedbackCard data={trialWhy.data} onOpenUser={onOpenUser} />}
             <div className={styles.tiles}>
                 <StatTile label="Saw the question" accent="var(--bp-gray)" value={fmt(t.seen)}>
                     <span>{fmt(t.answered)} answered ({pct(t.answered, t.seen)}) · {fmt(t.dismissed)} closed it</span>
