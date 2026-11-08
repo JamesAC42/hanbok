@@ -18,6 +18,7 @@ const { weeklySentenceQuota, quotaExceededMessage } = require('../../utils/sente
 const { isDailySentence } = require('../../utils/dailySentence');
 
 const { extractTextFromImage } = require('../../llm/analyzeImage');
+const { createAnalysisStream } = require('../../lib/analysisStream');
 
 // Server-Timing header so the browser's network tab shows where a slow
 // analysis spent its time (db, cache, llm, save).
@@ -468,6 +469,13 @@ const submitSentence = async (req, res) => {
     }
 
     
+    // Stream the analysis while it is written when the browser asks for it
+    // and STREAM_ANALYSIS=true. Errors before the first line stay plain JSON.
+    const stream = req.body?.stream === true && process.env.STREAM_ANALYSIS === 'true'
+        ? createAnalysisStream(res)
+        : null;
+    const send = (body, status = 200) => (stream ? stream.send(body, status) : res.status(status).json(body));
+
     try {
         
         timing.mark(isImageSubmission ? 'ocr' : 'limits');
@@ -524,15 +532,19 @@ const submitSentence = async (req, res) => {
             parsedResponse = await generateResponse(
                 prompt(originalLanguage, translationLanguage) + text, 
                 'geminiAnalysis',
-                { deadlineMs: 90000, attemptMs: ANALYSIS_TIMEOUT_MS }
+                {
+                    deadlineMs: 90000,
+                    attemptMs: ANALYSIS_TIMEOUT_MS,
+                    ...(stream ? { onText: stream.onText } : {}),
+                }
             );
 
             if(!parsedResponse.isValid) {
-                return res.json({ message: parsedResponse });
+                return send({ message: parsedResponse });
             }
 
             if(!parsedResponse.analysis) {
-                return res.json({ message: {
+                return send({ message: {
                     isValid: false,
                     error: { type: "other", message: "Failed to analyze the sentence. Please try again." }
                 } });
@@ -641,8 +653,8 @@ const submitSentence = async (req, res) => {
 
         timing.mark('quota');
         console.log(`Analysis ${sentenceDoc.sentenceId}: ${timing.header()}${existingSentence ? ' (cached)' : ''}`);
-        res.set('Server-Timing', timing.header());
-        res.json({ 
+        if (!stream?.started) res.set('Server-Timing', timing.header());
+        send({ 
             message: parsedResponse,
             originalLanguage: originalLanguage,
             translationLanguage: translationLanguage,
@@ -658,7 +670,7 @@ const submitSentence = async (req, res) => {
         });
     } catch (error) {
         console.error('Error:', error);
-        res.status(500).json({ 
+        send({ 
             message: {
                 isValid: false,
                 error: {
@@ -666,7 +678,7 @@ const submitSentence = async (req, res) => {
                     message: "Failed to analyze the sentence. Please try again."
                 }
             }
-        });
+        }, 500);
     }
 }
 

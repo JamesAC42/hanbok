@@ -7,6 +7,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { track } from '@/lib/analytics';
 import { rememberSentence } from '@/lib/pendingSentence';
+import { readAnalysisResponse } from '@/lib/analysisStream';
+import StreamingPreview from '@/components/analysis/StreamingPreview';
 
 import TextInput from '@/components/TextInput';
 import Button from '@/components/Button';
@@ -46,6 +48,8 @@ const SentenceForm = ({
     const [text, setText] = useState('');
     const [textContext, setTextContext] = useState('');
     const [loading, setLoading] = useState(false);
+    // The analysis so far, while the server streams it (STREAM_ANALYSIS).
+    const [streamPreview, setStreamPreview] = useState(null);
     const [error, setError] = useState(null);
     const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
     const [imagePreview, setImagePreview] = useState(null);
@@ -350,6 +354,8 @@ const SentenceForm = ({
             const source = imagePreview ? 'image' : 'text';
 
             playStartSound();
+            const startedAt = performance.now();
+            setStreamPreview(null);
             const response = await fetch('/api/submit', {
                 method: 'POST',
                 headers: {
@@ -360,14 +366,22 @@ const SentenceForm = ({
                     originalLanguage: language,
                     translationLanguage: nativeLanguage,
                     translate: translationMode,
-                    translationContext: textContext
+                    translationContext: textContext,
+                    // The server streams only when STREAM_ANALYSIS is on.
+                    stream: true
                 }),
                 signal: controller.signal
             });
 
+            let firstPartialAt = null;
+            const data = await readAnalysisResponse(response, (partial) => {
+                if (!firstPartialAt) {
+                    firstPartialAt = Date.now();
+                    track('analyze_stream_first', { language, ms: Math.round(performance.now() - startedAt) });
+                }
+                setStreamPreview(partial);
+            });
             clearTimeout(timeoutId);
-
-            const data = await response.json();
 
             // If rate limit exceeded, show error
             if (data.message?.error?.type === 'rate_limit_exceeded') {
@@ -663,7 +677,12 @@ const SentenceForm = ({
                 </form>
             </div>
             {
-                !error && loading && (
+                !error && loading && streamPreview && (
+                    <StreamingPreview analysis={streamPreview} language={language} original={text} />
+                )
+            }
+            {
+                !error && loading && !streamPreview && (
                     <div className={styles.loading}>
                         <Mascot pose="cards" size={64} motion="bob" />
                         <div className={`${styles.loadingText} ${styles.fadeTransition}`}>

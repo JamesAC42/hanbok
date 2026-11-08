@@ -72,7 +72,7 @@ const generateResponse = async (text, model, options = {}) => {
     let parsedResponse = null;
     let lastError = null;
     const startedAt = Date.now();
-    const { deadlineMs, attemptMs = 0 } = options;
+    const { deadlineMs, attemptMs = 0, onText } = options;
     const outOfTime = () => deadlineMs !== undefined
         && Date.now() - startedAt + attemptMs > deadlineMs;
 
@@ -84,7 +84,10 @@ const generateResponse = async (text, model, options = {}) => {
         try {
             console.log(`Generating response with ${modelLabels[model] || model}...`);
             console.log(`Attempt ${attempts + 1} of ${maxAttempts}`);
-            let response = await models[model](text);
+            // Only the analysis model can stream its text as it goes.
+            let response = onText && model === 'geminiAnalysis'
+                ? await models[model](text, { onText })
+                : await models[model](text);
 
             const jsonText = extractJsonText(response);
             parsedResponse = JSON.parse(jsonText);
