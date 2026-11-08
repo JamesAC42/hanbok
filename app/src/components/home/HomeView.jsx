@@ -17,6 +17,7 @@ import { stagesToday } from '@/lib/todayLoop';
 import { CHROME_EXTENSION_URL, isDesktopChrome, useExtensionInstalled } from '@/lib/extension';
 import styles from '@/styles/home/dashboardhome.module.scss';
 import { sentenceHref } from '@/lib/sentenceLink';
+import { track } from '@/lib/analytics';
 
 const SECONDS_PER_CARD = 8;
 
@@ -77,6 +78,66 @@ const useSpeakStats = (enabled) => {
 };
 
 const minutesOf = (seconds) => Math.round((seconds || 0) / 60);
+
+// New accounts land here with nothing read yet, and many leave without ever
+// trying a breakdown (8 of 19 signups in one week). This card puts one tap
+// between them and their first breakdown. It disappears once they've read
+// anything.
+const FIRST_SENTENCES = {
+    ko: [
+        { text: '보고 싶어요', label: 'I miss you' },
+        { text: '오늘 날씨가 너무 좋네요', label: 'The weather is so nice today' },
+        { text: '우리 그냥 썸이야', label: "We're just in the flirting stage" },
+    ],
+    ja: [
+        { text: '今日はいい天気ですね', label: 'Nice weather today' },
+        { text: 'また会いたいです', label: 'I want to see you again' },
+        { text: 'これは何ですか', label: 'What is this?' },
+    ],
+    zh: [
+        { text: '你吃饭了吗？', label: 'Have you eaten?' },
+        { text: '我很想你', label: 'I miss you a lot' },
+        { text: '今天天气很好', label: 'The weather is nice today' },
+    ],
+};
+
+const FirstBreakdownCard = ({ onOwnSentence }) => {
+    const router = useRouter();
+    const { language } = useLanguage();
+    const examples = FIRST_SENTENCES[language] || FIRST_SENTENCES.ko;
+
+    const go = (text, i) => {
+        try {
+            localStorage.setItem('pendingAnalysis', text);
+            localStorage.setItem('pendingAnalysisRun', '1');
+        } catch { /* private mode: the analyzer just opens empty */ }
+        track('first_breakdown_pick', { index: i, language: language || 'ko' });
+        router.push('/analyze');
+    };
+
+    return (
+        <section className={`${styles.card} ${styles.firstBreakdown}`} aria-labelledby="first-breakdown-heading">
+            <div className={styles.firstBreakdownHead}>
+                <Mascot pose="point" size={72} />
+                <div>
+                    <h2 id="first-breakdown-heading" className={styles.cardTitle}>Start with your first breakdown</h2>
+                    <p className={styles.muted}>Tap a sentence and see every word and grammar point explained. It takes five seconds.</p>
+                </div>
+            </div>
+            <div className={styles.firstBreakdownOptions}>
+                {examples.map((ex, i) => (
+                    <button key={ex.text} type="button" className={styles.firstBreakdownOption} onClick={() => go(ex.text, i)}>
+                        <strong>{ex.text}</strong>
+                        <span>{ex.label}</span>
+                    </button>
+                ))}
+            </div>
+            <button type="button" className={styles.firstBreakdownOwn} onClick={onOwnSentence}>
+                Or paste your own sentence
+            </button>
+        </section>
+    );
+};
 
 const QuickInput = ({ inputRef }) => {
     const router = useRouter();
@@ -578,6 +639,8 @@ const HomeView = () => {
                     <p>{subline}</p>
                 </div>
             </header>
+
+            {Array.isArray(recent) && recent.length === 0 && <FirstBreakdownCard onOwnSentence={focusInput} />}
 
             {progress || !loading ? (
                 <DayPath path={path} streak={streak} onFocusInput={focusInput} />

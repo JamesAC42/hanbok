@@ -1063,3 +1063,50 @@ a.statTile {
     gap: .75rem 1rem;
     flex-wrap: wrap;
 }
+
+// First breakdown card for new accounts (HomeView FirstBreakdownCard)
+.firstBreakdown {
+    border-color: var(--bp-read);
+    margin-bottom: 1.1rem;
+}
+
+.firstBreakdownHead {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    p { margin: .35rem 0 0; }
+}
+
+.firstBreakdownOptions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .75rem;
+    @media (max-width: 720px) { grid-template-columns: 1fr; }
+}
+
+.firstBreakdownOption {
+    @include bp-press-ghost(var(--bp-read));
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .25rem;
+    padding: .95rem 1.1rem;
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: normal;
+    text-align: left;
+    strong { font-size: 1.25rem; color: var(--foreground); font-family: inherit; }
+    span { font-family: var(--font-body, inherit); font-weight: 600; font-size: .9rem; color: var(--bp-ink2); }
+}
+
+.firstBreakdownOwn {
+    margin-top: .9rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-weight: 700;
+    color: var(--bp-read);
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
+}

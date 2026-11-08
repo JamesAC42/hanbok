@@ -102,7 +102,8 @@ export function AuthProvider({ children }) {
                 console.log("Login response:", data);
                 if(data.success) {
                     if (data.isNewUser) {
-                        track('signup', { method: 'google' });
+                        // select_by says how: 'btn' = the Google button, 'user_1tap'/'auto' = one-tap
+                        track('signup', { method: 'google', via: userDataOrGoogleResponse.select_by || 'unknown' });
                     }
                     setUser(data.user);
                 }
