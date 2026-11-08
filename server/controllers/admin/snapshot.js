@@ -139,7 +139,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         return null;
     });
     const traffic = (days) => (umamiConfigured()
-        ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100 }))
+        ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100, eventLimit: 100 }))
         : Promise.resolve(null));
 
     const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials] = await Promise.all([
