@@ -17,10 +17,16 @@
     border-bottom: 2px solid var(--tone-line);
     background: var(--tone-soft);
 
+    // The sidebar's fixed menu button sits at the top left on tablets and
+    // phones (sidebar.module.scss .mobileMenuButton), so leave room for it.
+    @media (max-width: 1000px) {
+        padding-left: 4.25rem;
+    }
+
     @media (max-width: 640px) {
         justify-content: flex-start;
         font-size: .95rem;
-        padding: .55rem 2.75rem .55rem 1rem;
+        padding: .55rem 2.75rem .55rem 4.25rem;
     }
 }
 
