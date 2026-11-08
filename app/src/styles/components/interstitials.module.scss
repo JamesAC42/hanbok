@@ -364,3 +364,49 @@
 @media (prefers-reduced-motion: reduce) {
     .overlay, .card { animation: none; }
 }
+
+// "What stopped you from keeping Plus?" after the trial-ended popup
+.whyOptions {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+    max-width: 28rem;
+    margin: 1.4rem auto 1rem;
+}
+
+.whyOption {
+    @include bp-press-ghost(var(--foreground));
+    justify-content: flex-start;
+    text-align: left;
+    white-space: normal;
+    text-transform: none;
+    letter-spacing: normal;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: .85rem 1.1rem;
+}
+
+.whyOptionOn {
+    border-color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 12%, var(--background));
+    color: var(--foreground);
+}
+
+.whyNote {
+    display: block;
+    width: 100%;
+    max-width: 28rem;
+    margin: 0 auto 1.25rem;
+    padding: .8rem 1rem;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--foreground);
+    background: var(--background);
+    border: 2px solid var(--bp-line);
+    border-radius: 12px;
+    resize: vertical;
+    &:focus { outline: none; border-color: var(--tone); }
+}
+
+.primary:disabled { opacity: .5; cursor: not-allowed; }

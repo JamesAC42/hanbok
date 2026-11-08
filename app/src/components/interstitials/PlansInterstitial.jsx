@@ -1,5 +1,7 @@
 'use client';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/analytics';
 import Mascot from '@/components/Mascot';
 import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
 import InterstitialFrame from './InterstitialFrame';
@@ -18,11 +20,88 @@ const PLANS = [
     },
 ];
 
+// Asked once when someone closes the trial-ended popup without keeping Plus.
+// Saved by server/controllers/trialFeedback.js, shown on the admin Surveys tab.
+const WHY = [
+    { value: 'price', label: "It's too expensive for me" },
+    { value: 'notEnoughUse', label: "I didn't use it enough" },
+    { value: 'missing', label: "It's missing something I need" },
+    { value: 'didntNotice', label: "I didn't know I had Plus" },
+    { value: 'other', label: 'Something else' },
+];
+
+const sendWhy = (reason, note) => fetch('/api/trial-feedback', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ reason, note }),
+}).catch(() => {});
+
+const WhyStep = ({ onClose }) => {
+    const [reason, setReason] = useState(null);
+    const [note, setNote] = useState('');
+    const [sent, setSent] = useState(false);
+
+    useEffect(() => {
+        if (!sent) return;
+        const timer = setTimeout(onClose, 1800);
+        return () => clearTimeout(timer);
+    }, [sent, onClose]);
+
+    const submit = () => {
+        if (!reason) return;
+        sendWhy(reason, note);
+        track('trial_feedback', { reason, note: !!note.trim() });
+        setSent(true);
+    };
+    const skip = () => {
+        track('trial_feedback_skip');
+        onClose();
+    };
+
+    return (
+        <InterstitialFrame labelledBy="trial-why-title" onClose={skip} tone="read">
+            <div className={styles.hero}>
+                <Mascot pose={sent ? 'celebrate' : 'think'} size={88} />
+                <h2 id="trial-why-title" className={styles.title}>{sent ? 'Thank you!' : 'One quick question'}</h2>
+                <p className={styles.subtitle}>
+                    {sent
+                        ? 'I read every answer, and it decides what we fix next.'
+                        : 'What stopped you from keeping Plus? Pick one, it takes two seconds.'}
+                </p>
+            </div>
+            {!sent && (
+                <>
+                    <div className={styles.whyOptions} role="radiogroup" aria-labelledby="trial-why-title">
+                        {WHY.map((o) => (
+                            <button key={o.value} type="button" role="radio" aria-checked={reason === o.value}
+                                className={`${styles.whyOption} ${reason === o.value ? styles.whyOptionOn : ''}`}
+                                onClick={() => setReason(o.value)}>
+                                {o.label}
+                            </button>
+                        ))}
+                    </div>
+                    {reason && (
+                        <textarea className={styles.whyNote} rows={3} maxLength={500} value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                            placeholder={reason === 'missing' ? 'What would you need? (optional)' : 'Anything else? (optional)'} />
+                    )}
+                    <div className={styles.actions}>
+                        <button type="button" className={styles.primary} disabled={!reason} onClick={submit}>Send</button>
+                        <button type="button" className={styles.secondary} onClick={skip}>Skip</button>
+                    </div>
+                </>
+            )}
+        </InterstitialFrame>
+    );
+};
+
 const perMonth = (yearly) => formatPrice(Math.round(yearly / 12 * 100) / 100);
 
 // Full-screen plans pitch. With a deal (YEARLY_DEAL_COUPON_ID) it leads with
 // the discount; every number comes from the coupon or the real list prices.
 const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction }) => {
+    const [asking, setAsking] = useState(false);
     const ends = dealEndsLabel(deal);
     const plusDeal = dealYearlyPrice('plus', deal);
 
@@ -42,6 +121,8 @@ const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction 
     const pill = trialEnded
         ? (deal ? 'Trial-end offer' : 'Hanbok Plus')
         : deal ? (ends ? 'Limited-time deal' : 'Yearly deal') : 'Hanbok Plus';
+
+    if (asking) return <WhyStep onClose={onClose} />;
 
     return (
         <InterstitialFrame labelledBy="plans-interstitial-title" onClose={onClose} tone={deal ? 'rev' : 'read'}>
@@ -83,7 +164,7 @@ const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction 
                 <Link href="/pricing" className={styles.primary} onClick={() => { onAction('pricing'); onClose(); }}>
                     {cta}
                 </Link>
-                <button type="button" className={styles.secondary} onClick={() => { onAction('dismiss'); onClose(); }}>
+                <button type="button" className={styles.secondary} onClick={() => { onAction('dismiss'); if (trialEnded) setAsking(true); else onClose(); }}>
                     Not now
                 </button>
             </div>
