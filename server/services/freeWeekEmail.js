@@ -144,9 +144,10 @@ const startFreeWeekEmailScheduler = () => {
         running = true;
         try {
             const s = await runFreeWeekEmails();
-            if (s.sent || s.failed) {
-                console.log(`Free week email: sent=${s.sent} failed=${s.failed} skipped=${s.skipped}`);
-            }
+            // Logged every run, even when nothing went out, so `docker compose logs`
+            // always shows whether it is running and how many people are left.
+            const waiting = await countCandidates(getDb()).catch(() => '?');
+            console.log(`Free week email: sent=${s.sent} failed=${s.failed} skipped=${s.skipped} waiting=${waiting}`);
         } catch (error) {
             console.error('Free week email run failed:', error);
         } finally {
