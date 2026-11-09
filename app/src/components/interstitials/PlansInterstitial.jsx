@@ -109,9 +109,9 @@ const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction 
         ? 'Your free week of Plus is over'
         : deal ? `${dealAmountLabel(deal)} a year of Hanbok` : 'Study without limits';
     const subtitle = trialEnded && deal
-        ? `You're back on the free plan, with 10 breakdowns a week. As a thank-you for trying Plus, keep it for ${formatPrice(plusDeal)} ${dealDurationLabel(deal)} instead of ${formatPrice(PLAN_PRICES.plus.yearly)}.`
+        ? `You're back on the free plan, with 5 breakdowns a week. As a thank-you for trying Plus, keep it for ${formatPrice(plusDeal)} ${dealDurationLabel(deal)} instead of ${formatPrice(PLAN_PRICES.plus.yearly)}.`
         : trialEnded
-        ? `You're back on the free plan, with 10 breakdowns a week. Keep Plus from ${perMonth(PLAN_PRICES.plus.yearly)} a month on a yearly plan, and everything you saved stays put.`
+        ? `You're back on the free plan, with 5 breakdowns a week. Keep Plus from ${perMonth(PLAN_PRICES.plus.yearly)} a month on a yearly plan, and everything you saved stays put.`
         : deal
         ? `Get Plus for ${formatPrice(plusDeal)} ${dealDurationLabel(deal)} instead of ${formatPrice(PLAN_PRICES.plus.yearly)}.`
         : trial

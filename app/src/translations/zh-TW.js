@@ -269,7 +269,7 @@ export const zhTW = {
 
         features: {
             free: {
-                analyses: '每週10個句子分析',
+                analyses: '每週5個句子分析',
                 extendedText: '每週2次擴充套件文字分析（最多1,000字元）',
                 conversations: '每月5次免費對話',
                 messages: '每次對話5條訊息',
@@ -491,7 +491,7 @@ export const zhTW = {
         viewPricing: '檢視價格',
         maybeLater: '稍後再說',
         sentenceAnalysesTitle: '每週句子分析次數已達上限',
-        sentenceAnalysesMessage: '您已用完本週10次免費句子分析。每月$4即可獲得無限制分析，或$1購買額外100次分析。',
+        sentenceAnalysesMessage: '您已用完本週5次免費句子分析。每月$4即可獲得無限制分析，或$1購買額外100次分析。',
         firstFiveUsedTitle: '每週句子分析使用情況',
         firstFiveUsedMessage: '您已使用本週10次免費句子分析中的5次。每月$4即可獲得無限制分析，或$1購買額外100次分析。',
         fifteenRemainingTitle: '每週句子分析更新',

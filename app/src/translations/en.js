@@ -269,7 +269,7 @@ export const en = {
         // Plan features
         features: {
             free: {
-                analyses: '10 sentence analyses/week',
+                analyses: '5 sentence analyses/week',
                 conversations: 'Limited AI conversations',
                 limitations: 'Limited dictionary access',
                 support: 'Community support'
@@ -500,7 +500,7 @@ export const en = {
         viewPricing: 'View Pricing',
         maybeLater: 'Maybe Later',
         sentenceAnalysesTitle: 'Weekly Sentence Analysis Limit Reached',
-        sentenceAnalysesMessage: 'You have used all 10 of your free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
+        sentenceAnalysesMessage: 'You have used all 5 of your free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         firstFiveUsedTitle: 'Weekly Sentence Analysis Usage',
         firstFiveUsedMessage: 'You have used 5 out of your 10 free weekly sentence analyses. Get unlimited analyses for only $4/month, or purchase an additional 100 analyses for just $1.',
         fifteenRemainingTitle: 'Weekly Sentence Analysis Update',
@@ -521,7 +521,7 @@ export const en = {
             },
             'sentence-analyses': {
                 title: 'Keep going with a free account',
-                main: "You've used this week's free tries. A free account gets 10 breakdowns a week and keeps every one in your Library.",
+                main: "You've used this week's free tries. A free account gets 5 breakdowns a week and keeps every one in your Library.",
                 sub: 'No card needed. The sentences you just broke down come with you.'
             },
             'image-extracts': {

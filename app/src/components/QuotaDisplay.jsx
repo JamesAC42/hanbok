@@ -32,7 +32,7 @@ const QuotaDisplay = ({ compact = false, smallScreensOnly = false }) => {
         return null;
     }
 
-    const total = quota.totalWeekly || 10;
+    const total = quota.totalWeekly || 5;
     const remaining = Math.max(0, Math.min(quota.remainingWeekly, total));
     const used = total - remaining;
 

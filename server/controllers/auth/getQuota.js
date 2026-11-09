@@ -1,6 +1,6 @@
 const { getDb } = require('../../database');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
-const { weeklySentenceQuota } = require('../../utils/sentenceQuota');
+const { FREE_WEEKLY_SENTENCES, weeklySentenceQuota } = require('../../utils/sentenceQuota');
 
 const getQuota = async (req, res) => {
     try {
@@ -13,8 +13,8 @@ const getQuota = async (req, res) => {
         let response = {
             isPremium: false,
             remainingDaily: null, // Not currently used but good for future
-            remainingWeekly: 10, // Default for free users
-            totalWeekly: 10,
+            remainingWeekly: FREE_WEEKLY_SENTENCES, // Default for free users
+            totalWeekly: FREE_WEEKLY_SENTENCES,
             usedPurchasedAnalysis: false,
             remainingPurchased: 0
         };

@@ -1,4 +1,5 @@
 const { getDb } = require('../../database');
+const { FREE_WEEKLY_SENTENCES } = require('../../utils/sentenceQuota');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
@@ -33,7 +34,7 @@ const getSession = async (req, res) => {
 
         // For free users, get their rate limit information
         let weekSentencesUsed = 0;
-        let weekSentencesTotal = 10; // Default weekly quota
+        let weekSentencesTotal = FREE_WEEKLY_SENTENCES; // Free weekly quota (utils/sentenceQuota)
         let weekSentencesRemaining = weekSentencesTotal;
         let weekExtendedTextUsed = 0;
         let weekExtendedTextTotal = user.tier === 0 ? FREE_TIER_WEEKLY_ANALYSIS_LIMIT : null;
@@ -91,7 +92,7 @@ const getSession = async (req, res) => {
                 weekExtendedTextUsed = 0;
             }
 
-            weekSentencesRemaining = weekSentencesTotal - weekSentencesUsed;
+            weekSentencesRemaining = Math.max(0, weekSentencesTotal - weekSentencesUsed);
             weekExtendedTextRemaining = Math.max((weekExtendedTextTotal || 0) - weekExtendedTextUsed, 0);
         } else {
             weekExtendedTextTotal = null;
