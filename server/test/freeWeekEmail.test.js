@@ -88,3 +88,9 @@ test('the email says what happens and links to sign in', () => {
     assert.match(mail.text, /Unsubscribe: /);
     assert.ok(mail.headers['List-Unsubscribe']);
 });
+
+// #166 shipped the scheduler but never started it, so nothing was ever sent.
+test('index.js starts the free week email scheduler', () => {
+    const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'index.js'), 'utf8');
+    assert.match(src, /freeWeekEmail\.startFreeWeekEmailScheduler\(\)/);
+});
