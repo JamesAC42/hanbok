@@ -116,6 +116,7 @@ const { setHeardFrom } = require('./controllers/auth/setHeardFrom');
 const lifecycleEmails = require('./services/lifecycleEmails');
 const streakEmails = require('./services/streakEmails');
 const trialEmails = require('./services/trialEmails');
+const freeWeekEmail = require('./services/freeWeekEmail');
 const { startAutoTrialExpiry } = require('./utils/autoTrial');
 
 // Import admin lyrics controllers
@@ -961,6 +962,8 @@ async function startServer() {
     streakEmails.startStreakEmailScheduler();
     // Trial ending / trial ended emails; does nothing unless TRIAL_EMAILS_ENABLED=true
     trialEmails.startTrialEmailScheduler();
+    // One-time 'free week of Plus' email; does nothing unless FREE_WEEK_EMAIL_ENABLED=true
+    freeWeekEmail.startFreeWeekEmailScheduler();
     // Ends no-card Plus trials that have run out (AUTO_TRIAL_ENABLED grants them)
     startAutoTrialExpiry(getDb);
     
