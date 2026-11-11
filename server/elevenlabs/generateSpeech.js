@@ -179,8 +179,29 @@ const getPresignedUrl = async (key) => {
   }
 };
 
+// Speech with per-character timings, for play-along and shadowing.
+// Returns { key, alignment } after storing the mp3 in S3.
+const generateTimedSpeech = async (text, { voiceId = DEFAULT_VOICE_IDS[0], language = null, keyPrefix = 'audio/timed' } = {}) => {
+  const model = getTtsModel(language);
+  const result = await client.textToSpeech.convertWithTimestamps(voiceId, {
+    output_format: "mp3_44100_128",
+    text,
+    ...model
+  });
+  if (!result?.audio_base64 || !result.alignment) throw new Error('ElevenLabs returned no timed audio');
+  const key = `${keyPrefix}/${voiceId}/${Date.now()}.mp3`;
+  await s3Client.send(new PutObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key,
+    Body: Buffer.from(result.audio_base64, 'base64'),
+    ContentType: 'audio/mpeg'
+  }));
+  return { key, voiceId, alignment: result.alignment };
+};
+
 module.exports = {
   CHINESE_MODEL_ID,
   generateSpeech,
+  generateTimedSpeech,
   getPresignedUrl
 };
