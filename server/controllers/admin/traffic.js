@@ -105,7 +105,7 @@ const optional = (promise) => promise.catch((error) => {
     return null;
 });
 
-const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12 }) => {
+const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12, eventLimit = 20 }) => {
     const c = config();
     const from = new Date(now.getTime() - days * DAY);
     const prevFrom = new Date(now.getTime() - 2 * days * DAY);
@@ -124,7 +124,7 @@ const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12 }) => {
         optional(metric(c, range, ['referrer'], 10)),
         optional(metric(c, range, ['country'], 8)),
         optional(metric(c, range, ['device'], 5)),
-        optional(metric(c, range, ['event'], 20)),
+        optional(metric(c, range, ['event'], eventLimit)),
         optional(umamiGet(`${site}/active`, {}, c)),
     ]);
 
