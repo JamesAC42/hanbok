@@ -97,6 +97,19 @@ export default async function PhrasePage({ params }) {
 
                 <div className={styles.prose}>
                     <p className={own.answer}>{p.intro}</p>
+                </div>
+
+                <TryIt
+                    lang="ko"
+                    run
+                    source="phrase_page_top"
+                    id="phrase-try-top"
+                    initial={firstLine}
+                    title="See the full breakdown"
+                    blurb="Tap Break it down and Hanbok explains every word and ending in this sentence, with audio and a translation. Or paste your own line from a drama, a song or a text."
+                />
+
+                <div className={styles.prose}>
                     {p.literal && (
                         <>
                             <h2 id="origin">Where it comes from</h2>
@@ -115,19 +128,6 @@ export default async function PhrasePage({ params }) {
                             <Example words={ex.words} translation={ex.en} />
                         </div>
                     ))}
-                </div>
-
-                <TryIt
-                    lang="ko"
-                    run
-                    source="phrase_page_top"
-                    id="phrase-try-top"
-                    initial={firstLine}
-                    title="See the full breakdown"
-                    blurb="Hanbok explains every word and ending in a sentence, with audio and a translation. Try it on this example, or paste your own line from a drama, a song or a text."
-                />
-
-                <div className={styles.prose}>
 
                     {p.forms?.length > 0 && (
                         <>
