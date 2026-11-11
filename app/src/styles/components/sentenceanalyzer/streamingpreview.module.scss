@@ -1,0 +1,104 @@
+@import '@/styles/variables.module.scss';
+
+// The analysis as it streams in, shown in place of the loading spinner.
+
+.preview {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    margin-bottom: 2rem;
+    padding: 1.2rem 1.4rem;
+    border-radius: 20px;
+    background: var(--background);
+    border: 2px solid var(--bp-line);
+    box-shadow: 0 4px 0 var(--bp-line);
+    font-family: var(--font-display);
+    color: var(--foreground);
+    text-align: center;
+    min-width: 0;
+}
+
+.original {
+    margin: 0;
+    font-size: clamp(1.3rem, 3.4vw, 1.9rem);
+    font-weight: 800;
+    line-height: 1.35;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+}
+
+.translation {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+    animation: rise .25s ease-out both;
+}
+
+.placeholder {
+    align-self: center;
+    width: min(70%, 22rem);
+    height: 1rem;
+    margin: .2rem 0;
+    border-radius: 99px;
+    background: var(--bp-soft);
+    animation: pulse 1.2s ease-in-out infinite;
+}
+
+.words {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: .45rem;
+    margin-top: .3rem;
+}
+
+.word {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .1rem;
+    padding: .4rem .7rem;
+    border-radius: 14px;
+    background: var(--bp-card);
+    border: 2px solid var(--bp-keep-line);
+    box-shadow: 0 3px 0 var(--bp-keep-line);
+    animation: rise .25s ease-out both;
+    min-width: 0;
+
+    b { font-size: 1.15rem; font-weight: 700; }
+    small { font-size: .74rem; font-weight: 600; color: var(--bp-ink2); max-width: 10rem; }
+}
+
+.more {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    padding: 0 .5rem;
+
+    i {
+        width: .45rem;
+        height: .45rem;
+        border-radius: 50%;
+        background: var(--bp-line-strong);
+        animation: pulse 1s ease-in-out infinite;
+        &:nth-child(2) { animation-delay: .15s; }
+        &:nth-child(3) { animation-delay: .3s; }
+    }
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: .35; }
+    50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .translation, .word { animation: none; }
+    .placeholder, .more i { animation: none; opacity: .6; }
+}

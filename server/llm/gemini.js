@@ -55,10 +55,28 @@ const buildAnalysisRequest = (text) => {
     };
 };
 
-const prompt_gemini_analysis = async (text) => {
+// onText (optional) gets the raw text generated so far, chunk by chunk, so
+// the analysis can be shown while it is still being written.
+const generateAnalysisText = async (request, onText) => {
+    if (!onText) {
+        const result = await analysisModel.generateContent(request, { timeout: ANALYSIS_TIMEOUT_MS });
+        return result.response.text();
+    }
+    const result = await analysisModel.generateContentStream(request, { timeout: ANALYSIS_TIMEOUT_MS });
+    let raw = '';
+    for await (const chunk of result.stream) {
+        let piece = '';
+        try { piece = chunk.text(); } catch { piece = ''; }
+        if (!piece) continue;
+        raw += piece;
+        try { onText(raw); } catch (error) { console.error('Analysis preview failed:', error.message); }
+    }
+    return raw;
+};
+
+const prompt_gemini_analysis = async (text, { onText } = {}) => {
     const { request, mapPaths } = buildAnalysisRequest(text);
-    const result = await analysisModel.generateContent(request, { timeout: ANALYSIS_TIMEOUT_MS });
-    const raw = result.response.text();
+    const raw = await generateAnalysisText(request, onText);
 
     let parsed;
     try {
