@@ -329,6 +329,7 @@ const Analysis = ({
                             language={originalLanguage}
                             translationLanguage={translationLanguage}
                             sentenceId={sentenceId}
+                            sentenceKey={isLyric ? null : (shareKey || sentenceId)}
                             showPronunciation={showPronunciation} />
                     </div>
                 </div>

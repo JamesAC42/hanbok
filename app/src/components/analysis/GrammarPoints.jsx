@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useEncounters, encounterLine } from '@/lib/encounters';
 import { sentenceHref } from '@/lib/sentenceLink';
 import metStyles from '@/styles/components/sentenceanalyzer/encounters.module.scss';
+import { DEPTHS, useGrammarDepth } from '@/lib/grammarDepth';
 
 // Examples are one short sentence each. Now and then the model runs away and
 // writes hundreds of sentences into one field; drop those rather than let
@@ -21,11 +22,13 @@ const usableExamples = (examples) => (Array.isArray(examples) ? examples : [])
     .filter(e => e && typeof e.original === 'string' && e.original.trim() && e.original.length <= MAX_EXAMPLE_CHARS)
     .slice(0, MAX_EXAMPLES);
 
-const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, showPronunciation}) => {
+const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, sentenceKey, showPronunciation}) => {
     const { t } = useLanguage();
     const savedGrammar = useSavedGrammar(sentenceId);
     const { user } = useAuth();
     const encounters = useEncounters(sentenceId, !!user);
+    const points = Array.isArray(analysis?.grammar_points) ? analysis.grammar_points : [];
+    const depth = useGrammarDepth(sentenceKey, points);
 
     // "You've met this 3 times before · last in 집에 가고 싶어." (signed in only)
     const renderMet = (lessonIndex) => {
@@ -116,8 +119,10 @@ const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, sho
                         </div>
                     </div>
 
-                    <div className={styles.grammarListItemExplanation}>
-                        {lesson.explanation}
+                    <div
+                        className={`${styles.grammarListItemExplanation} ${depth.loading ? styles.explanationLoading : ''}`}
+                        aria-busy={depth.loading || undefined}>
+                        {depth.explanations[lessonIndex]}
                     </div>
 
                     {renderMet(lessonIndex)}
@@ -168,9 +173,29 @@ const GrammarPoints = ({analysis, language, translationLanguage, sentenceId, sho
 
     return(
         <div className={styles.grammarList}>
-            <div className={styles.grammarListHeader}>
-                {t('analysis.grammar')}
+            <div className={styles.grammarListTop}>
+                <div className={styles.grammarListHeader}>
+                    {t('analysis.grammar')}
+                </div>
+                {depth.available && (
+                    <div className={styles.depthSwitch} role="radiogroup" aria-label="Explanation depth">
+                        {DEPTHS.map(d => (
+                            <button
+                                key={d.id}
+                                type="button"
+                                role="radio"
+                                aria-checked={depth.depth === d.id}
+                                className={depth.depth === d.id ? styles.depthActive : ''}
+                                onClick={() => depth.setDepth(d.id)}>
+                                {d.label}
+                            </button>
+                        ))}
+                    </div>
+                )}
             </div>
+            {depth.failed && (
+                <div className={styles.depthNote}>Couldn't rewrite these right now, so you're seeing the standard explanations.</div>
+            )}
             <div className={styles.grammarListContainer}>
                 {renderGrammarList()}
             </div>

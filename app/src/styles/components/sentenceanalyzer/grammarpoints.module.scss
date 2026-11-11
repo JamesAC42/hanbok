@@ -5,11 +5,61 @@
     position: relative;
     font-family: var(--font-display);
 
+    .grammarListTop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: .5rem .75rem;
+        margin-bottom: 1rem;
+    }
+
     .grammarListHeader {
         @include bp-title;
         font-size: 1.7rem;
         text-align: left;
-        margin-bottom: 1rem;
+    }
+
+    .depthSwitch {
+        display: inline-flex;
+        padding: 3px;
+        gap: 2px;
+        border-radius: 999px;
+        background: var(--bp-purple-soft);
+        border: 2px solid var(--bp-purple-line);
+
+        button {
+            appearance: none;
+            border: 0;
+            background: transparent;
+            color: var(--bp-purple-d);
+            font: inherit;
+            font-weight: 700;
+            font-size: .85rem;
+            padding: .35rem .8rem;
+            border-radius: 999px;
+            cursor: pointer;
+
+            &:hover { background: var(--background); }
+            &:focus-visible { outline: 2px solid var(--bp-purple); outline-offset: 1px; }
+        }
+
+        .depthActive,
+        .depthActive:hover {
+            background: var(--bp-purple-d);
+            color: #fff;
+        }
+    }
+
+    .depthNote {
+        font-size: .85rem;
+        color: var(--bp-ink2);
+        margin: -.5rem 0 .75rem;
+    }
+
+    .explanationLoading {
+        opacity: .45;
+        transition: opacity .2s;
     }
 
     .grammarListContainer {
