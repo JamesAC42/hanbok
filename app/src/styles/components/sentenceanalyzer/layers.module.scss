@@ -454,3 +454,101 @@ span.askChip {
     padding: .5rem .9rem;
     font-size: .78rem;
 }
+
+.karaoke {
+    margin-top: 1rem;
+    padding-top: .9rem;
+    border-top: 2px dashed var(--bp-line, rgba(0, 0, 0, .1));
+}
+
+.karaokeHead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    margin-bottom: .6rem;
+}
+
+.speedSwitch {
+    display: inline-flex;
+    gap: 2px;
+    padding: 2px;
+    border-radius: 999px;
+    border: 2px solid var(--bp-und-line);
+
+    button {
+        appearance: none;
+        border: 0;
+        background: transparent;
+        font: inherit;
+        font-weight: 700;
+        font-size: .8rem;
+        padding: .2rem .65rem;
+        border-radius: 999px;
+        color: var(--bp-und-d);
+        cursor: pointer;
+
+        &:disabled { cursor: default; opacity: .6; }
+        &:focus-visible { outline: 2px solid var(--bp-und); outline-offset: 1px; }
+    }
+
+    .speedActive {
+        background: var(--bp-und-d);
+        color: #fff;
+    }
+}
+
+.karaokeLine {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .15rem .45rem;
+    font-size: 1.45rem;
+    line-height: 1.5;
+    margin: .2rem 0 .6rem;
+
+    span {
+        padding: 0 .15rem;
+        border-radius: .35rem;
+        transition: background .12s, color .12s, opacity .12s;
+    }
+
+    .karaokeSaid { color: var(--bp-und-d); }
+    .karaokeNow { background: var(--bp-und-d); color: #fff; }
+    .karaokeDim { opacity: .35; }
+}
+
+.turn {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    font-weight: 700;
+    color: var(--bp-und-d);
+    margin-bottom: .5rem;
+
+    i {
+        display: block;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--bp-und);
+        transform-origin: left;
+        animation: turnBar linear forwards;
+    }
+}
+
+@keyframes turnBar {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+.karaokeActions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .6rem;
+
+    .againButton { margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .turn i { animation: none; }
+}

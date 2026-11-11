@@ -51,7 +51,7 @@ const AnalysisLayers = ({ analysis, language, sentenceKey, sentenceId }) => {
                     </button>
                 ))}
             </div>
-            {open === 'sound' && <SoundLayer analysis={analysis} hasPlus={hasPlus} />}
+            {open === 'sound' && <SoundLayer analysis={analysis} hasPlus={hasPlus} sentenceId={sentenceId} />}
             {open === 'map' && <MapLayer analysis={analysis} language={language} hasPlus={hasPlus} />}
             {open === 'ask' && <AskLayer analysis={analysis} language={language} sentenceId={sentenceId} />}
             {open === 'practice' && (

@@ -2,12 +2,13 @@
 import { useMemo, useState } from 'react';
 import { pronounce, RULES } from '@/lib/korean/soundRules';
 import PlusGate from '@/components/analysis/layers/PlusGate';
+import KaraokePlayer from '@/components/analysis/layers/KaraokePlayer';
 import styles from '@/styles/components/sentenceanalyzer/layers.module.scss';
 
 // "How it's said": the sentence as Koreans pronounce it, with every sound
 // change marked. Free shows the spoken line and the first change explained;
 // Plus explains them all.
-const SoundLayer = ({ analysis, hasPlus }) => {
+const SoundLayer = ({ analysis, hasPlus, sentenceId }) => {
     const result = useMemo(
         () => pronounce(analysis?.sentence?.original || '', analysis?.components || []),
         [analysis]
@@ -15,12 +16,17 @@ const SoundLayer = ({ analysis, hasPlus }) => {
     const [active, setActive] = useState(result.changes.length ? 0 : null);
     const shown = hasPlus ? result.changes : result.changes.slice(0, 1);
     const locked = hasPlus ? [] : result.changes.slice(1);
+    // Play-along needs a saved sentence (not lyric pages).
+    const karaoke = /^\d+$/.test(String(sentenceId ?? ''))
+        ? <KaraokePlayer sentenceId={sentenceId} hasPlus={hasPlus} />
+        : null;
 
     if (!result.changes.length) {
         return (
             <div className={styles.layerBody}>
                 <p className={`${styles.spoken} korean`}>[{result.spoken.trim()}]</p>
                 <p className={styles.muted}>This one is said just the way it's written. No sound changes.</p>
+                {karaoke}
             </div>
         );
     }
@@ -72,9 +78,11 @@ const SoundLayer = ({ analysis, hasPlus }) => {
                 </div>
             )}
 
+            {(hasPlus || locked.length === 0) && karaoke}
+
             {locked.length > 0 && (
                 <PlusGate layer="sound" title={`${locked.length} more sound ${locked.length === 1 ? 'change' : 'changes'} in this sentence`}>
-                    Plus explains every sound change, on every sentence you analyze.
+                    Plus explains every sound change on every sentence, and lets you play along and shadow it out loud.
                 </PlusGate>
             )}
         </div>
