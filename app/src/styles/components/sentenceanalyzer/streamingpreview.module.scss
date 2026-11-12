@@ -71,6 +71,15 @@
     small { font-size: .74rem; font-weight: 600; color: var(--bp-ink2); max-width: 10rem; }
 }
 
+.status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 .5rem;
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
 .more {
     display: inline-flex;
     align-items: center;

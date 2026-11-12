@@ -395,6 +395,7 @@ export const en = {
         placeholderContext: '(Optional) Desired context, recipient, formality level, etc.',
         analyze: 'Analyze',
         analyzing: 'Analyzing...',
+        opening: 'Done! Opening your breakdown...',
         processing_image: 'Processing image...',
         text_disabled_with_image: 'Text input is disabled when an image is uploaded.',
         loading: {

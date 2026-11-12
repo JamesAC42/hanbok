@@ -7,6 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { track } from '@/lib/analytics';
 import { rememberSentence } from '@/lib/pendingSentence';
+import { playFinishedSound } from '@/lib/finishedSound';
 import { readAnalysisResponse } from '@/lib/analysisStream';
 import StreamingPreview from '@/components/analysis/StreamingPreview';
 
@@ -29,7 +30,6 @@ const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB
 // Add audio reference for the paste sound effect
 const pasteSound = typeof Audio !== 'undefined' ? new Audio('/sound_effects/paste_click.mp3') : null;
 const startSound = typeof Audio !== 'undefined' ? new Audio('/sound_effects/start_analysis.mp3') : null;
-const finishedSound = typeof Audio !== 'undefined' ? new Audio('/sound_effects/finished_one.mp3') : null;
 
 const SentenceForm = ({
     analysis,
@@ -50,6 +50,8 @@ const SentenceForm = ({
     const [loading, setLoading] = useState(false);
     // The analysis so far, while the server streams it (STREAM_ANALYSIS).
     const [streamPreview, setStreamPreview] = useState(null);
+    // The analysis is back and we're moving to its page.
+    const [opening, setOpening] = useState(false);
     const [error, setError] = useState(null);
     const [loadingMessageIndex, setLoadingMessageIndex] = useState(0);
     const [imagePreview, setImagePreview] = useState(null);
@@ -145,14 +147,6 @@ const SentenceForm = ({
             startSound.currentTime = 0;
             startSound.volume = 0.02;
             startSound.play().catch(err => console.error('Error playing sound:', err));
-        }
-    };
-    const playFinishedSound = () => {
-        const shouldPlay = localStorage.getItem('playSoundEffects') !== 'false';
-        if (shouldPlay && finishedSound) {
-            finishedSound.currentTime = 0;
-            finishedSound.volume = 0.02;
-            finishedSound.play().catch(err => console.error('Error playing sound:', err));
         }
     };
 
@@ -316,6 +310,7 @@ const SentenceForm = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setOpening(false);
         setError(null);
 
         // If we have no text and no image, show error
@@ -466,7 +461,6 @@ const SentenceForm = ({
                     }, 500);
                 }
                 
-                playFinishedSound();
                 track('analyze', { language, source, signedIn: isAuthenticated });
                 if (!isAuthenticated) rememberAnonSentence(data.publicId);
                 
@@ -475,6 +469,8 @@ const SentenceForm = ({
                 // one: turning it off here made the form look finished while the
                 // navigation was still under way.
                 if (data.originalLanguage && data.sentenceId) {
+                    // The chime plays on the result page once the breakdown shows.
+                    setOpening(true);
                     rememberSentence({
                         analysis: data.message.analysis,
                         sentenceId: data.sentenceId,
@@ -490,10 +486,12 @@ const SentenceForm = ({
                     // Safety net in case the navigation never lands.
                     setTimeout(() => {
                         setLoading(false);
+                        setOpening(false);
                         setIsProcessingImage(false);
                     }, 20000);
                     return;
                 }
+                playFinishedSound();
             } else {
                 track('analyze_error', { reason: data.message.error?.type || 'other' });
                 setError({
@@ -678,15 +676,16 @@ const SentenceForm = ({
             </div>
             {
                 !error && loading && streamPreview && (
-                    <StreamingPreview analysis={streamPreview} language={language} original={text} />
+                    <StreamingPreview analysis={streamPreview} language={language} original={text}
+                        status={opening ? t('sentenceForm.opening') : null} />
                 )
             }
             {
                 !error && loading && !streamPreview && (
-                    <div className={styles.loading}>
+                    <div className={styles.loading} role="status">
                         <Mascot pose="cards" size={64} motion="bob" />
                         <div className={`${styles.loadingText} ${styles.fadeTransition}`}>
-                            {loadingMessages[loadingMessageIndex]}
+                            {opening ? t('sentenceForm.opening') : loadingMessages[loadingMessageIndex]}
                         </div>
                     </div>
                 )

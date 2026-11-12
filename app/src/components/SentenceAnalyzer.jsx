@@ -14,6 +14,7 @@ import TranslationSwitcher from '@/components/TranslationSwitcher';
 import Tiger from '@/components/Tiger';
 import Mascot from '@/components/Mascot';
 import { takeSentence } from '@/lib/pendingSentence';
+import { playFinishedSound } from '@/lib/finishedSound';
 
 
 const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {    
@@ -50,6 +51,11 @@ const SentenceAnalyzer = ({ sentenceId: propSentenceId }) => {
             window.setInputText(sentence);
         }
     };
+
+    // A fresh result just landed on screen: now is when "done" is true.
+    useEffect(() => {
+        if (handoff) playFinishedSound(handoff.sentenceId);
+    }, [handoff]);
 
     const handleNewAnalysis = (a) => {
         setAnalysis(a);
