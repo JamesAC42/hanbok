@@ -127,3 +127,52 @@ test('returning free accounts a week old get one trial on their next visit', asy
         assert.strictEqual(carryOverTrialEnd({ ...user, autoTrial: { endsAt: new Date(now.getTime() + DAY) } }, now.getTime()), null);
     });
 });
+
+// TRIAL_STARTS_AT_FIRST_BREAKDOWN: trial waits for the first breakdown.
+const { startTrialAtFirstBreakdown, trialWaitingDays, isTrialAtFirstBreakdown } = require('../utils/autoTrial');
+
+const updateDb = (modified = 1) => {
+    const calls = [];
+    return {
+        calls,
+        collection: () => ({ updateOne: async (filter, update) => { calls.push({ filter, update }); return { modifiedCount: modified }; } }),
+    };
+};
+const DEFERRED = { AUTO_TRIAL_ENABLED: 'true', PLUS_TRIAL_DAYS: '7', TRIAL_STARTS_AT_FIRST_BREAKDOWN: 'true' };
+
+test('with the flag on, new accounts start free and wait for their first breakdown', () => {
+    withEnv(DEFERRED, () => {
+        assert.strictEqual(isTrialAtFirstBreakdown(), true);
+        assert.deepStrictEqual(autoTrialFields(now), {});
+        assert.strictEqual(trialWaitingDays({ userId: 1, tier: 0 }), 7);
+    });
+    withEnv({ ...DEFERRED, TRIAL_STARTS_AT_FIRST_BREAKDOWN: undefined }, () => {
+        assert.strictEqual(autoTrialFields(now).tier, 2);
+        assert.strictEqual(trialWaitingDays({ userId: 1, tier: 0 }), 0);
+    });
+});
+
+test('first breakdown starts a 7-day trial once, only for accounts that never had one', async () => {
+    await withEnv(DEFERRED, async () => {
+        const db = updateDb();
+        const trial = await startTrialAtFirstBreakdown(db, { userId: 5, tier: 0 }, now);
+        assert.strictEqual(trial.source, 'firstBreakdown');
+        assert.strictEqual(new Date(trial.endsAt).getTime() - now.getTime(), 7 * DAY);
+        assert.strictEqual(db.calls[0].update.$set.tier, 2);
+        assert.deepStrictEqual(db.calls[0].filter.autoTrial, { $exists: false });
+
+        for (const user of [
+            { userId: 5, tier: 1 },
+            { userId: 5, tier: 0, autoTrial: { startedAt: now } },
+            { userId: 5, tier: 0, hasUsedFreeTrial: true },
+            { userId: 5, tier: 0, subscription: { stripeSubscriptionId: 'sub_1' } },
+        ]) {
+            assert.strictEqual(await startTrialAtFirstBreakdown(updateDb(), user, now), null);
+        }
+        // Lost the race to another request: nothing started.
+        assert.strictEqual(await startTrialAtFirstBreakdown(updateDb(0), { userId: 5, tier: 0 }, now), null);
+    });
+    await withEnv({ ...DEFERRED, TRIAL_STARTS_AT_FIRST_BREAKDOWN: undefined }, async () => {
+        assert.strictEqual(await startTrialAtFirstBreakdown(updateDb(), { userId: 5, tier: 0 }, now), null);
+    });
+});

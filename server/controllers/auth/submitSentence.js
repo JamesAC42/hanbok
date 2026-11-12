@@ -16,6 +16,7 @@ const SupportedLanguages = require('../../supported_languages');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { weeklySentenceQuota, quotaExceededMessage } = require('../../utils/sentenceQuota');
 const { isDailySentence } = require('../../utils/dailySentence');
+const { startTrialAtFirstBreakdown } = require('../../utils/autoTrial');
 
 const { extractTextFromImage } = require('../../llm/analyzeImage');
 const { createAnalysisStream } = require('../../lib/analysisStream');
@@ -604,6 +605,18 @@ const submitSentence = async (req, res) => {
             );
         }
 
+        // TRIAL_STARTS_AT_FIRST_BREAKDOWN: the Plus trial starts now, with this
+        // first breakdown, instead of at sign-up. This one doesn't count toward
+        // the free quota.
+        let plusTrialStarted = null;
+        if (user && user.tier === 0) {
+            plusTrialStarted = await startTrialAtFirstBreakdown(db, user).catch((error) => {
+                console.error('Starting trial at first breakdown failed:', error.message);
+                return null;
+            });
+            if (plusTrialStarted) user = { ...user, tier: 2, autoTrial: plusTrialStarted };
+        }
+
         // Initialize notification variable
         let notification = null;
         
@@ -667,7 +680,8 @@ const submitSentence = async (req, res) => {
             ...rateLimit,
             ...analysisUsage,
             ...weeklyQuotaInfo,
-            ...translationInfo
+            ...translationInfo,
+            ...(plusTrialStarted ? { plusTrialStarted: { endsAt: plusTrialStarted.endsAt } } : {})
         });
     } catch (error) {
         console.error('Error:', error);
