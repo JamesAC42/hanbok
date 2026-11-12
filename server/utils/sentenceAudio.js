@@ -117,7 +117,9 @@ const refreshSentenceAudioUrls = async (db, sentence, variant = 'normal') => {
   return { voice1, voice2 };
 };
 
-const clearSentenceAudioVariant = async (db, sentenceId, variant = 'normal') => {
+// `lost: true` marks audio that existed but whose files are gone (e.g. the old
+// AWS bucket), so the next generation of it doesn't count against a quota.
+const clearSentenceAudioVariant = async (db, sentenceId, variant = 'normal', { lost = false } = {}) => {
   const fields = getAudioFieldNames(variant);
   await db.collection('sentences').updateOne(
     { sentenceId },
@@ -125,7 +127,8 @@ const clearSentenceAudioVariant = async (db, sentenceId, variant = 'normal') => 
       $set: {
         [fields.voice1]: null,
         [fields.voice2]: null,
-        ...(variant === 'normal' ? { dateAudioGenerated: null } : {})
+        ...(variant === 'normal' ? { dateAudioGenerated: null } : {}),
+        ...(lost && variant === 'normal' ? { audioLostAt: new Date() } : {})
       }
     }
   );
@@ -161,6 +164,15 @@ const copySentenceAudioFromSource = async (db, targetSentenceId, sourceSentence,
   );
 };
 
+// Missing files are expected after the move off AWS; keep those logs short.
+const logRefreshError = (what, error) => {
+  if (error?.code === 'AUDIO_NOT_FOUND') {
+    console.log(`Audio missing, will regenerate: ${what}`);
+  } else {
+    console.error(`Error refreshing ${what}:`, error);
+  }
+};
+
 const resolveSentenceAudio = async (db, sentence, variant = 'normal') => {
   if (!sentence) {
     return null;
@@ -173,8 +185,9 @@ const resolveSentenceAudio = async (db, sentence, variant = 'normal') => {
         return refreshed;
       }
     } catch (error) {
-      console.error(`Error refreshing ${variant} audio for sentence ${sentence.sentenceId}:`, error);
-      await clearSentenceAudioVariant(db, sentence.sentenceId, variant);
+      logRefreshError(`${variant} audio for sentence ${sentence.sentenceId}`, error);
+      await clearSentenceAudioVariant(db, sentence.sentenceId, variant, { lost: true });
+      sentence.audioLostAt = sentence.audioLostAt || new Date();
     }
   }
 
@@ -199,8 +212,8 @@ const resolveSentenceAudio = async (db, sentence, variant = 'normal') => {
     await copySentenceAudioFromSource(db, sentence.sentenceId, sourceWithFreshUrls, variant);
     return refreshedMatch;
   } catch (error) {
-    console.error(`Error reusing ${variant} audio from sentence ${matchingSentence.sentenceId}:`, error);
-    await clearSentenceAudioVariant(db, matchingSentence.sentenceId, variant);
+    logRefreshError(`${variant} audio from sentence ${matchingSentence.sentenceId}`, error);
+    await clearSentenceAudioVariant(db, matchingSentence.sentenceId, variant, { lost: true });
     return null;
   }
 };

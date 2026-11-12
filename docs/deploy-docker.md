@@ -65,10 +65,15 @@ STREAM_ANALYSIS=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 STRIPE_ANALYTICS_KEY=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_REGION=
-AWS_BUCKET_NAME=
+# Audio files (Cloudflare R2, S3-compatible). Check with:
+#   docker compose exec api node scripts/checkStorage.js
+STORAGE_ENDPOINT=https://<account-id>.r2.cloudflarestorage.com
+STORAGE_BUCKET=hanbok
+STORAGE_REGION=auto
+STORAGE_ACCESS_KEY_ID=
+STORAGE_SECRET_ACCESS_KEY=
+# Optional: public bucket URL (r2.dev or custom domain); unset = 7-day signed links
+STORAGE_PUBLIC_URL=
 EMAIL_ENABLED=true
 EMAIL_HOST=
 EMAIL_PORT=
@@ -126,7 +131,7 @@ data or keys. Files are in `deploy/sites/`; everything lives in `/srv/sites`.
    `sudo chown -R 1000:1000 /srv/sites/*/content`.
 4. Fill `blog.env` and `kirakissu.env`: `DATABASE_URL=postgresql://blog:<pw>@postgres:5432/blog`,
    `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `JWT_SECRET` (new), `TURNSTILE_SECRET_KEY`,
-   the `AWS_*` values, `ALPHAVANTAGE_API_KEY`. `umami.env`: `DATABASE_URL=postgresql://umami:<pw>@postgres:5432/umami`
+   the `STORAGE_*` values, `ALPHAVANTAGE_API_KEY`. `umami.env`: `DATABASE_URL=postgresql://umami:<pw>@postgres:5432/umami`
    and `APP_SECRET=<new>`.
 5. In the blog and kirakissu repos (Settings → Secrets and variables → Actions):
    variables `DEPLOY_MODE=docker`, `SITES_HOST=<droplet ip>`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`;

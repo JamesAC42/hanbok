@@ -2,7 +2,7 @@ const { getDb } = require('../../database');
 const { generateSpeech } = require('../../elevenlabs/generateSpeech');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { buildAudioLengthError, isLongSentenceAudioRestricted } = require('../../utils/audioAccess');
-const { getSentenceTextToRead, resolveSentenceAudio } = require('../../utils/sentenceAudio');
+const { getSentenceTextToRead, hasAudioForVariant, resolveSentenceAudio } = require('../../utils/sentenceAudio');
 
 const AUDIO_WEEKLY_QUOTA = 5;
 
@@ -110,6 +110,9 @@ const generateAudio = async (req, res) => {
 
         let remainingGenerations = null;
 
+        // Audio this sentence had before but whose files are gone (old AWS
+        // bucket) is remade without using up the user's audio quota.
+        const hadAudio = hasAudioForVariant(sentence, 'normal');
         const existingAudio = await resolveSentenceAudio(db, sentence, 'normal');
         if (existingAudio) {
             return res.json({
@@ -124,8 +127,11 @@ const generateAudio = async (req, res) => {
         }
 
         let rateLimitRecord = null;
+        const freeRegeneration = hadAudio || !!sentence.audioLostAt;
 
-        if (userId !== null) {
+        if (freeRegeneration) {
+            // no quota check
+        } else if (userId !== null) {
             if (user.tier === 0 || user.tier === 1) {
                 const saved = user.remainingAudioGenerations ?? 0;
                 if (saved <= 0) {
@@ -152,12 +158,13 @@ const generateAudio = async (req, res) => {
                     voice1Key: normalAudio.voice1,
                     voice2Key: normalAudio.voice2,
                     dateAudioGenerated: new Date()
-                }
+                },
+                $unset: { audioLostAt: '' }
             }
         );
 
         // Track usage after successful generation
-        if (userId) {
+        if (userId && !freeRegeneration) {
             await db.collection('feature_usage').updateOne(
                 { userId: userId, feature: 'audio_generation' },
                 { 
@@ -171,7 +178,7 @@ const generateAudio = async (req, res) => {
 
         let remainingAfterGeneration = null;
 
-        if (user && (user.tier === 0 || user.tier === 1)) {
+        if (!freeRegeneration && user && (user.tier === 0 || user.tier === 1)) {
             await db.collection('users').updateOne(
                 { userId },
                 [
@@ -187,7 +194,7 @@ const generateAudio = async (req, res) => {
             remainingAfterGeneration = Math.max((user.remainingAudioGenerations || 0) - 1, 0);
         }
 
-        if (!userId && rateLimitRecord) {
+        if (!freeRegeneration && !userId && rateLimitRecord) {
             await db.collection('rate_limits').updateOne(
                 { identifier: ipAddress, identifierType: 'ipAddress' },
                 { 
@@ -203,7 +210,8 @@ const generateAudio = async (req, res) => {
 
         res.json({ 
             success: true,
-            generated: true,
+            // The app counts down the quota when generated is true.
+            generated: !freeRegeneration,
             voice1: normalAudio.voice1,
             voice2: normalAudio.voice2,
             voice1Slow: sentence.voice1SlowKey || null,
