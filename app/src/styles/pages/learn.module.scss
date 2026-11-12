@@ -181,20 +181,39 @@
     margin: 3rem 0 1rem;
 }
 
-// Body copy: large and plain for older readers.
+// Body copy: large and plain for older readers. Same Montserrat as the rest
+// of the app (the analysis page), so a guide reads as part of the product
+// rather than a separate blog.
 .prose {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.08rem;
     line-height: 1.75;
+    color: color-mix(in srgb, var(--foreground) 88%, var(--background));
 
     h2 {
         @include learn-heading;
-        font-size: 1.9rem;
-        margin: 2.75rem 0 .75rem;
+        font-size: 1.75rem;
+        margin: 2.5rem 0 .75rem;
+        padding-top: 2rem;
+        border-top: 2px solid var(--bp-line);
         scroll-margin-top: 6rem;
+        color: var(--foreground);
+    }
+
+    > h2:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+
+    h3 {
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 1.15rem;
+        margin: 1.75rem 0 .5rem;
+        color: var(--foreground);
     }
 
     p { margin: 0 0 1.1rem; }
+
+    strong, b { font-weight: 800; color: var(--foreground); }
 
     a {
         color: var(--bp-read);
@@ -899,4 +918,280 @@
     color: var(--bp-read);
     text-decoration: none;
     &:hover { text-decoration: underline; }
+}
+
+
+// ===== Guide layout (Learn articles) =====
+// Built like the analysis page: a framed header with labelled facts, the
+// reading column in a card, and a rail of tools that stays in view.
+
+.guide {
+    max-width: 74rem;
+    margin: 0 auto;
+}
+
+.guideHead {
+    @include bp-card;
+    padding: 1.75rem 2rem 0;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 0 var(--bp-line);
+    overflow: hidden;
+
+    .title { max-width: 52rem; }
+    .dek { max-width: 52rem; margin-bottom: 1.5rem; }
+
+    @media screen and (max-width: 725px) {
+        padding: 1.25rem 1.1rem 0;
+        border-radius: 18px;
+    }
+}
+
+// Labelled facts along the bottom of the header, like FORMALITY / CONTEXT
+// on an analysis.
+.facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0 -2rem;
+    border-top: 2px solid var(--bp-line);
+    background: var(--bp-soft);
+
+    > div {
+        padding: .85rem 2rem .95rem;
+        border-left: 2px solid var(--bp-line);
+        min-width: 0;
+        &:first-child { border-left: none; }
+    }
+
+    dt {
+        @include bp-label;
+        font-size: .66rem;
+        margin-bottom: .3rem;
+    }
+
+    dd {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: .95rem;
+        color: var(--foreground);
+    }
+
+    .levelTag { font-size: .7rem; }
+
+    @media screen and (max-width: 900px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        > div:nth-child(3) { border-left: none; }
+        > div:nth-child(n+3) { border-top: 2px solid var(--bp-line); }
+    }
+
+    @media screen and (max-width: 725px) {
+        margin: 0 -1.1rem;
+        > div { padding: .7rem 1.1rem .8rem; }
+    }
+}
+
+.guideCols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17.5rem;
+    gap: 1.75rem;
+    align-items: start;
+
+    @media screen and (max-width: 1180px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.guideMain { min-width: 0; }
+
+.guideBody {
+    @include bp-card;
+    padding: 2rem 2.25rem .9rem;
+
+    // On phones the examples and tables are already cards; a frame around
+    // them would only squeeze the text.
+    @media screen and (max-width: 725px) {
+        padding: .5rem .1rem 0;
+        border: none;
+        background: transparent;
+    }
+}
+
+.guideSection {
+    margin-top: 2.75rem;
+
+    .sectionTitle { margin-top: .15rem; }
+}
+
+.sectionKicker {
+    @include bp-label;
+    color: var(--bp-und-d);
+    margin: 0;
+}
+
+.moreCards {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    margin-bottom: 0;
+}
+
+// ----- Rail -----
+
+.rail {
+    position: sticky;
+    top: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-height: calc(100dvh - 7rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+
+    @media screen and (max-width: 1180px) {
+        display: none;
+    }
+}
+
+.railCard {
+    @include bp-card;
+    padding: 1rem 1.1rem;
+    font-family: var(--font-display);
+
+    p {
+        margin: 0 0 .6rem;
+        font-size: .9rem;
+        font-weight: 600;
+        line-height: 1.5;
+        color: var(--bp-ink2);
+    }
+}
+
+.railLabel {
+    @include bp-label;
+    margin: 0 0 .6rem !important;
+    font-size: .68rem !important;
+}
+
+.tocList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc;
+
+    li { counter-increment: toc; }
+
+    a {
+        display: flex;
+        gap: .55rem;
+        padding: .38rem .5rem;
+        margin: 0 -.5rem;
+        border-radius: 10px;
+        font-size: .86rem;
+        font-weight: 700;
+        line-height: 1.35;
+        color: var(--bp-ink2);
+        text-decoration: none;
+        word-break: keep-all;
+
+        &::before {
+            content: counter(toc);
+            flex: none;
+            width: 1.2rem;
+            font-weight: 800;
+            color: var(--bp-line-strong);
+        }
+
+        &:hover { background: var(--bp-soft); color: var(--foreground); }
+    }
+
+    a.tocOn {
+        background: var(--bp-und-soft);
+        color: var(--bp-und-d);
+        &::before { color: var(--bp-und); }
+    }
+}
+
+.tocInline {
+    @include bp-card;
+    display: none;
+    margin-bottom: 1rem;
+    padding: .8rem 1.1rem;
+    font-family: var(--font-display);
+
+    summary {
+        cursor: pointer;
+        font-weight: 800;
+        font-size: .95rem;
+
+        span {
+            @include bp-label;
+            font-size: .64rem;
+            margin-left: .4rem;
+        }
+    }
+
+    .tocList { margin-top: .6rem; }
+
+    @media screen and (max-width: 1180px) {
+        display: block;
+    }
+}
+
+.railForms {
+    list-style: none;
+    margin: 0 0 .9rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+
+    li {
+        display: flex;
+        align-items: baseline;
+        gap: .6rem;
+        padding: .5rem .7rem;
+        border-radius: 12px;
+        background: var(--bp-und-soft);
+    }
+
+    b {
+        font-family: var(--font-kr-sans);
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: color-mix(in srgb, var(--bp-und) 70%, var(--foreground));
+        white-space: nowrap;
+    }
+
+    span {
+        font-size: .82rem;
+        font-weight: 700;
+        color: var(--bp-ink2);
+    }
+}
+
+.railButton {
+    @include bp-press-ghost(var(--bp-und), 3px);
+    width: 100%;
+    box-sizing: border-box;
+    font-size: .72rem;
+    padding: .6rem .8rem;
+}
+
+.railAbout {
+    background: var(--bp-soft);
+}
+
+.railAboutHead {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: -.25rem 0 .4rem;
+
+    .railLabel { margin: 0 !important; }
+}
+
+.railFine {
+    font-size: .8rem !important;
+    margin: 0 !important;
+
+    a { color: var(--bp-read); font-weight: 800; text-decoration: none; }
+    a:hover { text-decoration: underline; }
 }

@@ -127,7 +127,7 @@
 
     @media screen and (max-width: 760px) {
         grid-template-columns: auto minmax(0, 1fr);
-        > :last-child { grid-column: 1 / -1; }
+        > .heroActions { grid-column: 1 / -1; }
     }
 
     @media screen and (max-width: 480px) {
@@ -137,7 +137,7 @@
         padding: 1.2rem 1rem;
 
         h2 { font-size: 1.45rem; }
-        > :last-child { width: 100%; }
+        > .heroActions { width: 100%; }
     }
 }
 
@@ -148,57 +148,121 @@
     align-items: stretch;
 }
 
-.planNote {
-    display: flex;
-    align-items: center;
-    gap: .9rem;
-    padding: .8rem 1rem;
-    border: 2px dashed var(--bp-line-strong);
-    border-radius: 16px;
-    font-weight: 700;
-    color: var(--bp-ink2);
-    line-height: 1.45;
+// ===== The path =====
+// Each level is a panel of rows, built like the analysis page: framed,
+// labelled and dense enough to show what you know about each point.
 
-    a { color: var(--bp-read); font-weight: 800; }
+.innerWide {
+    max-width: 72rem;
 }
 
-// ===== The path =====
+.heroStats {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: .4rem -1.6rem -1.4rem;
+    border-top: 2px solid var(--bp-und-line);
+    background: color-mix(in srgb, var(--bp-und) 4%, var(--background));
+    border-radius: 0 0 20px 20px;
+
+    > div {
+        padding: .8rem 1.6rem .9rem;
+        border-left: 2px solid var(--bp-und-line);
+        min-width: 0;
+        &:first-child { border-left: none; }
+    }
+
+    dt {
+        @include bp-label;
+        font-size: .66rem;
+        margin-bottom: .2rem;
+    }
+
+    dd {
+        margin: 0;
+        font-family: var(--font-lilita);
+        font-size: 1.6rem;
+        line-height: 1.1;
+        color: var(--foreground);
+
+        small {
+            font-family: var(--font-display);
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--bp-ink2);
+        }
+    }
+
+    .statDue { color: var(--bp-rev-d); }
+
+    @media screen and (max-width: 760px) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        > div:nth-child(3) { border-left: none; }
+        > div:nth-child(n+3) { border-top: 2px solid var(--bp-und-line); }
+    }
+
+    @media screen and (max-width: 480px) {
+        margin: .4rem -1rem -1.2rem;
+        text-align: left;
+        justify-self: stretch;
+        > div { padding: .7rem 1rem .8rem; }
+    }
+}
+
+.pathCols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17.5rem;
+    gap: 1.5rem;
+    align-items: start;
+
+    @media screen and (max-width: 1180px) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
 
 .path {
     display: flex;
     flex-direction: column;
-    gap: 1.6rem;
-    padding: .5rem 0 2rem;
+    gap: 1.25rem;
+    min-width: 0;
 }
 
-.levelSection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.levelPanel {
+    @include bp-card;
+    overflow: hidden;
 }
 
-.levelBanner {
+.levelHead {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: .85rem;
-    width: 100%;
-    padding: .8rem 1.1rem;
-    border-radius: 18px;
-    background: var(--bp-und);
-    color: #fff;
-    box-shadow: 0 4px 0 var(--bp-und-d);
+    gap: .5rem .85rem;
+    padding: .9rem 1.25rem .8rem;
+    background: var(--bp-und-soft);
+
+    @media screen and (max-width: 600px) {
+        padding: .8rem .9rem .7rem;
+
+        .levelStats {
+            flex-basis: 100%;
+            justify-content: flex-start;
+            padding-left: 3.15rem;
+        }
+    }
 }
 
 .levelNumber {
     display: grid;
     place-items: center;
     flex: none;
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 2.3rem;
+    height: 2.3rem;
     border-radius: 50%;
-    background: rgba(255, 255, 255, .22);
+    background: var(--bp-und);
+    box-shadow: inset 0 -3px 0 var(--bp-und-d);
+    color: #fff;
     font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 900;
 }
 
@@ -207,104 +271,136 @@
     flex-direction: column;
     flex: 1;
     min-width: 0;
-    font-weight: 700;
-    font-size: .9rem;
-    opacity: .95;
+    @include bp-title;
+    font-size: 1.35rem;
 
     b {
         @include bp-label;
-        color: inherit;
-        font-size: .72rem;
-        opacity: .85;
+        font-size: .66rem;
+        color: var(--bp-und-d);
     }
 }
 
-.levelCount {
-    flex: none;
-    padding: .3rem .7rem;
-    border-radius: 99px;
-    background: rgba(255, 255, 255, .22);
-    font-weight: 800;
-    font-size: .78rem;
+.levelStats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: .4rem;
+
+    > span {
+        @include bp-label;
+        font-size: .68rem;
+        padding: .3rem .65rem;
+        border-radius: 99px;
+        background: var(--background);
+        border: 2px solid var(--bp-und-line);
+        color: var(--bp-und-d);
+        white-space: nowrap;
+    }
+
+    .levelDue {
+        border-color: var(--bp-rev-line);
+        color: var(--bp-rev-d);
+    }
 }
 
-.trail {
+.levelBar {
+    @include bp-bar(var(--bp-und), 6px);
+    border-radius: 0;
+    background: var(--bp-line);
+    > i { border-radius: 0 6px 6px 0; box-shadow: none; }
+}
+
+.pointList {
+    list-style: none;
+    margin: 0;
+    padding: .35rem 0;
+}
+
+.pointRow {
     position: relative;
-    width: 100%;
-    max-width: 26rem;
-    margin-top: .6rem;
-}
+    display: grid;
+    grid-template-columns: 4.25rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    padding: .85rem 1.25rem .85rem 1rem;
 
-.trailLine {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
+    & + & { border-top: 2px solid var(--bp-line); }
+    &:hover { background: var(--bp-soft); }
 
-    path {
-        fill: none;
-        stroke: var(--bp-line);
-        stroke-width: 10px;
-        stroke-linecap: round;
+    @media screen and (max-width: 600px) {
+        grid-template-columns: 3.25rem minmax(0, 1fr);
+        gap: .75rem;
+        padding: .8rem .9rem;
     }
-
-    .trailDone { stroke: var(--bp-und-line); }
 }
 
-.node {
-    position: absolute;
-    width: 0;
-    height: 0;
-    text-decoration: none;
-    color: var(--foreground);
+// The path line runs down through the discs of a level.
+.rowRail {
+    position: relative;
+    align-self: stretch;
+    display: grid;
+    place-items: center;
 
-    &:hover .disc { filter: brightness(1.05); }
-    &:active .disc { transform: translate(-50%, -50%) scale(.96); }
-    &:focus-visible { outline: none; }
-    &:focus-visible .disc { outline: 3px solid var(--bp-read); outline-offset: 10px; }
+    &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: -1rem;
+        bottom: -1rem;
+        width: 6px;
+        transform: translateX(-50%);
+        background: var(--bp-line);
+        border-radius: 6px;
+    }
 }
 
-// A true circle: the 3D depth sits inside the circle (inset shadow) so the
-// outside is round and any ring around it stays centred.
+.pointRow:first-child .rowRail::before { top: 50%; }
+.pointRow:last-child .rowRail::before { bottom: 50%; }
+.pointRow:only-child .rowRail::before { display: none; }
+.pointRow:not(.stage0) .rowRail::before { background: var(--bp-und-line); }
+
+// A true circle: the 3D depth sits inside it (inset shadow).
 .disc {
     --node: var(--bp-und);
     --node-d: var(--bp-und-d);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 4.75rem;
-    height: 4.75rem;
-    transform: translate(-50%, -50%);
+    position: relative;
+    width: 3.9rem;
+    height: 3.9rem;
     border-radius: 50%;
     display: grid;
     place-items: center;
-    padding: .55rem;
+    padding: .4rem;
+    box-sizing: border-box;
     background: var(--node);
     color: #fff;
     box-shadow:
-        inset 0 -6px 0 var(--node-d),
+        inset 0 -5px 0 var(--node-d),
         inset 0 3px 0 rgba(255, 255, 255, .25);
     font-family: var(--font-kr-sans), var(--font-display);
     font-weight: 900;
-    font-size: 1rem;
+    font-size: .9rem;
     line-height: 1.1;
     text-align: center;
     word-break: keep-all;
     overflow-wrap: anywhere;
-    transition: transform .08s ease, filter .12s ease;
     z-index: 1;
+
+    @media screen and (max-width: 600px) {
+        width: 3.1rem;
+        height: 3.1rem;
+        font-size: .74rem;
+    }
 }
 
-.discLong { font-size: .82rem; }
+.discLong { font-size: .72rem; }
 
 .stage0 .disc {
-    --node-d: var(--bp-line-strong);
     background: var(--background);
     color: var(--bp-ink2);
     box-shadow:
         inset 0 0 0 3px var(--bp-line-strong),
-        inset 0 -7px 0 var(--bp-line-strong);
+        inset 0 -6px 0 var(--bp-line-strong);
 }
 
 .stage4 .disc {
@@ -313,92 +409,137 @@
     color: var(--bp-keep-ink);
 }
 
-.nodeDue .disc {
-    --node: var(--bp-rev);
-    --node-d: var(--bp-rev-d);
-    color: #fff;
-    box-shadow:
-        inset 0 -6px 0 var(--node-d),
-        inset 0 3px 0 rgba(255, 255, 255, .25);
-    background: var(--node);
-}
-
-// Ring around the current node, centred on the same point as the disc.
-.nodeHere::before {
+// Due points keep their stage colour and get a red marker, so a full
+// review day reads as a to-do list rather than an alarm.
+.rowDue .disc::after {
     content: '';
     position: absolute;
-    left: 0;
-    top: 0;
-    width: 6.1rem;
-    height: 6.1rem;
-    transform: translate(-50%, -50%);
+    top: -3px;
+    right: -3px;
+    width: .85rem;
+    height: .85rem;
     border-radius: 50%;
-    border: 5px solid var(--bp-und-line);
-    background: var(--background);
+    background: var(--bp-rev);
+    border: 3px solid var(--background);
 }
 
-.hereBubble {
-    position: absolute;
-    left: 0;
-    top: -4.7rem;
-    transform: translateX(-50%);
-    padding: .3rem .8rem;
-    border-radius: 10px;
-    border: 2px solid var(--bp-line);
-    background: var(--background);
-    color: var(--bp-und-d);
-    @include bp-label;
-    font-size: .72rem;
-    white-space: nowrap;
-    box-shadow: 0 3px 0 var(--bp-line);
-    animation: bp-bob 2.4s ease-in-out infinite;
-    z-index: 2;
+.rowHere .disc {
+    outline: 4px solid var(--bp-und-line);
+    outline-offset: 3px;
+}
 
+.rowBody {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    min-width: 0;
+}
+
+.rowHead { display: block; }
+
+.rowLink {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .25rem .65rem;
+    color: var(--foreground);
+    text-decoration: none;
+
+    // The whole row opens the point.
     &::after {
         content: '';
         position: absolute;
-        left: 50%;
-        bottom: -7px;
-        width: 10px;
-        height: 10px;
-        transform: translateX(-50%) rotate(45deg);
-        background: var(--background);
-        border-right: 2px solid var(--bp-line);
-        border-bottom: 2px solid var(--bp-line);
+        inset: 0;
+    }
+
+    &:focus-visible { outline: none; }
+    &:focus-visible::after { outline: 3px solid var(--bp-read); outline-offset: -3px; border-radius: 4px; }
+}
+
+.rowForm {
+    font-family: var(--font-kr-sans), var(--font-display);
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: color-mix(in srgb, var(--bp-und) 70%, var(--foreground));
+}
+
+.stage0 .rowForm { color: var(--foreground); }
+
+.rowName {
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.rowExplain {
+    font-size: .9rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--bp-ink2);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.rowMeta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .2rem 1rem;
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+}
+
+.rowStage {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+.rowGuide {
+    position: relative;
+    z-index: 1;
+    color: var(--bp-read);
+    font-weight: 800;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+}
+
+.rowSide {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: .35rem;
+    text-align: right;
+
+    @media screen and (max-width: 600px) {
+        grid-column: 2;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        text-align: left;
     }
 }
 
-.nodeLabel {
-    position: absolute;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
-    width: max-content;
-    max-width: min(11rem, 40vw);
-    transform: translateY(-50%);
+.rowWhen {
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+    white-space: nowrap;
 }
 
-.labelRight {
-    left: 3.6rem;
-    align-items: flex-start;
-    text-align: left;
+.rowChevron {
+    display: none;
 }
 
-.labelLeft {
-    right: 3.6rem;
-    align-items: flex-end;
-    text-align: right;
-}
-
-.nodeHere .labelRight { left: 4rem; }
-.nodeHere .labelLeft { right: 4rem; }
-
-.nodeName {
-    font-weight: 800;
-    font-size: .88rem;
-    line-height: 1.25;
-    color: var(--foreground);
+.hereTag {
+    @include bp-label;
+    font-size: .62rem;
+    padding: .15rem .5rem;
+    border-radius: 8px;
+    background: var(--bp-und);
+    color: #fff;
 }
 
 .stars {
@@ -413,11 +554,12 @@
 
 .nodeTag {
     @include bp-label;
-    font-size: .62rem;
-    padding: .15rem .5rem;
+    font-size: .64rem;
+    padding: .2rem .55rem;
     border-radius: 99px;
     background: var(--bp-rev-soft);
     color: var(--bp-rev-d);
+    white-space: nowrap;
 }
 
 .nodeTagNew {
@@ -425,8 +567,90 @@
     color: var(--bp-und-d);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .hereBubble { animation: none; }
+// ----- Rail -----
+
+.pathRail {
+    position: sticky;
+    top: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    @media screen and (max-width: 1180px) {
+        position: static;
+    }
+}
+
+.railCard {
+    @include bp-card;
+    padding: 1rem 1.1rem;
+
+    .label { display: block; margin-bottom: .65rem; font-size: .68rem; }
+}
+
+.growList {
+    list-style: none;
+    margin: 0 0 .75rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+
+    li {
+        display: grid;
+        grid-template-columns: 4.2rem minmax(0, 1fr);
+        gap: .5rem;
+        align-items: baseline;
+        font-size: .82rem;
+        font-weight: 600;
+        line-height: 1.4;
+        color: var(--bp-ink2);
+    }
+
+    b {
+        display: block;
+        font-weight: 800;
+        color: var(--foreground);
+    }
+
+    .stars { font-size: .75rem; }
+}
+
+.railFine {
+    margin: 0;
+    font-size: .8rem;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--bp-ink2);
+}
+
+.planNote {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+    background: var(--bp-soft);
+    font-size: .84rem;
+    font-weight: 700;
+    color: var(--bp-ink2);
+    line-height: 1.45;
+
+    a { color: var(--bp-read); font-weight: 800; }
+}
+
+.railLink {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    color: var(--foreground);
+    text-decoration: none;
+    box-shadow: 0 3px 0 var(--bp-line);
+    font-size: .84rem;
+    font-weight: 600;
+    line-height: 1.4;
+
+    strong { display: block; font-weight: 800; font-size: .95rem; margin-bottom: .1rem; color: var(--bp-read); }
+    span { color: var(--bp-ink2); }
+    &:hover { background: var(--bp-soft); }
 }
 
 .empty {
