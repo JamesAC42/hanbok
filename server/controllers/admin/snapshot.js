@@ -89,6 +89,11 @@ const trafficFrom = (traffic) => ({
     devices: traffic.devices,
     events: traffic.events,
     seo: seoFrom(traffic),
+    // Visitors with the likely bots taken out (see likelyBots in traffic.js);
+    // null when Umami would not answer the filtered queries.
+    likelyBotVisitors: traffic.likelyBots ? traffic.likelyBots.visitors : null,
+    humanVisitors: traffic.likelyBots ? Math.max(0, traffic.stats.current.visitors - traffic.likelyBots.visitors) : null,
+    likelyBots: traffic.likelyBots || null,
 });
 
 // Signups in the last 30 days by where they came from, with how many now pay.
@@ -195,7 +200,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         return null;
     });
     const traffic = (days) => (umamiConfigured()
-        ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100, eventLimit: 100 }))
+        ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100, eventLimit: 100, referrerLimit: 100, withBots: true }))
         : Promise.resolve(null));
 
     const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials, usageDepth] = await Promise.all([
@@ -279,4 +284,4 @@ const getSnapshot = async (req, res) => {
     }
 };
 
-module.exports = { getSnapshot, getEventBreakdown, requireMetricsToken, buildSnapshot, seoFrom, revenueFrom, usageDepthFrom };
+module.exports = { getSnapshot, getEventBreakdown, requireMetricsToken, buildSnapshot, seoFrom, revenueFrom, usageDepthFrom, trafficFrom };

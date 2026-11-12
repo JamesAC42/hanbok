@@ -90,3 +90,45 @@ test('usage depth buckets weekly breakdowns by who is using them', () => {
     assert.strictEqual(d.weekly.paying['6-9'], 1);
     assert.deepStrictEqual(d.endedTrials, { count: 4, '0': 2, '1-4': 1, '5-9': 0, '10-19': 1, '20+': 0 });
 });
+
+test('likely bots are US and Singapore laptop visitors with no referrer', async () => {
+    const { buildTraffic } = require('../controllers/admin/traffic');
+    const { trafficFrom } = require('../controllers/admin/snapshot');
+    const saved = { fetch: global.fetch, key: process.env.UMAMI_API_KEY, url: process.env.UMAMI_URL };
+    process.env.UMAMI_API_KEY = 'k';
+    process.env.UMAMI_URL = 'https://umami.test';
+    const seen = [];
+    global.fetch = async (href) => {
+        const url = new URL(href);
+        const q = Object.fromEntries(url.searchParams);
+        seen.push(q);
+        const ok = (body) => ({ ok: true, status: 200, json: async () => body });
+        if (url.pathname.endsWith('/stats')) {
+            if (q.device === 'laptop') return ok({ visitors: q.country === 'US' ? 600 : 380 });
+            return ok({ pageviews: 2600, visitors: 1300, visits: 1470, bounces: 1220, totaltime: 1 });
+        }
+        if (url.pathname.endsWith('/metrics') && q.type === 'referrer') {
+            if (q.device === 'laptop') return ok(q.country === 'US' ? [{ x: 'google.com', y: 70 }] : []);
+            return ok([{ x: 'google.com', y: 200 }]);
+        }
+        if (url.pathname.endsWith('/pageviews')) return ok({ pageviews: [], sessions: [] });
+        return ok([]);
+    };
+    try {
+        const plain = await buildTraffic({ days: 7, tz: 'UTC', now: new Date('2026-11-12T00:00:00Z') });
+        assert.strictEqual(plain.likelyBots, null);
+        assert.ok(!seen.some((q) => q.device), 'the admin dashboard makes no extra calls');
+
+        const traffic = await buildTraffic({ days: 7, tz: 'UTC', now: new Date('2026-11-12T00:00:00Z'), withBots: true });
+        const out = trafficFrom(traffic);
+        // US: 600 laptop visitors, 70 came from a referrer; SG: 380, none did.
+        assert.strictEqual(out.likelyBotVisitors, 530 + 380);
+        assert.strictEqual(out.humanVisitors, 1300 - 910);
+        assert.deepStrictEqual(out.likelyBots.byCountry.map((r) => r.direct), [530, 380]);
+    } finally {
+        global.fetch = saved.fetch;
+        for (const [k, v] of [['UMAMI_API_KEY', saved.key], ['UMAMI_URL', saved.url]]) {
+            if (v === undefined) delete process.env[k]; else process.env[k] = v;
+        }
+    }
+});

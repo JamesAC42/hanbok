@@ -105,7 +105,36 @@ const optional = (promise) => promise.catch((error) => {
     return null;
 });
 
-const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12, eventLimit = 20 }) => {
+// Most of the traffic jump since early November is bots: laptops in the US and
+// Singapore with no referrer that leave after one page (/login views went 23 ->
+// 138 a week while search visits barely moved). Umami can filter by device and
+// country but not by "no referrer", so this counts laptop visitors from those
+// countries and subtracts the ones that arrived from a referrer. The few real
+// people there who typed the address in are counted as bots too; small next to
+// the ~1,000 a week this removes.
+const BOT_COUNTRIES = ['US', 'SG'];
+const likelyBots = async (c, range, totalVisitors) => {
+    const site = `/websites/${c.websiteId}`;
+    const perCountry = await Promise.all(BOT_COUNTRIES.map(async (country) => {
+        const filter = { ...range, device: 'laptop', country };
+        const [stats, referred] = await Promise.all([
+            umamiGet(`${site}/stats`, filter, c),
+            metric(c, filter, ['referrer'], 100),
+        ]);
+        const visitors = normalizeStats(stats).visitors;
+        const fromReferrers = referred.reduce((sum, row) => sum + row.value, 0);
+        return { country, visitors, direct: Math.max(0, visitors - fromReferrers) };
+    }));
+    // An Umami that ignored the filters answers with the whole site's numbers.
+    if (perCountry.reduce((sum, row) => sum + row.visitors, 0) > totalVisitors) return null;
+    return {
+        visitors: perCountry.reduce((sum, row) => sum + row.direct, 0),
+        rule: 'laptop visitors from US or SG with no referrer',
+        byCountry: perCountry,
+    };
+};
+
+const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12, eventLimit = 20, referrerLimit = 10, withBots = false }) => {
     const c = config();
     const from = new Date(now.getTime() - days * DAY);
     const prevFrom = new Date(now.getTime() - 2 * days * DAY);
@@ -118,14 +147,15 @@ const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12, eventL
         umamiGet(`${site}/stats`, range, c),
         umamiGet(`${site}/stats`, { startAt: prevFrom.getTime(), endAt: from.getTime() }, c),
     ]);
-    const [series, pages, referrers, countries, devices, events, active] = await Promise.all([
+    const [series, pages, referrers, countries, devices, events, active, bots] = await Promise.all([
         optional(umamiGet(`${site}/pageviews`, { ...range, unit: 'day', timezone: tz }, c)),
         optional(metric(c, range, ['path', 'url'], pageLimit)),
-        optional(metric(c, range, ['referrer'], 10)),
+        optional(metric(c, range, ['referrer'], referrerLimit)),
         optional(metric(c, range, ['country'], 8)),
         optional(metric(c, range, ['device'], 5)),
         optional(metric(c, range, ['event'], eventLimit)),
         optional(umamiGet(`${site}/active`, {}, c)),
+        withBots ? optional(likelyBots(c, range, normalizeStats(current).visitors)) : Promise.resolve(null),
     ]);
 
     const pageviews = toDailySeries(series?.pageviews, dayKeys);
@@ -143,6 +173,7 @@ const buildTraffic = async ({ days, tz, now = new Date(), pageLimit = 12, eventL
         countries: countries || [],
         devices: devices || [],
         events: (events || []).filter((e) => e.label && e.label !== '(none)'),
+        likelyBots: bots,
     };
 };
 
