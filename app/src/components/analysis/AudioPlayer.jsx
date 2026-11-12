@@ -30,6 +30,8 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
     const [playbackMode, setPlaybackMode] = useState('normal');
     const [audioErrorCode, setAudioErrorCode] = useState(null);
     const [autoRequested, setAutoRequested] = useState(false);
+    // Set when the server says this sentence's audio files are gone; we then make them again.
+    const [audioGone, setAudioGone] = useState(false);
     const [popupType, setPopupType] = useState(null);
     const searchParams = useSearchParams();
 
@@ -176,8 +178,9 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
           // Don't automatically play after refreshing URLs
           setIsPlaying(false);
         } else {
-          // If we didn't get valid URLs, the S3 objects might be missing
+          // No valid URLs: the stored audio files are gone, so make new ones
           console.log('No valid URLs returned, keys have been cleared on the server');
+          if (!isSlowRequest) setAudioGone(true);
           setVoices(prev => ({
             ...prev,
             ...(isSlowRequest ? {
@@ -290,6 +293,12 @@ const AudioPlayer = ({ sentenceId: propSentenceId, voice1, voice2, voice1Slow, v
       generateAudio();
     }, [sentenceId, hasNormalAudio, loadingAudio, autoRequested, voice1, voice2]);
     
+    useEffect(() => {
+      if (!audioGone || loadingAudio || hasNormalAudio) return;
+      setAudioGone(false);
+      generateAudio();
+    }, [audioGone, loadingAudio, hasNormalAudio]);
+
     const handleAudioLock = () => {
       if(loadingAudio || loadingSlowAudio) {
         return;

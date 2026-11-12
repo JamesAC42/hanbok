@@ -88,10 +88,12 @@ MONGODB_PASSWORD=           <-- For mongodb
 MONGODB_HOST=               <-- For mongodb
 MONGODB_PORT=               <-- For mongodb
 MONGODB_DB=hanbok           <-- Name of MongoDB database, should be hanbok
-AWS_BUCKET_NAME=            <-- For AWS S3 to store audio files
-AWS_REGION=                 <-- For AWS S3 to store audio files
-AWS_ACCESS_KEY_ID=          <-- For AWS S3 to store audio files
-AWS_SECRET_ACCESS_KEY=      <-- For AWS S3 to store audio files
+STORAGE_ENDPOINT=           <-- S3-compatible endpoint for audio files (Cloudflare R2: https://<account>.r2.cloudflarestorage.com)
+STORAGE_BUCKET=             <-- Audio bucket name
+STORAGE_REGION=             <-- "auto" for R2
+STORAGE_ACCESS_KEY_ID=      <-- R2 API token access key
+STORAGE_SECRET_ACCESS_KEY=  <-- R2 API token secret
+STORAGE_PUBLIC_URL=         <-- Optional public bucket URL; unset = signed links
 STRIPE_PUBLISHABLE_KEY=     <-- For Stripe payment processing
 STRIPE_SECRET_KEY=          <-- For Stripe payment processing
 STRIPE_WEBHOOK_SECRET=      <-- For Stripe payment processing

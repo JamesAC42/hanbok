@@ -1,22 +1,10 @@
 const { getDb } = require('../../database');
 const { findSourceSentence } = require('../../lib/sourceSentence');
 const { attachGrammarContent } = require('../../grammar/reviewCards');
-const { getWordAudio } = require('../../utils/wordAudio');
-const { CHINESE_MODEL_ID } = require('../../elevenlabs/generateSpeech');
+const { getWordAudio, regenerateWordAudioRecord } = require('../../utils/wordAudio');
+const { CHINESE_MODEL_ID, getPresignedUrl } = require('../../elevenlabs/generateSpeech');
 const { isChinese } = require('../../llm/chineseScript');
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
-const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
-
-// Initialize S3 client
-const s3Client = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  }
-});
-
-const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+const { isLegacyAwsUrl } = require('../../lib/storage');
 
 // Chinese word audio made before Chinese moved to a Mandarin-pinned TTS model
 // often has wrong tones. Regenerate it in the background, one word at a time,
@@ -34,67 +22,51 @@ function regenerateStaleChineseAudio(records) {
   })();
 }
 
-// Helper function to check if an audio URL needs refreshing (older than 6 days)
-async function checkAndRefreshAudioUrl(audioRecord) {
+// Word audio whose file is gone (it lived in the old AWS bucket) is remade in
+// the background, a few words at a time, so the session opens fast and the
+// next one has audio.
+function regenerateMissingWordAudio(records) {
+  if (records.length === 0) return;
+  (async () => {
+    for (const record of records) {
+      try {
+        await regenerateWordAudioRecord(record);
+      } catch (error) {
+        console.error(`Error regenerating missing audio for ${record.word}:`, error.message);
+      }
+    }
+  })();
+}
+
+// A playable URL for the word's audio, refreshed when older than 6 days.
+// Returns null (and queues the record in `missing`) when the file is gone.
+async function checkAndRefreshAudioUrl(audioRecord, missing) {
   if (!audioRecord || !audioRecord.audioUrl || !audioRecord.dateGenerated) {
     return null;
   }
-  
+
   const now = new Date();
   const generatedDate = new Date(audioRecord.dateGenerated);
   const daysDifference = (now - generatedDate) / (1000 * 60 * 60 * 24);
-  
-  // If URL is less than 6 days old, it's still valid
-  if (daysDifference < 6) {
+
+  if (daysDifference < 6 && !isLegacyAwsUrl(audioRecord.audioUrl)) {
     return audioRecord.audioUrl;
   }
-  
-  // URL is expired, generate a new one
-  console.log(`Audio URL for word ${audioRecord.word} has expired (${daysDifference.toFixed(1)} days old). Refreshing...`);
-  
+
   try {
-    // Extract key from URL if it's a full URL
-    let key = audioRecord.audioUrl;
-    
-    if (key.startsWith('http')) {
-      try {
-        const url = new URL(key);
-        const pathParts = url.pathname.split('/');
-        // The key should be everything after the bucket name in the path
-        if (pathParts.length >= 3) {
-          key = pathParts.slice(1).join('/');
-        }
-      } catch (parseError) {
-        console.error('Error parsing URL:', parseError);
-        return audioRecord.audioUrl; // Return original URL if parsing fails
-      }
-    }
-    
-    // Generate a new presigned URL valid for 7 days
-    const command = new GetObjectCommand({
-      Bucket: BUCKET_NAME,
-      Key: key
-    });
-    
-    const newUrl = await getSignedUrl(s3Client, command, { expiresIn: 604800 });
-    
-    // Update the audio record with new URL and timestamp
+    const newUrl = await getPresignedUrl(audioRecord.audioUrl);
     const db = getDb();
     await db.collection('word_audio').updateOne(
       { _id: audioRecord._id },
-      { 
-        $set: { 
-          audioUrl: newUrl,
-          dateGenerated: now
-        }
-      }
+      { $set: { audioUrl: newUrl, dateGenerated: now } }
     );
-    
-    console.log(`Successfully refreshed audio URL for word ${audioRecord.word}`);
     return newUrl;
   } catch (error) {
-    console.error(`Error refreshing audio URL for word ${audioRecord.word}:`, error);
-    return audioRecord.audioUrl; // Return original URL if refresh fails
+    if (error.code !== 'AUDIO_NOT_FOUND') {
+      console.error(`Error refreshing audio URL for word ${audioRecord.word}:`, error.message);
+    }
+    missing.push(audioRecord);
+    return null;
   }
 }
 
@@ -228,6 +200,7 @@ async function initiateStudySession(req, res) {
     ];
 
     const staleChineseAudio = [];
+    const missingAudio = [];
 
     // For each card in the study session, get the content (word, sentence, etc.)
     const cardsWithContent = await Promise.all(studyQueue.map(async (card) => {
@@ -271,9 +244,9 @@ async function initiateStudySession(req, res) {
           
           if (audioRecord) {
             // Check if the audio URL needs to be refreshed
-            audioUrl = await checkAndRefreshAudioUrl(audioRecord);
+            audioUrl = await checkAndRefreshAudioUrl(audioRecord, missingAudio);
             audioId = audioRecord._id.toString();
-            if (isChinese(audioRecord.language) && audioRecord.ttsModel !== CHINESE_MODEL_ID) {
+            if (audioUrl && isChinese(audioRecord.language) && audioRecord.ttsModel !== CHINESE_MODEL_ID) {
               staleChineseAudio.push(audioRecord);
             }
           }
@@ -345,6 +318,7 @@ async function initiateStudySession(req, res) {
     });
 
     regenerateStaleChineseAudio(staleChineseAudio);
+    regenerateMissingWordAudio(missingAudio);
   } catch (error) {
     console.error('Error initiating study session:', error);
     res.status(500).json({

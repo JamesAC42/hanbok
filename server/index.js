@@ -942,6 +942,10 @@ async function startServer() {
     
     await connectToDatabase();
     ensureGrammarSeed(getDb());
+
+    // Where audio is stored (Cloudflare R2 in production). No secrets logged.
+    const storage = require('./lib/storage').describeStorage();
+    console.log(`Audio storage: ${storage.host} bucket=${storage.bucket} region=${storage.region} links=${storage.publicUrl ? 'public' : 'signed'}${storage.configured ? '' : ' (NOT CONFIGURED: set STORAGE_* in api.env)'}`);
     
     // Log any active jobs
     const activeJobs = await analysisQueue.getActive();

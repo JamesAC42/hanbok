@@ -3,6 +3,7 @@ const { CHINESE_MODEL_ID, generateSpeech, getPresignedUrl } = require('../eleven
 const { isChinese } = require('../llm/chineseScript');
 const { getJapaneseReading } = require('../llm/prompt_japanese_reading');
 const { toSpokenJapaneseParticle } = require('./sentenceAudio');
+const { isLegacyAwsUrl } = require('../lib/storage');
 
 /**
  * Get or generate audio for a word
@@ -53,7 +54,8 @@ async function getWordAudio(word, language, translation = null, forceRefresh = f
     // Check if the audio URL is older than 7 days (604800000 ms)
     const audioAge = Date.now() - existingAudio.dateGenerated.getTime();
     
-    if (audioAge < 604800000) {
+    // Links to the old AWS bucket are dead even when recent; re-check them below.
+    if (audioAge < 604800000 && !isLegacyAwsUrl(existingAudio.audioUrl)) {
       // URL is still valid, return it
       return existingAudio.audioUrl;
     } else if (existingAudio.audioUrl) {
@@ -90,9 +92,6 @@ async function getWordAudio(word, language, translation = null, forceRefresh = f
     
     // Generate new audio
     const audioResult = await generateSpeech(textToSpeak, { language });
-    
-    // Extract the S3 key from the URL
-    // The URL format is like: https://bucket.s3.region.amazonaws.com/key?params
     
     // For Japanese words, we need to create a unique document for each reading
     // For other languages, we can update the existing document
@@ -133,6 +132,29 @@ async function getWordAudio(word, language, translation = null, forceRefresh = f
   }
 }
 
+/**
+ * Make new audio for an existing word_audio record whose file is gone (e.g. it
+ * lived in the old AWS bucket) and update that record in place. Japanese
+ * records keep their reading.
+ */
+async function regenerateWordAudioRecord(record) {
+  const db = getDb();
+  const text = (record.language === 'ja' && record.hiraganaReading) || record.word;
+  const audioResult = await generateSpeech(text, { language: record.language });
+  await db.collection('word_audio').updateOne(
+    { _id: record._id },
+    {
+      $set: {
+        audioUrl: audioResult.voice1,
+        dateGenerated: new Date(),
+        ...(isChinese(record.language) ? { ttsModel: CHINESE_MODEL_ID } : {})
+      }
+    }
+  );
+  return audioResult.voice1;
+}
+
 module.exports = {
-  getWordAudio
+  getWordAudio,
+  regenerateWordAudioRecord
 }; 

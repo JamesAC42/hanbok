@@ -19,11 +19,10 @@ const getKaraoke = async (req, res) => {
         const text = String(sentence.text || sentence.analysis?.sentence?.original || '').trim();
         if (!text || text.length > MAX_TEXT) return res.status(400).json({ success: false, error: 'This sentence is too long for play-along' });
 
-        let karaoke = sentence.karaoke;
-        if (!karaoke?.key || !Array.isArray(karaoke.words)) {
+        const { generateTimedSpeech, getPresignedUrl } = require('../../elevenlabs/generateSpeech');
+        const make = () => {
             const id = sentence.sentenceId;
             if (!pending.has(id)) {
-                const { generateTimedSpeech } = require('../../elevenlabs/generateSpeech');
                 pending.set(id, (async () => {
                     const timed = await generateTimedSpeech(text, { language: sentence.originalLanguage, keyPrefix: 'audio/karaoke' });
                     const doc = { key: timed.key, voiceId: timed.voiceId, words: wordTimings(timed.alignment), at: new Date() };
@@ -31,11 +30,21 @@ const getKaraoke = async (req, res) => {
                     return doc;
                 })().finally(() => pending.delete(id)));
             }
-            karaoke = await pending.get(id);
-        }
+            return pending.get(id);
+        };
 
-        const { getPresignedUrl } = require('../../elevenlabs/generateSpeech');
-        const url = await getPresignedUrl(karaoke.key);
+        let karaoke = sentence.karaoke;
+        if (!karaoke?.key || !Array.isArray(karaoke.words)) karaoke = await make();
+
+        let url;
+        try {
+            url = await getPresignedUrl(karaoke.key);
+        } catch (error) {
+            // The stored file is gone (e.g. made while audio lived on AWS): make it again.
+            if (error.code !== 'AUDIO_NOT_FOUND') throw error;
+            karaoke = await make();
+            url = await getPresignedUrl(karaoke.key);
+        }
         res.set('Cache-Control', 'private, no-store');
         return res.json({ success: true, url, words: karaoke.words });
     } catch (error) {
