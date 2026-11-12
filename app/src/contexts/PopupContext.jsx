@@ -22,10 +22,12 @@ export function PopupProvider({ children }) {
         });
     };
 
-    const showLoginRequiredPopup = (type) => {
+    // detail: extra text for the popup, e.g. { word, meaning } for 'save-word'
+    const showLoginRequiredPopup = (type, detail = null) => {
         setPopupState({
             show: true,
             type,
+            detail,
             variant: 'login'
         });
     };
@@ -72,6 +74,7 @@ export function PopupProvider({ children }) {
                 <LoginRequiredPopup 
                     onClose={hidePopup}
                     type={popupState.type}
+                    detail={popupState.detail}
                 />
             )}
             {popupState.show && popupState.variant === 'promo' && (

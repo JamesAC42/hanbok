@@ -1,0 +1,32 @@
+.toast {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    transform: translateX(-50%);
+    z-index: 1200;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    max-width: calc(100vw - 2rem);
+    padding: .8rem 1rem .8rem 1.1rem;
+    border-radius: 14px;
+    background: var(--foreground);
+    color: var(--background);
+    font-weight: 700;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .18);
+}
+
+.link {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: .7;
+}

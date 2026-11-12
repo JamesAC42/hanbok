@@ -92,7 +92,7 @@ export default async function PhrasePage({ params }) {
                 <h1 className={styles.title}>What does <span lang="ko">{p.ko}</span> ({p.roman}) mean?</h1>
 
                 <div className={own.card}>
-                    <WordList items={[{ ko: p.ko, rom: p.roman, en: p.meaning, note: REGISTER[p.register] }]} />
+                    <WordList items={[{ ko: p.ko, rom: p.roman, en: p.meaning, note: REGISTER[p.register] }]} saveLabel="Save to flashcards" />
                 </div>
 
                 <div className={styles.prose}>

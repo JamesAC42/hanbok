@@ -4,18 +4,23 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { addWord } from '@/api/words';
+import { queuePendingSave } from '@/lib/pendingSaves';
+import { track } from '@/lib/analytics';
 import styles from '@/styles/pages/learn.module.scss';
 
 // A vocabulary list where every word has its own Save button.
 // items: [{ ko, rom, en, note, href? }]; with href the word links to its phrase page.
-const WordList = ({ items, lang = 'ko' }) => {
+// saveLabel: wording for the Save button (the phrase pages' answer card says more).
+const WordList = ({ items, lang = 'ko', saveLabel = 'Save' }) => {
     const { user } = useAuth();
     const { showLoginRequiredPopup } = usePopup();
     const [saved, setSaved] = useState({});
 
     const save = async (item) => {
         if (!user) {
-            showLoginRequiredPopup('words');
+            queuePendingSave({ ko: item.ko, en: item.en, lang });
+            track('seo_save_click', { page: window.location.pathname });
+            showLoginRequiredPopup('save-word', { word: item.ko, meaning: item.en });
             return;
         }
         setSaved((s) => ({ ...s, [item.ko]: 'saving' }));
@@ -44,7 +49,7 @@ const WordList = ({ items, lang = 'ko' }) => {
                                 onClick={() => save(item)}
                                 disabled={state === 'saving' || state === 'saved'}
                             >
-                                {state === 'saved' ? 'Saved' : state === 'limit' ? 'Deck full' : state === 'saving' ? '...' : 'Save'}
+                                {state === 'saved' ? 'Saved' : state === 'limit' ? 'Deck full' : state === 'saving' ? '...' : saveLabel}
                             </button>
                         </div>
                         <p className={styles.wordEn}>{item.en}</p>

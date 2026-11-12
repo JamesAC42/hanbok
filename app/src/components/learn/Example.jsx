@@ -5,6 +5,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { addWord } from '@/api/words';
+import { queuePendingSave } from '@/lib/pendingSaves';
+import { track } from '@/lib/analytics';
 import styles from '@/styles/pages/learn.module.scss';
 
 // A tappable example sentence. `words` is a list of chips; each chip has parts
@@ -21,11 +23,13 @@ const Example = ({ words, translation, note, lang = 'ko' }) => {
     const sentence = words.map((w) => w.parts.map((p) => p.t).join('')).join(' ');
 
     const save = async (part) => {
+        const word = part.base || part.t;
         if (!user) {
-            showLoginRequiredPopup('words');
+            queuePendingSave({ ko: word, en: part.gloss || part.g, lang });
+            track('seo_save_click', { page: window.location.pathname });
+            showLoginRequiredPopup('save-word', { word, meaning: part.gloss || part.g });
             return;
         }
-        const word = part.base || part.t;
         setSaved((s) => ({ ...s, [word]: 'saving' }));
         try {
             const res = await addWord({
