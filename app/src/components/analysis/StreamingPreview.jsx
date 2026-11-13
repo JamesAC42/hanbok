@@ -4,7 +4,8 @@ import styles from '@/styles/components/sentenceanalyzer/streamingpreview.module
 
 // While the analysis is still being written: the translation and each word
 // as soon as it is ready, so the wait shows progress instead of a spinner.
-const StreamingPreview = ({ analysis, language, original }) => {
+// `status` replaces the dots once the analysis is complete and its page is opening.
+const StreamingPreview = ({ analysis, language, original, status }) => {
     const words = analysis?.components || [];
     const translation = analysis?.sentence?.translation;
     return (
@@ -20,9 +21,11 @@ const StreamingPreview = ({ analysis, language, original }) => {
                         {w.meaning?.description && <small>{w.meaning.description}</small>}
                     </span>
                 ))}
-                <span className={styles.more} aria-label="Still analyzing">
-                    <i /><i /><i />
-                </span>
+                {status
+                    ? <span className={styles.status} role="status">{status}</span>
+                    : <span className={styles.more} aria-label="Still analyzing">
+                        <i /><i /><i />
+                    </span>}
             </div>
         </div>
     );
