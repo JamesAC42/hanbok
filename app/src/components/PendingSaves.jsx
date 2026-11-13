@@ -21,7 +21,7 @@ export default function PendingSaves() {
             const done = [];
             for (const w of pending) {
                 try {
-                    const res = await addWord({ originalWord: w.ko, translatedWord: w.en, originalLanguage: w.lang, translationLanguage: 'en' });
+                    const res = await addWord({ originalWord: w.ko, translatedWord: w.en, originalLanguage: w.lang, translationLanguage: w.to || 'en' });
                     if (!res?.reachedLimit) done.push(w.ko);
                 } catch { /* skip that one */ }
             }

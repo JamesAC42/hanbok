@@ -24,8 +24,10 @@ const LoginRequiredPopup = ({ onClose, type = 'words', detail = null }) => {
             // and lands in their flashcards once they're signed in.
             case 'save-word':
                 return {
-                    title: detail?.word ? `Keep ${detail.word} in your flashcards` : 'Keep this word in your flashcards',
-                    message: 'Sign up free and it is saved the moment your account exists. Hanbok brings it back in short reviews until it sticks.',
+                    title: detail?.word ? `Keep ${detail.word} in your flashcards` : 'Keep these words in your flashcards',
+                    message: detail?.word
+                        ? 'Sign up free and it is saved the moment your account exists. Hanbok brings it back in short reviews until it sticks.'
+                        : 'Sign up free and they are saved the moment your account exists. Hanbok brings them back in short reviews until they stick.',
                     subMessage: 'No card needed. Takes one tap with Google.'
                 };
             case 'related-words':

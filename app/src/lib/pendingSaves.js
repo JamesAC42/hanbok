@@ -13,10 +13,11 @@ const read = () => {
     }
 };
 
-export const queuePendingSave = ({ ko, en, lang = 'ko' }) => {
+// ko: the word (any studied language), en: its meaning, lang/to: language codes
+export const queuePendingSave = ({ ko, en, lang = 'ko', to = 'en' }) => {
     if (!ko) return;
     try {
-        const list = [{ ko, en: en || '', lang }, ...read().filter((w) => w.ko !== ko)].slice(0, MAX);
+        const list = [{ ko, en: en || '', lang, to }, ...read().filter((w) => w.ko !== ko)].slice(0, MAX);
         localStorage.setItem(KEY, JSON.stringify(list));
     } catch {}
 };

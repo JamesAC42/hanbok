@@ -6,6 +6,8 @@ import useCardsToday from '@/hooks/useCardsToday';
 import Mascot from '@/components/Mascot';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 import { loginHref } from '@/lib/anonSentences';
+import { queuePendingSave } from '@/lib/pendingSaves';
+import { track } from '@/lib/analytics';
 import Tiger from '@/components/Tiger';
 import { Fa6SolidParagraph } from '@/components/icons/Paragraph';
 import { markStage } from '@/lib/todayLoop';
@@ -39,18 +41,37 @@ const KeepBox = ({ user, words, unsavedWords, savedLoading, addingAll, saveAll, 
     };
 
     if (!user) {
+        // Signing up from here keeps the ticked words: they're queued now and
+        // saved once the account exists (components/PendingSaves).
+        const queue = (method) => {
+            chosen.forEach((w) => queuePendingSave({ ko: w.originalWord, en: w.translatedWord, lang: w.originalLanguage || 'ko', to: w.translationLanguage || 'en' }));
+            track('anon_keep_click', { method, count: chosen.length });
+        };
         return (
             <section className={styles.keep}>
-                <h3 className={styles.keepTitle}>Save this breakdown</h3>
+                <h3 className={styles.keepTitle}>
+                    {words.length ? `Keep ${plural(words.length, 'new word')}` : 'Save this breakdown'}
+                </h3>
                 <p className={styles.keepText}>
-                    Make a free account to keep this sentence in your Library and turn its
-                    {words.length ? ` ${plural(words.length, 'word')}` : ' words'} into flashcards.
-                    Free accounts get 5 breakdowns a week. No card needed.
+                    Sign up free and the words you tick become flashcards, and this sentence stays in your Library. No card needed.
                 </p>
+                {words.length > 0 && (
+                    <ul className={styles.checklist}>
+                        {words.map(word => (
+                            <li key={word.originalWord}>
+                                <label className={styles.check}>
+                                    <input type="checkbox" checked={!unchecked.has(word.originalWord)} onChange={() => toggle(word)} />
+                                    <span className={styles.checkWord}>{word.originalWord}</span>
+                                    <span className={styles.checkGloss}>{word.translatedWord}</span>
+                                </label>
+                            </li>
+                        ))}
+                    </ul>
+                )}
                 <div className={styles.keepGoogle}>
-                    <GoogleSignInButton text="signup_with" />
+                    <GoogleSignInButton text="signup_with" onSignIn={() => queue('google')} />
                 </div>
-                <Link href={loginHref(true)} className={styles.keepEmail}>Sign up with email</Link>
+                <Link href={loginHref(true)} className={styles.keepEmail} onClick={() => queue('email')}>Sign up with email</Link>
             </section>
         );
     }
