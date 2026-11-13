@@ -21,8 +21,8 @@ export default function SignUpCta({ title, source }) {
                     sentences from dramas, songs and texts, and keeps your streak going. No card needed.
                 </p>
                 <div className={styles.signUpActions}>
-                    <div className={styles.signUpGoogle} onClickCapture={() => track('seo_signup_click', { source, method: 'google' })}>
-                        <GoogleSignInButton text="signup_with" />
+                    <div className={styles.signUpGoogle}>
+                        <GoogleSignInButton text="signup_with" onSignIn={() => track('seo_signup_click', { source, method: 'google' })} />
                     </div>
                     <Link href={loginHref(true)} className={styles.signUpEmail} onClick={() => track('seo_signup_click', { source, method: 'email' })}>
                         Sign up with email

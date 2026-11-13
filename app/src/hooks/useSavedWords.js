@@ -3,6 +3,8 @@ import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePopup } from '@/contexts/PopupContext';
 import { addWord, removeWord, checkSavedWords } from '@/api/words';
+import { queuePendingSave } from '@/lib/pendingSaves';
+import { track } from '@/lib/analytics';
 
 // Unique, saveable words from an analysis, in sentence order.
 export const getAnalysisWords = (analysis, originalLanguage, translationLanguage) => {
@@ -82,9 +84,18 @@ const useSavedWords = ({ analysis, originalLanguage, translationLanguage, senten
         return result;
     }, [originalLanguage, translationLanguage, sentenceId]);
 
+    // Signed out: remember the words and ask for a free account; they're saved
+    // as soon as it exists (components/PendingSaves).
+    const queueForSignup = useCallback((list, where) => {
+        list.forEach((w) => queuePendingSave({ ko: w.originalWord, en: w.translatedWord, lang: originalLanguage, to: translationLanguage }));
+        track('anon_save_click', { where, count: list.length });
+        const first = list[0];
+        showLoginRequiredPopup('save-word', list.length === 1 && first ? { word: first.originalWord, meaning: first.translatedWord } : null);
+    }, [originalLanguage, translationLanguage, showLoginRequiredPopup]);
+
     const toggleWord = useCallback(async (word) => {
         if (!user) {
-            showLoginRequiredPopup('words');
+            queueForSignup([word], 'word');
             return;
         }
         try {
@@ -106,7 +117,7 @@ const useSavedWords = ({ analysis, originalLanguage, translationLanguage, senten
         } catch (error) {
             console.error('Error toggling word in library:', error);
         }
-    }, [user, savedWords, originalLanguage, saveWord, showLoginRequiredPopup, showLimitReachedPopup]);
+    }, [user, savedWords, originalLanguage, saveWord, queueForSignup, showLimitReachedPopup]);
 
     const unsavedWords = useMemo(
         () => words.filter(word => !savedWords.has(word.originalWord)),
@@ -117,7 +128,7 @@ const useSavedWords = ({ analysis, originalLanguage, translationLanguage, senten
     const saveAll = useCallback(async (subset) => {
         const toSave = Array.isArray(subset) ? subset : unsavedWords;
         if (!user) {
-            showLoginRequiredPopup('words');
+            queueForSignup(toSave, 'all');
             return;
         }
         setAddingAll(true);
@@ -134,7 +145,7 @@ const useSavedWords = ({ analysis, originalLanguage, translationLanguage, senten
         } finally {
             setAddingAll(false);
         }
-    }, [user, unsavedWords, saveWord, showLoginRequiredPopup, showLimitReachedPopup]);
+    }, [user, unsavedWords, saveWord, queueForSignup, showLimitReachedPopup]);
 
     return {
         words,
