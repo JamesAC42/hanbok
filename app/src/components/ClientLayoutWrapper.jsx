@@ -5,6 +5,7 @@ import { captureAttribution } from '@/lib/analytics';
 import Interstitials from '@/components/interstitials/Interstitials';
 import TrialBanner from '@/components/TrialBanner';
 import GoogleOneTap from '@/components/GoogleOneTap';
+import PendingSaves from '@/components/PendingSaves';
 
 function ClientLayoutWrapper({ children }) {
   useEffect(() => {
@@ -20,6 +21,8 @@ function ClientLayoutWrapper({ children }) {
       <Interstitials />
       {/* Google one-tap sign-up for signed-out visitors */}
       <GoogleOneTap />
+      {/* Words saved before signing up land in the new account */}
+      <PendingSaves />
     </>
   );
 }

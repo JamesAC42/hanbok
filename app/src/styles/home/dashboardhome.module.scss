@@ -1078,6 +1078,12 @@ a.statTile {
     p { margin: .35rem 0 0; }
 }
 
+.firstBreakdownHead p.firstBreakdownTrial {
+    margin-top: .5rem;
+    font-weight: 700;
+    color: var(--bp-read);
+}
+
 .firstBreakdownOptions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

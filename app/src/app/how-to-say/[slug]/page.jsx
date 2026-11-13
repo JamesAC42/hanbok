@@ -79,7 +79,7 @@ export default async function SayingPage({ params }) {
                 <h1 className={styles.title}>How to say &ldquo;{s.english}&rdquo; in Korean</h1>
 
                 <div className={own.card}>
-                    <WordList items={[{ ko: s.answer.ko, rom: s.answer.roman, en: s.answer.en }]} />
+                    <WordList items={[{ ko: s.answer.ko, rom: s.answer.roman, en: s.answer.en }]} saveLabel="Save to flashcards" />
                 </div>
 
                 <div className={styles.prose}>

@@ -7,12 +7,12 @@ import { loginHref } from '@/lib/anonSentences';
 import styles from '@/styles/components/limitreachedpopup.module.scss';
 import Mascot from '@/components/Mascot';
 
-const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
+const LoginRequiredPopup = ({ onClose, type = 'words', detail = null }) => {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
     const { t } = useLanguage();
     // The sign-up wall offers Google right here so the visitor stays on their sentence.
-    const inlineSignup = type === 'sentence-analyses';
+    const inlineSignup = type === 'sentence-analyses' || type === 'save-word';
 
     useEffect(() => {
         if (isAuthenticated) onClose();
@@ -20,6 +20,14 @@ const LoginRequiredPopup = ({ onClose, type = 'words' }) => {
 
     const getMessage = () => {
         switch (type) {
+            // Save tapped on a search page; the word is queued (lib/pendingSaves)
+            // and lands in their flashcards once they're signed in.
+            case 'save-word':
+                return {
+                    title: detail?.word ? `Keep ${detail.word} in your flashcards` : 'Keep this word in your flashcards',
+                    message: 'Sign up free and it is saved the moment your account exists. Hanbok brings it back in short reviews until it sticks.',
+                    subMessage: 'No card needed. Takes one tap with Google.'
+                };
             case 'related-words':
                 return {
                     title: t('loginRequired.title'),

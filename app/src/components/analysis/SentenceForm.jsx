@@ -43,7 +43,7 @@ const SentenceForm = ({
     setTranslationMode
 }) => {
     const { t, language, nativeLanguage, supportedAnalysisLanguages } = useLanguage();
-    const { isAuthenticated, user, decrementRemainingImageExtracts, decrementRemainingSentenceAnalyses, updateWeeklySentenceQuota } = useAuth();
+    const { isAuthenticated, user, fetchSession, decrementRemainingImageExtracts, decrementRemainingSentenceAnalyses, updateWeeklySentenceQuota } = useAuth();
     const { showLimitReachedPopup, showLoginRequiredPopup } = usePopup();
     const [text, setText] = useState('');
     const [textContext, setTextContext] = useState('');
@@ -435,8 +435,13 @@ const SentenceForm = ({
                 // Show transition animation
                 setTransition(true);
                 
+                // The first breakdown started the Plus trial: reload the session so
+                // the trial banner and Plus features show up right away.
+                if (data.plusTrialStarted) {
+                    track('trial_start', { source: 'firstBreakdown' });
+                    fetchSession?.();
+                } else if (isAuthenticated && user?.tier === 0 && !data.usedPurchasedAnalysis) {
                 // For free users, always update the weekly sentence quota information after each analysis
-                if (isAuthenticated && user?.tier === 0 && !data.usedPurchasedAnalysis) {
                     // If the server sent weekly quota info, use it
                     if (data.weeklyQuota) {
                         updateWeeklySentenceQuota(

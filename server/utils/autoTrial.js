@@ -8,9 +8,15 @@ const SWEEP_INTERVAL_MS = 10 * 60 * 1000;
 
 const isAutoTrialEnabled = (env = process.env) => env.AUTO_TRIAL_ENABLED === 'true' && plusTrialDays() > 0;
 
+// TRIAL_STARTS_AT_FIRST_BREAKDOWN=true holds the trial back until the account's
+// first sentence breakdown, so the 7 days run while someone is actually using
+// Hanbok. Started at sign-up, a third of trials ran out with no breakdown at all.
+const isTrialAtFirstBreakdown = (env = process.env) =>
+    isAutoTrialEnabled(env) && env.TRIAL_STARTS_AT_FIRST_BREAKDOWN === 'true';
+
 // Fields to merge into a brand-new user document.
 const autoTrialFields = (now = new Date()) => {
-    if (!isAutoTrialEnabled()) return {};
+    if (!isAutoTrialEnabled() || isTrialAtFirstBreakdown()) return {};
     return {
         tier: 2,
         autoTrial: { startedAt: now, endsAt: new Date(now.getTime() + plusTrialDays() * DAY) },
@@ -49,6 +55,33 @@ const startReturningTrialIfEligible = async (db, user, now = new Date()) => {
         { $set: { tier: 2, autoTrial } }
     );
     return result.modifiedCount === 1 ? { ...user, tier: 2, autoTrial } : user;
+};
+
+// Never had a trial or a subscription (any account age).
+const neverTrialedFilter = () => ({
+    tier: { $not: { $gt: 0 } },
+    autoTrial: { $exists: false },
+    'subscription.stripeSubscriptionId': { $exists: false },
+    hasUsedFreeTrial: { $ne: true },
+});
+
+// With TRIAL_STARTS_AT_FIRST_BREAKDOWN on, starts the trial after this user's
+// first finished breakdown. Returns the trial, or null when none was started.
+const startTrialAtFirstBreakdown = async (db, user, now = new Date()) => {
+    if (!user?.userId || !trialWaitingDays(user)) return null;
+    const autoTrial = { startedAt: now, endsAt: new Date(now.getTime() + plusTrialDays() * DAY), source: 'firstBreakdown' };
+    const result = await db.collection('users').updateOne(
+        { userId: user.userId, ...neverTrialedFilter() },
+        { $set: { tier: 2, autoTrial } }
+    );
+    return result.modifiedCount === 1 ? autoTrial : null;
+};
+
+// Days of Plus waiting for this user's first breakdown, for the client; 0 when none.
+const trialWaitingDays = (user) => {
+    if (!isTrialAtFirstBreakdown() || !user) return 0;
+    if (user.tier > 0 || user.autoTrial || user.subscription?.stripeSubscriptionId || user.hasUsedFreeTrial === true) return 0;
+    return plusTrialDays();
 };
 
 // A trial that has run out, on an account that never subscribed.
@@ -126,5 +159,6 @@ const startAutoTrialExpiry = (getDb) => {
 module.exports = {
     isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, trialEndedAt, carryOverTrialEnd, startAutoTrialExpiry,
     isReturningTrialEnabled, isReturningTrialEligible, returningTrialFilter, startReturningTrialIfEligible,
+    isTrialAtFirstBreakdown, startTrialAtFirstBreakdown, trialWaitingDays,
     isPaying, ON_TRIAL_EXPR, PAYING_EXPR, PAYING_PROJECTION,
 };

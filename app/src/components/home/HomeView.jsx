@@ -101,7 +101,7 @@ const FIRST_SENTENCES = {
     ],
 };
 
-const FirstBreakdownCard = ({ onOwnSentence }) => {
+const FirstBreakdownCard = ({ onOwnSentence, trialDays }) => {
     const router = useRouter();
     const { language } = useLanguage();
     const examples = FIRST_SENTENCES[language] || FIRST_SENTENCES.ko;
@@ -122,6 +122,9 @@ const FirstBreakdownCard = ({ onOwnSentence }) => {
                 <div>
                     <h2 id="first-breakdown-heading" className={styles.cardTitle}>Start with your first breakdown</h2>
                     <p className={styles.muted}>Tap a sentence and see every word and grammar point explained. It takes five seconds.</p>
+                    {trialDays > 0 && (
+                        <p className={styles.firstBreakdownTrial}>Your first breakdown also unlocks {trialDays} days of Plus, free. No card needed.</p>
+                    )}
                 </div>
             </div>
             <div className={styles.firstBreakdownOptions}>
@@ -640,7 +643,7 @@ const HomeView = () => {
                 </div>
             </header>
 
-            {Array.isArray(recent) && recent.length === 0 && <FirstBreakdownCard onOwnSentence={focusInput} />}
+            {Array.isArray(recent) && recent.length === 0 && <FirstBreakdownCard onOwnSentence={focusInput} trialDays={user?.plusTrialWaitingDays || 0} />}
 
             {progress || !loading ? (
                 <DayPath path={path} streak={streak} onFocusInput={focusInput} />
