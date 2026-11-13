@@ -5,18 +5,11 @@ import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Dashboard from '@/components/Dashboard';
 import Tiger from '@/components/Tiger';
-import Stars, { STAGE_NAMES } from '@/components/grammar/Stars';
+import Stars, { STAGE_NAMES, LEVEL_STEPS } from '@/components/grammar/Stars';
 import getFontClass from '@/lib/fontClass';
 import { useGrammarGuides, findGuide } from '@/lib/grammarGuides';
 import styles from '@/styles/components/grammar.module.scss';
 import { sentenceHref } from '@/lib/sentenceLink';
-
-const LEVEL_STEPS = [
-    { name: 'Learned', how: 'Do the lesson or get one question right' },
-    { name: 'Practiced', how: 'Get 3 questions right' },
-    { name: 'Strong', how: 'Remember it a week later' },
-    { name: 'Mastered', how: 'Remember it three weeks later' },
-];
 
 const formatDue = (date) => {
     if (!date) return null;
