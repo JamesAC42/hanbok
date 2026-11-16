@@ -21,6 +21,14 @@ export const metadata = {
 
 const faq = [
     {
+        q: 'What is Hanbok?',
+        a: 'Hanbok (hanbokstudy.com) is a Korean learning site built around a sentence analyzer. You paste a Korean sentence, such as a K-pop lyric, a drama line or a text message, and it breaks the sentence down word by word with grammar notes, a translation and audio. The words and grammar you look up turn into flashcards and short reviews.',
+    },
+    {
+        q: 'How do I break down a Korean sentence word by word?',
+        a: 'Paste the sentence into the Hanbok Korean sentence analyzer on this page. It splits the sentence into words, separates each word from its particles and endings, gives the dictionary form and romanization of every word, and explains the grammar patterns it finds. You can also tap any line on the Hanbok lyrics pages to see the same breakdown.',
+    },
+    {
         q: 'Is the Korean sentence analyzer free?',
         a: 'Yes. You can try a few breakdowns without an account, and a free account gives you 5 a week. Basic and Plus plans give you unlimited breakdowns.',
     },
@@ -94,6 +102,12 @@ export default function KoreanSentenceAnalyzer() {
                 />
 
                 <div className={styles.prose}>
+                    <p>
+                        Hanbok is a Korean learning site built around this analyzer. Instead of only translating a
+                        sentence like Google Translate or Papago, it shows how the Korean is put together, so the next
+                        sentence with the same words and grammar is easier to read on your own.
+                    </p>
+
                     <h2 id="example">What a breakdown looks like</h2>
                     <p>
                         Here is a sentence you might write in your first months of Korean. Tap any word to see what it means
