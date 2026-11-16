@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { track } from '@/lib/analytics';
-import { PRICE_IDS, PLAN_BY_PRICE_ID } from '@/lib/checkout';
+import { PRICE_IDS, PLAN_BY_PRICE_ID, rememberCheckout } from '@/lib/checkout';
+import { loginHref } from '@/lib/anonSentences';
 import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
@@ -111,7 +112,9 @@ const Pricing = () => {
         const plan = PLAN_BY_PRICE_ID[priceId] || 'unknown';
         track('checkout_start', { plan, loggedIn: !!user, trial: !!trialOffer && plan.startsWith('PLUS_SUBSCRIPTION'), carryOver: !!carryOverEnd });
         if (!user) {
-            router.push('/login');
+            // Sign up first, then checkout continues on its own (components/ResumeCheckout).
+            rememberCheckout(priceId);
+            router.push(loginHref(true));
             return;
         }
 
