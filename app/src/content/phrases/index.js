@@ -6,6 +6,7 @@ export const CATEGORIES = [
     { key: 'reaction', title: 'Reactions', dek: 'What people blurt out when something happens.' },
     { key: 'people', title: 'Calling people', dek: 'Oppa, unnie, sunbae: who calls whom what.' },
     { key: 'love', title: 'Love and friendship', dek: 'From a crush to saying I love you.' },
+    { key: 'drama', title: 'K-drama words', dek: 'Chaebol bosses, palace titles, ghosts and the words every K-drama fan hears.' },
     { key: 'everyday', title: 'Everyday phrases', dek: 'Hello, thanks, sorry and the other words you hear every day.' },
     { key: 'slang', title: 'Slang', dek: 'Casual words friends use with each other.' },
     { key: 'internet', title: 'Internet and texting', dek: 'Words born online and in group chats, and what ㅋㅋㅋ and ㅇㅇ stand for.' },
