@@ -7,7 +7,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { track } from '@/lib/analytics';
 import { PRICE_IDS, PLAN_BY_PRICE_ID, rememberCheckout } from '@/lib/checkout';
 import { loginHref } from '@/lib/anonSentences';
-import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
+import { PLAN_PRICES, monthlyOfferPrice, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
 import ContentPage from '@/components/ContentPage';
 import Dashboard from '@/components/Dashboard';
 import Mascot from '@/components/Mascot';
@@ -76,6 +76,8 @@ const Pricing = () => {
     const [studentOffer, setStudentOffer] = useState(null);
     const [trialOffer, setTrialOffer] = useState(null);
     const [dealOffer, setDealOffer] = useState(null);
+    // Cheap first month of Plus right after the no-card trial
+    const [monthlyOffer, setMonthlyOffer] = useState(null);
     // On the no-card trial: when billing would start if they pick a plan now.
     const [carryOverEnd, setCarryOverEnd] = useState(null);
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
@@ -100,6 +102,10 @@ const Pricing = () => {
                 setTrialOffer(data?.trial?.eligible && data.trial.days > 0 ? data.trial : null);
                 setDealOffer(data?.deal?.eligible ? data.deal : null);
                 setCarryOverEnd(data?.trialCarryOver?.endsAt || null);
+                const monthly = data?.monthly?.eligible ? data.monthly : null;
+                setMonthlyOffer(monthly);
+                // Lead with the small first step when there is one.
+                if (monthly) setIsYearly(false);
             })
             .catch(() => { setStudentOffer(null); setTrialOffer(null); setDealOffer(null); setCarryOverEnd(null); });
     }, [authLoading, user]);
@@ -176,6 +182,24 @@ const Pricing = () => {
 
     const renderPlanPrice = (plan) => {
         const amount = isYearly ? PRICING[plan].yearly : PRICING[plan].monthly;
+        const firstMonth = !isYearly && plan === 'plus' ? monthlyOfferPrice(monthlyOffer) : null;
+        if (firstMonth !== null) {
+            return (
+                <>
+                    <p className={pricingStyles.dealWas}>
+                        <s>{formatPrice(amount)}</s> <span>your trial-end price</span>
+                    </p>
+                    <div className={pricingStyles.planPrice}>
+                        <span className={pricingStyles.currency}>{t('pricing.pricing.currency')}</span>
+                        <span className={pricingStyles.amount}>{formatPrice(firstMonth).slice(1)}</span>
+                        <span className={pricingStyles.period}>first month</span>
+                    </div>
+                    <p className={pricingStyles.perMonth}>
+                        {`then ${formatPrice(amount)} a month, cancel anytime. ${dealEndsLabel(monthlyOffer) || ''}`.trim()}
+                    </p>
+                </>
+            );
+        }
         const info = getPriceInfo(plan);
         const dealPrice = isYearly ? dealYearlyPrice(plan, dealOffer) : null;
         if (dealPrice !== null) {

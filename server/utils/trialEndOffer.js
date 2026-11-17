@@ -17,26 +17,41 @@ const trialEndOfferHours = (env = process.env) => {
     return Math.min(hours, 24 * 14);
 };
 
-// When this user's offer runs out, or null if they don't have one right now.
+// TRIAL_END_MONTHLY_COUPON_ID: a coupon for the monthly Plus plan in the same
+// window, e.g. $7 off once so the first month costs $3. A small first step for
+// people who won't commit to a year. Off until it's set.
+const trialEndMonthlyCouponId = (env = process.env) => env.TRIAL_END_MONTHLY_COUPON_ID || null;
+
+// When this user's trial-end window closes, or null if they're not in it.
 // Students keep their own coupon since Stripe applies only one.
-const offerEndsAt = (user, now = Date.now()) => {
-    if (!trialEndCouponId()) return null;
+const windowEndsAt = (user, now = Date.now()) => {
     const ended = trialEndedAt(user);
     if (!ended || isStudentEligible(user)) return null;
     const endsAt = new Date(ended).getTime() + trialEndOfferHours() * HOUR;
     return endsAt > now ? new Date(endsAt) : null;
 };
 
-// The offer as a deal (same shape as the yearly deal), or null. The deal ends at
-// the personal deadline, or earlier if the coupon's own "Redeem by" comes first.
-const getTrialEndOffer = async (user, retrieveCoupon, now = Date.now()) => {
-    const personalEnd = offerEndsAt(user, now);
+// When this user's yearly offer runs out, or null if they don't have one right now.
+const offerEndsAt = (user, now = Date.now()) => (trialEndCouponId() ? windowEndsAt(user, now) : null);
+
+const dealUntil = async (couponId, personalEnd, retrieveCoupon, now, kind) => {
     if (!personalEnd) return null;
-    const deal = await getCouponDeal(trialEndCouponId(), retrieveCoupon, now);
+    const deal = await getCouponDeal(couponId, retrieveCoupon, now);
     if (!deal) return null;
     const couponEnd = deal.endsAt ? new Date(deal.endsAt) : null;
     const endsAt = couponEnd && couponEnd < personalEnd ? couponEnd : personalEnd;
-    return { ...deal, endsAt: endsAt.toISOString(), kind: 'trialEnd' };
+    return { ...deal, endsAt: endsAt.toISOString(), kind };
 };
 
-module.exports = { trialEndCouponId, trialEndOfferHours, offerEndsAt, getTrialEndOffer };
+// The offer as a deal (same shape as the yearly deal), or null. The deal ends at
+// the personal deadline, or earlier if the coupon's own "Redeem by" comes first.
+const getTrialEndOffer = (user, retrieveCoupon, now = Date.now()) =>
+    dealUntil(trialEndCouponId(), offerEndsAt(user, now), retrieveCoupon, now, 'trialEnd');
+
+// The monthly first-step offer (same shape, kind 'trialEndMonthly'), or null.
+const getTrialEndMonthlyOffer = (user, retrieveCoupon, now = Date.now()) =>
+    trialEndMonthlyCouponId()
+        ? dealUntil(trialEndMonthlyCouponId(), windowEndsAt(user, now), retrieveCoupon, now, 'trialEndMonthly')
+        : Promise.resolve(null);
+
+module.exports = { trialEndCouponId, trialEndMonthlyCouponId, trialEndOfferHours, offerEndsAt, getTrialEndOffer, getTrialEndMonthlyOffer };

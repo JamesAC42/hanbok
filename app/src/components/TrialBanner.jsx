@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { track } from '@/lib/analytics';
-import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel } from '@/lib/plans';
+import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, monthlyOfferPrice } from '@/lib/plans';
 import styles from '@/styles/components/trialbanner.module.scss';
 
 const HOUR = 60 * 60 * 1000;
@@ -64,7 +64,10 @@ const TrialBanner = () => {
         fetch('/api/pricing/offer', { credentials: 'include' })
             .then((res) => (res.ok ? res.json() : null))
             .then((data) => {
-                if (!cancelled && data?.deal?.eligible && data.deal.kind === 'trialEnd') setOffer(data.deal);
+                if (cancelled) return;
+                const yearly = data?.deal?.eligible && data.deal.kind === 'trialEnd' ? data.deal : null;
+                const monthly = data?.monthly?.eligible ? data.monthly : null;
+                if (yearly || monthly) setOffer({ yearly, monthly, endsAt: (yearly || monthly).endsAt });
             })
             .catch(() => {});
         return () => { cancelled = true; };
@@ -89,7 +92,9 @@ const TrialBanner = () => {
     const message = onTrial
         ? <>{user.plusTrialSource === 'returning' ? <>Welcome back! <strong>A free week of Hanbok Plus</strong> is on us: </> : <>You're on <strong>Hanbok Plus free</strong>: </>}{timeLeft(user.plusTrialEndsAt, now)}. Keep it from {perMonth(PLAN_PRICES.plus.yearly)} a month{
             new Date(user.plusTrialEndsAt).getTime() - now >= CARRY_OVER_MS ? ', and pay nothing until the trial ends' : ''}.</>
-        : <>Your trial-end offer: <strong>{dealAmountLabel(offer)} yearly plans</strong>, Plus for {formatPrice(dealYearlyPrice('plus', offer))}. Offer {timeLeft(offer.endsAt, now)}.</>;
+        : offer.monthly
+            ? <>Your trial-end offer: <strong>Plus for {formatPrice(monthlyOfferPrice(offer.monthly))} your first month</strong>{offer.yearly ? <>, or {formatPrice(dealYearlyPrice('plus', offer.yearly))} for a year</> : null}. Offer {timeLeft(offer.endsAt, now)}.</>
+            : <>Your trial-end offer: <strong>{dealAmountLabel(offer.yearly)} yearly plans</strong>, Plus for {formatPrice(dealYearlyPrice('plus', offer.yearly))}. Offer {timeLeft(offer.endsAt, now)}.</>;
 
     return (
         <div className={`${styles.banner} ${onTrial ? styles.trial : styles.offer}`} role="status">

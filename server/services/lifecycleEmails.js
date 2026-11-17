@@ -185,7 +185,8 @@ const COPY = {
         button: { label: 'Keep Plus', path: '/pricing' },
         footer: "You're getting this because you started a free Plus trial on Hanbok.",
     }),
-    trialEnded: (name, { sentences = 0, words = 0, offer = null } = {}) => ({
+    // monthly = the cheap-first-month offer (TRIAL_END_MONTHLY_COUPON_ID) or null
+    trialEnded: (name, { sentences = 0, words = 0, offer = null, monthly = null } = {}) => ({
         subject: offer ? `Your Plus trial ended. Here's ${offerLabel(offer)} until ${offerDeadline(offer)}` : 'Your Plus trial has ended',
         intro: `Hi ${name},`,
         paragraphs: [
@@ -194,6 +195,7 @@ const COPY = {
             offer
                 ? `If you want Plus back, here is a thank-you for trying it: ${offerLabel(offer)} a yearly plan. Plus comes to ${offerPrice(99, offer)} ${offer.duration === 'forever' ? 'a year' : 'for your first year'} instead of $99, and Basic to ${offerPrice(40, offer)}. It is applied automatically at checkout and ends ${offerDeadline(offer)}.`
                 : 'If you want Plus back, it is $99 a year (about $8.25 a month) or $10 month to month. Basic is $40 a year for unlimited breakdowns.',
+            ...(monthly ? [`Not ready for a year? Your first month of Plus is ${offerPrice(10, monthly)}, then $10 a month, cancel anytime. That price is yours until ${offerDeadline(monthly)}.`] : []),
             'And if something kept you from upgrading, just reply and tell me. I read every reply.',
         ],
         button: { label: offer ? 'Get Plus at the trial price' : 'See plans', path: '/pricing' },
