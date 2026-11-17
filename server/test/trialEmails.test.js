@@ -55,3 +55,12 @@ test('emails show real usage and the offer prices', () => {
     const plain = renderEmail('trialEnded', { name: 'Mina', userId: 7, secret: 's', data: {} });
     assert.equal(plain.subject, 'Your Plus trial has ended');
 });
+
+test('trial-ended email mentions the cheap first month when there is one', () => {
+    const { renderEmail } = require('../services/lifecycleEmails');
+    const monthly = { amountOff: 7, percentOff: null, endsAt: '2026-11-20T12:00:00Z' };
+    const withOffer = renderEmail('trialEnded', { name: 'Alex', userId: 1, secret: 's', data: { sentences: 3, words: 2, monthly } });
+    assert.match(withOffer.html, /first month of Plus is \$3, then \$10 a month/);
+    const without = renderEmail('trialEnded', { name: 'Alex', userId: 1, secret: 's', data: { sentences: 3, words: 2 } });
+    assert.doesNotMatch(without.html, /first month of Plus/);
+});

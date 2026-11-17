@@ -89,7 +89,8 @@ const pickInterstitial = async (user) => {
     const deal = offer?.deal?.eligible ? offer.deal : null;
 
     if (wantsTrialEnded(user)) {
-        return { id: trialEndedId(user), kind: 'plans', deal, trial: null, trialEnded: true };
+        const monthly = offer?.monthly?.eligible ? offer.monthly : null;
+        return { id: trialEndedId(user), kind: 'plans', deal, monthly, trial: null, trialEnded: true };
     }
     if (deal && !lastShown(dealId(deal))) {
         return { id: dealId(deal), kind: 'plans', deal, trial: null };
@@ -164,6 +165,7 @@ const Interstitials = () => {
     return (
         <PlansInterstitial
             deal={current.deal}
+            monthly={current.monthly}
             trial={current.trial}
             trialEnded={!!current.trialEnded}
             signedIn={!!user}

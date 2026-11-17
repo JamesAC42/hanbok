@@ -2,7 +2,7 @@ const { getDb } = require('../database');
 const { isSchoolEmail, isStudentEligible, studentCouponId, studentDiscountPercent } = require('../utils/studentDiscount');
 const { plusTrialDays, isTrialEligible } = require('../utils/plusTrial');
 const { getYearlyDeal, isDealEligible } = require('../utils/yearlyDeal');
-const { getTrialEndOffer } = require('../utils/trialEndOffer');
+const { getTrialEndOffer, getTrialEndMonthlyOffer } = require('../utils/trialEndOffer');
 const { carryOverTrialEnd } = require('../utils/autoTrial');
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -16,7 +16,9 @@ const getPricingOffer = async (req, res) => {
         trial: { days: plusTrialDays(), eligible: isTrialEligible(null) },
         // On the no-card trial with 2+ days left: a plan bought now starts billing when the trial ends
         trialCarryOver: null,
-        deal: null
+        deal: null,
+        // Cheap first month of Plus right after the no-card trial (TRIAL_END_MONTHLY_COUPON_ID)
+        monthly: null
     };
     const deal = await getYearlyDeal(retrieveCoupon);
     if (deal) {
@@ -39,6 +41,11 @@ const getPricingOffer = async (req, res) => {
             if (trialEnd) {
                 const { couponId, ...shown } = trialEnd;
                 offer.deal = { ...shown, eligible: true };
+            }
+            const monthly = isDealEligible(user) ? await getTrialEndMonthlyOffer(user, retrieveCoupon) : null;
+            if (monthly) {
+                const { couponId, ...shown } = monthly;
+                offer.monthly = { ...shown, eligible: true };
             }
             if (enabled) {
                 offer.student.schoolEmail = isSchoolEmail(user?.email);

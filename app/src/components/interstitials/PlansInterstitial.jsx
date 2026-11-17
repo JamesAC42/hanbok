@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
 import Mascot from '@/components/Mascot';
-import { PLAN_PRICES, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
+import { PLAN_PRICES, monthlyOfferPrice, dealYearlyPrice, formatPrice, dealAmountLabel, dealDurationLabel, dealEndsLabel } from '@/lib/plans';
+import { startCheckout, PRICE_IDS } from '@/lib/checkout';
 import InterstitialFrame from './InterstitialFrame';
 import styles from '@/styles/components/interstitials.module.scss';
 
@@ -100,7 +101,8 @@ const perMonth = (yearly) => formatPrice(Math.round(yearly / 12 * 100) / 100);
 
 // Full-screen plans pitch. With a deal (YEARLY_DEAL_COUPON_ID) it leads with
 // the discount; every number comes from the coupon or the real list prices.
-const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction }) => {
+const PlansInterstitial = ({ deal, monthly = null, trial, trialEnded = false, onClose, onAction }) => {
+    const firstMonth = trialEnded ? monthlyOfferPrice(monthly) : null;
     const [asking, setAsking] = useState(false);
     const ends = dealEndsLabel(deal);
     const plusDeal = dealYearlyPrice('plus', deal);
@@ -164,6 +166,19 @@ const PlansInterstitial = ({ deal, trial, trialEnded = false, onClose, onAction 
                 <Link href="/pricing" className={styles.primary} onClick={() => { onAction('pricing'); onClose(); }}>
                     {cta}
                 </Link>
+                {firstMonth !== null && (
+                    <button
+                        type="button"
+                        className={styles.secondary}
+                        onClick={async () => {
+                            onAction('monthly');
+                            const ok = await startCheckout(PRICE_IDS.PLUS_SUBSCRIPTION, { offer: 'trialEndMonthly' });
+                            if (!ok) window.location.href = '/pricing';
+                        }}
+                    >
+                        Or try a month for {formatPrice(firstMonth)}
+                    </button>
+                )}
                 <button type="button" className={styles.secondary} onClick={() => { onAction('dismiss'); if (trialEnded) setAsking(true); else onClose(); }}>
                     Not now
                 </button>

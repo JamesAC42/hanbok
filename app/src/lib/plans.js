@@ -19,6 +19,16 @@ export const dealYearlyPrice = (plan, deal) => {
     return null;
 };
 
+// First month of monthly Plus with the trial-end monthly offer (offer.monthly
+// from /api/pricing/offer), or null without one.
+export const monthlyOfferPrice = (offer) => {
+    const list = PLAN_PRICES.plus.monthly;
+    if (!offer) return null;
+    if (offer.percentOff) return Math.round(list * (100 - offer.percentOff)) / 100;
+    if (offer.amountOff) return Math.max(0, Math.round((list - offer.amountOff) * 100) / 100);
+    return null;
+};
+
 // "$69.30" or "$70": drop cents when there are none.
 export const formatPrice = (amount) =>
     `$${Number.isInteger(amount) ? amount : amount.toFixed(2)}`;

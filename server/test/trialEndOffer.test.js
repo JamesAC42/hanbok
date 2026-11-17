@@ -69,3 +69,24 @@ test("the coupon's own end date wins when it comes first", async () => {
         assert.strictEqual(offer.endsAt, new Date(NOW + 5 * HOUR).toISOString());
     });
 });
+
+// TRIAL_END_MONTHLY_COUPON_ID: cheap first month of Plus in the same window.
+const { getTrialEndMonthlyOffer } = require('../utils/trialEndOffer');
+const sevenOff = async (id) => ({ id, valid: true, amount_off: 700, currency: 'usd', duration: 'once' });
+
+test('monthly offer: off without its coupon, on in the window, independent of the yearly one', async () => {
+    await withEnv({ TRIAL_END_MONTHLY_COUPON_ID: undefined, TRIAL_END_COUPON_ID: undefined }, async () => {
+        assert.strictEqual(await getTrialEndMonthlyOffer(endedUser(1), sevenOff, NOW), null);
+    });
+    await withEnv({ TRIAL_END_MONTHLY_COUPON_ID: 'first-month-3', TRIAL_END_COUPON_ID: undefined, TRIAL_END_OFFER_HOURS: undefined }, async () => {
+        const offer = await getTrialEndMonthlyOffer(endedUser(1), sevenOff, NOW);
+        assert.strictEqual(offer.couponId, 'first-month-3');
+        assert.strictEqual(offer.amountOff, 7);
+        assert.strictEqual(offer.kind, 'trialEndMonthly');
+        assert.strictEqual(new Date(offer.endsAt).getTime(), NOW - HOUR + 72 * HOUR);
+        // Outside the window, or still on the trial: nothing.
+        assert.strictEqual(await getTrialEndMonthlyOffer(endedUser(80), sevenOff, NOW), null);
+        const onTrial = { userId: 1, tier: 2, autoTrial: { endsAt: new Date(NOW + HOUR) } };
+        assert.strictEqual(await getTrialEndMonthlyOffer(onTrial, sevenOff, NOW), null);
+    });
+});

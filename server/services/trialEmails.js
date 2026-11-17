@@ -10,7 +10,7 @@
 
 const { getUnsubscribeSecret, renderEmail } = require('./lifecycleEmails');
 const { trialEndsAt, trialEndedAt } = require('../utils/autoTrial');
-const { getTrialEndOffer } = require('../utils/trialEndOffer');
+const { getTrialEndOffer, getTrialEndMonthlyOffer } = require('../utils/trialEndOffer');
 
 const HOUR_MS = 60 * 60 * 1000;
 const TRIAL_ENDING_HOURS = 30;
@@ -125,7 +125,8 @@ const runTrialEmails = async ({
         try {
             const usage = await trialUsage(db, user);
             const offer = type === 'trialEnded' ? await getTrialEndOffer(user, retrieveCoupon, now.getTime()) : null;
-            const mail = renderEmail(type, { name: user.name, userId: user.userId, secret, data: { ...usage, offer } });
+            const monthly = type === 'trialEnded' ? await getTrialEndMonthlyOffer(user, retrieveCoupon, now.getTime()) : null;
+            const mail = renderEmail(type, { name: user.name, userId: user.userId, secret, data: { ...usage, offer, monthly } });
             await sendMail({ to: user.email, ...mail });
             summary[type]++;
         } catch (error) {

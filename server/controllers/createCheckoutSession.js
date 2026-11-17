@@ -3,7 +3,9 @@ const { getDb } = require('../database');
 const { isStudentEligible, studentCouponId } = require('../utils/studentDiscount');
 const { plusTrialDays, isTrialEligible, isPlusPrice } = require('../utils/plusTrial');
 const { getYearlyDeal, isDealEligible, isYearlyPrice } = require('../utils/yearlyDeal');
-const { getTrialEndOffer } = require('../utils/trialEndOffer');
+const { getTrialEndOffer, getTrialEndMonthlyOffer } = require('../utils/trialEndOffer');
+
+const PLUS_MONTHLY_PRICE_ID = 'price_1QtBf2Dv6kE7Gatasq6pq1Tc';
 const { carryOverTrialEnd } = require('../utils/autoTrial');
 
 const createCheckoutSession = async (req, res) => {
@@ -84,6 +86,15 @@ const createCheckoutSession = async (req, res) => {
                     delete sessionConfig.allow_promotion_codes;
                     sessionConfig.metadata.deal = deal.couponId;
                     if (deal.kind === 'trialEnd') sessionConfig.metadata.trialEndOffer = 'true';
+                }
+            } else if (priceId === PLUS_MONTHLY_PRICE_ID && isDealEligible(user)) {
+                // Right after the no-card trial: a cheap first month (TRIAL_END_MONTHLY_COUPON_ID).
+                const monthly = await getTrialEndMonthlyOffer(user, (id) => stripe.coupons.retrieve(id));
+                if (monthly) {
+                    sessionConfig.discounts = [{ coupon: monthly.couponId }];
+                    delete sessionConfig.allow_promotion_codes;
+                    sessionConfig.metadata.deal = monthly.couponId;
+                    sessionConfig.metadata.trialEndOffer = 'monthly';
                 }
             }
         }
