@@ -410,3 +410,45 @@
 }
 
 .primary:disabled { opacity: .5; cursor: not-allowed; }
+
+// Welcome sheet right after sign-up (components/WelcomeFirstBreakdown).
+.welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: .25rem;
+
+    .pill {
+        background: var(--bp-read-soft);
+        color: color-mix(in srgb, var(--bp-read) 78%, var(--foreground));
+    }
+    .title { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+    .actions { margin-top: 1.1rem; }
+}
+
+.welcomeSentence {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    margin: 1.1rem 0 0;
+    padding: 1rem 1.4rem;
+    max-width: 30rem;
+    border: 2px solid var(--bp-line);
+    border-radius: 1rem;
+    background: var(--bp-read-soft);
+
+    strong { font-size: 1.45rem; font-weight: 800; line-height: 1.35; }
+    span { font-size: .95rem; font-weight: 600; color: var(--bp-ink2); }
+}
+
+.welcomeTrial {
+    margin: .8rem 0 0;
+    font-size: .95rem;
+    font-weight: 800;
+    color: color-mix(in srgb, var(--bp-read) 78%, var(--foreground));
+}
+
+@media (max-width: 640px) {
+    .welcome .actions { position: static; margin: 1rem 0 0; padding: 0; border: none; width: 100%; }
+}
