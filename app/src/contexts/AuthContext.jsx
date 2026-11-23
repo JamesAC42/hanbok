@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { track, getAttribution, identifyUser } from '@/lib/analytics';
 import { claimAnonSentences } from '@/lib/anonSentences';
+import { markNewSignup } from '@/lib/firstBreakdown';
 import { reportExtensionInstalled } from '@/lib/extension';
 
 const AuthContext = createContext();
@@ -104,6 +105,7 @@ export function AuthProvider({ children }) {
                     if (data.isNewUser) {
                         // select_by says how: 'btn' = the Google button, 'user_1tap'/'auto' = one-tap
                         track('signup', { method: 'google', via: userDataOrGoogleResponse.select_by || 'unknown' });
+                        markNewSignup();
                     }
                     setUser(data.user);
                 }

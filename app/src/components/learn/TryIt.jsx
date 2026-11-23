@@ -1,9 +1,10 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Mascot from '@/components/Mascot';
 import { track } from '@/lib/analytics';
+import { rememberContextSentence } from '@/lib/firstBreakdown';
 import styles from '@/styles/pages/learn.module.scss';
 
 // "Try it on your own sentence": hands the text to the analyzer. With `run`,
@@ -12,6 +13,9 @@ const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw
     const router = useRouter();
     const { setLanguage } = useLanguage();
     const [text, setText] = useState(initial);
+
+    // The page's own example line, for the welcome breakdown after sign-up.
+    useEffect(() => { if (initial) rememberContextSentence(initial, lang, source); }, [initial, lang, source]);
 
     const submit = (e) => {
         e.preventDefault();
