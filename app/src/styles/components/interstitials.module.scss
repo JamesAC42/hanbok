@@ -452,3 +452,24 @@
 @media (max-width: 640px) {
     .welcome .actions { position: static; margin: 1rem 0 0; padding: 0; border: none; width: 100%; }
 }
+
+// Card-required trial offer (components/CardTrialOffer).
+.cardTrialPerks {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    display: grid;
+    gap: .45rem;
+    text-align: left;
+    font-weight: 700;
+
+    li { display: flex; gap: .55rem; align-items: baseline; }
+    span { color: var(--bp-read); font-weight: 900; }
+}
+
+.cardTrialFine {
+    margin: .8rem 0 0;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--bp-ink2);
+}

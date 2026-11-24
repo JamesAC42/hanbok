@@ -1,7 +1,7 @@
 // No-card Plus trial: new accounts start on Plus for PLUS_TRIAL_DAYS and drop
 // back to Free when it ends, unless they subscribed in the meantime. OFF unless
 // AUTO_TRIAL_ENABLED=true. Existing trials still expire if the flag is turned off.
-const { plusTrialDays } = require('./plusTrial');
+const { plusTrialDays, isTrialEligible } = require('./plusTrial');
 
 const DAY = 24 * 60 * 60 * 1000;
 const SWEEP_INTERVAL_MS = 10 * 60 * 1000;
@@ -156,7 +156,16 @@ const startAutoTrialExpiry = (getDb) => {
     return timer;
 };
 
+// Card-required trial: with the no-card trial off (AUTO_TRIAL_ENABLED not true),
+// accounts that never had a trial or a subscription can start PLUS_TRIAL_DAYS of
+// Plus through Stripe Checkout (card taken, charged when it ends). 0 when not.
+const cardTrialDays = (user, env = process.env) => {
+    if (isAutoTrialEnabled(env) || !user) return 0;
+    return isTrialEligible(user) ? plusTrialDays() : 0;
+};
+
 module.exports = {
+    cardTrialDays,
     isAutoTrialEnabled, autoTrialFields, expireAutoTrials, expireIfDue, trialEndsAt, trialEndedAt, carryOverTrialEnd, startAutoTrialExpiry,
     isReturningTrialEnabled, isReturningTrialEligible, returningTrialFilter, startReturningTrialIfEligible,
     isTrialAtFirstBreakdown, startTrialAtFirstBreakdown, trialWaitingDays,

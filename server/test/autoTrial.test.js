@@ -176,3 +176,21 @@ test('first breakdown starts a 7-day trial once, only for accounts that never ha
         assert.strictEqual(await startTrialAtFirstBreakdown(updateDb(), { userId: 5, tier: 0 }, now), null);
     });
 });
+
+// Card-required trial (AUTO_TRIAL_ENABLED off)
+test('cardTrialDays: only with the no-card trial off, for never-trialed free accounts', () => {
+    const { cardTrialDays } = require('../utils/autoTrial');
+    const off = { AUTO_TRIAL_ENABLED: 'false' };
+    const saved = process.env.PLUS_TRIAL_DAYS;
+    delete process.env.PLUS_TRIAL_DAYS;
+    try {
+        assert.strictEqual(cardTrialDays({ userId: 1, tier: 0 }, off), 7);
+        assert.strictEqual(cardTrialDays({ userId: 1, tier: 0 }, { AUTO_TRIAL_ENABLED: 'true' }), 0);
+        assert.strictEqual(cardTrialDays({ userId: 1, tier: 0, autoTrial: { endsAt: new Date() } }, off), 0);
+        assert.strictEqual(cardTrialDays({ userId: 1, tier: 0, hasUsedFreeTrial: true }, off), 0);
+        assert.strictEqual(cardTrialDays({ userId: 1, tier: 1, subscription: { stripeSubscriptionId: 's' } }, off), 0);
+        assert.strictEqual(cardTrialDays(null, off), 0);
+    } finally {
+        if (saved !== undefined) process.env.PLUS_TRIAL_DAYS = saved;
+    }
+});
