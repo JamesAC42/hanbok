@@ -430,6 +430,9 @@ const SentenceForm = ({
                 // Show transition animation
                 setTransition(true);
                 
+                // Tells components/CardTrialOffer a breakdown just finished.
+                try { window.dispatchEvent(new CustomEvent('hanbok:breakdown-done')); } catch {}
+
                 // The first breakdown started the Plus trial: reload the session so
                 // the trial banner and Plus features show up right away.
                 if (data.plusTrialStarted) {

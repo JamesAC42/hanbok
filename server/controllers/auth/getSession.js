@@ -3,7 +3,7 @@ const { FREE_WEEKLY_SENTENCES } = require('../../utils/sentenceQuota');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
-const { expireIfDue, trialEndsAt, trialEndedAt, startReturningTrialIfEligible, trialWaitingDays } = require('../../utils/autoTrial');
+const { expireIfDue, trialEndsAt, trialEndedAt, startReturningTrialIfEligible, trialWaitingDays, cardTrialDays } = require('../../utils/autoTrial');
 
 const getSession = async (req, res) => {
     
@@ -116,6 +116,8 @@ const getSession = async (req, res) => {
             plusTrialSource: trialEndsAt(user) ? (user.autoTrial.source || 'signup') : null,
             // Days of Plus the first breakdown will start (TRIAL_STARTS_AT_FIRST_BREAKDOWN); 0 when none
             plusTrialWaitingDays: trialWaitingDays(user),
+            // Days of Plus a card trial at checkout would give (no-card trial off); 0 when none
+            plusCardTrialDays: cardTrialDays(user),
             remainingImageExtracts: user.remainingImageExtracts ? user.remainingImageExtracts : 0,
             remainingSentenceAnalyses: user.remainingSentenceAnalyses ? user.remainingSentenceAnalyses : 0,
             hasUsedFreeTrial: user.hasUsedFreeTrial || false,

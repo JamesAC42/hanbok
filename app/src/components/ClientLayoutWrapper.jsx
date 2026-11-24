@@ -8,6 +8,7 @@ import GoogleOneTap from '@/components/GoogleOneTap';
 import PendingSaves from '@/components/PendingSaves';
 import ResumeCheckout from '@/components/ResumeCheckout';
 import WelcomeFirstBreakdown from '@/components/WelcomeFirstBreakdown';
+import CardTrialOffer from '@/components/CardTrialOffer';
 
 function ClientLayoutWrapper({ children }) {
   useEffect(() => {
@@ -27,6 +28,7 @@ function ClientLayoutWrapper({ children }) {
       <PendingSaves />
       {/* A plan picked before signing up goes on to checkout once signed in */}
       <WelcomeFirstBreakdown />
+      <CardTrialOffer />
       <ResumeCheckout />
     </>
   );
