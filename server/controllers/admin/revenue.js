@@ -447,4 +447,4 @@ const getRevenue = async (req, res) => {
     }
 };
 
-module.exports = { getRevenue, buildRevenue, summarize, monthlyAmount, netMonthly, dayStart };
+module.exports = { getRevenue, buildRevenue, summarize, monthlyAmount, netMonthly, dayStart, getStripe, listAll, payingAt, NEVER_PAYING, planOf };
