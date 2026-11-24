@@ -3,6 +3,7 @@ import { articles } from '@/content/learn';
 import { phrases, phraseHref } from '@/content/phrases';
 import { sayings, sayingHref } from '@/content/how-to-say';
 import { patterns, patternHref } from '@/content/grammar';
+import { jaPatterns, jaPatternHref } from '@/content/japanese-grammar';
 
 // /llms.txt (llmstxt.org): a plain-text map of the site for AI assistants and
 // answer engines, so they can describe Hanbok and link to the right page.
@@ -20,6 +21,7 @@ export function GET() {
         '',
         '## Main tools',
         link('Korean sentence analyzer', '/korean-sentence-analyzer', 'paste a Korean sentence and get a word-by-word breakdown with grammar, translation and audio'),
+        link('Japanese sentence analyzer', '/japanese-sentence-analyzer', 'paste a Japanese sentence and get a word-by-word breakdown with furigana, grammar, translation and audio'),
         link('Analyzer (Korean, Japanese, Chinese)', '/analyze'),
         link('K-pop lyrics broken down line by line', '/lyrics', 'popular songs with every line analyzed, plus key words and grammar for each song'),
         link('Hangeul (Korean alphabet)', '/hangeul'),
@@ -38,6 +40,11 @@ export function GET() {
         'Each page explains one ending or particle: what it means, how to attach it, when to use it, look-alikes and common mistakes.',
         link('All Korean grammar patterns', '/grammar'),
         ...patterns.map((g) => link(`${g.form}: ${g.meaning}`, patternHref(g))),
+        '',
+        `## Japanese grammar points, JLPT N5 to N3 (${jaPatterns.length} pages)`,
+        'Each page explains one Japanese particle, verb form or grammar point: what it means, how to form it, when to use it, look-alikes, common mistakes and examples with furigana.',
+        link('Japanese grammar list', '/japanese/grammar'),
+        ...jaPatterns.map((g) => link(`${g.form} (${g.roman}, JLPT ${g.level}): ${g.meaning}`, jaPatternHref(g))),
         '',
         `## Korean words and slang explained (${phrases.length} pages)`,
         'What common Korean words, slang and texting abbreviations mean, with usage notes and examples.',
