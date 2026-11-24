@@ -44,6 +44,16 @@ Files in `deploy/`:
 From then on every merge to main deploys. Rollback: Actions → Deploy (Docker)
 → rollback, or on the server `sudo -u deploy /home/deploy/hanbok-deploy-entry.sh rollback`.
 
+## Feature flags (no SSH)
+
+Non-secret feature flags live in `server/config/flags.production.env` and
+`server/config/flags.staging.env`, which are baked into the API image. To change
+one, edit the file and merge: CD builds the image and recreates the containers.
+A key in the flag file wins over the same key in `api.env`; keys it doesn't list
+keep their `api.env` value. Secrets stay in `api.env`. The API logs
+`Flags: flags.production.env v<hash>: ...` at startup and `/api/health` reports
+`flags: "production@<hash>"`. See `server/lib/flags.js`.
+
 ## api.env
 
 ```

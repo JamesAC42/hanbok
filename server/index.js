@@ -1,4 +1,6 @@
 require('dotenv').config();
+// Feature flags from server/config/flags.<target>.env win over api.env (lib/flags.js).
+require('./lib/flags').applyFlags();
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -398,7 +400,8 @@ app.get('/api/health', async (req, res) => {
         check(Promise.resolve().then(() => getDb().command({ ping: 1 }))),
         check(redisClient.ping()),
     ]);
-    res.status(mongo && redis ? 200 : 503).json({ ok: mongo && redis, mongo, redis });
+    const { target, version } = require('./lib/flags').appliedFlags();
+    res.status(mongo && redis ? 200 : 503).json({ ok: mongo && redis, mongo, redis, flags: target ? `${target}@${version}` : null });
 });
 
 // Speak: live voice role-play with Horang (controllers/speak.js)
