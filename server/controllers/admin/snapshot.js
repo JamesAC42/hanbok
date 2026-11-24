@@ -7,6 +7,7 @@ const { getDb } = require('../../database');
 const { createTtlCache } = require('../../lib/ttlCache');
 const { buildOverview, buildEngagement } = require('./stats');
 const { buildRevenue } = require('./revenue');
+const { buildPayers } = require('./payers');
 const { PAYING_EXPR } = require('../../utils/autoTrial');
 const { buildTraffic, buildEventBreakdown, isConfigured: umamiConfigured } = require('./traffic');
 
@@ -203,7 +204,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         ? section(`traffic${days}d`, buildTraffic({ days, tz, now, pageLimit: 100, eventLimit: 100, referrerLimit: 100, withBots: true }))
         : Promise.resolve(null));
 
-    const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials, usageDepth] = await Promise.all([
+    const [week, month, engagement, revenueWeek, revenueMonth, trafficWeek, trafficMonth, channels, autoTrials, usageDepth, payers] = await Promise.all([
         section('overview7d', buildOverview(db, { days: 7, tz })),
         section('overview30d', buildOverview(db, { days: 30, tz })),
         section('engagement', buildEngagement(db, { days: 30, tz })),
@@ -214,6 +215,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         section('channels', buildChannels(db, now)),
         section('autoTrials', buildAutoTrials(db, now)),
         section('usageDepth', buildUsageDepth(db, now)),
+        section('payers', buildPayers(db, { now: now.getTime() })),
     ]);
 
     return {
@@ -243,6 +245,7 @@ const buildSnapshot = async (db, { tz = 'UTC', now = new Date() } = {}) => {
         channels30d: channels,
         autoTrials,
         usageDepth,
+        payers,
         errors,
     };
 };
