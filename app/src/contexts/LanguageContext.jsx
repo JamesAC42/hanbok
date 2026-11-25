@@ -31,6 +31,10 @@ export function LanguageProvider({ children }) {
         
         if (savedLanguage) setLanguage(savedLanguage);
         if (savedNativeLanguage) setNativeLanguage(savedNativeLanguage);
+
+        // ?lang=ja on a link (ads, partner links) picks the language to study.
+        const fromLink = new URLSearchParams(window.location.search).get('lang');
+        if (fromLink && Object.prototype.hasOwnProperty.call(supportedAnalysisLanguages, fromLink)) setLanguage(fromLink);
     }, []);
 
     // Save preferences when they change
