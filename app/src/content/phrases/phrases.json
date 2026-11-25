@@ -146,7 +146,11 @@
     "q": "What is the difference between aigoo and omo?",
     "a": "아이고 often carries tiredness, pain or sympathy. 어머 (omo) is more about sudden surprise."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Aigoo (아이고) Meaning: Why Koreans Say Aigoo",
+   "description": "아이고 means \"oh dear!\" or \"ugh\". When Koreans say it, whether it's only for older people, aigoo vs omo, with example sentences."
+  }
  },
  {
   "slug": "daebak",
@@ -297,7 +301,11 @@
     "q": "How do you spell daebak in Korean?",
     "a": "It is written 대박."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Daebak (대박) Meaning: Awesome or No Way?",
+   "description": "대박 means \"awesome!\" or \"no way!\". Can daebak mean something bad, is it rude, and how to spell it in Korean, with example sentences."
+  }
  },
  {
   "slug": "heol",
@@ -589,7 +597,9 @@
   "roman": "jinjja",
   "aka": [
    "jinja",
-   "jincha"
+   "jincha",
+   "chinja",
+   "jjinja"
   ],
   "meaning": "Really / Seriously",
   "category": "reaction",
@@ -735,8 +745,16 @@
    {
     "q": "What does \"ah jinjja\" mean?",
     "a": "아 진짜 said with a sigh means something like \"Oh, come on\" or \"Seriously...\", showing annoyance."
+   },
+   {
+    "q": "Is it jinja or jinjja?",
+    "a": "Both spellings point to the same word, 진짜. Jinjja is the standard romanization of the doubled ㅉ sound; jinja is a common simpler spelling, and you will also see jincha or chinja."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Jinjja (진짜) Meaning: Really? + What Ah Jinjja Means",
+   "description": "진짜 (often spelled jinja) means \"really\" or \"seriously\". What ah jinjja means, jinjja vs jeongmal, and whether it's polite, with examples."
+  }
  },
  {
   "slug": "mwoya",
@@ -1377,7 +1395,11 @@
     "q": "Can I call my favorite idol oppa?",
     "a": "Yes, if you are female and he is older than you. Fans do this all the time, and it is friendly rather than rude."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Oppa (오빠) Meaning: Brother, Boyfriend or Idol?",
+   "description": "오빠 means \"older brother\", said by women. Does oppa mean boyfriend, can a guy say it, and calling idols oppa, with example sentences."
+  }
  },
  {
   "slug": "unnie",
@@ -1537,7 +1559,11 @@
     "q": "Can I call a stranger unnie?",
     "a": "Some women call female staff 언니 in casual places, but with strangers it is safer to use polite speech without a family title."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Unnie (언니) Meaning: Who Can Say Unnie?",
+   "description": "언니 means \"older sister\", said by women. Can a guy say unnie, unnie or eonni, and calling a stranger unnie, with example sentences."
+  }
  },
  {
   "slug": "hyung",
@@ -1703,8 +1729,16 @@
    {
     "q": "What is the difference between hyung and hyungnim?",
     "a": "형님 is the more respectful version. Friends say 형, while 형님 is for someone you want to show extra respect to, such as an older brother-in-law."
+   },
+   {
+    "q": "Is hyung older or younger?",
+    "a": "Older. 형 is someone older than you, and only males call older men hyung. For a younger brother or junior, Koreans use the person's name or 동생 (dongsaeng)."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Hyung (형) Meaning: Older Brother, Said by Guys",
+   "description": "형 means \"older brother\", said by males to older men they're close to. Can girls say hyung, hyung vs hyungnim, with example sentences."
+  }
  },
  {
   "slug": "noona",
@@ -1852,7 +1886,11 @@
     "q": "Is noona romantic?",
     "a": "Not by itself. It just means older sister. But a man dating an older woman often calls her 누나, so the context decides."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Noona (누나) Meaning: Older Sister, Said by Guys",
+   "description": "누나 means \"older sister\", said by males. Can a girl say noona, and when noona sounds romantic, with example sentences you can break down."
+  }
  },
  {
   "slug": "sunbae",
@@ -2004,8 +2042,16 @@
    {
     "q": "Should I say sunbae or sunbaenim?",
     "a": "선배님 is more polite and is the safe choice at work or with someone you are not close to. Plain 선배 is fine with seniors you know well."
+   },
+   {
+    "q": "What does sunbaenim mean?",
+    "a": "선배님 (sunbaenim) is 선배 with the honorific -님 added. It still means \"senior,\" but shows more respect, so juniors use it at work, in the military and in K-pop when greeting older idols."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Sunbae (선배) and Sunbaenim Meaning in Korean",
+   "description": "선배 means your senior at school or work. Sunbae vs sunbaenim, the opposite word hoobae, and when to add -nim, with example sentences."
+  }
  },
  {
   "slug": "hoobae",
@@ -2148,7 +2194,11 @@
     "q": "Is a hoobae always younger?",
     "a": "No. It depends on who joined first. A hoobae is often younger, but not always."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Hoobae (후배) Meaning: Your Junior in Korean",
+   "description": "후배 means your junior at school or work, the opposite of sunbae. Is a hoobae always younger, and can you call someone hoobae to their face."
+  }
  },
  {
   "slug": "ahjussi",
@@ -2309,8 +2359,16 @@
    {
     "q": "What age is an ahjussi?",
     "a": "There is no fixed age, but it usually means a man in his late thirties or older, or anyone who looks like a grown-up to the speaker."
+   },
+   {
+    "q": "What is the female version of ahjussi?",
+    "a": "For a middle-aged woman Koreans say 아줌마 (ajumma), or the politer 아주머니 (ajumeoni)."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Ahjussi (아저씨) Meaning: Who Is an Ahjussi?",
+   "description": "아저씨 means \"mister\", a middle-aged man. What age counts as ahjussi, when it sounds rude, the word for women, with example sentences."
+  }
  },
  {
   "slug": "ajumma",
@@ -2470,7 +2528,11 @@
     "q": "What is the difference between ajumma and ajumeoni?",
     "a": "They mean the same thing. 아주머니 (ajumeoni) is the more polite form and 아줌마 is the casual one."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Ajumma (아줌마) Meaning: Is It Rude?",
+   "description": "아줌마 means a middle-aged woman, like \"ma'am\". When ajumma sounds rude, the politer ajumeoni, and how Koreans use it, with examples."
+  }
  },
  {
   "slug": "maknae",
@@ -2633,7 +2695,11 @@
     "q": "Is maknae only for families?",
     "a": "No. It works for any group: a family, a team at work, a club, or an idol group."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Maknae (막내) Meaning: The Youngest, in K-pop Too",
+   "description": "막내 means the youngest member of a family or group. What maknae means in K-pop, golden maknae, and maknae at work, with example sentences."
+  }
  },
  {
   "slug": "chingu",
@@ -2776,7 +2842,11 @@
     "q": "How do you say boyfriend and girlfriend in Korean?",
     "a": "남자친구 (boyfriend) and 여자친구 (girlfriend). In casual talk they shorten to 남친 and 여친."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Chingu (친구) Meaning: Friend, and Who Counts",
+   "description": "친구 means \"friend\", but in Korean usually someone your own age. Can an older person be your chingu, and boyfriend/girlfriend words."
+  }
  },
  {
   "slug": "kkondae",
@@ -3285,7 +3355,8 @@
   "aka": [
    "yobo",
    "yeobo-ya",
-   "yobbo"
+   "yobbo",
+   "yebo"
   ],
   "meaning": "Honey (between spouses)",
   "category": "love",
@@ -3430,7 +3501,11 @@
     "q": "Is yeobo the same as yeoboseyo?",
     "a": "No. 여보 is for your spouse, and 여보세요 is \"hello\" on the phone. The two words are related, but they are used very differently."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Yeobo (여보) Meaning: What Korean Couples Call Each Other",
+   "description": "여보 means \"honey\", what Korean spouses call each other. Can unmarried couples say it, how it differs from yeoboseyo, with example sentences."
+  }
  },
  {
   "slug": "aegyo",
@@ -3608,7 +3683,11 @@
     "q": "How do you do aegyo?",
     "a": "Common moves are a cute, high-pitched voice, stretching words, pouting, and small hand gestures like finger hearts. The goal is to seem sweet and endearing."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Aegyo (애교) Meaning: Acting Cute in Korean",
+   "description": "애교 means acting cute and charming, a big part of K-pop. Is aegyo only for girls, and how people do aegyo, with example sentences."
+  }
  },
  {
   "slug": "saranghae",
@@ -3749,8 +3828,16 @@
    {
     "q": "Is saranghae only romantic?",
     "a": "No. Koreans say it to family and close friends too, much like English speakers say \"love you\" to a sibling or best friend."
+   },
+   {
+    "q": "What does nado saranghae mean?",
+    "a": "나도 사랑해 (nado saranghae) means \"I love you too.\" 나도 is \"me too,\" so it is the usual reply when someone says 사랑해 to you."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Saranghae (사랑해) Meaning: I Love You + How to Reply",
+   "description": "사랑해 means \"I love you\" in casual Korean. Saranghae vs saranghaeyo, how to reply (nado saranghae), and why it isn't only romantic, with examples."
+  }
  },
  {
   "slug": "bogo-sipeo",
@@ -3938,7 +4025,11 @@
     "q": "Can I say bogo sipeo to a friend?",
     "a": "Yes. It is not only romantic; friends and family say it to each other all the time."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Bogo Sipeo (보고 싶어) Meaning: I Miss You",
+   "description": "보고 싶어 means \"I miss you\". Bogoshipo or bogo sipeo, saying it to a friend, and the polite form, with example sentences you can break down."
+  }
  },
  {
   "slug": "joahae",
@@ -4564,7 +4655,11 @@
     "q": "What does \"jebal jom\" mean?",
     "a": "제발 좀 is like \"Please, just...\" and often sounds exasperated."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Jebal (제발) Meaning: Please, I'm Begging",
+   "description": "제발 means \"please\" when you're begging. Why you don't say it at a restaurant, whether it's polite, and what jebal jom means, with examples."
+  }
  },
  {
   "slug": "wae",
@@ -4713,7 +4808,11 @@
     "q": "How do you say because in Korean?",
     "a": "왜냐하면 means \"because\" at the start of an explanation."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Wae (왜) Meaning: Why? or What?",
+   "description": "왜 means \"why?\", but also \"what?\" when someone calls you. Is wae rude, and how to say because in Korean, with example sentences."
+  }
  },
  {
   "slug": "hwaiting",
@@ -4855,7 +4954,11 @@
     "q": "Can I say hwaiting to my boss?",
     "a": "It is common at work and usually fine. With someone much more senior, 힘내세요 can sound more respectful."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Hwaiting (화이팅) Meaning: Why Koreans Say Fighting",
+   "description": "화이팅 means \"you can do it!\" Why Koreans say fighting, hwaiting or paiting, and whether you can say it to your boss, with examples."
+  }
  },
  {
   "slug": "jamkkanman",
@@ -5147,8 +5250,16 @@
    {
     "q": "How do you reply to mianhae?",
     "a": "A common reply is 괜찮아 (gwaenchana), \"It's okay.\""
+   },
+   {
+    "q": "Is it mianhae or mianhe?",
+    "a": "Both spellings mean 미안해. Mianhae is the standard romanization; mianhe is a common shortcut because 해 sounds close to \"heh.\""
    }
-  ]
+  ],
+  "seo": {
+   "title": "Mianhae (미안해) Meaning: I'm Sorry in Korean",
+   "description": "미안해 means \"I'm sorry\" casually. Mianhae or mianhe, mianhae vs joesonghamnida, and how to reply to an apology, with example sentences."
+  }
  },
  {
   "slug": "gomawo",
@@ -5270,7 +5381,11 @@
     "q": "How do you reply to gomawo?",
     "a": "You can say 뭘 (mwol), like \"no problem,\" or 아니야 (aniya), \"not at all.\""
    }
-  ]
+  ],
+  "seo": {
+   "title": "Gomawo (고마워) Meaning: Thanks in Korean",
+   "description": "고마워 means \"thanks\" casually. Gomawo vs kamsahamnida, who you can say it to, and how to reply, with example sentences you can break down."
+  }
  },
  {
   "slug": "kamsahamnida",
@@ -5279,7 +5394,10 @@
   "aka": [
    "gamsahamnida",
    "kamsamnida",
-   "kamsahamida"
+   "kamsahamida",
+   "kamsamida",
+   "gamsamnida",
+   "kansamnida"
   ],
   "meaning": "Thank you",
   "category": "everyday",
@@ -5399,8 +5517,16 @@
    {
     "q": "How do you reply to kamsahamnida?",
     "a": "A common reply is 아니에요 (anieyo), \"not at all,\" or 천만에요 (cheonmaneyo), \"you're welcome.\""
+   },
+   {
+    "q": "Why does kamsahamnida sound like kamsamnida?",
+    "a": "In fast, everyday speech the 하 in 감사합니다 gets very light, so many people hear \"kamsamnida.\" It is the same word. When you write it, it is always 감사합니다."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Kamsahamnida (감사합니다) Meaning + How to Reply",
+   "description": "감사합니다 means \"thank you\" politely. Kamsahamnida or gamsahamnida, why it sounds like kamsamnida, how to reply, with example sentences."
+  }
  },
  {
   "slug": "annyeong",
@@ -5545,7 +5671,11 @@
     "q": "Does annyeong mean hello or goodbye?",
     "a": "Both. Friends use it when meeting and when parting."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Annyeong (안녕) Meaning: Hi or Bye?",
+   "description": "안녕 means both \"hi\" and \"bye\" in casual Korean. How to tell which, whether you can say it to a stranger, and the polite form, with examples."
+  }
  },
  {
   "slug": "annyeonghaseyo",
@@ -5689,7 +5819,11 @@
     "q": "How do you reply to annyeonghaseyo?",
     "a": "Just say 안녕하세요 back, often with a small bow."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Annyeonghaseyo (안녕하세요) Meaning + How to Reply",
+   "description": "안녕하세요 means \"hello\" politely. Can you say it to friends, how to reply, and the casual annyeong, with example sentences you can break down."
+  }
  },
  {
   "slug": "gaja",
@@ -5848,7 +5982,11 @@
     "q": "What does gajua mean?",
     "a": "가즈아 is a playful, stretched way to write 가자, used online to say \"Let's gooo!\""
    }
-  ]
+  ],
+  "seo": {
+   "title": "Gaja (가자) Meaning: Let's Go in Korean",
+   "description": "가자 means \"let's go\". Is gaja rude, what gajua means, and the polite way to say let's go, with example sentences you can break down."
+  }
  },
  {
   "slug": "baegopa",
@@ -6141,7 +6279,11 @@
     "q": "How do you reply to jal ja?",
     "a": "Say 너도 잘 자 (neodo jal ja), \"you too, sleep well.\""
    }
-  ]
+  ],
+  "seo": {
+   "title": "Jal Ja (잘 자) Meaning: Good Night in Korean",
+   "description": "잘 자 means \"good night\" or \"sleep well\" casually. Can you say it to your parents, how to reply, and the polite form, with examples."
+  }
  },
  {
   "slug": "jal-meokgesseumnida",
@@ -6760,7 +6902,11 @@
     "q": "Is aniyo rude?",
     "a": "No. 아니요 is polite and safe with anyone. Your tone matters more than the word, so a soft 아니요, 괜찮아요 (\"No, I'm fine\") is a gentle way to refuse."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Aniyo (아니요) Meaning: How to Say No in Korean",
+   "description": "아니요 means \"no\" politely. Aniyo or anieyo, the casual way to say no, and whether aniyo sounds rude, with example sentences."
+  }
  },
  {
   "slug": "nunchi",
@@ -7243,7 +7389,11 @@
     "q": "Why is it in the past tense?",
     "a": "With some verbs like 미치다, Korean uses the past form to describe a state that is true now."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Michyeosseo (미쳤어) Meaning: Are You Crazy?",
+   "description": "미쳤어 means \"are you crazy?\" or \"that's insane\". Is it rude, why it's in the past tense, and michyeotda, with example sentences."
+  }
  },
  {
   "slug": "eojjeol-tv",
@@ -11737,7 +11887,11 @@
     "q": "Can grown-ups say appa?",
     "a": "Yes. Plenty of adults, especially daughters, call their father 아빠 their whole life."
    }
-  ]
+  ],
+  "seo": {
+   "title": "Appa (아빠) Meaning: Dad in Korean",
+   "description": "아빠 means \"dad\". Appa vs abeoji, whether grown-ups still say appa, and the honorific abeonim, with example sentences you can break down."
+  }
  },
  {
   "slug": "eomeoni",

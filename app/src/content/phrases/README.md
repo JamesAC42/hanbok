@@ -10,6 +10,7 @@ Review every Korean sentence by hand before shipping.
   "ko": "대박",
   "roman": "daebak",
   "aka": ["dae bak"],                // other spellings learners type
+  "seo": { "title": "...", "description": "..." }, // optional; hand-written for top pages by Search Console impressions
   "meaning": "Awesome! / No way!",   // under 40 characters
   "category": "reaction",            // reaction | people | love | everyday | slang | internet | food | drama
   "register": "casual",              // casual | polite | formal | any

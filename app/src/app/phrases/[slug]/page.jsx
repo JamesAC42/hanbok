@@ -30,8 +30,9 @@ export async function generateMetadata({ params }) {
     const { slug } = await params;
     const p = getPhrase(slug);
     if (!p) return {};
-    const title = `${titleFor(p)}: What It Means + Examples`;
-    const description = `What does ${p.roman} (${p.ko}) mean? ${p.meaning}. When Koreans say it, who you can say it to, and example sentences you can tap to break down.`;
+    // Hand-written seo.title / seo.description (top pages by Search Console impressions) win over the template.
+    const title = p.seo?.title || `${titleFor(p)}: What It Means + Examples`;
+    const description = p.seo?.description || `What does ${p.roman} (${p.ko}) mean? ${p.meaning}. When Koreans say it, who you can say it to, and example sentences you can tap to break down.`;
     const url = phraseHref(p);
     return {
         title,
