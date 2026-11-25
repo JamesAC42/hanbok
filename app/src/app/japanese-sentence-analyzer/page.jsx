@@ -154,7 +154,8 @@ export default function JapaneseSentenceAnalyzer() {
                     <p>
                         The particles that confuse learners most are <Link href="/japanese/grammar/wa-vs-ga" lang="ja">は and が</Link>, and
                         {' '}<Link href="/japanese/grammar/ni-vs-de" lang="ja">に and で</Link>. The{' '}
-                        <Link href="/japanese/grammar">Japanese grammar list</Link> covers these and 100 more points from JLPT N5 to N3.
+                        <Link href="/japanese/grammar">Japanese grammar list</Link> covers these and 100 more points from JLPT N5 to N3,
+                        and <Link href="/japanese/phrases">Japanese words explained</Link> covers words like senpai and daijoubu.
                     </p>
                     <Tutor>
                         My tip: start with lines you actually care about. A lyric you love or a line from your favorite anime
