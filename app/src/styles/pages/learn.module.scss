@@ -300,6 +300,14 @@
     color: var(--foreground);
 }
 
+.chip rt,
+.detailWord rt {
+    font-size: .45em;
+    font-weight: 500;
+    color: var(--bp-ink2);
+    text-decoration: none;
+}
+
 .chipOpen {
     border-color: var(--bp-read);
     background: var(--bp-read-soft);

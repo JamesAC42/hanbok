@@ -3,6 +3,7 @@ import { articles } from '@/content/learn';
 import { phrases, phraseHref } from '@/content/phrases';
 import { sayings, sayingHref } from '@/content/how-to-say';
 import { patterns, patternHref } from '@/content/grammar';
+import { jaPatterns, jaPatternHref } from '@/content/japanese-grammar';
 import { updates } from '@/content/updates';
 
 // Rebuilt at most hourly so new songs show up without a deploy.
@@ -12,11 +13,13 @@ const STATIC_PAGES = [
     { path: '/', changeFrequency: 'weekly', priority: 1 },
     { path: '/analyze', changeFrequency: 'monthly', priority: 0.9 },
     { path: '/korean-sentence-analyzer', changeFrequency: 'monthly', priority: 0.9 },
+    { path: '/japanese-sentence-analyzer', changeFrequency: 'monthly', priority: 0.9 },
     { path: '/lyrics', changeFrequency: 'daily', priority: 0.9 },
     { path: '/learn', changeFrequency: 'weekly', priority: 0.9 },
     { path: '/phrases', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/how-to-say', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/grammar', changeFrequency: 'weekly', priority: 0.8 },
+    { path: '/japanese/grammar', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/hangeul', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/pricing', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
@@ -62,6 +65,12 @@ export default async function sitemap() {
         priority: 0.7,
     }));
 
+    const jaGrammarPages = jaPatterns.map((g) => ({
+        url: `${SITE_URL}${jaPatternHref(g)}`,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+    }));
+
     const posts = updates.map((post) => ({
         url: `${SITE_URL}/updates/${post.slug}`,
         lastModified: new Date(post.published),
@@ -69,5 +78,5 @@ export default async function sitemap() {
         priority: 0.4,
     }));
 
-    return [...pages, ...guides, ...phrasePages, ...sayingPages, ...grammarPages, ...posts, ...songs];
+    return [...pages, ...guides, ...phrasePages, ...sayingPages, ...grammarPages, ...jaGrammarPages, ...posts, ...songs];
 }

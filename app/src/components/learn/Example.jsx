@@ -10,9 +10,10 @@ import { track } from '@/lib/analytics';
 import styles from '@/styles/pages/learn.module.scss';
 
 // A tappable example sentence. `words` is a list of chips; each chip has parts
-// ({ t, g, particle?, base?, gloss? }). Particles are colored, and tapping a chip
+// ({ t, g, particle?, base?, gloss?, r? }). Particles are colored, and tapping a chip
 // opens its meaning with a Save button that adds the word to the reader's deck.
 // Everything is in the server HTML, so search engines read the breakdown too.
+// `r` is a kana reading shown above the part (furigana) for Japanese kanji.
 const Example = ({ words, translation, note, lang = 'ko' }) => {
     const router = useRouter();
     const { user } = useAuth();
@@ -20,7 +21,9 @@ const Example = ({ words, translation, note, lang = 'ko' }) => {
     const { showLoginRequiredPopup } = usePopup();
     const [open, setOpen] = useState(null);
     const [saved, setSaved] = useState({});
-    const sentence = words.map((w) => w.parts.map((p) => p.t).join('')).join(' ');
+    // Japanese and Chinese are written without spaces between words.
+    const sentence = words.map((w) => w.parts.map((p) => p.t).join('')).join(lang === 'ja' || lang === 'zh' ? '' : ' ');
+    const text = (p) => (p.r ? <ruby>{p.t}<rt>{p.r}</rt></ruby> : p.t);
 
     const save = async (part) => {
         const word = part.base || part.t;
@@ -65,7 +68,7 @@ const Example = ({ words, translation, note, lang = 'ko' }) => {
                         aria-expanded={open === i}
                     >
                         {w.parts.map((p, j) => (
-                            <span key={j} className={p.particle ? styles.particle : undefined}>{p.t}</span>
+                            <span key={j} className={p.particle ? styles.particle : undefined}>{text(p)}</span>
                         ))}
                     </button>
                 ))}
@@ -80,7 +83,7 @@ const Example = ({ words, translation, note, lang = 'ko' }) => {
                         return (
                             <div key={j} className={styles.detailRow}>
                                 <span className={`${styles.detailWord} ${p.particle ? styles.detailParticle : ''}`} lang={lang}>
-                                    {p.t}
+                                    {text(p)}
                                     {p.base && <small> ({p.base})</small>}
                                 </span>
                                 <span className={styles.detailGloss}>{p.g}</span>

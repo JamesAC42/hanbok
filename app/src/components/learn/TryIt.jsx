@@ -33,7 +33,8 @@ const TryIt = ({ lang = 'ko', placeholder, title = 'Try it on a sentence you saw
 
     return (
         <form className={styles.tryIt} onSubmit={submit}>
-            <Mascot pose="teach" size={84} />
+            {/* The teach pose holds a 한글 board, so other languages get the wave. */}
+            <Mascot pose={lang === 'ko' ? 'teach' : 'wave'} size={84} />
             <div className={styles.tryItBody}>
                 <label htmlFor={id} className={styles.tryItTitle}>{title}</label>
                 <p>{blurb || 'Paste a line from a song, a drama or a text message. Hanbok marks every particle and explains each word.'}</p>
