@@ -4,6 +4,7 @@ import { phrases, phraseHref } from '@/content/phrases';
 import { sayings, sayingHref } from '@/content/how-to-say';
 import { patterns, patternHref } from '@/content/grammar';
 import { jaPatterns, jaPatternHref } from '@/content/japanese-grammar';
+import { jaPhrases, jaPhraseHref } from '@/content/japanese-phrases';
 
 // /llms.txt (llmstxt.org): a plain-text map of the site for AI assistants and
 // answer engines, so they can describe Hanbok and link to the right page.
@@ -45,6 +46,11 @@ export function GET() {
         'Each page explains one Japanese particle, verb form or grammar point: what it means, how to form it, when to use it, look-alikes, common mistakes and examples with furigana.',
         link('Japanese grammar list', '/japanese/grammar'),
         ...jaPatterns.map((g) => link(`${g.form} (${g.roman}, JLPT ${g.level}): ${g.meaning}`, jaPatternHref(g))),
+        '',
+        `## Japanese words explained (${jaPhrases.length} pages)`,
+        'What common Japanese words, honorifics and anime expressions mean, with usage notes and examples with furigana.',
+        link('All Japanese words', '/japanese/phrases'),
+        ...jaPhrases.map((p) => link(`What does ${p.ja} (${p.roman}) mean? ${p.meaning}`, jaPhraseHref(p))),
         '',
         `## Korean words and slang explained (${phrases.length} pages)`,
         'What common Korean words, slang and texting abbreviations mean, with usage notes and examples.',

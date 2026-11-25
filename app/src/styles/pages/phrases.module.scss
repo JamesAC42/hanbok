@@ -167,3 +167,10 @@
     margin-top: .5rem !important;
     @include bp-label;
 }
+
+// Furigana over a Japanese word in the form card.
+.formKo rt {
+    font-size: .38em;
+    font-weight: 500;
+    color: var(--bp-ink2);
+}

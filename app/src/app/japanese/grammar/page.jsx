@@ -40,7 +40,8 @@ export default function JapaneseGrammarIndex() {
                     <p className={styles.dek}>
                         {jaPatterns.length} particles, verb forms and patterns from JLPT N5 to N3, each with how to form it,
                         when to use it and example sentences with furigana you can tap. Stuck on a real sentence? Paste it into
-                        the <Link href="/japanese-sentence-analyzer">Japanese sentence analyzer</Link>.
+                        the <Link href="/japanese-sentence-analyzer">Japanese sentence analyzer</Link>. Heard a word in an
+                        anime? See <Link href="/japanese/phrases">Japanese words explained</Link>.
                     </p>
                 </div>
             </header>

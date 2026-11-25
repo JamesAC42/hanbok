@@ -4,6 +4,7 @@ import { phrases, phraseHref } from '@/content/phrases';
 import { sayings, sayingHref } from '@/content/how-to-say';
 import { patterns, patternHref } from '@/content/grammar';
 import { jaPatterns, jaPatternHref } from '@/content/japanese-grammar';
+import { jaPhrases, jaPhraseHref } from '@/content/japanese-phrases';
 import { updates } from '@/content/updates';
 
 // Rebuilt at most hourly so new songs show up without a deploy.
@@ -20,6 +21,7 @@ const STATIC_PAGES = [
     { path: '/how-to-say', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/grammar', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/japanese/grammar', changeFrequency: 'weekly', priority: 0.8 },
+    { path: '/japanese/phrases', changeFrequency: 'weekly', priority: 0.8 },
     { path: '/hangeul', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/pricing', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.6 },
@@ -71,6 +73,12 @@ export default async function sitemap() {
         priority: 0.7,
     }));
 
+    const jaPhrasePages = jaPhrases.map((p) => ({
+        url: `${SITE_URL}${jaPhraseHref(p)}`,
+        changeFrequency: 'monthly',
+        priority: 0.7,
+    }));
+
     const posts = updates.map((post) => ({
         url: `${SITE_URL}/updates/${post.slug}`,
         lastModified: new Date(post.published),
@@ -78,5 +86,5 @@ export default async function sitemap() {
         priority: 0.4,
     }));
 
-    return [...pages, ...guides, ...phrasePages, ...sayingPages, ...grammarPages, ...jaGrammarPages, ...posts, ...songs];
+    return [...pages, ...guides, ...phrasePages, ...sayingPages, ...grammarPages, ...jaGrammarPages, ...jaPhrasePages, ...posts, ...songs];
 }
