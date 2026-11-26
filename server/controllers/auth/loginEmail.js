@@ -4,7 +4,7 @@ const { FREE_WEEKLY_SENTENCES } = require('../../utils/sentenceQuota');
 const polyfillData = require('../../migrations/user_polyfill');
 const getPreviousSunday = require('../../utils/getPreviousSunday');
 const { FREE_TIER_WEEKLY_ANALYSIS_LIMIT } = require('./extendedTextRateLimits');
-const { expireIfDue, trialEndsAt, trialEndedAt } = require('../../utils/autoTrial');
+const { expireIfDue, trialEndsAt, trialEndedAt, trialWaitingDays, cardTrialDays } = require('../../utils/autoTrial');
 
 const loginEmail = async (req, res, redisClient) => {
     const { email, password } = req.body;
@@ -156,6 +156,9 @@ const loginEmail = async (req, res, redisClient) => {
                 heardFrom: user.attribution?.heardFrom || null,
                 plusTrialEndsAt: trialEndsAt(user),
                 plusTrialEndedAt: trialEndedAt(user),
+                // Same as /api/session, so offers work right after signing in
+                plusTrialWaitingDays: trialWaitingDays(user),
+                plusCardTrialDays: cardTrialDays(user),
                 remainingImageExtracts: user.remainingImageExtracts,
                 remainingSentenceAnalyses: user.remainingSentenceAnalyses || 0,
                 hasUsedFreeTrial: user.hasUsedFreeTrial || false,

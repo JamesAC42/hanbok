@@ -14,6 +14,8 @@ const KEY = 'hanbok_card_trial_offer';
 const MAX_SHOWS = 3;
 const GAP_MS = 3 * 24 * 60 * 60 * 1000;
 const DELAY_MS = 6000;
+const RETRY_MS = 3000;
+const MAX_WAIT_MS = 120000;
 
 const PERKS = [
     'Unlimited sentence breakdowns',
@@ -42,13 +44,21 @@ export default function CardTrialOffer() {
             const state = readState();
             if (state.count >= MAX_SHOWS || Date.now() - state.last < GAP_MS) return;
             clearTimeout(timer);
-            timer = setTimeout(() => {
-                // Another popup is up: try again after the next breakdown.
-                if (document.querySelector('[role="dialog"][aria-modal="true"]')) return;
+            // Wait for any other popup (welcome sheet, plans, speak) to close,
+            // checking every few seconds for up to two minutes.
+            let waited = 0;
+            const tryShow = () => {
+                if (document.querySelector('[role="dialog"][aria-modal="true"]')) {
+                    waited += RETRY_MS;
+                    if (waited > MAX_WAIT_MS) { track('card_trial_skip', { reason: 'dialog' }); return; }
+                    timer = setTimeout(tryShow, RETRY_MS);
+                    return;
+                }
                 try { localStorage.setItem(KEY, JSON.stringify({ count: state.count + 1, last: Date.now() })); } catch {}
                 track('card_trial_view', { shown: state.count + 1 });
                 setOpen(true);
-            }, DELAY_MS);
+            };
+            timer = setTimeout(tryShow, DELAY_MS);
         };
         window.addEventListener('hanbok:breakdown-done', onDone);
         return () => { window.removeEventListener('hanbok:breakdown-done', onDone); clearTimeout(timer); };

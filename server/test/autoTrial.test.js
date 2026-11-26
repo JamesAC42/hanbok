@@ -194,3 +194,13 @@ test('cardTrialDays: only with the no-card trial off, for never-trialed free acc
         if (saved !== undefined) process.env.PLUS_TRIAL_DAYS = saved;
     }
 });
+
+test('sign-in responses carry the trial offer fields that /api/session has', () => {
+    const fs = require('node:fs');
+    const path = require('node:path');
+    for (const file of ['login.js', 'loginEmail.js', 'getSession.js']) {
+        const src = fs.readFileSync(path.join(__dirname, '..', 'controllers', 'auth', file), 'utf8');
+        assert.match(src, /plusCardTrialDays: cardTrialDays\(user\)/, file);
+        assert.match(src, /plusTrialWaitingDays: trialWaitingDays\(user\)/, file);
+    }
+});
